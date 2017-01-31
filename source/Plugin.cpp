@@ -21,6 +21,7 @@
 #include <xercesc/util/PlatformUtils.hpp>
 #include <ctpp2/CDT.hpp>
 #include <spine/Convenience.h>
+#include <spine/FmiApiKey.h>
 #include <spine/Location.h>
 #include <spine/TableFormatterOptions.h>
 #include <macgyver/TypeName.h>
@@ -597,32 +598,11 @@ boost::optional<std::string> Plugin::get_fmi_apikey(
 {
   try
   {
-    const char* KEY_NAME = "fmi-apikey";
-    const char* KEY_NAME_2 = "access-token";
-
-    boost::optional<std::string> fmi_apikey;
-    for (int i = 0; i < 3 and not fmi_apikey; i++)
-    {
-      switch (i)
-      {
-        case 0:
-          fmi_apikey = theRequest.getHeader(KEY_NAME);
-          break;
-        case 1:
-          fmi_apikey = theRequest.getParameter(KEY_NAME);
-          break;
-        case 2:
-          fmi_apikey = theRequest.getParameter(KEY_NAME_2);
-          break;
-        default:;
-      }
-    }
-
-    return fmi_apikey;
+    return SmartMet::Spine::FmiApiKey::getFmiApiKey(theRequest, true);
   }
   catch (...)
   {
-    throw SmartMet::Spine::Exception(BCP, "Operation failed!", NULL);
+    throw;
   }
 }
 
