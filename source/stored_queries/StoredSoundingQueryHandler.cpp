@@ -74,7 +74,7 @@ void StoredSoundingQueryHandler::init_handler()
     throw std::runtime_error("No Observation available");
   }
 
-  mObservation = reinterpret_cast<SmartMet::Engine::Observation::Interface*>(engine);
+  mObservation = reinterpret_cast<SmartMet::Engine::Observation::Engine*>(engine);
   mObservation->setGeonames(mGeonames);
 }
 

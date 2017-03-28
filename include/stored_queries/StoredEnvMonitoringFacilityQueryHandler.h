@@ -1,7 +1,7 @@
 #pragma once
 
 #include <engines/geonames/Engine.h>
-#include <engines/observation/Interface.h>
+#include <engines/observation/Engine.h>
 #include <engines/observation/MastQuery.h>
 #include "SupportsExtraHandlerParams.h"
 #include "SupportsLocationParameters.h"
@@ -102,7 +102,7 @@ class StoredEnvMonitoringFacilityQueryHandler : public StoredQueryHandlerBase,
                                        const StationDataMap& validStations) const;
 
   SmartMet::Engine::Geonames::Engine* m_geoEngine;
-  SmartMet::Engine::Observation::Interface* m_obsEngine;
+  SmartMet::Engine::Observation::Engine* m_obsEngine;
   std::string m_missingText;
   int m_debugLevel;
 };

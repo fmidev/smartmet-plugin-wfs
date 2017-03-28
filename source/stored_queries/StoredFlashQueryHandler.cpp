@@ -79,7 +79,7 @@ void bw::StoredFlashQueryHandler::init_handler()
     if (engine == NULL)
       throw SmartMet::Spine::Exception(BCP, "No Observation engine available");
 
-    obs_engine = reinterpret_cast<SmartMet::Engine::Observation::Interface*>(engine);
+    obs_engine = reinterpret_cast<SmartMet::Engine::Observation::Engine*>(engine);
 
     engine = reactor->getSingleton("Geonames", NULL);
     if (engine == NULL)

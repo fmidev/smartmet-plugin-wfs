@@ -6,7 +6,9 @@
 #include "SupportsLocationParameters.h"
 #include "SupportsQualityParameters.h"
 #include <engines/geonames/Engine.h>
-#include <engines/observation/Interface.h>
+#include <engines/observation/Engine.h>
+#include <engines/observation/DBRegistry.h>
+#include <engines/observation/QueryResult.h>
 #include <tuple>
 #include <map>
 
@@ -77,10 +79,10 @@ class StoredSoundingQueryHandler : protected virtual SupportsExtraHandlerParams,
                      std::ostream& output) const;
 
  private:
-  virtual void update_parameters(
-      const RequestParameterMap& request_params,
-      int seq_id,
-      std::vector<boost::shared_ptr<RequestParameterMap> >& result) const;
+  virtual void update_parameters(const RequestParameterMap& request_params,
+                                 int seq_id,
+                                 std::vector<boost::shared_ptr<RequestParameterMap> >& result)
+      const;
 
   const std::shared_ptr<SmartMet::Engine::Observation::DBRegistryConfig> dbRegistryConfig(
       const std::string& configName) const;
@@ -116,7 +118,7 @@ class StoredSoundingQueryHandler : protected virtual SupportsExtraHandlerParams,
   bool mSqRestrictions;
   bool mSupportQCParameters;
 
-  SmartMet::Engine::Observation::Interface* mObservation;
+  SmartMet::Engine::Observation::Engine* mObservation;
   SmartMet::Engine::Geonames::Engine* mGeonames;
 };
 }

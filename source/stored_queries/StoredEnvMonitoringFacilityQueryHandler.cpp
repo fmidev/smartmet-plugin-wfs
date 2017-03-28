@@ -89,7 +89,7 @@ void bw::StoredEnvMonitoringFacilityQueryHandler::init_handler()
     if (engine == NULL)
       throw SmartMet::Spine::Exception(BCP, "No Observation engine available");
 
-    m_obsEngine = reinterpret_cast<SmartMet::Engine::Observation::Interface *>(engine);
+    m_obsEngine = reinterpret_cast<SmartMet::Engine::Observation::Engine *>(engine);
     m_obsEngine->setGeonames(m_geoEngine);
   }
   catch (...)

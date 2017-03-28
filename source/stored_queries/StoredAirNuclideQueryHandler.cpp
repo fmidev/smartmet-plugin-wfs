@@ -2,6 +2,7 @@
 #include "StoredQueryHandlerFactoryDef.h"
 #include "FeatureID.h"
 #include <engines/observation/MastQuery.h>
+#include <engines/observation/DBRegistry.h>
 #include <smartmet/spine/Exception.h>
 #include <spine/Convenience.h>
 #include <boost/format.hpp>
@@ -63,7 +64,7 @@ void bw::StoredAirNuclideQueryHandler::init_handler()
     if (engine == NULL)
       throw SmartMet::Spine::Exception(BCP, "No Observation engine available");
 
-    m_obsEngine = reinterpret_cast<SmartMet::Engine::Observation::Interface*>(engine);
+    m_obsEngine = reinterpret_cast<SmartMet::Engine::Observation::Engine*>(engine);
     m_obsEngine->setGeonames(m_geoEngine);
   }
   catch (...)
@@ -96,8 +97,8 @@ void bw::StoredAirNuclideQueryHandler::query(const StoredQuery& query,
 
       std::vector<std::string> nuclideCodes;
       params.get<std::string>(P_NUCLIDE_CODES, std::back_inserter(nuclideCodes));
-      BOOST_FOREACH (auto& n, nuclideCodes)
-        n = prepare_nuclide(n);
+      BOOST_FOREACH(auto & n, nuclideCodes)
+      n = prepare_nuclide(n);
 
       const char* DATA_CRS_NAME = "urn:ogc:def:crs:EPSG::4326";
       SmartMet::Engine::Gis::CRSRegistry& crs_registry = plugin_data.get_crs_registry();
@@ -124,9 +125,8 @@ void bw::StoredAirNuclideQueryHandler::query(const StoredQuery& query,
       const int debug_level = get_config()->get_debug_level();
       if (debug_level > 2)
       {
-        BOOST_FOREACH (auto id, locations_list)
-          std::cerr << "Found location: name: " << id.first << " geoid: " << id.second->geoid
-                    << "\n";
+        BOOST_FOREACH(auto id, locations_list)
+        std::cerr << "Found location: name: " << id.first << " geoid: " << id.second->geoid << "\n";
       }
 
       // Get all the information needed in a OBsEngine station search.
@@ -281,7 +281,7 @@ void bw::StoredAirNuclideQueryHandler::query(const StoredQuery& query,
       NuclideNameMap nuclideNameMap;
 
       // At least one observation_id is required for data search.
-      if (not profileContainer or (profileContainer->size("ANALYSIS_ID") == 0))
+      if (not profileContainer or(profileContainer->size("ANALYSIS_ID") == 0))
       {
         queryInitializationOK = false;
       }
@@ -409,8 +409,8 @@ void bw::StoredAirNuclideQueryHandler::query(const StoredQuery& query,
       const std::string fullFeatureId = feature_id.get_id();
 
       // Removing some feature id parameters
-      const char* place_params[] = {
-          P_WMOS, P_FMISIDS, P_PLACES, P_LATLONS, P_GEOIDS, P_KEYWORD, P_BOUNDING_BOX};
+      const char* place_params[] = {P_WMOS,   P_FMISIDS, P_PLACES,      P_LATLONS,
+                                    P_GEOIDS, P_KEYWORD, P_BOUNDING_BOX};
       for (unsigned i = 0; i < sizeof(place_params) / sizeof(*place_params); i++)
       {
         feature_id.erase_param(place_params[i]);
@@ -542,8 +542,8 @@ void bw::StoredAirNuclideQueryHandler::query(const StoredQuery& query,
           int ind = 0;
 
           currentAnalysisIdStr = analysisIdStr;
-          for (; (stationIdIt != stationIdItEnd) and
-                 (currentAnalysisIdStr == bo::QueryResult::toString(analysisIdIt, 0));
+          for (; (stationIdIt != stationIdItEnd)and(currentAnalysisIdStr ==
+                                                    bo::QueryResult::toString(analysisIdIt, 0));
                ++analysisIdIt,
                ++stationIdIt,
                ++observationIdIt,
@@ -660,7 +660,7 @@ std::string bw::StoredAirNuclideQueryHandler::prepare_nuclide(const std::string&
 }
 
 const std::shared_ptr<SmartMet::Engine::Observation::DBRegistryConfig>
-bw::StoredAirNuclideQueryHandler::dbRegistryConfig(const std::string& configName) const
+    bw::StoredAirNuclideQueryHandler::dbRegistryConfig(const std::string& configName) const
 {
   try
   {
@@ -698,10 +698,10 @@ namespace
 using namespace SmartMet::Plugin::WFS;
 
 boost::shared_ptr<SmartMet::Plugin::WFS::StoredQueryHandlerBase>
-wfs_stored_air_nuclide_handler_create(SmartMet::Spine::Reactor* reactor,
-                                      boost::shared_ptr<StoredQueryConfig> config,
-                                      PluginData& plugin_data,
-                                      boost::optional<std::string> template_file_name)
+    wfs_stored_air_nuclide_handler_create(SmartMet::Spine::Reactor* reactor,
+                                          boost::shared_ptr<StoredQueryConfig> config,
+                                          PluginData& plugin_data,
+                                          boost::optional<std::string> template_file_name)
 {
   try
   {

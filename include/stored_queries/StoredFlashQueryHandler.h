@@ -1,6 +1,6 @@
 #pragma once
 
-#include <engines/observation/Interface.h>
+#include <engines/observation/Engine.h>
 #include <engines/geonames/Engine.h>
 #include "StoredQueryHandlerBase.h"
 #include "ArrayParameterTemplate.h"
@@ -37,7 +37,7 @@ class StoredFlashQueryHandler : public StoredQueryHandlerBase,
  private:
   SmartMet::Engine::Geonames::Engine *geo_engine;
 
-  SmartMet::Engine::Observation::Interface *obs_engine;
+  SmartMet::Engine::Observation::Engine *obs_engine;
 
   std::vector<SmartMet::Spine::Parameter> bs_param;
   int stroke_time_ind;

@@ -140,8 +140,8 @@ class StoredWWProbabilityQueryHandler : public StoredQueryHandlerBase,
                          const std::string& tz_name,
                          CTPP::CDT& hash) const;
 
-  WinterWeatherIntensityProbabilities getProbabilities(
-      const ProbabilityQueryParam& queryParam) const;
+  WinterWeatherIntensityProbabilities getProbabilities(const ProbabilityQueryParam& queryParam)
+      const;
 
   SmartMet::Engine::Querydata::Engine* itsQEngine;
   SmartMet::Engine::Geonames::Engine* itsGeonames;

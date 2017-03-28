@@ -6,7 +6,7 @@
 #include "SupportsLocationParameters.h"
 #include "SupportsQualityParameters.h"
 #include <engines/geonames/Engine.h>
-#include <engines/observation/Interface.h>
+#include <engines/observation/Engine.h>
 #include <engines/observation/MastQueryParams.h>
 #include <boost/format.hpp>
 #include <boost/algorithm/string.hpp>
@@ -65,7 +65,7 @@ class StoredAirNuclideQueryHandler : protected virtual SupportsExtraHandlerParam
   bool m_sqRestrictions;
   bool m_supportQCParameters;
 
-  SmartMet::Engine::Observation::Interface* m_obsEngine;
+  SmartMet::Engine::Observation::Engine* m_obsEngine;
   SmartMet::Engine::Geonames::Engine* m_geoEngine;
 };
 

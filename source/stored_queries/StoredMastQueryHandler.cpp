@@ -2,6 +2,7 @@
 #include "StoredQueryHandlerFactoryDef.h"
 #include "FeatureID.h"
 #include <smartmet/engines/observation/MastQuery.h>
+#include <engines/observation/DBRegistry.h>
 #include <smartmet/spine/Exception.h>
 #include <smartmet/spine/Convenience.h>
 #include <macgyver/StringConversion.h>
@@ -64,7 +65,7 @@ void bw::StoredMastQueryHandler::init_handler()
     if (engine == NULL)
       throw SmartMet::Spine::Exception(BCP, "No Observation engine available");
 
-    m_obsEngine = reinterpret_cast<SmartMet::Engine::Observation::Interface*>(engine);
+    m_obsEngine = reinterpret_cast<SmartMet::Engine::Observation::Engine*>(engine);
     m_obsEngine->setGeonames(m_geoEngine);
   }
   catch (...)
@@ -119,9 +120,8 @@ void bw::StoredMastQueryHandler::query(const StoredQuery& query,
       const int debug_level = get_config()->get_debug_level();
       if (debug_level > 2)
       {
-        BOOST_FOREACH (auto id, locations_list)
-          std::cerr << "Found location: name: " << id.first << " geoid: " << id.second->geoid
-                    << "\n";
+        BOOST_FOREACH(auto id, locations_list)
+        std::cerr << "Found location: name: " << id.first << " geoid: " << id.second->geoid << "\n";
       }
 
       // Get all the information needed in a OBsEngine station search.
@@ -231,7 +231,7 @@ void bw::StoredMastQueryHandler::query(const StoredQuery& query,
       typedef std::map<std::string, std::tuple<uint64_t, std::string, std::string, bool, bool> >
           MeteoParameterMap;
       MeteoParameterMap meteoParameterMap;
-      BOOST_FOREACH (std::string name, meteoParametersVector)
+      BOOST_FOREACH(std::string name, meteoParametersVector)
       {
         const uint64_t paramId = m_obsEngine->getParameterId(name, stationType);
         if (paramId == 0)
@@ -250,8 +250,8 @@ void bw::StoredMastQueryHandler::query(const StoredQuery& query,
         if (paramIdIt != meteoParameterMap.end())
         {
           // Check if the parameter is already inserted.
-          if ((std::get<3>(paramIdIt->second) and not isQCParameter) or
-              (std::get<4>(paramIdIt->second) and isQCParameter))
+          if ((std::get<3>(paramIdIt->second) and not isQCParameter)or(
+                  std::get<4>(paramIdIt->second) and isQCParameter))
           {
             std::string errParamName;
             if (isQCParameter)
@@ -381,7 +381,7 @@ void bw::StoredMastQueryHandler::query(const StoredQuery& query,
       bo::MastQuery dataQuery;
 
       // At least one observation_id is required for data search.
-      if (not profileContainer or (profileContainer->size("OBSERVATION_ID") == 0))
+      if (not profileContainer or(profileContainer->size("OBSERVATION_ID") == 0))
       {
         queryInitializationOK = false;
       }
@@ -504,8 +504,8 @@ void bw::StoredMastQueryHandler::query(const StoredQuery& query,
           std::string dataQualityStr = bo::QueryResult::toString(dataQualityIt, 0);
           deltaHeight = boost::lexical_cast<double>(boost::any_cast<double>(*dataLevelIt));
 
-          if (currentFmisid != fmisidStr or currentMeasurandId != measurandIdStr or
-              currentDataTime != dataTimeStr)
+          if (currentFmisid != fmisidStr or currentMeasurandId !=
+              measurandIdStr or currentDataTime != dataTimeStr)
           {
             currentFmisid = fmisidStr;
             currentMeasurandId = measurandIdStr;
@@ -676,7 +676,7 @@ void bw::StoredMastQueryHandler::update_parameters(
 }
 
 const std::shared_ptr<SmartMet::Engine::Observation::DBRegistryConfig>
-bw::StoredMastQueryHandler::dbRegistryConfig(const std::string& configName) const
+    bw::StoredMastQueryHandler::dbRegistryConfig(const std::string& configName) const
 {
   try
   {

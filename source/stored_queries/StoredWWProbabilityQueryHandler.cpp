@@ -410,9 +410,8 @@ WinterWeatherIntensityProbabilities StoredWWProbabilityQueryHandler::getProbabil
     {
       std::ostringstream msg;
       msg << "Inconsistent timesteps in LIGHT, MODERATE, HEAVY Winter Weather Condition "
-             "parameters: '"
-          << queryParam.paramLight.name() << "', '" << queryParam.paramModerate.name() << "', '"
-          << queryParam.paramHeavy.name() << "'";
+             "parameters: '" << queryParam.paramLight.name() << "', '"
+          << queryParam.paramModerate.name() << "', '" << queryParam.paramHeavy.name() << "'";
       SmartMet::Spine::Exception exception(BCP, msg.str());
       exception.addParameter(WFS_EXCEPTION_CODE, WFS_OPERATION_PROCESSING_FAILED);
       throw exception;
@@ -602,10 +601,11 @@ namespace
 using namespace SmartMet::Plugin::WFS;
 
 boost::shared_ptr<SmartMet::Plugin::WFS::StoredQueryHandlerBase>
-wfs_winterweather_probabilities_query_handler_create(SmartMet::Spine::Reactor* reactor,
-                                                     boost::shared_ptr<StoredQueryConfig> config,
-                                                     PluginData& pluginData,
-                                                     boost::optional<std::string> templateFileName)
+    wfs_winterweather_probabilities_query_handler_create(
+        SmartMet::Spine::Reactor* reactor,
+        boost::shared_ptr<StoredQueryConfig> config,
+        PluginData& pluginData,
+        boost::optional<std::string> templateFileName)
 {
   try
   {
