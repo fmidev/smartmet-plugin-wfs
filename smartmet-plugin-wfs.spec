@@ -89,6 +89,7 @@ rm -rf $RPM_BUILD_ROOT
 
 %changelog
 * Upcoming
+- Add tests to test data fetching from the arbitrary heighs of hybrid forecast model.
 - Add support for data fetching from an arbitrary heigh from model topography.
 - http/https scheme selection based on X-Forwarded-Proto header; STU-5084
 
