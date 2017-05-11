@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wfs:GetFeature
+         service="WFS"
+         version="2.0.0"
+         xmlns:wfs="http://www.opengis.net/wfs/2.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://www.opengis.net/wfs/2.0 http://schemas.opengis.net/wfs/2.0/wfs.xsd">
+   <wfs:StoredQuery id="ForecastTest">
+     <wfs:Parameter name="begin">2017-05-12T02:00:00Z</wfs:Parameter>
+     <wfs:Parameter name="end">2017-05-12T03:00:00Z</wfs:Parameter>
+     <wfs:Parameter name="latlons">60.37752 25.26906</wfs:Parameter>
+     <wfs:Parameter name="parameter">Temperature</wfs:Parameter>
+     <wfs:Parameter name="models">harmonie_scandinavia_hybrid</wfs:Parameter>
+     <wfs:Parameter name="heights">12.34567890 25</wfs:Parameter>
+     <wfs:Parameter name="crs">http://www.opengis.net/def/crs/EPSG/0/7409</wfs:Parameter>
+   </wfs:StoredQuery>
+</wfs:GetFeature>
