@@ -67,7 +67,7 @@
       </Abstract>
     </Parameter>
     
-    <Parameter name="latlons" type="double">
+    <Parameter name="latlons" type="doubleList">
       <Title>The list of sites for which to provide forecast</Title>
       <Abstract>
       The list of sites for which to provide forecast
@@ -99,6 +99,20 @@
       <Title>Time zone</Title>
       <Abstract>
       Time zone
+      </Abstract>
+    </Parameter>
+    
+    <Parameter name="models" type="NameList">
+      <Title>Forecast model list</Title>
+      <Abstract>
+      Forecast model list
+      </Abstract>
+    </Parameter>
+    
+    <Parameter name="heights" type="doubleList">
+      <Title>The list of heights for which to provide forecast</Title>
+      <Abstract>
+      The list of heights for which to provide forecast
       </Abstract>
     </Parameter>
     
