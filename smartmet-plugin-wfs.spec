@@ -88,6 +88,9 @@ rm -rf $RPM_BUILD_ROOT
 %{_sysconfdir}/smartmet/plugins/wfs/XMLSchemas.cache
 
 %changelog
+* Upcoming
+- Check joinability of an option thread in StoredEnvMonitoringFacilityQueryHandler.
+
 * Tue May 23 2017 Mika Heiskanen <mika.heiskanen@fmi.fi> - 17.5.23-1.fmi
 - Add tests to test data fetching from arbitrary heights of hybrid forecast model.
 - Add support for data fetching from an arbitrary height from model topography.

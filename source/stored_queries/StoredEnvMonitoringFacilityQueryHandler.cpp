@@ -179,7 +179,8 @@ void bw::StoredEnvMonitoringFacilityQueryHandler::query(const StoredQuery &query
                     boost::ref(params),
                     boost::ref(validStations)));
 
-    thread1.join();
+    if (thread1.joinable())
+      thread1.join();
     thread2.join();
     thread3.join();
 
