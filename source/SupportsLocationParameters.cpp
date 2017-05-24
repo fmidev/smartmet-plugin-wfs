@@ -267,6 +267,13 @@ void bw::SupportsLocationParameters::get_wmos(
 {
   try
   {
+    Locus::QueryOptions opts;
+    opts.SetCountries("all");
+    opts.SetSearchVariants(true);
+    opts.SetLanguage("wmo");
+    opts.SetFeatures("SYNOP,STUK");
+    opts.SetResultLimit(1);
+
     std::vector<int64_t> ids;
     param.get<int64_t>(P_WMOS, std::back_inserter(ids));
     BOOST_FOREACH (int64_t id, ids)
@@ -281,7 +288,7 @@ void bw::SupportsLocationParameters::get_wmos(
       else
       {
         std::string id_s = boost::lexical_cast<std::string>(id);
-        SmartMet::Spine::LocationList locList = geo_engine->suggest(id_s, "wmo");
+        SmartMet::Spine::LocationList locList = geo_engine->nameSearch(opts, id_s);
         if (include_wmos and locList.empty())
         {
           SmartMet::Spine::Exception exception(BCP, "Unknown 'wmoid' value!");

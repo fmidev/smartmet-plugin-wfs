@@ -219,6 +219,13 @@ void bw::StoredEnvMonitoringFacilityQueryHandler::query(const StoredQuery &query
       std::string lang = language;
       SupportsLocationParameters::engOrFinToEnOrFi(lang);
 
+      Locus::QueryOptions opts;
+      opts.SetCountries("all");
+      opts.SetSearchVariants(true);
+      opts.SetLanguage("fmisid");
+      opts.SetFeatures("SYNOP,STUK");
+      opts.SetResultLimit(1);
+
       for (bw::StoredEnvMonitoringFacilityQueryHandler::StationDataMap::iterator vsIt =
                validStations.begin();
            vsIt != validStations.end();
@@ -256,7 +263,7 @@ void bw::StoredEnvMonitoringFacilityQueryHandler::query(const StoredQuery &query
         std::string countryName;
 
         // Data from Geonames
-        SmartMet::Spine::LocationList locList = m_geoEngine->suggest((*vsIt).first, "fmisid");
+        SmartMet::Spine::LocationList locList = m_geoEngine->nameSearch(opts, (*vsIt).first);
         if (not locList.empty())
         {
           SmartMet::Spine::LocationPtr stationLocPtr = locList.front();

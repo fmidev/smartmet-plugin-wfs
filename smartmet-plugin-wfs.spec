@@ -88,6 +88,9 @@ rm -rf $RPM_BUILD_ROOT
 %{_sysconfdir}/smartmet/plugins/wfs/XMLSchemas.cache
 
 %changelog
+* Upcoming
+- Replace few suggest methods with nameSearch to avoid server crash.
+
 * Wed May 24 2017 Mika Heiskanen <mika.heiskanen@fmi.fi> - 17.5.24-1.fmi
 - Check joinability of an option thread in StoredEnvMonitoringFacilityQueryHandler.
 
