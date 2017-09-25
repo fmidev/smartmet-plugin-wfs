@@ -14,9 +14,10 @@ namespace bo = SmartMet::Engine::Observation;
 
 namespace
 {
-const char* P_CLASS_ID = "networkClassId";
 const char* P_NETWORK_ID = "networkId";
-const char* P_NETWORK_NAME = "networkName";
+const char* P_CLASS_ID = "classId";
+const char* P_CLASS_NAME = "className";
+const char* P_GROUP_ID = "groupId";
 const char* P_STATION_ID = "stationId";
 const char* P_STATION_NAME = "stationName";
 const char* P_MISSING_TEXT = "missingText";
@@ -36,9 +37,10 @@ bw::StoredEnvMonitoringNetworkQueryHandler::StoredEnvMonitoringNetworkQueryHandl
 {
   try
   {
-    register_array_param<int64_t>(P_CLASS_ID, *config);
     register_array_param<int64_t>(P_NETWORK_ID, *config);
-    register_array_param<std::string>(P_NETWORK_NAME, *config, false);
+    register_array_param<int64_t>(P_CLASS_ID, *config);
+    register_array_param<std::string>(P_CLASS_NAME, *config, false);
+    register_array_param<int64_t>(P_GROUP_ID, *config);
     register_array_param<int64_t>(P_STATION_ID, *config);
     register_array_param<std::string>(P_STATION_NAME, *config, false);
     register_scalar_param<std::string>(P_INSPIRE_NAMESPACE, *config);
@@ -102,7 +104,8 @@ void bw::StoredEnvMonitoringNetworkQueryHandler::query(const StoredQuery& query,
     FeatureID featureId(get_config()->get_query_id(), params.get_map(), sqId);
 
     // Removing some feature id parameters
-    const char* removeParams[] = {P_NETWORK_ID, P_NETWORK_NAME, P_STATION_ID, P_STATION_NAME};
+    const char* removeParams[] = {
+        P_NETWORK_ID, P_CLASS_ID, P_CLASS_NAME, P_GROUP_ID, P_STATION_ID, P_STATION_NAME};
     for (unsigned i = 0; i < sizeof(removeParams) / sizeof(*removeParams); i++)
     {
       featureId.erase_param(removeParams[i]);
@@ -115,14 +118,17 @@ void bw::StoredEnvMonitoringNetworkQueryHandler::query(const StoredQuery& query,
     bw::SupportsLocationParameters::engOrFinToEnOrFi(lang);
 
     // Get request parameters.
-    std::vector<int64_t> classIdVector;
-    params.get<int64_t>(P_CLASS_ID, std::back_inserter(classIdVector));
-
     std::vector<int64_t> networkIdVector;
     params.get<int64_t>(P_NETWORK_ID, std::back_inserter(networkIdVector));
 
-    std::vector<std::string> networkNameVector;
-    params.get<std::string>(P_NETWORK_NAME, std::back_inserter(networkNameVector));
+    std::vector<int64_t> classIdVector;
+    params.get<int64_t>(P_CLASS_ID, std::back_inserter(classIdVector));
+
+    std::vector<std::string> classNameVector;
+    params.get<std::string>(P_CLASS_NAME, std::back_inserter(classNameVector));
+
+    std::vector<int64_t> groupIdVector;
+    params.get<int64_t>(P_GROUP_ID, std::back_inserter(groupIdVector));
 
     std::vector<int64_t> stationIdVector;
     params.get<int64_t>(P_STATION_ID, std::back_inserter(stationIdVector));
@@ -133,6 +139,8 @@ void bw::StoredEnvMonitoringNetworkQueryHandler::query(const StoredQuery& query,
     // Using GROUP_MEMBERS_V1 as a base configuration
     bo::MastQueryParams emnQueryParams(dbRegistryConfig("GROUP_MEMBERS_V1"));
     emnQueryParams.addField("GROUP_ID");
+
+    emnQueryParams.addJoinOnConfig(dbRegistryConfig("NETWORK_MEMBERS_V1"), "STATION_ID");
 
     // Join on NETWORKS_V1 view
     emnQueryParams.addJoinOnConfig(dbRegistryConfig("STATION_GROUPS_V2"), "GROUP_ID");
@@ -149,34 +157,39 @@ void bw::StoredEnvMonitoringNetworkQueryHandler::query(const StoredQuery& query,
     emnQueryParams.addOrderBy("GROUP_ID", "ASC");
     emnQueryParams.useDistinct();
 
-    for (auto& classId : classIdVector)
-      emnQueryParams.addOperation("OR_GROUP_class_id", "CLASS_ID", "PropertyIsEqualTo", classId);
-
     for (std::vector<int64_t>::const_iterator it = networkIdVector.begin();
          it != networkIdVector.end();
          ++it)
-      emnQueryParams.addOperation("OR_GROUP_network", "GROUP_ID", "PropertyIsEqualTo", *it);
+      emnQueryParams.addOperation("OR_GROUP_network_id", "NETWORK_ID", "PropertyIsEqualTo", *it);
 
-    for (std::vector<std::string>::const_iterator it = networkNameVector.begin();
-         it != networkNameVector.end();
+    for (auto& classId : classIdVector)
+      emnQueryParams.addOperation("OR_GROUP_class_id", "CLASS_ID", "PropertyIsEqualTo", classId);
+
+    for (std::vector<std::string>::const_iterator it = classNameVector.begin();
+         it != classNameVector.end();
          ++it)
-      emnQueryParams.addOperation("OR_GROUP_network", "GROUP_NAME", "PropertyIsLike", *it);
+      emnQueryParams.addOperation("OR_GROUP_class_name", "CLASS_NAME", "PropertyIsLike", *it);
+
+    for (auto& groupId : groupIdVector)
+      emnQueryParams.addOperation("OR_GROUP_group_id", "GROUP_ID", "PropertyIsEqualTo", groupId);
 
     for (std::vector<int64_t>::const_iterator it = stationIdVector.begin();
          it != stationIdVector.end();
          ++it)
-      emnQueryParams.addOperation("OR_GROUP_network", "STATION_ID", "PropertyIsEqualTo", *it);
+      emnQueryParams.addOperation("OR_GROUP_station_id", "STATION_ID", "PropertyIsEqualTo", *it);
 
     if (not stationNameVector.empty())
     {
       for (std::vector<std::string>::const_iterator it = stationNameVector.begin();
            it != stationNameVector.end();
            ++it)
-        emnQueryParams.addOperation("OR_GROUP_network", "STATION_NAME", "PropertyIsLike", *it);
+        emnQueryParams.addOperation("OR_GROUP_station_name", "STATION_NAME", "PropertyIsLike", *it);
     }
 
+    /*
     emnQueryParams.addOperation(
         "OR_GROUP_language_code", "LANGUAGE_CODE", "PropertyIsEqualTo", lang);
+    */
 
     // bo::EnvironmentalMonitoringFacilityQuery emnQuery;
     bo::MastQuery emnQuery;
@@ -194,49 +207,50 @@ void bw::StoredEnvMonitoringNetworkQueryHandler::query(const StoredQuery& query,
     // Container with the data fetched from obsengine.
     std::shared_ptr<bo::QueryResult> resultContainer = emnQuery.getQueryResultContainer();
 
-    int networkCount = 0;
+    int groupCount = 0;
 
     if (resultContainer)
     {
-      bo::QueryResult::ValueVectorType::const_iterator netIdIt = resultContainer->begin("GROUP_ID");
-      bo::QueryResult::ValueVectorType::const_iterator netIdItEnd =
+      bo::QueryResult::ValueVectorType::const_iterator groupIdIt =
+          resultContainer->begin("GROUP_ID");
+      bo::QueryResult::ValueVectorType::const_iterator groupIdItEnd =
           resultContainer->end("GROUP_ID");
-      bo::QueryResult::ValueVectorType::const_iterator netCodeIt =
+      bo::QueryResult::ValueVectorType::const_iterator groupCodeIt =
           resultContainer->begin("GROUP_CODE");
-      bo::QueryResult::ValueVectorType::const_iterator netNameIt =
+      bo::QueryResult::ValueVectorType::const_iterator groupNameIt =
           resultContainer->begin("GROUP_NAME");
-      bo::QueryResult::ValueVectorType::const_iterator netDescIt =
+      bo::QueryResult::ValueVectorType::const_iterator groupDescIt =
           resultContainer->begin("GROUP_DESC");
 
-      size_t netNameVectorSize = resultContainer->size("GROUP_NAME");
-      size_t netIdVectorSize = netIdItEnd - netIdIt;
-      std::string networkId;
+      size_t groupNameVectorSize = resultContainer->size("GROUP_NAME");
+      size_t groupIdVectorSize = groupIdItEnd - groupIdIt;
+      std::string groupIdOld;
 
-      if (netIdVectorSize == netNameVectorSize)
+      if (groupIdVectorSize == groupNameVectorSize)
       {
-        // Filling the network and station data
-        int networkCounter = 0;
-        for (; netIdIt != netIdItEnd; ++netIdIt, ++netCodeIt, ++netNameIt, ++netDescIt)
+        // Filling the group and station data
+        int groupCounter = 0;
+        for (; groupIdIt != groupIdItEnd; ++groupIdIt, ++groupCodeIt, ++groupNameIt, ++groupDescIt)
         {
-          const std::string netId = bo::QueryResult::toString(netIdIt);
-          if (networkId != netId)
+          const std::string groupId = bo::QueryResult::toString(groupIdIt);
+          if (groupIdOld != groupId)
           {
-            networkCount++;
-            networkCounter++;
-            hash["networks"][networkCounter - 1]["id"] = netId;
-            const std::string netCode = bo::QueryResult::toString(netCodeIt);
-            if (not netCode.empty())
-              hash["networks"][networkCounter - 1]["code"] = netCode;
-            hash["networks"][networkCounter - 1]["name"] = bo::QueryResult::toString(netNameIt);
-            hash["networks"][networkCounter - 1]["description"] =
-                bo::QueryResult::toString(netDescIt);
-            hash["networks"][networkCounter - 1]["inspireNamespace"] = inspireNamespace;
+            groupCount++;
+            groupCounter++;
+            hash["networks"][groupCounter - 1]["id"] = groupId;
+            const std::string groupCode = bo::QueryResult::toString(groupCodeIt);
+            if (not groupCode.empty())
+              hash["networks"][groupCounter - 1]["code"] = groupCode;
+            hash["networks"][groupCounter - 1]["name"] = bo::QueryResult::toString(groupNameIt);
+            hash["networks"][groupCounter - 1]["description"] =
+                bo::QueryResult::toString(groupDescIt);
+            hash["networks"][groupCounter - 1]["inspireNamespace"] = inspireNamespace;
 
-            featureId.add_param(P_NETWORK_ID, netId);
-            hash["networks"][networkCounter - 1]["featureId"] = featureId.get_id();
-            featureId.erase_param(P_NETWORK_ID);
+            featureId.add_param(P_GROUP_ID, groupId);
+            hash["networks"][groupCounter - 1]["featureId"] = featureId.get_id();
+            featureId.erase_param(P_GROUP_ID);
           }
-          networkId = netId;
+          groupIdOld = groupId;
         }
       }
       else
@@ -248,7 +262,7 @@ void bw::StoredEnvMonitoringNetworkQueryHandler::query(const StoredQuery& query,
       }
     }
 
-    const std::string networksMatched = boost::to_string(networkCount);
+    const std::string networksMatched = boost::to_string(groupCount);
     hash["networksMatched"] = networksMatched;
     hash["networksReturned"] = networksMatched;
 
