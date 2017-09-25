@@ -20,8 +20,8 @@ namespace pt = boost::posix_time;
 
 namespace
 {
-const char *P_CLASS_ID = "networkClassId";
-const char *P_GROUP_ID = "networkId";
+const char *P_CLASS_ID = "classId";
+const char *P_GROUP_ID = "groupId";
 const char *P_STATION_ID = "stationId";
 const char *P_STATION_NAME = "stationName";
 const char *P_MISSING_TEXT = "missingText";
@@ -155,6 +155,7 @@ void bw::StoredEnvMonitoringFacilityQueryHandler::query(const StoredQuery &query
                       boost::ref(params),
                       boost::ref(validStations)));
     }
+
     // Get station group data from Observation
     StationGroupMap stationGroupMap;
     bo::MastQuery sgQuery;
