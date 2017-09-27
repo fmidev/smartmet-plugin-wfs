@@ -4,11 +4,11 @@
 # Project related configuration options
 #---------------------------------------------------------------------------
 DOXYFILE_ENCODING      = UTF-8
-PROJECT_NAME           = "BrainStorm: WFS Plugin"
+PROJECT_NAME           = "SmartMet: WFS Plugin"
 PROJECT_NUMBER         =
 PROJECT_BRIEF          =
 PROJECT_LOGO           =
-OUTPUT_DIRECTORY       = ../../doc/brainstorm/plugins/wfs
+OUTPUT_DIRECTORY       = doc
 CREATE_SUBDIRS         = NO
 OUTPUT_LANGUAGE        = English
 BRIEF_MEMBER_DESC      = YES
@@ -247,13 +247,14 @@ SKIP_FUNCTION_MACROS   = YES
 #---------------------------------------------------------------------------
 # Configuration::additions related to external references
 #---------------------------------------------------------------------------
-TAGFILES               = ../../doc/macgyver/macgyver.tag=../../../../macgyver/html \
-                         ../../doc/newbase/newbase.tag=../../../../newbase/html \
-                         ../../doc/brainstorm/spine/spine.tag=../../../spine/html \
-                         ../../doc/brainstorm/engines/geoengine/geoengine.tag=../../../engines/geoengine/html \
-                         ../../doc/brainstorm/engines/obsengine/obsengine.tag=../../../engines/obsengine/html \
-                         ../../doc/brainstorm/engines/qengine/qengine.tag=../../../engines/qengine/html
-GENERATE_TAGFILE       = ../../doc/brainstorm/plugins/wfs/wfs.tag
+TAGFILES               = ../../library/macgyver/doc/macgyver.tag=../../../../library/macgyver/doc/html \
+                         ../../library/spine/doc/spine.tag=../../../../library/spine/doc/html \
+                         ../../library/newbase/doc/newbase.tag=../../../../library/newbase/doc/html \
+                         ../../engines/querydata/doc/querydata.tag=../../../../engines/querydata/doc/html \
+                         ../../engines/geonames/doc/geonames.tag=../../../../engines/geonames/doc/html \
+                         ../../engines/observation/doc/observation.tag=../../../../engines/observtion/doc/html
+
+GENERATE_TAGFILE       = doc/wfs.tag
 ALLEXTERNALS           = NO
 EXTERNAL_GROUPS        = YES
 PERL_PATH              = /usr/bin/perl
