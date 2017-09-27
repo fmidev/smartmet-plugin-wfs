@@ -1,6 +1,7 @@
 *~
 #*
 *.so
+doc/
 obj/
 lib*.a
 /files.list
