@@ -992,14 +992,14 @@ The following stored query handler parameters are in use
   <td>classId</td>
   <td>@ref WFS_CFG_ARRAY_PARAM_TMPL</td>
   <td>int</td>
-  <td>Station groups are classified into classes. ClassId is an unique identity for a class.</td>
+  <td>Station groups are classified into classes. ClassId is a unique identity for a class.</td>
 </tr>
 
 <tr>
   <td>groupId</td>
   <td>@ref WFS_CFG_ARRAY_PARAM_TMPL</td>
   <td>int</td>
-  <td>A station is placed in groups depending on which kind of measurents it does. GroupId is an
+  <td>A station is placed in groups depending on which kind of measurents it does. GroupId is a
 unique identity for a group.</td>
 </tr>
 
@@ -1007,14 +1007,14 @@ unique identity for a group.</td>
   <td>stationId</td>
   <td>@ref WFS_CFG_ARRAY_PARAM_TMPL</td>
   <td>int</td>
-  <td>StationId is an unique local identity for a station.</td>
+  <td>StationId is a unique local identity for a station.</td>
 </tr>
 
 <tr>
   <td>stationName</td>
   <td>@ref WFS_CFG_SCALAR_PARAM_TMPL</td>
   <td>string</td>
-  <td>StationName is an just a name for a station.</td>
+  <td>StationName is just a name for a station.</td>
 </tr>
 
 <tr>
