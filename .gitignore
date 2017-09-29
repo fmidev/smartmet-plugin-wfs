@@ -1,7 +1,8 @@
 *~
 #*
 *.so
-doc/
+doc/html
+doc/wfs.tag
 obj/
 lib*.a
 /files.list
