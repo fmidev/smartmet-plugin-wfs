@@ -137,7 +137,7 @@ class AdHocQuery : public StoredQuery
    *   @param language The language code
    *   @param stored_query_ids query id in stored query map
    *   @param spp standard presentation parameters
-   *   @param sq_map stored query map object
+   *   @param stored_query_map stored query map object
    *   @param queries Pointers to created query objects.
    *
    *   Throws SmartMet::Plugin::WFS::WfsException in case of an error. Usually error
@@ -323,7 +323,7 @@ class AdHocQuery : public StoredQuery
     *   @brief Find storedqueryids from typenames
     *
     *   @param typename_storedquery_map Type name - stored query id - map.
-    *   @param typenames Typenames in query.
+    *   @param type_names Typenames in query.
     *   @param stored_query_ids Resulting stored query ids..
     *
     */

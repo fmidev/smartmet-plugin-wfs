@@ -78,7 +78,7 @@ class Parser : public xercesc::XercesDOMParser
                             const bool isRoot);
 
  private:
-  std::unique_ptr< ::SmartMet::Plugin::WFS::Xml::XmlErrorHandler> error_handler;
+  std::unique_ptr<XmlErrorHandler> error_handler;
 
   /**
    *  @brief Root element callback for the current parse

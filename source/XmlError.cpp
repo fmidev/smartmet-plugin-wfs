@@ -3,18 +3,24 @@
 #include <macgyver/TypeName.h>
 #include <spine/Exception.h>
 
-namespace bwx = SmartMet::Plugin::WFS::Xml;
-
-bwx::XmlError::XmlError(const std::string& text, error_level_t error_level = bwx::XmlError::ERROR)
+namespace SmartMet
+{
+namespace Plugin
+{
+namespace WFS
+{
+namespace Xml
+{
+XmlError::XmlError(const std::string& text, error_level_t error_level = XmlError::ERROR)
     : std::runtime_error(text), error_level(error_level)
 {
 }
 
-bwx::XmlError::~XmlError() throw()
+XmlError::~XmlError() throw()
 {
 }
 
-void bwx::XmlError::add_messages(const std::list<std::string>& messages)
+void XmlError::add_messages(const std::list<std::string>& messages)
 {
   try
   {
@@ -26,7 +32,7 @@ void bwx::XmlError::add_messages(const std::list<std::string>& messages)
   }
 }
 
-const char* bwx::XmlError::error_level_name(enum error_level_t error_level)
+const char* XmlError::error_level_name(enum error_level_t error_level)
 {
   try
   {
@@ -47,4 +53,8 @@ const char* bwx::XmlError::error_level_name(enum error_level_t error_level)
   {
     throw SmartMet::Spine::Exception(BCP, "Operation failed!", NULL);
   }
+}
+}
+}
+}
 }

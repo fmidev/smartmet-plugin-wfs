@@ -452,7 +452,6 @@ void set_attr(xercesc::DOMElement& element, const std::string& name, const std::
     throw SmartMet::Spine::Exception(BCP, "Operation failed!", NULL);
   }
 }
-
 }  // namespace Xml
 }  // namespace WFS
 }  // namespace Plugin

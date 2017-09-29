@@ -14,8 +14,6 @@ namespace ba = boost::algorithm;
 namespace bw = SmartMet::Plugin::WFS;
 namespace bwx = SmartMet::Plugin::WFS::Xml;
 
-using SmartMet::Spine::Value;
-
 static void check_param_max_occurs(int actual_count,
                                    int max_occurs,
                                    const std::string& location,

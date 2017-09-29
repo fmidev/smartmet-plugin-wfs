@@ -10,10 +10,29 @@
 #include <spine/Value.h>
 #include <sstream>
 
-namespace bw = SmartMet::Plugin::WFS;
-using SmartMet::Spine::Value;
+namespace
+{
+void optional_deprecate_notice(const std::string& item_def)
+{
+  try
+  {
+    std::cerr << "WARNING: bw::ParameterTemplateItem::parse: deprecated optional specification"
+              << " '?' in '" << item_def << "' is ignored" << std::endl;
+  }
+  catch (...)
+  {
+    throw SmartMet::Spine::Exception(BCP, "Operation failed!", NULL);
+  }
+}
+}
 
-void bw::ParameterTemplateItem::parse(const SmartMet::Spine::Value& item_def, bool allow_absent)
+namespace SmartMet
+{
+namespace Plugin
+{
+namespace WFS
+{
+void ParameterTemplateItem::parse(const SmartMet::Spine::Value& item_def, bool allow_absent)
 {
   try
   {
@@ -36,23 +55,7 @@ void bw::ParameterTemplateItem::parse(const SmartMet::Spine::Value& item_def, bo
   }
 }
 
-namespace
-{
-void optional_deprecate_notice(const std::string& item_def)
-{
-  try
-  {
-    std::cerr << "WARNING: bw::ParameterTemplateItem::parse: deprecated optional specification"
-              << " '?' in '" << item_def << "' is ignored" << std::endl;
-  }
-  catch (...)
-  {
-    throw SmartMet::Spine::Exception(BCP, "Operation failed!", NULL);
-  }
-}
-}
-
-void bw::ParameterTemplateItem::parse(const std::string& item_def, bool allow_absent)
+void ParameterTemplateItem::parse(const std::string& item_def, bool allow_absent)
 {
   try
   {
@@ -127,7 +130,7 @@ void bw::ParameterTemplateItem::parse(const std::string& item_def, bool allow_ab
   }
 }
 
-void bw::ParameterTemplateItem::reset()
+void ParameterTemplateItem::reset()
 {
   try
   {
@@ -145,9 +148,9 @@ void bw::ParameterTemplateItem::reset()
 }
 
 boost::variant<SmartMet::Spine::Value, std::vector<SmartMet::Spine::Value> >
-bw::ParameterTemplateItem::get_value(const RequestParameterMap& req_param_map,
-                                     const SupportsExtraHandlerParams* extra_params,
-                                     bool allow_array) const
+ParameterTemplateItem::get_value(const RequestParameterMap& req_param_map,
+                                 const SupportsExtraHandlerParams* extra_params,
+                                 bool allow_array) const
 {
   try
   {
@@ -180,7 +183,7 @@ bw::ParameterTemplateItem::get_value(const RequestParameterMap& req_param_map,
   }
 }
 
-bool bw::ParameterTemplateItem::get_value(
+bool ParameterTemplateItem::get_value(
     boost::variant<SmartMet::Spine::Value, std::vector<SmartMet::Spine::Value> >& result,
     const RequestParameterMap& req_param_map,
     const SupportsExtraHandlerParams* extra_params,
@@ -311,7 +314,7 @@ bool bw::ParameterTemplateItem::get_value(
   }
 }
 
-bool bw::ParameterTemplateItem::handle_redirection(
+bool ParameterTemplateItem::handle_redirection(
     boost::variant<SmartMet::Spine::Value, std::vector<SmartMet::Spine::Value> >& result,
     const RequestParameterMap& req_param_map,
     const SupportsExtraHandlerParams* extra_params,
@@ -335,6 +338,9 @@ bool bw::ParameterTemplateItem::handle_redirection(
   {
     throw SmartMet::Spine::Exception(BCP, "Operation failed!", NULL);
   }
+}
+}
+}
 }
 
 /**

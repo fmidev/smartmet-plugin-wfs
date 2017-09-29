@@ -37,9 +37,9 @@ class StoredQuery : public QueryBase
    *   @brief Static method for reading stored query from KVP format request
    *
    *   @param language The language code
-*  @param spp standard presentation parameters
+   *   @param spp standard presentation parameters
    *   @param http_request The HTTP request with the query
-*  @param sq_map stored query map object
+   *   @param sq_map stored query map object
    *   @return The shared pointer to created query object
    *
    *   Throws SmartMet::Plugin::WFS::WfsException in case of an error. Usually error
@@ -55,9 +55,9 @@ class StoredQuery : public QueryBase
    *   @brief Static method for reading stored query from XML format request
    *
    *   @param language The language code
-*  @param spp standard presentation parameters
+   *   @param spp standard presentation parameters
    *   @param element Xerces-C DOM root element of the query
-*  @param sq_map stored query map object
+   *   @param sq_map stored query map object
    *   @return The shared pointer to created query object
    *
    *   Throws SmartMet::Plugin::WFS::WfsException in case of an error. Usually error

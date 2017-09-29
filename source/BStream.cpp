@@ -5,6 +5,7 @@
 #include <macgyver/TypeName.h>
 #include <spine/Exception.h>
 #include <algorithm>
+#include <cstdio>
 #include <set>
 
 namespace bw = SmartMet::Plugin::WFS;
@@ -157,8 +158,6 @@ void OBStream::put_unsigned(uint64_t value)
     throw SmartMet::Spine::Exception(BCP, "Operation failed!", NULL);
   }
 }
-
-#include <cstdio>
 
 void OBStream::put_double(double value)
 {

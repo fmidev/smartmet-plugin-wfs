@@ -144,6 +144,7 @@ class GetPropertyValue : public RequestBase
    * decreases as output progresses.
    *   @param start_index current index of first member from responses to go output, i.e. this
    * parameter decreases as output progresses.
+   *   @param query is the target of filtering
    *   @param is_timestamp_set value changes to "true", when valid timestamp has been copied from
    * query response to result tree.
    *   @param is_schemalocation_set value changes to "true", when valid schema location has been
@@ -194,8 +195,6 @@ class GetPropertyValue : public RequestBase
    *   @param xpath_snapshot response parsed.
    *   @param cumulative_num_returned keep count of number of members returned, i.e. included in
    * result tree
-   *   @param cumulative_num_matched keep count of number of hits in all responsens, i.e. those not
-   * included in result tree are included in this number
    *   @param max_members maximum number of members still needed in output, i.e. this parameter
    * decreases as output progresses.
    *   @param start_index current index of first member from responses to go output, i.e. this

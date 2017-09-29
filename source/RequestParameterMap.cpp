@@ -4,8 +4,6 @@
 #include <spine/Exception.h>
 #include <algorithm>
 
-using SmartMet::Spine::Value;
-
 namespace bw = SmartMet::Plugin::WFS;
 
 bw::RequestParameterMap::RequestParameterMap() : params()

@@ -59,9 +59,9 @@ struct ParameterTemplateItem
    *   SmartMet::Plugin::WFS::StoredQueryHandlerBase::parse_kvp_parameters.
    *
    *   @param req_param_map the parameter map read from HTTP request
-*  @param extra_params Optional pointer to object of class
-* SmartMet::Plugin::WFS::SupportsExtraHandlerParameters
-*               for named parameter support
+   *   @param extra_params Optional pointer to object of class
+   *          SmartMet::Plugin::WFS::SupportsExtraHandlerParameters
+   *          for named parameter support
    *   @param allow_array specify whether an array is permitted in return value
    *   @return the parameter value in case of an success
    *
@@ -82,9 +82,9 @@ struct ParameterTemplateItem
    *   @param result member function stores the result there when successful. Unchanged
    *            if the return value is false or an exception is thrown
    *   @param req_param_map the parameter map read from HTTP request
-*  @param extra Optional pointer to object of class
-* SmartMet::Plugin::WFS::SupportsExtraHandlerParameters
-*               for named parameter support
+   *   @param extra_params Optional pointer to object of class
+   *          SmartMet::Plugin::WFS::SupportsExtraHandlerParameters
+   *          for named parameter support
    *   @param allow_array specify whether an array is permitted in return value
    *   @return indicates whether the parameter value is stored
    *
@@ -93,7 +93,7 @@ struct ParameterTemplateItem
   bool get_value(
       boost::variant<SmartMet::Spine::Value, std::vector<SmartMet::Spine::Value> >& result,
       const RequestParameterMap& req_param_map,
-      const SupportsExtraHandlerParams* extra = NULL,
+      const SupportsExtraHandlerParams* extra_params = NULL,
       bool allow_array = false) const;
 
  private:

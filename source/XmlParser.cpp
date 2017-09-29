@@ -25,8 +25,6 @@
 
 namespace fs = boost::filesystem;
 
-// using SmartMet::Plugin::WFS::Xml::Parser;
-// using SmartMet::Plugin::WFS::Xml::to_opt_string;
 namespace SmartMet
 {
 namespace Plugin
@@ -37,7 +35,7 @@ namespace Xml
 {
 Parser::Parser(bool stop_on_error, xercesc::XMLGrammarPool *grammar_pool)
     : xercesc::XercesDOMParser(NULL, xercesc::XMLPlatformUtils::fgMemoryManager, grammar_pool),
-      error_handler(new SmartMet::Plugin::WFS::Xml::XmlErrorHandler(stop_on_error))
+      error_handler(new XmlErrorHandler(stop_on_error))
 {
   try
   {
@@ -142,7 +140,7 @@ boost::shared_ptr<xercesc::DOMDocument> Parser::parse_input(
   }
 }
 
-std::list<std::string> SmartMet::Plugin::WFS::Xml::Parser::get_messages() const
+std::list<std::string> Parser::get_messages() const
 {
   try
   {
@@ -206,7 +204,7 @@ void Parser::startElement(const xercesc::XMLElementDecl &elemDecl,
   }
 }
 
-class SmartMet::Plugin::WFS::Xml::ParserMT::EntityResolver : public xercesc::XMLEntityResolver
+class ParserMT::EntityResolver : public xercesc::XMLEntityResolver
 {
   std::map<std::string, std::string> cache;
 
@@ -282,8 +280,7 @@ class SmartMet::Plugin::WFS::Xml::ParserMT::EntityResolver : public xercesc::XML
   }
 };
 
-SmartMet::Plugin::WFS::Xml::ParserMT::ParserMT(const std::string &grammar_pool_file_name,
-                                               bool stop_on_error)
+ParserMT::ParserMT(const std::string &grammar_pool_file_name, bool stop_on_error)
     : grammar_pool_file_name(grammar_pool_file_name), stop_on_error(stop_on_error)
 {
   try
@@ -300,8 +297,7 @@ SmartMet::Plugin::WFS::Xml::ParserMT::ParserMT(const std::string &grammar_pool_f
       std::cerr << METHOD_NAME << ": failed to read Xerces-C grammar pool dump file '"
                 << grammar_pool_file_name << "': C++ exception type is '"
                 << Fmi::get_type_name(&err) << "', message '"
-                << SmartMet::Plugin::WFS::Xml::to_opt_string(err.getMessage()).first << "'"
-                << std::endl;
+                << to_opt_string(err.getMessage()).first << "'" << std::endl;
 
       throw SmartMet::Spine::Exception(BCP, "Operation failed!", NULL);
     }
@@ -312,18 +308,18 @@ SmartMet::Plugin::WFS::Xml::ParserMT::ParserMT(const std::string &grammar_pool_f
   }
 }
 
-SmartMet::Plugin::WFS::Xml::ParserMT::~ParserMT()
+ParserMT::~ParserMT()
 {
 }
 
-SmartMet::Plugin::WFS::Xml::Parser *SmartMet::Plugin::WFS::Xml::ParserMT::get()
+Parser *ParserMT::get()
 {
   try
   {
-    SmartMet::Plugin::WFS::Xml::Parser *parser = t_parser.get();
+    Parser *parser = t_parser.get();
     if (parser == NULL)
     {
-      t_parser.reset(new SmartMet::Plugin::WFS::Xml::Parser(stop_on_error, grammar_pool.get()));
+      t_parser.reset(new Parser(stop_on_error, grammar_pool.get()));
       parser = t_parser.get();
     }
 
@@ -338,7 +334,7 @@ SmartMet::Plugin::WFS::Xml::Parser *SmartMet::Plugin::WFS::Xml::ParserMT::get()
   }
 }
 
-void SmartMet::Plugin::WFS::Xml::ParserMT::load_schema_cache(const std::string &file_name)
+void ParserMT::load_schema_cache(const std::string &file_name)
 {
   try
   {
@@ -362,7 +358,7 @@ boost::shared_ptr<xercesc::DOMDocument> str2xmldom(const std::string &src,
   try
   {
     xercesc::XercesDOMParser parser;
-    SmartMet::Plugin::WFS::Xml::XmlErrorHandler error_handler(true);
+    XmlErrorHandler error_handler(true);
     parser.setDoNamespaces(true);
     parser.setValidationScheme(xercesc::XercesDOMParser::Val_Never);
     // parser.setExitOnFirstFatalError(true);

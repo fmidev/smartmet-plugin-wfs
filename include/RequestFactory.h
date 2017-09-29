@@ -42,7 +42,7 @@ class RequestFactory
    *   @brief Registers factory methods for creating WFS request objects
    *
    *   @param name the name of the request
-*  @param feature_id ID to register for use for GetCapabilities response
+   *   @param feature_id ID to register for use for GetCapabilities response
    *   @param create_from_kvp factory method for creating the request object from
    *          HTTP format KVP request. KVP is not supported if empty boost::function1
    *          provided.
