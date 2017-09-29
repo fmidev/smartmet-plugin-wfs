@@ -977,7 +977,7 @@ This handler adds support for stored queries for ....
 
 @section WFS_SQ_ENV_MONITORING_FACILITY_QUERY_HANDLER_PARAMS Query handler built-in parameters
 
-The following stored query handler are in use
+The following stored query handler parameters are in use
 
 <table border="1">
 
@@ -989,31 +989,106 @@ The following stored query handler are in use
 </tr>
 
 <tr>
-  <td>networkname</td>
+  <td>classId</td>
+  <td>@ref WFS_CFG_ARRAY_PARAM_TMPL</td>
+  <td>int</td>
+  <td>Station groups are classified into classes. ClassId is an unique identity for a class.</td>
+</tr>
+
+<tr>
+  <td>groupId</td>
+  <td>@ref WFS_CFG_ARRAY_PARAM_TMPL</td>
+  <td>int</td>
+  <td>A station is placed in groups depending on which kind of measurents it does. GroupId is an
+unique identity for a group.</td>
+</tr>
+
+<tr>
+  <td>stationId</td>
+  <td>@ref WFS_CFG_ARRAY_PARAM_TMPL</td>
+  <td>int</td>
+  <td>StationId is an unique local identity for a station.</td>
+</tr>
+
+<tr>
+  <td>stationName</td>
   <td>@ref WFS_CFG_SCALAR_PARAM_TMPL</td>
   <td>string</td>
-  <td>Network name.</td>
+  <td>StationName is an just a name for a station.</td>
 </tr>
 
 <tr>
-  <td>networkid</td>
+  <td>beginTime</td>
   <td>@ref WFS_CFG_SCALAR_PARAM_TMPL</td>
-  <td>int</td>
-  <td>Network id.</td>
+  <td>time</td>
+  <td>Specifies the begin time position of operational activity period.</td>
 </tr>
 
 <tr>
-  <td>stationname</td>
+  <td>endTime</td>
+  <td>@ref WFS_CFG_SCALAR_PARAM_TMPL</td>
+  <td>time</td>
+  <td>Specifies the end time position of operational activity period.</td>
+</tr>
+
+<tr>
+  <td>basePhenomenon</td>
+  <td>@ref WFS_CFG_ARRAY_PARAM_TMPL</td>
+  <td>string</td>
+  <td>The parameter can be used to restrict result to stations measuring the specific
+phenomenon.</td>
+</tr>
+
+<tr>
+  <td>aggregateFunction</td>
+  <td>@ref WFS_CFG_ARRAY_PARAM_TMPL</td>
+  <td>string</td>
+  <td>The parameter can be used to restrict result to stations that have measurands with the
+specific aggregate function.</td>
+</tr>
+
+<tr>
+  <td>aggregatePeriod</td>
+  <td>@ref WFS_CFG_ARRAY_PARAM_TMPL</td>
+  <td>string</td>
+  <td>The parameter can be used to restrict result to stations that have measurands with the
+specific aggregate period.</td>
+</tr>
+
+<tr>
+  <td>measurandCode</td>
+  <td>@ref WFS_CFG_ARRAY_PARAM_TMPL</td>
+  <td>The parameter can be used to restrict result to stations that have measurands with the
+specific measurand code.</td>
+  <td></td>
+</tr>
+
+<tr>
+  <td>storageId</td>
+  <td>@ref WFS_CFG_ARRAY_PARAM_TMPL</td>
+  <td>int</td>
+  <td>StoregeId can be used to restrict database search to specific storages </td>
+</tr>
+
+<tr>
+  <td>inspireNamespace</td>
   <td>@ref WFS_CFG_SCALAR_PARAM_TMPL</td>
   <td>string</td>
-  <td>Station name.</td>
+  <td></td>
 </tr>
 
 <tr>
-  <td>fmiid</td>
+  <td>authorityDomain</td>
   <td>@ref WFS_CFG_SCALAR_PARAM_TMPL</td>
-  <td>int</td>
-  <td>Station id.</td>
+  <td>string</td>
+  <td>Authority domain used for example in codeSpace names of XML response.</td>
+</tr>
+
+<tr>
+  <td>showObservingCapability</td>
+  <td>@ref WFS_CFG_SCALAR_PARAM_TMPL</td>
+  <td>bool</td>
+  <td>Enable or disable observing capabilities to be shown in XML response.</td>
 </tr>
 
 
