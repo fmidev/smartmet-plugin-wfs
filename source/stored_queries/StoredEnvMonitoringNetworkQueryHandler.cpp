@@ -387,7 +387,8 @@ The following stored query handler parameters are in use
   <td>networkId</td>
   <td>@ref WFS_CFG_SCALAR_PARAM_TMPL</td>
   <td>int</td>
-  <td>The networkid is a unique identity of network. Every station has a unique identity in a network if it is part of it (e.g. ICAO code for airports).</td>
+  <td>The networkid is a unique identity of network. Every station has a unique identity in a
+network if it is part of it (e.g. ICAO code for airports).</td>
 </tr>
 
 <tr>
@@ -408,7 +409,7 @@ The following stored query handler parameters are in use
   <td>groupId</td>
   <td>@ref WFS_CFG_ARRAY_PARAM_TMPL</td>
   <td>int</td>
-  <td>A station is placed in groups depending on which kind of measurents it does. GroupId is an
+  <td>A station is placed in groups depending on which kind of measurents it does. GroupId is a
 unique identity for a group.</td>
 </tr>
 
@@ -416,7 +417,7 @@ unique identity for a group.</td>
   <td>stationId</td>
   <td>@ref WFS_CFG_ARRAY_PARAM_TMPL</td>
   <td>int</td>
-  <td>StationId is an unique local identity for a station.</td>
+  <td>StationId is a unique local identity for a station.</td>
 </tr>
 
 <tr>
