@@ -372,7 +372,7 @@ This handler adds support for stored queries for ....
 
 @section WFS_SQ_ENV_MONITORING_NETWORK_QUERY_HANDLER_PARAMS Query handler built-in parameters
 
-The following stored query handler are in use
+The following stored query handler parameters are in use
 
 <table border="1">
 
@@ -384,19 +384,61 @@ The following stored query handler are in use
 </tr>
 
 <tr>
-  <td>networkname</td>
+  <td>networkId</td>
   <td>@ref WFS_CFG_SCALAR_PARAM_TMPL</td>
-  <td>string</td>
-  <td>Network name.</td>
+  <td>int</td>
+  <td>The networkid is a unique identity of network. Every station has a unique identity in a network if it is part of it (e.g. ICAO code for airports).</td>
 </tr>
 
 <tr>
-  <td>networkid</td>
-  <td>@ref WFS_CFG_SCALAR_PARAM_TMPL</td>
+  <td>classId</td>
+  <td>@ref WFS_CFG_ARRAY_PARAM_TMPL</td>
   <td>int</td>
-  <td>Network id.</td>
+  <td>Station groups are classified into classes. ClassId is an unique identity for a class.</td>
 </tr>
 
+<tr>
+  <td>className</td>
+  <td>@ref WFS_CFG_ARRAY_PARAM_TMPL</td>
+  <td>int</td>
+  <td>Class name is just a name for a class with classId identity.</td>
+</tr>
+
+<tr>
+  <td>groupId</td>
+  <td>@ref WFS_CFG_ARRAY_PARAM_TMPL</td>
+  <td>int</td>
+  <td>A station is placed in groups depending on which kind of measurents it does. GroupId is an
+unique identity for a group.</td>
+</tr>
+
+<tr>
+  <td>stationId</td>
+  <td>@ref WFS_CFG_ARRAY_PARAM_TMPL</td>
+  <td>int</td>
+  <td>StationId is an unique local identity for a station.</td>
+</tr>
+
+<tr>
+  <td>stationName</td>
+  <td>@ref WFS_CFG_SCALAR_PARAM_TMPL</td>
+  <td>string</td>
+  <td>StationName is just a name for a station.</td>
+</tr>
+
+<tr>
+  <td>inspireNamespace</td>
+  <td>@ref WFS_CFG_SCALAR_PARAM_TMPL</td>
+  <td>string</td>
+  <td></td>
+</tr>
+
+<tr>
+  <td>authorityDomain</td>
+  <td>@ref WFS_CFG_SCALAR_PARAM_TMPL</td>
+  <td>string</td>
+  <td>Authority domain used for example in codeSpace names of XML response.</td>
+</tr>
 
 </table>
 
