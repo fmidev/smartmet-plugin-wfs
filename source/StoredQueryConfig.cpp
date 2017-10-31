@@ -2,6 +2,7 @@
 #include "ParameterTemplateBase.h"
 #include "StoredQueryHandlerBase.h"
 #include <boost/algorithm/string.hpp>
+#include <boost/filesystem.hpp>
 #include <macgyver/TypeName.h>
 #include <spine/Convenience.h>
 #include <spine/Exception.h>
@@ -17,6 +18,7 @@ SmartMet::Plugin::WFS::StoredQueryConfig::StoredQueryConfig(const std::string& c
 {
   try
   {
+    config_last_write_time = config_write_time();
     parse_config();
   }
   catch (...)
@@ -31,6 +33,7 @@ SmartMet::Plugin::WFS::StoredQueryConfig::StoredQueryConfig(
 {
   try
   {
+    config_last_write_time = config_write_time();
     parse_config();
   }
   catch (...)
@@ -417,6 +420,56 @@ void SmartMet::Plugin::WFS::StoredQueryConfig::dump_params(std::ostream& stream)
   catch (...)
   {
     throw SmartMet::Spine::Exception(BCP, "Operation failed!", NULL);
+  }
+}
+
+std::time_t SmartMet::Plugin::WFS::StoredQueryConfig::config_write_time() const
+{
+  try
+  {
+    namespace ba = boost::algorithm;
+    namespace fs = boost::filesystem;
+
+    auto filepath = get_file_name();
+
+    fs::path p(filepath);
+    auto filename = p.filename().string();
+
+    bool validFile =
+        (fs::is_regular_file(filepath) and not ba::starts_with(filename, ".") and
+         not ba::starts_with(filename, "#") and filename.substr(filename.length() - 5) == ".conf");
+
+    if (validFile)
+      return fs::last_write_time(p);
+
+    return config_last_write_time;
+  }
+  catch (...)
+  {
+    std::ostringstream msg;
+    msg << "Failed to get last write time of '" << get_file_name() << "' file.";
+    throw SmartMet::Spine::Exception(BCP, msg.str(), NULL);
+  }
+}
+
+bool SmartMet::Plugin::WFS::StoredQueryConfig::last_write_time_changed() const
+{
+  try
+  {
+    if (config_write_time() == config_last_write_time)
+      return false;
+
+    return true;
+  }
+  catch (const SmartMet::Spine::Exception& e)
+  {
+    throw;
+  }
+  catch (...)
+  {
+    std::ostringstream msg;
+    msg << "Failed to test write time of '" << get_file_name() << "' file.";
+    throw SmartMet::Spine::Exception(BCP, msg.str(), NULL);
   }
 }
 

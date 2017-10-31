@@ -158,11 +158,27 @@ class StoredQueryConfig : public SmartMet::Spine::ConfigBase
 
   void warn_about_unused_params(const StoredQueryHandlerBase* handler = NULL);
 
+  /**
+   *  @brief Get last write time of the stored query configuration file.
+   *  If the file is removed the time stored to an object is returned.
+   *  @return The last write time if file.
+   */
+  std::time_t config_write_time() const;
+
+  /**
+   *  @brief Test if the stored query configuration file is changed.
+   *  @retval true Last write time has changed.
+   *  @retval false Last write time has not changed.
+   */
+  bool last_write_time_changed() const;
+
  private:
   void parse_config();
 
  private:
   std::string query_id;
+  std::time_t config_last_write_time;
+
   int expires_seconds;  ///< For the expires entity-header field. After that the response is
                         /// considered stale.
                         /**
