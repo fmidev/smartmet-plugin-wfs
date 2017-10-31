@@ -32,6 +32,7 @@
 #include <list>
 #include <map>
 #include <string>
+#include <thread>
 
 namespace SmartMet
 {
@@ -125,6 +126,8 @@ class Plugin : public SmartMetPlugin, virtual private boost::noncopyable, privat
  private:
   boost::shared_ptr<pqxx::connection> create_geoserver_db_conn() const;
 
+  void updateLoop();
+
  private:
   const std::string itsModuleName;
 
@@ -140,6 +143,12 @@ class Plugin : public SmartMetPlugin, virtual private boost::noncopyable, privat
   SmartMet::Spine::Reactor* itsReactor;
 
   const char* itsConfig;
+
+  bool itsShutdownRequested;
+
+  int itsUpdateLoopThreadCount;
+
+  std::unique_ptr<std::thread> itsUpdateLoopThread;
 
 };  // class Plugin
 

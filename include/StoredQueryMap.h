@@ -49,6 +49,8 @@ class StoredQueryMap
 
   virtual std::vector<std::string> get_return_type_names() const;
 
+  void update_handlers();
+
  private:
   void add_handler(SmartMet::Spine::Reactor* theReactor,
                    boost::shared_ptr<StoredQueryConfig> sqh_config,

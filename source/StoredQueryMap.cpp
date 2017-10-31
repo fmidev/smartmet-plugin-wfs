@@ -403,3 +403,8 @@ void bw::StoredQueryMap::add_handler_thread_proc(SmartMet::Spine::Reactor* theRe
     throw SmartMet::Spine::Exception(BCP, "Operation failed!", NULL);
   }
 }
+
+void bw::StoredQueryMap::update_handlers()
+{
+
+}

@@ -40,7 +40,9 @@
 #include <spine/TableFormatterOptions.h>
 #include <xercesc/util/PlatformUtils.hpp>
 #include <Plugin.h>
+#include <chrono>
 #include <cxxabi.h>
+#include <functional>
 #include <iostream>
 #include <stdexcept>
 #include <typeinfo>
@@ -65,7 +67,12 @@ namespace WFS
  *  @brief Plugin constructor
  */
 Plugin::Plugin(SmartMet::Spine::Reactor* theReactor, const char* theConfig)
-    : SmartMetPlugin(), itsModuleName("WFS"), itsReactor(theReactor), itsConfig(theConfig)
+    : SmartMetPlugin(),
+      itsModuleName("WFS"),
+      itsReactor(theReactor),
+      itsConfig(theConfig),
+      itsShutdownRequested(false),
+      itsUpdateLoopThreadCount(0)
 {
 }
 
@@ -138,6 +145,9 @@ void Plugin::init()
           throw SmartMet::Spine::Exception(BCP, msg.str());
         }
       }
+
+      // Begin the update loop
+      itsUpdateLoopThread.reset(new std::thread(std::bind(&Plugin::updateLoop, this)));
     }
     catch (...)
     {
@@ -167,7 +177,18 @@ void Plugin::init()
 
 void Plugin::shutdown()
 {
-  std::cout << "  -- Shutdown requested (wfs)\n";
+  try
+  {
+    std::cout << "  -- Shutdown requested (wfs)\n";
+    itsShutdownRequested = true;
+
+    while (itsUpdateLoopThreadCount > 0)
+      std::this_thread::sleep_for(std::chrono::milliseconds(100));
+  }
+  catch (...)
+  {
+    throw Spine::Exception(BCP, "Starting shutdown failed!", NULL);
+  }
 }
 // ----------------------------------------------------------------------
 /*!
@@ -794,6 +815,35 @@ RequestBaseP Plugin::parse_xml_describe_stored_queries_request(const std::string
   catch (...)
   {
     throw SmartMet::Spine::Exception(BCP, "Operation failed!", NULL);
+  }
+}
+
+void Plugin::updateLoop()
+{
+  try
+  {
+    itsUpdateLoopThreadCount++;
+    while (not itsShutdownRequested)
+    {
+      try
+      {
+        for (int i = 0; (not itsShutdownRequested && i < 5); i++)
+          boost::this_thread::sleep(boost::posix_time::milliseconds(1000));
+
+        if (not itsShutdownRequested)
+          plugin_data->updateStoredQueryMap();
+      }
+      catch (...)
+      {
+        Spine::Exception exception(BCP, "Could not update storedQueries!", NULL);
+        exception.printError();
+      }
+    }
+    itsUpdateLoopThreadCount--;
+  }
+  catch (...)
+  {
+    throw Spine::Exception(BCP, "Capabilities update failed!", NULL);
   }
 }
 

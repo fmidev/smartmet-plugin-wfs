@@ -73,6 +73,18 @@ bw::PluginData::~PluginData()
 {
 }
 
+void bw::PluginData::updateStoredQueryMap()
+{
+  try
+  {
+    stored_query_map->update_handlers();
+  }
+  catch (...)
+  {
+    throw Spine::Exception(BCP, "Stored query handlers update failed!", NULL);
+  }
+}
+
 boost::posix_time::ptime bw::PluginData::get_time_stamp() const
 {
   try

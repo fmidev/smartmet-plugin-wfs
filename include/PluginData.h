@@ -90,6 +90,8 @@ class PluginData : public boost::noncopyable
   inline WfsCapabilities& get_capabilities() { return *wfs_capabilities; }
   inline const WfsCapabilities& get_capabilities() const { return *wfs_capabilities; }
 
+  void updateStoredQueryMap();
+
  private:
   void create_template_formatters();
   void create_xml_parser();
