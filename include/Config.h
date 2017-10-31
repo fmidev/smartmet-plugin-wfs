@@ -49,6 +49,7 @@ class Config : private boost::noncopyable, public SmartMet::Spine::ConfigBase
   bool getValidateXmlOutput() const { return validate_output; }
   bool getEnableDemoQueries() const { return enable_demo_queries; }
   bool getEnableTestQueries() const { return enable_test_queries; }
+  bool getEnableConfigurationPolling() const { return enable_configuration_polling; }
   bool getSQRestrictions() const { return sq_restrictions; }
   int getDefaultExpiresSeconds() const { return default_expires_seconds; }
   const Fmi::TemplateDirectory& get_template_directory() const { return *template_directory; }
@@ -58,6 +59,7 @@ class Config : private boost::noncopyable, public SmartMet::Spine::ConfigBase
   inline int getCacheTimeConstant() const { return cache_time_constant; }
   std::vector<boost::shared_ptr<WfsFeatureDef> > read_features_config(
       SmartMet::Engine::Gis::CRSRegistry& theCRSRegistry);
+
   void read_typename_config(std::map<std::string, std::string>& typename_storedqry);
 
  private:
@@ -74,6 +76,7 @@ class Config : private boost::noncopyable, public SmartMet::Spine::ConfigBase
   bool validate_output;
   bool enable_demo_queries;
   bool enable_test_queries;
+  bool enable_configuration_polling;
   bool sq_restrictions;
 
 };  // class Config

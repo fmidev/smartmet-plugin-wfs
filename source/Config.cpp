@@ -50,6 +50,9 @@ Config::Config(const string& configfile)
     validate_output = get_optional_config_param<bool>("validateXmlOutput", false);
     enable_demo_queries = get_optional_config_param<bool>("enableDemoQueries", false);
     enable_test_queries = get_optional_config_param<bool>("enableTestQueries", false);
+    enable_configuration_polling =
+        get_optional_config_param<bool>("enableConfigurationPolling", false);
+
     sq_restrictions = get_optional_config_param<bool>("storedQueryRestrictions", true);
 
     std::vector<std::string> xml_grammar_pool_fns;

@@ -146,8 +146,9 @@ void Plugin::init()
         }
       }
 
-      // Begin the update loop
-      itsUpdateLoopThread.reset(new std::thread(std::bind(&Plugin::updateLoop, this)));
+      // Begin the update loop if enabled
+      if (plugin_data->get_config().getEnableConfigurationPolling())
+        itsUpdateLoopThread.reset(new std::thread(std::bind(&Plugin::updateLoop, this)));
     }
     catch (...)
     {
