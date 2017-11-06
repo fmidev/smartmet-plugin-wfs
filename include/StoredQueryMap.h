@@ -49,7 +49,7 @@ class StoredQueryMap
 
   virtual std::vector<std::string> get_return_type_names() const;
 
-  void update_handlers();
+  void update_handlers(Spine::Reactor* theReactor, PluginData& plugin_data);
 
  private:
   void add_handler(SmartMet::Spine::Reactor* theReactor,

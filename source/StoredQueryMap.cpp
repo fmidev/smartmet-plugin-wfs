@@ -404,7 +404,57 @@ void bw::StoredQueryMap::add_handler_thread_proc(SmartMet::Spine::Reactor* theRe
   }
 }
 
-void bw::StoredQueryMap::update_handlers()
+void bw::StoredQueryMap::update_handlers(Spine::Reactor* theReactor, bw::PluginData& plugin_data)
 {
+  try
+  {
+    for (const auto& sqName : handler_names)
+    {
+      std::ostringstream msg;
 
+      if (auto handler = get_handler_by_name(sqName))
+      {
+        auto config_write_time = handler->get_config()->config_write_time();
+        if (handler->get_config()->last_write_time_changed())
+        {
+          boost::shared_ptr<StoredQueryConfig> sqh_config(
+              new StoredQueryConfig(handler->get_config()->get_file_name()));
+
+          if (sqName != sqh_config->get_query_id())
+          {
+            msg << Spine::log_time_str() << ": [WFS] Stored query with name '" << sqName
+                << "' has changed to '" << sqh_config->get_query_id()
+                << "'. The name change iqnored! CHANGE THE NAME BACK TO '" << sqName
+                << "' OR RESTART THE SERVER!\n";
+            std::cerr << msg.str() << std::flush;
+            continue;
+          }
+
+          char mbstr[100];
+          const char* fmt = "%Y-%m-%d %H:%M:%S";
+          std::strftime(mbstr, sizeof(mbstr), fmt, std::localtime(&config_write_time));
+
+          msg << Spine::log_time_str() << ": [WFS] Updating stored query with name '" << sqName
+              << "'. Last write time of file '" << handler->get_config()->get_file_name()
+              << "' is now " << mbstr << ".\n";
+          std::cerr << msg.str() << std::flush;
+
+          add_handler(theReactor,
+                      boost::filesystem::path(handler->get_config()->get_file_name()),
+                      plugin_data.get_config().get_template_directory(),
+                      plugin_data);
+        }
+      }
+      else
+      {
+        msg << Spine::log_time_str() << ": [WFS] [ERROR] Stored query name '" << sqName
+            << "' is found from StoredQueryMap but a handler not found for it!\n";
+        std::cerr << msg.str() << std::flush;
+      }
+    }
+  }
+  catch (...)
+  {
+    throw Spine::Exception(BCP, "A stored query handler update failed!", NULL);
+  }
 }

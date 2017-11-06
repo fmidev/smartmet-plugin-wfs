@@ -832,7 +832,7 @@ void Plugin::updateLoop()
           boost::this_thread::sleep(boost::posix_time::milliseconds(1000));
 
         if (not itsShutdownRequested)
-          plugin_data->updateStoredQueryMap();
+          plugin_data->updateStoredQueryMap(itsReactor);
       }
       catch (...)
       {

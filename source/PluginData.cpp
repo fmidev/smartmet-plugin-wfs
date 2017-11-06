@@ -73,11 +73,11 @@ bw::PluginData::~PluginData()
 {
 }
 
-void bw::PluginData::updateStoredQueryMap()
+void bw::PluginData::updateStoredQueryMap(Spine::Reactor *theReactor)
 {
   try
   {
-    stored_query_map->update_handlers();
+    stored_query_map->update_handlers(theReactor, *this);
   }
   catch (...)
   {
