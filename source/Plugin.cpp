@@ -836,7 +836,7 @@ void Plugin::updateLoop()
       }
       catch (...)
       {
-        Spine::Exception exception(BCP, "Could not update storedQueries!", NULL);
+        Spine::Exception exception(BCP, "Stored query map update failed!", NULL);
         exception.printError();
       }
     }
