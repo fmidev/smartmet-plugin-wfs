@@ -394,7 +394,7 @@ void StoredSoundingQueryHandler::query(const StoredQuery& query,
                 stationLatitude + dataContainer->castTo<double>(dataLatitudeIt, 6);
             const double levelLon =
                 stationLongitude + dataContainer->castTo<double>(dataLongitudeIt, 6);
-            set_2D_coord(transformation, levelLon, levelLat, row);
+            set_2D_coord(transformation, levelLat, levelLon, row);
             uint32_t significance = dataContainer->castTo<uint32_t>(dataSignificanceIt, 0);
             row["significance"] = significance;
             std::bitset<18> sBitset(significance);
