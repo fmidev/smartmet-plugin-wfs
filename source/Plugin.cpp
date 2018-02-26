@@ -827,7 +827,7 @@ void Plugin::updateLoop()
   try
   {
     itsUpdateLoopThreadCount++;
-    while (not itsShutdownRequested)
+    while (not(itsShutdownRequested or isShutdownRequested()))
     {
       try
       {
