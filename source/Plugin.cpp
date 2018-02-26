@@ -148,11 +148,7 @@ void Plugin::init()
 
       // Begin the update loop if enabled
       if (plugin_data->get_config().getEnableConfigurationPolling())
-#ifdef TODO_CLEAN_CRASH_UNIQUE_PTR
         itsUpdateLoopThread.reset(new std::thread(std::bind(&Plugin::updateLoop, this)));
-#else
-        itsUpdateLoopThread = new std::thread(std::bind(&Plugin::updateLoop, this));
-#endif
     }
     catch (...)
     {
@@ -201,7 +197,9 @@ void Plugin::shutdown()
  */
 // ----------------------------------------------------------------------
 
-Plugin::~Plugin() {}
+Plugin::~Plugin()
+{
+}
 // ----------------------------------------------------------------------
 /*!
  * \brief Return the plugin name

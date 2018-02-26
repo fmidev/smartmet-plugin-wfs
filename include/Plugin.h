@@ -147,11 +147,7 @@ class Plugin : public SmartMetPlugin, virtual private boost::noncopyable, privat
   boost::atomic<bool> itsShutdownRequested;
   boost::atomic<int> itsUpdateLoopThreadCount;
 
-#ifdef TODO_CLEAN_CRASH_UNIQUE_PTR
   std::unique_ptr<std::thread> itsUpdateLoopThread;
-#else
-  std::thread* itsUpdateLoopThread;
-#endif
 
 };  // class Plugin
 
