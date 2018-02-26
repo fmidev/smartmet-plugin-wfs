@@ -185,6 +185,9 @@ void Plugin::shutdown()
 
     while (itsUpdateLoopThreadCount > 0)
       std::this_thread::sleep_for(std::chrono::milliseconds(100));
+
+    if (itsUpdateLoopThread and itsUpdateLoopThread->joinable())
+      itsUpdateLoopThread->join();
   }
   catch (...)
   {
