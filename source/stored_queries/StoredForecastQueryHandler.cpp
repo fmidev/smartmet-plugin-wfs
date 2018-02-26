@@ -456,7 +456,7 @@ boost::shared_ptr<SmartMet::Spine::Table> bw::StoredForecastQueryHandler::extrac
       if (not query.origin_time)
       {
         // With multifile data q_engine->get() origintime must not be set/locked
- 
+
         query.origin_time.reset(new pt::ptime(q->originTime()));
 
         if (not q_engine->getProducerConfig(producer).ismultifile)
