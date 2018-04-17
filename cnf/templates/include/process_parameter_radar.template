@@ -38,3 +38,19 @@
          		</om:value>
         	     </om:NamedValue>
       		 </om:parameter></TMPL_if>
+<TMPL_if DEFINED(dataset.params.db_gain[0])>            <om:parameter>
+	             <om:NamedValue>
+                        <om:name xlink:href="http://inspire.ec.europa.eu/codeList/ProcessParameterValue/value/radar/linearTransformationGain"/>
+                        <om:value>
+                                <gml:Measure uom="double"><TMPL_var dataset.params.db_gain[0]></gml:Measure>
+                        </om:value>
+                     </om:NamedValue>
+                 </om:parameter></TMPL_if>
+<TMPL_if DEFINED(dataset.params.db_d_offset[0])>            <om:parameter>
+                     <om:NamedValue>
+                        <om:name xlink:href="http://inspire.ec.europa.eu/codeList/ProcessParameterValue/value/radar/linearTransformationOffset"/>
+                        <om:value>
+                                <gml:Measure uom="double"><TMPL_var dataset.params.db_d_offset[0]></gml:Measure>
+                        </om:value>
+                     </om:NamedValue>
+                 </om:parameter></TMPL_if>
