@@ -201,10 +201,10 @@ void StoredObsQueryHandler::query(const StoredQuery& query,
       std::vector<std::string> qc_info_param_names;
       const bool support_quality_info = SupportsQualityParameters::supportQualityInfo(params);
 
-      if (not m_support_qc_parameters)
+      auto qc_param_name_ref = SupportsQualityParameters::firstQCParameter(param_names);
+      if (not m_support_qc_parameters or not support_quality_info)
       {
         // Do not allow QC parameters if it is not enabled in stored query.
-        auto qc_param_name_ref = SupportsQualityParameters::firstQCParameter(param_names);
         if (qc_param_name_ref != param_names.end())
         {
           SmartMet::Spine::Exception exception(BCP, "Invalid parameter!");
@@ -213,13 +213,13 @@ void StoredObsQueryHandler::query(const StoredQuery& query,
           exception.addParameter(WFS_EXCEPTION_CODE, WFS_INVALID_PARAMETER_VALUE);
           throw exception;
         }
+      }
 
-        // Quality info parameter construction
-        if (support_quality_info)
-        {
-          BOOST_FOREACH (const std::string& name, param_names)
-            qc_info_param_names.push_back("qc_" + name);
-        }
+      // Quality info parameter construction if there is not any QC parameters given.
+      if (support_quality_info and qc_param_name_ref == param_names.end())
+      {
+        BOOST_FOREACH (const std::string& name, param_names)
+          qc_info_param_names.push_back("qc_" + name);
       }
 
       int first_param = 0, last_param = 0;

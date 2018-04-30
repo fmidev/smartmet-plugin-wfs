@@ -3,10 +3,15 @@
                         <wml2:point>
                             <wml2:MeasurementTVP> 
                                       <wml2:time><TMPL_var row.epochTimeStr></wml2:time>
-				      <wml2:value><TMPL_var dataIt.value></wml2:value><TMPL_if (DEFINED(group.qualityInfo) && DEFINED(dataIt.qcValue))>
+				      <wml2:value><TMPL_var dataIt.value></wml2:value><TMPL_if (DEFINED(obsParam.isQCParameter) || (DEFINED(dataIt.qcValue) && DEFINED(group.qualityInfo)))>
                                       <wml2:metadata>
                                         <wml2:TVPMeasurementMetadata>
-                                          <wml2:quality xlink:title="qc-<TMPL_var dataIt.qcValue>" xlink:href="<TMPL_var protocol><TMPL_var hostname><TMPL_var fmi_apikey_prefix><TMPL_var fmi_apikey>/meta?qualitycode=<TMPL_var dataIt.qcValue>&amp;language=eng&amp;"/>
+                                          <wml2:qualifier>
+                                            <swe:Category>
+                                              <swe:codeSpace xlink:title="Quality codes" xlink:href="<TMPL_var protocol><TMPL_var hostname><TMPL_var fmi_apikey_prefix><TMPL_var fmi_apikey>/meta?qualitycode=&amp;language=<TMPL_var language>&amp;"/><TMPL_if !DEFINED(obsParam.isQCParameter)>
+                                              <swe:value><TMPL_var dataIt.qcValue></swe:value></TMPL_if>
+                                            </swe:Category>
+                                          </wml2:qualifier>
                                         </wml2:TVPMeasurementMetadata>
                                       </wml2:metadata></TMPL_if>
                             </wml2:MeasurementTVP>
