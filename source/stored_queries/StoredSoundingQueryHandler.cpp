@@ -650,6 +650,9 @@ void StoredSoundingQueryHandler::parseSoundingQuery(const RequestParameterMap& p
        ++soundingIdIt, ++stationIdIt, ++messageTimeIt, ++launchTimeIt, ++soundingEndIt)
   {
     const int32_t tmpstationId = soundingQueryResult->castTo<int32_t>(stationIdIt);
+
+    // The messages are arranged to descending order using MESSAGE_TIME.
+    // If the value of latest is true, we pick only the first radiosounding.
     if ((not latest) or (latest and latestSet.find(tmpstationId) == latestSet.end()))
     {
       const int32_t soundingId = soundingQueryResult->castTo<int32_t>(soundingIdIt);
@@ -714,6 +717,7 @@ void StoredSoundingQueryHandler::makeSoundingQuery(const RequestParameterMap& pa
       "OR_GROUP_data_end_time", "MESSAGE_TIME", "PropertyIsLessThanOrEqualTo", endTime);
 
   profileQueryParams.addOrderBy("STATION_ID", "ASC");
+  profileQueryParams.addOrderBy("MESSAGE_TIME", "DESC");
 
   // Execute query
   SmartMet::Engine::Observation::MastQuery profileQuery;
