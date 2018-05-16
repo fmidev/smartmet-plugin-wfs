@@ -93,6 +93,9 @@ rm -rf $RPM_BUILD_ROOT
 %{_sysconfdir}/smartmet/plugins/wfs/XMLSchemas.cache
 
 %changelog
+* Upcoming
+- Arrange soundings using message_time to get the latest request parameter work correctly
+
 * Mon May  7 2018 Mika Heiskanen <mika.heiskanen@fmi.fi> - 18.5.7-2.fmi
 - Require newer querydata-engine so that data independent latlon parameters can be used
 
