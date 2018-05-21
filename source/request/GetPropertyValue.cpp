@@ -603,7 +603,8 @@ bool GetPropertyValue::collect_query_responses(std::vector<std::string>& query_r
         std::ostringstream result_stream;
         query_ptr->execute(result_stream, get_language());
         const std::string cache_key = query_ptr->get_cache_key();
-        query_cache.insert(cache_key, result_stream.str());
+        query_cache.insert(cache_key, result_stream.str(), cache_key);
+        query_cache.expire(cache_key);
 
         // FIXME: should we restrict caching on too large responses?
 
