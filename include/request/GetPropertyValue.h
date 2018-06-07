@@ -6,7 +6,7 @@
 #include "StandardPresentationParameters.h"
 #include "StoredQueryMap.h"
 #include "XPathSnapshot.h"
-#include <macgyver/Cache.h>
+#include <macgyver/TimedCache.h>
 #include <xercesc/dom/DOMDocument.hpp>
 
 namespace SmartMet

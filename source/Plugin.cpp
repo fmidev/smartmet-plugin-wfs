@@ -83,8 +83,9 @@ void Plugin::init()
     try
     {
       plugin_data.reset(new PluginData(itsReactor, itsConfig));
-      query_cache.reset(new QueryResponseCache(plugin_data->get_config().getCacheSize(),
-                                               plugin_data->get_config().getCacheTimeConstant()));
+      query_cache.reset(new QueryResponseCache(
+          plugin_data->get_config().getCacheSize(),
+          std::chrono::seconds(plugin_data->get_config().getCacheTimeConstant())));
       request_factory.reset(new RequestFactory(*plugin_data));
 
       if (itsReactor->getRequiredAPIVersion() != SMARTMET_API_VERSION)

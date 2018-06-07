@@ -14,8 +14,8 @@
 #include "XmlParser.h"
 #include <boost/date_time/posix_time/ptime.hpp>
 #include <boost/shared_ptr.hpp>
-#include <macgyver/Cache.h>
 #include <macgyver/TemplateFormatterMT.h>
+#include <macgyver/TimedCache.h>
 
 namespace SmartMet
 {
@@ -25,9 +25,7 @@ namespace WFS
 {
 class StoredQueryMap;
 
-typedef Fmi::Cache::
-    Cache<std::string, std::string, Fmi::Cache::LRUEviction, std::string, Fmi::Cache::InstantExpire>
-        QueryResponseCache;
+typedef Fmi::TimedCache::Cache<std::string, std::string> QueryResponseCache;
 
 class PluginData : public boost::noncopyable
 {

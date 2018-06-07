@@ -20,9 +20,9 @@
 
 #include <ctpp2/CDT.hpp>
 
-#include <macgyver/Cache.h>
 #include <macgyver/ObjectPool.h>
 #include <macgyver/TemplateFormatterMT.h>
+#include <macgyver/TimedCache.h>
 
 #include <boost/shared_ptr.hpp>
 #include <boost/thread.hpp>
