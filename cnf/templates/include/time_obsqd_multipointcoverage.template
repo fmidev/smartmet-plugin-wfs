@@ -6,7 +6,7 @@
       </om:phenomenonTime>
       <om:resultTime>
         <gml:TimeInstant gml:id="time2-<TMPL_var group.groupId>">
-          <gml:timePosition><TMPL_var group.phenomenonStartTime></gml:timePosition>
+          <gml:timePosition><TMPL_var group.resultTime></gml:timePosition>
         </gml:TimeInstant>
       </om:resultTime><TMPL_else>
       <om:phenomenonTime xlink:href="#time1-<TMPL_var group.groupId>"/>

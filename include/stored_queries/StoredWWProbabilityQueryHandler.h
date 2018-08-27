@@ -137,6 +137,7 @@ class StoredWWProbabilityQueryHandler : public StoredQueryHandlerBase,
                          SmartMet::Engine::Gis::CRSRegistry& crsRegistry,
                          const std::string& requestedCRS,
                          const boost::posix_time::ptime& origintime,
+                         const boost::posix_time::ptime& modificationtime,
                          const std::string& tz_name,
                          CTPP::CDT& hash) const;
 

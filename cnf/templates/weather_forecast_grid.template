@@ -13,7 +13,7 @@
                     <om:name <TMPL_include "include/link_for_process.template">/>
                     <om:value>
                         <gml:TimeInstant gml:id="analysis-time-<TMPL_var group.groupId>">
-                            <gml:timePosition><TMPL_var group.resultTime></gml:timePosition>
+                            <gml:timePosition><TMPL_var group.dataOriginTime></gml:timePosition>
                         </gml:TimeInstant>
                     </om:value>
                 </om:NamedValue>

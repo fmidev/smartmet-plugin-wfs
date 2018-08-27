@@ -13,7 +13,7 @@
           </om:phenomenonTime>
           <om:resultTime>
             <gml:TimeInstant gml:id="time-1-1">
-              <gml:timePosition>2013-03-18T00:00:00Z</gml:timePosition>
+              <gml:timePosition>2017-08-31T13:32:00Z</gml:timePosition>
             </gml:TimeInstant>
           </om:resultTime>
           <om:procedure xlink:href="http://xml.fmi.fi/inspire/process/hirlam"/>
@@ -127,7 +127,7 @@
           </om:phenomenonTime>
           <om:resultTime>
             <gml:TimeInstant gml:id="time-1-1">
-              <gml:timePosition>2013-03-18T00:00:00Z</gml:timePosition>
+              <gml:timePosition>2017-08-31T13:32:00Z</gml:timePosition>
             </gml:TimeInstant>
           </om:resultTime>
           <om:procedure xlink:href="http://xml.fmi.fi/inspire/process/hirlam"/>

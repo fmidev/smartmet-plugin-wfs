@@ -46,6 +46,7 @@ class StoredForecastQueryHandler : public StoredQueryHandlerBase,
     std::string tz_name;
 
     std::unique_ptr<boost::posix_time::ptime> origin_time;
+    boost::posix_time::ptime modification_time = boost::posix_time::not_a_date_time;
 
    public:
     boost::shared_ptr<SmartMet::Spine::Table> result;

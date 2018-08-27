@@ -245,6 +245,7 @@ void StoredWWProbabilityQueryHandler::parseQueryResults(
     SmartMet::Engine::Gis::CRSRegistry& crsRegistry,
     const std::string& requestedCRS,
     const boost::posix_time::ptime& origintime,
+    const boost::posix_time::ptime& modificationtime,
     const std::string& tz_name,
     CTPP::CDT& hash) const
 {
@@ -319,6 +320,7 @@ void StoredWWProbabilityQueryHandler::parseQueryResults(
         wfs_member["precipitation_form_id"] = wwtype;
         wfs_member["phenomenon_time"] = runtime_timestamp;
         wfs_member["analysis_time"] = format_local_time(origintime, tzp);
+        wfs_member["resultTime"] = format_local_time(modificationtime, tzp);
         wfs_member["designator"] = loc->iso2;
         wfs_member["name"] = loc->name;
         wfs_member["location_indicator_icao"] = airp_loc.icao_code;
@@ -526,6 +528,7 @@ void StoredWWProbabilityQueryHandler::query(const StoredQuery& query,
       q = itsQEngine->get(producer);
 
     boost::posix_time::ptime origintime = q->originTime();
+    boost::posix_time::ptime modificationtime = q->modificationTime();
 
     boost::shared_ptr<SmartMet::Spine::TimeSeriesGeneratorOptions> pTimeOptions =
         get_time_generator_options(sq_params);
@@ -580,6 +583,7 @@ void StoredWWProbabilityQueryHandler::query(const StoredQuery& query,
                       crsRegistry,
                       requestedCRS,
                       origintime,
+                      modificationtime,
                       tz_name,
                       hash);
 

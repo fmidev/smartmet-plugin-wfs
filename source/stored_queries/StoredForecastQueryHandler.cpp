@@ -241,7 +241,13 @@ void bw::StoredForecastQueryHandler::query(const StoredQuery& stored_query,
             const std::string origin_time_str =
                 Fmi::to_iso_extended_string(*query.origin_time) + "Z";
             group["dataOriginTime"] = origin_time_str;
-            group["resultTime"] = origin_time_str;
+          }
+
+          if (query.modification_time != boost::posix_time::not_a_date_time)
+          {
+            const std::string modification_time_str =
+                Fmi::to_iso_extended_string(query.modification_time) + "Z";
+            group["resultTime"] = modification_time_str;
           }
 
           for (std::size_t i = query.first_data_ind; i <= query.last_data_ind; i++)
@@ -436,6 +442,7 @@ boost::shared_ptr<SmartMet::Spine::Table> bw::StoredForecastQueryHandler::extrac
       }
 
       auto q = (origin_time ? q_engine->get(producer, *origin_time) : q_engine->get(producer));
+      query.modification_time = q->modificationTime();
 
 // FIXME: try to use the same model instead of searching model again
 #ifdef ENABLE_MODEL_PATH
