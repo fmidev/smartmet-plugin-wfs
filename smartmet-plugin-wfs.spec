@@ -3,7 +3,7 @@
 %define SPECNAME smartmet-plugin-%{DIRNAME}
 Summary: SmartMet WFS plugin
 Name: %{SPECNAME}
-Version: 18.10.11
+Version: 18.10.18
 Release: 1%{?dist}.fmi
 License: MIT
 Group: SmartMet/Plugins
@@ -95,6 +95,9 @@ rm -rf $RPM_BUILD_ROOT
 %{_sysconfdir}/smartmet/plugins/wfs/XMLSchemas.cache
 
 %changelog
+* Thu Oct 18 2018 Anssi Reponen <anssi.reponen@fmi.fi> - 18.10.18-1.fmi
+- Support for data_source-field added (BRAINSTORM-1233)
+
 * Thu Oct 11 2018 Mika Heiskanen <mika.heiskanen@fmi.fi> - 18.10.11-1.fmi
 - Replaced unsafe TemplateFormatterMT with TemplateFactory
 
