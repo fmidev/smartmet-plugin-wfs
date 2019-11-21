@@ -353,6 +353,41 @@ void StoredObsQueryHandler::query(const StoredQuery& query,
 
       params.get<int64_t>(P_GEOIDS, std::back_inserter(query_params.geoids));
 
+      // If feature is SYNOP, use fmisid instead of geoid
+      std::set<int> geoid_erase_set;
+      for (auto loc : locations_list)
+      {
+        // Check if optional fmisid exists
+        if (loc.second->fmisid)
+        {
+          // Check if feature is SYNOP
+          if (loc.second->feature == "SYNOP")
+          {
+            std::set<int> fmisid_set;
+            fmisid_set.insert(query_params.fmisids.begin(), query_params.fmisids.end());
+
+            int fmisid = *(loc.second->fmisid);
+            // Add fmisid if it doesn't already exist
+            if (fmisid_set.find(fmisid) == fmisid_set.end())
+            {
+              query_params.fmisids.push_back(fmisid);
+              geoid_erase_set.insert(loc.second->geoid);
+            }
+          }
+        }
+      }
+      // Remove geoids
+      if (!geoid_erase_set.empty())
+      {
+        for (int i = query_params.geoids.size() - 1; i >= 0; i--)
+        {
+          if (geoid_erase_set.find(query_params.geoids.at(i)) != geoid_erase_set.end())
+          {
+            query_params.geoids.erase(query_params.geoids.begin() + i);
+          }
+        }
+      }
+
       params.get<int64_t>(P_HOURS, std::back_inserter(query_params.hours));
 
       params.get<int64_t>(P_WEEK_DAYS, std::back_inserter(query_params.weekdays));
