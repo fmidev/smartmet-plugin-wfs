@@ -250,7 +250,6 @@ file-list:	cnf/XMLGrammarPool.dump
 	echo cnf/XMLGrammarPool.dump >>files.list.new
 	echo cnf/XMLSchemas.cache >>files.list.new
 	find test/base -name '*.conf' >>files.list.new
-	find test/base/input -name '*.get' >>files.list.new
 	find test/base/output -name '*.get' -o -name '*.kvp.post' -o -name '*.xml.post' >>files.list.new
 	find test/base/xml -name '*.xml' >>files.list.new
 	find test -name '*.pl' >>files.list.new
