@@ -58,7 +58,7 @@ StoredQueryParamRegistry::ScalarParameterRec::~ScalarParameterRec() = default;
 StoredQueryParamRegistry::ArrayParameterRec::~ArrayParameterRec() = default;
 
 
-boost::shared_ptr<bw::RequestParameterMap> StoredQueryParamRegistry::process_parameters(
+boost::shared_ptr<bw::RequestParameterMap> StoredQueryParamRegistry::resolve_handler_parameters(
     const bw::RequestParameterMap& src, const SupportsExtraHandlerParams* extra_params) const
 {
   try
