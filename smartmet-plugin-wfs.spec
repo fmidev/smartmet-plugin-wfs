@@ -3,7 +3,7 @@
 %define SPECNAME smartmet-plugin-%{DIRNAME}
 Summary: SmartMet WFS plugin
 Name: %{SPECNAME}
-Version: 21.7.5
+Version: 21.7.9
 Release: 1%{?dist}.fmi
 License: MIT
 Group: SmartMet/Plugins
@@ -22,13 +22,12 @@ BuildRequires: libconfig-devel >= 1.7.2
 BuildRequires: libcurl-devel
 BuildRequires: xerces-c-devel
 BuildRequires: xqilla-devel
-BuildRequires: libpqxx-devel < 1:7.0
 BuildRequires: openssl-devel
 BuildRequires: bzip2-devel
 BuildRequires: smartmet-library-spine-devel >= 21.7.5
 BuildRequires: smartmet-library-gis-devel >= 21.6.18
-BuildRequires: smartmet-library-locus-devel >= 21.6.21
-BuildRequires: smartmet-library-macgyver-devel >= 21.6.18
+BuildRequires: smartmet-library-locus-devel >= 21.7.8
+BuildRequires: smartmet-library-macgyver-devel >= 21.7.8
 BuildRequires: smartmet-engine-contour-devel >= 21.5.20
 BuildRequires: smartmet-engine-geonames-devel >= 21.6.22
 BuildRequires: smartmet-engine-gis-devel >= 21.6.17
@@ -44,10 +43,9 @@ Requires: ctpp2
 Requires: fmt >= 7.1.3
 Requires: libconfig >= 1.7.2
 Requires: libcurl
-Requires: libpqxx < 1:7.0
 Requires: jsoncpp
-Requires: smartmet-library-locus >= 21.6.21
-Requires: smartmet-library-macgyver >= 21.6.18
+Requires: smartmet-library-locus >= 21.7.8
+Requires: smartmet-library-macgyver >= 21.7.8
 Requires: smartmet-library-spine >= 21.7.5
 Requires: smartmet-library-gis >= 21.6.18
 Requires: smartmet-engine-contour >= 21.5.20
@@ -70,6 +68,20 @@ Requires: boost169-iostreams
 Requires: boost169-serialization
 Requires: boost169-system
 Requires: boost169-thread
+
+%if %{defined el7}
+Requires: libpqxx < 1:7.0
+BuildRequires: libpqxx-devel < 1:7.0
+%else
+%if %{defined el8}
+Requires: libpqxx >= 1:7.0
+BuildRequires: libpqxx-devel >= 1:7.0
+%else
+Requires: libpqxx
+BuildRequires: libpqxx-devel
+%endif
+%endif
+
 Provides: %{SPECNAME}
 Obsoletes: smartmet-brainstorm-wfs < 16.11.1
 Obsoletes: smartmet-brainstorm-wfs-debuginfo < 16.11.1
@@ -143,6 +155,9 @@ rm -rf $RPM_BUILD_ROOT
 %{_includedir}/smartmet/plugin/wfs/request/*.h
 
 %changelog
+* Fri Jul  9 2021 Andris Pavēnis <andris.pavenis@fmi.fi> 21.7.9-1.fmi
+- Use libpqxx7 for RHEL8
+
 * Mon Jul  5 2021 Andris Pavēnis <andris.pavenis@fmi.fi> 21.7.5-1.fmi
 - Rebuild after moving DataFilter from obsengine to spine
 
