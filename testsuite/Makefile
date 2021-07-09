@@ -2,7 +2,7 @@
 INCDIR = smartmet/plugins/$(SUBNAME)
 TOP = $(shell pwd)/..
 
-REQUIRES = gdal jsoncpp
+REQUIRES = gdal jsoncpp libpqxx
 
 include $(shell echo $${PREFIX-/usr})/share/smartmet/devel/makefile.inc
 
@@ -30,6 +30,7 @@ LIBS += -L$(libdir) \
 	-lconfig++ \
 	-lconfig \
 	-lctpp2 \
+	$(LIBPQXX_LIBS) \
 	$(JSONCPP_LIBS) \
 	-lcurl \
 	-lcrypto \
