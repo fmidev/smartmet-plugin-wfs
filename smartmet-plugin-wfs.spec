@@ -27,7 +27,7 @@ BuildRequires: bzip2-devel
 BuildRequires: smartmet-library-spine-devel >= 21.7.5
 BuildRequires: smartmet-library-gis-devel >= 21.6.18
 BuildRequires: smartmet-library-locus-devel >= 21.7.8
-BuildRequires: smartmet-library-macgyver-devel >= 21.7.8
+BuildRequires: smartmet-library-macgyver-devel >= 21.7.20
 BuildRequires: smartmet-engine-contour-devel >= 21.5.20
 BuildRequires: smartmet-engine-geonames-devel >= 21.6.22
 BuildRequires: smartmet-engine-gis-devel >= 21.6.17
@@ -45,7 +45,7 @@ Requires: libconfig >= 1.7.2
 Requires: libcurl
 Requires: jsoncpp
 Requires: smartmet-library-locus >= 21.7.8
-Requires: smartmet-library-macgyver >= 21.7.8
+Requires: smartmet-library-macgyver >= 21.7.20
 Requires: smartmet-library-spine >= 21.7.5
 Requires: smartmet-library-gis >= 21.6.18
 Requires: smartmet-engine-contour >= 21.5.20
@@ -90,6 +90,7 @@ Obsoletes: smartmet-brainstorm-wfs-debuginfo < 16.11.1
 #TestRequires: ctpp2
 #TestRequires: smartmet-test-db >= 21.3.2
 #TestRequires: smartmet-test-data >= 20.6.30
+#TestRequires: smartmet-library-macgyver-devel >= 21.7.20
 #TestRequires: smartmet-library-gis-devel >= 21.6.18
 #TestRequires: smartmet-library-newbase-devel >= 20.10.28
 #TestRequires: smartmet-library-spine-devel >= 21.7.5

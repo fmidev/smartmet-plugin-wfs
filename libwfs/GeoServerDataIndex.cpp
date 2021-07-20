@@ -260,9 +260,9 @@ void bw::GeoServerDataIndex::query_single_layer(const boost::posix_time::ptime& 
       msg << METHOD_NAME << "GeoServer SQL request for layer '" << layer << "':\n" << sql << "\n";
       std::cout << msg.str() << std::flush;
     }
-    boost::shared_ptr<pqxx::connection> conn = db.get_conn();
-    pqxx::work work(*conn);
-    pqxx::result result = work.exec(sql);
+    GeoServerDB::ConnectionPtr conn = db.get_conn();
+    GeoServerDB::Transaction work(*conn);
+    pqxx::result result = work.execute(sql);
     process_sql_result(result, layer);
     work.commit();
   }

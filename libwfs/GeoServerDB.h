@@ -2,7 +2,7 @@
 
 #include <boost/noncopyable.hpp>
 #include <macgyver/ObjectPool.h>
-#include <pqxx/pqxx>
+#include <macgyver/PostgreSQLConnection.h>
 
 namespace SmartMet
 {
@@ -13,20 +13,26 @@ namespace WFS
 class GeoServerDB : virtual protected boost::noncopyable
 {
  public:
+  typedef Fmi::Database::PostgreSQLConnection Connection;
+  typedef Fmi::Database::PostgreSQLConnectionOptions ConnectionOpt;
+  typedef boost::shared_ptr<Connection> ConnectionPtr;
+  typedef Fmi::Database::PostgreSQLConnection::Transaction Transaction;
+
+ public:
   GeoServerDB(const std::string& conn_str, std::size_t keep_conn = 5);
 
   virtual ~GeoServerDB();
 
-  boost::shared_ptr<pqxx::connection> get_conn();
+  ConnectionPtr get_conn();
 
   void update();
 
  private:
-  boost::shared_ptr<pqxx::connection> create_new_conn();
+  ConnectionPtr create_new_conn();
 
  private:
-  const std::string conn_str;
-  Fmi::ObjectPool<pqxx::connection> conn_pool;
+  ConnectionOpt conn_opt;
+  Fmi::ObjectPool<Connection> conn_pool;
 };
 
 }  // namespace WFS

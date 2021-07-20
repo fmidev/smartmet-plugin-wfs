@@ -4,7 +4,8 @@
 namespace bw = SmartMet::Plugin::WFS;
 
 bw::GeoServerDB::GeoServerDB(const std::string& conn_str, std::size_t keep_conn)
-    : conn_str(conn_str), conn_pool(boost::bind(&bw::GeoServerDB::create_new_conn, this), keep_conn)
+    : conn_opt(conn_str)
+    , conn_pool(boost::bind(&bw::GeoServerDB::create_new_conn, this), keep_conn)
 {
   try
   {
@@ -19,7 +20,7 @@ bw::GeoServerDB::GeoServerDB(const std::string& conn_str, std::size_t keep_conn)
 
 bw::GeoServerDB::~GeoServerDB() {}
 
-boost::shared_ptr<pqxx::connection> bw::GeoServerDB::get_conn()
+bw::GeoServerDB::ConnectionPtr bw::GeoServerDB::get_conn()
 {
   try
   {
@@ -43,11 +44,11 @@ void bw::GeoServerDB::update()
   }
 }
 
-boost::shared_ptr<pqxx::connection> bw::GeoServerDB::create_new_conn()
+bw::GeoServerDB::ConnectionPtr bw::GeoServerDB::create_new_conn()
 {
   try
   {
-    return boost::shared_ptr<pqxx::connection>(new pqxx::connection(conn_str));
+    return boost::make_shared<Connection>(conn_opt);
   }
   catch (...)
   {
