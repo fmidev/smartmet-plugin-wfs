@@ -3,7 +3,7 @@
 %define SPECNAME smartmet-plugin-%{DIRNAME}
 Summary: SmartMet WFS plugin
 Name: %{SPECNAME}
-Version: 21.7.9
+Version: 21.7.20
 Release: 1%{?dist}.fmi
 License: MIT
 Group: SmartMet/Plugins
@@ -157,6 +157,9 @@ rm -rf $RPM_BUILD_ROOT
 %{_includedir}/smartmet/plugin/wfs/request/*.h
 
 %changelog
+* Tue Jul 20 2021 Andris Pavēnis <andris.pavenis@fmi.fi> 21.7.20-1.fmi
+- Use Fmi::Database::PostgreSQLConnection for geoserver database access
+
 * Fri Jul  9 2021 Andris Pavēnis <andris.pavenis@fmi.fi> 21.7.9-1.fmi
 - Use libpqxx7 for RHEL8
 
