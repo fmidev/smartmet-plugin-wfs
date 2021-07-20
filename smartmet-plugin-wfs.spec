@@ -123,6 +123,7 @@ Requires: smartmet-library-spine-devel
 Requires: smartmet-library-gis-devel
 Requires: smartmet-library-locus-devel
 Requires: smartmet-library-macgyver-devel
+Requires: %{SPECNAME} = %{version}-%{release}
 %description -n %{SPECNAME}-devel
 SmartMet WFS plugin development files (for building testsuite without rebuilding plugin)
 
