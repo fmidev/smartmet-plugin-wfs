@@ -13,21 +13,17 @@
 //#include "StoredQueryMap.h"
 //#include "XmlEnvInit.h"
 //#include "XmlParser.h"
-
-#include <spine/HTTP.h>
-#include <spine/Reactor.h>
-#include <spine/SmartMetPlugin.h>
-#include <spine/HTTPAuthentication.h>
-
-#include <ctpp2/CDT.hpp>
-
-#include <macgyver/ObjectPool.h>
-#include <macgyver/TimedCache.h>
-
 #include <boost/shared_ptr.hpp>
+#include <boost/smart_ptr/atomic_shared_ptr.hpp>
 #include <boost/thread.hpp>
 #include <boost/utility.hpp>
-
+#include <ctpp2/CDT.hpp>
+#include <macgyver/ObjectPool.h>
+#include <macgyver/TimedCache.h>
+#include <spine/HTTP.h>
+#include <spine/HTTPAuthentication.h>
+#include <spine/Reactor.h>
+#include <spine/SmartMetPlugin.h>
 #include <condition_variable>
 #include <iostream>
 #include <list>
@@ -42,11 +38,10 @@ namespace Plugin
 {
 namespace WFS
 {
-class Plugin
-  : public SmartMetPlugin
-  , virtual private boost::noncopyable
-  , private Xml::EnvInit
-  , private SmartMet::Spine::HTTP::Authentication
+class Plugin : public SmartMetPlugin,
+               virtual private boost::noncopyable,
+               private Xml::EnvInit,
+               private SmartMet::Spine::HTTP::Authentication
 {
  public:
   Plugin(SmartMet::Spine::Reactor* theReactor, const char* theConfig);
@@ -72,13 +67,13 @@ class Plugin
 
  private:
   void realRequestHandler(SmartMet::Spine::Reactor& theReactor,
-			  const std::string& language,
-			  const SmartMet::Spine::HTTP::Request& theRequest,
-			  SmartMet::Spine::HTTP::Response& theResponse);
+                          const std::string& language,
+                          const SmartMet::Spine::HTTP::Request& theRequest,
+                          SmartMet::Spine::HTTP::Response& theResponse);
 
   void adminHandler(SmartMet::Spine::Reactor& theReactor,
-		    const SmartMet::Spine::HTTP::Request& theRequest,
-		    SmartMet::Spine::HTTP::Response& theResponse);
+                    const SmartMet::Spine::HTTP::Request& theRequest,
+                    SmartMet::Spine::HTTP::Response& theResponse);
 
   void updateLoop();
 
@@ -88,7 +83,7 @@ class Plugin
  private:
   const std::string itsModuleName;
 
-  boost::shared_ptr<PluginImpl> plugin_impl;
+  boost::atomic_shared_ptr<PluginImpl> plugin_impl;
 
   SmartMet::Spine::Reactor* itsReactor;
 

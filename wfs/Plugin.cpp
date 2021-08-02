@@ -74,18 +74,18 @@ void Plugin::init()
       }
 
       ensureUpdateLoopStarted();
-      boost::atomic_store(&plugin_impl, new_impl);
+      plugin_impl.store(new_impl);
     }
     catch (...)
     {
       throw Fmi::Exception::Trace(BCP, "Operation failed!");
     }
 
-    auto adminCred = plugin_impl->get_config().get_admin_credentials();
+    auto adminCred = plugin_impl.load()->get_config().get_admin_credentials();
 
     if (!itsReactor->addContentHandler(
             this,
-            plugin_impl->get_config().defaultUrl(),
+            plugin_impl.load()->get_config().defaultUrl(),
             boost::bind(&Plugin::realRequestHandler, this, _1, "", _2, _3)))
     {
       throw Fmi::Exception(
@@ -117,7 +117,7 @@ void Plugin::shutdown()
 {
   // FIXME: do shutdown in thread safe way
   stopUpdateLoop();
-  auto impl = boost::atomic_load(&plugin_impl);
+  auto impl = plugin_impl.load();
   if (impl) {
       impl->shutdown();
   }
@@ -131,8 +131,8 @@ void Plugin::shutdown()
 Plugin::~Plugin()
 {
   stopUpdateLoop();
-  plugin_impl.reset();
 }
+
 // ----------------------------------------------------------------------
 /*!
  * \brief Return the plugin name
@@ -189,7 +189,7 @@ void Plugin::requestHandler(SmartMet::Spine::Reactor& theReactor,
 {
   try
   {
-    auto impl = boost::atomic_load(&plugin_impl);
+    auto impl = plugin_impl.load();
     std::string language = "eng";
     std::string defaultPath = impl->get_config().defaultUrl();
     std::string requestPath = theRequest.getResource();
@@ -217,9 +217,9 @@ void Plugin::realRequestHandler(SmartMet::Spine::Reactor& theReactor,
 {
   try
   {
-    auto impl = boost::atomic_load(&plugin_impl);
+    auto impl = plugin_impl.load();
     std::string data_source = Spine::optional_string(theRequest.getParameter("source"),
-                                                     plugin_impl->get_primary_data_source());
+                                                     impl->get_primary_data_source());
     impl->set_data_source(data_source);
     impl->realRequestHandler(theReactor, language, theRequest, theResponse);
   }
@@ -235,7 +235,7 @@ void Plugin::adminHandler(SmartMet::Spine::Reactor& theReactor,
 {
   try
   {
-    auto impl = boost::atomic_load(&plugin_impl);
+    auto impl = plugin_impl.load();
     const auto operation = theRequest.getParameter("request");
     auto adminCred = impl->get_config().get_admin_credentials();
     if (operation)
@@ -324,12 +324,10 @@ void Plugin::updateLoop()
   {
     while (updateCheck())
     {
-      boost::shared_ptr<PluginImpl> impl;
-
       try
       {
-        impl = boost::atomic_load(&plugin_impl);
-        if (impl and plugin_impl->get_config().getEnableConfigurationPolling() and
+        auto impl = plugin_impl.load();
+        if (impl and impl->get_config().getEnableConfigurationPolling() and
             impl->is_reload_required(true))
         {
           bool ok = reload(itsConfig);
