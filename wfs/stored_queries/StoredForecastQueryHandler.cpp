@@ -570,6 +570,8 @@ boost::shared_ptr<SmartMet::Spine::Table> bw::StoredForecastQueryHandler::extrac
       }
       */
 
+	  Spine::TimeSeries::LocalTimePoolPtr localTimePool =	boost::make_shared<SmartMet::Spine::TimeSeries::LocalTimePool>();
+
       // Fetch data from an arbitrary height.
       for (const auto& level_height : query.level_heights)
       {
@@ -597,7 +599,8 @@ boost::shared_ptr<SmartMet::Spine::Table> bw::StoredForecastQueryHandler::extrac
                 zone,
                 query.find_nearest_valid_point,
                 nearestpoint,
-                query.lastpoint);
+                query.lastpoint,
+				localTimePool);
             SmartMet::Spine::TimeSeries::Value val =
                 q->valueAtHeight(qengine_param, dt, level_height);
 
@@ -642,7 +645,8 @@ boost::shared_ptr<SmartMet::Spine::Table> bw::StoredForecastQueryHandler::extrac
                   zone,
                   query.find_nearest_valid_point,
                   nearestpoint,
-                  query.lastpoint);
+                  query.lastpoint,
+				  localTimePool);
               SmartMet::Spine::TimeSeries::Value val = q->value(qengine_param, d);
 
               std::stringstream ss;

@@ -167,7 +167,8 @@ void StoredObsQueryHandler::query(const StoredQuery& query,
       std::vector<int64_t> tmp_vect;
       SmartMet::Engine::Observation::Settings query_params;
       query_params.useDataCache = true;
-
+	  query_params.localTimePool = boost::make_shared<SmartMet::Spine::TimeSeries::LocalTimePool>();
+	  
       const char* DATA_CRS_NAME = "urn:ogc:def:crs:EPSG::4326";
 
       query_params.latest = params.get_optional<bool>(P_LATEST, false);

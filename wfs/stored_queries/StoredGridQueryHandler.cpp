@@ -881,6 +881,8 @@ StoredGridQueryHandler::Result StoredGridQueryHandler::extract_forecast(
       query.data_params.push_back(lat);
     }
 
+	Spine::TimeSeries::LocalTimePoolPtr localTimePool =	boost::make_shared<SmartMet::Spine::TimeSeries::LocalTimePool>();
+
     SmartMet::Engine::Querydata::ParameterOptions qengine_lonparam(lon,
                                                                    producer,
                                                                    *loc,
@@ -893,7 +895,8 @@ StoredGridQueryHandler::Result StoredGridQueryHandler::extract_forecast(
                                                                    loc->timezone,
                                                                    query.find_nearest_valid_point,
                                                                    nearestpoint,
-                                                                   query.lastpoint);
+                                                                   query.lastpoint,
+																   localTimePool);
 
     auto longitudeData = model->values(qengine_lonparam, mask, oneTimeStep);
 
@@ -909,7 +912,8 @@ StoredGridQueryHandler::Result StoredGridQueryHandler::extract_forecast(
                                                                    loc->timezone,
                                                                    query.find_nearest_valid_point,
                                                                    nearestpoint,
-                                                                   query.lastpoint);
+                                                                   query.lastpoint,
+																   localTimePool);
 
     auto latitudeData = model->values(qengine_latparam, mask, oneTimeStep);
 
@@ -984,7 +988,8 @@ StoredGridQueryHandler::Result StoredGridQueryHandler::extract_forecast(
               loc->timezone,
               query.find_nearest_valid_point,
               nearestpoint,
-              query.lastpoint);
+              query.lastpoint,
+			  localTimePool);
 
           auto val = model->values(qengine_param, mask, tlist);
 
