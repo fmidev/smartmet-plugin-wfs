@@ -109,7 +109,6 @@ class StoredQueryMap final
 
  private:
   bool background_init;
-  std::atomic<bool> shutdown_requested;
   std::atomic<bool> reload_required;
   std::atomic<bool> loading_started;
   mutable boost::shared_mutex mutex;

@@ -16,7 +16,6 @@ namespace fs = boost::filesystem;
 
 bw::StoredQueryMap::StoredQueryMap(SmartMet::Spine::Reactor* theReactor, PluginImpl& plugin_impl)
   : background_init(false)
-  , shutdown_requested(false)
   , reload_required(false)
   , loading_started(false)
   , theReactor(theReactor)
@@ -34,7 +33,6 @@ bw::StoredQueryMap::~StoredQueryMap()
 
 void bw::StoredQueryMap::shutdown()
 {
-    shutdown_requested = true;
   if (init_tasks) {
     init_tasks->stop();
   }
@@ -74,7 +72,7 @@ void bw::StoredQueryMap::wait_for_init()
   do {
     std::time_t start = std::time(nullptr);
     std::unique_lock<std::mutex> lock(mutex2);
-    while (not shutdown_requested and not directory_monitor.ready()) {
+    while (!Spine::Reactor::isShuttingDown() && !directory_monitor.ready()) {
       cond.wait_for(lock, std::chrono::milliseconds(100));
       if (not loading_started and (std::time(nullptr) - start > 180)) {
 	throw Fmi::Exception::Trace(BCP, "Timed out while waiting for stored query configuration loading to start");
@@ -309,7 +307,7 @@ void bw::StoredQueryMap::on_config_change(Fmi::DirectoryMonitor::Watcher watcher
 
 	config_dirs.at(watcher).num_updates++;
       } catch (...) {
-        if (true || !shutdown_requested) {
+        if (true || !Spine::Reactor::isShuttingDown()) {
 	  have_errors++;
 	  auto err = Fmi::Exception::Trace(BCP, "Operation failed!");
 	  std::cout << err.getStackTrace() << std::endl;
@@ -333,7 +331,7 @@ void bw::StoredQueryMap::on_config_change(Fmi::DirectoryMonitor::Watcher watcher
       std::ostringstream msg;
       msg << "Failed to process " << have_errors << " store query configuration files";
       auto err = Fmi::Exception::Trace(BCP, msg.str());
-      if (initial_update && !shutdown_requested) {
+      if (initial_update && !Spine::Reactor::isShuttingDown()) {
 	throw err;
       } else {
 	std::cout << err.getStackTrace() << std::endl;
