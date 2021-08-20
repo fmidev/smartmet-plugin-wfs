@@ -84,7 +84,8 @@ FmiParameterName get_parameter(boost::shared_ptr<SmartMet::Plugin::WFS::StoredQu
 
 SmartMet::Engine::Querydata::ParameterOptions get_qengine_parameter(
     const SmartMet::Plugin::WFS::ProbabilityQueryParam& queryParam,
-    const SmartMet::Spine::Parameter& smartmetParam)
+    const SmartMet::Spine::Parameter& smartmetParam,
+	SmartMet::Spine::TimeSeries::LocalTimePoolPtr& localTimePool)
 {
   try
   {
@@ -106,7 +107,8 @@ SmartMet::Engine::Querydata::ParameterOptions get_qengine_parameter(
                                                                 queryParam.tz_name,
                                                                 nearestFlag,
                                                                 nearestpoint,
-                                                                nearestpoint);
+                                                                nearestpoint,
+																localTimePool);
 
     return qengine_param;
   }
@@ -371,13 +373,14 @@ WinterWeatherIntensityProbabilities StoredWWProbabilityQueryHandler::getProbabil
   try
   {
     WinterWeatherIntensityProbabilities ret;
+	Spine::TimeSeries::LocalTimePoolPtr localTimePool =	boost::make_shared<SmartMet::Spine::TimeSeries::LocalTimePool>();
 
     SmartMet::Engine::Querydata::ParameterOptions qengine_param_light =
-        get_qengine_parameter(queryParam, queryParam.paramLight);
+	  get_qengine_parameter(queryParam, queryParam.paramLight, localTimePool);
     SmartMet::Engine::Querydata::ParameterOptions qengine_param_moderate =
-        get_qengine_parameter(queryParam, queryParam.paramModerate);
+        get_qengine_parameter(queryParam, queryParam.paramModerate, localTimePool);
     SmartMet::Engine::Querydata::ParameterOptions qengine_param_heavy =
-        get_qengine_parameter(queryParam, queryParam.paramHeavy);
+        get_qengine_parameter(queryParam, queryParam.paramHeavy, localTimePool);
 
     SmartMet::Spine::TimeSeries::TimeSeriesPtr qengine_result_light =
         queryParam.q->values(qengine_param_light, queryParam.tlist);
