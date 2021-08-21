@@ -3,7 +3,7 @@
 %define SPECNAME smartmet-plugin-%{DIRNAME}
 Summary: SmartMet WFS plugin
 Name: %{SPECNAME}
-Version: 21.8.19
+Version: 21.8.21
 Release: 1%{?dist}.fmi
 License: MIT
 Group: SmartMet/Plugins
@@ -24,19 +24,19 @@ BuildRequires: xerces-c-devel
 BuildRequires: xqilla-devel
 BuildRequires: openssl-devel
 BuildRequires: bzip2-devel
-BuildRequires: smartmet-library-spine-devel >= 21.8.19
+BuildRequires: smartmet-library-spine-devel >= 21.8.21
 BuildRequires: smartmet-library-gis-devel >= 21.8.3
 BuildRequires: smartmet-library-locus-devel >= 21.8.11
-BuildRequires: smartmet-library-macgyver-devel >= 21.8.5
+BuildRequires: smartmet-library-macgyver-devel >= 21.8.20
 BuildRequires: smartmet-engine-contour-devel >= 21.8.17
 BuildRequires: smartmet-engine-geonames-devel >= 21.8.17
 BuildRequires: smartmet-engine-gis-devel >= 21.8.17
 BuildRequires: smartmet-engine-grid-devel >= 21.8.18
-BuildRequires: smartmet-engine-querydata-devel >= 21.8.19
+BuildRequires: smartmet-engine-querydata-devel >= 21.8.21
 BuildRequires: smartmet-library-grid-content-devel >= 21.8.18
 BuildRequires: smartmet-library-grid-files-devel >= 21.6.8
 %if %{with observation}
-BuildRequires: smartmet-engine-observation-devel >= 21.8.19
+BuildRequires: smartmet-engine-observation-devel >= 21.8.21
 %endif
 # BuildRequires: postgresql95-libs
 Requires: ctpp2
@@ -45,8 +45,8 @@ Requires: libconfig >= 1.7.2
 Requires: libcurl
 Requires: jsoncpp
 Requires: smartmet-library-locus >= 21.8.11
-Requires: smartmet-library-macgyver >= 21.8.5
-Requires: smartmet-library-spine >= 21.8.19
+Requires: smartmet-library-macgyver >= 21.8.20
+Requires: smartmet-library-spine >= 21.8.21
 Requires: smartmet-library-gis >= 21.8.3
 Requires: smartmet-engine-contour >= 21.8.17
 Requires: smartmet-engine-geonames >= 21.8.17
@@ -55,9 +55,9 @@ Requires: smartmet-engine-grid >= 21.8.18
 Requires: smartmet-library-grid-content >= 21.8.18
 Requires: smartmet-library-grid-files >= 21.6.8
 %if %{with observation}
-Requires: smartmet-engine-observation >= 21.8.19
+Requires: smartmet-engine-observation >= 21.8.21
 %endif
-Requires: smartmet-engine-querydata >= 21.8.19
+Requires: smartmet-engine-querydata >= 21.8.21
 Requires: smartmet-server >= 21.6.3
 Requires: xerces-c
 Requires: xqilla
@@ -90,15 +90,15 @@ Obsoletes: smartmet-brainstorm-wfs-debuginfo < 16.11.1
 #TestRequires: ctpp2
 #TestRequires: smartmet-test-db >= 21.3.2
 #TestRequires: smartmet-test-data >= 20.6.30
-#TestRequires: smartmet-library-macgyver-devel >= 21.8.5
+#TestRequires: smartmet-library-macgyver-devel >= 21.8.20
 #TestRequires: smartmet-library-gis-devel >= 21.8.3
 #TestRequires: smartmet-library-newbase-devel >= 20.10.28
-#TestRequires: smartmet-library-spine-devel >= 21.8.19
+#TestRequires: smartmet-library-spine-devel >= 21.8.21
 #TestRequires: smartmet-engine-geonames-devel >= 20.8.23
 #TestRequires: smartmet-engine-gis-devel >= 21.8.17
-#TestRequires: smartmet-engine-querydata-devel >= 21.8.19
+#TestRequires: smartmet-engine-querydata-devel >= 21.8.21
 %if %{with observation}
-#TestRequires: smartmet-engine-observation >= 21.8.19
+#TestRequires: smartmet-engine-observation >= 21.8.21
 %endif
 #TestRequires: smartmet-engine-grid >= 21.8.17
 #TestRequires: redis
@@ -157,6 +157,9 @@ rm -rf $RPM_BUILD_ROOT
 %{_includedir}/smartmet/plugin/wfs/request/*.h
 
 %changelog
+* Sat Aug 21 2021 Mika Heiskanen <mika.heiskanen@fmi.fi> - 21.8.21-1.fmi
+- Repackaged due to LocalTimePool ABI changes
+
 * Thu Aug 19 2021 Mika Heiskanen <mika.heiskanen@fmi.fi> - 21.8.19-1.fmi
 - Start using local time pool to avoid unnecessary allocations of local_date_time objects (BRAINSTORM-2122)
 
