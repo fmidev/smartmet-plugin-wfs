@@ -3,7 +3,7 @@
 %define SPECNAME smartmet-plugin-%{DIRNAME}
 Summary: SmartMet WFS plugin
 Name: %{SPECNAME}
-Version: 21.8.21
+Version: 21.8.23
 Release: 1%{?dist}.fmi
 License: MIT
 Group: SmartMet/Plugins
@@ -157,6 +157,9 @@ rm -rf $RPM_BUILD_ROOT
 %{_includedir}/smartmet/plugin/wfs/request/*.h
 
 %changelog
+* Mon Aug 23 2021 Pertti Kinnia <pertti.kinnia@fmi.fi> - 21.8.23-1.fmi
+- Enclose geoserver layer scheme and table name within quotes in database query (BRAINSTORM-2137)
+
 * Sat Aug 21 2021 Mika Heiskanen <mika.heiskanen@fmi.fi> - 21.8.21-1.fmi
 - Repackaged due to LocalTimePool ABI changes
 

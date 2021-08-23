@@ -61,8 +61,14 @@ bw::StoredGeoserverQueryHandler::StoredGeoserverQueryHandler(
         config->assert_is_group(cfg_item);
         std::vector<std::string> aliases;
         const std::string name = config->get_mandatory_config_param<std::string>(cfg_item, "name");
-        const std::string db_table =
+        std::string db_table =
             config->get_mandatory_config_param<std::string>(cfg_item, "db_table");
+
+        // Enclose scheme and table name within quotes. Scheme is assumed not to contain dot(s)
+        auto pos = db_table.find(".");
+        if ((pos != std::string::npos) && (pos > 0) && ((pos + 1) <= db_table.length()))
+          db_table = "\"" + db_table.substr(0, pos) + "\".\"" + db_table.substr(pos + 1) + "\"";
+
         config->get_config_array(cfg_item, "alias", aliases, 0);
         if (not layer_map->insert(std::make_pair(name, db_table)).second)
         {
