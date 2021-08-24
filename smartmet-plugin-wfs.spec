@@ -4,7 +4,7 @@
 Summary: SmartMet WFS plugin
 Name: %{SPECNAME}
 Version: 21.8.24
-Release: 1%{?dist}.fmi
+Release: 2%{?dist}.fmi
 License: MIT
 Group: SmartMet/Plugins
 URL: https://github.com/fmidev/smartmet-plugin-wfs
@@ -157,6 +157,9 @@ rm -rf $RPM_BUILD_ROOT
 %{_includedir}/smartmet/plugin/wfs/request/*.h
 
 %changelog
+* Tue Aug 24 2021 Pertti Kinnia <pertti.kinnia@fmi.fi> - 21.8.24-2.fmi
+- To avoid unnecessary manual configuration, add missing layers from layerParamNameMap to layerMap to use layer name as table name for layers not entered in layerMap (BRAINSTORM-2137)
+
 * Tue Aug 24 2021 Pertti Kinnia <pertti.kinnia@fmi.fi> - 21.8.24-1.fmi
 - Use layerMap's layer name as default table name (BRAINSTORM-2137)
 - Ignore dot (scheme) as the last character in table name when encapsulating it for database query
