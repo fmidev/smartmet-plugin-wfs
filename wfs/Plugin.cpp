@@ -380,6 +380,11 @@ void Plugin::stopUpdateLoop()
   itsShuttingDown = false;
 }
 
+Fmi::Cache::CacheStatistics Plugin::getCacheStats() const
+{
+  return plugin_impl.load()->getCacheStats();
+}
+
 }  // namespace WFS
 }  // namespace Plugin
 }  // namespace SmartMet

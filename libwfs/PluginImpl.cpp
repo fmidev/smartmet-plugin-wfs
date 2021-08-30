@@ -935,3 +935,15 @@ bool PluginImpl::is_reload_required(bool reset)
 {
   return stored_query_map->is_reload_required(reset);
 }
+
+Fmi::Cache::CacheStatistics PluginImpl::getCacheStats() const
+{
+  Fmi::Cache::CacheStatistics ret;
+
+  Fmi::TimedCache::CacheStatistics query_cache_stats = query_cache->getCacheStatistics();
+  boost::posix_time::ptime start_time = boost::posix_time::from_time_t(std::chrono::duration_cast<std::chrono::seconds>(query_cache_stats.getConstructionTime().time_since_epoch()).count());
+  ret.insert(std::make_pair("Wfs::query_cache", Fmi::Cache::CacheStats(query_cache_stats.getHits(), query_cache_stats.getMisses(), start_time)));
+  
+  return ret;
+}
+

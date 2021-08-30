@@ -20,6 +20,7 @@
 #include <ctpp2/CDT.hpp>
 #include <macgyver/ObjectPool.h>
 #include <macgyver/TimedCache.h>
+#include <macgyver/CacheStats.h>
 #include <spine/HTTP.h>
 #include <spine/HTTPAuthentication.h>
 #include <spine/Reactor.h>
@@ -79,8 +80,10 @@ class Plugin : public SmartMetPlugin,
 
   void ensureUpdateLoopStarted();
   void stopUpdateLoop();
-
+  
  private:
+  Fmi::Cache::CacheStatistics getCacheStats() const override;
+
   const std::string itsModuleName;
 
   boost::atomic_shared_ptr<PluginImpl> plugin_impl;
