@@ -61,12 +61,13 @@ bw::StoredGeoserverQueryHandler::StoredGeoserverQueryHandler(
         config->assert_is_group(cfg_item);
         std::vector<std::string> aliases;
         const std::string name = config->get_mandatory_config_param<std::string>(cfg_item, "name");
-        std::string db_table =
-            config->get_mandatory_config_param<std::string>(cfg_item, "db_table");
+        std::string db_table = cfg_item.exists("db_table")
+            ? config->get_mandatory_config_param<std::string>(cfg_item, "db_table")
+            : "mosaic." + name;
 
         // Enclose scheme and table name within quotes. Scheme is assumed not to contain dot(s)
         auto pos = db_table.find(".");
-        if ((pos != std::string::npos) && (pos > 0) && ((pos + 1) <= db_table.length()))
+        if ((pos != std::string::npos) && (pos > 0) && ((pos + 1) < db_table.length()))
           db_table = "\"" + db_table.substr(0, pos) + "\".\"" + db_table.substr(pos + 1) + "\"";
 
         config->get_config_array(cfg_item, "alias", aliases, 0);
@@ -126,6 +127,16 @@ bw::StoredGeoserverQueryHandler::StoredGeoserverQueryHandler(
       }
       layer_param_name_map.insert(std::make_pair(Fmi::ascii_tolower_copy(layer_name),
                                                  Fmi::ascii_tolower_copy(parameter_name)));
+
+      // Add missing layers to layerMap, using layer name as table name
+      if (!layer_db_table_name_format)
+      {
+        std::string db_table("mosaic." + layer_name);
+        auto pos = db_table.find(".");
+        if ((pos != std::string::npos) && (pos > 0) && ((pos + 1) < db_table.length()))
+          db_table = "\"" + db_table.substr(0, pos) + "\".\"" + db_table.substr(pos + 1) + "\"";
+        layer_map->insert(std::make_pair(layer_name, db_table));
+      }
     }
   }
   catch (...)
