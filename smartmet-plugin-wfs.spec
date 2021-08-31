@@ -3,8 +3,8 @@
 %define SPECNAME smartmet-plugin-%{DIRNAME}
 Summary: SmartMet WFS plugin
 Name: %{SPECNAME}
-Version: 21.8.24
-Release: 2%{?dist}.fmi
+Version: 21.8.30
+Release: 1%{?dist}.fmi
 License: MIT
 Group: SmartMet/Plugins
 URL: https://github.com/fmidev/smartmet-plugin-wfs
@@ -24,15 +24,15 @@ BuildRequires: xerces-c-devel
 BuildRequires: xqilla-devel
 BuildRequires: openssl-devel
 BuildRequires: bzip2-devel
-BuildRequires: smartmet-library-spine-devel >= 21.8.21
-BuildRequires: smartmet-library-gis-devel >= 21.8.3
+BuildRequires: smartmet-library-spine-devel >= 21.8.30
+BuildRequires: smartmet-library-gis-devel >= 21.8.30
 BuildRequires: smartmet-library-locus-devel >= 21.8.11
-BuildRequires: smartmet-library-macgyver-devel >= 21.8.20
-BuildRequires: smartmet-engine-contour-devel >= 21.8.17
-BuildRequires: smartmet-engine-geonames-devel >= 21.8.17
-BuildRequires: smartmet-engine-gis-devel >= 21.8.17
+BuildRequires: smartmet-library-macgyver-devel >= 21.8.30
+BuildRequires: smartmet-engine-contour-devel >= 21.8.30
+BuildRequires: smartmet-engine-geonames-devel >= 21.8.30
+BuildRequires: smartmet-engine-gis-devel >= 21.8.30
 BuildRequires: smartmet-engine-grid-devel >= 21.8.18
-BuildRequires: smartmet-engine-querydata-devel >= 21.8.21
+BuildRequires: smartmet-engine-querydata-devel >= 21.8.30
 BuildRequires: smartmet-library-grid-content-devel >= 21.8.18
 BuildRequires: smartmet-library-grid-files-devel >= 21.6.8
 %if %{with observation}
@@ -45,19 +45,19 @@ Requires: libconfig >= 1.7.2
 Requires: libcurl
 Requires: jsoncpp
 Requires: smartmet-library-locus >= 21.8.11
-Requires: smartmet-library-macgyver >= 21.8.20
-Requires: smartmet-library-spine >= 21.8.21
-Requires: smartmet-library-gis >= 21.8.3
-Requires: smartmet-engine-contour >= 21.8.17
-Requires: smartmet-engine-geonames >= 21.8.17
-Requires: smartmet-engine-gis >= 21.8.17
+Requires: smartmet-library-macgyver >= 21.8.30
+Requires: smartmet-library-spine >= 21.8.30
+Requires: smartmet-library-gis >= 21.8.30
+Requires: smartmet-engine-contour >= 21.8.30
+Requires: smartmet-engine-geonames >= 21.8.30
+Requires: smartmet-engine-gis >= 21.8.30
 Requires: smartmet-engine-grid >= 21.8.18
 Requires: smartmet-library-grid-content >= 21.8.18
 Requires: smartmet-library-grid-files >= 21.6.8
 %if %{with observation}
-Requires: smartmet-engine-observation >= 21.8.21
+Requires: smartmet-engine-observation >= 21.8.30
 %endif
-Requires: smartmet-engine-querydata >= 21.8.21
+Requires: smartmet-engine-querydata >= 21.8.30
 Requires: smartmet-server >= 21.6.3
 Requires: xerces-c
 Requires: xqilla
@@ -157,6 +157,9 @@ rm -rf $RPM_BUILD_ROOT
 %{_includedir}/smartmet/plugin/wfs/request/*.h
 
 %changelog
+* Mon Aug 30 2021 Anssi Reponen <anssi.reponen@fmi.fi> - 21.8.30-1.fmi
+- Cache counters added (BRAINSTORM-1005)
+
 * Tue Aug 24 2021 Pertti Kinnia <pertti.kinnia@fmi.fi> - 21.8.24-2.fmi
 - To avoid unnecessary manual configuration, add missing layers from layerParamNameMap to layerMap to use layer name as table name for layers not entered in layerMap (BRAINSTORM-2137)
 

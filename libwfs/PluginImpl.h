@@ -20,6 +20,7 @@
 #include <macgyver/DirectoryMonitor.h>
 #include <macgyver/TemplateFactory.h>
 #include <macgyver/TimedCache.h>
+#include <macgyver/CacheStats.h>
 
 namespace SmartMet
 {
@@ -132,6 +133,8 @@ class PluginImpl : public boost::noncopyable
   void dump_constructor_map(std::ostream& os);
 
   bool is_reload_required(bool reset = false);
+
+  Fmi::Cache::CacheStatistics getCacheStats() const;
 
  private:
   void query(const std::string& language,
