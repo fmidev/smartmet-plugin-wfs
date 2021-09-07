@@ -3,7 +3,7 @@
 %define SPECNAME smartmet-plugin-%{DIRNAME}
 Summary: SmartMet WFS plugin
 Name: %{SPECNAME}
-Version: 21.8.30
+Version: 21.9.7
 Release: 1%{?dist}.fmi
 License: MIT
 Group: SmartMet/Plugins
@@ -18,13 +18,12 @@ BuildRequires: ctpp2-devel
 BuildRequires: fmt-devel >= 7.1.3
 BuildRequires: gdal32-devel
 BuildRequires: jsoncpp-devel
-BuildRequires: libconfig-devel >= 1.7.2
 BuildRequires: libcurl-devel
 BuildRequires: xerces-c-devel
 BuildRequires: xqilla-devel
 BuildRequires: openssl-devel
 BuildRequires: bzip2-devel
-BuildRequires: smartmet-library-spine-devel >= 21.8.30
+BuildRequires: smartmet-library-spine-devel >= 21.9.7
 BuildRequires: smartmet-library-gis-devel >= 21.8.30
 BuildRequires: smartmet-library-locus-devel >= 21.8.11
 BuildRequires: smartmet-library-macgyver-devel >= 21.8.30
@@ -41,12 +40,11 @@ BuildRequires: smartmet-engine-observation-devel >= 21.8.21
 # BuildRequires: postgresql95-libs
 Requires: ctpp2
 Requires: fmt >= 7.1.3
-Requires: libconfig >= 1.7.2
 Requires: libcurl
 Requires: jsoncpp
 Requires: smartmet-library-locus >= 21.8.11
 Requires: smartmet-library-macgyver >= 21.8.30
-Requires: smartmet-library-spine >= 21.8.30
+Requires: smartmet-library-spine >= 21.9.7
 Requires: smartmet-library-gis >= 21.8.30
 Requires: smartmet-engine-contour >= 21.8.30
 Requires: smartmet-engine-geonames >= 21.8.30
@@ -157,6 +155,9 @@ rm -rf $RPM_BUILD_ROOT
 %{_includedir}/smartmet/plugin/wfs/request/*.h
 
 %changelog
+* Tue Sep  7 2021 Andris Pavēnis <andris.pavenis@fmi.fi> 21.9.7-1.fmi
+- Repackaged due to dependency changes (libconfig -> libconfig17)
+
 * Mon Aug 30 2021 Anssi Reponen <anssi.reponen@fmi.fi> - 21.8.30-1.fmi
 - Cache counters added (BRAINSTORM-1005)
 
