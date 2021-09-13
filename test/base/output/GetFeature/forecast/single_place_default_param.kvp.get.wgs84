@@ -1,0 +1,564 @@
+Global data object:
+
+   fmi_apikey = "foobar";
+   fmi_apikey_prefix = "/fmi-apikey/";
+   groups = [
+              {
+                'dataOriginTime' : "2008-08-05T06:31:00Z",
+                'featureId' : "WFS-ppXLoFGKMXklwyyTZ0XRYT9tzXeJTowrEbfyy48PPpUy8.kLSxZc.ndU07ctrj6FQlYJqoTGx8udakWhTjunTRmybM7LuyVNO3La4.hUJxwZtO7JOy4eWXn0rYdmnJIZmfLv05OdZjZq4ZMmro15fPffyyX9_bLy78tPTDi2ZYmlsy9suyp54ZamZs348OzLWpm0340ld16ZnDW24fETTz6Yd2PLStXQgNbbp589O7PUy.OlY27DuZW3fky7K6tGnlsw7b.Xry37.HDDf4ad3TDW9ww7L_PXh3ZNO7D204WVww8sO2tapl28MvLD068staHDll58.vLLWtX07slPhly5JtOtqvp3ZImnllx9NO_dW9Q5Zcenhp6YemnfuY6G5z6b.WXJx65eXm_pyVsRt_LLjw8.lTLz6NDpp25bW_dlrGq1IYA-",
+                'groupId' : "1-1",
+                'metadata' : {
+                               'boundingBox' : {
+                                                 'lowerLeft' : {
+                                                                 'lat' : 51.3,
+                                                                 'lon' : 6
+                                                               },
+                                                 'lowerRight' : {
+                                                                  'lat' : 51.3062443879,
+                                                                  'lon' : 33.959986767
+                                                                },
+                                                 'upperLeft' : {
+                                                                 'lat' : 70.1863645074,
+                                                                 'lon' : -9.072431653
+                                                               },
+                                                 'upperRight' : {
+                                                                  'lat' : 70.2,
+                                                                  'lon' : 49
+                                                                }
+                                               }
+                             },
+                'paramList' : [
+                                {
+                                  'featureId' : "WFS-3xBB69jpd4rAgrhcQv0ZaE8sUYyJTowrEbfyy48PPpUy8.kLSxZc.ndU07ctrj6FQlYJqoTGx8udakWhTjunTRmybM7LuyVNO3La4.hUJxwZtO7JOy4eWXn0rYdmnJIZmfLv05OdZjZq4ZMmro15fPffyyX9_bLy78tPTDi2ZYmlsy9suyp54ZamZs348OzLWpm0340ld16ZnDW24fETTz6Yd2PLStXQgNbbp589O7PUy.OlY27DuZW3fky7K6tGnlsw7b.Xry37.HDDf4ad3TDW9ww7L_PXh3ZNO7D204WVww8sO2tapl28MvLD068src59N_LLk49cvLzf05K2I2_llx4efSpl59Gh007ctrfuy1jVakMA",
+                                  'name' : "Temperature"
+                                },
+                                {
+                                  'featureId' : "WFS-1uaFMA2MmKfJoJkPuKQlazsvK7mJTowrEbfyy48PPpUy8.kLSxZc.ndU07ctrj6FQlYJqoTGx8udakWhTjunTRmybM7LuyVNO3La4.hUJxwZtO7JOy4eWXn0rYdmnJIZmfLv05OdZjZq4ZMmro15fPffyyX9_bLy78tPTDi2ZYmlsy9suyp54ZamZs348OzLWpm0340ld16ZnDW24fETTz6Yd2PLStXQgNbbp589O7PUy.OlY27DuZW3fky7K6tGnlsw7b.Xry37.HDDf4ad3TDW9ww7L_PXh3ZNO7D204WVww8sO2tDhyy8.fXllbnPpv5ZcnHrl5eb.nJWxG38suPDz6VMvPo0Omnbltb92WsarUhg",
+                                  'name' : "pressure"
+                                },
+                                {
+                                  'featureId' : "WFS-Tlrxn6ixV0P.mhndsK4sj4x1Ed.JTowrEbfyy48PPpUy8.kLSxZc.ndU07ctrj6FQlYJqoTGx8udakWhTjunTRmybM7LuyVNO3La4.hUJxwZtO7JOy4eWXn0rYdmnJIZmfLv05OdZjZq4ZMmro15fPffyyX9_bLy78tPTDi2ZYmlsy9suyp54ZamZs348OzLWpm0340ld16ZnDW24fETTz6Yd2PLStXQgNbbp589O7PUy.OlY27DuZW3fky7K6tGnlsw7b.Xry37.HDDf4ad3TDW9ww7L_PXh3ZNO7D204WVww8sO2tavp3ZKfDLlyTabc59N_LLk49cvLzf05K2I2_llx4efSpl59Gh007ctrfuy1jVakMA",
+                                  'name' : "WindSpeedMS"
+                                },
+                                {
+                                  'featureId' : "WFS-Vr6eZqnrgQEti0cAhQblD8zg_cWJTowrEbfyy48PPpUy8.kLSxZc.ndU07ctrj6FQlYJqoTGx8udakWhTjunTRmybM7LuyVNO3La4.hUJxwZtO7JOy4eWXn0rYdmnJIZmfLv05OdZjZq4ZMmro15fPffyyX9_bLy78tPTDi2ZYmlsy9suyp54ZamZs348OzLWpm0340ld16ZnDW24fETTz6Yd2PLStXQgNbbp589O7PUy.OlY27DuZW3fky7K6tGnlsw7b.Xry37.HDDf4ad3TDW9ww7L_PXh3ZNO7D204WVww8sO2tqvp3ZImnllx9NO_c3OfTfyy5OPXLy839OStiNv5ZceHn0qZefRodNO3La37stY1WpDA--",
+                                  'name' : "WindDirection"
+                                },
+                                {
+                                  'featureId' : "WFS-cKIOIPBWA265VoCrMPKwamGfyFKJTowrEbfyy48PPpUy8.kLSxZc.ndU07ctrj6FQlYJqoTGx8udakWhTjunTRmybM7LuyVNO3La4.hUJxwZtO7JOy4eWXn0rYdmnJIZmfLv05OdZjZq4ZMmro15fPffyyX9_bLy78tPTDi2ZYmlsy9suyp54ZamZs348OzLWpm0340ld16ZnDW24fETTz6Yd2PLStXQgNbbp589O7PUy.OlY27DuZW3fky7K6tGnlsw7b.Xry37.HDDf4ad3TDW9ww7L_PXh3ZNO7D204WVww8sO2t6hyy49PDT0w9NO_cx0Nzn038suTj1y8vN_TkrYjb.WXHh59KmXn0aHTTty2t.7LWNVqQw",
+                                  'name' : "Precipitation1h"
+                                }
+                              ],
+                'phenomenonEndTime' : "2008-08-07T00:00:00Z",
+                'phenomenonStartTime' : "2008-08-05T12:00:00Z",
+                'producerName' : "pal_skandinavia",
+                'resultTime' : "2008-08-05T03:31:00Z",
+                'returnArray' : [
+                                  {
+                                    'data' : [
+                                               "14.6",
+                                               "1004.874",
+                                               "15.134",
+                                               "80.0",
+                                               "0.2"
+                                             ],
+                                    'epochTime' : 1217937600,
+                                    'epochTimeStr' : "2008-08-05T12:00:00Z",
+                                    'x' : "60.16952",
+                                    'y' : "24.93545"
+                                  },
+                                  {
+                                    'data' : [
+                                               "14.7",
+                                               "1005.1171",
+                                               "14.484",
+                                               "73.7",
+                                               "0.3"
+                                             ],
+                                    'epochTime' : 1217941200,
+                                    'epochTimeStr' : "2008-08-05T13:00:00Z",
+                                    'x' : "60.16952",
+                                    'y' : "24.93545"
+                                  },
+                                  {
+                                    'data' : [
+                                               "14.9",
+                                               "1005.3603",
+                                               "13.505",
+                                               "73.7",
+                                               "0.3"
+                                             ],
+                                    'epochTime' : 1217944800,
+                                    'epochTimeStr' : "2008-08-05T14:00:00Z",
+                                    'x' : "60.16952",
+                                    'y' : "24.93545"
+                                  },
+                                  {
+                                    'data' : [
+                                               "15.2",
+                                               "1005.6035",
+                                               "12.734",
+                                               "73.7",
+                                               "0.2"
+                                             ],
+                                    'epochTime' : 1217948400,
+                                    'epochTimeStr' : "2008-08-05T15:00:00Z",
+                                    'x' : "60.16952",
+                                    'y' : "24.93545"
+                                  },
+                                  {
+                                    'data' : [
+                                               "15.3",
+                                               "1005.9038",
+                                               "11.884",
+                                               "63.7",
+                                               "0.2"
+                                             ],
+                                    'epochTime' : 1217952000,
+                                    'epochTimeStr' : "2008-08-05T16:00:00Z",
+                                    'x' : "60.16952",
+                                    'y' : "24.93545"
+                                  },
+                                  {
+                                    'data' : [
+                                               "15.4",
+                                               "1006.2042",
+                                               "10.637",
+                                               "60.0",
+                                               "0.1"
+                                             ],
+                                    'epochTime' : 1217955600,
+                                    'epochTimeStr' : "2008-08-05T17:00:00Z",
+                                    'x' : "60.16952",
+                                    'y' : "24.93545"
+                                  },
+                                  {
+                                    'data' : [
+                                               "14.4",
+                                               "1006.5045",
+                                               "9.961",
+                                               "60.0",
+                                               "0.0"
+                                             ],
+                                    'epochTime' : 1217959200,
+                                    'epochTimeStr' : "2008-08-05T18:00:00Z",
+                                    'x' : "60.16952",
+                                    'y' : "24.93545"
+                                  },
+                                  {
+                                    'data' : [
+                                               "14.4",
+                                               "1006.9902",
+                                               "9.595",
+                                               "50.0",
+                                               "0.0"
+                                             ],
+                                    'epochTime' : 1217962800,
+                                    'epochTimeStr' : "2008-08-05T19:00:00Z",
+                                    'x' : "60.16952",
+                                    'y' : "24.93545"
+                                  },
+                                  {
+                                    'data' : [
+                                               "14.3",
+                                               "1007.476",
+                                               "9.287",
+                                               "50.0",
+                                               "0.0"
+                                             ],
+                                    'epochTime' : 1217966400,
+                                    'epochTimeStr' : "2008-08-05T20:00:00Z",
+                                    'x' : "60.16952",
+                                    'y' : "24.93545"
+                                  },
+                                  {
+                                    'data' : [
+                                               "14.3",
+                                               "1007.9617",
+                                               "8.839",
+                                               "50.0",
+                                               "0.0"
+                                             ],
+                                    'epochTime' : 1217970000,
+                                    'epochTimeStr' : "2008-08-05T21:00:00Z",
+                                    'x' : "60.16952",
+                                    'y' : "24.93545"
+                                  },
+                                  {
+                                    'data' : [
+                                               "14.2",
+                                               "1008.4562",
+                                               "8.94",
+                                               "40.0",
+                                               "0.0"
+                                             ],
+                                    'epochTime' : 1217973600,
+                                    'epochTimeStr' : "2008-08-05T22:00:00Z",
+                                    'x' : "60.16952",
+                                    'y' : "24.93545"
+                                  },
+                                  {
+                                    'data' : [
+                                               "14.1",
+                                               "1008.9508",
+                                               "9.059",
+                                               "33.7",
+                                               "0.0"
+                                             ],
+                                    'epochTime' : 1217977200,
+                                    'epochTimeStr' : "2008-08-05T23:00:00Z",
+                                    'x' : "60.16952",
+                                    'y' : "24.93545"
+                                  },
+                                  {
+                                    'data' : [
+                                               "14.0",
+                                               "1009.4454",
+                                               "9.131",
+                                               "33.7",
+                                               "0.0"
+                                             ],
+                                    'epochTime' : 1217980800,
+                                    'epochTimeStr' : "2008-08-06T00:00:00Z",
+                                    'x' : "60.16952",
+                                    'y' : "24.93545"
+                                  },
+                                  {
+                                    'data' : [
+                                               "13.5",
+                                               "1009.847",
+                                               "8.491",
+                                               "30.0",
+                                               "0.0"
+                                             ],
+                                    'epochTime' : 1217984400,
+                                    'epochTimeStr' : "2008-08-06T01:00:00Z",
+                                    'x' : "60.16952",
+                                    'y' : "24.93545"
+                                  },
+                                  {
+                                    'data' : [
+                                               "13.0",
+                                               "1010.2485",
+                                               "7.928",
+                                               "30.0",
+                                               "0.0"
+                                             ],
+                                    'epochTime' : 1217988000,
+                                    'epochTimeStr' : "2008-08-06T02:00:00Z",
+                                    'x' : "60.16952",
+                                    'y' : "24.93545"
+                                  },
+                                  {
+                                    'data' : [
+                                               "12.6",
+                                               "1010.6501",
+                                               "7.428",
+                                               "30.0",
+                                               "0.0"
+                                             ],
+                                    'epochTime' : 1217991600,
+                                    'epochTimeStr' : "2008-08-06T03:00:00Z",
+                                    'x' : "60.16952",
+                                    'y' : "24.93545"
+                                  },
+                                  {
+                                    'data' : [
+                                               "13.2",
+                                               "1010.9658",
+                                               "7.261",
+                                               "30.0",
+                                               "0.0"
+                                             ],
+                                    'epochTime' : 1217995200,
+                                    'epochTimeStr' : "2008-08-06T04:00:00Z",
+                                    'x' : "60.16952",
+                                    'y' : "24.93545"
+                                  },
+                                  {
+                                    'data' : [
+                                               "13.8",
+                                               "1011.2815",
+                                               "7.138",
+                                               "30.0",
+                                               "0.0"
+                                             ],
+                                    'epochTime' : 1217998800,
+                                    'epochTimeStr' : "2008-08-06T05:00:00Z",
+                                    'x' : "60.16952",
+                                    'y' : "24.93545"
+                                  },
+                                  {
+                                    'data' : [
+                                               "14.4",
+                                               "1011.5972",
+                                               "6.972",
+                                               "33.7",
+                                               "0.0"
+                                             ],
+                                    'epochTime' : 1218002400,
+                                    'epochTimeStr' : "2008-08-06T06:00:00Z",
+                                    'x' : "60.16952",
+                                    'y' : "24.93545"
+                                  },
+                                  {
+                                    'data' : [
+                                               "15.4",
+                                               "1011.838",
+                                               "6.364",
+                                               "33.7",
+                                               "0.0"
+                                             ],
+                                    'epochTime' : 1218006000,
+                                    'epochTimeStr' : "2008-08-06T07:00:00Z",
+                                    'x' : "60.16952",
+                                    'y' : "24.93545"
+                                  },
+                                  {
+                                    'data' : [
+                                               "16.5",
+                                               "1012.0139",
+                                               "5.727",
+                                               "33.7",
+                                               "0.0"
+                                             ],
+                                    'epochTime' : 1218009600,
+                                    'epochTimeStr' : "2008-08-06T08:00:00Z",
+                                    'x' : "60.16952",
+                                    'y' : "24.93545"
+                                  },
+                                  {
+                                    'data' : [
+                                               "17.6",
+                                               "1012.1349",
+                                               "5.119",
+                                               "33.7",
+                                               "0.0"
+                                             ],
+                                    'epochTime' : 1218013200,
+                                    'epochTimeStr' : "2008-08-06T09:00:00Z",
+                                    'x' : "60.16952",
+                                    'y' : "24.93545"
+                                  },
+                                  {
+                                    'data' : [
+                                               "18.2",
+                                               "1012.2055",
+                                               "4.645",
+                                               "25.8",
+                                               "0.0"
+                                             ],
+                                    'epochTime' : 1218016800,
+                                    'epochTimeStr' : "2008-08-06T10:00:00Z",
+                                    'x' : "60.16952",
+                                    'y' : "24.93545"
+                                  },
+                                  {
+                                    'data' : [
+                                               "18.6",
+                                               "1012.2456",
+                                               "4.18",
+                                               "23.7",
+                                               "0.0"
+                                             ],
+                                    'epochTime' : 1218020400,
+                                    'epochTimeStr' : "2008-08-06T11:00:00Z",
+                                    'x' : "60.16952",
+                                    'y' : "24.93545"
+                                  },
+                                  {
+                                    'data' : [
+                                               "18.8",
+                                               "1012.2695",
+                                               "3.706",
+                                               "15.8",
+                                               "0.0"
+                                             ],
+                                    'epochTime' : 1218024000,
+                                    'epochTimeStr' : "2008-08-06T12:00:00Z",
+                                    'x' : "60.16952",
+                                    'y' : "24.93545"
+                                  },
+                                  {
+                                    'data' : [
+                                               "19.0",
+                                               "1012.295",
+                                               "3.477",
+                                               "10.8",
+                                               "0.0"
+                                             ],
+                                    'epochTime' : 1218027600,
+                                    'epochTimeStr' : "2008-08-06T13:00:00Z",
+                                    'x' : "60.16952",
+                                    'y' : "24.93545"
+                                  },
+                                  {
+                                    'data' : [
+                                               "19.0",
+                                               "1012.3302",
+                                               "3.206",
+                                               "5.0",
+                                               "0.0"
+                                             ],
+                                    'epochTime' : 1218031200,
+                                    'epochTimeStr' : "2008-08-06T14:00:00Z",
+                                    'x' : "60.16952",
+                                    'y' : "24.93545"
+                                  },
+                                  {
+                                    'data' : [
+                                               "18.7",
+                                               "1012.3869",
+                                               "2.977",
+                                               "360.0",
+                                               "0.0"
+                                             ],
+                                    'epochTime' : 1218034800,
+                                    'epochTimeStr' : "2008-08-06T15:00:00Z",
+                                    'x' : "60.16952",
+                                    'y' : "24.93545"
+                                  },
+                                  {
+                                    'data' : [
+                                               "18.0",
+                                               "1012.4978",
+                                               "3.135",
+                                               "360.0",
+                                               "0.0"
+                                             ],
+                                    'epochTime' : 1218038400,
+                                    'epochTimeStr' : "2008-08-06T16:00:00Z",
+                                    'x' : "60.16952",
+                                    'y' : "24.93545"
+                                  },
+                                  {
+                                    'data' : [
+                                               "17.2",
+                                               "1012.6375",
+                                               "3.335",
+                                               "7.1",
+                                               "0.0"
+                                             ],
+                                    'epochTime' : 1218042000,
+                                    'epochTimeStr' : "2008-08-06T17:00:00Z",
+                                    'x' : "60.16952",
+                                    'y' : "24.93545"
+                                  },
+                                  {
+                                    'data' : [
+                                               "16.4",
+                                               "1012.8018",
+                                               "3.493",
+                                               "7.1",
+                                               "0.0"
+                                             ],
+                                    'epochTime' : 1218045600,
+                                    'epochTimeStr' : "2008-08-06T18:00:00Z",
+                                    'x' : "60.16952",
+                                    'y' : "24.93545"
+                                  },
+                                  {
+                                    'data' : [
+                                               "16.1",
+                                               "1013.0043",
+                                               "3.188",
+                                               "22.1",
+                                               "0.0"
+                                             ],
+                                    'epochTime' : 1218049200,
+                                    'epochTimeStr' : "2008-08-06T19:00:00Z",
+                                    'x' : "60.16952",
+                                    'y' : "24.93545"
+                                  },
+                                  {
+                                    'data' : [
+                                               "15.9",
+                                               "1013.2095",
+                                               "2.854",
+                                               "35.5",
+                                               "0.0"
+                                             ],
+                                    'epochTime' : 1218052800,
+                                    'epochTimeStr' : "2008-08-06T20:00:00Z",
+                                    'x' : "60.16952",
+                                    'y' : "24.93545"
+                                  },
+                                  {
+                                    'data' : [
+                                               "15.7",
+                                               "1013.4",
+                                               "2.549",
+                                               "50.5",
+                                               "0.0"
+                                             ],
+                                    'epochTime' : 1218056400,
+                                    'epochTimeStr' : "2008-08-06T21:00:00Z",
+                                    'x' : "60.16952",
+                                    'y' : "24.93545"
+                                  },
+                                  {
+                                    'data' : [
+                                               "15.2",
+                                               "1013.5577",
+                                               "2.35",
+                                               "92.8",
+                                               "0.0"
+                                             ],
+                                    'epochTime' : 1218060000,
+                                    'epochTimeStr' : "2008-08-06T22:00:00Z",
+                                    'x' : "60.16952",
+                                    'y' : "24.93545"
+                                  },
+                                  {
+                                    'data' : [
+                                               "14.7",
+                                               "1013.6657",
+                                               "2.1",
+                                               "153.9",
+                                               "0.0"
+                                             ],
+                                    'epochTime' : 1218063600,
+                                    'epochTimeStr' : "2008-08-06T23:00:00Z",
+                                    'x' : "60.16952",
+                                    'y' : "24.93545"
+                                  },
+                                  {
+                                    'data' : [
+                                               "14.1",
+                                               "1013.7068",
+                                               "1.9",
+                                               "196.5",
+                                               "0.0"
+                                             ],
+                                    'epochTime' : 1218067200,
+                                    'epochTimeStr' : "2008-08-07T00:00:00Z",
+                                    'x' : "60.16952",
+                                    'y' : "24.93545"
+                                  }
+                                ],
+                'stationList' : [
+                                  {
+                                    'country' : "Finland",
+                                    'geoid' : "658225",
+                                    'iso2' : "FI",
+                                    'localtz' : "Europe/Helsinki",
+                                    'name' : "Helsinki",
+                                    'region' : "Finland",
+                                    'x' : "60.16952",
+                                    'y' : "24.93545"
+                                  }
+                                ]
+              }
+            ];
+   hostname = "opendata.fmi.fi";
+   language = "eng";
+   numMatched = 1;
+   numParam = 5;
+   numReturned = 1;
+   protocol = "http://";
+   responseTimestamp = "2012-12-12T12:12:12Z";
+   srsDim = 2;
+   srsEpochDim = 3;
+   srsEpochName = "https://xml.fmi.fi/gml/crs/compoundCRS.php?crs=4326&amp;time=unixtime";
+   srsName = "http://www.opengis.net/def/crs/EPSG/0/4326"
+ 

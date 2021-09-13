@@ -1,0 +1,299 @@
+<html>
+<title>WFS response CTPP hash dump</title>
+<body>
+<pre>
+Global data object:
+
+   fmi_apikey = &quot;foobar&quot;;
+   fmi_apikey_prefix = &quot;/fmi-apikey/&quot;;
+   hostname = &quot;opendata.fmi.fi&quot;;
+   hosts = {
+             &#39;wms&#39; : &quot;wms.fmi.fi&quot;
+           };
+   language = &quot;eng&quot;;
+   named_parameters = {
+                        &#39;defaultformat&#39; : [
+                                            &quot;grib2&quot;
+                                          ],
+                        &#39;defaultmeteoparam&#39; : [
+                                                &quot;GeopHeight&quot;,
+                                                &quot;Temperature&quot;,
+                                                &quot;Pressure&quot;,
+                                                &quot;Humidity&quot;,
+                                                &quot;WindUMS&quot;,
+                                                &quot;WindVMS&quot;,
+                                                &quot;MaximumWind&quot;,
+                                                &quot;WindGust&quot;,
+                                                &quot;DewPoint&quot;,
+                                                &quot;TotalCloudCover&quot;,
+                                                &quot;LowCloudCover&quot;,
+                                                &quot;MediumCloudCover&quot;,
+                                                &quot;HighCloudCover&quot;,
+                                                &quot;Precipitation1h&quot;,
+                                                &quot;PrecipitationAmount&quot;,
+                                                &quot;RadiationGlobalAccumulation&quot;,
+                                                &quot;RadiationLWAccumulation&quot;,
+                                                &quot;RadiationNetSurfaceLWAccumulation&quot;,
+                                                &quot;RadiationNetSurfaceSWAccumulation&quot;
+                                              ],
+                        &#39;format&#39; : [
+                                     &quot;grib2&quot;
+                                   ],
+                        &#39;projection&#39; : [
+                                         &quot;epsg:4326&quot;
+                                       ]
+                      };
+   numMatched = 1;
+   numReturned = 1;
+   param_sets = [
+                  {
+                    &#39;URL&#39; : &quot;producer=hirlam&amp;param=GeopHeight,Temperature,Pressure,Humidity,DewPoint,WindUMS,WindVMS,TotalCloudCover,LowCloudCover,MediumCloudCover,HighCloudCover,Precipitation1h&amp;bbox=24,60,25,61&amp;origintime=2013-03-18T00:00:00Z&amp;starttime=2013-03-18T00:00:00Z&amp;endtime=2013-03-20T06:00:00Z&amp;format=grib2&amp;projection=epsg:4326&quot;,
+                    &#39;params&#39; : {
+                                 &#39;_WKT&#39; : [
+                                            &quot;PROJCS[\&quot;unknown\&quot;,GEOGCS[\&quot;unknown\&quot;,DATUM[\&quot;WGS_1984\&quot;,SPHEROID[\&quot;WGS 84\&quot;,6378137,298.257223563,AUTHORITY[\&quot;EPSG\&quot;,\&quot;7030\&quot;]],AUTHORITY[\&quot;EPSG\&quot;,\&quot;6326\&quot;]],PRIMEM[\&quot;Greenwich\&quot;,0,AUTHORITY[\&quot;EPSG\&quot;,\&quot;8901\&quot;]],UNIT[\&quot;degree\&quot;,0.0174532925199433,AUTHORITY[\&quot;EPSG\&quot;,\&quot;9122\&quot;]]],PROJECTION[\&quot;custom_proj4\&quot;],UNIT[\&quot;metre\&quot;,1,AUTHORITY[\&quot;EPSG\&quot;,\&quot;9001\&quot;]],AXIS[\&quot;Easting\&quot;,EAST],AXIS[\&quot;Northing\&quot;,NORTH],EXTENSION[\&quot;PROJ4\&quot;,\&quot;+proj=ob_tran +o_proj=eqc +o_lon_p=0 +o_lat_p=30 +lon_0=0 +datum=WGS84\&quot;]]&quot;
+                                          ],
+                                 &#39;_areaHeight&#39; : [
+                                                   &quot;1869.72217011675&quot;
+                                                 ],
+                                 &#39;_areaWidth&#39; : [
+                                                  &quot;537.435149490083&quot;
+                                                ],
+                                 &#39;_aspectRatio&#39; : [
+                                                    &quot;0.287441181411741&quot;
+                                                  ],
+                                 &#39;_bllat&#39; : [
+                                              &quot;56.984799954054&quot;
+                                            ],
+                                 &#39;_bllon&#39; : [
+                                              &quot;17.9645063865565&quot;
+                                            ],
+                                 &#39;_brlat&#39; : [
+                                              &quot;55.4114513476157&quot;
+                                            ],
+                                 &#39;_brlon&#39; : [
+                                              &quot;26.1717217177981&quot;
+                                            ],
+                                 &#39;_firstTime&#39; : [
+                                                  &quot;20130318T000000Z&quot;
+                                                ],
+                                 &#39;_lastTime&#39; : [
+                                                 &quot;20130320T060000Z&quot;
+                                               ],
+                                 &#39;_level&#39; : [
+                                              &quot;0&quot;
+                                            ],
+                                 &#39;_nTimeSteps&#39; : [
+                                                   &quot;55&quot;
+                                                 ],
+                                 &#39;_parameters&#39; : [
+                                                   &quot;GeopHeight&quot;,
+                                                   &quot;Temperature&quot;,
+                                                   &quot;Pressure&quot;,
+                                                   &quot;Humidity&quot;,
+                                                   &quot;PrecipitationConv&quot;,
+                                                   &quot;PrecipitationLarge&quot;,
+                                                   &quot;KIndex&quot;,
+                                                   &quot;DewPoint&quot;,
+                                                   &quot;RadiationLW&quot;,
+                                                   &quot;RadiationGlobal&quot;,
+                                                   &quot;CloudSymbol&quot;,
+                                                   &quot;Visibility&quot;,
+                                                   &quot;RadiationNetTopAtmLW&quot;,
+                                                   &quot;WindSpeedMS&quot;,
+                                                   &quot;WindDirection&quot;,
+                                                   &quot;WindVectorMS&quot;,
+                                                   &quot;HourlyMaximumGust&quot;,
+                                                   &quot;WindUMS&quot;,
+                                                   &quot;WindVMS&quot;,
+                                                   &quot;TotalCloudCover&quot;,
+                                                   &quot;LowCloudCover&quot;,
+                                                   &quot;MediumCloudCover&quot;,
+                                                   &quot;HighCloudCover&quot;,
+                                                   &quot;MiddleAndLowCloudCover&quot;,
+                                                   &quot;Precipitation1h&quot;,
+                                                   &quot;PrecipitationForm&quot;,
+                                                   &quot;PrecipitationType&quot;,
+                                                   &quot;ProbabilityThunderstorm&quot;,
+                                                   &quot;FogIntensity&quot;,
+                                                   &quot;WeatherSymbol3&quot;,
+                                                   &quot;WeatherSymbol1&quot;
+                                                 ],
+                                 &#39;_timeStep&#39; : [
+                                                 &quot;60&quot;
+                                               ],
+                                 &#39;_ullat&#39; : [
+                                              &quot;72.644934908435&quot;
+                                            ],
+                                 &#39;_ullon&#39; : [
+                                              &quot;32.9673800041818&quot;
+                                            ],
+                                 &#39;_urlat&#39; : [
+                                              &quot;70.0044761211726&quot;
+                                            ],
+                                 &#39;_urlon&#39; : [
+                                              &quot;45.0119267281501&quot;
+                                            ],
+                                 &#39;_xNumber&#39; : [
+                                                &quot;72&quot;
+                                              ],
+                                 &#39;_xResolution&#39; : [
+                                                    &quot;7.46437707625115&quot;
+                                                  ],
+                                 &#39;_yNumber&#39; : [
+                                                &quot;248&quot;
+                                              ],
+                                 &#39;_yResolution&#39; : [
+                                                    &quot;7.53920229885787&quot;
+                                                  ],
+                                 &#39;calcBBox&#39; : [
+                                                &quot;24&quot;,
+                                                &quot;60&quot;,
+                                                &quot;25&quot;,
+                                                &quot;61&quot;
+                                              ],
+                                 &#39;crs&#39; : [
+                                           &quot;EPSG:4326&quot;
+                                         ],
+                                 &#39;featureId&#39; : [
+                                                 &quot;WFS-mxOZBlOnCyu_zMOMHkSerFZidjaJTowpIWbbpdOs2_llx4efR060aeWzDtdOufXlmw48rp1n5ackLWxb.u7Jp3Z4W_xjHCBk5AxygWATkCpFoU47p00ZsmzMzb.W3D0rKz8tOJk2M3XZsk7umXl2w7JDU25emXfQw8sO2tSPl38JGXTn0dK1qmXbwy8sPTryy1oUOWXnz68staEjrt05NPTzWdX07slWbTrOr6d2StNp1rTcPjTt67a.ndkrQr6d2SP159K0ImXvQ36d3St6pv6YdkPZv65Ie_tl5VtTN_eHs39ckPf2y8q4JuXJp67Yezf1yQ9_bLyrckac.iHs39ckPf2y8q3qHLLj08NPTD0079zHRXNQ5Zcenhp6Yemnfug7d_Xd0r2pYcmnD00790fZvxYdkHHj67euzD00791d1LDk04emnfumV4OPH129dmHpp37qwwqWHJpw9NO_dOy9KfXlmw48syvBx4.u3rsw9NO_dWGFSw5NOHpp37p2XpT68s2HHlp14OPH129dmHpp37mpv5ac.ndU07ctr36FGyGhw5b8nXHl5VmaNPLZh2tThy36suPpp37q1MvDnndOmjNk2bnPpv5ZcnHrl5eb.nJWSFm26XTrNv5ZceHn0dOtGnlsw7XTrn15ZsOPK6dZ.WnIAA--&quot;
+                                               ],
+                                 &#39;firstTime&#39; : [
+                                                 &quot;2013-03-18T00:00:00Z&quot;
+                                               ],
+                                 &#39;format&#39; : [
+                                              &quot;grib2&quot;
+                                            ],
+                                 &#39;intersection&#39; : [
+                                                    &quot;24.1111 60.0000&quot;,
+                                                    &quot;24.2222 60.0000&quot;,
+                                                    &quot;24.3333 60.0000&quot;,
+                                                    &quot;24.4444 60.0000&quot;,
+                                                    &quot;24.5556 60.0000&quot;,
+                                                    &quot;24.6667 60.0000&quot;,
+                                                    &quot;24.7778 60.0000&quot;,
+                                                    &quot;24.8889 60.0000&quot;,
+                                                    &quot;25.0000 60.0000&quot;,
+                                                    &quot;25.0000 60.1111&quot;,
+                                                    &quot;25.0000 60.2222&quot;,
+                                                    &quot;25.0000 60.3333&quot;,
+                                                    &quot;25.0000 60.4444&quot;,
+                                                    &quot;25.0000 60.5556&quot;,
+                                                    &quot;25.0000 60.6667&quot;,
+                                                    &quot;25.0000 60.7778&quot;,
+                                                    &quot;25.0000 60.8889&quot;,
+                                                    &quot;25.0000 61.0000&quot;,
+                                                    &quot;24.8889 61.0000&quot;,
+                                                    &quot;24.7778 61.0000&quot;,
+                                                    &quot;24.6667 61.0000&quot;,
+                                                    &quot;24.5556 61.0000&quot;,
+                                                    &quot;24.4444 61.0000&quot;,
+                                                    &quot;24.3333 61.0000&quot;,
+                                                    &quot;24.2222 61.0000&quot;,
+                                                    &quot;24.1111 61.0000&quot;,
+                                                    &quot;24.0000 61.0000&quot;,
+                                                    &quot;24.0000 60.8889&quot;,
+                                                    &quot;24.0000 60.7778&quot;,
+                                                    &quot;24.0000 60.6667&quot;,
+                                                    &quot;24.0000 60.5556&quot;,
+                                                    &quot;24.0000 60.4444&quot;,
+                                                    &quot;24.0000 60.3333&quot;,
+                                                    &quot;24.0000 60.2222&quot;,
+                                                    &quot;24.0000 60.1111&quot;,
+                                                    &quot;24.0000 60.0000&quot;,
+                                                    &quot;24.1111 60.0000&quot;
+                                                  ],
+                                 &#39;lastTime&#39; : [
+                                                &quot;2013-03-20T06:00:00Z&quot;
+                                              ],
+                                 &#39;level&#39; : [
+                                             &quot;0&quot;
+                                           ],
+                                 &#39;modelBBox&#39; : [
+                                                 &quot;17.9645063865565&quot;,
+                                                 &quot;55.4114513476157&quot;,
+                                                 &quot;45.0119267281501&quot;,
+                                                 &quot;72.644934908435&quot;
+                                               ],
+                                 &#39;originTime&#39; : [
+                                                  &quot;2013-03-18T00:00:00Z&quot;
+                                                ],
+                                 &#39;param&#39; : [
+                                             &quot;GeopHeight&quot;,
+                                             &quot;Temperature&quot;,
+                                             &quot;Pressure&quot;,
+                                             &quot;Humidity&quot;,
+                                             &quot;DewPoint&quot;,
+                                             &quot;WindUMS&quot;,
+                                             &quot;WindVMS&quot;,
+                                             &quot;TotalCloudCover&quot;,
+                                             &quot;LowCloudCover&quot;,
+                                             &quot;MediumCloudCover&quot;,
+                                             &quot;HighCloudCover&quot;,
+                                             &quot;Precipitation1h&quot;
+                                           ],
+                                 &#39;phenomenonBeginTime&#39; : [
+                                                           &quot;2013-03-18T00:00:00Z&quot;
+                                                         ],
+                                 &#39;phenomenonEndTime&#39; : [
+                                                         &quot;2013-03-20T06:00:00Z&quot;
+                                                       ],
+                                 &#39;producer&#39; : [
+                                                &quot;hirlam&quot;
+                                              ],
+                                 &#39;requestedBBox&#39; : [
+                                                     &quot;60&quot;,
+                                                     &quot;24&quot;,
+                                                     &quot;61&quot;,
+                                                     &quot;25&quot;
+                                                   ],
+                                 &#39;units&#39; : [
+                                             &quot;grib&quot;
+                                           ]
+                               }
+                  }
+                ];
+   protocol = &quot;http://&quot;;
+   queryNum = 1;
+   query_parameters = {
+                        &#39;boundingBox&#39; : [
+                                          &quot;24 60 25 61 EPSG::4326&quot;
+                                        ],
+                        &#39;format&#39; : [
+                                     &quot;grib2&quot;
+                                   ],
+                        &#39;fullInterval&#39; : [
+                                           &quot;0&quot;
+                                         ],
+                        &#39;meteoParam&#39; : [
+                                         &quot;GeopHeight&quot;,
+                                         &quot;Temperature&quot;,
+                                         &quot;Pressure&quot;,
+                                         &quot;Humidity&quot;,
+                                         &quot;WindUMS&quot;,
+                                         &quot;WindVMS&quot;,
+                                         &quot;MaximumWind&quot;,
+                                         &quot;WindGust&quot;,
+                                         &quot;DewPoint&quot;,
+                                         &quot;TotalCloudCover&quot;,
+                                         &quot;LowCloudCover&quot;,
+                                         &quot;MediumCloudCover&quot;,
+                                         &quot;HighCloudCover&quot;,
+                                         &quot;Precipitation1h&quot;,
+                                         &quot;PrecipitationAmount&quot;,
+                                         &quot;RadiationGlobalAccumulation&quot;,
+                                         &quot;RadiationLWAccumulation&quot;,
+                                         &quot;RadiationNetSurfaceLWAccumulation&quot;,
+                                         &quot;RadiationNetSurfaceSWAccumulation&quot;
+                                       ],
+                        &#39;projection&#39; : [
+                                         &quot;epsg::4326&quot;
+                                       ],
+                        &#39;storedquery_id&#39; : [
+                                             &quot;fmi::forecast::hirlam::surface::grid&quot;
+                                           ]
+                      };
+   responseTimestamp = &quot;2012-12-12T12:12:12Z&quot;
+ 
+</pre>
+</body>
+</html>

@@ -1,0 +1,108 @@
+Global data object:
+
+   fmi_apikey = "foobar";
+   fmi_apikey_prefix = "/fmi-apikey/";
+   groups = [
+              {
+                'dataOriginTime' : "2017-05-11T00:00:00Z",
+                'featureId' : "WFS-xLzqFvn4M4HI4pCqYAP.iXB_IAeJTowrEbfyy48PPpUy8.kLSxZc.ndU07ctqH.FKsYIZzGx8udaoWjp04Ol6_v37rt_DLuz6ea7dl6L8mXMvx8ua.LQpx17Be3aMHLOy7slTTty2of4UqxwxqODNp3ZJ2XDyy8.lbDs05JDMz5d.nJzrMbM27Bs3dGvL577.WS_v7ZeXflp6YcWzLE2NmXtl2SMunPo6c6Ci1STT_LAoQKY5QGlsy9suyp54ZamZs348OzLWpm0340ld16ZnDW24fETTz6Yd2PLStXQgNbbp589O7PUy.OlY27DuZW3fky7K9tGHlt37tOW_zx4d2TTuw9tOG_o84uWnIyuGHlh21rVMu3hl5YenXllbnPpv5ZcnHrl5eb.nJWxG38suPDz6VMvPo0Omnbltb92WsarUhg-",
+                'groupId' : "1-1",
+                'metadata' : {
+                               'boundingBox' : {
+                                                 'lowerLeft' : {
+                                                                 'lat' : 60.148905733,
+                                                                 'lon' : 24.9080451199
+                                                               },
+                                                 'lowerRight' : {
+                                                                  'lat' : 60.108876633,
+                                                                  'lon' : 25.8894914128
+                                                                },
+                                                 'upperLeft' : {
+                                                                 'lat' : 61.2210554916,
+                                                                 'lon' : 25.073239686
+                                                               },
+                                                 'upperRight' : {
+                                                                  'lat' : 61.1796934343,
+                                                                  'lon' : 26.0873536649
+                                                                }
+                                               }
+                             },
+                'paramList' : [
+                                {
+                                  'featureId' : "WFS-xLzqFvn4M4HI4pCqYAP.iXB_IAeJTowrEbfyy48PPpUy8.kLSxZc.ndU07ctqH.FKsYIZzGx8udaoWjp04Ol6_v37rt_DLuz6ea7dl6L8mXMvx8ua.LQpx17Be3aMHLOy7slTTty2of4UqxwxqODNp3ZJ2XDyy8.lbDs05JDMz5d.nJzrMbM27Bs3dGvL577.WS_v7ZeXflp6YcWzLE2NmXtl2SMunPo6c6Ci1STT_LAoQKY5QGlsy9suyp54ZamZs348OzLWpm0340ld16ZnDW24fETTz6Yd2PLStXQgNbbp589O7PUy.OlY27DuZW3fky7K9tGHlt37tOW_zx4d2TTuw9tOG_o84uWnIyuGHlh21rVMu3hl5YenXllbnPpv5ZcnHrl5eb.nJWxG38suPDz6VMvPo0Omnbltb92WsarUhg-",
+                                  'name' : "Temperature"
+                                }
+                              ],
+                'phenomenonEndTime' : "2017-05-12T03:00:00Z",
+                'phenomenonStartTime' : "2017-05-12T02:00:00Z",
+                'producerName' : "harmonie_scandinavia_hybrid",
+                'resultTime' : "2017-05-10T21:00:00Z",
+                'returnArray' : [
+                                  {
+                                    'data' : [
+                                               "0.4"
+                                             ],
+                                    'elev' : "12.345679",
+                                    'epochTime' : 1494554400,
+                                    'epochTimeStr' : "2017-05-12T02:00:00Z",
+                                    'x' : "60.37752",
+                                    'y' : "25.26906"
+                                  },
+                                  {
+                                    'data' : [
+                                               "0.2"
+                                             ],
+                                    'elev' : "12.345679",
+                                    'epochTime' : 1494558000,
+                                    'epochTimeStr' : "2017-05-12T03:00:00Z",
+                                    'x' : "60.37752",
+                                    'y' : "25.26906"
+                                  },
+                                  {
+                                    'data' : [
+                                               "0.3"
+                                             ],
+                                    'elev' : "25.000000",
+                                    'epochTime' : 1494554400,
+                                    'epochTimeStr' : "2017-05-12T02:00:00Z",
+                                    'x' : "60.37752",
+                                    'y' : "25.26906"
+                                  },
+                                  {
+                                    'data' : [
+                                               "0.0"
+                                             ],
+                                    'elev' : "25.000000",
+                                    'epochTime' : 1494558000,
+                                    'epochTimeStr' : "2017-05-12T03:00:00Z",
+                                    'x' : "60.37752",
+                                    'y' : "25.26906"
+                                  }
+                                ],
+                'stationList' : [
+                                  {
+                                    'country' : "Finland",
+                                    'elev' : "16",
+                                    'geoid' : "637067",
+                                    'iso2' : "FI",
+                                    'localtz' : "Europe/Helsinki",
+                                    'name' : "Sipoo",
+                                    'region' : "Finland",
+                                    'x' : "60.37752",
+                                    'y' : "25.26906"
+                                  }
+                                ]
+              }
+            ];
+   hostname = "beta.fmi.fi";
+   language = "eng";
+   numMatched = 1;
+   numParam = 1;
+   numReturned = 1;
+   protocol = "http://";
+   responseTimestamp = "2012-12-12T12:12:12Z";
+   srsDim = 3;
+   srsEpochDim = 4;
+   srsEpochName = "http://xml.fmi.fi/gml/crs/compoundCRS.php?crs=7409&amp;time=unixtime";
+   srsName = "http://www.opengis.net/def/crs/EPSG/0/7409"
+ 

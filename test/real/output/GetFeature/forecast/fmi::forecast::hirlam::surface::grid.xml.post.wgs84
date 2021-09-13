@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wfs:FeatureCollection
+    timeStamp="2012-12-12T12:12:12Z"
+    numberMatched="1"
+    numberReturned="1"
+        xmlns:wfs="http://www.opengis.net/wfs/2.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:xlink="http://www.w3.org/1999/xlink"
+    xmlns:om="http://www.opengis.net/om/2.0"
+    xmlns:omso="http://inspire.ec.europa.eu/schemas/omso/3.0"
+    xmlns:gml="http://www.opengis.net/gml/3.2"
+    xmlns:gmd="http://www.isotc211.org/2005/gmd"
+    xmlns:swe="http://www.opengis.net/swe/2.0"
+    xmlns:gmlcov="http://www.opengis.net/gmlcov/1.0"
+    xmlns:inspire="urn:x-inspire:specification:gmlas:BaseTypes:3.2"
+    xmlns:sam="http://www.opengis.net/sampling/2.0"
+    xmlns:sams="http://www.opengis.net/samplingSpatial/2.0" 
+    xmlns:target="http://xml.fmi.fi/namespace/om/atmosphericfeatures/1.1"
+    xsi:schemaLocation="
+    http://www.opengis.net/wfs/2.0 http://schemas.opengis.net/wfs/2.0/wfs.xsd
+    http://www.opengis.net/gmlcov/1.0 http://schemas.opengis.net/gmlcov/1.0/gmlcovAll.xsd
+    http://www.opengis.net/sampling/2.0 http://schemas.opengis.net/sampling/2.0/samplingFeature.xsd
+    http://www.opengis.net/samplingSpatial/2.0 http://schemas.opengis.net/samplingSpatial/2.0/spatialSamplingFeature.xsd
+    http://www.opengis.net/swe/2.0 http://schemas.opengis.net/sweCommon/2.0/swe.xsd
+    http://inspire.ec.europa.eu/schemas/omso/3.0 https://inspire.ec.europa.eu/schemas/omso/3.0/SpecialisedObservations.xsd
+    http://www.isotc211.org/2005/gmd http://schemas.opengis.net/iso/19139/20070417/gmd/gmd.xsd
+    http://xml.fmi.fi/namespace/om/atmosphericfeatures/1.1 https://xml.fmi.fi/schema/om/atmosphericfeatures/1.1/atmosphericfeatures.xsd">
+
+    
+    <wfs:member>
+        <omso:GridSeriesObservation gml:id="WFS-ENWbU.fRyQcaVfPxRYOQmRQq6veJTowpIWbbpdOs2_llx4efR060aeWzDtdOufXlmw48rp1n5ackLMzb.W3D0rKz8tOJk2M3XZsk7umXl2w7JDU25emXfQw8sO2tSPl38JGXTn0dK1qmXbwy8sPTryy1oUOWXnz68staEjrt05NPTzWdX07slWbTrOr6d2StNp1rTcPjTt67a.ndkrQr6d2SP159K0ImXvQ36d3St6pv6YdkPZv65Ie_tl5VtTN_eHs39ckPf2y8q4JuXJp67Yezf1yQ9_bLyrckac.iHs39ckPf2y8q3qHLLj08NPTD0079zHRXNQ5Zcenhp6Yemnfug7d_Xd0r2pYcmnD00790fZvxYdkHHj67euzD00791d1LDk04emnfumV4OPH129dmHpp37qwwqWHJpw9NO_dOy9KfXlmw48syvBx4.u3rsw9NO_dWGFSw5NOHpp37p2XpT68s2HHlp14OPH129dmHpp37mpv5ac.ndU07ctr36FGyGhw5b8nXHl5VmaNPLZh2tThy36suPpp37q1MvDnndOmjNk2bnPpv5ZcnHrl5eb.nJWSFm26XTrNv5ZceHn0dOtGnlsw7XTrn15ZsOPK6dZ.WnIA-">
+
+                        <om:phenomenonTime>
+                <gml:TimePeriod gml:id="ph-time-1-0">
+                    <gml:beginPosition>2013-03-18T00:00:00Z</gml:beginPosition>
+                    <gml:endPosition>2013-03-20T06:00:00Z</gml:endPosition>
+                </gml:TimePeriod>
+            </om:phenomenonTime>
+            <om:resultTime>
+                <gml:TimeInstant gml:id="rs-time-1-0">
+                <gml:timePosition>2013-03-18T00:00:00Z</gml:timePosition>
+                </gml:TimeInstant>
+            </om:resultTime>
+            <om:validTime>
+                <gml:TimePeriod gml:id="vt-time-1-0">
+                    <gml:beginPosition>2013-03-18T00:00:00Z</gml:beginPosition>
+                    <gml:endPosition>2013-03-20T06:00:00Z</gml:endPosition>
+                </gml:TimePeriod>
+            </om:validTime>
+
+              <om:procedure xlink:href="http://xml.fmi.fi/inspire/process/hirlam"/>
+	                  <om:parameter>
+                <om:NamedValue>
+                    <om:name xlink:href="https://inspire.ec.europa.eu/codeList/ProcessParameterValue/value/numericalModel/analysisTime"/>
+                    <om:value>
+                        <gml:TimeInstant gml:id="analysis-time---1-0"> 
+			    <gml:timePosition>2013-03-18T00:00:00Z</gml:timePosition> 
+                        </gml:TimeInstant>
+                    </om:value>
+                </om:NamedValue>
+            </om:parameter>
+
+            <om:observedProperty xlink:href="http://opendata.fmi.fi/fmi-apikey/foobar/meta?observableProperty=forecast&amp;param=GeopHeight,Temperature,Pressure,Humidity,DewPoint,WindUMS,WindVMS,TotalCloudCover,LowCloudCover,MediumCloudCover,HighCloudCover,Precipitation1h&amp;language=eng&amp;units=grib"/>
+                        <om:featureOfInterest>
+                <sams:SF_SpatialSamplingFeature gml:id="s-1-0">
+                <sam:sampledFeature>
+                    <target:SurfaceWeatherTargetArea gml:id="sampledFeatureTarget-0-1"> 
+                        <target:geometry>
+                            <gml:Polygon gml:id="sampledFeatureTarget-polygon-0-1" srsName="http://www.opengis.net/def/crs/EPSG/0/4326" srsDimension="2">
+                                <gml:exterior>
+                                    <gml:LinearRing>
+                                        <gml:coordinates>
+					    17.9645063865565 55.4114513476157 17.9645063865565 72.644934908435 45.0119267281501 72.644934908435 45.0119267281501 55.4114513476157 17.9645063865565 55.4114513476157
+                                        </gml:coordinates>
+                                    </gml:LinearRing>
+                                </gml:exterior>
+                            </gml:Polygon>                
+                        </target:geometry>
+            		<target:observableProperty xlink:href="http://opendata.fmi.fi/fmi-apikey/foobar/meta?observableProperty=forecast&amp;param=GeopHeight,Temperature,Pressure,Humidity,DewPoint,WindUMS,WindVMS,TotalCloudCover,LowCloudCover,MediumCloudCover,HighCloudCover,Precipitation1h&amp;language=eng&amp;units=grib"/>
+                    </target:SurfaceWeatherTargetArea>
+                </sam:sampledFeature>
+                <sams:shape>
+                    <gml:Polygon gml:id="samplingFeatureTarget-polygon-0-1">
+                        <gml:exterior>
+                            <gml:LinearRing>
+                                <gml:coordinates>
+					17.9645063865565 55.4114513476157 17.9645063865565 72.644934908435 45.0119267281501 72.644934908435 45.0119267281501 55.4114513476157 17.9645063865565 55.4114513476157
+	  	                </gml:coordinates>
+                            </gml:LinearRing>
+                        </gml:exterior>
+                    </gml:Polygon>                    
+                </sams:shape>            
+            </sams:SF_SpatialSamplingFeature>
+            </om:featureOfInterest>           
+
+	                <om:result>        
+                <gmlcov:RectifiedGridCoverage gml:id="rgd-0-1">
+                    <gml:domainSet>
+                        <gml:RectifiedGrid gml:id="rg-0-1" dimension="2">
+                            <gml:limits>
+                                <gml:GridEnvelope>                                                                           
+                                    <gml:low>0 0</gml:low>
+                                    <gml:high>72 248</gml:high>
+                                </gml:GridEnvelope>
+                            </gml:limits>
+                            <gml:axisLabels>Lat Long</gml:axisLabels>
+                            <gml:origin>
+                                <gml:Point gml:id="origin-point-0-1" srsName="http://www.opengis.net/def/crs/EPSG/0/4326" srsDimension="2">
+                                    <gml:pos>17.9645063865565 72.644934908435</gml:pos>
+                                </gml:Point>
+                            </gml:origin>
+                            <gml:offsetVector>7.46437707625115 0</gml:offsetVector>
+                            <gml:offsetVector>0 7.53920229885787</gml:offsetVector>                            
+                        </gml:RectifiedGrid>
+                    </gml:domainSet>
+                    <gml:rangeSet>           
+                        <gml:File>
+                            <gml:rangeParameters/>
+                            <gml:fileReference>http://opendata.fmi.fi/fmi-apikey/foobar/download?producer=hirlam&amp;param=GeopHeight,Temperature,Pressure,Humidity,DewPoint,WindUMS,WindVMS,TotalCloudCover,LowCloudCover,MediumCloudCover,HighCloudCover,Precipitation1h&amp;bbox=17.9645063865565,55.4114513476157,45.0119267281501,72.644934908435&amp;origintime=2013-03-18T00:00:00Z&amp;starttime=2013-03-18T00:00:00Z&amp;endtime=2013-03-20T06:00:00Z&amp;format=grib2&amp;projection=epsg:4326</gml:fileReference>     
+                            <gml:fileStructure codeSpace="http://apps.ecmwf.int/codes/grib/param-db"></gml:fileStructure>              
+                            <gml:mimeType>application/octet-stream</gml:mimeType>
+                        </gml:File>
+                    </gml:rangeSet>
+                    <gml:coverageFunction>
+                        <gml:CoverageMappingRule>
+                            <gml:ruleDefinition>Linear</gml:ruleDefinition>
+                        </gml:CoverageMappingRule>
+                    </gml:coverageFunction>
+                    <gmlcov:rangeType>
+                        <swe:DataRecord><swe:field name="GeopHeight" xlink:href="http://opendata.fmi.fi/fmi-apikey/foobar/meta?observableProperty=forecast&amp;param=GeopHeight&amp;language=eng&amp;units=grib"/><swe:field name="Temperature" xlink:href="http://opendata.fmi.fi/fmi-apikey/foobar/meta?observableProperty=forecast&amp;param=Temperature&amp;language=eng&amp;units=grib"/><swe:field name="Pressure" xlink:href="http://opendata.fmi.fi/fmi-apikey/foobar/meta?observableProperty=forecast&amp;param=Pressure&amp;language=eng&amp;units=grib"/><swe:field name="Humidity" xlink:href="http://opendata.fmi.fi/fmi-apikey/foobar/meta?observableProperty=forecast&amp;param=Humidity&amp;language=eng&amp;units=grib"/><swe:field name="DewPoint" xlink:href="http://opendata.fmi.fi/fmi-apikey/foobar/meta?observableProperty=forecast&amp;param=DewPoint&amp;language=eng&amp;units=grib"/><swe:field name="WindUMS" xlink:href="http://opendata.fmi.fi/fmi-apikey/foobar/meta?observableProperty=forecast&amp;param=WindUMS&amp;language=eng&amp;units=grib"/><swe:field name="WindVMS" xlink:href="http://opendata.fmi.fi/fmi-apikey/foobar/meta?observableProperty=forecast&amp;param=WindVMS&amp;language=eng&amp;units=grib"/><swe:field name="TotalCloudCover" xlink:href="http://opendata.fmi.fi/fmi-apikey/foobar/meta?observableProperty=forecast&amp;param=TotalCloudCover&amp;language=eng&amp;units=grib"/><swe:field name="LowCloudCover" xlink:href="http://opendata.fmi.fi/fmi-apikey/foobar/meta?observableProperty=forecast&amp;param=LowCloudCover&amp;language=eng&amp;units=grib"/><swe:field name="MediumCloudCover" xlink:href="http://opendata.fmi.fi/fmi-apikey/foobar/meta?observableProperty=forecast&amp;param=MediumCloudCover&amp;language=eng&amp;units=grib"/><swe:field name="HighCloudCover" xlink:href="http://opendata.fmi.fi/fmi-apikey/foobar/meta?observableProperty=forecast&amp;param=HighCloudCover&amp;language=eng&amp;units=grib"/><swe:field name="Precipitation1h" xlink:href="http://opendata.fmi.fi/fmi-apikey/foobar/meta?observableProperty=forecast&amp;param=Precipitation1h&amp;language=eng&amp;units=grib"/></swe:DataRecord>
+                    </gmlcov:rangeType>              
+                </gmlcov:RectifiedGridCoverage>
+            </om:result>
+
+        </omso:GridSeriesObservation>
+    </wfs:member>
+    
+</wfs:FeatureCollection>

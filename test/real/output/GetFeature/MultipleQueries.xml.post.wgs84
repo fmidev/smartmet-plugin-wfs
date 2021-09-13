@@ -1,0 +1,1443 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<wfs:FeatureCollection xmlns:wfs="http://www.opengis.net/wfs/2.0" numberMatched="24" numberReturned="24" timeStamp="2012-12-12T12:12:12Z" xmlns:gml="http://www.opengis.net/gml/3.2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.opengis.net/wfs/2.0 http://schemas.opengis.net/wfs/2.0/wfs.xsd http://www.opengis.net/gml/3.2 http://schemas.opengis.net/gml/3.2.1/gml.xsd">
+
+  <wfs:member>
+    <wfs:FeatureCollection numberMatched="1" numberReturned="1" timeStamp="2012-12-12T12:12:12Z" xmlns:gco="http://www.isotc211.org/2005/gco" xmlns:gmd="http://www.isotc211.org/2005/gmd" xmlns:gml="http://www.opengis.net/gml/3.2" xmlns:gmlcov="http://www.opengis.net/gmlcov/1.0" xmlns:om="http://www.opengis.net/om/2.0" xmlns:ompr="http://inspire.ec.europa.eu/schemas/ompr/3.0" xmlns:omso="http://inspire.ec.europa.eu/schemas/omso/3.0" xmlns:sam="http://www.opengis.net/sampling/2.0" xmlns:sams="http://www.opengis.net/samplingSpatial/2.0" xmlns:swe="http://www.opengis.net/swe/2.0" xmlns:target="http://xml.fmi.fi/namespace/om/atmosphericfeatures/1.0" xmlns:wfs="http://www.opengis.net/wfs/2.0" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.opengis.net/wfs/2.0 http://schemas.opengis.net/wfs/2.0/wfs.xsd     http://www.opengis.net/gmlcov/1.0 http://schemas.opengis.net/gmlcov/1.0/gmlcovAll.xsd     http://www.opengis.net/sampling/2.0 http://schemas.opengis.net/sampling/2.0/samplingFeature.xsd     http://www.opengis.net/samplingSpatial/2.0 http://schemas.opengis.net/samplingSpatial/2.0/spatialSamplingFeature.xsd     http://www.opengis.net/swe/2.0 http://schemas.opengis.net/sweCommon/2.0/swe.xsd     http://inspire.ec.europa.eu/schemas/omso/3.0 http://inspire.ec.europa.eu/schemas/omso/3.0/SpecialisedObservations.xsd     http://inspire.ec.europa.eu/schemas/ompr/3.0 http://inspire.ec.europa.eu/schemas/ompr/3.0/Processes.xsd     http://xml.fmi.fi/namespace/om/atmosphericfeatures/1.0 http://xml.fmi.fi/schema/om/atmosphericfeatures/1.0/atmosphericfeatures.xsd">
+      <wfs:member>
+        <omso:GridSeriesObservation gml:id="WFS-YXchiy1KeOas.HorNTucA5u5PLOJTowuYWbbpdOs2_llx4efR060aeWzDtdOufXlmw48rp1w36d3R0629dnTTw36d3THv7ZeWHPlhaWLLn07qmnblte_Qo2bBNVCY2PlzrUi0Kcd06aMmrhnZd2Spp25bXv0KNm4bWwnBm07sk7Lh5ZefSth2ackhmZ8u_Tk51mNmjJg1bOjXl899_LJf39svLvy09MOLZliaWzL2y7KnnhlqZmzfjw7MtambTfjSV3XpmcNbbh8RNPPph3Y8tK1dCA1tunnz07s9TL46VjTsM5lbd.TLsrM0aeWzDtZXDDyw7a1I.XfwkZdOfR0rWqZdvDLyw9OvLLWhQ5ZefPryy1oSOu3Tk09PNbVfTuyRNPLLj6ad.6tavp3ZKfDLlyTadZ1fTuyVZtOs6vp3ZK02nWtNw.NO3rtr6d2StCvp3ZI_Xn0rQiZe9Dfp3dK3qm_ph2Q9m_rkh7.2XlW5Xy4emjLyp.duLfsZ1tTN_eHs39ckPf2y8q4JuXJp67Yezf1yQ9_bLyrckac.iHs39ckPf2y8q3qHLLj08NPTD0079zHRXNQ5Zcenhp6Yemnfug7d_Xd0r2pYcmnD00790fZvxYdkHHj67euzD00791d1LDk04emnfumV4OPH129dmHpp37qwwqWHJpw9NO_dOy9KfXlmw48syvBx4.u3rsw9NO_dWGFSw5NOHpp37p2XpT68s2HHlp14OPH129dmHpp37q.KWHJpw9NO_dE05s3Xnlg48fXb12YemnfubnPpv5ZcnHrl5eb.nJXmFm26XTrNv5ZceHn0dOtGnlsw7XTrn15ZsOPK6dcN.nd0dOtvXZ008N.nd0x7.2Xlhz5Wh007ctPpl4T8hNDpp25bW_dlrGq1IYA">
+          <om:phenomenonTime>
+            <gml:TimePeriod gml:id="time-interval-1-1">
+              <gml:beginPosition>2013-03-19T12:00:00Z</gml:beginPosition>
+              <gml:endPosition>2013-03-19T13:00:00Z</gml:endPosition>
+            </gml:TimePeriod>
+          </om:phenomenonTime>
+          <om:resultTime>
+            <gml:TimeInstant gml:id="time-1-1">
+              <gml:timePosition>2013-03-17T22:00:00Z</gml:timePosition>
+            </gml:TimeInstant>
+          </om:resultTime>
+          <om:procedure xlink:href="http://xml.fmi.fi/inspire/process/hirlam"/>
+          <om:parameter>
+            <om:NamedValue>
+              <om:name xlink:href="http://xml.fmi.fi/inspire/process/hirlam"/>
+              <om:value>
+                <gml:TimeInstant gml:id="analysis-time-1-1">
+                  <gml:timePosition>2013-03-18T00:00:00Z</gml:timePosition>
+                </gml:TimeInstant>
+              </om:value>
+            </om:NamedValue>
+          </om:parameter>
+          <om:observedProperty xlink:href="http://beta.fmi.fi/fmi-apikey/foobar/meta?observableProperty=forecast&amp;param=GeopHeight,Temperature,Pressure,Humidity,WindDirection,WindSpeedMS,WindUMS,WindVMS,MaximumWind,WindGust,DewPoint,TotalCloudCover,WeatherSymbol3,LowCloudCover,MediumCloudCover,HighCloudCover,Precipitation1h,PrecipitationAmount,RadiationGlobalAccumulation,RadiationLWAccumulation,RadiationNetSurfaceLWAccumulation,RadiationNetSurfaceSWAccumulation,RadiationDiffuseAccumulation&amp;language=eng"/>
+          <om:featureOfInterest>
+            <sams:SF_SpatialSamplingFeature gml:id="enn-s-1-1-">
+              <sam:sampledFeature>
+                <target:LocationCollection gml:id="sampled-target-1-1">
+                  <target:member>
+                    <target:Location gml:id="forloc-geoid-642056-pos">
+                      <gml:identifier codeSpace="http://xml.fmi.fi/namespace/stationcode/geoid">642056</gml:identifier>
+                      <gml:name codeSpace="http://xml.fmi.fi/namespace/locationcode/name">Pesiö</gml:name>
+                      <gml:name codeSpace="http://xml.fmi.fi/namespace/locationcode/geoid">642056</gml:name>
+                      <target:representativePoint xlink:href="#point-642056"/>
+                      <target:country codeSpace="http://xml.fmi.fi/namespace/location/country">Finland</target:country>
+                      <target:timezone>Europe/Helsinki</target:timezone>
+                      <target:region codeSpace="http://xml.fmi.fi/namespace/location/region">Suomussalmi</target:region>
+                    </target:Location>
+                  </target:member>
+                </target:LocationCollection>
+              </sam:sampledFeature>
+              <sams:shape>
+                <gml:MultiPoint gml:id="sf-1-1-">
+                  <gml:pointMembers>
+                    <gml:Point gml:id="point-642056" srsDimension="2" srsName="http://www.opengis.net/def/crs/EPSG/0/4258">
+                      <gml:name>Pesiö</gml:name>
+                      <gml:pos>64.95000 28.65000 </gml:pos>
+                    </gml:Point>
+                  </gml:pointMembers>
+                </gml:MultiPoint>
+              </sams:shape>
+            </sams:SF_SpatialSamplingFeature>
+          </om:featureOfInterest>
+          <om:result>
+            <gmlcov:MultiPointCoverage gml:id="mpcv-1-1">
+              <gml:domainSet>
+                <gmlcov:SimpleMultiPoint gml:id="mp-1-1" srsDimension="3" srsName="http://xml.fmi.fi/gml/crs/compoundCRS.php?crs=4258&amp;time=unixtime">
+                  <gmlcov:positions>
+                64.95000 28.65000  1363694400
+                64.95000 28.65000  1363698000
+                </gmlcov:positions>
+                </gmlcov:SimpleMultiPoint>
+              </gml:domainSet>
+              <gml:rangeSet>
+                <gml:DataBlock>
+                  <gml:rangeParameters/>
+                  <gml:doubleOrNilReasonTupleList>
+                230.44 -5.38 1030.11 29.83 89.1 4.7 -4.7 -0.1 NaN NaN -20.32 100.0 3.0 0.0 100.0 100.0 0.0 NaN NaN NaN NaN NaN NaN 
+                230.44 -5.28 1029.75 32.58 85.6 4.8 -4.7 -0.4 NaN NaN -19.24 100.0 3.0 0.0 100.0 100.0 0.0 NaN NaN NaN NaN NaN NaN 
+                </gml:doubleOrNilReasonTupleList>
+                </gml:DataBlock>
+              </gml:rangeSet>
+              <gml:coverageFunction>
+                <gml:CoverageMappingRule>
+                  <gml:ruleDefinition>Linear</gml:ruleDefinition>
+                </gml:CoverageMappingRule>
+              </gml:coverageFunction>
+              <gmlcov:rangeType>
+                <swe:DataRecord>
+                  <swe:field name="GeopHeight" xlink:href="http://beta.fmi.fi/fmi-apikey/foobar/meta?observableProperty=forecast&amp;param=GeopHeight&amp;language=eng"/>
+                  <swe:field name="Temperature" xlink:href="http://beta.fmi.fi/fmi-apikey/foobar/meta?observableProperty=forecast&amp;param=Temperature&amp;language=eng"/>
+                  <swe:field name="Pressure" xlink:href="http://beta.fmi.fi/fmi-apikey/foobar/meta?observableProperty=forecast&amp;param=Pressure&amp;language=eng"/>
+                  <swe:field name="Humidity" xlink:href="http://beta.fmi.fi/fmi-apikey/foobar/meta?observableProperty=forecast&amp;param=Humidity&amp;language=eng"/>
+                  <swe:field name="WindDirection" xlink:href="http://beta.fmi.fi/fmi-apikey/foobar/meta?observableProperty=forecast&amp;param=WindDirection&amp;language=eng"/>
+                  <swe:field name="WindSpeedMS" xlink:href="http://beta.fmi.fi/fmi-apikey/foobar/meta?observableProperty=forecast&amp;param=WindSpeedMS&amp;language=eng"/>
+                  <swe:field name="WindUMS" xlink:href="http://beta.fmi.fi/fmi-apikey/foobar/meta?observableProperty=forecast&amp;param=WindUMS&amp;language=eng"/>
+                  <swe:field name="WindVMS" xlink:href="http://beta.fmi.fi/fmi-apikey/foobar/meta?observableProperty=forecast&amp;param=WindVMS&amp;language=eng"/>
+                  <swe:field name="MaximumWind" xlink:href="http://beta.fmi.fi/fmi-apikey/foobar/meta?observableProperty=forecast&amp;param=MaximumWind&amp;language=eng"/>
+                  <swe:field name="WindGust" xlink:href="http://beta.fmi.fi/fmi-apikey/foobar/meta?observableProperty=forecast&amp;param=WindGust&amp;language=eng"/>
+                  <swe:field name="DewPoint" xlink:href="http://beta.fmi.fi/fmi-apikey/foobar/meta?observableProperty=forecast&amp;param=DewPoint&amp;language=eng"/>
+                  <swe:field name="TotalCloudCover" xlink:href="http://beta.fmi.fi/fmi-apikey/foobar/meta?observableProperty=forecast&amp;param=TotalCloudCover&amp;language=eng"/>
+                  <swe:field name="WeatherSymbol3" xlink:href="http://beta.fmi.fi/fmi-apikey/foobar/meta?observableProperty=forecast&amp;param=WeatherSymbol3&amp;language=eng"/>
+                  <swe:field name="LowCloudCover" xlink:href="http://beta.fmi.fi/fmi-apikey/foobar/meta?observableProperty=forecast&amp;param=LowCloudCover&amp;language=eng"/>
+                  <swe:field name="MediumCloudCover" xlink:href="http://beta.fmi.fi/fmi-apikey/foobar/meta?observableProperty=forecast&amp;param=MediumCloudCover&amp;language=eng"/>
+                  <swe:field name="HighCloudCover" xlink:href="http://beta.fmi.fi/fmi-apikey/foobar/meta?observableProperty=forecast&amp;param=HighCloudCover&amp;language=eng"/>
+                  <swe:field name="Precipitation1h" xlink:href="http://beta.fmi.fi/fmi-apikey/foobar/meta?observableProperty=forecast&amp;param=Precipitation1h&amp;language=eng"/>
+                  <swe:field name="PrecipitationAmount" xlink:href="http://beta.fmi.fi/fmi-apikey/foobar/meta?observableProperty=forecast&amp;param=PrecipitationAmount&amp;language=eng"/>
+                  <swe:field name="RadiationGlobalAccumulation" xlink:href="http://beta.fmi.fi/fmi-apikey/foobar/meta?observableProperty=forecast&amp;param=RadiationGlobalAccumulation&amp;language=eng"/>
+                  <swe:field name="RadiationLWAccumulation" xlink:href="http://beta.fmi.fi/fmi-apikey/foobar/meta?observableProperty=forecast&amp;param=RadiationLWAccumulation&amp;language=eng"/>
+                  <swe:field name="RadiationNetSurfaceLWAccumulation" xlink:href="http://beta.fmi.fi/fmi-apikey/foobar/meta?observableProperty=forecast&amp;param=RadiationNetSurfaceLWAccumulation&amp;language=eng"/>
+                  <swe:field name="RadiationNetSurfaceSWAccumulation" xlink:href="http://beta.fmi.fi/fmi-apikey/foobar/meta?observableProperty=forecast&amp;param=RadiationNetSurfaceSWAccumulation&amp;language=eng"/>
+                  <swe:field name="RadiationDiffuseAccumulation" xlink:href="http://beta.fmi.fi/fmi-apikey/foobar/meta?observableProperty=forecast&amp;param=RadiationDiffuseAccumulation&amp;language=eng"/>
+                </swe:DataRecord>
+              </gmlcov:rangeType>
+            </gmlcov:MultiPointCoverage>
+          </om:result>
+        </omso:GridSeriesObservation>
+      </wfs:member>
+    </wfs:FeatureCollection>
+  </wfs:member>
+
+  <wfs:member>
+    <wfs:FeatureCollection numberMatched="23" numberReturned="23" timeStamp="2012-12-12T12:12:12Z" xmlns:gco="http://www.isotc211.org/2005/gco" xmlns:gmd="http://www.isotc211.org/2005/gmd" xmlns:gml="http://www.opengis.net/gml/3.2" xmlns:gmlcov="http://www.opengis.net/gmlcov/1.0" xmlns:om="http://www.opengis.net/om/2.0" xmlns:ompr="http://inspire.ec.europa.eu/schemas/ompr/3.0" xmlns:omso="http://inspire.ec.europa.eu/schemas/omso/3.0" xmlns:sam="http://www.opengis.net/sampling/2.0" xmlns:sams="http://www.opengis.net/samplingSpatial/2.0" xmlns:swe="http://www.opengis.net/swe/2.0" xmlns:target="http://xml.fmi.fi/namespace/om/atmosphericfeatures/1.0" xmlns:wfs="http://www.opengis.net/wfs/2.0" xmlns:wml2="http://www.opengis.net/waterml/2.0" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.opengis.net/wfs/2.0 http://schemas.opengis.net/wfs/2.0/wfs.xsd     http://www.opengis.net/gmlcov/1.0 http://schemas.opengis.net/gmlcov/1.0/gmlcovAll.xsd     http://www.opengis.net/sampling/2.0 http://schemas.opengis.net/sampling/2.0/samplingFeature.xsd     http://www.opengis.net/samplingSpatial/2.0 http://schemas.opengis.net/samplingSpatial/2.0/spatialSamplingFeature.xsd     http://www.opengis.net/swe/2.0 http://schemas.opengis.net/sweCommon/2.0/swe.xsd     http://inspire.ec.europa.eu/schemas/omso/3.0 http://inspire.ec.europa.eu/schemas/omso/3.0/SpecialisedObservations.xsd     http://inspire.ec.europa.eu/schemas/ompr/3.0 http://inspire.ec.europa.eu/schemas/ompr/3.0/Processes.xsd     http://www.opengis.net/waterml/2.0 http://schemas.opengis.net/waterml/2.0/waterml2.xsd     http://xml.fmi.fi/namespace/om/atmosphericfeatures/1.0 http://xml.fmi.fi/schema/om/atmosphericfeatures/1.0/atmosphericfeatures.xsd">
+      <wfs:member>
+        <omso:PointTimeSeriesObservation gml:id="WFS-g3nySFxhKuCk4AYKTMuokHOIikSJTowtIWbbpdOs2_llx4efR060aeWzDtdOufXlmw48rp1w36d3R066aduXth2dcvDDp5QtLFlz6d1TTty2vfoUbQY2PlzrUi0Kcd06aMmrhnZd2Spp25bXv0KNoODNp3ZJ2XDyy8.lbDs05JDMz5d.nJzrMbNGTBq2dGvL577.WS_v7ZeXflp6YcWzLE0tmXtl2VPPDLUzNm_Hh2Za1M2m_GkruvTM4a23D4iaefTDux5aVq6EBrbdPPnp3Z6mXx0rGnYZzK278mXZWZo08tmHayuGHlh21qR8u_hIy6c.jo3OfTfyy5OPXLy839OSukLNt0unWbfyy48PPo6daNPLZh2unXPryzYceV064b9O7o6ddNO3L2w7OuXhh08mh007ctPpl4T8hNDpp25bW_dlrGq1IYA--GeopHeight">
+          <om:phenomenonTime>
+            <gml:TimePeriod gml:id="time-interval-1-1">
+              <gml:beginPosition>2013-03-20T00:00:00Z</gml:beginPosition>
+              <gml:endPosition>2013-03-20T00:00:00Z</gml:endPosition>
+            </gml:TimePeriod>
+          </om:phenomenonTime>
+          <om:resultTime>
+            <gml:TimeInstant gml:id="time-1-1">
+              <gml:timePosition>2013-03-17T22:00:00Z</gml:timePosition>
+            </gml:TimeInstant>
+          </om:resultTime>
+          <om:procedure xlink:href="http://xml.fmi.fi/inspire/process/hirlam"/>
+          <om:parameter>
+            <om:NamedValue>
+              <om:name xlink:href="http://inspire.ec.europa.eu/codeList/ProcessParameterValue/value/numericalModel/analysisTime"/>
+              <om:value>
+                <gml:TimeInstant gml:id="analysis-time-1-1-GeopHeight--">
+                  <gml:timePosition>2013-03-18T00:00:00Z</gml:timePosition>
+                </gml:TimeInstant>
+              </om:value>
+            </om:NamedValue>
+          </om:parameter>
+          <om:observedProperty xlink:href="http://beta.fmi.fi/fmi-apikey/foobar/meta?observableProperty=forecast&amp;param=GeopHeight&amp;language=eng"/>
+          <om:featureOfInterest>
+            <sams:SF_SpatialSamplingFeature gml:id="enn-s-1-1-GeopHeight">
+              <sam:sampledFeature>
+                <target:LocationCollection gml:id="sampled-target-1-1-GeopHeight">
+                  <target:member>
+                    <target:Location gml:id="forloc-geoid-642056-pos-GeopHeight">
+                      <gml:identifier codeSpace="http://xml.fmi.fi/namespace/stationcode/geoid">642056</gml:identifier>
+                      <gml:name codeSpace="http://xml.fmi.fi/namespace/locationcode/name">Pesiö</gml:name>
+                      <gml:name codeSpace="http://xml.fmi.fi/namespace/locationcode/geoid">642056</gml:name>
+                      <target:representativePoint xlink:href="#point-642056-GeopHeight"/>
+                      <target:country codeSpace="http://xml.fmi.fi/namespace/location/country">Finland</target:country>
+                      <target:timezone>Europe/Helsinki</target:timezone>
+                      <target:region codeSpace="http://xml.fmi.fi/namespace/location/region">Suomussalmi</target:region>
+                    </target:Location>
+                  </target:member>
+                </target:LocationCollection>
+              </sam:sampledFeature>
+              <sams:shape>
+                <gml:MultiPoint gml:id="foi-multipoint-1-1-GeopHeight">
+                  <gml:pointMembers>
+                    <gml:Point gml:id="point-642056-GeopHeight" srsDimension="2" srsName="http://www.opengis.net/def/crs/EPSG/0/4258">
+                      <gml:name>Pesiö</gml:name>
+                      <gml:pos>64.95000 28.65000 </gml:pos>
+                    </gml:Point>
+                  </gml:pointMembers>
+                </gml:MultiPoint>
+              </sams:shape>
+            </sams:SF_SpatialSamplingFeature>
+          </om:featureOfInterest>
+          <om:result>
+            <wml2:MeasurementTimeseries gml:id="mts-1-1-GeopHeight">
+              <wml2:point>
+                <wml2:MeasurementTVP>
+                  <wml2:time>2013-03-20T00:00:00Z</wml2:time>
+                  <wml2:value>230.44</wml2:value>
+                </wml2:MeasurementTVP>
+              </wml2:point>
+            </wml2:MeasurementTimeseries>
+          </om:result>
+        </omso:PointTimeSeriesObservation>
+      </wfs:member>
+      <wfs:member>
+        <omso:PointTimeSeriesObservation gml:id="WFS-Stqal7OXC7XCNFYI3wO.r1ykyCqJTowtIWbbpdOs2_llx4efR060aeWzDtdOufXlmw48rp1w36d3R066aduXth2dcvDDp5QtLFlz6d1TTty2vfoUbQY2PlzrUi0Kcd06aMmrhnZd2Spp25bXv0KNoODNp3ZJ2XDyy8.lbDs05JDMz5d.nJzrMbNGTBq2dGvL577.WS_v7ZeXflp6YcWzLE0tmXtl2VPPDLUzNm_Hh2Za1M2m_GkruvTM4a23D4iaefTDux5aVq6EBrbdPPnp3Z6mXx0rGnYZzK278mXZWZo08tmHayuGHlh21rVMu3hl5YenXllbnPpv5ZcnHrl5eb.nJXSFm26XTrNv5ZceHn0dOtGnlsw7XTrn15ZsOPK6dcN.nd0dOumnbl7YdnXLww6eTQ6aduWn0y8J.Qmh007ctrfuy1jVakMA-Temperature">
+          <om:phenomenonTime xlink:href="#time-interval-1-1"/>
+          <om:resultTime xlink:href="#time-1-1"/>
+          <om:procedure xlink:href="http://xml.fmi.fi/inspire/process/hirlam"/>
+          <om:parameter>
+            <om:NamedValue>
+              <om:name xlink:href="http://inspire.ec.europa.eu/codeList/ProcessParameterValue/value/numericalModel/analysisTime"/>
+              <om:value>
+                <gml:TimeInstant gml:id="analysis-time-1-1-Temperature--">
+                  <gml:timePosition>2013-03-18T00:00:00Z</gml:timePosition>
+                </gml:TimeInstant>
+              </om:value>
+            </om:NamedValue>
+          </om:parameter>
+          <om:observedProperty xlink:href="http://beta.fmi.fi/fmi-apikey/foobar/meta?observableProperty=forecast&amp;param=Temperature&amp;language=eng"/>
+          <om:featureOfInterest>
+            <sams:SF_SpatialSamplingFeature gml:id="enn-s-1-1-Temperature">
+              <sam:sampledFeature>
+                <target:LocationCollection gml:id="sampled-target-1-1-Temperature">
+                  <target:member>
+                    <target:Location gml:id="forloc-geoid-642056-pos-Temperature">
+                      <gml:identifier codeSpace="http://xml.fmi.fi/namespace/stationcode/geoid">642056</gml:identifier>
+                      <gml:name codeSpace="http://xml.fmi.fi/namespace/locationcode/name">Pesiö</gml:name>
+                      <gml:name codeSpace="http://xml.fmi.fi/namespace/locationcode/geoid">642056</gml:name>
+                      <target:representativePoint xlink:href="#point-642056-Temperature"/>
+                      <target:country codeSpace="http://xml.fmi.fi/namespace/location/country">Finland</target:country>
+                      <target:timezone>Europe/Helsinki</target:timezone>
+                      <target:region codeSpace="http://xml.fmi.fi/namespace/location/region">Suomussalmi</target:region>
+                    </target:Location>
+                  </target:member>
+                </target:LocationCollection>
+              </sam:sampledFeature>
+              <sams:shape>
+                <gml:MultiPoint gml:id="foi-multipoint-1-1-Temperature">
+                  <gml:pointMembers>
+                    <gml:Point gml:id="point-642056-Temperature" srsDimension="2" srsName="http://www.opengis.net/def/crs/EPSG/0/4258">
+                      <gml:name>Pesiö</gml:name>
+                      <gml:pos>64.95000 28.65000 </gml:pos>
+                    </gml:Point>
+                  </gml:pointMembers>
+                </gml:MultiPoint>
+              </sams:shape>
+            </sams:SF_SpatialSamplingFeature>
+          </om:featureOfInterest>
+          <om:result>
+            <wml2:MeasurementTimeseries gml:id="mts-1-1-Temperature">
+              <wml2:point>
+                <wml2:MeasurementTVP>
+                  <wml2:time>2013-03-20T00:00:00Z</wml2:time>
+                  <wml2:value>-9.15</wml2:value>
+                </wml2:MeasurementTVP>
+              </wml2:point>
+            </wml2:MeasurementTimeseries>
+          </om:result>
+        </omso:PointTimeSeriesObservation>
+      </wfs:member>
+      <wfs:member>
+        <omso:PointTimeSeriesObservation gml:id="WFS-3mWBc1O2MkqolPT4GmNZL7DqQSWJTowtIWbbpdOs2_llx4efR060aeWzDtdOufXlmw48rp1w36d3R066aduXth2dcvDDp5QtLFlz6d1TTty2vfoUbQY2PlzrUi0Kcd06aMmrhnZd2Spp25bXv0KNoODNp3ZJ2XDyy8.lbDs05JDMz5d.nJzrMbNGTBq2dGvL577.WS_v7ZeXflp6YcWzLE0tmXtl2VPPDLUzNm_Hh2Za1M2m_GkruvTM4a23D4iaefTDux5aVq6EBrbdPPnp3Z6mXx0rGnYZzK278mXZWZo08tmHayuGHlh21oUOWXnz68src59N_LLk49cvLzf05K6Qs23S6dZt_LLjw8.jp1o08tmHa6dc.vLNhx5XTrhv07ujp1007cvbDs65eGHTyaHTTty0.mXhPyE0Omnbltb92WsarUhg-Pressure">
+          <om:phenomenonTime xlink:href="#time-interval-1-1"/>
+          <om:resultTime xlink:href="#time-1-1"/>
+          <om:procedure xlink:href="http://xml.fmi.fi/inspire/process/hirlam"/>
+          <om:parameter>
+            <om:NamedValue>
+              <om:name xlink:href="http://inspire.ec.europa.eu/codeList/ProcessParameterValue/value/numericalModel/analysisTime"/>
+              <om:value>
+                <gml:TimeInstant gml:id="analysis-time-1-1-Pressure--">
+                  <gml:timePosition>2013-03-18T00:00:00Z</gml:timePosition>
+                </gml:TimeInstant>
+              </om:value>
+            </om:NamedValue>
+          </om:parameter>
+          <om:observedProperty xlink:href="http://beta.fmi.fi/fmi-apikey/foobar/meta?observableProperty=forecast&amp;param=Pressure&amp;language=eng"/>
+          <om:featureOfInterest>
+            <sams:SF_SpatialSamplingFeature gml:id="enn-s-1-1-Pressure">
+              <sam:sampledFeature>
+                <target:LocationCollection gml:id="sampled-target-1-1-Pressure">
+                  <target:member>
+                    <target:Location gml:id="forloc-geoid-642056-pos-Pressure">
+                      <gml:identifier codeSpace="http://xml.fmi.fi/namespace/stationcode/geoid">642056</gml:identifier>
+                      <gml:name codeSpace="http://xml.fmi.fi/namespace/locationcode/name">Pesiö</gml:name>
+                      <gml:name codeSpace="http://xml.fmi.fi/namespace/locationcode/geoid">642056</gml:name>
+                      <target:representativePoint xlink:href="#point-642056-Pressure"/>
+                      <target:country codeSpace="http://xml.fmi.fi/namespace/location/country">Finland</target:country>
+                      <target:timezone>Europe/Helsinki</target:timezone>
+                      <target:region codeSpace="http://xml.fmi.fi/namespace/location/region">Suomussalmi</target:region>
+                    </target:Location>
+                  </target:member>
+                </target:LocationCollection>
+              </sam:sampledFeature>
+              <sams:shape>
+                <gml:MultiPoint gml:id="foi-multipoint-1-1-Pressure">
+                  <gml:pointMembers>
+                    <gml:Point gml:id="point-642056-Pressure" srsDimension="2" srsName="http://www.opengis.net/def/crs/EPSG/0/4258">
+                      <gml:name>Pesiö</gml:name>
+                      <gml:pos>64.95000 28.65000 </gml:pos>
+                    </gml:Point>
+                  </gml:pointMembers>
+                </gml:MultiPoint>
+              </sams:shape>
+            </sams:SF_SpatialSamplingFeature>
+          </om:featureOfInterest>
+          <om:result>
+            <wml2:MeasurementTimeseries gml:id="mts-1-1-Pressure">
+              <wml2:point>
+                <wml2:MeasurementTVP>
+                  <wml2:time>2013-03-20T00:00:00Z</wml2:time>
+                  <wml2:value>1030.03</wml2:value>
+                </wml2:MeasurementTVP>
+              </wml2:point>
+            </wml2:MeasurementTimeseries>
+          </om:result>
+        </omso:PointTimeSeriesObservation>
+      </wfs:member>
+      <wfs:member>
+        <omso:PointTimeSeriesObservation gml:id="WFS-N7BdeiwxFDkjv9muyVkMWWZkq4qJTowtIWbbpdOs2_llx4efR060aeWzDtdOufXlmw48rp1w36d3R066aduXth2dcvDDp5QtLFlz6d1TTty2vfoUbQY2PlzrUi0Kcd06aMmrhnZd2Spp25bXv0KNoODNp3ZJ2XDyy8.lbDs05JDMz5d.nJzrMbNGTBq2dGvL577.WS_v7ZeXflp6YcWzLE0tmXtl2VPPDLUzNm_Hh2Za1M2m_GkruvTM4a23D4iaefTDux5aVq6EBrbdPPnp3Z6mXx0rGnYZzK278mXZWZo08tmHayuGHlh21oSOu3Tk09PLc59N_LLk49cvLzf05K6Qs23S6dZt_LLjw8.jp1o08tmHa6dc.vLNhx5XTrhv07ujp1007cvbDs65eGHTyaHTTty0.mXhPyE0Omnbltb92WsarUhg-Humidity">
+          <om:phenomenonTime xlink:href="#time-interval-1-1"/>
+          <om:resultTime xlink:href="#time-1-1"/>
+          <om:procedure xlink:href="http://xml.fmi.fi/inspire/process/hirlam"/>
+          <om:parameter>
+            <om:NamedValue>
+              <om:name xlink:href="http://inspire.ec.europa.eu/codeList/ProcessParameterValue/value/numericalModel/analysisTime"/>
+              <om:value>
+                <gml:TimeInstant gml:id="analysis-time-1-1-Humidity--">
+                  <gml:timePosition>2013-03-18T00:00:00Z</gml:timePosition>
+                </gml:TimeInstant>
+              </om:value>
+            </om:NamedValue>
+          </om:parameter>
+          <om:observedProperty xlink:href="http://beta.fmi.fi/fmi-apikey/foobar/meta?observableProperty=forecast&amp;param=Humidity&amp;language=eng"/>
+          <om:featureOfInterest>
+            <sams:SF_SpatialSamplingFeature gml:id="enn-s-1-1-Humidity">
+              <sam:sampledFeature>
+                <target:LocationCollection gml:id="sampled-target-1-1-Humidity">
+                  <target:member>
+                    <target:Location gml:id="forloc-geoid-642056-pos-Humidity">
+                      <gml:identifier codeSpace="http://xml.fmi.fi/namespace/stationcode/geoid">642056</gml:identifier>
+                      <gml:name codeSpace="http://xml.fmi.fi/namespace/locationcode/name">Pesiö</gml:name>
+                      <gml:name codeSpace="http://xml.fmi.fi/namespace/locationcode/geoid">642056</gml:name>
+                      <target:representativePoint xlink:href="#point-642056-Humidity"/>
+                      <target:country codeSpace="http://xml.fmi.fi/namespace/location/country">Finland</target:country>
+                      <target:timezone>Europe/Helsinki</target:timezone>
+                      <target:region codeSpace="http://xml.fmi.fi/namespace/location/region">Suomussalmi</target:region>
+                    </target:Location>
+                  </target:member>
+                </target:LocationCollection>
+              </sam:sampledFeature>
+              <sams:shape>
+                <gml:MultiPoint gml:id="foi-multipoint-1-1-Humidity">
+                  <gml:pointMembers>
+                    <gml:Point gml:id="point-642056-Humidity" srsDimension="2" srsName="http://www.opengis.net/def/crs/EPSG/0/4258">
+                      <gml:name>Pesiö</gml:name>
+                      <gml:pos>64.95000 28.65000 </gml:pos>
+                    </gml:Point>
+                  </gml:pointMembers>
+                </gml:MultiPoint>
+              </sams:shape>
+            </sams:SF_SpatialSamplingFeature>
+          </om:featureOfInterest>
+          <om:result>
+            <wml2:MeasurementTimeseries gml:id="mts-1-1-Humidity">
+              <wml2:point>
+                <wml2:MeasurementTVP>
+                  <wml2:time>2013-03-20T00:00:00Z</wml2:time>
+                  <wml2:value>44.62</wml2:value>
+                </wml2:MeasurementTVP>
+              </wml2:point>
+            </wml2:MeasurementTimeseries>
+          </om:result>
+        </omso:PointTimeSeriesObservation>
+      </wfs:member>
+      <wfs:member>
+        <omso:PointTimeSeriesObservation gml:id="WFS-qbw9Iw_wWHaHPwN6WcjyVVTOfjWJTowtIWbbpdOs2_llx4efR060aeWzDtdOufXlmw48rp1w36d3R066aduXth2dcvDDp5QtLFlz6d1TTty2vfoUbQY2PlzrUi0Kcd06aMmrhnZd2Spp25bXv0KNoODNp3ZJ2XDyy8.lbDs05JDMz5d.nJzrMbNGTBq2dGvL577.WS_v7ZeXflp6YcWzLE0tmXtl2VPPDLUzNm_Hh2Za1M2m_GkruvTM4a23D4iaefTDux5aVq6EBrbdPPnp3Z6mXx0rGnYZzK278mXZWZo08tmHayuGHlh21tV9O7JE08suPpp37m5z6b.WXJx65eXm_pyV0hZtul06zb.WXHh59HTrRp5bMO10659eWbDjyunXDfp3dHTrpp25e2HZ1y8MOnk0Omnblp9MvCfkJodNO3La37stY1WpDA---WindDirection">
+          <om:phenomenonTime xlink:href="#time-interval-1-1"/>
+          <om:resultTime xlink:href="#time-1-1"/>
+          <om:procedure xlink:href="http://xml.fmi.fi/inspire/process/hirlam"/>
+          <om:parameter>
+            <om:NamedValue>
+              <om:name xlink:href="http://inspire.ec.europa.eu/codeList/ProcessParameterValue/value/numericalModel/analysisTime"/>
+              <om:value>
+                <gml:TimeInstant gml:id="analysis-time-1-1-WindDirection--">
+                  <gml:timePosition>2013-03-18T00:00:00Z</gml:timePosition>
+                </gml:TimeInstant>
+              </om:value>
+            </om:NamedValue>
+          </om:parameter>
+          <om:observedProperty xlink:href="http://beta.fmi.fi/fmi-apikey/foobar/meta?observableProperty=forecast&amp;param=WindDirection&amp;language=eng"/>
+          <om:featureOfInterest>
+            <sams:SF_SpatialSamplingFeature gml:id="enn-s-1-1-WindDirection">
+              <sam:sampledFeature>
+                <target:LocationCollection gml:id="sampled-target-1-1-WindDirection">
+                  <target:member>
+                    <target:Location gml:id="forloc-geoid-642056-pos-WindDirection">
+                      <gml:identifier codeSpace="http://xml.fmi.fi/namespace/stationcode/geoid">642056</gml:identifier>
+                      <gml:name codeSpace="http://xml.fmi.fi/namespace/locationcode/name">Pesiö</gml:name>
+                      <gml:name codeSpace="http://xml.fmi.fi/namespace/locationcode/geoid">642056</gml:name>
+                      <target:representativePoint xlink:href="#point-642056-WindDirection"/>
+                      <target:country codeSpace="http://xml.fmi.fi/namespace/location/country">Finland</target:country>
+                      <target:timezone>Europe/Helsinki</target:timezone>
+                      <target:region codeSpace="http://xml.fmi.fi/namespace/location/region">Suomussalmi</target:region>
+                    </target:Location>
+                  </target:member>
+                </target:LocationCollection>
+              </sam:sampledFeature>
+              <sams:shape>
+                <gml:MultiPoint gml:id="foi-multipoint-1-1-WindDirection">
+                  <gml:pointMembers>
+                    <gml:Point gml:id="point-642056-WindDirection" srsDimension="2" srsName="http://www.opengis.net/def/crs/EPSG/0/4258">
+                      <gml:name>Pesiö</gml:name>
+                      <gml:pos>64.95000 28.65000 </gml:pos>
+                    </gml:Point>
+                  </gml:pointMembers>
+                </gml:MultiPoint>
+              </sams:shape>
+            </sams:SF_SpatialSamplingFeature>
+          </om:featureOfInterest>
+          <om:result>
+            <wml2:MeasurementTimeseries gml:id="mts-1-1-WindDirection">
+              <wml2:point>
+                <wml2:MeasurementTVP>
+                  <wml2:time>2013-03-20T00:00:00Z</wml2:time>
+                  <wml2:value>70.0</wml2:value>
+                </wml2:MeasurementTVP>
+              </wml2:point>
+            </wml2:MeasurementTimeseries>
+          </om:result>
+        </omso:PointTimeSeriesObservation>
+      </wfs:member>
+      <wfs:member>
+        <omso:PointTimeSeriesObservation gml:id="WFS-gj3Y3dDpiGI7GQLmJTY5.jBnoemJTowtIWbbpdOs2_llx4efR060aeWzDtdOufXlmw48rp1w36d3R066aduXth2dcvDDp5QtLFlz6d1TTty2vfoUbQY2PlzrUi0Kcd06aMmrhnZd2Spp25bXv0KNoODNp3ZJ2XDyy8.lbDs05JDMz5d.nJzrMbNGTBq2dGvL577.WS_v7ZeXflp6YcWzLE0tmXtl2VPPDLUzNm_Hh2Za1M2m_GkruvTM4a23D4iaefTDux5aVq6EBrbdPPnp3Z6mXx0rGnYZzK278mXZWZo08tmHayuGHlh21rV9O7JT4ZcuSbTbnPpv5ZcnHrl5eb.nJXSFm26XTrNv5ZceHn0dOtGnlsw7XTrn15ZsOPK6dcN.nd0dOumnbl7YdnXLww6eTQ6aduWn0y8J.Qmh007ctrfuy1jVakMA-WindSpeedMS">
+          <om:phenomenonTime xlink:href="#time-interval-1-1"/>
+          <om:resultTime xlink:href="#time-1-1"/>
+          <om:procedure xlink:href="http://xml.fmi.fi/inspire/process/hirlam"/>
+          <om:parameter>
+            <om:NamedValue>
+              <om:name xlink:href="http://inspire.ec.europa.eu/codeList/ProcessParameterValue/value/numericalModel/analysisTime"/>
+              <om:value>
+                <gml:TimeInstant gml:id="analysis-time-1-1-WindSpeedMS--">
+                  <gml:timePosition>2013-03-18T00:00:00Z</gml:timePosition>
+                </gml:TimeInstant>
+              </om:value>
+            </om:NamedValue>
+          </om:parameter>
+          <om:observedProperty xlink:href="http://beta.fmi.fi/fmi-apikey/foobar/meta?observableProperty=forecast&amp;param=WindSpeedMS&amp;language=eng"/>
+          <om:featureOfInterest>
+            <sams:SF_SpatialSamplingFeature gml:id="enn-s-1-1-WindSpeedMS">
+              <sam:sampledFeature>
+                <target:LocationCollection gml:id="sampled-target-1-1-WindSpeedMS">
+                  <target:member>
+                    <target:Location gml:id="forloc-geoid-642056-pos-WindSpeedMS">
+                      <gml:identifier codeSpace="http://xml.fmi.fi/namespace/stationcode/geoid">642056</gml:identifier>
+                      <gml:name codeSpace="http://xml.fmi.fi/namespace/locationcode/name">Pesiö</gml:name>
+                      <gml:name codeSpace="http://xml.fmi.fi/namespace/locationcode/geoid">642056</gml:name>
+                      <target:representativePoint xlink:href="#point-642056-WindSpeedMS"/>
+                      <target:country codeSpace="http://xml.fmi.fi/namespace/location/country">Finland</target:country>
+                      <target:timezone>Europe/Helsinki</target:timezone>
+                      <target:region codeSpace="http://xml.fmi.fi/namespace/location/region">Suomussalmi</target:region>
+                    </target:Location>
+                  </target:member>
+                </target:LocationCollection>
+              </sam:sampledFeature>
+              <sams:shape>
+                <gml:MultiPoint gml:id="foi-multipoint-1-1-WindSpeedMS">
+                  <gml:pointMembers>
+                    <gml:Point gml:id="point-642056-WindSpeedMS" srsDimension="2" srsName="http://www.opengis.net/def/crs/EPSG/0/4258">
+                      <gml:name>Pesiö</gml:name>
+                      <gml:pos>64.95000 28.65000 </gml:pos>
+                    </gml:Point>
+                  </gml:pointMembers>
+                </gml:MultiPoint>
+              </sams:shape>
+            </sams:SF_SpatialSamplingFeature>
+          </om:featureOfInterest>
+          <om:result>
+            <wml2:MeasurementTimeseries gml:id="mts-1-1-WindSpeedMS">
+              <wml2:point>
+                <wml2:MeasurementTVP>
+                  <wml2:time>2013-03-20T00:00:00Z</wml2:time>
+                  <wml2:value>4.5</wml2:value>
+                </wml2:MeasurementTVP>
+              </wml2:point>
+            </wml2:MeasurementTimeseries>
+          </om:result>
+        </omso:PointTimeSeriesObservation>
+      </wfs:member>
+      <wfs:member>
+        <omso:PointTimeSeriesObservation gml:id="WFS-.dcTME_WZdSqJ3SDD5Icn7vEKaSJTowtIWbbpdOs2_llx4efR060aeWzDtdOufXlmw48rp1w36d3R066aduXth2dcvDDp5QtLFlz6d1TTty2vfoUbQY2PlzrUi0Kcd06aMmrhnZd2Spp25bXv0KNoODNp3ZJ2XDyy8.lbDs05JDMz5d.nJzrMbNGTBq2dGvL577.WS_v7ZeXflp6YcWzLE0tmXtl2VPPDLUzNm_Hh2Za1M2m_GkruvTM4a23D4iaefTDux5aVq6EBrbdPPnp3Z6mXx0rGnYZzK278mXZWZo08tmHayuGHlh21nV9O7JVm025z6b.WXJx65eXm_pyV0hZtul06zb.WXHh59HTrRp5bMO10659eWbDjyunXDfp3dHTrpp25e2HZ1y8MOnk0Omnblp9MvCfkJodNO3La37stY1WpDA--WindUMS">
+          <om:phenomenonTime xlink:href="#time-interval-1-1"/>
+          <om:resultTime xlink:href="#time-1-1"/>
+          <om:procedure xlink:href="http://xml.fmi.fi/inspire/process/hirlam"/>
+          <om:parameter>
+            <om:NamedValue>
+              <om:name xlink:href="http://inspire.ec.europa.eu/codeList/ProcessParameterValue/value/numericalModel/analysisTime"/>
+              <om:value>
+                <gml:TimeInstant gml:id="analysis-time-1-1-WindUMS--">
+                  <gml:timePosition>2013-03-18T00:00:00Z</gml:timePosition>
+                </gml:TimeInstant>
+              </om:value>
+            </om:NamedValue>
+          </om:parameter>
+          <om:observedProperty xlink:href="http://beta.fmi.fi/fmi-apikey/foobar/meta?observableProperty=forecast&amp;param=WindUMS&amp;language=eng"/>
+          <om:featureOfInterest>
+            <sams:SF_SpatialSamplingFeature gml:id="enn-s-1-1-WindUMS">
+              <sam:sampledFeature>
+                <target:LocationCollection gml:id="sampled-target-1-1-WindUMS">
+                  <target:member>
+                    <target:Location gml:id="forloc-geoid-642056-pos-WindUMS">
+                      <gml:identifier codeSpace="http://xml.fmi.fi/namespace/stationcode/geoid">642056</gml:identifier>
+                      <gml:name codeSpace="http://xml.fmi.fi/namespace/locationcode/name">Pesiö</gml:name>
+                      <gml:name codeSpace="http://xml.fmi.fi/namespace/locationcode/geoid">642056</gml:name>
+                      <target:representativePoint xlink:href="#point-642056-WindUMS"/>
+                      <target:country codeSpace="http://xml.fmi.fi/namespace/location/country">Finland</target:country>
+                      <target:timezone>Europe/Helsinki</target:timezone>
+                      <target:region codeSpace="http://xml.fmi.fi/namespace/location/region">Suomussalmi</target:region>
+                    </target:Location>
+                  </target:member>
+                </target:LocationCollection>
+              </sam:sampledFeature>
+              <sams:shape>
+                <gml:MultiPoint gml:id="foi-multipoint-1-1-WindUMS">
+                  <gml:pointMembers>
+                    <gml:Point gml:id="point-642056-WindUMS" srsDimension="2" srsName="http://www.opengis.net/def/crs/EPSG/0/4258">
+                      <gml:name>Pesiö</gml:name>
+                      <gml:pos>64.95000 28.65000 </gml:pos>
+                    </gml:Point>
+                  </gml:pointMembers>
+                </gml:MultiPoint>
+              </sams:shape>
+            </sams:SF_SpatialSamplingFeature>
+          </om:featureOfInterest>
+          <om:result>
+            <wml2:MeasurementTimeseries gml:id="mts-1-1-WindUMS">
+              <wml2:point>
+                <wml2:MeasurementTVP>
+                  <wml2:time>2013-03-20T00:00:00Z</wml2:time>
+                  <wml2:value>-4.2</wml2:value>
+                </wml2:MeasurementTVP>
+              </wml2:point>
+            </wml2:MeasurementTimeseries>
+          </om:result>
+        </omso:PointTimeSeriesObservation>
+      </wfs:member>
+      <wfs:member>
+        <omso:PointTimeSeriesObservation gml:id="WFS-9oObQZiiiHoMqXO9Xni9AFW63GeJTowtIWbbpdOs2_llx4efR060aeWzDtdOufXlmw48rp1w36d3R066aduXth2dcvDDp5QtLFlz6d1TTty2vfoUbQY2PlzrUi0Kcd06aMmrhnZd2Spp25bXv0KNoODNp3ZJ2XDyy8.lbDs05JDMz5d.nJzrMbNGTBq2dGvL577.WS_v7ZeXflp6YcWzLE0tmXtl2VPPDLUzNm_Hh2Za1M2m_GkruvTM4a23D4iaefTDux5aVq6EBrbdPPnp3Z6mXx0rGnYZzK278mXZWZo08tmHayuGHlh21nV9O7JWm025z6b.WXJx65eXm_pyV0hZtul06zb.WXHh59HTrRp5bMO10659eWbDjyunXDfp3dHTrpp25e2HZ1y8MOnk0Omnblp9MvCfkJodNO3La37stY1WpDA--WindVMS">
+          <om:phenomenonTime xlink:href="#time-interval-1-1"/>
+          <om:resultTime xlink:href="#time-1-1"/>
+          <om:procedure xlink:href="http://xml.fmi.fi/inspire/process/hirlam"/>
+          <om:parameter>
+            <om:NamedValue>
+              <om:name xlink:href="http://inspire.ec.europa.eu/codeList/ProcessParameterValue/value/numericalModel/analysisTime"/>
+              <om:value>
+                <gml:TimeInstant gml:id="analysis-time-1-1-WindVMS--">
+                  <gml:timePosition>2013-03-18T00:00:00Z</gml:timePosition>
+                </gml:TimeInstant>
+              </om:value>
+            </om:NamedValue>
+          </om:parameter>
+          <om:observedProperty xlink:href="http://beta.fmi.fi/fmi-apikey/foobar/meta?observableProperty=forecast&amp;param=WindVMS&amp;language=eng"/>
+          <om:featureOfInterest>
+            <sams:SF_SpatialSamplingFeature gml:id="enn-s-1-1-WindVMS">
+              <sam:sampledFeature>
+                <target:LocationCollection gml:id="sampled-target-1-1-WindVMS">
+                  <target:member>
+                    <target:Location gml:id="forloc-geoid-642056-pos-WindVMS">
+                      <gml:identifier codeSpace="http://xml.fmi.fi/namespace/stationcode/geoid">642056</gml:identifier>
+                      <gml:name codeSpace="http://xml.fmi.fi/namespace/locationcode/name">Pesiö</gml:name>
+                      <gml:name codeSpace="http://xml.fmi.fi/namespace/locationcode/geoid">642056</gml:name>
+                      <target:representativePoint xlink:href="#point-642056-WindVMS"/>
+                      <target:country codeSpace="http://xml.fmi.fi/namespace/location/country">Finland</target:country>
+                      <target:timezone>Europe/Helsinki</target:timezone>
+                      <target:region codeSpace="http://xml.fmi.fi/namespace/location/region">Suomussalmi</target:region>
+                    </target:Location>
+                  </target:member>
+                </target:LocationCollection>
+              </sam:sampledFeature>
+              <sams:shape>
+                <gml:MultiPoint gml:id="foi-multipoint-1-1-WindVMS">
+                  <gml:pointMembers>
+                    <gml:Point gml:id="point-642056-WindVMS" srsDimension="2" srsName="http://www.opengis.net/def/crs/EPSG/0/4258">
+                      <gml:name>Pesiö</gml:name>
+                      <gml:pos>64.95000 28.65000 </gml:pos>
+                    </gml:Point>
+                  </gml:pointMembers>
+                </gml:MultiPoint>
+              </sams:shape>
+            </sams:SF_SpatialSamplingFeature>
+          </om:featureOfInterest>
+          <om:result>
+            <wml2:MeasurementTimeseries gml:id="mts-1-1-WindVMS">
+              <wml2:point>
+                <wml2:MeasurementTVP>
+                  <wml2:time>2013-03-20T00:00:00Z</wml2:time>
+                  <wml2:value>-1.5</wml2:value>
+                </wml2:MeasurementTVP>
+              </wml2:point>
+            </wml2:MeasurementTimeseries>
+          </om:result>
+        </omso:PointTimeSeriesObservation>
+      </wfs:member>
+      <wfs:member>
+        <omso:PointTimeSeriesObservation gml:id="WFS-ikSP97fd2OFzs1W39I5zX7n9.ZaJTowtIWbbpdOs2_llx4efR060aeWzDtdOufXlmw48rp1w36d3R066aduXth2dcvDDp5QtLFlz6d1TTty2vfoUbQY2PlzrUi0Kcd06aMmrhnZd2Spp25bXv0KNoODNp3ZJ2XDyy8.lbDs05JDMz5d.nJzrMbNGTBq2dGvL577.WS_v7ZeXflp6YcWzLE0tmXtl2VPPDLUzNm_Hh2Za1M2m_GkruvTM4a23D4iaefTDux5aVq6EBrbdPPnp3Z6mXx0rGnYZzK278mXZWZo08tmHayuGHlh21rTcPjTt67a.ndkbnPpv5ZcnHrl5eb.nJXSFm26XTrNv5ZceHn0dOtGnlsw7XTrn15ZsOPK6dcN.nd0dOumnbl7YdnXLww6eTQ6aduWn0y8J.Qmh007ctrfuy1jVakMA-MaximumWind">
+          <om:phenomenonTime xlink:href="#time-interval-1-1"/>
+          <om:resultTime xlink:href="#time-1-1"/>
+          <om:procedure xlink:href="http://xml.fmi.fi/inspire/process/hirlam"/>
+          <om:parameter>
+            <om:NamedValue>
+              <om:name xlink:href="http://inspire.ec.europa.eu/codeList/ProcessParameterValue/value/numericalModel/analysisTime"/>
+              <om:value>
+                <gml:TimeInstant gml:id="analysis-time-1-1-MaximumWind--">
+                  <gml:timePosition>2013-03-18T00:00:00Z</gml:timePosition>
+                </gml:TimeInstant>
+              </om:value>
+            </om:NamedValue>
+          </om:parameter>
+          <om:observedProperty xlink:href="http://beta.fmi.fi/fmi-apikey/foobar/meta?observableProperty=forecast&amp;param=MaximumWind&amp;language=eng"/>
+          <om:featureOfInterest>
+            <sams:SF_SpatialSamplingFeature gml:id="enn-s-1-1-MaximumWind">
+              <sam:sampledFeature>
+                <target:LocationCollection gml:id="sampled-target-1-1-MaximumWind">
+                  <target:member>
+                    <target:Location gml:id="forloc-geoid-642056-pos-MaximumWind">
+                      <gml:identifier codeSpace="http://xml.fmi.fi/namespace/stationcode/geoid">642056</gml:identifier>
+                      <gml:name codeSpace="http://xml.fmi.fi/namespace/locationcode/name">Pesiö</gml:name>
+                      <gml:name codeSpace="http://xml.fmi.fi/namespace/locationcode/geoid">642056</gml:name>
+                      <target:representativePoint xlink:href="#point-642056-MaximumWind"/>
+                      <target:country codeSpace="http://xml.fmi.fi/namespace/location/country">Finland</target:country>
+                      <target:timezone>Europe/Helsinki</target:timezone>
+                      <target:region codeSpace="http://xml.fmi.fi/namespace/location/region">Suomussalmi</target:region>
+                    </target:Location>
+                  </target:member>
+                </target:LocationCollection>
+              </sam:sampledFeature>
+              <sams:shape>
+                <gml:MultiPoint gml:id="foi-multipoint-1-1-MaximumWind">
+                  <gml:pointMembers>
+                    <gml:Point gml:id="point-642056-MaximumWind" srsDimension="2" srsName="http://www.opengis.net/def/crs/EPSG/0/4258">
+                      <gml:name>Pesiö</gml:name>
+                      <gml:pos>64.95000 28.65000 </gml:pos>
+                    </gml:Point>
+                  </gml:pointMembers>
+                </gml:MultiPoint>
+              </sams:shape>
+            </sams:SF_SpatialSamplingFeature>
+          </om:featureOfInterest>
+          <om:result>
+            <wml2:MeasurementTimeseries gml:id="mts-1-1-MaximumWind">
+              <wml2:point>
+                <wml2:MeasurementTVP>
+                  <wml2:time>2013-03-20T00:00:00Z</wml2:time>
+                  <wml2:value>NaN</wml2:value>
+                </wml2:MeasurementTVP>
+              </wml2:point>
+            </wml2:MeasurementTimeseries>
+          </om:result>
+        </omso:PointTimeSeriesObservation>
+      </wfs:member>
+      <wfs:member>
+        <omso:PointTimeSeriesObservation gml:id="WFS-pUwp0gXAsd7iMfU075iURklU1_2JTowtIWbbpdOs2_llx4efR060aeWzDtdOufXlmw48rp1w36d3R066aduXth2dcvDDp5QtLFlz6d1TTty2vfoUbQY2PlzrUi0Kcd06aMmrhnZd2Spp25bXv0KNoODNp3ZJ2XDyy8.lbDs05JDMz5d.nJzrMbNGTBq2dGvL577.WS_v7ZeXflp6YcWzLE0tmXtl2VPPDLUzNm_Hh2Za1M2m_GkruvTM4a23D4iaefTDux5aVq6EBrbdPPnp3Z6mXx0rGnYZzK278mXZWZo08tmHayuGHlh21oV9O7JH68.jc59N_LLk49cvLzf05K6Qs23S6dZt_LLjw8.jp1o08tmHa6dc.vLNhx5XTrhv07ujp1007cvbDs65eGHTyaHTTty0.mXhPyE0Omnbltb92WsarUhg-WindGust">
+          <om:phenomenonTime xlink:href="#time-interval-1-1"/>
+          <om:resultTime xlink:href="#time-1-1"/>
+          <om:procedure xlink:href="http://xml.fmi.fi/inspire/process/hirlam"/>
+          <om:parameter>
+            <om:NamedValue>
+              <om:name xlink:href="http://inspire.ec.europa.eu/codeList/ProcessParameterValue/value/numericalModel/analysisTime"/>
+              <om:value>
+                <gml:TimeInstant gml:id="analysis-time-1-1-WindGust--">
+                  <gml:timePosition>2013-03-18T00:00:00Z</gml:timePosition>
+                </gml:TimeInstant>
+              </om:value>
+            </om:NamedValue>
+          </om:parameter>
+          <om:observedProperty xlink:href="http://beta.fmi.fi/fmi-apikey/foobar/meta?observableProperty=forecast&amp;param=WindGust&amp;language=eng"/>
+          <om:featureOfInterest>
+            <sams:SF_SpatialSamplingFeature gml:id="enn-s-1-1-WindGust">
+              <sam:sampledFeature>
+                <target:LocationCollection gml:id="sampled-target-1-1-WindGust">
+                  <target:member>
+                    <target:Location gml:id="forloc-geoid-642056-pos-WindGust">
+                      <gml:identifier codeSpace="http://xml.fmi.fi/namespace/stationcode/geoid">642056</gml:identifier>
+                      <gml:name codeSpace="http://xml.fmi.fi/namespace/locationcode/name">Pesiö</gml:name>
+                      <gml:name codeSpace="http://xml.fmi.fi/namespace/locationcode/geoid">642056</gml:name>
+                      <target:representativePoint xlink:href="#point-642056-WindGust"/>
+                      <target:country codeSpace="http://xml.fmi.fi/namespace/location/country">Finland</target:country>
+                      <target:timezone>Europe/Helsinki</target:timezone>
+                      <target:region codeSpace="http://xml.fmi.fi/namespace/location/region">Suomussalmi</target:region>
+                    </target:Location>
+                  </target:member>
+                </target:LocationCollection>
+              </sam:sampledFeature>
+              <sams:shape>
+                <gml:MultiPoint gml:id="foi-multipoint-1-1-WindGust">
+                  <gml:pointMembers>
+                    <gml:Point gml:id="point-642056-WindGust" srsDimension="2" srsName="http://www.opengis.net/def/crs/EPSG/0/4258">
+                      <gml:name>Pesiö</gml:name>
+                      <gml:pos>64.95000 28.65000 </gml:pos>
+                    </gml:Point>
+                  </gml:pointMembers>
+                </gml:MultiPoint>
+              </sams:shape>
+            </sams:SF_SpatialSamplingFeature>
+          </om:featureOfInterest>
+          <om:result>
+            <wml2:MeasurementTimeseries gml:id="mts-1-1-WindGust">
+              <wml2:point>
+                <wml2:MeasurementTVP>
+                  <wml2:time>2013-03-20T00:00:00Z</wml2:time>
+                  <wml2:value>NaN</wml2:value>
+                </wml2:MeasurementTVP>
+              </wml2:point>
+            </wml2:MeasurementTimeseries>
+          </om:result>
+        </omso:PointTimeSeriesObservation>
+      </wfs:member>
+      <wfs:member>
+        <omso:PointTimeSeriesObservation gml:id="WFS-YA.zv5feOcpGkgI8Z110yG9tJwmJTowtIWbbpdOs2_llx4efR060aeWzDtdOufXlmw48rp1w36d3R066aduXth2dcvDDp5QtLFlz6d1TTty2vfoUbQY2PlzrUi0Kcd06aMmrhnZd2Spp25bXv0KNoODNp3ZJ2XDyy8.lbDs05JDMz5d.nJzrMbNGTBq2dGvL577.WS_v7ZeXflp6YcWzLE0tmXtl2VPPDLUzNm_Hh2Za1M2m_GkruvTM4a23D4iaefTDux5aVq6EBrbdPPnp3Z6mXx0rGnYZzK278mXZWZo08tmHayuGHlh21oRMvehv07ujc59N_LLk49cvLzf05K6Qs23S6dZt_LLjw8.jp1o08tmHa6dc.vLNhx5XTrhv07ujp1007cvbDs65eGHTyaHTTty0.mXhPyE0Omnbltb92WsarUhg-DewPoint">
+          <om:phenomenonTime xlink:href="#time-interval-1-1"/>
+          <om:resultTime xlink:href="#time-1-1"/>
+          <om:procedure xlink:href="http://xml.fmi.fi/inspire/process/hirlam"/>
+          <om:parameter>
+            <om:NamedValue>
+              <om:name xlink:href="http://inspire.ec.europa.eu/codeList/ProcessParameterValue/value/numericalModel/analysisTime"/>
+              <om:value>
+                <gml:TimeInstant gml:id="analysis-time-1-1-DewPoint--">
+                  <gml:timePosition>2013-03-18T00:00:00Z</gml:timePosition>
+                </gml:TimeInstant>
+              </om:value>
+            </om:NamedValue>
+          </om:parameter>
+          <om:observedProperty xlink:href="http://beta.fmi.fi/fmi-apikey/foobar/meta?observableProperty=forecast&amp;param=DewPoint&amp;language=eng"/>
+          <om:featureOfInterest>
+            <sams:SF_SpatialSamplingFeature gml:id="enn-s-1-1-DewPoint">
+              <sam:sampledFeature>
+                <target:LocationCollection gml:id="sampled-target-1-1-DewPoint">
+                  <target:member>
+                    <target:Location gml:id="forloc-geoid-642056-pos-DewPoint">
+                      <gml:identifier codeSpace="http://xml.fmi.fi/namespace/stationcode/geoid">642056</gml:identifier>
+                      <gml:name codeSpace="http://xml.fmi.fi/namespace/locationcode/name">Pesiö</gml:name>
+                      <gml:name codeSpace="http://xml.fmi.fi/namespace/locationcode/geoid">642056</gml:name>
+                      <target:representativePoint xlink:href="#point-642056-DewPoint"/>
+                      <target:country codeSpace="http://xml.fmi.fi/namespace/location/country">Finland</target:country>
+                      <target:timezone>Europe/Helsinki</target:timezone>
+                      <target:region codeSpace="http://xml.fmi.fi/namespace/location/region">Suomussalmi</target:region>
+                    </target:Location>
+                  </target:member>
+                </target:LocationCollection>
+              </sam:sampledFeature>
+              <sams:shape>
+                <gml:MultiPoint gml:id="foi-multipoint-1-1-DewPoint">
+                  <gml:pointMembers>
+                    <gml:Point gml:id="point-642056-DewPoint" srsDimension="2" srsName="http://www.opengis.net/def/crs/EPSG/0/4258">
+                      <gml:name>Pesiö</gml:name>
+                      <gml:pos>64.95000 28.65000 </gml:pos>
+                    </gml:Point>
+                  </gml:pointMembers>
+                </gml:MultiPoint>
+              </sams:shape>
+            </sams:SF_SpatialSamplingFeature>
+          </om:featureOfInterest>
+          <om:result>
+            <wml2:MeasurementTimeseries gml:id="mts-1-1-DewPoint">
+              <wml2:point>
+                <wml2:MeasurementTVP>
+                  <wml2:time>2013-03-20T00:00:00Z</wml2:time>
+                  <wml2:value>-18.99</wml2:value>
+                </wml2:MeasurementTVP>
+              </wml2:point>
+            </wml2:MeasurementTimeseries>
+          </om:result>
+        </omso:PointTimeSeriesObservation>
+      </wfs:member>
+      <wfs:member>
+        <omso:PointTimeSeriesObservation gml:id="WFS-9rVe6QDBC67XoRWz3k8pZpAQTr6JTowtIWbbpdOs2_llx4efR060aeWzDtdOufXlmw48rp1w36d3R066aduXth2dcvDDp5QtLFlz6d1TTty2vfoUbQY2PlzrUi0Kcd06aMmrhnZd2Spp25bXv0KNoODNp3ZJ2XDyy8.lbDs05JDMz5d.nJzrMbNGTBq2dGvL577.WS_v7ZeXflp6YcWzLE0tmXtl2VPPDLUzNm_Hh2Za1M2m_GkruvTM4a23D4iaefTDux5aVq6EBrbdPPnp3Z6mXx0rGnYZzK278mXZWZo08tmHayuGHlh21vVN_TDsh7N_XJD39svJuc.m_llyceuXl5v6cldIWbbpdOs2_llx4efR060aeWzDtdOufXlmw48rp1w36d3R066aduXth2dcvDDp5NDpp25afTLwn5CaHTTty2t.7LWNVqQw-TotalCloudCover">
+          <om:phenomenonTime xlink:href="#time-interval-1-1"/>
+          <om:resultTime xlink:href="#time-1-1"/>
+          <om:procedure xlink:href="http://xml.fmi.fi/inspire/process/hirlam"/>
+          <om:parameter>
+            <om:NamedValue>
+              <om:name xlink:href="http://inspire.ec.europa.eu/codeList/ProcessParameterValue/value/numericalModel/analysisTime"/>
+              <om:value>
+                <gml:TimeInstant gml:id="analysis-time-1-1-TotalCloudCover--">
+                  <gml:timePosition>2013-03-18T00:00:00Z</gml:timePosition>
+                </gml:TimeInstant>
+              </om:value>
+            </om:NamedValue>
+          </om:parameter>
+          <om:observedProperty xlink:href="http://beta.fmi.fi/fmi-apikey/foobar/meta?observableProperty=forecast&amp;param=TotalCloudCover&amp;language=eng"/>
+          <om:featureOfInterest>
+            <sams:SF_SpatialSamplingFeature gml:id="enn-s-1-1-TotalCloudCover">
+              <sam:sampledFeature>
+                <target:LocationCollection gml:id="sampled-target-1-1-TotalCloudCover">
+                  <target:member>
+                    <target:Location gml:id="forloc-geoid-642056-pos-TotalCloudCover">
+                      <gml:identifier codeSpace="http://xml.fmi.fi/namespace/stationcode/geoid">642056</gml:identifier>
+                      <gml:name codeSpace="http://xml.fmi.fi/namespace/locationcode/name">Pesiö</gml:name>
+                      <gml:name codeSpace="http://xml.fmi.fi/namespace/locationcode/geoid">642056</gml:name>
+                      <target:representativePoint xlink:href="#point-642056-TotalCloudCover"/>
+                      <target:country codeSpace="http://xml.fmi.fi/namespace/location/country">Finland</target:country>
+                      <target:timezone>Europe/Helsinki</target:timezone>
+                      <target:region codeSpace="http://xml.fmi.fi/namespace/location/region">Suomussalmi</target:region>
+                    </target:Location>
+                  </target:member>
+                </target:LocationCollection>
+              </sam:sampledFeature>
+              <sams:shape>
+                <gml:MultiPoint gml:id="foi-multipoint-1-1-TotalCloudCover">
+                  <gml:pointMembers>
+                    <gml:Point gml:id="point-642056-TotalCloudCover" srsDimension="2" srsName="http://www.opengis.net/def/crs/EPSG/0/4258">
+                      <gml:name>Pesiö</gml:name>
+                      <gml:pos>64.95000 28.65000 </gml:pos>
+                    </gml:Point>
+                  </gml:pointMembers>
+                </gml:MultiPoint>
+              </sams:shape>
+            </sams:SF_SpatialSamplingFeature>
+          </om:featureOfInterest>
+          <om:result>
+            <wml2:MeasurementTimeseries gml:id="mts-1-1-TotalCloudCover">
+              <wml2:point>
+                <wml2:MeasurementTVP>
+                  <wml2:time>2013-03-20T00:00:00Z</wml2:time>
+                  <wml2:value>100.0</wml2:value>
+                </wml2:MeasurementTVP>
+              </wml2:point>
+            </wml2:MeasurementTimeseries>
+          </om:result>
+        </omso:PointTimeSeriesObservation>
+      </wfs:member>
+      <wfs:member>
+        <omso:PointTimeSeriesObservation gml:id="WFS-ZMgD1lVeDa0hKRUBBZi2uhUAv86JTowtIWbbpdOs2_llx4efR060aeWzDtdOufXlmw48rp1w36d3R066aduXth2dcvDDp5QtLFlz6d1TTty2vfoUbQY2PlzrUi0Kcd06aMmrhnZd2Spp25bXv0KNoODNp3ZJ2XDyy8.lbDs05JDMz5d.nJzrMbNGTBq2dGvL577.WS_v7ZeXflp6YcWzLE0tmXtl2VPPDLUzNm_Hh2Za1M2m_GkruvTM4a23D4iaefTDux5aVq6EBrbdPPnp3Z6mXx0rGnYZzK278mXZWZo08tmHayuGHlh21uV8uHpoy8qfnbi37Gbc59N_LLk49cvLzf05K6Qs23S6dZt_LLjw8.jp1o08tmHa6dc.vLNhx5XTrhv07ujp1007cvbDs65eGHTyaHTTty0.mXhPyE0Omnbltb92WsarUhg--WeatherSymbol3">
+          <om:phenomenonTime xlink:href="#time-interval-1-1"/>
+          <om:resultTime xlink:href="#time-1-1"/>
+          <om:procedure xlink:href="http://xml.fmi.fi/inspire/process/hirlam"/>
+          <om:parameter>
+            <om:NamedValue>
+              <om:name xlink:href="http://inspire.ec.europa.eu/codeList/ProcessParameterValue/value/numericalModel/analysisTime"/>
+              <om:value>
+                <gml:TimeInstant gml:id="analysis-time-1-1-WeatherSymbol3--">
+                  <gml:timePosition>2013-03-18T00:00:00Z</gml:timePosition>
+                </gml:TimeInstant>
+              </om:value>
+            </om:NamedValue>
+          </om:parameter>
+          <om:observedProperty xlink:href="http://beta.fmi.fi/fmi-apikey/foobar/meta?observableProperty=forecast&amp;param=WeatherSymbol3&amp;language=eng"/>
+          <om:featureOfInterest>
+            <sams:SF_SpatialSamplingFeature gml:id="enn-s-1-1-WeatherSymbol3">
+              <sam:sampledFeature>
+                <target:LocationCollection gml:id="sampled-target-1-1-WeatherSymbol3">
+                  <target:member>
+                    <target:Location gml:id="forloc-geoid-642056-pos-WeatherSymbol3">
+                      <gml:identifier codeSpace="http://xml.fmi.fi/namespace/stationcode/geoid">642056</gml:identifier>
+                      <gml:name codeSpace="http://xml.fmi.fi/namespace/locationcode/name">Pesiö</gml:name>
+                      <gml:name codeSpace="http://xml.fmi.fi/namespace/locationcode/geoid">642056</gml:name>
+                      <target:representativePoint xlink:href="#point-642056-WeatherSymbol3"/>
+                      <target:country codeSpace="http://xml.fmi.fi/namespace/location/country">Finland</target:country>
+                      <target:timezone>Europe/Helsinki</target:timezone>
+                      <target:region codeSpace="http://xml.fmi.fi/namespace/location/region">Suomussalmi</target:region>
+                    </target:Location>
+                  </target:member>
+                </target:LocationCollection>
+              </sam:sampledFeature>
+              <sams:shape>
+                <gml:MultiPoint gml:id="foi-multipoint-1-1-WeatherSymbol3">
+                  <gml:pointMembers>
+                    <gml:Point gml:id="point-642056-WeatherSymbol3" srsDimension="2" srsName="http://www.opengis.net/def/crs/EPSG/0/4258">
+                      <gml:name>Pesiö</gml:name>
+                      <gml:pos>64.95000 28.65000 </gml:pos>
+                    </gml:Point>
+                  </gml:pointMembers>
+                </gml:MultiPoint>
+              </sams:shape>
+            </sams:SF_SpatialSamplingFeature>
+          </om:featureOfInterest>
+          <om:result>
+            <wml2:MeasurementTimeseries gml:id="mts-1-1-WeatherSymbol3">
+              <wml2:point>
+                <wml2:MeasurementTVP>
+                  <wml2:time>2013-03-20T00:00:00Z</wml2:time>
+                  <wml2:value>3.0</wml2:value>
+                </wml2:MeasurementTVP>
+              </wml2:point>
+            </wml2:MeasurementTimeseries>
+          </om:result>
+        </omso:PointTimeSeriesObservation>
+      </wfs:member>
+      <wfs:member>
+        <omso:PointTimeSeriesObservation gml:id="WFS-NRj6DGoMkd.Ckc8TJ4xLVUDyF.uJTowtIWbbpdOs2_llx4efR060aeWzDtdOufXlmw48rp1w36d3R066aduXth2dcvDDp5QtLFlz6d1TTty2vfoUbQY2PlzrUi0Kcd06aMmrhnZd2Spp25bXv0KNoODNp3ZJ2XDyy8.lbDs05JDMz5d.nJzrMbNGTBq2dGvL577.WS_v7ZeXflp6YcWzLE0tmXtl2VPPDLUzNm_Hh2Za1M2m_GkruvTM4a23D4iaefTDux5aVq6EBrbdPPnp3Z6mXx0rGnYZzK278mXZWZo08tmHayuGHlh21tTN_eHs39ckPf2y8m5z6b.WXJx65eXm_pyV0hZtul06zb.WXHh59HTrRp5bMO10659eWbDjyunXDfp3dHTrpp25e2HZ1y8MOnk0Omnblp9MvCfkJodNO3La37stY1WpDA---LowCloudCover">
+          <om:phenomenonTime xlink:href="#time-interval-1-1"/>
+          <om:resultTime xlink:href="#time-1-1"/>
+          <om:procedure xlink:href="http://xml.fmi.fi/inspire/process/hirlam"/>
+          <om:parameter>
+            <om:NamedValue>
+              <om:name xlink:href="http://inspire.ec.europa.eu/codeList/ProcessParameterValue/value/numericalModel/analysisTime"/>
+              <om:value>
+                <gml:TimeInstant gml:id="analysis-time-1-1-LowCloudCover--">
+                  <gml:timePosition>2013-03-18T00:00:00Z</gml:timePosition>
+                </gml:TimeInstant>
+              </om:value>
+            </om:NamedValue>
+          </om:parameter>
+          <om:observedProperty xlink:href="http://beta.fmi.fi/fmi-apikey/foobar/meta?observableProperty=forecast&amp;param=LowCloudCover&amp;language=eng"/>
+          <om:featureOfInterest>
+            <sams:SF_SpatialSamplingFeature gml:id="enn-s-1-1-LowCloudCover">
+              <sam:sampledFeature>
+                <target:LocationCollection gml:id="sampled-target-1-1-LowCloudCover">
+                  <target:member>
+                    <target:Location gml:id="forloc-geoid-642056-pos-LowCloudCover">
+                      <gml:identifier codeSpace="http://xml.fmi.fi/namespace/stationcode/geoid">642056</gml:identifier>
+                      <gml:name codeSpace="http://xml.fmi.fi/namespace/locationcode/name">Pesiö</gml:name>
+                      <gml:name codeSpace="http://xml.fmi.fi/namespace/locationcode/geoid">642056</gml:name>
+                      <target:representativePoint xlink:href="#point-642056-LowCloudCover"/>
+                      <target:country codeSpace="http://xml.fmi.fi/namespace/location/country">Finland</target:country>
+                      <target:timezone>Europe/Helsinki</target:timezone>
+                      <target:region codeSpace="http://xml.fmi.fi/namespace/location/region">Suomussalmi</target:region>
+                    </target:Location>
+                  </target:member>
+                </target:LocationCollection>
+              </sam:sampledFeature>
+              <sams:shape>
+                <gml:MultiPoint gml:id="foi-multipoint-1-1-LowCloudCover">
+                  <gml:pointMembers>
+                    <gml:Point gml:id="point-642056-LowCloudCover" srsDimension="2" srsName="http://www.opengis.net/def/crs/EPSG/0/4258">
+                      <gml:name>Pesiö</gml:name>
+                      <gml:pos>64.95000 28.65000 </gml:pos>
+                    </gml:Point>
+                  </gml:pointMembers>
+                </gml:MultiPoint>
+              </sams:shape>
+            </sams:SF_SpatialSamplingFeature>
+          </om:featureOfInterest>
+          <om:result>
+            <wml2:MeasurementTimeseries gml:id="mts-1-1-LowCloudCover">
+              <wml2:point>
+                <wml2:MeasurementTVP>
+                  <wml2:time>2013-03-20T00:00:00Z</wml2:time>
+                  <wml2:value>0.0</wml2:value>
+                </wml2:MeasurementTVP>
+              </wml2:point>
+            </wml2:MeasurementTimeseries>
+          </om:result>
+        </omso:PointTimeSeriesObservation>
+      </wfs:member>
+      <wfs:member>
+        <omso:PointTimeSeriesObservation gml:id="WFS-Sc5sYWLBWotiV2wZWYJ3c1v4Ii2JTowtIWbbpdOs2_llx4efR060aeWzDtdOufXlmw48rp1w36d3R066aduXth2dcvDDp5QtLFlz6d1TTty2vfoUbQY2PlzrUi0Kcd06aMmrhnZd2Spp25bXv0KNoODNp3ZJ2XDyy8.lbDs05JDMz5d.nJzrMbNGTBq2dGvL577.WS_v7ZeXflp6YcWzLE0tmXtl2VPPDLUzNm_Hh2Za1M2m_GkruvTM4a23D4iaefTDux5aVq6EBrbdPPnp3Z6mXx0rGnYZzK278mXZWZo08tmHayuGHlh21wTcuTT12w9m_rkh7.2Xk3OfTfyy5OPXLy839OSukLNt0unWbfyy48PPo6daNPLZh2unXPryzYceV064b9O7o6ddNO3L2w7OuXhh08mh007ctPpl4T8hNDpp25bW_dlrGq1IYA---MediumCloudCover">
+          <om:phenomenonTime xlink:href="#time-interval-1-1"/>
+          <om:resultTime xlink:href="#time-1-1"/>
+          <om:procedure xlink:href="http://xml.fmi.fi/inspire/process/hirlam"/>
+          <om:parameter>
+            <om:NamedValue>
+              <om:name xlink:href="http://inspire.ec.europa.eu/codeList/ProcessParameterValue/value/numericalModel/analysisTime"/>
+              <om:value>
+                <gml:TimeInstant gml:id="analysis-time-1-1-MediumCloudCover--">
+                  <gml:timePosition>2013-03-18T00:00:00Z</gml:timePosition>
+                </gml:TimeInstant>
+              </om:value>
+            </om:NamedValue>
+          </om:parameter>
+          <om:observedProperty xlink:href="http://beta.fmi.fi/fmi-apikey/foobar/meta?observableProperty=forecast&amp;param=MediumCloudCover&amp;language=eng"/>
+          <om:featureOfInterest>
+            <sams:SF_SpatialSamplingFeature gml:id="enn-s-1-1-MediumCloudCover">
+              <sam:sampledFeature>
+                <target:LocationCollection gml:id="sampled-target-1-1-MediumCloudCover">
+                  <target:member>
+                    <target:Location gml:id="forloc-geoid-642056-pos-MediumCloudCover">
+                      <gml:identifier codeSpace="http://xml.fmi.fi/namespace/stationcode/geoid">642056</gml:identifier>
+                      <gml:name codeSpace="http://xml.fmi.fi/namespace/locationcode/name">Pesiö</gml:name>
+                      <gml:name codeSpace="http://xml.fmi.fi/namespace/locationcode/geoid">642056</gml:name>
+                      <target:representativePoint xlink:href="#point-642056-MediumCloudCover"/>
+                      <target:country codeSpace="http://xml.fmi.fi/namespace/location/country">Finland</target:country>
+                      <target:timezone>Europe/Helsinki</target:timezone>
+                      <target:region codeSpace="http://xml.fmi.fi/namespace/location/region">Suomussalmi</target:region>
+                    </target:Location>
+                  </target:member>
+                </target:LocationCollection>
+              </sam:sampledFeature>
+              <sams:shape>
+                <gml:MultiPoint gml:id="foi-multipoint-1-1-MediumCloudCover">
+                  <gml:pointMembers>
+                    <gml:Point gml:id="point-642056-MediumCloudCover" srsDimension="2" srsName="http://www.opengis.net/def/crs/EPSG/0/4258">
+                      <gml:name>Pesiö</gml:name>
+                      <gml:pos>64.95000 28.65000 </gml:pos>
+                    </gml:Point>
+                  </gml:pointMembers>
+                </gml:MultiPoint>
+              </sams:shape>
+            </sams:SF_SpatialSamplingFeature>
+          </om:featureOfInterest>
+          <om:result>
+            <wml2:MeasurementTimeseries gml:id="mts-1-1-MediumCloudCover">
+              <wml2:point>
+                <wml2:MeasurementTVP>
+                  <wml2:time>2013-03-20T00:00:00Z</wml2:time>
+                  <wml2:value>63.2</wml2:value>
+                </wml2:MeasurementTVP>
+              </wml2:point>
+            </wml2:MeasurementTimeseries>
+          </om:result>
+        </omso:PointTimeSeriesObservation>
+      </wfs:member>
+      <wfs:member>
+        <omso:PointTimeSeriesObservation gml:id="WFS-uzZ_8nsBffcwd.JHB7Ci3xW4TdWJTowtIWbbpdOs2_llx4efR060aeWzDtdOufXlmw48rp1w36d3R066aduXth2dcvDDp5QtLFlz6d1TTty2vfoUbQY2PlzrUi0Kcd06aMmrhnZd2Spp25bXv0KNoODNp3ZJ2XDyy8.lbDs05JDMz5d.nJzrMbNGTBq2dGvL577.WS_v7ZeXflp6YcWzLE0tmXtl2VPPDLUzNm_Hh2Za1M2m_GkruvTM4a23D4iaefTDux5aVq6EBrbdPPnp3Z6mXx0rGnYZzK278mXZWZo08tmHayuGHlh21uSNOfRD2b.uSHv7ZeTc59N_LLk49cvLzf05K6Qs23S6dZt_LLjw8.jp1o08tmHa6dc.vLNhx5XTrhv07ujp1007cvbDs65eGHTyaHTTty0.mXhPyE0Omnbltb92WsarUhg--HighCloudCover">
+          <om:phenomenonTime xlink:href="#time-interval-1-1"/>
+          <om:resultTime xlink:href="#time-1-1"/>
+          <om:procedure xlink:href="http://xml.fmi.fi/inspire/process/hirlam"/>
+          <om:parameter>
+            <om:NamedValue>
+              <om:name xlink:href="http://inspire.ec.europa.eu/codeList/ProcessParameterValue/value/numericalModel/analysisTime"/>
+              <om:value>
+                <gml:TimeInstant gml:id="analysis-time-1-1-HighCloudCover--">
+                  <gml:timePosition>2013-03-18T00:00:00Z</gml:timePosition>
+                </gml:TimeInstant>
+              </om:value>
+            </om:NamedValue>
+          </om:parameter>
+          <om:observedProperty xlink:href="http://beta.fmi.fi/fmi-apikey/foobar/meta?observableProperty=forecast&amp;param=HighCloudCover&amp;language=eng"/>
+          <om:featureOfInterest>
+            <sams:SF_SpatialSamplingFeature gml:id="enn-s-1-1-HighCloudCover">
+              <sam:sampledFeature>
+                <target:LocationCollection gml:id="sampled-target-1-1-HighCloudCover">
+                  <target:member>
+                    <target:Location gml:id="forloc-geoid-642056-pos-HighCloudCover">
+                      <gml:identifier codeSpace="http://xml.fmi.fi/namespace/stationcode/geoid">642056</gml:identifier>
+                      <gml:name codeSpace="http://xml.fmi.fi/namespace/locationcode/name">Pesiö</gml:name>
+                      <gml:name codeSpace="http://xml.fmi.fi/namespace/locationcode/geoid">642056</gml:name>
+                      <target:representativePoint xlink:href="#point-642056-HighCloudCover"/>
+                      <target:country codeSpace="http://xml.fmi.fi/namespace/location/country">Finland</target:country>
+                      <target:timezone>Europe/Helsinki</target:timezone>
+                      <target:region codeSpace="http://xml.fmi.fi/namespace/location/region">Suomussalmi</target:region>
+                    </target:Location>
+                  </target:member>
+                </target:LocationCollection>
+              </sam:sampledFeature>
+              <sams:shape>
+                <gml:MultiPoint gml:id="foi-multipoint-1-1-HighCloudCover">
+                  <gml:pointMembers>
+                    <gml:Point gml:id="point-642056-HighCloudCover" srsDimension="2" srsName="http://www.opengis.net/def/crs/EPSG/0/4258">
+                      <gml:name>Pesiö</gml:name>
+                      <gml:pos>64.95000 28.65000 </gml:pos>
+                    </gml:Point>
+                  </gml:pointMembers>
+                </gml:MultiPoint>
+              </sams:shape>
+            </sams:SF_SpatialSamplingFeature>
+          </om:featureOfInterest>
+          <om:result>
+            <wml2:MeasurementTimeseries gml:id="mts-1-1-HighCloudCover">
+              <wml2:point>
+                <wml2:MeasurementTVP>
+                  <wml2:time>2013-03-20T00:00:00Z</wml2:time>
+                  <wml2:value>100.0</wml2:value>
+                </wml2:MeasurementTVP>
+              </wml2:point>
+            </wml2:MeasurementTimeseries>
+          </om:result>
+        </omso:PointTimeSeriesObservation>
+      </wfs:member>
+      <wfs:member>
+        <omso:PointTimeSeriesObservation gml:id="WFS-sBcS.sV6Wtnj.vZ31zVc1e.zIGKJTowtIWbbpdOs2_llx4efR060aeWzDtdOufXlmw48rp1w36d3R066aduXth2dcvDDp5QtLFlz6d1TTty2vfoUbQY2PlzrUi0Kcd06aMmrhnZd2Spp25bXv0KNoODNp3ZJ2XDyy8.lbDs05JDMz5d.nJzrMbNGTBq2dGvL577.WS_v7ZeXflp6YcWzLE0tmXtl2VPPDLUzNm_Hh2Za1M2m_GkruvTM4a23D4iaefTDux5aVq6EBrbdPPnp3Z6mXx0rGnYZzK278mXZWZo08tmHayuGHlh21vUOWXHp4aemHpp37mOhuc.m_llyceuXl5v6cldIWbbpdOs2_llx4efR060aeWzDtdOufXlmw48rp1w36d3R066aduXth2dcvDDp5NDpp25afTLwn5CaHTTty2t.7LWNVqQw-Precipitation1h">
+          <om:phenomenonTime xlink:href="#time-interval-1-1"/>
+          <om:resultTime xlink:href="#time-1-1"/>
+          <om:procedure xlink:href="http://xml.fmi.fi/inspire/process/hirlam"/>
+          <om:parameter>
+            <om:NamedValue>
+              <om:name xlink:href="http://inspire.ec.europa.eu/codeList/ProcessParameterValue/value/numericalModel/analysisTime"/>
+              <om:value>
+                <gml:TimeInstant gml:id="analysis-time-1-1-Precipitation1h--">
+                  <gml:timePosition>2013-03-18T00:00:00Z</gml:timePosition>
+                </gml:TimeInstant>
+              </om:value>
+            </om:NamedValue>
+          </om:parameter>
+          <om:observedProperty xlink:href="http://beta.fmi.fi/fmi-apikey/foobar/meta?observableProperty=forecast&amp;param=Precipitation1h&amp;language=eng"/>
+          <om:featureOfInterest>
+            <sams:SF_SpatialSamplingFeature gml:id="enn-s-1-1-Precipitation1h">
+              <sam:sampledFeature>
+                <target:LocationCollection gml:id="sampled-target-1-1-Precipitation1h">
+                  <target:member>
+                    <target:Location gml:id="forloc-geoid-642056-pos-Precipitation1h">
+                      <gml:identifier codeSpace="http://xml.fmi.fi/namespace/stationcode/geoid">642056</gml:identifier>
+                      <gml:name codeSpace="http://xml.fmi.fi/namespace/locationcode/name">Pesiö</gml:name>
+                      <gml:name codeSpace="http://xml.fmi.fi/namespace/locationcode/geoid">642056</gml:name>
+                      <target:representativePoint xlink:href="#point-642056-Precipitation1h"/>
+                      <target:country codeSpace="http://xml.fmi.fi/namespace/location/country">Finland</target:country>
+                      <target:timezone>Europe/Helsinki</target:timezone>
+                      <target:region codeSpace="http://xml.fmi.fi/namespace/location/region">Suomussalmi</target:region>
+                    </target:Location>
+                  </target:member>
+                </target:LocationCollection>
+              </sam:sampledFeature>
+              <sams:shape>
+                <gml:MultiPoint gml:id="foi-multipoint-1-1-Precipitation1h">
+                  <gml:pointMembers>
+                    <gml:Point gml:id="point-642056-Precipitation1h" srsDimension="2" srsName="http://www.opengis.net/def/crs/EPSG/0/4258">
+                      <gml:name>Pesiö</gml:name>
+                      <gml:pos>64.95000 28.65000 </gml:pos>
+                    </gml:Point>
+                  </gml:pointMembers>
+                </gml:MultiPoint>
+              </sams:shape>
+            </sams:SF_SpatialSamplingFeature>
+          </om:featureOfInterest>
+          <om:result>
+            <wml2:MeasurementTimeseries gml:id="mts-1-1-Precipitation1h">
+              <wml2:point>
+                <wml2:MeasurementTVP>
+                  <wml2:time>2013-03-20T00:00:00Z</wml2:time>
+                  <wml2:value>0.0</wml2:value>
+                </wml2:MeasurementTVP>
+              </wml2:point>
+            </wml2:MeasurementTimeseries>
+          </om:result>
+        </omso:PointTimeSeriesObservation>
+      </wfs:member>
+      <wfs:member>
+        <omso:PointTimeSeriesObservation gml:id="WFS-8vlvKHYsepnK4hbNv33rYsO3VsOJTowtIWbbpdOs2_llx4efR060aeWzDtdOufXlmw48rp1w36d3R066aduXth2dcvDDp5QtLFlz6d1TTty2vfoUbQY2PlzrUi0Kcd06aMmrhnZd2Spp25bXv0KNoODNp3ZJ2XDyy8.lbDs05JDMz5d.nJzrMbNGTBq2dGvL577.WS_v7ZeXflp6YcWzLE0tmXtl2VPPDLUzNm_Hh2Za1M2m_GkruvTM4a23D4iaefTDux5aVq6EBrbdPPnp3Z6mXx0rGnYZzK278mXZWZo08tmHayuGHlh21zUOWXHp4aemHpp37oO3f13dG5z6b.WXJx65eXm_pyV0hZtul06zb.WXHh59HTrRp5bMO10659eWbDjyunXDfp3dHTrpp25e2HZ1y8MOnk0Omnblp9MvCfkJodNO3La37stY1WpDAA---PrecipitationAmount">
+          <om:phenomenonTime xlink:href="#time-interval-1-1"/>
+          <om:resultTime xlink:href="#time-1-1"/>
+          <om:procedure xlink:href="http://xml.fmi.fi/inspire/process/hirlam"/>
+          <om:parameter>
+            <om:NamedValue>
+              <om:name xlink:href="http://inspire.ec.europa.eu/codeList/ProcessParameterValue/value/numericalModel/analysisTime"/>
+              <om:value>
+                <gml:TimeInstant gml:id="analysis-time-1-1-PrecipitationAmount--">
+                  <gml:timePosition>2013-03-18T00:00:00Z</gml:timePosition>
+                </gml:TimeInstant>
+              </om:value>
+            </om:NamedValue>
+          </om:parameter>
+          <om:observedProperty xlink:href="http://beta.fmi.fi/fmi-apikey/foobar/meta?observableProperty=forecast&amp;param=PrecipitationAmount&amp;language=eng"/>
+          <om:featureOfInterest>
+            <sams:SF_SpatialSamplingFeature gml:id="enn-s-1-1-PrecipitationAmount">
+              <sam:sampledFeature>
+                <target:LocationCollection gml:id="sampled-target-1-1-PrecipitationAmount">
+                  <target:member>
+                    <target:Location gml:id="forloc-geoid-642056-pos-PrecipitationAmount">
+                      <gml:identifier codeSpace="http://xml.fmi.fi/namespace/stationcode/geoid">642056</gml:identifier>
+                      <gml:name codeSpace="http://xml.fmi.fi/namespace/locationcode/name">Pesiö</gml:name>
+                      <gml:name codeSpace="http://xml.fmi.fi/namespace/locationcode/geoid">642056</gml:name>
+                      <target:representativePoint xlink:href="#point-642056-PrecipitationAmount"/>
+                      <target:country codeSpace="http://xml.fmi.fi/namespace/location/country">Finland</target:country>
+                      <target:timezone>Europe/Helsinki</target:timezone>
+                      <target:region codeSpace="http://xml.fmi.fi/namespace/location/region">Suomussalmi</target:region>
+                    </target:Location>
+                  </target:member>
+                </target:LocationCollection>
+              </sam:sampledFeature>
+              <sams:shape>
+                <gml:MultiPoint gml:id="foi-multipoint-1-1-PrecipitationAmount">
+                  <gml:pointMembers>
+                    <gml:Point gml:id="point-642056-PrecipitationAmount" srsDimension="2" srsName="http://www.opengis.net/def/crs/EPSG/0/4258">
+                      <gml:name>Pesiö</gml:name>
+                      <gml:pos>64.95000 28.65000 </gml:pos>
+                    </gml:Point>
+                  </gml:pointMembers>
+                </gml:MultiPoint>
+              </sams:shape>
+            </sams:SF_SpatialSamplingFeature>
+          </om:featureOfInterest>
+          <om:result>
+            <wml2:MeasurementTimeseries gml:id="mts-1-1-PrecipitationAmount">
+              <wml2:point>
+                <wml2:MeasurementTVP>
+                  <wml2:time>2013-03-20T00:00:00Z</wml2:time>
+                  <wml2:value>NaN</wml2:value>
+                </wml2:MeasurementTVP>
+              </wml2:point>
+            </wml2:MeasurementTimeseries>
+          </om:result>
+        </omso:PointTimeSeriesObservation>
+      </wfs:member>
+      <wfs:member>
+        <omso:PointTimeSeriesObservation gml:id="WFS-1omAESM5bse3SE3PfhVqKY0Vt4uJTowtIWbbpdOs2_llx4efR060aeWzDtdOufXlmw48rp1w36d3R066aduXth2dcvDDp5QtLFlz6d1TTty2vfoUbQY2PlzrUi0Kcd06aMmrhnZd2Spp25bXv0KNoODNp3ZJ2XDyy8.lbDs05JDMz5d.nJzrMbNGTBq2dGvL577.WS_v7ZeXflp6YcWzLE0tmXtl2VPPDLUzNm_Hh2Za1M2m_GkruvTM4a23D4iaefTDux5aVq6EBrbdPPnp3Z6mXx0rGnYZzK278mXZWZo08tmHayuGHlh217UsOTTh6ad.6Ps34sOyDjx9dvXZh6ad.5uc.m_llyceuXl5v6cldIWbbpdOs2_llx4efR060aeWzDtdOufXlmw48rp1w36d3R066aduXth2dcvDDp5NDpp25afTLwn5CaHTTty2t.7LWNVqQwA--RadiationGlobalAccumulation">
+          <om:phenomenonTime xlink:href="#time-interval-1-1"/>
+          <om:resultTime xlink:href="#time-1-1"/>
+          <om:procedure xlink:href="http://xml.fmi.fi/inspire/process/hirlam"/>
+          <om:parameter>
+            <om:NamedValue>
+              <om:name xlink:href="http://inspire.ec.europa.eu/codeList/ProcessParameterValue/value/numericalModel/analysisTime"/>
+              <om:value>
+                <gml:TimeInstant gml:id="analysis-time-1-1-RadiationGlobalAccumulation--">
+                  <gml:timePosition>2013-03-18T00:00:00Z</gml:timePosition>
+                </gml:TimeInstant>
+              </om:value>
+            </om:NamedValue>
+          </om:parameter>
+          <om:observedProperty xlink:href="http://beta.fmi.fi/fmi-apikey/foobar/meta?observableProperty=forecast&amp;param=RadiationGlobalAccumulation&amp;language=eng"/>
+          <om:featureOfInterest>
+            <sams:SF_SpatialSamplingFeature gml:id="enn-s-1-1-RadiationGlobalAccumulation">
+              <sam:sampledFeature>
+                <target:LocationCollection gml:id="sampled-target-1-1-RadiationGlobalAccumulation">
+                  <target:member>
+                    <target:Location gml:id="forloc-geoid-642056-pos-RadiationGlobalAccumulation">
+                      <gml:identifier codeSpace="http://xml.fmi.fi/namespace/stationcode/geoid">642056</gml:identifier>
+                      <gml:name codeSpace="http://xml.fmi.fi/namespace/locationcode/name">Pesiö</gml:name>
+                      <gml:name codeSpace="http://xml.fmi.fi/namespace/locationcode/geoid">642056</gml:name>
+                      <target:representativePoint xlink:href="#point-642056-RadiationGlobalAccumulation"/>
+                      <target:country codeSpace="http://xml.fmi.fi/namespace/location/country">Finland</target:country>
+                      <target:timezone>Europe/Helsinki</target:timezone>
+                      <target:region codeSpace="http://xml.fmi.fi/namespace/location/region">Suomussalmi</target:region>
+                    </target:Location>
+                  </target:member>
+                </target:LocationCollection>
+              </sam:sampledFeature>
+              <sams:shape>
+                <gml:MultiPoint gml:id="foi-multipoint-1-1-RadiationGlobalAccumulation">
+                  <gml:pointMembers>
+                    <gml:Point gml:id="point-642056-RadiationGlobalAccumulation" srsDimension="2" srsName="http://www.opengis.net/def/crs/EPSG/0/4258">
+                      <gml:name>Pesiö</gml:name>
+                      <gml:pos>64.95000 28.65000 </gml:pos>
+                    </gml:Point>
+                  </gml:pointMembers>
+                </gml:MultiPoint>
+              </sams:shape>
+            </sams:SF_SpatialSamplingFeature>
+          </om:featureOfInterest>
+          <om:result>
+            <wml2:MeasurementTimeseries gml:id="mts-1-1-RadiationGlobalAccumulation">
+              <wml2:point>
+                <wml2:MeasurementTVP>
+                  <wml2:time>2013-03-20T00:00:00Z</wml2:time>
+                  <wml2:value>NaN</wml2:value>
+                </wml2:MeasurementTVP>
+              </wml2:point>
+            </wml2:MeasurementTimeseries>
+          </om:result>
+        </omso:PointTimeSeriesObservation>
+      </wfs:member>
+      <wfs:member>
+        <omso:PointTimeSeriesObservation gml:id="WFS-rkVffaaYW8aL5YiQBoUSbl1FO8GJTowtIWbbpdOs2_llx4efR060aeWzDtdOufXlmw48rp1w36d3R066aduXth2dcvDDp5QtLFlz6d1TTty2vfoUbQY2PlzrUi0Kcd06aMmrhnZd2Spp25bXv0KNoODNp3ZJ2XDyy8.lbDs05JDMz5d.nJzrMbNGTBq2dGvL577.WS_v7ZeXflp6YcWzLE0tmXtl2VPPDLUzNm_Hh2Za1M2m_GkruvTM4a23D4iaefTDux5aVq6EBrbdPPnp3Z6mXx0rGnYZzK278mXZWZo08tmHayuGHlh213UsOTTh6ad.6ZXg48fXb12YemnfubnPpv5ZcnHrl5eb.nJXSFm26XTrNv5ZceHn0dOtGnlsw7XTrn15ZsOPK6dcN.nd0dOumnbl7YdnXLww6eTQ6aduWn0y8J.Qmh007ctrfuy1jVakMA---RadiationLWAccumulation">
+          <om:phenomenonTime xlink:href="#time-interval-1-1"/>
+          <om:resultTime xlink:href="#time-1-1"/>
+          <om:procedure xlink:href="http://xml.fmi.fi/inspire/process/hirlam"/>
+          <om:parameter>
+            <om:NamedValue>
+              <om:name xlink:href="http://inspire.ec.europa.eu/codeList/ProcessParameterValue/value/numericalModel/analysisTime"/>
+              <om:value>
+                <gml:TimeInstant gml:id="analysis-time-1-1-RadiationLWAccumulation--">
+                  <gml:timePosition>2013-03-18T00:00:00Z</gml:timePosition>
+                </gml:TimeInstant>
+              </om:value>
+            </om:NamedValue>
+          </om:parameter>
+          <om:observedProperty xlink:href="http://beta.fmi.fi/fmi-apikey/foobar/meta?observableProperty=forecast&amp;param=RadiationLWAccumulation&amp;language=eng"/>
+          <om:featureOfInterest>
+            <sams:SF_SpatialSamplingFeature gml:id="enn-s-1-1-RadiationLWAccumulation">
+              <sam:sampledFeature>
+                <target:LocationCollection gml:id="sampled-target-1-1-RadiationLWAccumulation">
+                  <target:member>
+                    <target:Location gml:id="forloc-geoid-642056-pos-RadiationLWAccumulation">
+                      <gml:identifier codeSpace="http://xml.fmi.fi/namespace/stationcode/geoid">642056</gml:identifier>
+                      <gml:name codeSpace="http://xml.fmi.fi/namespace/locationcode/name">Pesiö</gml:name>
+                      <gml:name codeSpace="http://xml.fmi.fi/namespace/locationcode/geoid">642056</gml:name>
+                      <target:representativePoint xlink:href="#point-642056-RadiationLWAccumulation"/>
+                      <target:country codeSpace="http://xml.fmi.fi/namespace/location/country">Finland</target:country>
+                      <target:timezone>Europe/Helsinki</target:timezone>
+                      <target:region codeSpace="http://xml.fmi.fi/namespace/location/region">Suomussalmi</target:region>
+                    </target:Location>
+                  </target:member>
+                </target:LocationCollection>
+              </sam:sampledFeature>
+              <sams:shape>
+                <gml:MultiPoint gml:id="foi-multipoint-1-1-RadiationLWAccumulation">
+                  <gml:pointMembers>
+                    <gml:Point gml:id="point-642056-RadiationLWAccumulation" srsDimension="2" srsName="http://www.opengis.net/def/crs/EPSG/0/4258">
+                      <gml:name>Pesiö</gml:name>
+                      <gml:pos>64.95000 28.65000 </gml:pos>
+                    </gml:Point>
+                  </gml:pointMembers>
+                </gml:MultiPoint>
+              </sams:shape>
+            </sams:SF_SpatialSamplingFeature>
+          </om:featureOfInterest>
+          <om:result>
+            <wml2:MeasurementTimeseries gml:id="mts-1-1-RadiationLWAccumulation">
+              <wml2:point>
+                <wml2:MeasurementTVP>
+                  <wml2:time>2013-03-20T00:00:00Z</wml2:time>
+                  <wml2:value>NaN</wml2:value>
+                </wml2:MeasurementTVP>
+              </wml2:point>
+            </wml2:MeasurementTimeseries>
+          </om:result>
+        </omso:PointTimeSeriesObservation>
+      </wfs:member>
+      <wfs:member>
+        <omso:PointTimeSeriesObservation gml:id="WFS-DvtqF5ey2V0xvOIwK6nRr4Bv22OJTowtIWbbpdOs2_llx4efR060aeWzDtdOufXlmw48rp1w36d3R066aduXth2dcvDDp5QtLFlz6d1TTty2vfoUbQY2PlzrUi0Kcd06aMmrhnZd2Spp25bXv0KNoODNp3ZJ2XDyy8.lbDs05JDMz5d.nJzrMbNGTBq2dGvL577.WS_v7ZeXflp6YcWzLE0tmXtl2VPPDLUzNm_Hh2Za1M2m_GkruvTM4a23D4iaefTDux5aVq6EBrbdPPnp3Z6mXx0rGnYZzK278mXZWZo08tmHayuGHlh21hhUsOTTh6ad.6dl6U.vLNhx5ZleDjx9dvXZh6ad.5uc.m_llyceuXl5v6cldIWbbpdOs2_llx4efR060aeWzDtdOufXlmw48rp1w36d3R066aduXth2dcvDDp5NDpp25afTLwn5CaHTTty2t.7LWNVqQwA--RadiationNetSurfaceLWAccumulation">
+          <om:phenomenonTime xlink:href="#time-interval-1-1"/>
+          <om:resultTime xlink:href="#time-1-1"/>
+          <om:procedure xlink:href="http://xml.fmi.fi/inspire/process/hirlam"/>
+          <om:parameter>
+            <om:NamedValue>
+              <om:name xlink:href="http://inspire.ec.europa.eu/codeList/ProcessParameterValue/value/numericalModel/analysisTime"/>
+              <om:value>
+                <gml:TimeInstant gml:id="analysis-time-1-1-RadiationNetSurfaceLWAccumulation--">
+                  <gml:timePosition>2013-03-18T00:00:00Z</gml:timePosition>
+                </gml:TimeInstant>
+              </om:value>
+            </om:NamedValue>
+          </om:parameter>
+          <om:observedProperty xlink:href="http://beta.fmi.fi/fmi-apikey/foobar/meta?observableProperty=forecast&amp;param=RadiationNetSurfaceLWAccumulation&amp;language=eng"/>
+          <om:featureOfInterest>
+            <sams:SF_SpatialSamplingFeature gml:id="enn-s-1-1-RadiationNetSurfaceLWAccumulation">
+              <sam:sampledFeature>
+                <target:LocationCollection gml:id="sampled-target-1-1-RadiationNetSurfaceLWAccumulation">
+                  <target:member>
+                    <target:Location gml:id="forloc-geoid-642056-pos-RadiationNetSurfaceLWAccumulation">
+                      <gml:identifier codeSpace="http://xml.fmi.fi/namespace/stationcode/geoid">642056</gml:identifier>
+                      <gml:name codeSpace="http://xml.fmi.fi/namespace/locationcode/name">Pesiö</gml:name>
+                      <gml:name codeSpace="http://xml.fmi.fi/namespace/locationcode/geoid">642056</gml:name>
+                      <target:representativePoint xlink:href="#point-642056-RadiationNetSurfaceLWAccumulation"/>
+                      <target:country codeSpace="http://xml.fmi.fi/namespace/location/country">Finland</target:country>
+                      <target:timezone>Europe/Helsinki</target:timezone>
+                      <target:region codeSpace="http://xml.fmi.fi/namespace/location/region">Suomussalmi</target:region>
+                    </target:Location>
+                  </target:member>
+                </target:LocationCollection>
+              </sam:sampledFeature>
+              <sams:shape>
+                <gml:MultiPoint gml:id="foi-multipoint-1-1-RadiationNetSurfaceLWAccumulation">
+                  <gml:pointMembers>
+                    <gml:Point gml:id="point-642056-RadiationNetSurfaceLWAccumulation" srsDimension="2" srsName="http://www.opengis.net/def/crs/EPSG/0/4258">
+                      <gml:name>Pesiö</gml:name>
+                      <gml:pos>64.95000 28.65000 </gml:pos>
+                    </gml:Point>
+                  </gml:pointMembers>
+                </gml:MultiPoint>
+              </sams:shape>
+            </sams:SF_SpatialSamplingFeature>
+          </om:featureOfInterest>
+          <om:result>
+            <wml2:MeasurementTimeseries gml:id="mts-1-1-RadiationNetSurfaceLWAccumulation">
+              <wml2:point>
+                <wml2:MeasurementTVP>
+                  <wml2:time>2013-03-20T00:00:00Z</wml2:time>
+                  <wml2:value>NaN</wml2:value>
+                </wml2:MeasurementTVP>
+              </wml2:point>
+            </wml2:MeasurementTimeseries>
+          </om:result>
+        </omso:PointTimeSeriesObservation>
+      </wfs:member>
+      <wfs:member>
+        <omso:PointTimeSeriesObservation gml:id="WFS-zPvZJqUageLvivoEv.OQ_1w.H_uJTowtIWbbpdOs2_llx4efR060aeWzDtdOufXlmw48rp1w36d3R066aduXth2dcvDDp5QtLFlz6d1TTty2vfoUbQY2PlzrUi0Kcd06aMmrhnZd2Spp25bXv0KNoODNp3ZJ2XDyy8.lbDs05JDMz5d.nJzrMbNGTBq2dGvL577.WS_v7ZeXflp6YcWzLE0tmXtl2VPPDLUzNm_Hh2Za1M2m_GkruvTM4a23D4iaefTDux5aVq6EBrbdPPnp3Z6mXx0rGnYZzK278mXZWZo08tmHayuGHlh21hhUsOTTh6ad.6dl6U.vLNhx5adeDjx9dvXZh6ad.5uc.m_llyceuXl5v6cldIWbbpdOs2_llx4efR060aeWzDtdOufXlmw48rp1w36d3R066aduXth2dcvDDp5NDpp25afTLwn5CaHTTty2t.7LWNVqQwA--RadiationNetSurfaceSWAccumulation">
+          <om:phenomenonTime xlink:href="#time-interval-1-1"/>
+          <om:resultTime xlink:href="#time-1-1"/>
+          <om:procedure xlink:href="http://xml.fmi.fi/inspire/process/hirlam"/>
+          <om:parameter>
+            <om:NamedValue>
+              <om:name xlink:href="http://inspire.ec.europa.eu/codeList/ProcessParameterValue/value/numericalModel/analysisTime"/>
+              <om:value>
+                <gml:TimeInstant gml:id="analysis-time-1-1-RadiationNetSurfaceSWAccumulation--">
+                  <gml:timePosition>2013-03-18T00:00:00Z</gml:timePosition>
+                </gml:TimeInstant>
+              </om:value>
+            </om:NamedValue>
+          </om:parameter>
+          <om:observedProperty xlink:href="http://beta.fmi.fi/fmi-apikey/foobar/meta?observableProperty=forecast&amp;param=RadiationNetSurfaceSWAccumulation&amp;language=eng"/>
+          <om:featureOfInterest>
+            <sams:SF_SpatialSamplingFeature gml:id="enn-s-1-1-RadiationNetSurfaceSWAccumulation">
+              <sam:sampledFeature>
+                <target:LocationCollection gml:id="sampled-target-1-1-RadiationNetSurfaceSWAccumulation">
+                  <target:member>
+                    <target:Location gml:id="forloc-geoid-642056-pos-RadiationNetSurfaceSWAccumulation">
+                      <gml:identifier codeSpace="http://xml.fmi.fi/namespace/stationcode/geoid">642056</gml:identifier>
+                      <gml:name codeSpace="http://xml.fmi.fi/namespace/locationcode/name">Pesiö</gml:name>
+                      <gml:name codeSpace="http://xml.fmi.fi/namespace/locationcode/geoid">642056</gml:name>
+                      <target:representativePoint xlink:href="#point-642056-RadiationNetSurfaceSWAccumulation"/>
+                      <target:country codeSpace="http://xml.fmi.fi/namespace/location/country">Finland</target:country>
+                      <target:timezone>Europe/Helsinki</target:timezone>
+                      <target:region codeSpace="http://xml.fmi.fi/namespace/location/region">Suomussalmi</target:region>
+                    </target:Location>
+                  </target:member>
+                </target:LocationCollection>
+              </sam:sampledFeature>
+              <sams:shape>
+                <gml:MultiPoint gml:id="foi-multipoint-1-1-RadiationNetSurfaceSWAccumulation">
+                  <gml:pointMembers>
+                    <gml:Point gml:id="point-642056-RadiationNetSurfaceSWAccumulation" srsDimension="2" srsName="http://www.opengis.net/def/crs/EPSG/0/4258">
+                      <gml:name>Pesiö</gml:name>
+                      <gml:pos>64.95000 28.65000 </gml:pos>
+                    </gml:Point>
+                  </gml:pointMembers>
+                </gml:MultiPoint>
+              </sams:shape>
+            </sams:SF_SpatialSamplingFeature>
+          </om:featureOfInterest>
+          <om:result>
+            <wml2:MeasurementTimeseries gml:id="mts-1-1-RadiationNetSurfaceSWAccumulation">
+              <wml2:point>
+                <wml2:MeasurementTVP>
+                  <wml2:time>2013-03-20T00:00:00Z</wml2:time>
+                  <wml2:value>NaN</wml2:value>
+                </wml2:MeasurementTVP>
+              </wml2:point>
+            </wml2:MeasurementTimeseries>
+          </om:result>
+        </omso:PointTimeSeriesObservation>
+      </wfs:member>
+      <wfs:member>
+        <omso:PointTimeSeriesObservation gml:id="WFS-_N.Ad8YRYyc2OMHG0czNS9eZ36OJTowtIWbbpdOs2_llx4efR060aeWzDtdOufXlmw48rp1w36d3R066aduXth2dcvDDp5QtLFlz6d1TTty2vfoUbQY2PlzrUi0Kcd06aMmrhnZd2Spp25bXv0KNoODNp3ZJ2XDyy8.lbDs05JDMz5d.nJzrMbNGTBq2dGvL577.WS_v7ZeXflp6YcWzLE0tmXtl2VPPDLUzNm_Hh2Za1M2m_GkruvTM4a23D4iaefTDux5aVq6EBrbdPPnp3Z6mXx0rGnYZzK278mXZWZo08tmHayuGHlh218UsOTTh6ad.6JpzZuvPLBx4.u3rsw9NO_c3OfTfyy5OPXLy839OSukLNt0unWbfyy48PPo6daNPLZh2unXPryzYceV064b9O7o6ddNO3L2w7OuXhh08mh007ctPpl4T8hNDpp25bW_dlrGq1IYA-RadiationDiffuseAccumulation">
+          <om:phenomenonTime xlink:href="#time-interval-1-1"/>
+          <om:resultTime xlink:href="#time-1-1"/>
+          <om:procedure xlink:href="http://xml.fmi.fi/inspire/process/hirlam"/>
+          <om:parameter>
+            <om:NamedValue>
+              <om:name xlink:href="http://inspire.ec.europa.eu/codeList/ProcessParameterValue/value/numericalModel/analysisTime"/>
+              <om:value>
+                <gml:TimeInstant gml:id="analysis-time-1-1-RadiationDiffuseAccumulation--">
+                  <gml:timePosition>2013-03-18T00:00:00Z</gml:timePosition>
+                </gml:TimeInstant>
+              </om:value>
+            </om:NamedValue>
+          </om:parameter>
+          <om:observedProperty xlink:href="http://beta.fmi.fi/fmi-apikey/foobar/meta?observableProperty=forecast&amp;param=RadiationDiffuseAccumulation&amp;language=eng"/>
+          <om:featureOfInterest>
+            <sams:SF_SpatialSamplingFeature gml:id="enn-s-1-1-RadiationDiffuseAccumulation">
+              <sam:sampledFeature>
+                <target:LocationCollection gml:id="sampled-target-1-1-RadiationDiffuseAccumulation">
+                  <target:member>
+                    <target:Location gml:id="forloc-geoid-642056-pos-RadiationDiffuseAccumulation">
+                      <gml:identifier codeSpace="http://xml.fmi.fi/namespace/stationcode/geoid">642056</gml:identifier>
+                      <gml:name codeSpace="http://xml.fmi.fi/namespace/locationcode/name">Pesiö</gml:name>
+                      <gml:name codeSpace="http://xml.fmi.fi/namespace/locationcode/geoid">642056</gml:name>
+                      <target:representativePoint xlink:href="#point-642056-RadiationDiffuseAccumulation"/>
+                      <target:country codeSpace="http://xml.fmi.fi/namespace/location/country">Finland</target:country>
+                      <target:timezone>Europe/Helsinki</target:timezone>
+                      <target:region codeSpace="http://xml.fmi.fi/namespace/location/region">Suomussalmi</target:region>
+                    </target:Location>
+                  </target:member>
+                </target:LocationCollection>
+              </sam:sampledFeature>
+              <sams:shape>
+                <gml:MultiPoint gml:id="foi-multipoint-1-1-RadiationDiffuseAccumulation">
+                  <gml:pointMembers>
+                    <gml:Point gml:id="point-642056-RadiationDiffuseAccumulation" srsDimension="2" srsName="http://www.opengis.net/def/crs/EPSG/0/4258">
+                      <gml:name>Pesiö</gml:name>
+                      <gml:pos>64.95000 28.65000 </gml:pos>
+                    </gml:Point>
+                  </gml:pointMembers>
+                </gml:MultiPoint>
+              </sams:shape>
+            </sams:SF_SpatialSamplingFeature>
+          </om:featureOfInterest>
+          <om:result>
+            <wml2:MeasurementTimeseries gml:id="mts-1-1-RadiationDiffuseAccumulation">
+              <wml2:point>
+                <wml2:MeasurementTVP>
+                  <wml2:time>2013-03-20T00:00:00Z</wml2:time>
+                  <wml2:value>NaN</wml2:value>
+                </wml2:MeasurementTVP>
+              </wml2:point>
+            </wml2:MeasurementTimeseries>
+          </om:result>
+        </omso:PointTimeSeriesObservation>
+      </wfs:member>
+    </wfs:FeatureCollection>
+  </wfs:member>
+
+</wfs:FeatureCollection>
