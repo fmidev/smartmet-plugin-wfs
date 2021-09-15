@@ -237,7 +237,7 @@ void SmartMet::Plugin::WFS::StoredQueryConfig::parse_config()
         catch (const std::exception& err)
         {
           std::ostringstream msg;
-          msg << "Error while parsing stored query parameter description:\n";
+          msg << "Error while parsing stored query parameter description in '" + get_file_name() + "':\n";
           dump_setting(msg, c_item, 16);
           msg << std::endl;
           std::cerr << msg.str();
