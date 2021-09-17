@@ -89,12 +89,12 @@ Obsoletes: smartmet-brainstorm-wfs-debuginfo < 16.11.1
 #TestRequires: smartmet-test-db >= 21.3.2
 #TestRequires: smartmet-test-data >= 20.6.30
 #TestRequires: smartmet-library-macgyver-devel >= 21.8.20
-#TestRequires: smartmet-library-gis-devel >= 21.8.3
-#TestRequires: smartmet-library-newbase-devel >= 20.10.28
-#TestRequires: smartmet-library-spine-devel >= 21.8.21
-#TestRequires: smartmet-engine-geonames-devel >= 20.8.23
-#TestRequires: smartmet-engine-gis-devel >= 21.8.17
-#TestRequires: smartmet-engine-querydata-devel >= 21.8.21
+#TestRequires: smartmet-library-gis >= 21.8.3
+#TestRequires: smartmet-library-newbase >= 20.10.28
+#TestRequires: smartmet-library-spine-plugin-test >= 21.9.17
+#TestRequires: smartmet-engine-geonames >= 20.8.23
+#TestRequires: smartmet-engine-gis >= 21.8.17
+#TestRequires: smartmet-engine-querydata >= 21.8.21
 %if %{with observation}
 #TestRequires: smartmet-engine-observation >= 21.8.21
 %endif
