@@ -84,11 +84,10 @@ Provides: %{SPECNAME}
 Obsoletes: smartmet-brainstorm-wfs < 16.11.1
 Obsoletes: smartmet-brainstorm-wfs-debuginfo < 16.11.1
 
-#TestRequires: gcc-c++
 #TestRequires: ctpp2
 #TestRequires: smartmet-test-db >= 21.3.2
 #TestRequires: smartmet-test-data >= 20.6.30
-#TestRequires: smartmet-library-macgyver-devel >= 21.8.20
+#TestRequires: smartmet-utils-devel
 #TestRequires: smartmet-library-gis >= 21.8.3
 #TestRequires: smartmet-library-newbase >= 20.10.28
 #TestRequires: smartmet-library-spine-plugin-test >= 21.9.17
@@ -101,15 +100,6 @@ Obsoletes: smartmet-brainstorm-wfs-debuginfo < 16.11.1
 #TestRequires: smartmet-engine-grid >= 21.8.17
 #TestRequires: redis
 #TestRequires: smartmet-engine-grid-test
-#TestRequires: gdal32-devel
-#TestRequires: boost169-devel
-#TestRequires: boost169-date-time
-#TestRequires: boost169-filesystem
-#TestRequires: boost169-iostreams
-#TestRequires: boost169-serialization
-#TestRequires: boost169-system
-#TestRequires: boost169-thread
-#TestRequires: boost169-program-options
 # Required by top level Makefile
 #TestRequires: jsoncpp-devel
 
