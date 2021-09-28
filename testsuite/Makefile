@@ -2,7 +2,7 @@
 INCDIR = smartmet/plugins/$(SUBNAME)
 TOP = $(shell pwd)/..
 
-REQUIRES = gdal jsoncpp libpqxx
+REQUIRES = gdal jsoncpp libpqxx configpp
 
 include $(shell echo $${PREFIX-/usr})/share/smartmet/devel/makefile.inc
 
@@ -24,14 +24,12 @@ LIBS += -L$(libdir) \
 	-lboost_filesystem \
         -lboost_chrono \
 	-lboost_system \
+	$(REQUIRED_LIBS) \
         -lxqilla \
 	-lxerces-c \
-	$(GDAL_LIBS) \
 	-lconfig++ \
 	-lconfig \
 	-lctpp2 \
-	$(LIBPQXX_LIBS) \
-	$(JSONCPP_LIBS) \
 	-lcurl \
 	-lcrypto \
 	-lfmt \
