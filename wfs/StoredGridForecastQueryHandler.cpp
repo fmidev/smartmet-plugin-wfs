@@ -602,8 +602,7 @@ uint StoredGridForecastQueryHandler::processGridQuery(
               if (gridQuery.mQueryParameterList[idx].mValueList[t]->mParameterLevel > 0)
               {
                 levelValue = gridQuery.mQueryParameterList[idx].mValueList[t]->mParameterLevel;
-                if (gridQuery.mQueryParameterList[idx].mValueList[t]->mParameterLevelIdType == T::ParamLevelIdTypeValue::FMI
-                    && gridQuery.mQueryParameterList[idx].mValueList[t]->mParameterLevelId == 2)
+                if (gridQuery.mQueryParameterList[idx].mValueList[t]->mParameterLevelId == 2)
                   levelValue = levelValue / 100;
               }
 
