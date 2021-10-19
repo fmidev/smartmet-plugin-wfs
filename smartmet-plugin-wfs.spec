@@ -3,7 +3,7 @@
 %define SPECNAME smartmet-plugin-%{DIRNAME}
 Summary: SmartMet WFS plugin
 Name: %{SPECNAME}
-Version: 21.10.11
+Version: 21.10.19
 Release: 1%{?dist}.fmi
 License: MIT
 Group: SmartMet/Plugins
@@ -23,17 +23,17 @@ BuildRequires: xerces-c-devel
 BuildRequires: xqilla-devel
 BuildRequires: openssl-devel
 BuildRequires: bzip2-devel
-BuildRequires: smartmet-library-spine-devel >= 21.10.11
+BuildRequires: smartmet-library-spine-devel >= 21.10.18
 BuildRequires: smartmet-library-gis-devel >= 21.9.24
 BuildRequires: smartmet-library-locus-devel >= 21.8.11
 BuildRequires: smartmet-library-macgyver-devel >= 21.10.4
 BuildRequires: smartmet-engine-contour-devel >= 21.9.13
 BuildRequires: smartmet-engine-geonames-devel >= 21.9.28
 BuildRequires: smartmet-engine-gis-devel >= 21.9.13
-BuildRequires: smartmet-engine-grid-devel >= 21.10.11
+BuildRequires: smartmet-engine-grid-devel >= 21.10.19
 BuildRequires: smartmet-engine-querydata-devel >= 21.9.13
-BuildRequires: smartmet-library-grid-content-devel >= 21.10.11
-BuildRequires: smartmet-library-grid-files-devel >= 21.10.11
+BuildRequires: smartmet-library-grid-content-devel >= 21.10.19
+BuildRequires: smartmet-library-grid-files-devel >= 21.10.19
 %if %{with observation}
 BuildRequires: smartmet-engine-observation-devel >= 21.9.20
 %endif
@@ -44,14 +44,14 @@ Requires: libcurl
 Requires: jsoncpp
 Requires: smartmet-library-locus >= 21.8.11
 Requires: smartmet-library-macgyver >= 21.10.4
-Requires: smartmet-library-spine >= 21.10.11
+Requires: smartmet-library-spine >= 21.10.18
 Requires: smartmet-library-gis >= 21.9.24
 Requires: smartmet-engine-contour >= 21.9.13
 Requires: smartmet-engine-geonames >= 21.9.28
 Requires: smartmet-engine-gis >= 21.9.13
-Requires: smartmet-engine-grid >= 21.10.11
-Requires: smartmet-library-grid-content >= 21.10.11
-Requires: smartmet-library-grid-files >= 21.10.11
+Requires: smartmet-engine-grid >= 21.10.19
+Requires: smartmet-library-grid-content >= 21.10.19
+Requires: smartmet-library-grid-files >= 21.10.19
 %if %{with observation}
 Requires: smartmet-engine-observation >= 21.9.20
 %endif
@@ -145,6 +145,9 @@ rm -rf $RPM_BUILD_ROOT
 %{_includedir}/smartmet/plugin/wfs/request/*.h
 
 %changelog
+* Tue Oct 19 2021 Mika Heiskanen <mika.heiskanen@fmi.fi> - 21.10.19-1.fmi
+- Repackaged due to ABI changes in base grid libraries
+
 * Mon Oct 11 2021 Mika Heiskanen <mika.heiskanen@fmi.fi> - 21.10.11-1.fmi
 - Simplified grid storage structures
 
