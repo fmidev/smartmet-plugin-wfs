@@ -90,6 +90,7 @@ Obsoletes: smartmet-brainstorm-wfs-debuginfo < 16.11.1
 #TestRequires: smartmet-utils-devel
 #TestRequires: smartmet-library-gis >= 21.8.3
 #TestRequires: smartmet-library-newbase >= 20.10.28
+#TestRequires: smartmet-library-newbase-devel >= 20.10.28
 #TestRequires: smartmet-library-spine-plugin-test >= 21.9.17
 #TestRequires: smartmet-engine-geonames >= 20.8.23
 #TestRequires: smartmet-engine-gis >= 21.8.17
@@ -145,6 +146,9 @@ rm -rf $RPM_BUILD_ROOT
 %{_includedir}/smartmet/plugin/wfs/request/*.h
 
 %changelog
+* Fri Oct 29 2021 Pertti Kinnia <pertti.kinnia@fmi.fi> - upcoming
+- Added test dependency for smartmet-library-newbase-devel
+
 * Tue Oct 19 2021 Mika Heiskanen <mika.heiskanen@fmi.fi> - 21.10.19-1.fmi
 - Repackaged due to ABI changes in base grid libraries
 
