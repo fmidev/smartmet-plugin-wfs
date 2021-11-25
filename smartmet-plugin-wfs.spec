@@ -16,7 +16,7 @@ BuildRequires: make
 BuildRequires: boost169-devel
 BuildRequires: ctpp2-devel
 BuildRequires: fmt-devel >= 7.1.3
-BuildRequires: gdal32-devel
+BuildRequires: gdal33-devel
 BuildRequires: jsoncpp-devel
 BuildRequires: libcurl-devel
 BuildRequires: xerces-c-devel
@@ -37,7 +37,6 @@ BuildRequires: smartmet-library-grid-files-devel >= 21.11.15
 %if %{with observation}
 BuildRequires: smartmet-engine-observation-devel >= 21.11.11
 %endif
-# BuildRequires: postgresql95-libs
 Requires: ctpp2
 Requires: fmt >= 7.1.3
 Requires: libcurl
