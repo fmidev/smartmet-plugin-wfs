@@ -3,7 +3,7 @@
 %define SPECNAME smartmet-plugin-%{DIRNAME}
 Summary: SmartMet WFS plugin
 Name: %{SPECNAME}
-Version: 21.11.15
+Version: 21.11.25
 Release: 1%{?dist}.fmi
 License: MIT
 Group: SmartMet/Plugins
@@ -23,7 +23,7 @@ BuildRequires: xerces-c-devel
 BuildRequires: xqilla-devel
 BuildRequires: openssl-devel
 BuildRequires: bzip2-devel
-BuildRequires: smartmet-library-spine-devel >= 21.11.10
+BuildRequires: smartmet-library-spine-devel >= 21.11.23
 BuildRequires: smartmet-library-gis-devel >= 21.9.24
 BuildRequires: smartmet-library-locus-devel >= 21.8.11
 BuildRequires: smartmet-library-macgyver-devel >= 21.10.4
@@ -31,8 +31,8 @@ BuildRequires: smartmet-engine-contour-devel >= 21.9.13
 BuildRequires: smartmet-engine-geonames-devel >= 21.9.28
 BuildRequires: smartmet-engine-gis-devel >= 21.9.13
 BuildRequires: smartmet-engine-grid-devel >= 21.11.15
-BuildRequires: smartmet-engine-querydata-devel >= 21.9.13
-BuildRequires: smartmet-library-grid-content-devel >= 21.11.15
+BuildRequires: smartmet-engine-querydata-devel >= 21.11.17
+BuildRequires: smartmet-library-grid-content-devel >= 21.11.18
 BuildRequires: smartmet-library-grid-files-devel >= 21.11.15
 %if %{with observation}
 BuildRequires: smartmet-engine-observation-devel >= 21.11.11
@@ -44,18 +44,18 @@ Requires: libcurl
 Requires: jsoncpp
 Requires: smartmet-library-locus >= 21.8.11
 Requires: smartmet-library-macgyver >= 21.10.4
-Requires: smartmet-library-spine >= 21.11.10
+Requires: smartmet-library-spine >= 21.11.23
 Requires: smartmet-library-gis >= 21.9.24
 Requires: smartmet-engine-contour >= 21.9.13
 Requires: smartmet-engine-geonames >= 21.9.28
 Requires: smartmet-engine-gis >= 21.9.13
 Requires: smartmet-engine-grid >= 21.11.15
-Requires: smartmet-library-grid-content >= 21.11.15
+Requires: smartmet-library-grid-content >= 21.11.18
 Requires: smartmet-library-grid-files >= 21.11.15
 %if %{with observation}
 Requires: smartmet-engine-observation >= 21.11.11
 %endif
-Requires: smartmet-engine-querydata >= 21.9.13
+Requires: smartmet-engine-querydata >= 21.11.17
 Requires: smartmet-server >= 21.9.7
 Requires: xerces-c
 Requires: xqilla
@@ -146,6 +146,9 @@ rm -rf $RPM_BUILD_ROOT
 %{_includedir}/smartmet/plugin/wfs/request/*.h
 
 %changelog
+* Thu Nov 25 2021 Mika Heiskanen <mika.heiskanen@fmi.fi> - 21.11.25-1.fmi
+- Repackaged since Spine::location_parameter() API changed
+
 * Mon Nov 15 2021 Mika Heiskanen <mika.heiskanen@fmi.fi> - 21.11.15-1.fmi
 - Repackaged due to ABI changes in base grid libraries
 
