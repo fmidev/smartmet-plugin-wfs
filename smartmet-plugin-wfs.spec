@@ -144,6 +144,9 @@ rm -rf $RPM_BUILD_ROOT
 %{_includedir}/smartmet/plugin/wfs/request/*.h
 
 %changelog
+* Thu Nov 25 2021 Mika Heiskanen <mika.heiskanen@fmi.fi> - 21.11.25-1.fmi
+- Repackaged since Spine::location_parameter() API changed
+
 * Mon Nov 15 2021 Mika Heiskanen <mika.heiskanen@fmi.fi> - 21.11.15-1.fmi
 - Repackaged due to ABI changes in base grid libraries
 
