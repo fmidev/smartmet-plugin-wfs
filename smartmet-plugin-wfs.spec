@@ -3,7 +3,7 @@
 %define SPECNAME smartmet-plugin-%{DIRNAME}
 Summary: SmartMet WFS plugin
 Name: %{SPECNAME}
-Version: 21.12.3
+Version: 21.12.7
 Release: 1%{?dist}.fmi
 License: MIT
 Group: SmartMet/Plugins
@@ -144,6 +144,9 @@ rm -rf $RPM_BUILD_ROOT
 %{_includedir}/smartmet/plugin/wfs/request/*.h
 
 %changelog
+* Tue Dec  7 2021 Andris Pavēnis <andris.pavenis@fmi.fi> 21.12.7-1.fmi
+- Upgrade to PostgreSQL 13 and GDAL-3.3
+
 * Thu Nov 25 2021 Mika Heiskanen <mika.heiskanen@fmi.fi> - 21.11.25-1.fmi
 - Repackaged since Spine::location_parameter() API changed
 
