@@ -18,7 +18,6 @@
 #include <boost/thread.hpp>
 #include <boost/utility.hpp>
 #include <ctpp2/CDT.hpp>
-#include <macgyver/ObjectPool.h>
 #include <macgyver/TimedCache.h>
 #include <macgyver/CacheStats.h>
 #include <spine/HTTP.h>
