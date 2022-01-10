@@ -5,12 +5,13 @@ namespace bw = SmartMet::Plugin::WFS;
 
 bw::GeoServerDB::GeoServerDB(const std::string& conn_str, std::size_t keep_conn)
     : conn_opt(conn_str)
-    , conn_pool(boost::bind(&bw::GeoServerDB::create_new_conn, this), keep_conn)
+    , conn_pool( [this]() -> ConnectionPtr { return create_new_conn(); },
+		 10, 50, 5)
 {
   try
   {
     // Ensure that one can connect
-    conn_pool.get();
+    (void)conn_pool.reserve();
   }
   catch (...)
   {
@@ -24,19 +25,7 @@ bw::GeoServerDB::ConnectionPtr bw::GeoServerDB::get_conn()
 {
   try
   {
-    return conn_pool.get();
-  }
-  catch (...)
-  {
-    throw Fmi::Exception::Trace(BCP, "Operation failed!");
-  }
-}
-
-void bw::GeoServerDB::update()
-{
-  try
-  {
-    conn_pool.update();
+    return conn_pool.reserve();
   }
   catch (...)
   {
@@ -48,7 +37,7 @@ bw::GeoServerDB::ConnectionPtr bw::GeoServerDB::create_new_conn()
 {
   try
   {
-    return boost::make_shared<Connection>(conn_opt);
+    return std::make_shared<Connection>(conn_opt);
   }
   catch (...)
   {

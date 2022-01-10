@@ -26,7 +26,7 @@ BuildRequires: bzip2-devel
 BuildRequires: smartmet-library-spine-devel >= 21.12.2
 BuildRequires: smartmet-library-gis-devel >= 21.12.1
 BuildRequires: smartmet-library-locus-devel >= 21.12.2
-BuildRequires: smartmet-library-macgyver-devel >= 21.12.1
+BuildRequires: smartmet-library-macgyver-devel >= 22.1.10
 BuildRequires: smartmet-engine-contour-devel >= 21.12.2
 BuildRequires: smartmet-engine-geonames-devel >= 21.12.2
 BuildRequires: smartmet-engine-gis-devel >= 21.12.2
@@ -42,7 +42,7 @@ Requires: fmt >= 7.1.3
 Requires: libcurl
 Requires: jsoncpp
 Requires: smartmet-library-locus >= 21.12.2
-Requires: smartmet-library-macgyver >= 21.12.1
+Requires: smartmet-library-macgyver >= 22.1.10
 Requires: smartmet-library-spine >= 21.12.2
 Requires: smartmet-library-gis >= 21.12.1
 Requires: smartmet-engine-contour >= 21.12.2
@@ -110,7 +110,7 @@ Summary: SmartMet WFS plugin development files
 Requires: smartmet-library-spine-devel >= 21.12.2
 Requires: smartmet-library-gis-devel >= 21.12.1
 Requires: smartmet-library-locus-devel >= 21.12.2
-Requires: smartmet-library-macgyver-devel >= 21.12.1
+Requires: smartmet-library-macgyver-devel >= 22.1.10
 Requires: %{SPECNAME} = %{version}-%{release}
 %description -n %{SPECNAME}-devel
 SmartMet WFS plugin development files (for building testsuite without rebuilding plugin)

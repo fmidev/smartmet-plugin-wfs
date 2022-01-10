@@ -1,7 +1,8 @@
 #pragma once
 
+#include <memory>
 #include <boost/noncopyable.hpp>
-#include <macgyver/ObjectPool.h>
+#include <macgyver/WorkerPool.h>
 #include <macgyver/PostgreSQLConnection.h>
 
 namespace SmartMet
@@ -15,7 +16,7 @@ class GeoServerDB : virtual protected boost::noncopyable
  public:
   typedef Fmi::Database::PostgreSQLConnection Connection;
   typedef Fmi::Database::PostgreSQLConnectionOptions ConnectionOpt;
-  typedef boost::shared_ptr<Connection> ConnectionPtr;
+  typedef std::shared_ptr<Connection> ConnectionPtr;
   typedef Fmi::Database::PostgreSQLConnection::Transaction Transaction;
 
  public:
@@ -25,14 +26,12 @@ class GeoServerDB : virtual protected boost::noncopyable
 
   ConnectionPtr get_conn();
 
-  void update();
-
  private:
   ConnectionPtr create_new_conn();
 
  private:
   ConnectionOpt conn_opt;
-  Fmi::ObjectPool<Connection> conn_pool;
+  Fmi::WorkerPool<Connection> conn_pool;
 };
 
 }  // namespace WFS
