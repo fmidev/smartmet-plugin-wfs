@@ -7,6 +7,7 @@
 #include <macgyver/TypeName.h>
 #include <spine/Convenience.h>
 #include <macgyver/Exception.h>
+#include <functional>
 #include <iostream>
 #include <sstream>
 
@@ -228,14 +229,14 @@ void bw::GeoServerDataIndex::query(const boost::posix_time::ptime& begin,
   {
     std::for_each(layers.begin(),
                   layers.end(),
-                  boost::bind(&bw::GeoServerDataIndex::query_single_layer,
-                              this,
-                              begin,
-                              end,
-                              ::_1,
-                              boundingBox,
-                              boundingBoxCRS,
-                              destCRS));
+                  std::bind(&bw::GeoServerDataIndex::query_single_layer,
+			    this,
+			    begin,
+			    end,
+			    std::placeholders::_1,
+			    boundingBox,
+			    boundingBoxCRS,
+			    destCRS));
   }
   catch (...)
   {
