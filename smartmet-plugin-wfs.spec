@@ -3,7 +3,7 @@
 %define SPECNAME smartmet-plugin-%{DIRNAME}
 Summary: SmartMet WFS plugin
 Name: %{SPECNAME}
-Version: 22.1.25
+Version: 22.1.27
 Release: 1%{?dist}.fmi
 License: MIT
 Group: SmartMet/Plugins
@@ -144,6 +144,9 @@ rm -rf $RPM_BUILD_ROOT
 %{_includedir}/smartmet/plugin/wfs/request/*.h
 
 %changelog
+* Thu Jan 27 2022 Anssi Reponen <anssi.reponen@fmi.fi> - 22.1.27-1.fmi
+- Use DistanceParser for maxdistance URL- and config-parameter (BRAINSTORM-605)
+
 * Tue Jan 25 2022 Mika Heiskanen <mika.heiskanen@fmi.fi> - 22.1.25-1.fmi
 - Repackaged due to ABI changes in libraries/engine
 

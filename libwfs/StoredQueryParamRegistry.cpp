@@ -3,6 +3,7 @@
 #include "ScalarParameterTemplate.h"
 #include "SupportsExtraHandlerParams.h"
 #include <boost/foreach.hpp>
+#include <macgyver/DistanceParser.h>
 #include <macgyver/StringConversion.h>
 #include <macgyver/TypeName.h>
 #include <macgyver/Exception.h>
@@ -89,7 +90,24 @@ boost::shared_ptr<bw::RequestParameterMap> StoredQueryParamRegistry::process_par
             break;
 
           case P_DOUBLE:
-            result->add(name, value.get_double());
+  			{
+			  if(Fmi::ascii_tolower_copy(name) == "maxdistance")
+				{
+				  try
+					{
+					  result->add(name, value.get_double());
+					}
+				  catch(...)
+					{
+					  std::string maxdistance = value.get_string();
+					  result->add(name, Fmi::DistanceParser::parse_meter(maxdistance));
+					}
+				}
+			  else
+				{
+				  result->add(name, value.get_double());
+				}				
+			}
             break;
 
           case P_STRING:
