@@ -3,7 +3,7 @@
 %define SPECNAME smartmet-plugin-%{DIRNAME}
 Summary: SmartMet WFS plugin
 Name: %{SPECNAME}
-Version: 22.1.25
+Version: 22.1.31
 Release: 1%{?dist}.fmi
 License: MIT
 Group: SmartMet/Plugins
@@ -144,6 +144,9 @@ rm -rf $RPM_BUILD_ROOT
 %{_includedir}/smartmet/plugin/wfs/request/*.h
 
 %changelog
+* Mon Jan 31 2022 Mika Heiskanen <mika.heiskanen@fmi.fi> - 22.1.31-1.fmi
+- Use observation_data_r1 instead of observation_data_v1
+
 * Tue Jan 25 2022 Mika Heiskanen <mika.heiskanen@fmi.fi> - 22.1.25-1.fmi
 - Repackaged due to ABI changes in libraries/engine
 

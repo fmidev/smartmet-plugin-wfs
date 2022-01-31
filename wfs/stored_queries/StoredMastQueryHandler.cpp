@@ -6,8 +6,8 @@
 #include <engines/observation/DBRegistry.h>
 #include <macgyver/StringConversion.h>
 #include <smartmet/engines/observation/MastQuery.h>
-#include <smartmet/spine/Convenience.h>
 #include <smartmet/macgyver/Exception.h>
+#include <smartmet/spine/Convenience.h>
 #include <tuple>
 
 namespace bw = SmartMet::Plugin::WFS;
@@ -383,8 +383,8 @@ void bw::StoredMastQueryHandler::query(const StoredQuery& query,
         // Get the data match with the observation_id values
         //
 
-        // Using OBSERVATION_DATA_V1 as a base configuration
-        bo::MastQueryParams dataQueryParams(dbRegistryConfig("OBSERVATION_DATA_V1"));
+        // Using OBSERVATION_DATA_R1 as a base configuration
+        bo::MastQueryParams dataQueryParams(dbRegistryConfig("OBSERVATION_DATA_R1"));
 
         dataQueryParams.addField("STATION_ID");
         dataQueryParams.addField("MEASURAND_ID");
