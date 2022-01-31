@@ -30,7 +30,7 @@ BuildRequires: smartmet-library-macgyver-devel >= 22.1.21
 BuildRequires: smartmet-engine-contour-devel >= 22.1.21
 BuildRequires: smartmet-engine-geonames-devel >= 22.1.21
 BuildRequires: smartmet-engine-gis-devel >= 22.1.21
-BuildRequires: smartmet-engine-grid-devel >= 22.1.25
+BuildRequires: smartmet-engine-grid-devel >= 22.1.27
 BuildRequires: smartmet-engine-querydata-devel >= 22.1.21
 BuildRequires: smartmet-library-grid-content-devel >= 22.1.25
 BuildRequires: smartmet-library-grid-files-devel >= 22.1.25
@@ -48,7 +48,7 @@ Requires: smartmet-library-gis >= 22.1.24
 Requires: smartmet-engine-contour >= 22.1.21
 Requires: smartmet-engine-geonames >= 22.1.21
 Requires: smartmet-engine-gis >= 22.1.21
-Requires: smartmet-engine-grid >= 22.1.25
+Requires: smartmet-engine-grid >= 22.1.27
 Requires: smartmet-library-grid-content >= 22.1.25
 Requires: smartmet-library-grid-files >= 22.1.25
 %if %{with observation}
@@ -96,7 +96,7 @@ Obsoletes: smartmet-brainstorm-wfs-debuginfo < 16.11.1
 %if %{with observation}
 #TestRequires: smartmet-engine-observation >= 22.1.21
 %endif
-#TestRequires: smartmet-engine-grid >= 22.1.25
+#TestRequires: smartmet-engine-grid >= 22.1.27
 #TestRequires: redis
 #TestRequires: smartmet-engine-grid-test
 # Required by top level Makefile
