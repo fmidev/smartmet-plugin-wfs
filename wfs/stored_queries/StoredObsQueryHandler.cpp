@@ -232,6 +232,8 @@ void StoredObsQueryHandler::query(const StoredQuery& query,
 
       query_params.starttimeGiven = true;
 
+      query_params.language = language;
+
       params.get<int64_t>(P_HOURS, std::back_inserter(query_params.hours));
 
       params.get<int64_t>(P_WEEK_DAYS, std::back_inserter(query_params.weekdays));
