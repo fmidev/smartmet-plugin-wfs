@@ -538,6 +538,13 @@
       </Abstract>
     </Parameter>
     
+    <Parameter name="language" type="xsi:string">
+      <Title>Language</Title>
+      <Abstract>
+      Language
+      </Abstract>
+    </Parameter>
+    
     <QueryExpressionText xmlns:wfs_001="http://inspire.ec.europa.eu/schemas/omso/3.0"
                          xsi:schemaLocation="http://inspire.ec.europa.eu/schemas/omso/3.0 https://inspire.ec.europa.eu/schemas/omso/3.0/SpecialisedObservations.xsd"
                          returnFeatureTypes="wfs_001:PointTimeSeriesObservation"
@@ -639,6 +646,13 @@
       <Title>Time zone</Title>
       <Abstract>
       Time zone
+      </Abstract>
+    </Parameter>
+    
+    <Parameter name="language" type="xsi:string">
+      <Title>Language</Title>
+      <Abstract>
+      Language
       </Abstract>
     </Parameter>
     

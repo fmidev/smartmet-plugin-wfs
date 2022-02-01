@@ -30,6 +30,7 @@
 #define P_MAX_EPOCHS "maxEpochs"
 #define P_CRS "crs"
 #define P_LATEST "latest"
+#define P_LANGUAGE "language"
 
 namespace pt = boost::posix_time;
 namespace lt = boost::local_time;
@@ -92,6 +93,7 @@ StoredObsQueryHandler::StoredObsQueryHandler(SmartMet::Spine::Reactor* reactor,
     register_scalar_param<std::string>(P_CRS);
     register_array_param<int64_t>(P_FMISIDS);
     register_array_param<int64_t>(P_WMOS);
+    register_scalar_param<std::string>(P_LANGUAGE, false, true);
 
     max_hours = config->get_optional_config_param<double>("maxHours", 7.0 * 24.0);
     max_station_count = config->get_optional_config_param<unsigned>("maxStationCount", 0);
@@ -112,6 +114,7 @@ void StoredObsQueryHandler::query(const StoredQuery& query,
                                   const boost::optional<std::string>& hostname,
                                   std::ostream& output) const
 {
+  std::string curr_lang = language;
   try
   {
     namespace pt = boost::posix_time;
@@ -245,8 +248,10 @@ void StoredObsQueryHandler::query(const StoredQuery& query,
 
       params.get<int64_t>(P_FMISIDS, std::back_inserter(stationSettings.fmisids));
 
+      curr_lang = params.get_optional<std::string>(P_LANGUAGE, curr_lang);
+
       std::list<std::pair<std::string, SmartMet::Spine::LocationPtr> > locations_list;
-      get_location_options(params, language, &locations_list);
+      get_location_options(params, curr_lang, &locations_list);
 
       for (const auto& item : locations_list)
       {
@@ -263,7 +268,7 @@ void StoredObsQueryHandler::query(const StoredQuery& query,
       {
         stationSettings.geoid_settings.maxdistance = query_params.maxdistance;
         stationSettings.geoid_settings.numberofstations = query_params.numberofstations;
-        stationSettings.geoid_settings.language = language;
+        stationSettings.geoid_settings.language = curr_lang;
       }
 
       using SmartMet::Spine::BoundingBox;
@@ -431,7 +436,7 @@ void StoredObsQueryHandler::query(const StoredQuery& query,
       hash["numMatched"] = num_groups;
       hash["numReturned"] = num_groups;
       hash["numParam"] = param_names.size();
-      hash["language"] = language;
+      hash["language"] = curr_lang;
       hash["projSrsDim"] = (show_height ? 3 : 2);
       hash["projSrsName"] = proj_uri;
       hash["projEpochSrsDim"] = (show_height ? 4 : 3);
@@ -497,7 +502,7 @@ void StoredObsQueryHandler::query(const StoredQuery& query,
             try
             {
               const long geoid_long = Fmi::stol(geoid);
-              std::string langCode = language;
+              std::string langCode = curr_lang;
               SupportsLocationParameters::engOrFinToEnOrFi(langCode);
               geoLoc = geo_engine->idSearch(geoid_long, langCode);
               region = (geoLoc ? geoLoc->area : "");
@@ -703,7 +708,7 @@ void StoredObsQueryHandler::query(const StoredQuery& query,
       Fmi::Exception exception(BCP, "Operation processing failed!", nullptr);
       if (exception.getExceptionByParameterName(WFS_EXCEPTION_CODE) == nullptr)
         exception.addParameter(WFS_EXCEPTION_CODE, WFS_OPERATION_PROCESSING_FAILED);
-      exception.addParameter(WFS_LANGUAGE, language);
+      exception.addParameter(WFS_LANGUAGE, curr_lang);
       throw exception;
     }
   }
