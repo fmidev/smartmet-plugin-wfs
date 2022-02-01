@@ -1,5 +1,6 @@
 ; No requires data available in smartmet-test-data for following 4 tests
 GetFeature/observation/obs-test-1s.kvp.get
+GetFeature/observation/obs-test-1s_maxdistance.kvp.get
 GetFeature/observation/special/16.kvp.get
 GetFeature/observation/special/17.kvp.get
 GetFeature/observation/special/22.kvp.get

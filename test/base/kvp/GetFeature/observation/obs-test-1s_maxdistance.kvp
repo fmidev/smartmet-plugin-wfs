@@ -1,0 +1,1 @@
+request=GetFeature&storedquery_id=ObsTest&place=Leppävaara&begin=2020-08-05T08:00:00Z&end=2020-08-05T12:00:00Z&parameter=t2m,smartsymbol&maxdistance=5.5km

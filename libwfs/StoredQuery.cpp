@@ -4,6 +4,7 @@
 #include "WfsException.h"
 #include "XmlUtils.h"
 #include <boost/algorithm/string.hpp>
+#include <macgyver/DistanceParser.h>
 #include <macgyver/StringConversion.h>
 #include <macgyver/TypeName.h>
 #include <macgyver/Exception.h>
@@ -422,7 +423,12 @@ void bw::StoredQuery::extract_kvp_parameters(const SmartMet::Spine::HTTP::Reques
           else
           {
             std::vector<SmartMet::Spine::Value> vect;
-            SmartMet::Spine::Value value = param_def.readValue(value_str);
+            SmartMet::Spine::Value value;
+			if(Fmi::ascii_tolower_copy(param_name) == "maxdistance")
+			  value = SmartMet::Spine::Value(Fmi::DistanceParser::parse_meter(value_str));
+			else
+			  value = param_def.readValue(value_str);
+
             value.check_limits(param_desc.lower_limit, param_desc.upper_limit);
             query.params->insert_value(param_name, value);
           }
