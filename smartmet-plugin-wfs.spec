@@ -3,7 +3,7 @@
 %define SPECNAME smartmet-plugin-%{DIRNAME}
 Summary: SmartMet WFS plugin
 Name: %{SPECNAME}
-Version: 22.1.27
+Version: 22.2.1
 Release: 1%{?dist}.fmi
 License: MIT
 Group: SmartMet/Plugins
@@ -30,7 +30,7 @@ BuildRequires: smartmet-library-macgyver-devel >= 22.1.21
 BuildRequires: smartmet-engine-contour-devel >= 22.1.21
 BuildRequires: smartmet-engine-geonames-devel >= 22.1.21
 BuildRequires: smartmet-engine-gis-devel >= 22.1.21
-BuildRequires: smartmet-engine-grid-devel >= 22.1.25
+BuildRequires: smartmet-engine-grid-devel >= 22.1.27
 BuildRequires: smartmet-engine-querydata-devel >= 22.1.21
 BuildRequires: smartmet-library-grid-content-devel >= 22.1.25
 BuildRequires: smartmet-library-grid-files-devel >= 22.1.25
@@ -48,7 +48,7 @@ Requires: smartmet-library-gis >= 22.1.24
 Requires: smartmet-engine-contour >= 22.1.21
 Requires: smartmet-engine-geonames >= 22.1.21
 Requires: smartmet-engine-gis >= 22.1.21
-Requires: smartmet-engine-grid >= 22.1.25
+Requires: smartmet-engine-grid >= 22.1.27
 Requires: smartmet-library-grid-content >= 22.1.25
 Requires: smartmet-library-grid-files >= 22.1.25
 %if %{with observation}
@@ -96,7 +96,7 @@ Obsoletes: smartmet-brainstorm-wfs-debuginfo < 16.11.1
 %if %{with observation}
 #TestRequires: smartmet-engine-observation >= 22.1.21
 %endif
-#TestRequires: smartmet-engine-grid >= 22.1.25
+#TestRequires: smartmet-engine-grid >= 22.1.27
 #TestRequires: redis
 #TestRequires: smartmet-engine-grid-test
 # Required by top level Makefile
@@ -144,8 +144,12 @@ rm -rf $RPM_BUILD_ROOT
 %{_includedir}/smartmet/plugin/wfs/request/*.h
 
 %changelog
-* Thu Jan 27 2022 Anssi Reponen <anssi.reponen@fmi.fi> - 22.1.27-1.fmi
+
+* Tue Feb  1 2022 Anssi Reponen <anssi.reponen@fmi.fi> - 22.2.1-1.fmi
 - Use DistanceParser for maxdistance URL- and config-parameter (BRAINSTORM-605)
+
+* Mon Jan 31 2022 Mika Heiskanen <mika.heiskanen@fmi.fi> - 22.1.31-1.fmi
+- Use observation_data_r1 instead of observation_data_v1
 
 * Tue Jan 25 2022 Mika Heiskanen <mika.heiskanen@fmi.fi> - 22.1.25-1.fmi
 - Repackaged due to ABI changes in libraries/engine
