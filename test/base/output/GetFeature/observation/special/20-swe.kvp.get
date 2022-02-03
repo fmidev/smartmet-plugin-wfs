@@ -5,24 +5,24 @@ Global data object:
    groups = [
               {
                 'crs' : "EPSG::4326",
-                'featureId' : "WFS-R41MXGR5wPZ3vnKm3v.f8QOteNGJTowqU_Fzo46mXn0haWLLn07qmnblte_QqErBJ4Y2PlzrUi0Kcd06aM2TZnZd2Spp25bXv0KhKwTVQmdm26eenJzrMYsGDluxdGvL577.WS_v7ZeXflp6YcWzLE0NmHdn64c.WsTLuZmzD0y8.kTM2b8eHZlrUzab8aSu69MzhrbcPiJp59MO7HlpWroQGltw.IvDfj0c50TG9ty9Mu.hh5YduXpl5c6xujLbWRuw7ctZXDZhx5azOWXPp37mtt08.endnqZfHSsbdh3Nrd12z81Pph6ad.7nOE1uPXDs09PMndm3xtbn0w9NO_dU88MtaG_hl3ZMPTC3OfTfyy5OPXLy839OStKfi50cdTLz6NDpp25afTLwn5CaHTTty2t.7LWNVqQw",
+                'featureId' : "WFS-Iui0MQvH7CfT5HOFXLub_cCIdXmJTowqU_Fzo46mXn0haWLLn07qmnblte_QqErBJ4Y2PlzrUi0Kcd06aM2TZnZd2Spp25bXv0KhKwTVQmdm26eenJzrMYsGDluxdGvL577.WS_v7ZeXflp6YcWzLE0NmHdn64c.WsTn2ZmzD0y8.kTM2b8eHZlrUzab8aSu69MzhrbcPiJp59MO7HlpWroQGltw.IvDfj0c50TG9ty9Mu.hh5YduXpl5c6xujLbWRuw7ctZXDZhx5azOWXPp37mtt08.endnqZfHSsbdh3Nrd12z81Pph6ad.7nOE1uPXDs09PMndm3xtbn0w9NO_dU88MtaG_hl3ZMPTC3OfTfyy5OPXLy839OStKfi50cdTLz6NDpp25afTLwn5CaHTTty2t.7LWNVqQw",
                 'groupId' : "1-1",
                 'groupNum' : 1,
                 'obsParamList' : [
                                    {
-                                     'featureId' : "WFS-tcWhf3dry3BsHrjrbkgSN0ZIkV2JTowqU_Fzo46mXn0haWLLn07qmnblte_QqErBJ4Y2PlzrUi0Kcd06aM2TZnZd2Spp25bXv0KhKwTVQmdm26eenJzrMYsGDluxdGvL577.WS_v7ZeXflp6YcWzLE0NmHdn64c.WsTLuZmzD0y8.kTM2b8eHZlrUzab8aSu69MzhrbcPiJp59MO7HlpWroQGltw.IvDfj0c50TG9ty9Mu.hh5YduXpl5c6xujLa1tunnz07s9TL46VjbsO5tbuu2fmp9MPTTv3c5wmtx64dmnp5k7s2.Nrc.mHpp37qnnhlrQ38Mu7Jh6YW5z6b.WXJx65eXm_pyVpT8XOjjqZefRodNO3LT6ZeE_ITQ6aduW1v3ZaxqtSGAA--",
+                                     'featureId' : "WFS-WVNvCcB1BbIZYZHlXmNvBLS3EaOJTowqU_Fzo46mXn0haWLLn07qmnblte_QqErBJ4Y2PlzrUi0Kcd06aM2TZnZd2Spp25bXv0KhKwTVQmdm26eenJzrMYsGDluxdGvL577.WS_v7ZeXflp6YcWzLE0NmHdn64c.WsTn2ZmzD0y8.kTM2b8eHZlrUzab8aSu69MzhrbcPiJp59MO7HlpWroQGltw.IvDfj0c50TG9ty9Mu.hh5YduXpl5c6xujLa1tunnz07s9TL46VjbsO5tbuu2fmp9MPTTv3c5wmtx64dmnp5k7s2.Nrc.mHpp37qnnhlrQ38Mu7Jh6YW5z6b.WXJx65eXm_pyVpT8XOjjqZefRodNO3LT6ZeE_ITQ6aduW1v3ZaxqtSGAA--",
                                      'name' : "t2m"
                                    },
                                    {
-                                     'featureId' : "WFS-gJ67zUb_KaQyHM2FXhuXC9FZXbmJTowqU_Fzo46mXn0haWLLn07qmnblte_QqErBJ4Y2PlzrUi0Kcd06aM2TZnZd2Spp25bXv0KhKwTVQmdm26eenJzrMYsGDluxdGvL577.WS_v7ZeXflp6YcWzLE0NmHdn64c.WsTLuZmzD0y8.kTM2b8eHZlrUzab8aSu69MzhrbcPiJp59MO7HlpWroQGltw.IvDfj0c50TG9ty9Mu.hh5YduXpl5c6yN2Hbla23Tz56d2epl8dKxt2Hc2t3XbPzU.mHpp37uc4TW49cOzT08yd2bfG1ufTD00791Tzwy1ob.GXdkw9MLc59N_LLk49cvLzf05K0p.LnRx1MvPo0Omnblp9MvCfkJodNO3La37stY1WpDA--",
+                                     'featureId' : "WFS-LPwkh2SNgmKgHKZG3CY_xZ1CQ9WJTowqU_Fzo46mXn0haWLLn07qmnblte_QqErBJ4Y2PlzrUi0Kcd06aM2TZnZd2Spp25bXv0KhKwTVQmdm26eenJzrMYsGDluxdGvL577.WS_v7ZeXflp6YcWzLE0NmHdn64c.WsTn2ZmzD0y8.kTM2b8eHZlrUzab8aSu69MzhrbcPiJp59MO7HlpWroQGltw.IvDfj0c50TG9ty9Mu.hh5YduXpl5c6yN2Hbla23Tz56d2epl8dKxt2Hc2t3XbPzU.mHpp37uc4TW49cOzT08yd2bfG1ufTD00791Tzwy1ob.GXdkw9MLc59N_LLk49cvLzf05K0p.LnRx1MvPo0Omnblp9MvCfkJodNO3La37stY1WpDA--",
                                      'name' : "name"
                                    },
                                    {
-                                     'featureId' : "WFS-SvBs7iCk.5wLN3nvaEKxeB8qWnmJTowqU_Fzo46mXn0haWLLn07qmnblte_QqErBJ4Y2PlzrUi0Kcd06aM2TZnZd2Spp25bXv0KhKwTVQmdm26eenJzrMYsGDluxdGvL577.WS_v7ZeXflp6YcWzLE0NmHdn64c.WsTLuZmzD0y8.kTM2b8eHZlrUzab8aSu69MzhrbcPiJp59MO7HlpWroQGltw.IvDfj0c50TG9ty9Mu.hh5YduXpl5c6yuGzDjytbbp589O7PUy.OlY27DubW7rtn5qfTD00793OcJrceuHZp6eZO7Nvja3Pph6ad.6p54Za0N_DLuyYemFuc.m_llyceuXl5v6claU_Fzo46mXn0aHTTty0.mXhPyE0Omnbltb92WsarUhg-",
+                                     'featureId' : "WFS-ttsZBx.K9xMGbrr3BO8X4cRNRNGJTowqU_Fzo46mXn0haWLLn07qmnblte_QqErBJ4Y2PlzrUi0Kcd06aM2TZnZd2Spp25bXv0KhKwTVQmdm26eenJzrMYsGDluxdGvL577.WS_v7ZeXflp6YcWzLE0NmHdn64c.WsTn2ZmzD0y8.kTM2b8eHZlrUzab8aSu69MzhrbcPiJp59MO7HlpWroQGltw.IvDfj0c50TG9ty9Mu.hh5YduXpl5c6yuGzDjytbbp589O7PUy.OlY27DubW7rtn5qfTD00793OcJrceuHZp6eZO7Nvja3Pph6ad.6p54Za0N_DLuyYemFuc.m_llyceuXl5v6claU_Fzo46mXn0aHTTty0.mXhPyE0Omnbltb92WsarUhg-",
                                      'name' : "place"
                                    },
                                    {
-                                     'featureId' : "WFS-a8SGkHp2DTkEIUbIlhNWTpFIv8KJTowqU_Fzo46mXn0haWLLn07qmnblte_QqErBJ4Y2PlzrUi0Kcd06aM2TZnZd2Spp25bXv0KhKwTVQmdm26eenJzrMYsGDluxdGvL577.WS_v7ZeXflp6YcWzLE0NmHdn64c.WsTLuZmzD0y8.kTM2b8eHZlrUzab8aSu69MzhrbcPiJp59MO7HlpWroQGltw.IvDfj0c50TG9ty9Mu.hh5YduXpl5c6zOWXPp37mtt08.endnqZfHSsbdh3Nrd12z81Pph6ad.7nOE1uPXDs09PMndm3xtbn0w9NO_dU88MtaG_hl3ZMPTC3OfTfyy5OPXLy839OStKfi50cdTLz6NDpp25afTLwn5CaHTTty2t.7LWNVqQw",
+                                     'featureId' : "WFS-sMOP1OpFxhxvNWTHVsZ64YbgZTqJTowqU_Fzo46mXn0haWLLn07qmnblte_QqErBJ4Y2PlzrUi0Kcd06aM2TZnZd2Spp25bXv0KhKwTVQmdm26eenJzrMYsGDluxdGvL577.WS_v7ZeXflp6YcWzLE0NmHdn64c.WsTn2ZmzD0y8.kTM2b8eHZlrUzab8aSu69MzhrbcPiJp59MO7HlpWroQGltw.IvDfj0c50TG9ty9Mu.hh5YduXpl5c6zOWXPp37mtt08.endnqZfHSsbdh3Nrd12z81Pph6ad.7nOE1uPXDs09PMndm3xtbn0w9NO_dU88MtaG_hl3ZMPTC3OfTfyy5OPXLy839OStKfi50cdTLz6NDpp25afTLwn5CaHTTty2t.7LWNVqQw",
                                      'name' : "region"
                                    }
                                  ],
@@ -37,13 +37,13 @@ Global data object:
                                                     'value' : "20.7"
                                                   },
                                                   {
-                                                    'value' : "Kaisaniemi"
+                                                    'value' : "Kajsaniemi"
                                                   },
                                                   {
                                                     'value' : "Kaisaniemi"
                                                   },
                                                   {
-                                                    'value' : "Helsinki"
+                                                    'value' : "Helsingfors"
                                                   }
                                                 ],
                                        'epochTime' : 1375689600,
@@ -58,13 +58,13 @@ Global data object:
                                                     'value' : "21.3"
                                                   },
                                                   {
-                                                    'value' : "Kaisaniemi"
+                                                    'value' : "Kajsaniemi"
                                                   },
                                                   {
                                                     'value' : "Kaisaniemi"
                                                   },
                                                   {
-                                                    'value' : "Helsinki"
+                                                    'value' : "Helsingfors"
                                                   }
                                                 ],
                                        'epochTime' : 1375693200,
@@ -79,13 +79,13 @@ Global data object:
                                                     'value' : "21.8"
                                                   },
                                                   {
-                                                    'value' : "Kaisaniemi"
+                                                    'value' : "Kajsaniemi"
                                                   },
                                                   {
                                                     'value' : "Kaisaniemi"
                                                   },
                                                   {
-                                                    'value' : "Helsinki"
+                                                    'value' : "Helsingfors"
                                                   }
                                                 ],
                                        'epochTime' : 1375696800,
@@ -100,13 +100,13 @@ Global data object:
                                                     'value' : "22.2"
                                                   },
                                                   {
-                                                    'value' : "Kaisaniemi"
+                                                    'value' : "Kajsaniemi"
                                                   },
                                                   {
                                                     'value' : "Kaisaniemi"
                                                   },
                                                   {
-                                                    'value' : "Helsinki"
+                                                    'value' : "Helsingfors"
                                                   }
                                                 ],
                                        'epochTime' : 1375700400,
@@ -121,13 +121,13 @@ Global data object:
                                                     'value' : "21.4"
                                                   },
                                                   {
-                                                    'value' : "Kaisaniemi"
+                                                    'value' : "Kajsaniemi"
                                                   },
                                                   {
                                                     'value' : "Kaisaniemi"
                                                   },
                                                   {
-                                                    'value' : "Helsinki"
+                                                    'value' : "Helsingfors"
                                                   }
                                                 ],
                                        'epochTime' : 1375704000,
@@ -143,7 +143,7 @@ Global data object:
                                        'fmisid' : "100971",
                                        'geoid' : "-16000150",
                                        'name' : "Helsinki Kaisaniemi",
-                                       'region' : "Helsinki",
+                                       'region' : "Helsingfors",
                                        'wmo' : "2978",
                                        'x' : "60.17523",
                                        'y' : "24.94459"
@@ -154,7 +154,7 @@ Global data object:
               }
             ];
    hostname = "opendata.fmi.fi";
-   language = "en";
+   language = "sv";
    named_parameters = {
                         'defaultmeteoparam' : [
                                                 "Temperature",
@@ -191,7 +191,7 @@ Global data object:
                                                    "false"
                                                  ],
                         'language' : [
-                                       "en"
+                                       "sv"
                                      ],
                         'latest' : [
                                      "false"
