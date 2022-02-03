@@ -32,6 +32,7 @@ enum TypeInd
 
 StoredQueryParamRegistry::StoredQueryParamRegistry(StoredQueryConfig::Ptr config)
     : bw::StoredQueryConfig::Wrapper(config)
+    , silence_param_init_warnings_(false)
 {
   try
   {
