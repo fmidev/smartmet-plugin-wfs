@@ -21,13 +21,15 @@ class ArrayParameterTemplate : public ParameterTemplateBase
   ArrayParameterTemplate(StoredQueryConfig& config,
                          const std::string& config_path,
                          std::size_t min_size = 0,
-                         std::size_t max_size = 999);
+                         std::size_t max_size = 999,
+			 bool silent = false);
 
   ArrayParameterTemplate(StoredQueryConfig& config,
                          const std::string& base_path,
                          const std::string& config_path,
                          std::size_t min_size = 0,
-                         std::size_t max_size = 999);
+                         std::size_t max_size = 999,
+			 bool silent = false);
 
   virtual ~ArrayParameterTemplate();
 
@@ -70,7 +72,7 @@ class ArrayParameterTemplate : public ParameterTemplateBase
       const SupportsExtraHandlerParams* extra_params = nullptr) const;
 
  private:
-  void init();
+  void init(bool silent);
 
  private:
   std::vector<ParameterTemplateItem> items;

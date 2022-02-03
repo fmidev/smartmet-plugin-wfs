@@ -12,7 +12,8 @@ namespace WFS
 ArrayParameterTemplate::ArrayParameterTemplate(StoredQueryConfig& config,
                                                const std::string& config_path,
                                                std::size_t min_size,
-                                               std::size_t max_size)
+                                               std::size_t max_size,
+					       bool silent)
     : ParameterTemplateBase(config, HANDLER_PARAM_NAME, config_path),
       min_size(min_size),
       max_size(max_size)
@@ -21,7 +22,7 @@ ArrayParameterTemplate::ArrayParameterTemplate(StoredQueryConfig& config,
   {
     try
     {
-      init();
+      init(silent);
     }
     catch (...)
     {
@@ -38,14 +39,15 @@ ArrayParameterTemplate::ArrayParameterTemplate(StoredQueryConfig& config,
                                                const std::string& base_path,
                                                const std::string& config_path,
                                                std::size_t min_size,
-                                               std::size_t max_size)
+                                               std::size_t max_size,
+					       bool silent)
     : ParameterTemplateBase(config, base_path, config_path), min_size(min_size), max_size(max_size)
 {
   try
   {
     try
     {
-      init();
+      init(silent);
     }
     catch (...)
     {
@@ -348,7 +350,7 @@ std::vector<SmartMet::Spine::BoundingBox> ArrayParameterTemplate::get_bbox_array
   }
 }
 
-void ArrayParameterTemplate::init()
+void ArrayParameterTemplate::init(bool silent)
 {
   try
   {
@@ -365,7 +367,7 @@ void ArrayParameterTemplate::init()
                 << "' with minimal size " << min_size
                 << " not provided in stored query configuration '" << get_config().get_file_name() << "'";
             throw Fmi::Exception::Trace(BCP, msg.str());
-        } else {
+        } else if (not silent) {
             std::cout << "WARNING: Definition of array parameter '" << get_config_path()
                       << "' with minimal size 0 is not provided in stored query configuration '"
 		      << get_config().get_file_name() << "'" << std::endl;

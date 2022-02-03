@@ -17,11 +17,25 @@ class SupportsExtraHandlerParams;
 class ScalarParameterTemplate : public ParameterTemplateBase
 {
  public:
-  ScalarParameterTemplate(StoredQueryConfig& config, const std::string& config_path);
+  // explicit is intentionally used below to avoid ambiguity between conversions
+  // -  const char* -> std::string
+  // -  const char* -> bool
+  // which neither GCC nor CLANG++ detect (https://gcc.gnu.org/bugzilla/show_bug.cgi?id=104365)
+  explicit ScalarParameterTemplate(StoredQueryConfig& config,
+				   const char* config_path,
+				   bool silent)
+    : ScalarParameterTemplate(config, std::string(config_path), silent)
+  {
+  }
+
+  explicit ScalarParameterTemplate(StoredQueryConfig& config,
+				   const std::string& config_path,
+				   bool silent);
 
   ScalarParameterTemplate(StoredQueryConfig& config,
                           const std::string& base_path,
-                          const std::string& config_path);
+                          const std::string& config_path,
+			  bool silent);
 
   virtual ~ScalarParameterTemplate();
 
@@ -126,7 +140,7 @@ class ScalarParameterTemplate : public ParameterTemplateBase
   };
 
  private:
-  void init();
+  void init(bool silent);
 
  private:
   ParameterTemplateItem item;

@@ -14,14 +14,16 @@ namespace Plugin
 namespace WFS
 {
 ScalarParameterTemplate::ScalarParameterTemplate(StoredQueryConfig& config,
-                                                 const std::string& config_path)
+                                                 const std::string& config_path,
+						 bool silent)
     : ParameterTemplateBase(config, HANDLER_PARAM_NAME, config_path)
 {
+  (void)silent;
   try
   {
     try
     {
-      init();
+      init(silent);
     }
     catch (...)
     {
@@ -36,14 +38,16 @@ ScalarParameterTemplate::ScalarParameterTemplate(StoredQueryConfig& config,
 
 ScalarParameterTemplate::ScalarParameterTemplate(StoredQueryConfig& config,
                                                  const std::string& base_path,
-                                                 const std::string& config_path)
+                                                 const std::string& config_path,
+						 bool silent)
     : ParameterTemplateBase(config, base_path, config_path)
 {
+  (void)silent;
   try
   {
     try
     {
-      init();
+      init(silent);
     }
     catch (...)
     {
@@ -153,7 +157,7 @@ boost::tribool ScalarParameterTemplate::get_value(
   }
 }
 
-void ScalarParameterTemplate::init()
+void ScalarParameterTemplate::init(bool silent)
 {
   try
   {
@@ -185,7 +189,7 @@ void ScalarParameterTemplate::init()
                 }
             }
         }
-    } else {
+    } else if (not silent) {
         std::cout << "WARNING: stored query scalar parameter '" << get_config_path()
                   << "' definition missing in '" << get_config().get_file_name() << '\''
                   << std::endl;

@@ -91,7 +91,7 @@ void StoredQueryParamRegistry::register_scalar_param(const std::string& name,
 {
   boost::shared_ptr<ScalarParameterRec> rec(new ScalarParameterRec);
   rec->name = name;
-  rec->param_def.reset(new ScalarParameterTemplate(*get_config(), name));
+  rec->param_def.reset(new ScalarParameterTemplate(*get_config(), name, false));
   rec->type_name = typeid(ParamType).name();
   rec->required = required;
   add_param_rec(rec);

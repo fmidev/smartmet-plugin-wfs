@@ -61,7 +61,7 @@ bw::SupportsExtraHandlerParams::SupportsExtraHandlerParams(
       else if (def.isScalar())
       {
         boost::shared_ptr<ScalarParameterTemplate> scalar_param_def;
-        scalar_param_def.reset(new ScalarParameterTemplate(*config, item_path, "def"));
+        scalar_param_def.reset(new ScalarParameterTemplate(*config, item_path, "def", false));
         if (reg)
           register_scalar_param(name, scalar_param_def, false);
         param_def = scalar_param_def;
