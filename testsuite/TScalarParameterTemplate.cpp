@@ -92,7 +92,7 @@ BOOST_AUTO_TEST_CASE(simple_param_no_default)
   unlink(fn.c_str());
 
   boost::shared_ptr<ScalarParameterTemplate> pt;
-  BOOST_REQUIRE_NO_THROW(pt.reset(new ScalarParameterTemplate(*config, "foo")));
+  BOOST_REQUIRE_NO_THROW(pt.reset(new ScalarParameterTemplate(*config, "foo", false)));
 
   const ParameterTemplateItem& item = pt->get_item();
   BOOST_CHECK(not item.plain_text);
@@ -115,7 +115,7 @@ BOOST_AUTO_TEST_CASE(simple_point_param)
   unlink(fn.c_str());
 
   boost::shared_ptr<ScalarParameterTemplate> pt;
-  BOOST_REQUIRE_NO_THROW(pt.reset(new ScalarParameterTemplate(*config, "foo")));
+  BOOST_REQUIRE_NO_THROW(pt.reset(new ScalarParameterTemplate(*config, "foo", false)));
 
   Point value;
   RequestParameterMap param_map;
@@ -147,7 +147,7 @@ BOOST_AUTO_TEST_CASE(simple_bbox_param)
   unlink(fn.c_str());
 
   boost::shared_ptr<ScalarParameterTemplate> pt;
-  BOOST_REQUIRE_NO_THROW(pt.reset(new ScalarParameterTemplate(*config, "foo")));
+  BOOST_REQUIRE_NO_THROW(pt.reset(new ScalarParameterTemplate(*config, "foo", false)));
 
   BoundingBox value;
   RequestParameterMap param_map;
@@ -183,7 +183,7 @@ BOOST_AUTO_TEST_CASE(simple_param_weak_ref_no_default)
   unlink(fn.c_str());
 
   boost::shared_ptr<ScalarParameterTemplate> pt;
-  BOOST_REQUIRE_NO_THROW(pt.reset(new ScalarParameterTemplate(*config, "foo")));
+  BOOST_REQUIRE_NO_THROW(pt.reset(new ScalarParameterTemplate(*config, "foo", false)));
 
   const ParameterTemplateItem& item = pt->get_item();
   BOOST_CHECK(item.weak);
@@ -207,9 +207,9 @@ BOOST_AUTO_TEST_CASE(simple_param_no_default_non_root)
   unlink(fn.c_str());
 
   boost::shared_ptr<ScalarParameterTemplate> pt;
-  BOOST_REQUIRE_THROW(pt.reset(new ScalarParameterTemplate(*config, "fo", "bar")),
+  BOOST_REQUIRE_THROW(pt.reset(new ScalarParameterTemplate(*config, "fo", "bar", false)),
                       Fmi::Exception);
-  BOOST_REQUIRE_NO_THROW(pt.reset(new ScalarParameterTemplate(*config, "foo", "bar")));
+  BOOST_REQUIRE_NO_THROW(pt.reset(new ScalarParameterTemplate(*config, "foo", "bar", false)));
 
   const ParameterTemplateItem& item = pt->get_item();
   BOOST_CHECK(not item.plain_text);
@@ -232,7 +232,7 @@ BOOST_AUTO_TEST_CASE(simple_param_with_default)
   unlink(fn.c_str());
 
   boost::shared_ptr<ScalarParameterTemplate> pt;
-  BOOST_REQUIRE_NO_THROW(pt.reset(new ScalarParameterTemplate(*config, "foo")));
+  BOOST_REQUIRE_NO_THROW(pt.reset(new ScalarParameterTemplate(*config, "foo", false)));
 
   const ParameterTemplateItem& item = pt->get_item();
   BOOST_CHECK(not item.plain_text);
@@ -271,7 +271,7 @@ BOOST_AUTO_TEST_CASE(simple_param_weak_ref_with_default)
   unlink(fn.c_str());
 
   boost::shared_ptr<ScalarParameterTemplate> pt;
-  BOOST_REQUIRE_NO_THROW(pt.reset(new ScalarParameterTemplate(*config, "foo")));
+  BOOST_REQUIRE_NO_THROW(pt.reset(new ScalarParameterTemplate(*config, "foo", false)));
 
   const ParameterTemplateItem& item = pt->get_item();
   BOOST_CHECK(not item.plain_text);
@@ -308,7 +308,7 @@ BOOST_AUTO_TEST_CASE(simple_param_with_default_containing_space)
   unlink(fn.c_str());
 
   boost::shared_ptr<ScalarParameterTemplate> pt;
-  BOOST_REQUIRE_NO_THROW(pt.reset(new ScalarParameterTemplate(*config, "foo")));
+  BOOST_REQUIRE_NO_THROW(pt.reset(new ScalarParameterTemplate(*config, "foo", false)));
 
   const ParameterTemplateItem& item = pt->get_item();
   BOOST_CHECK(not item.plain_text);
@@ -347,7 +347,7 @@ BOOST_AUTO_TEST_CASE(simple_param_from_array_no_default)
   unlink(fn.c_str());
 
   boost::shared_ptr<ScalarParameterTemplate> pt;
-  BOOST_REQUIRE_NO_THROW(pt.reset(new ScalarParameterTemplate(*config, "foo")));
+  BOOST_REQUIRE_NO_THROW(pt.reset(new ScalarParameterTemplate(*config, "foo", false)));
 
   const ParameterTemplateItem& item = pt->get_item();
   BOOST_CHECK(not item.plain_text);
@@ -403,7 +403,7 @@ BOOST_AUTO_TEST_CASE(simple_param_from_array_with_default)
   unlink(fn.c_str());
 
   boost::shared_ptr<ScalarParameterTemplate> pt;
-  BOOST_REQUIRE_NO_THROW(pt.reset(new ScalarParameterTemplate(*config, "foo")));
+  BOOST_REQUIRE_NO_THROW(pt.reset(new ScalarParameterTemplate(*config, "foo", false)));
 
   const ParameterTemplateItem& item = pt->get_item();
   BOOST_CHECK(not item.plain_text);
@@ -447,7 +447,7 @@ BOOST_AUTO_TEST_CASE(reference_to_non_existing_request_parameter)
   unlink(fn.c_str());
 
   boost::shared_ptr<ScalarParameterTemplate> pt;
-  BOOST_REQUIRE_THROW(pt.reset(new ScalarParameterTemplate(*config, "foo")), Fmi::Exception);
+  BOOST_REQUIRE_THROW(pt.reset(new ScalarParameterTemplate(*config, "foo", false)), Fmi::Exception);
 }
 
 BOOST_AUTO_TEST_CASE(request_of_copying_entire_array_to_scalar)
@@ -463,7 +463,7 @@ BOOST_AUTO_TEST_CASE(request_of_copying_entire_array_to_scalar)
   unlink(fn.c_str());
 
   boost::shared_ptr<ScalarParameterTemplate> pt;
-  BOOST_REQUIRE_THROW(pt.reset(new ScalarParameterTemplate(*config, "foo")), Fmi::Exception);
+  BOOST_REQUIRE_THROW(pt.reset(new ScalarParameterTemplate(*config, "foo", false)), Fmi::Exception);
 }
 
 BOOST_AUTO_TEST_CASE(using_absent_parameters)
@@ -479,7 +479,7 @@ BOOST_AUTO_TEST_CASE(using_absent_parameters)
   unlink(fn.c_str());
 
   boost::shared_ptr<ScalarParameterTemplate> pt;
-  BOOST_REQUIRE_NO_THROW(pt.reset(new ScalarParameterTemplate(*config, "foo")));
+  BOOST_REQUIRE_NO_THROW(pt.reset(new ScalarParameterTemplate(*config, "foo", false)));
 
   const ParameterTemplateItem& item = pt->get_item();
   BOOST_CHECK(item.absent);
@@ -508,7 +508,7 @@ BOOST_AUTO_TEST_CASE(parameter_definition_missing_from_config)
   unlink(fn.c_str());
 
   boost::shared_ptr<ScalarParameterTemplate> pt;
-  BOOST_REQUIRE_NO_THROW(pt.reset(new ScalarParameterTemplate(*config, "bar")));
+  BOOST_REQUIRE_NO_THROW(pt.reset(new ScalarParameterTemplate(*config, "bar", false)));
 
   const ParameterTemplateItem& item = pt->get_item();
   BOOST_CHECK(item.absent);
