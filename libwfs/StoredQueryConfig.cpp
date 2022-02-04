@@ -76,6 +76,10 @@ void SmartMet::Plugin::WFS::StoredQueryConfig::warn_about_unused_params(
 {
   try
   {
+    if (plugin_config->silenceInitWarnings()) {
+      return;
+    }
+
     BOOST_FOREACH (const auto& map_item, param_map)
     {
       const ParamDesc& desc = map_item.second;
