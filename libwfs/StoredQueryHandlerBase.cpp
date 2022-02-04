@@ -36,6 +36,10 @@ StoredQueryHandlerBase::StoredQueryHandlerBase(SmartMet::Spine::Reactor* reactor
     const auto& return_types = config->get_return_type_names();
     hidden = config->get_optional_config_param<bool>("hidden", false);
 
+    silence_param_init_warnings(plugin_impl
+				.get_config()
+				.get_optional_config_param<bool>("silence_init_warnings", false));
+
     if (not hidden)
     {
       BOOST_FOREACH (const auto& tn, return_types)
