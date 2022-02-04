@@ -367,11 +367,13 @@ void ArrayParameterTemplate::init(bool silent)
                 << "' with minimal size " << min_size
                 << " not provided in stored query configuration '" << get_config().get_file_name() << "'";
             throw Fmi::Exception::Trace(BCP, msg.str());
-        } else if (not silent) {
-            std::cout << "WARNING: Definition of array parameter '" << get_config_path()
-                      << "' with minimal size 0 is not provided in stored query configuration '"
-		      << get_config().get_file_name() << "'" << std::endl;
-            return;
+        } else {
+	    if (not silent) {
+                std::cout << "WARNING: Definition of array parameter '" << get_config_path()
+			  << "' with minimal size 0 is not provided in stored query configuration '"
+			  << get_config().get_file_name() << "'" << std::endl;
+	    }
+	    return;
         }
     }
 
