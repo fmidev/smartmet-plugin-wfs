@@ -3,7 +3,7 @@
 %define SPECNAME smartmet-plugin-%{DIRNAME}
 Summary: SmartMet WFS plugin
 Name: %{SPECNAME}
-Version: 22.2.1
+Version: 22.2.9
 Release: 1%{?dist}.fmi
 License: MIT
 Group: SmartMet/Plugins
@@ -25,34 +25,34 @@ BuildRequires: openssl-devel
 BuildRequires: bzip2-devel
 BuildRequires: smartmet-library-spine-devel >= 22.1.21
 BuildRequires: smartmet-library-gis-devel >= 22.1.24
-BuildRequires: smartmet-library-locus-devel >= 21.12.7
+BuildRequires: smartmet-library-locus-devel >= 22.1.31
 BuildRequires: smartmet-library-macgyver-devel >= 22.1.21
 BuildRequires: smartmet-engine-contour-devel >= 22.1.21
-BuildRequires: smartmet-engine-geonames-devel >= 22.1.21
-BuildRequires: smartmet-engine-gis-devel >= 22.1.21
-BuildRequires: smartmet-engine-grid-devel >= 22.1.27
+BuildRequires: smartmet-engine-geonames-devel >= 22.1.31
+BuildRequires: smartmet-engine-gis-devel >= 22.2.8
+BuildRequires: smartmet-engine-grid-devel >= 22.2.9
 BuildRequires: smartmet-engine-querydata-devel >= 22.1.21
-BuildRequires: smartmet-library-grid-content-devel >= 22.1.25
-BuildRequires: smartmet-library-grid-files-devel >= 22.1.25
+BuildRequires: smartmet-library-grid-content-devel >= 22.2.9
+BuildRequires: smartmet-library-grid-files-devel >= 22.2.9
 %if %{with observation}
-BuildRequires: smartmet-engine-observation-devel >= 22.1.21
+BuildRequires: smartmet-engine-observation-devel >= 22.2.8
 %endif
 Requires: ctpp2
 Requires: fmt >= 7.1.3
 Requires: libcurl
 Requires: jsoncpp
-Requires: smartmet-library-locus >= 21.12.7
+Requires: smartmet-library-locus >= 22.1.31
 Requires: smartmet-library-macgyver >= 22.1.21
 Requires: smartmet-library-spine >= 22.1.21
 Requires: smartmet-library-gis >= 22.1.24
 Requires: smartmet-engine-contour >= 22.1.21
-Requires: smartmet-engine-geonames >= 22.1.21
-Requires: smartmet-engine-gis >= 22.1.21
-Requires: smartmet-engine-grid >= 22.1.27
-Requires: smartmet-library-grid-content >= 22.1.25
-Requires: smartmet-library-grid-files >= 22.1.25
+Requires: smartmet-engine-geonames >= 22.1.31
+Requires: smartmet-engine-gis >= 22.2.8
+Requires: smartmet-engine-grid >= 22.2.9
+Requires: smartmet-library-grid-content >= 22.2.9
+Requires: smartmet-library-grid-files >= 22.2.9
 %if %{with observation}
-Requires: smartmet-engine-observation >= 22.1.21
+Requires: smartmet-engine-observation >= 22.2.8
 %endif
 Requires: smartmet-engine-querydata >= 22.1.21
 Requires: smartmet-server >= 21.11.25
@@ -90,13 +90,13 @@ Obsoletes: smartmet-brainstorm-wfs-debuginfo < 16.11.1
 #TestRequires: smartmet-library-gis >= 22.1.24
 #TestRequires: smartmet-library-newbase >= 21.1.21
 #TestRequires: smartmet-library-spine-plugin-test >= 21.1.21
-#TestRequires: smartmet-engine-geonames >= 22.1.21
-#TestRequires: smartmet-engine-gis >= 22.1.21
+#TestRequires: smartmet-engine-geonames >= 22.1.31
+#TestRequires: smartmet-engine-gis >= 22.2.8
 #TestRequires: smartmet-engine-querydata >= 22.1.21
 %if %{with observation}
-#TestRequires: smartmet-engine-observation >= 22.1.21
+#TestRequires: smartmet-engine-observation >= 22.2.8
 %endif
-#TestRequires: smartmet-engine-grid >= 22.1.27
+#TestRequires: smartmet-engine-grid >= 22.2.9
 #TestRequires: redis
 #TestRequires: smartmet-engine-grid-test
 # Required by top level Makefile
@@ -109,7 +109,7 @@ SmartMet WFS plugin
 Summary: SmartMet WFS plugin development files
 Requires: smartmet-library-spine-devel >= 22.1.21
 Requires: smartmet-library-gis-devel >= 22.1.24
-Requires: smartmet-library-locus-devel >= 21.12.7
+Requires: smartmet-library-locus-devel >= 22.1.31
 Requires: smartmet-library-macgyver-devel >= 22.1.21
 Requires: %{SPECNAME} = %{version}-%{release}
 %description -n %{SPECNAME}-devel
@@ -144,6 +144,8 @@ rm -rf $RPM_BUILD_ROOT
 %{_includedir}/smartmet/plugin/wfs/request/*.h
 
 %changelog
+* Wed Feb  9 2022 Mika Heiskanen <mika.heiskanen@fmi.fi> - 22.2.9-1.fmi
+- Repackaged due to ABI changes in grid libraries
 
 * Tue Feb  1 2022 Anssi Reponen <anssi.reponen@fmi.fi> - 22.2.1-1.fmi
 - Use DistanceParser for maxdistance URL- and config-parameter (BRAINSTORM-605)
