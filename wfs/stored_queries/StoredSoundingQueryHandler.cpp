@@ -692,15 +692,6 @@ void StoredSoundingQueryHandler::makeSoundingQuery(const RequestParameterMap& pa
   }
 
   const uint64_t soundingType = params.get_single<uint64_t>(P_SOUNDING_TYPE);
-  if (soundingType == 1)
-  {
-    std::ostringstream msg;
-    msg << "Sounding type '" << soundingType << "' is not supported.";
-    Fmi::Exception exception(BCP, "Invalid parameter value");
-    exception.addParameter(WFS_EXCEPTION_CODE, WFS_INVALID_PARAMETER_VALUE);
-    exception.addDetail(msg.str());
-    throw exception;
-  }
 
   profileQueryParams.addOperation(
       "OR_GROUP_sounding_type", "SOUNDING_TYPE", "PropertyIsEqualTo", (long)soundingType);
