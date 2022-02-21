@@ -203,6 +203,7 @@ std::string EntityResolver::download(const std::string& uri) const
   const int content_decoding = 1;
   const int transfer_decoding = 1;
   const char *accept_encoding = "gzip, deflate";
+  const long follow_location = 1;
 
   curl_easy_setopt(curl, CURLOPT_VERBOSE, &verbose);
   curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, &append_data);
@@ -213,6 +214,7 @@ std::string EntityResolver::download(const std::string& uri) const
   curl_easy_setopt(curl, CURLOPT_ACCEPT_ENCODING, accept_encoding);
   curl_easy_setopt(curl, CURLOPT_HTTP_CONTENT_DECODING, &content_decoding);
   curl_easy_setopt(curl, CURLOPT_HTTP_TRANSFER_DECODING, &transfer_decoding);
+  curl_easy_setopt(curl, CURLOPT_FOLLOWLOCATION, &follow_location);
 
   if (proxy != "") {
     curl_easy_setopt(curl, CURLOPT_PROXY, proxy.c_str());
