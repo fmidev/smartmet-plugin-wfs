@@ -46,7 +46,7 @@ StoredSoundingQueryHandler::StoredSoundingQueryHandler(
   register_scalar_param<std::string>(P_MISSING_TEXT);
   register_scalar_param<std::string>(P_CRS);
   register_scalar_param<bool>(P_LATEST);
-  register_scalar_param<uint64_t>(P_SOUNDING_TYPE);
+  register_array_param<uint64_t>(P_SOUNDING_TYPE);
   register_array_param<uint64_t>(P_PUBLICITY, 1);
   register_array_param<double>(P_ALTITUDE_RANGES, 0, 2, 2);
   register_array_param<double>(P_PRESSURE_RANGES, 0, 2, 2);
@@ -691,10 +691,12 @@ void StoredSoundingQueryHandler::makeSoundingQuery(const RequestParameterMap& pa
         "OR_GROUP_station_id", "STATION_ID", "PropertyIsEqualTo", station.fmisid);
   }
 
-  const uint64_t soundingType = params.get_single<uint64_t>(P_SOUNDING_TYPE);
-
-  profileQueryParams.addOperation(
+  std::vector<uint64_t> soundingTypes;
+  params.get<uint64_t>(P_SOUNDING_TYPE, std::back_inserter(soundingTypes));
+  for (auto soundingType : soundingTypes) {
+    profileQueryParams.addOperation(
       "OR_GROUP_sounding_type", "SOUNDING_TYPE", "PropertyIsEqualTo", (long)soundingType);
+  }
 
   std::vector<uint64_t> publicityFlags;
   params.get<uint64_t>(P_PUBLICITY, std::back_inserter(publicityFlags));

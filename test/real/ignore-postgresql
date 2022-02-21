@@ -1,2 +1,3 @@
 GetFeature/observation/fmi::observations::weather::sounding::multipointcoverage-latest.xml.post
 GetFeature/observation/fmi::observations::weather::sounding::multipointcoverage.xml.post
+GetFeature/observation/fmi::observations::weather::sounding::multipointcoverage-old.xml.post
