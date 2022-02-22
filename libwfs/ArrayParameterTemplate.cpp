@@ -362,12 +362,16 @@ void ArrayParameterTemplate::init(bool silent)
 
     if (not setting_root) {
         if (min_size > 0) {
-            std::ostringstream msg;
-            msg << "Definition of array parameter '" << get_config_path()
-                << "' with minimal size " << min_size
-                << " not provided in stored query configuration '" << get_config().get_file_name() << "'";
+	  // Definition of array not provided and zero size array is NOT permitted:
+	  // -> interpret as an configuration error
+	  std::ostringstream msg;
+	  msg << "Definition of array parameter '" << get_config_path()
+	      << "' with minimal size " << min_size
+	      << " not provided in stored query configuration '" << get_config().get_file_name() << "'";
             throw Fmi::Exception::Trace(BCP, msg.str());
         } else {
+	  // Definition of array not provided and zero size array is permitted:
+	  // -> interpret as empty array and optionally provide a warning
 	    if (not silent) {
                 std::cout << "WARNING: Definition of array parameter '" << get_config_path()
 			  << "' with minimal size 0 is not provided in stored query configuration '"
@@ -377,32 +381,35 @@ void ArrayParameterTemplate::init(bool silent)
         }
     }
 
-    if (not setting_root->isArray())
-    {
-      std::ostringstream msg;
-      msg << "The configuration parameter '" << base_prefix << get_config_path()
-          << "' is required to be an array";
-      throw Fmi::Exception(BCP, msg.str());
+    std::vector<libconfig::Setting*> setting_array;
+
+    if (setting_root->isArray()) {
+        if ((setting_root->getLength() == 0) and (min_size > 0))
+        {
+            std::ostringstream msg;
+            msg << "The length " << setting_root->getLength() << " of configuration parameter '"
+                << base_prefix << get_config_path() << "' is out of allowed range " << min_size << ".."
+                << max_size;
+            throw Fmi::Exception(BCP, msg.str());
+        }
+
+        for (int i = 0; i < setting_root->getLength(); i++)
+        {
+            libconfig::Setting* setting = &(*setting_root)[i];
+            setting_array.push_back(setting);
+        }
+    } else {
+        setting_array.push_back(setting_root);
     }
-    // One does not know actual size of an array here
-    else if ((setting_root->getLength() == 0) and (min_size > 0))
+
+    bool have_weak_ref = false;
+    std::size_t calc_min_size = 0;
+    std::size_t calc_max_size = 0;
+    const int len = setting_array.size();
+    for (int i = 0; i < len; i++)
     {
-      std::ostringstream msg;
-      msg << "The length " << setting_root->getLength() << " of configuration parameter '"
-          << base_prefix << get_config_path() << "' is out of allowed range " << min_size << ".."
-          << max_size;
-      throw Fmi::Exception(BCP, msg.str());
-    }
-    else
-    {
-      bool have_weak_ref = false;
-      std::size_t calc_min_size = 0;
-      std::size_t calc_max_size = 0;
-      int len = setting_root->getLength();
-      for (int i = 0; i < len; i++)
-      {
         ParameterTemplateItem item;
-        libconfig::Setting& setting = (*setting_root)[i];
+        libconfig::Setting& setting = *setting_array.at(i);
         SmartMet::Spine::Value item_def = SmartMet::Spine::Value::from_config(setting);
         item.parse(item_def);
 
@@ -413,70 +420,69 @@ void ArrayParameterTemplate::init(bool silent)
         // entire array are permitted in in this case
         if (not item.weak and item.param_ref)
         {
-          const StoredQueryConfig::ParamDesc& param = get_param_desc(*item.param_ref);
+            const StoredQueryConfig::ParamDesc& param = get_param_desc(*item.param_ref);
 
-          if (param.isArray())
-          {
-            if (item.param_ind && *item.param_ind >= param.param_def.getMaxSize())
+            if (param.isArray())
             {
-              // The requested index is above max. possible size of parameter array
-              std::ostringstream msg;
-              msg << "The array index " << *item.param_ind << " is out of the range 0.."
-                  << param.param_def.getMaxSize();
-              throw Fmi::Exception(BCP, msg.str());
+                if (item.param_ind && *item.param_ind >= param.param_def.getMaxSize())
+                {
+                    // The requested index is above max. possible size of parameter array
+                    std::ostringstream msg;
+                    msg << "The array index " << *item.param_ind << " is out of the range 0.."
+                        << param.param_def.getMaxSize();
+                    throw Fmi::Exception(BCP, msg.str());
+                }
             }
-          }
 
-          if (item.param_ind)
-          {
-            calc_min_size++;
-            calc_max_size++;
-          }
-          else if (param.isArray() /* and not item.param_ind */)
-          {
-            // Minimal size check is skipped later if parameter
-            // template refers to entire optional request array parameter
-            calc_min_size += param.param_def.getMinSize();
-            calc_max_size += param.param_def.getMaxSize();
-          }
-          else
-          {
-            calc_min_size++;
-            calc_max_size++;
-          }
+            if (item.param_ind)
+            {
+                calc_min_size++;
+                calc_max_size++;
+            }
+            else if (param.isArray() /* and not item.param_ind */)
+            {
+                // Minimal size check is skipped later if parameter
+                // template refers to entire optional request array parameter
+                calc_min_size += param.param_def.getMinSize();
+                calc_max_size += param.param_def.getMaxSize();
+            }
+            else
+            {
+                calc_min_size++;
+                calc_max_size++;
+            }
         }
         else if (item.plain_text)
         {
-          calc_min_size++;
-          calc_max_size++;
+            calc_min_size++;
+            calc_max_size++;
         }
 
         items.push_back(item);
-      }
+    }
 
-      if (not have_weak_ref)
-      {
+    if (not have_weak_ref)
+    {
         if (calc_min_size > max_size)
         {
-          std::ostringstream msg;
-          msg << "CONFIGURATION ERROR: calculated minimal"
-              << " array size " << calc_min_size << " exceeds upper limit " << max_size
-              << " of array parameter for config path '" << base_prefix << get_config_path() << "'";
-          throw Fmi::Exception(BCP, msg.str());
+            std::ostringstream msg;
+            msg << "CONFIGURATION ERROR: calculated minimal"
+                << " array size " << calc_min_size << " exceeds upper limit " << max_size
+                << " of array parameter for config path '" << base_prefix << get_config_path() << "'";
+            throw Fmi::Exception(BCP, msg.str());
         }
 
         if (calc_max_size < min_size)
         {
-          std::ostringstream msg;
-          msg << "CONFIGURATION ERROR: calculated maximal"
-              << " array size " << calc_max_size << " is lower than lower limit " << min_size
-              << " of array parameter for config path '" << base_prefix << get_config_path() << "'";
-          throw Fmi::Exception(BCP, msg.str());
+            std::ostringstream msg;
+            msg << "CONFIGURATION ERROR: calculated maximal"
+                << " array size " << calc_max_size << " is lower than lower limit " << min_size
+                << " of array parameter for config path '" << base_prefix << get_config_path() << "'";
+            throw Fmi::Exception(BCP, msg.str());
         }
-      }
     }
   }
-  catch (...)
+catch (...)
   {
     throw Fmi::Exception::Trace(BCP, "Operation failed!");
   }
