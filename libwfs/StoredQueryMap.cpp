@@ -5,17 +5,20 @@
 #include <boost/chrono.hpp>
 #include <boost/filesystem.hpp>
 #include <spine/Convenience.h>
+#include <macgyver/Base64.h>
 #include <macgyver/Exception.h>
 #include <queue>
 #include <sstream>
 #include <stdexcept>
+#include <openssl/sha.h>
 
 namespace ba = boost::algorithm;
 namespace bw = SmartMet::Plugin::WFS;
 namespace fs = boost::filesystem;
 
 bw::StoredQueryMap::StoredQueryMap(SmartMet::Spine::Reactor* theReactor, PluginImpl& plugin_impl)
-  : background_init(false)
+  : bw::FileContentChecker(131072, (plugin_impl.get_debug_level() >= 2))
+  , background_init(false)
   , reload_required(false)
   , loading_started(false)
   , theReactor(theReactor)
@@ -410,6 +413,7 @@ bw::StoredQueryMap::get_query_config_by_file_name(const std::string& config_file
 void bw::StoredQueryMap::handle_query_remove(const std::string& config_file_name)
 {
   try {
+    remove_file_hash(config_file_name);
     auto config = get_query_config_by_file_name(config_file_name);
     duplicate.erase(config_file_name);
     if (config) {
@@ -465,6 +469,9 @@ void bw::StoredQueryMap::handle_query_add(const std::string& config_file_name,
 					  bool silent_duplicate)
 {
   try {
+    if (not check_file_hash(config_file_name)) {
+      return;
+    }
     const int debug_level = plugin_impl.get_debug_level();
     const bool verbose = not initial_update or debug_level > 0;
     StoredQueryConfig::Ptr sqh_config(new StoredQueryConfig(config_file_name, &plugin_impl.get_config()));
@@ -500,6 +507,9 @@ void bw::StoredQueryMap::handle_query_modify(const std::string& config_file_name
 					     const boost::filesystem::path& template_dir)
 {
   try {
+    if (not check_file_hash(config_file_name)) {
+      return;
+    }
     StoredQueryConfig::Ptr sqh_config(new StoredQueryConfig(config_file_name, &plugin_impl.get_config()));
     const std::string id = sqh_config->get_query_id();
 

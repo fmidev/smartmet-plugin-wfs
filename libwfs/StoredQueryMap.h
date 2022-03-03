@@ -1,5 +1,6 @@
 #pragma once
 
+#include "FileContentChecker.h"
 #include "PluginImpl.h"
 #include "StoredQuery.h"
 #include "StoredQueryHandlerBase.h"
@@ -31,6 +32,7 @@ class StoredQueryHandlerBase;
  *         and mapping query names to actual objects which handles the queries.
  */
 class StoredQueryMap final
+  : private FileContentChecker
 {
  public:
   StoredQueryMap(SmartMet::Spine::Reactor* theReactor, PluginImpl& plugin_impl);
