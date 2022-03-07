@@ -1,5 +1,5 @@
 GetFeature/observation/fmi::observations::weather::sounding::multipointcoverage-latest.xml.post
 GetFeature/observation/fmi::observations::weather::sounding::multipointcoverage.xml.post
-GetFeature/observation/fmi::observations::weather::sounding::multipointcoverage-old.xml.post
+GetFeature/observation/fmi::observations::weather::sounding::multipointcoverage-type-1.xml.post
 GetPropertyValue/observation/stat_name_fail_202006.kvp.get
 GetFeature/observation/fes-filter-1.xml.post
