@@ -23,7 +23,7 @@ BuildRequires: xerces-c-devel
 BuildRequires: xqilla-devel
 BuildRequires: openssl-devel
 BuildRequires: bzip2-devel
-BuildRequires: smartmet-library-spine-timeseries >= 22.3.8
+BuildRequires: smartmet-library-timeseries-devel >= 22.3.8
 BuildRequires: smartmet-library-spine-devel >= 22.3.8
 BuildRequires: smartmet-library-gis-devel >= 22.1.24
 BuildRequires: smartmet-library-locus-devel >= 22.1.31
