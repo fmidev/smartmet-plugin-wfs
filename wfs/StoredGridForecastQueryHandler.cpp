@@ -3,8 +3,16 @@
 #include "StoredQueryHandlerFactoryDef.h"
 #include "WfsConvenience.h"
 #include <boost/algorithm/string.hpp>
-#include <boost/math/constants/constants.hpp>
 #include <boost/format.hpp>
+#include <boost/math/constants/constants.hpp>
+#include <engines/grid/Engine.h>
+#include <grid-content/queryServer/definition/QueryConfigurator.h>
+#include <grid-files/common/AdditionalParameters.h>
+#include <grid-files/common/GeneralFunctions.h>
+#include <grid-files/common/GraphFunctions.h>
+#include <grid-files/common/ImageFunctions.h>
+#include <grid-files/common/Typedefs.h>
+#include <grid-files/identification/GridDef.h>
 #include <macgyver/StringConversion.h>
 #include <macgyver/TimeFormatter.h>
 #include <macgyver/TimeParser.h>
@@ -12,25 +20,16 @@
 #include <newbase/NFmiPoint.h>
 #include <newbase/NFmiQueryData.h>
 #include <smartmet/engines/querydata/MetaQueryOptions.h>
-#include <smartmet/spine/Convenience.h>
 #include <smartmet/macgyver/Exception.h>
+#include <smartmet/spine/Convenience.h>
+#include <smartmet/spine/HTTP.h>
 #include <smartmet/spine/ParameterFactory.h>
 #include <smartmet/spine/Table.h>
-#include <smartmet/timeseries/TimeSeriesInclude.h>
 #include <smartmet/spine/Value.h>
-#include <smartmet/spine/HTTP.h>
-#include <grid-files/common/AdditionalParameters.h>
-#include <grid-files/common/Typedefs.h>
-#include <grid-files/common/GeneralFunctions.h>
-#include <grid-files/common/GraphFunctions.h>
-#include <grid-files/common/ImageFunctions.h>
-#include <grid-files/identification/GridDef.h>
-#include <engines/grid/Engine.h>
+#include <smartmet/timeseries/TimeSeriesInclude.h>
 #include <limits>
 #include <locale>
 #include <map>
-#include <grid-content/queryServer/definition/QueryConfigurator.h>
-
 
 namespace ba = boost::algorithm;
 namespace pt = boost::posix_time;
@@ -45,7 +44,6 @@ namespace Plugin
 {
 namespace WFS
 {
-
 const char* StoredGridForecastQueryHandler::P_MODEL = "model";
 const char* StoredGridForecastQueryHandler::P_ORIGIN_TIME = "originTime";
 const char* StoredGridForecastQueryHandler::P_LEVEL_HEIGHTS = "levelHeights";
@@ -61,42 +59,41 @@ namespace
 {
 struct StationRec
 {
-    std::string geoid;
-    std::string name;
-    std::string lat;
-    std::string lon;
-    std::string elev;
+  std::string geoid;
+  std::string name;
+  std::string lat;
+  std::string lon;
+  std::string elev;
 };
 }  // namespace
-
-
 
 StoredGridForecastQueryHandler::StoredGridForecastQueryHandler(
     Spine::Reactor* reactor,
     StoredQueryConfig::Ptr config,
     PluginImpl& plugin_impl,
-    boost::optional<std::string> template_file_name) :
+    boost::optional<std::string> template_file_name)
+    :
 
-        StoredQueryParamRegistry(config),
-        SupportsExtraHandlerParams(config, false),
-        RequiresGridEngine(reactor),
-        RequiresGeoEngine(reactor),
-        StoredQueryHandlerBase(reactor, config, plugin_impl, template_file_name),
-        SupportsLocationParameters(reactor, config, SUPPORT_KEYWORDS | INCLUDE_GEOIDS),
-        SupportsTimeParameters(config),
-        SupportsTimeZone(reactor, config),
-        common_params(),
-        ind_geoid(add_param(common_params, "geoid", Spine::Parameter::Type::DataIndependent)),
-        ind_epoch(add_param(common_params, "time", Spine::Parameter::Type::DataIndependent)),
-        ind_place(add_param(common_params, "name", Spine::Parameter::Type::DataIndependent)),
-        ind_lat(add_param(common_params, "latitude", Spine::Parameter::Type::DataIndependent)),
-        ind_lon(add_param(common_params, "longitude", Spine::Parameter::Type::DataIndependent)),
-        ind_elev(add_param(common_params, "elevation", Spine::Parameter::Type::DataIndependent)),
-        ind_level(add_param(common_params, "level", Spine::Parameter::Type::DataIndependent)),
-        ind_region(add_param(common_params, "region", Spine::Parameter::Type::DataIndependent)),
-        ind_country(add_param(common_params, "countryname", Spine::Parameter::Type::DataIndependent)),
-        ind_country_iso(add_param(common_params, "iso2", Spine::Parameter::Type::DataIndependent)),
-        ind_localtz(add_param(common_params, "localtz", Spine::Parameter::Type::DataIndependent))
+      StoredQueryParamRegistry(config),
+      SupportsExtraHandlerParams(config, false),
+      RequiresGridEngine(reactor),
+      RequiresGeoEngine(reactor),
+      StoredQueryHandlerBase(reactor, config, plugin_impl, template_file_name),
+      SupportsLocationParameters(reactor, config, SUPPORT_KEYWORDS | INCLUDE_GEOIDS),
+      SupportsTimeParameters(config),
+      SupportsTimeZone(reactor, config),
+      common_params(),
+      ind_geoid(add_param(common_params, "geoid", Spine::Parameter::Type::DataIndependent)),
+      ind_epoch(add_param(common_params, "time", Spine::Parameter::Type::DataIndependent)),
+      ind_place(add_param(common_params, "name", Spine::Parameter::Type::DataIndependent)),
+      ind_lat(add_param(common_params, "latitude", Spine::Parameter::Type::DataIndependent)),
+      ind_lon(add_param(common_params, "longitude", Spine::Parameter::Type::DataIndependent)),
+      ind_elev(add_param(common_params, "elevation", Spine::Parameter::Type::DataIndependent)),
+      ind_level(add_param(common_params, "level", Spine::Parameter::Type::DataIndependent)),
+      ind_region(add_param(common_params, "region", Spine::Parameter::Type::DataIndependent)),
+      ind_country(add_param(common_params, "countryname", Spine::Parameter::Type::DataIndependent)),
+      ind_country_iso(add_param(common_params, "iso2", Spine::Parameter::Type::DataIndependent)),
+      ind_localtz(add_param(common_params, "localtz", Spine::Parameter::Type::DataIndependent))
 {
   try
   {
@@ -120,17 +117,7 @@ StoredGridForecastQueryHandler::StoredGridForecastQueryHandler(
   }
 }
 
-
-
-
-
-StoredGridForecastQueryHandler::~StoredGridForecastQueryHandler()
-{
-}
-
-
-
-
+StoredGridForecastQueryHandler::~StoredGridForecastQueryHandler() {}
 
 void StoredGridForecastQueryHandler::init_handler()
 {
@@ -156,11 +143,10 @@ void StoredGridForecastQueryHandler::init_handler()
   }
 }
 
-
-
-
-
-void StoredGridForecastQueryHandler::query(const StoredQuery& stored_query, const std::string& language, const boost::optional<std::string>& hostname, std::ostream& output) const
+void StoredGridForecastQueryHandler::query(const StoredQuery& stored_query,
+                                           const std::string& language,
+                                           const boost::optional<std::string>& hostname,
+                                           std::ostream& output) const
 {
   try
   {
@@ -182,7 +168,7 @@ void StoredGridForecastQueryHandler::query(const StoredQuery& stored_query, cons
       // Parsing request parameters
       try
       {
-        Spine::ValueFormatterParam vf_param;
+        Fmi::ValueFormatterParam vf_param;
 
         query.missing_text = params.get_single<std::string>(P_MISSING_TEXT);
         vf_param.missingText = query.missing_text;
@@ -199,12 +185,13 @@ void StoredGridForecastQueryHandler::query(const StoredQuery& stored_query, cons
         parse_level_heights(params, query);
         parse_levels(params, query);
         parse_params(params, query);
-        query.value_formatter.reset(new Spine::ValueFormatter(vf_param));
+        query.value_formatter.reset(new Fmi::ValueFormatter(vf_param));
         query.time_formatter.reset(Fmi::TimeFormatter::create("iso"));
         parse_times(params, query);
 
         const std::string crs = params.get_single<std::string>(P_CRS);
-        auto transformation = plugin_impl.get_crs_registry().create_transformation("urn:ogc:def:crs:EPSG::4326", crs);
+        auto transformation =
+            plugin_impl.get_crs_registry().create_transformation("urn:ogc:def:crs:EPSG::4326", crs);
         bool show_height = false;
         std::string proj_uri = "UNKNOWN";
         std::string proj_epoch_uri = "UNKNOWN";
@@ -240,7 +227,8 @@ void StoredGridForecastQueryHandler::query(const StoredQuery& stored_query, cons
 
         hash["language"] = language;
 
-        hash["responseTimestamp"] = Fmi::to_iso_extended_string(get_plugin_impl().get_time_stamp()) + "Z";
+        hash["responseTimestamp"] =
+            Fmi::to_iso_extended_string(get_plugin_impl().get_time_stamp()) + "Z";
         hash["numMatched"] = num_groups;
         hash["numReturned"] = num_groups;
         hash["numParam"] = query.last_data_ind - query.first_data_ind + 1;
@@ -255,8 +243,7 @@ void StoredGridForecastQueryHandler::query(const StoredQuery& stored_query, cons
         hash["srsEpochDim"] = show_height ? 4 : 3;
 
         int sq_id = stored_query.get_query_id();
-        const char* location_params[] =
-        { P_PLACES, P_LATLONS, P_GEOIDS, P_KEYWORD };
+        const char* location_params[] = {P_PLACES, P_LATLONS, P_GEOIDS, P_KEYWORD};
 
         for (std::size_t group_id = 0; group_id < num_groups; group_id++)
         {
@@ -279,7 +266,8 @@ void StoredGridForecastQueryHandler::query(const StoredQuery& stored_query, cons
           group["groupId"] = str(format("%1%-%2%") % sq_id % (group_id + 1));
           if (query.origin_time)
           {
-            const std::string origin_time_str = Fmi::to_iso_extended_string(*query.origin_time) + "Z";
+            const std::string origin_time_str =
+                Fmi::to_iso_extended_string(*query.origin_time) + "Z";
             group["dataOriginTime"] = origin_time_str;
             group["resultTime"] = origin_time_str;
           }
@@ -335,7 +323,8 @@ void StoredGridForecastQueryHandler::query(const StoredQuery& stored_query, cons
                 tzp = get_tz_for_site(longitude, latitude, query.tz_name);
                 group["stationList"][station_ind]["geoid"] = geo_id;
                 group["stationList"][station_ind]["name"] = name;
-                set_2D_coord(transformation, latitude, longitude, group["stationList"][station_ind]);
+                set_2D_coord(
+                    transformation, latitude, longitude, group["stationList"][station_ind]);
                 if (show_height)
                 {
                   group["stationList"][station_ind]["elev"] = query.result->get(ind_elev, i);
@@ -355,7 +344,10 @@ void StoredGridForecastQueryHandler::query(const StoredQuery& stored_query, cons
 
               CTPP::CDT& row_data = group["returnArray"][row_counter++];
 
-              set_2D_coord(transformation, query.result->get(ind_lat, i), query.result->get(ind_lon, i), row_data);
+              set_2D_coord(transformation,
+                           query.result->get(ind_lat, i),
+                           query.result->get(ind_lon, i),
+                           row_data);
 
               if (show_height)
               {
@@ -371,7 +363,8 @@ void StoredGridForecastQueryHandler::query(const StoredQuery& stored_query, cons
 
               for (std::size_t k = query.first_data_ind; k <= query.last_data_ind; k++)
               {
-                row_data["data"][k - query.first_data_ind] = remove_trailing_0(query.result->get(k, i));
+                row_data["data"][k - query.first_data_ind] =
+                    remove_trailing_0(query.result->get(k, i));
               }
 
               interval_begin = i == 0 ? epoch : std::min(interval_begin, epoch);
@@ -383,7 +376,8 @@ void StoredGridForecastQueryHandler::query(const StoredQuery& stored_query, cons
           group["phenomenonEndTime"] = Fmi::to_iso_extended_string(interval_end) + "Z";
         }
 
-        //printf("BBOX %f,%f  %f,%f  %f,%f  %f,%f\n", query.top_left.X(), query.top_left.Y(), query.top_right.X(), query.top_right.Y(), query.bottom_left.X(), query.bottom_left.Y(),
+        // printf("BBOX %f,%f  %f,%f  %f,%f  %f,%f\n", query.top_left.X(), query.top_left.Y(),
+        // query.top_right.X(), query.top_right.Y(), query.bottom_left.X(), query.bottom_left.Y(),
         //    query.bottom_right.X(), query.bottom_right.Y());
 
         format_output(hash, output, stored_query.get_use_debug_format());
@@ -410,25 +404,21 @@ void StoredGridForecastQueryHandler::query(const StoredQuery& stored_query, cons
   }
 }
 
-
-
-
-
-uint StoredGridForecastQueryHandler::processGridQuery(
-    Query& wfsQuery,
-    const std::string& tag,
-    const Spine::LocationPtr loc,
-    std::string country,
-    QueryServer::Query& gridQuery,
-    Table_sptr output,
-    uint rowCount) const
+uint StoredGridForecastQueryHandler::processGridQuery(Query& wfsQuery,
+                                                      const std::string& tag,
+                                                      const Spine::LocationPtr loc,
+                                                      std::string country,
+                                                      QueryServer::Query& gridQuery,
+                                                      Table_sptr output,
+                                                      uint rowCount) const
 {
   try
   {
     if (!grid_engine || !grid_engine->isEnabled())
       throw Fmi::Exception(BCP, "The grid-engine is disabled!");
 
-    std::shared_ptr < ContentServer::ServiceInterface > contentServer = grid_engine->getContentServer_sptr();
+    std::shared_ptr<ContentServer::ServiceInterface> contentServer =
+        grid_engine->getContentServer_sptr();
     TS::Value missing_value = TS::None();
     std::string timezoneName = loc->timezone;
     boost::local_time::time_zone_ptr localtz = itsTimezones.time_zone_from_string(loc->timezone);
@@ -443,7 +433,8 @@ uint StoredGridForecastQueryHandler::processGridQuery(
       tz = itsTimezones.time_zone_from_string(timezoneName);
     }
 
-    AdditionalParameters additionalParameters(itsTimezones, *wfsQuery.output_locale, *wfsQuery.time_formatter, *wfsQuery.value_formatter);
+    AdditionalParameters additionalParameters(
+        itsTimezones, *wfsQuery.output_locale, *wfsQuery.time_formatter, *wfsQuery.value_formatter);
 
     int result = grid_engine->executeQuery(gridQuery);
     if (result != 0)
@@ -455,36 +446,39 @@ uint StoredGridForecastQueryHandler::processGridQuery(
       switch (result)
       {
         case QueryServer::Result::NO_PRODUCERS_FOUND:
-          exception.addDetail("The reason for this situation is usually that the given producer is unknown");
-          exception.addDetail("or there are no producer list available in the grid engine's configuration file.");
+          exception.addDetail(
+              "The reason for this situation is usually that the given producer is unknown");
+          exception.addDetail(
+              "or there are no producer list available in the grid engine's configuration file.");
           break;
       }
       throw exception;
     }
 
-       // Going through all parameters
+    // Going through all parameters
 
-    int pLen = (int) gridQuery.mQueryParameterList.size();
+    int pLen = (int)gridQuery.mQueryParameterList.size();
     for (int p = 0; p < pLen; p++)
     {
-       // Counting the number of values that the parameter can have in single timestep.
+      // Counting the number of values that the parameter can have in single timestep.
 
       uint vLen = 0;
-      if ((int) gridQuery.mQueryParameterList.size() > p && gridQuery.mQueryParameterList[p].mValueList.size() > 0)
+      if ((int)gridQuery.mQueryParameterList.size() > p &&
+          gridQuery.mQueryParameterList[p].mValueList.size() > 0)
       {
         // ### Going through all timesteps.
 
         uint timestepCount = gridQuery.mQueryParameterList[p].mValueList.size();
         for (uint x = 0; x < timestepCount; x++)
         {
-          uint vv = (uint) gridQuery.mQueryParameterList[p].mValueList[x]->mValueList.getLength();
+          uint vv = (uint)gridQuery.mQueryParameterList[p].mValueList[x]->mValueList.getLength();
           if (vv > vLen)
             vLen = vv;
         }
       }
 
-      uint rLen = (uint) gridQuery.mQueryParameterList[p].mValueList.size();
-      uint tLen = (uint) gridQuery.mForecastTimeList.size();
+      uint rLen = (uint)gridQuery.mQueryParameterList[p].mValueList.size();
+      uint tLen = (uint)gridQuery.mForecastTimeList.size();
 
       uint col = p;
       uint rows = rowCount;
@@ -506,12 +500,15 @@ uint StoredGridForecastQueryHandler::processGridQuery(
 
             if (!wfsQuery.have_model_area)
             {
-              if (geometryId == 0  &&  gridQuery.mQueryParameterList[p].mValueList[t]->mGeometryId != 0)
+              if (geometryId == 0 &&
+                  gridQuery.mQueryParameterList[p].mValueList[t]->mGeometryId != 0)
                 geometryId = gridQuery.mQueryParameterList[p].mValueList[t]->mGeometryId;
             }
 
             T::GridValue val;
-            if (gridQuery.mQueryParameterList[p].mValueList[t]->mValueList.getGridValueByIndex(v,val) && (val.mValue != ParamValueMissing || val.mValueString.length() > 0))
+            if (gridQuery.mQueryParameterList[p].mValueList[t]->mValueList.getGridValueByIndex(
+                    v, val) &&
+                (val.mValue != ParamValueMissing || val.mValueString.length() > 0))
             {
               if (val.mValueString.length() > 0)
               {
@@ -537,9 +534,9 @@ uint StoredGridForecastQueryHandler::processGridQuery(
                   if (gridQuery.mQueryParameterList[p].mPrecision >= 0)
                     precision = gridQuery.mQueryParameterList[p].mPrecision;
 
-                  std::string ss = wfsQuery.value_formatter->format(val.mValue,precision);
+                  std::string ss = wfsQuery.value_formatter->format(val.mValue, precision);
                   output->set(col, row, ss);
-                  //output->set(col, row, std::to_string(val->mValue));
+                  // output->set(col, row, std::to_string(val->mValue));
                 }
                 else
                 {
@@ -566,13 +563,14 @@ uint StoredGridForecastQueryHandler::processGridQuery(
       else
       {
         // The query has returned no values for the parameter. This usually means that the parameter
-        // is not a data parameter. It is most likely "a special parameter" that is based on the given
-        // query location, time, level, etc.
+        // is not a data parameter. It is most likely "a special parameter" that is based on the
+        // given query location, time, level, etc.
 
         std::string paramValue;
-        uint tLen = (uint) gridQuery.mForecastTimeList.size();
+        uint tLen = (uint)gridQuery.mForecastTimeList.size();
         uint t = 0;
-        for (auto ft = gridQuery.mForecastTimeList.begin(); ft != gridQuery.mForecastTimeList.end(); ++ft)
+        for (auto ft = gridQuery.mForecastTimeList.begin(); ft != gridQuery.mForecastTimeList.end();
+             ++ft)
         {
           uint row = rows + t;
           if (row > lastRow)
@@ -580,18 +578,29 @@ uint StoredGridForecastQueryHandler::processGridQuery(
 
           boost::posix_time::ptime utcTime = boost::posix_time::from_time_t(*ft);
           boost::local_time::local_date_time queryTime(utcTime, tz);
-          //boost::local_time::local_date_time queryTime(Fmi::TimeParser::parse_iso(*ft), tz);
-          if (additionalParameters.getParameterValueByLocation(gridQuery.mQueryParameterList[p].mParam, tag, loc, country, gridQuery.mQueryParameterList[p].mPrecision,paramValue))
+          // boost::local_time::local_date_time queryTime(Fmi::TimeParser::parse_iso(*ft), tz);
+          if (additionalParameters.getParameterValueByLocation(
+                  gridQuery.mQueryParameterList[p].mParam,
+                  tag,
+                  loc,
+                  country,
+                  gridQuery.mQueryParameterList[p].mPrecision,
+                  paramValue))
           {
             output->set(col, row, paramValue);
           }
-          else
-          if (additionalParameters.getParameterValueByLocationAndTime(gridQuery.mQueryParameterList[p].mParam, tag, loc, queryTime, tz,gridQuery.mQueryParameterList[p].mPrecision, paramValue))
+          else if (additionalParameters.getParameterValueByLocationAndTime(
+                       gridQuery.mQueryParameterList[p].mParam,
+                       tag,
+                       loc,
+                       queryTime,
+                       tz,
+                       gridQuery.mQueryParameterList[p].mPrecision,
+                       paramValue))
           {
             output->set(col, row, paramValue);
           }
-          else
-          if (gridQuery.mQueryParameterList[p].mParam == "level")
+          else if (gridQuery.mQueryParameterList[p].mParam == "level")
           {
             int idx = 0;
 
@@ -610,7 +619,8 @@ uint StoredGridForecastQueryHandler::processGridQuery(
 
             output->set(col, row, std::to_string(levelValue));
           }
-          else if (gridQuery.mQueryParameterList[p].mParam == "model" || gridQuery.mQueryParameterList[p].mParam == "producer")
+          else if (gridQuery.mQueryParameterList[p].mParam == "model" ||
+                   gridQuery.mQueryParameterList[p].mParam == "producer")
           {
             int idx = 0;
             while (idx < pLen)
@@ -618,7 +628,8 @@ uint StoredGridForecastQueryHandler::processGridQuery(
               if (gridQuery.mQueryParameterList[idx].mValueList[t]->mProducerId > 0)
               {
                 T::ProducerInfo info;
-                if (grid_engine->getProducerInfoById(gridQuery.mQueryParameterList[idx].mValueList[t]->mProducerId,info))
+                if (grid_engine->getProducerInfoById(
+                        gridQuery.mQueryParameterList[idx].mValueList[t]->mProducerId, info))
                 {
                   output->set(col, row, info.mName);
                   idx = pLen + 10;
@@ -649,9 +660,11 @@ uint StoredGridForecastQueryHandler::processGridQuery(
               if (gridQuery.mQueryParameterList[idx].mValueList[t]->mGenerationId > 0)
               {
                 T::GenerationInfo info;
-                if (grid_engine->getGenerationInfoById(gridQuery.mQueryParameterList[idx].mValueList[t]->mGenerationId,info))
+                if (grid_engine->getGenerationInfoById(
+                        gridQuery.mQueryParameterList[idx].mValueList[t]->mGenerationId, info))
                 {
-                  boost::local_time::local_date_time origTime(Fmi::TimeParser::parse_iso(info.mAnalysisTime), tz);
+                  boost::local_time::local_date_time origTime(
+                      Fmi::TimeParser::parse_iso(info.mAnalysisTime), tz);
                   output->set(col, row, wfsQuery.time_formatter->format(origTime));
                   idx = pLen + 10;
                 }
@@ -680,27 +693,32 @@ uint StoredGridForecastQueryHandler::processGridQuery(
               {
                 std::string producerName;
                 T::ProducerInfo producer;
-                if (grid_engine->getProducerInfoById(gridQuery.mQueryParameterList[p].mValueList[r]->mProducerId,producer))
+                if (grid_engine->getProducerInfoById(
+                        gridQuery.mQueryParameterList[p].mValueList[r]->mProducerId, producer))
                   producerName = producer.mName;
 
-                sprintf(tmp, "%s:%d:%d:%d:%d:%s", gridQuery.mQueryParameterList[p].mValueList[r]->mParameterKey.c_str(),
-                    (int) gridQuery.mQueryParameterList[p].mValueList[r]->mParameterLevelId, (int) gridQuery.mQueryParameterList[p].mValueList[r]->mParameterLevel,
-                    (int) gridQuery.mQueryParameterList[p].mValueList[r]->mForecastType, (int) gridQuery.mQueryParameterList[p].mValueList[r]->mForecastNumber,
-                    producerName.c_str());
+                sprintf(tmp,
+                        "%s:%d:%d:%d:%d:%s",
+                        gridQuery.mQueryParameterList[p].mValueList[r]->mParameterKey.c_str(),
+                        (int)gridQuery.mQueryParameterList[p].mValueList[r]->mParameterLevelId,
+                        (int)gridQuery.mQueryParameterList[p].mValueList[r]->mParameterLevel,
+                        (int)gridQuery.mQueryParameterList[p].mValueList[r]->mForecastType,
+                        (int)gridQuery.mQueryParameterList[p].mValueList[r]->mForecastNumber,
+                        producerName.c_str());
 
                 if (pList.find(std::string(tmp)) == pList.end())
                   pList.insert(std::string(tmp));
               }
             }
-            char *pp = tmp;
+            char* pp = tmp;
             pp += sprintf(pp, "### MULTI-MATCH ### ");
             for (auto p = pList.begin(); p != pList.end(); ++p)
               pp += sprintf(pp, "%s ", p->c_str());
 
             output->set(col, row, std::string(tmp));
           }
-          else
-          if (!additionalParameters.isAdditionalParameter(gridQuery.mQueryParameterList[p].mParam.c_str()))
+          else if (!additionalParameters.isAdditionalParameter(
+                       gridQuery.mQueryParameterList[p].mParam.c_str()))
           {
             // This is a normal data parameter, but the query has not return any values for it.
             output->set(col, row, wfsQuery.missing_text);
@@ -711,17 +729,16 @@ uint StoredGridForecastQueryHandler::processGridQuery(
       }
     }
 
-
     if (generationId > 0)
     {
       T::GenerationInfo info;
-      if (grid_engine->getGenerationInfoById(generationId,info))
+      if (grid_engine->getGenerationInfoById(generationId, info))
       {
-        //boost::local_time::local_date_time origTime(boost::posix_time::from_iso_string(info->mAnalysisTime), tz);
+        // boost::local_time::local_date_time
+        // origTime(boost::posix_time::from_iso_string(info->mAnalysisTime), tz);
         wfsQuery.origin_time.reset(new pt::ptime(Fmi::TimeParser::parse_iso(info.mAnalysisTime)));
       }
     }
-
 
     if (geometryId > 0)
     {
@@ -730,7 +747,8 @@ uint StoredGridForecastQueryHandler::processGridQuery(
       T::Coordinate bottomLeft;
       T::Coordinate bottomRight;
 
-      if (Identification::gridDef.getGridLatLonAreaByGeometryId(geometryId, topLeft, topRight, bottomLeft, bottomRight))
+      if (Identification::gridDef.getGridLatLonAreaByGeometryId(
+              geometryId, topLeft, topRight, bottomLeft, bottomRight))
       {
         wfsQuery.have_model_area = true;
         wfsQuery.top_left.Set(topLeft.x(), topLeft.y());
@@ -747,10 +765,6 @@ uint StoredGridForecastQueryHandler::processGridQuery(
     throw Fmi::Exception(BCP, "Operation failed!", NULL);
   }
 }
-
-
-
-
 
 Table_sptr StoredGridForecastQueryHandler::extract_forecast(Query& wfsQuery) const
 {
@@ -778,93 +792,94 @@ Table_sptr StoredGridForecastQueryHandler::extract_forecast(Query& wfsQuery) con
       if (debug_level > 0)
         std::cout << "Location: " << loc->name << " in " << country << std::endl;
 
+      attributeList.addAttribute("type",
+                                 std::to_string(QueryServer::QueryParameter::Type::PointValues));
 
-      attributeList.addAttribute("type",std::to_string(QueryServer::QueryParameter::Type::PointValues));
-
-      attributeList.addAttribute("locationType",std::to_string(QueryServer::QueryParameter::LocationType::Point));
+      attributeList.addAttribute("locationType",
+                                 std::to_string(QueryServer::QueryParameter::LocationType::Point));
 
       std::vector<std::vector<T::Coordinate>> areaCoordinates;
       std::vector<T::Coordinate> coordinates;
       coordinates.push_back(T::Coordinate(loc->longitude, loc->latitude));
       areaCoordinates.push_back(coordinates);
-      std::string coordinateStr = toString(areaCoordinates,',',';');
-      attributeList.addAttribute("coordinates",coordinateStr);
+      std::string coordinateStr = toString(areaCoordinates, ',', ';');
+      attributeList.addAttribute("coordinates", coordinateStr);
 
       if (!wfsQuery.language.empty())
-        attributeList.addAttribute("language",wfsQuery.language);
+        attributeList.addAttribute("language", wfsQuery.language);
 
       uint sz = wfsQuery.models.size();
       if (sz > 0)
       {
         char tmp[1000];
-        char *p = tmp;
+        char* p = tmp;
         *p = '\0';
         for (auto prod = wfsQuery.models.begin(); prod != wfsQuery.models.end(); ++prod)
         {
           std::string mappingName = grid_engine->getProducerName(*prod);
 
           std::vector<std::string> nameList;
-          grid_engine->getProducerNameList(mappingName,nameList);
+          grid_engine->getProducerNameList(mappingName, nameList);
           for (auto n = nameList.begin(); n != nameList.end(); ++n)
           {
             if (p > tmp)
-              p += sprintf(p,",%s",n->c_str());
+              p += sprintf(p, ",%s", n->c_str());
             else
-              p += sprintf(p,"%s",n->c_str());
+              p += sprintf(p, "%s", n->c_str());
           }
         }
-        attributeList.addAttribute("producer",tmp);
+        attributeList.addAttribute("producer", tmp);
       }
 
       if (wfsQuery.levels.size() > 0)
       {
-        std::string levels = toString(wfsQuery.levels,',');
-        attributeList.addAttribute("levels",levels);
+        std::string levels = toString(wfsQuery.levels, ',');
+        attributeList.addAttribute("levels", levels);
       }
 
       if (strcasecmp(wfsQuery.level_type.c_str(), "pressure") == 0)
       {
-        attributeList.addAttribute("levelId","2");
+        attributeList.addAttribute("levelId", "2");
       }
 
       if (strcasecmp(wfsQuery.level_type.c_str(), "hybrid") == 0)
       {
-        attributeList.addAttribute("levelId","3");
+        attributeList.addAttribute("levelId", "3");
       }
 
       if (wfsQuery.level_heights.size() > 0)
       {
-        std::string heights = toString(wfsQuery.level_heights,',');
-        attributeList.addAttribute("heights",heights);
+        std::string heights = toString(wfsQuery.level_heights, ',');
+        attributeList.addAttribute("heights", heights);
       }
 
       if (!wfsQuery.level_type.empty())
-        attributeList.addAttribute("levelId",wfsQuery.level_type);
+        attributeList.addAttribute("levelId", wfsQuery.level_type);
 
       std::string timezoneName = loc->timezone;
       if (wfsQuery.tz_name != "localtime")
         timezoneName = wfsQuery.tz_name;
 
-      attributeList.addAttribute("timezone",timezoneName);
+      attributeList.addAttribute("timezone", timezoneName);
 
-      attributeList.addAttribute("starttime",to_iso_string(wfsQuery.toptions->startTime));
+      attributeList.addAttribute("starttime", to_iso_string(wfsQuery.toptions->startTime));
 
-      attributeList.addAttribute("endtime",to_iso_string(wfsQuery.toptions->endTime));
+      attributeList.addAttribute("endtime", to_iso_string(wfsQuery.toptions->endTime));
 
       if (wfsQuery.toptions->timeSteps)
-        attributeList.addAttribute("timesteps",std::to_string(*wfsQuery.toptions->timeSteps));
+        attributeList.addAttribute("timesteps", std::to_string(*wfsQuery.toptions->timeSteps));
 
       if (wfsQuery.toptions->timeStep)
-        attributeList.addAttribute("timestep",std::to_string(*wfsQuery.toptions->timeStep));
+        attributeList.addAttribute("timestep", std::to_string(*wfsQuery.toptions->timeStep));
 
       char tmp[10000];
       tmp[0] = '\0';
-      char *p = tmp;
+      char* p = tmp;
 
       for (auto param = wfsQuery.data_params.begin(); param != wfsQuery.data_params.end(); ++param)
       {
         if (param != wfsQuery.data_params.begin())
-          p += sprintf(p,",");
+          p += sprintf(p, ",");
 
         std::string paramName = param->name();
         std::string interpolationMethod = "";
@@ -872,7 +887,7 @@ Table_sptr StoredGridForecastQueryHandler::extract_forecast(Query& wfsQuery) con
         if (pos != std::string::npos)
         {
           interpolationMethod = std::to_string(T::AreaInterpolationMethod::Linear);
-          paramName.erase(pos,4);
+          paramName.erase(pos, 4);
         }
 
         std::string name = paramName;
@@ -885,44 +900,46 @@ Table_sptr StoredGridForecastQueryHandler::extract_forecast(Query& wfsQuery) con
 
           std::string key = producerName + ";" + paramName;
 
-
-          grid_engine->getParameterDetails(producerName,paramName,parameters);
+          grid_engine->getParameterDetails(producerName, paramName, parameters);
 
           size_t len = parameters.size();
-          if (len > 0  &&  strcasecmp(parameters[0].mProducerName.c_str(),key.c_str()) != 0)
-            name = paramName + ":" + parameters[0].mProducerName + ":" + parameters[0].mGeometryId + ":" + parameters[0].mLevelId + ":" + parameters[0].mLevel + ":" + parameters[0].mForecastType + ":" + parameters[0].mForecastNumber + "::" + interpolationMethod;
+          if (len > 0 && strcasecmp(parameters[0].mProducerName.c_str(), key.c_str()) != 0)
+            name = paramName + ":" + parameters[0].mProducerName + ":" + parameters[0].mGeometryId +
+                   ":" + parameters[0].mLevelId + ":" + parameters[0].mLevel + ":" +
+                   parameters[0].mForecastType + ":" + parameters[0].mForecastNumber +
+                   "::" + interpolationMethod;
           else
             name = paramName;
         }
 
-        p += sprintf(p,"%s",name.c_str());
+        p += sprintf(p, "%s", name.c_str());
       }
 
-      attributeList.addAttribute("param",tmp);
+      attributeList.addAttribute("param", tmp);
 
       QueryServer::Query query;
-      //attributeList.print(std::cout,0,0);
-      queryConfigurator.configure(query,attributeList);
+      // attributeList.print(std::cout,0,0);
+      queryConfigurator.configure(query, attributeList);
 
-      //query.print(std::cout,0,0);
+      // query.print(std::cout,0,0);
 
-      rowCount = processGridQuery(wfsQuery,tloc->first,loc,country,query,output,rowCount);
+      rowCount = processGridQuery(wfsQuery, tloc->first, loc, country, query, output, rowCount);
     }
-/*
+    /*
 
-    printf("*******************\n");
-    auto cols = output->columns();
-    auto rows = output->rows();
+        printf("*******************\n");
+        auto cols = output->columns();
+        auto rows = output->rows();
 
-    for (auto r = rows.begin(); r != rows.end(); ++r)
-    {
-      for (auto c = cols.begin(); c != cols.end(); ++c)
-      {
-        std::cout << output->get(*c, *r) << ";";
-      }
-      std::cout << "\n";
-    }
-*/
+        for (auto r = rows.begin(); r != rows.end(); ++r)
+        {
+          for (auto c = cols.begin(); c != cols.end(); ++c)
+          {
+            std::cout << output->get(*c, *r) << ";";
+          }
+          std::cout << "\n";
+        }
+    */
     return output;
   }
   catch (...)
@@ -931,11 +948,8 @@ Table_sptr StoredGridForecastQueryHandler::extract_forecast(Query& wfsQuery) con
   }
 }
 
-
-
-
-
-void StoredGridForecastQueryHandler::parse_models(const RequestParameterMap& params, StoredForecastQueryHandler::Query& dest) const
+void StoredGridForecastQueryHandler::parse_models(const RequestParameterMap& params,
+                                                  StoredForecastQueryHandler::Query& dest) const
 {
   try
   {
@@ -948,11 +962,8 @@ void StoredGridForecastQueryHandler::parse_models(const RequestParameterMap& par
   }
 }
 
-
-
-
-
-void StoredGridForecastQueryHandler::parse_level_heights(const RequestParameterMap& params, Query& dest) const
+void StoredGridForecastQueryHandler::parse_level_heights(const RequestParameterMap& params,
+                                                         Query& dest) const
 {
   try
   {
@@ -965,7 +976,7 @@ void StoredGridForecastQueryHandler::parse_level_heights(const RequestParameterM
       if (!dest.level_heights.insert(tmp).second)
       {
         Fmi::Exception exception(BCP, "Duplicate geometric height!");
-        exception.addParameter("height",std::to_string(tmp));
+        exception.addParameter("height", std::to_string(tmp));
         exception.addParameter(WFS_EXCEPTION_CODE, WFS_OPERATION_PARSING_FAILED);
         throw exception;
       }
@@ -977,11 +988,8 @@ void StoredGridForecastQueryHandler::parse_level_heights(const RequestParameterM
   }
 }
 
-
-
-
-
-void StoredGridForecastQueryHandler::parse_levels(const RequestParameterMap& params, Query& dest) const
+void StoredGridForecastQueryHandler::parse_levels(const RequestParameterMap& params,
+                                                  Query& dest) const
 {
   try
   {
@@ -997,7 +1005,7 @@ void StoredGridForecastQueryHandler::parse_levels(const RequestParameterMap& par
       if (!dest.levels.insert(tmp).second)
       {
         Fmi::Exception exception(BCP, "Duplicate level!");
-        exception.addParameter("level",std::to_string(tmp));
+        exception.addParameter("level", std::to_string(tmp));
         exception.addParameter(WFS_EXCEPTION_CODE, WFS_OPERATION_PARSING_FAILED);
         throw exception;
       }
@@ -1009,11 +1017,8 @@ void StoredGridForecastQueryHandler::parse_levels(const RequestParameterMap& par
   }
 }
 
-
-
-
-
-void StoredGridForecastQueryHandler::parse_times(const RequestParameterMap& param, Query& dest) const
+void StoredGridForecastQueryHandler::parse_times(const RequestParameterMap& param,
+                                                 Query& dest) const
 {
   try
   {
@@ -1028,11 +1033,8 @@ void StoredGridForecastQueryHandler::parse_times(const RequestParameterMap& para
   }
 }
 
-
-
-
-
-void StoredGridForecastQueryHandler::parse_params(const RequestParameterMap& param, Query& dest) const
+void StoredGridForecastQueryHandler::parse_params(const RequestParameterMap& param,
+                                                  Query& dest) const
 {
   try
   {
@@ -1061,14 +1063,9 @@ void StoredGridForecastQueryHandler::parse_params(const RequestParameterMap& par
   }
 }
 
-
-
-
-} // WFS
-} // Plugin
-} // Smartmet
-
-
+}  // namespace WFS
+}  // namespace Plugin
+}  // namespace SmartMet
 
 namespace
 {
@@ -1082,7 +1079,8 @@ boost::shared_ptr<SmartMet::Plugin::WFS::StoredQueryHandlerBase> wfs_grid_foreca
 {
   try
   {
-    StoredGridForecastQueryHandler* qh = new StoredGridForecastQueryHandler(reactor, config, plugin_impl, template_file_name);
+    StoredGridForecastQueryHandler* qh =
+        new StoredGridForecastQueryHandler(reactor, config, plugin_impl, template_file_name);
     boost::shared_ptr<SmartMet::Plugin::WFS::StoredQueryHandlerBase> result(qh);
     return result;
   }
@@ -1093,7 +1091,8 @@ boost::shared_ptr<SmartMet::Plugin::WFS::StoredQueryHandlerBase> wfs_grid_foreca
 }
 }  // namespace
 
-SmartMet::Plugin::WFS::StoredQueryHandlerFactoryDef wfs_grid_forecast_handler_factory(&wfs_grid_forecast_handler_create);
+SmartMet::Plugin::WFS::StoredQueryHandlerFactoryDef wfs_grid_forecast_handler_factory(
+    &wfs_grid_forecast_handler_create);
 
 /**
 
