@@ -244,7 +244,7 @@ bw::ContourQueryResultSet bw::StoredContourQueryHandler::getContours_gridEngine(
 
     std::shared_ptr<ContentServer::ServiceInterface> contentServer =
         grid_engine->getContentServer_sptr();
-    Spine::TimeSeries::Value missing_value = Spine::TimeSeries::None();
+	TS::Value missing_value = TS::None();
     ContourQueryResultSet ret;
 
     const char* urnStr = queryParameter.gridQuery.mAttributeList.getAttributeValue("grid.urn");
@@ -544,13 +544,13 @@ void bw::StoredContourQueryHandler::query_qEngine(const StoredQuery& stored_quer
     query_param->smoothing_degree = sq_params.get_optional<uint64_t>(P_SMOOTHING_DEGREE, 2);
     query_param->smoothing_size = sq_params.get_optional<uint64_t>(P_SMOOTHING_SIZE, 2);
 
-    boost::shared_ptr<SmartMet::Spine::TimeSeriesGeneratorOptions> pTimeOptions =
+    boost::shared_ptr<TS::TimeSeriesGeneratorOptions> pTimeOptions =
         get_time_generator_options(sq_params);
 
     // get data in UTC
     const std::string zone = "UTC";
     auto tz = geo_engine->getTimeZones().time_zone_from_string(zone);
-    query_param->tlist = SmartMet::Spine::TimeSeriesGenerator::generate(*pTimeOptions, tz);
+    query_param->tlist = TS::TimeSeriesGenerator::generate(*pTimeOptions, tz);
     query_param->tz_name = get_tz_name(sq_params);
 
     CTPP::CDT hash;
@@ -676,7 +676,7 @@ void bw::StoredContourQueryHandler::query_gridEngine(const StoredQuery& stored_q
       attributeList.addAttribute("param", name);
     }
 
-    boost::shared_ptr<SmartMet::Spine::TimeSeriesGeneratorOptions> tOptions =
+    boost::shared_ptr<TS::TimeSeriesGeneratorOptions> tOptions =
         get_time_generator_options(sq_params);
 
     if (tOptions->startTimeData)
@@ -724,11 +724,11 @@ void bw::StoredContourQueryHandler::query_gridEngine(const StoredQuery& stored_q
     query_param->smoothing_degree = sq_params.get_optional<uint64_t>(P_SMOOTHING_DEGREE, 2);
     query_param->smoothing_size = sq_params.get_optional<uint64_t>(P_SMOOTHING_SIZE, 2);
 
-    boost::shared_ptr<SmartMet::Spine::TimeSeriesGeneratorOptions> pTimeOptions =
+    boost::shared_ptr<TS::TimeSeriesGeneratorOptions> pTimeOptions =
         get_time_generator_options(sq_params);
     const std::string zone = "UTC";
     auto tz = geo_engine->getTimeZones().time_zone_from_string(zone);
-    query_param->tlist = SmartMet::Spine::TimeSeriesGenerator::generate(*pTimeOptions, tz);
+    query_param->tlist = TS::TimeSeriesGenerator::generate(*pTimeOptions, tz);
     query_param->tz_name = get_tz_name(sq_params);
     get_bounding_box(sq_params, requestedCRS, &(query_param->bbox));
 

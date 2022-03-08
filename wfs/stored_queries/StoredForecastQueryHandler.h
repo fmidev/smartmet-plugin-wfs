@@ -15,7 +15,7 @@
 #include <engines/querydata/Engine.h>
 #include <engines/querydata/MetaData.h>
 #include <newbase/NFmiPoint.h>
-#include <spine/TimeSeriesGenerator.h>
+#include <timeseries/TimeSeriesInclude.h>
 #include <list>
 #include <utility>
 
@@ -59,7 +59,7 @@ class StoredForecastQueryHandler : public StoredQueryHandlerBase,
 
     std::unique_ptr<SmartMet::Spine::ValueFormatter> value_formatter;
     std::unique_ptr<Fmi::TimeFormatter> time_formatter;
-    boost::shared_ptr<SmartMet::Spine::TimeSeriesGeneratorOptions> toptions;
+    boost::shared_ptr<TS::TimeSeriesGeneratorOptions> toptions;
 
     bool have_model_area;
     NFmiPoint top_left;

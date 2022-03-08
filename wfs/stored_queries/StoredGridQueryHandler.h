@@ -7,7 +7,7 @@
 
 #include <engines/geonames/Engine.h>
 #include <engines/querydata/Engine.h>
-#include <spine/TimeSeries.h>
+#include <timeseries/TimeSeriesInclude.h>
 
 #include "RequestParameterMap.h"
 #include "RequiresGeoEngine.h"
@@ -88,7 +88,7 @@ class StoredGridQueryHandler : public StoredQueryHandlerBase,
 
     std::unique_ptr<SmartMet::Spine::ValueFormatter> value_formatter;
     std::unique_ptr<Fmi::TimeFormatter> time_formatter;
-    boost::shared_ptr<SmartMet::Spine::TimeSeriesGeneratorOptions> toptions;
+    boost::shared_ptr<TS::TimeSeriesGeneratorOptions> toptions;
 
     SmartMet::Spine::BoundingBox requested_bbox;
 
@@ -148,8 +148,8 @@ class StoredGridQueryHandler : public StoredQueryHandlerBase,
   Result::Grid rearrangeGrid(const Result::Grid& inputGrid, int arrayWidth) const;
 
   std::pair<unsigned int, unsigned int> getDataIndexExtents(
-      const SmartMet::Spine::TimeSeries::TimeSeriesGroupPtr& longitudes,
-      const SmartMet::Spine::TimeSeries::TimeSeriesGroupPtr& latitudes,
+      const TS::TimeSeriesGroupPtr& longitudes,
+      const TS::TimeSeriesGroupPtr& latitudes,
       const Query& query,
       const std::string& dataCrs) const;
 

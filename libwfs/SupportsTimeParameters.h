@@ -6,7 +6,7 @@
 #include "StoredQueryParamRegistry.h"
 #include "SupportsExtraHandlerParams.h"
 #include <boost/shared_ptr.hpp>
-#include <spine/TimeSeriesGenerator.h>
+#include <timeseries/TimeSeriesInclude.h>
 #include <map>
 #include <string>
 #include <vector>
@@ -29,7 +29,7 @@ class SupportsTimeParameters : protected virtual SupportsExtraHandlerParams,
 
   virtual ~SupportsTimeParameters();
 
-  boost::shared_ptr<SmartMet::Spine::TimeSeriesGeneratorOptions> get_time_generator_options(
+  boost::shared_ptr<TS::TimeSeriesGeneratorOptions> get_time_generator_options(
       const RequestParameterMap &param_values) const;
 
  private:
