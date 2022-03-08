@@ -15,8 +15,6 @@
 #include <smartmet/spine/Convenience.h>
 #include <smartmet/spine/ParameterFactory.h>
 #include <smartmet/spine/Table.h>
-#include <smartmet/spine/TimeSeriesGenerator.h>
-#include <smartmet/spine/TimeSeriesOutput.h>
 #include <smartmet/spine/Value.h>
 #include <limits>
 #include <locale>
@@ -510,7 +508,7 @@ boost::shared_ptr<SmartMet::Spine::Table> bw::StoredForecastQueryHandler::extrac
       }
 
       auto tz = geo_engine->getTimeZones().time_zone_from_string(zone);
-      auto tlist = SmartMet::Spine::TimeSeriesGenerator::generate(*query.toptions, tz);
+      auto tlist = TS::TimeSeriesGenerator::generate(*query.toptions, tz);
 
       if (debug_level > 2)
       {
@@ -570,7 +568,7 @@ boost::shared_ptr<SmartMet::Spine::Table> bw::StoredForecastQueryHandler::extrac
       }
       */
 
-	  Spine::TimeSeries::LocalTimePoolPtr localTimePool =	boost::make_shared<SmartMet::Spine::TimeSeries::LocalTimePool>();
+	  TS::LocalTimePoolPtr localTimePool =	boost::make_shared<TS::LocalTimePool>();
 
       // Fetch data from an arbitrary height.
       for (const auto& level_height : query.level_heights)
@@ -601,11 +599,11 @@ boost::shared_ptr<SmartMet::Spine::Table> bw::StoredForecastQueryHandler::extrac
                 nearestpoint,
                 query.lastpoint,
 				localTimePool);
-            SmartMet::Spine::TimeSeries::Value val =
+            TS::Value val =
                 q->valueAtHeight(qengine_param, dt, level_height);
 
             std::stringstream ss;
-            SmartMet::Spine::TimeSeries::OStreamVisitor osv(ss, *query.value_formatter, prec);
+            TS::OStreamVisitor osv(ss, *query.value_formatter, prec);
             boost::apply_visitor(osv, val);
 
             ennusteet->set(column, row, ss.str());
@@ -647,10 +645,10 @@ boost::shared_ptr<SmartMet::Spine::Table> bw::StoredForecastQueryHandler::extrac
                   nearestpoint,
                   query.lastpoint,
 				  localTimePool);
-              SmartMet::Spine::TimeSeries::Value val = q->value(qengine_param, d);
+              TS::Value val = q->value(qengine_param, d);
 
               std::stringstream ss;
-              SmartMet::Spine::TimeSeries::OStreamVisitor osv(ss, *query.value_formatter, prec);
+              TS::OStreamVisitor osv(ss, *query.value_formatter, prec);
               boost::apply_visitor(osv, val);
 
               ennusteet->set(column, row, ss.str());

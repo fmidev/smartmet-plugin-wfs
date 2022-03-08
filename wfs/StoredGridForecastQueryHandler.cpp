@@ -16,8 +16,7 @@
 #include <smartmet/macgyver/Exception.h>
 #include <smartmet/spine/ParameterFactory.h>
 #include <smartmet/spine/Table.h>
-#include <smartmet/spine/TimeSeriesGenerator.h>
-#include <smartmet/spine/TimeSeriesOutput.h>
+#include <smartmet/timeseries/TimeSeriesInclude.h>
 #include <smartmet/spine/Value.h>
 #include <smartmet/spine/HTTP.h>
 #include <grid-files/common/AdditionalParameters.h>
@@ -430,7 +429,7 @@ uint StoredGridForecastQueryHandler::processGridQuery(
       throw Fmi::Exception(BCP, "The grid-engine is disabled!");
 
     std::shared_ptr < ContentServer::ServiceInterface > contentServer = grid_engine->getContentServer_sptr();
-    Spine::TimeSeries::Value missing_value = Spine::TimeSeries::None();
+    TS::Value missing_value = TS::None();
     std::string timezoneName = loc->timezone;
     boost::local_time::time_zone_ptr localtz = itsTimezones.time_zone_from_string(loc->timezone);
     boost::local_time::time_zone_ptr tz = localtz;

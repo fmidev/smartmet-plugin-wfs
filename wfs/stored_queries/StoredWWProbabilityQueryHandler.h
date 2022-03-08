@@ -63,7 +63,7 @@ struct ProbabilityQueryParam
   std::locale outputLocale;
   bool nearestValid;
   std::string tz_name;
-  SmartMet::Spine::TimeSeriesGenerator::LocalTimeList tlist;
+  TS::TimeSeriesGenerator::LocalTimeList tlist;
   SmartMet::Spine::LocationPtr loc;
   SmartMet::Engine::Querydata::Producer producer;
   std::string missingText;

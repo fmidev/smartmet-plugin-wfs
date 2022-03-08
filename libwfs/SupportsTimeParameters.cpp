@@ -41,13 +41,13 @@ bw::SupportsTimeParameters::SupportsTimeParameters(bw::StoredQueryConfig::Ptr co
 
 bw::SupportsTimeParameters::~SupportsTimeParameters() {}
 
-boost::shared_ptr<SmartMet::Spine::TimeSeriesGeneratorOptions>
+boost::shared_ptr<TS::TimeSeriesGeneratorOptions>
 bw::SupportsTimeParameters::get_time_generator_options(const RequestParameterMap &param) const
 {
   try
   {
-    boost::shared_ptr<SmartMet::Spine::TimeSeriesGeneratorOptions> options(
-        new SmartMet::Spine::TimeSeriesGeneratorOptions);
+    boost::shared_ptr<TS::TimeSeriesGeneratorOptions> options(
+        new TS::TimeSeriesGeneratorOptions);
 
     options->endTimeUTC = true;
     options->startTimeUTC = true;
@@ -56,7 +56,7 @@ bw::SupportsTimeParameters::get_time_generator_options(const RequestParameterMap
     param.get<uint64_t>(P_HOURS, std::back_inserter(hours));
     if (not hours.empty())
     {
-      options->mode = SmartMet::Spine::TimeSeriesGeneratorOptions::FixedTimes;
+      options->mode = TS::TimeSeriesGeneratorOptions::FixedTimes;
       BOOST_FOREACH (int64_t hour, hours)
       {
         if ((hour >= 0) and (hour <= 23))
@@ -77,7 +77,7 @@ bw::SupportsTimeParameters::get_time_generator_options(const RequestParameterMap
     param.get<uint64_t>(P_TIMES, std::back_inserter(times));
     if (not times.empty())
     {
-      options->mode = SmartMet::Spine::TimeSeriesGeneratorOptions::FixedTimes;
+      options->mode = TS::TimeSeriesGeneratorOptions::FixedTimes;
       BOOST_FOREACH (int64_t tm, times)
       {
         int h = tm / 100;
@@ -99,7 +99,7 @@ bw::SupportsTimeParameters::get_time_generator_options(const RequestParameterMap
     boost::optional<uint64_t> time_step = param.get_optional<uint64_t>(P_TIME_STEP);
     if (time_step)
     {
-      if (options->mode != SmartMet::Spine::TimeSeriesGeneratorOptions::TimeSteps)
+      if (options->mode != TS::TimeSeriesGeneratorOptions::TimeSteps)
       {
         Fmi::Exception exception(BCP, "Cannot use timestep option in this time mode!");
         exception.addParameter(WFS_EXCEPTION_CODE, WFS_OPERATION_PARSING_FAILED);
@@ -108,7 +108,7 @@ bw::SupportsTimeParameters::get_time_generator_options(const RequestParameterMap
 
       if (*time_step == 0)
       {
-        options->mode = SmartMet::Spine::TimeSeriesGeneratorOptions::DataTimes;
+        options->mode = TS::TimeSeriesGeneratorOptions::DataTimes;
       }
       else if (1440 % *time_step != 0)
       {
@@ -228,7 +228,7 @@ Time related parameter support is implemented in C++ class
 SmartMet::Plugin::WFS::SupportsTimeParameters .
 
 The actual generation of time moments to use is implemented in C++ class
-SmartMet::Spine::TimeSeriesGenerator
+TS::TimeSeriesGenerator
 
 
 @section WFS_SQ_TIME_PARAMS_PARAMS The stored query handler parameters of this group

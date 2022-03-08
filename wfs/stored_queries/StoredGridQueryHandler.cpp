@@ -27,7 +27,6 @@
 #include <smartmet/engines/querydata/MetaQueryOptions.h>
 #include <smartmet/spine/Convenience.h>
 #include <smartmet/spine/ParameterFactory.h>
-#include <smartmet/spine/TimeSeriesOutput.h>
 
 #include "AreaUtils.h"
 #include "FeatureID.h"
@@ -35,7 +34,6 @@
 #include "WfsConvenience.h"
 #include "stored_queries/StoredGridQueryHandler.h"
 
-namespace ts = SmartMet::Spine::TimeSeries;
 namespace bw = SmartMet::Plugin::WFS;
 namespace ba = boost::algorithm;
 namespace bl = boost::lambda;
@@ -160,13 +158,13 @@ std::string formatToScaledInteger(double input, unsigned long digits, unsigned l
   }
 }
 
-ts::TimeSeriesGroupPtr makeSparseGrid(const ts::TimeSeriesGroupPtr& inputGrid,
+TS::TimeSeriesGroupPtr makeSparseGrid(const TS::TimeSeriesGroupPtr& inputGrid,
                                       unsigned long step,
                                       const std::pair<unsigned, unsigned>& extents)
 {
   try
   {
-    ts::TimeSeriesGroupPtr result(new ts::TimeSeriesGroup);
+    TS::TimeSeriesGroupPtr result(new TS::TimeSeriesGroup);
 
     unsigned long index = 0;
     unsigned long xindex;
@@ -179,7 +177,7 @@ ts::TimeSeriesGroupPtr makeSparseGrid(const ts::TimeSeriesGroupPtr& inputGrid,
 
       if (xindex % step == 0 && yindex % step == 0)
       {
-        result->push_back(ts::LonLatTimeSeries(locationIt->lonlat, locationIt->timeseries));
+        result->push_back(TS::LonLatTimeSeries(locationIt->lonlat, locationIt->timeseries));
       }
     }
 
@@ -394,8 +392,8 @@ void dump_meta_query_options(const qe::MetaQueryOptions& opt)
 }  // namespace
 
 std::pair<unsigned int, unsigned int> StoredGridQueryHandler::getDataIndexExtents(
-    const SmartMet::Spine::TimeSeries::TimeSeriesGroupPtr& longitudes,
-    const SmartMet::Spine::TimeSeries::TimeSeriesGroupPtr& latitudes,
+    const TS::TimeSeriesGroupPtr& longitudes,
+    const TS::TimeSeriesGroupPtr& latitudes,
     const Query& query,
     const std::string& dataCrs) const
 {
@@ -802,7 +800,7 @@ StoredGridQueryHandler::Result StoredGridQueryHandler::extract_forecast(
     }
 
     auto tz = geo_engine->getTimeZones().time_zone_from_string(zone);
-    auto tlist = SmartMet::Spine::TimeSeriesGenerator::generate(*query.toptions, tz);
+    auto tlist = TS::TimeSeriesGenerator::generate(*query.toptions, tz);
 
     if (debug_level > 2)
     {
@@ -868,7 +866,7 @@ StoredGridQueryHandler::Result StoredGridQueryHandler::extract_forecast(
     auto secondIt = tlist.begin();
     std::advance(secondIt, 1);
 
-    TimeSeriesGenerator::LocalTimeList oneTimeStep(tlist.begin(), secondIt);
+	TS::TimeSeriesGenerator::LocalTimeList oneTimeStep(tlist.begin(), secondIt);
 
     auto lon = ParameterFactory::instance().parse("longitude");
 
@@ -881,7 +879,7 @@ StoredGridQueryHandler::Result StoredGridQueryHandler::extract_forecast(
       query.data_params.push_back(lat);
     }
 
-	Spine::TimeSeries::LocalTimePoolPtr localTimePool =	boost::make_shared<SmartMet::Spine::TimeSeries::LocalTimePool>();
+	TS::LocalTimePoolPtr localTimePool =	boost::make_shared<TS::LocalTimePool>();
 
     SmartMet::Engine::Querydata::ParameterOptions qengine_lonparam(lon,
                                                                    producer,
@@ -1008,7 +1006,7 @@ StoredGridQueryHandler::Result StoredGridQueryHandler::extract_forecast(
             {
               auto tsValue = locationIt->timeseries[i].value;
 
-              if (boost::get<SmartMet::Spine::TimeSeries::None>(&(tsValue)))
+              if (boost::get<TS::None>(&(tsValue)))
               {
                 thisXYGrid.emplace_back(query.missing_text);
               }

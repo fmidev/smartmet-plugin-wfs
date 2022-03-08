@@ -85,7 +85,7 @@ FmiParameterName get_parameter(boost::shared_ptr<SmartMet::Plugin::WFS::StoredQu
 SmartMet::Engine::Querydata::ParameterOptions get_qengine_parameter(
     const SmartMet::Plugin::WFS::ProbabilityQueryParam& queryParam,
     const SmartMet::Spine::Parameter& smartmetParam,
-	SmartMet::Spine::TimeSeries::LocalTimePoolPtr& localTimePool)
+	TS::LocalTimePoolPtr& localTimePool)
 {
   try
   {
@@ -119,9 +119,9 @@ SmartMet::Engine::Querydata::ParameterOptions get_qengine_parameter(
 }
 
 void populate_result_vector(
-    SmartMet::Spine::TimeSeries::TimeSeriesPtr qengine_result_light,
-    SmartMet::Spine::TimeSeries::TimeSeriesPtr qengine_result_moderate,
-    SmartMet::Spine::TimeSeries::TimeSeriesPtr qengine_result_heavy,
+    TS::TimeSeriesPtr qengine_result_light,
+    TS::TimeSeriesPtr qengine_result_moderate,
+    TS::TimeSeriesPtr qengine_result_heavy,
     SmartMet::Plugin::WFS::WinterWeatherIntensityProbabilities& result_vector)
 {
   try
@@ -130,9 +130,9 @@ void populate_result_vector(
 
     for (unsigned int i = 0; i < result_set_size; i++)
     {
-      const SmartMet::Spine::TimeSeries::TimedValue& tv_light = qengine_result_light->at(i);
-      const SmartMet::Spine::TimeSeries::TimedValue& tv_moderate = qengine_result_moderate->at(i);
-      const SmartMet::Spine::TimeSeries::TimedValue& tv_heavy = qengine_result_heavy->at(i);
+      const TS::TimedValue& tv_light = qengine_result_light->at(i);
+      const TS::TimedValue& tv_moderate = qengine_result_moderate->at(i);
+      const TS::TimedValue& tv_heavy = qengine_result_heavy->at(i);
 
       if (!(boost::get<double>(&tv_light.value)))
       {
@@ -373,7 +373,7 @@ WinterWeatherIntensityProbabilities StoredWWProbabilityQueryHandler::getProbabil
   try
   {
     WinterWeatherIntensityProbabilities ret;
-	Spine::TimeSeries::LocalTimePoolPtr localTimePool =	boost::make_shared<SmartMet::Spine::TimeSeries::LocalTimePool>();
+	TS::LocalTimePoolPtr localTimePool =	boost::make_shared<TS::LocalTimePool>();
 
     SmartMet::Engine::Querydata::ParameterOptions qengine_param_light =
 	  get_qengine_parameter(queryParam, queryParam.paramLight, localTimePool);
@@ -382,11 +382,11 @@ WinterWeatherIntensityProbabilities StoredWWProbabilityQueryHandler::getProbabil
     SmartMet::Engine::Querydata::ParameterOptions qengine_param_heavy =
         get_qengine_parameter(queryParam, queryParam.paramHeavy, localTimePool);
 
-    SmartMet::Spine::TimeSeries::TimeSeriesPtr qengine_result_light =
+    TS::TimeSeriesPtr qengine_result_light =
         queryParam.q->values(qengine_param_light, queryParam.tlist);
-    SmartMet::Spine::TimeSeries::TimeSeriesPtr qengine_result_moderate =
+    TS::TimeSeriesPtr qengine_result_moderate =
         queryParam.q->values(qengine_param_moderate, queryParam.tlist);
-    SmartMet::Spine::TimeSeries::TimeSeriesPtr qengine_result_heavy =
+    TS::TimeSeriesPtr qengine_result_heavy =
         queryParam.q->values(qengine_param_heavy, queryParam.tlist);
 
     unsigned int result_set_size(qengine_result_light->size());
@@ -517,13 +517,13 @@ void StoredWWProbabilityQueryHandler::query(const StoredQuery& query,
     boost::posix_time::ptime origintime = q->originTime();
     boost::posix_time::ptime modificationtime = q->modificationTime();
 
-    boost::shared_ptr<SmartMet::Spine::TimeSeriesGeneratorOptions> pTimeOptions =
+    boost::shared_ptr<TS::TimeSeriesGeneratorOptions> pTimeOptions =
         get_time_generator_options(sq_params);
     // get data in UTC
     const std::string zone = "UTC";
     auto tz = geo_engine->getTimeZones().time_zone_from_string(zone);
-    SmartMet::Spine::TimeSeriesGenerator::LocalTimeList tlist =
-        SmartMet::Spine::TimeSeriesGenerator::generate(*pTimeOptions, tz);
+	TS::TimeSeriesGenerator::LocalTimeList tlist =
+        TS::TimeSeriesGenerator::generate(*pTimeOptions, tz);
 
     ProbabilityQueryResultSet query_results;
     // iterate locations

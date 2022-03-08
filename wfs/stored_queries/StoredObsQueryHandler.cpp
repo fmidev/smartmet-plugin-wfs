@@ -10,8 +10,7 @@
 #include <macgyver/StringConversion.h>
 #include <smartmet/spine/Convenience.h>
 #include <smartmet/spine/ParameterTools.h>
-#include <smartmet/spine/TimeSeries.h>
-#include <smartmet/spine/TimeSeriesOutput.h>
+#include <smartmet/timeseries/TimeSeriesInclude.h>
 #include <smartmet/spine/Value.h>
 #include <algorithm>
 #include <functional>
@@ -170,7 +169,7 @@ void StoredObsQueryHandler::query(const StoredQuery& query,
       std::vector<int64_t> tmp_vect;
       SmartMet::Engine::Observation::Settings query_params;
       query_params.useDataCache = true;
-	  query_params.localTimePool = boost::make_shared<SmartMet::Spine::TimeSeries::LocalTimePool>();
+	  query_params.localTimePool = boost::make_shared<TS::LocalTimePool>();
 	  
       const char* DATA_CRS_NAME = "urn:ogc:def:crs:EPSG::4326";
 
@@ -348,7 +347,7 @@ void StoredObsQueryHandler::query(const StoredQuery& query,
       query_params.taggedFMISIDs = obs_engine->translateToFMISID(
           query_params.starttime, query_params.endtime, query_params.stationtype, stationSettings);
 
-      SmartMet::Spine::TimeSeries::TimeSeriesVectorPtr obsengine_result(
+      TS::TimeSeriesVectorPtr obsengine_result(
           obs_engine->values(query_params));
 
       const bool emptyResult = (!obsengine_result || obsengine_result->size() == 0);
@@ -362,14 +361,14 @@ void StoredObsQueryHandler::query(const StoredQuery& query,
       pt::ptime now = get_plugin_impl().get_time_stamp();
       std::shared_ptr<Fmi::TimeFormatter> tfmt(Fmi::TimeFormatter::create("iso"));
 
-      // Formatting the SmartMet::Spine::TimeSeries::Value values.
+      // Formatting the TS::Value values.
       SmartMet::Spine::ValueFormatter fmt{SmartMet::Spine::ValueFormatterParam()};
       fmt.setMissingText(query_params.missingtext);
-      SmartMet::Spine::TimeSeries::StringVisitor sv(fmt, 3);
+      TS::StringVisitor sv(fmt, 3);
 
       if (not emptyResult)
       {
-        const SmartMet::Spine::TimeSeries::TimeSeries& ts_fmisid = obsengine_result->at(fmisid_ind);
+        const TS::TimeSeries& ts_fmisid = obsengine_result->at(fmisid_ind);
         for (std::size_t i = 0; i < ts_fmisid.size(); i++)
         {
           // Fmisids are doubles for some reason, fix this!!!!
@@ -456,15 +455,15 @@ void StoredObsQueryHandler::query(const StoredQuery& query,
 
       if (not emptyResult)
       {
-        const SmartMet::Spine::TimeSeries::TimeSeries& ts_lat = obsengine_result->at(lat_ind);
-        const SmartMet::Spine::TimeSeries::TimeSeries& ts_lon = obsengine_result->at(lon_ind);
-        const SmartMet::Spine::TimeSeries::TimeSeries& ts_height = obsengine_result->at(height_ind);
-        const SmartMet::Spine::TimeSeries::TimeSeries& ts_name = obsengine_result->at(name_ind);
-        const SmartMet::Spine::TimeSeries::TimeSeries& ts_dist = obsengine_result->at(dist_ind);
-        const SmartMet::Spine::TimeSeries::TimeSeries& ts_direction =
+        const TS::TimeSeries& ts_lat = obsengine_result->at(lat_ind);
+        const TS::TimeSeries& ts_lon = obsengine_result->at(lon_ind);
+        const TS::TimeSeries& ts_height = obsengine_result->at(height_ind);
+        const TS::TimeSeries& ts_name = obsengine_result->at(name_ind);
+        const TS::TimeSeries& ts_dist = obsengine_result->at(dist_ind);
+        const TS::TimeSeries& ts_direction =
             obsengine_result->at(direction_ind);
-        const SmartMet::Spine::TimeSeries::TimeSeries& ts_geoid = obsengine_result->at(geoid_ind);
-        const SmartMet::Spine::TimeSeries::TimeSeries& ts_wmo = obsengine_result->at(wmo_ind);
+        const TS::TimeSeries& ts_geoid = obsengine_result->at(geoid_ind);
+        const TS::TimeSeries& ts_wmo = obsengine_result->at(wmo_ind);
 
         std::map<std::string, SmartMet::Spine::LocationPtr> sites;
 
@@ -588,7 +587,7 @@ void StoredObsQueryHandler::query(const StoredQuery& query,
               bool first = true;
               lt::time_zone_ptr tzp;
 
-              const SmartMet::Spine::TimeSeries::TimeSeries& ts_epoch =
+              const TS::TimeSeries& ts_epoch =
                   obsengine_result->at(initial_bs_param.size());
               BOOST_FOREACH (int row_num, it1.second.row_index_vect)
               {
@@ -633,7 +632,7 @@ void StoredObsQueryHandler::query(const StoredQuery& query,
                   const int ind = entry.p.ind;
                   if (ind >= 0)
                   {
-                    const SmartMet::Spine::TimeSeries::TimeSeries& ts_k = obsengine_result->at(ind);
+                    const TS::TimeSeries& ts_k = obsengine_result->at(ind);
                     const uint precision = get_meteo_parameter_options(name)->precision;
                     sv.setPrecision(precision);
                     const std::string value = boost::apply_visitor(sv, ts_k[row_num].value);
@@ -642,7 +641,7 @@ void StoredObsQueryHandler::query(const StoredQuery& query,
                     {
                       const int qc_ind = entry.qc->ind;
                       std::stringstream qc_value;
-                      const SmartMet::Spine::TimeSeries::TimeSeries& ts_qc_k =
+                      const TS::TimeSeries& ts_qc_k =
                           obsengine_result->at(qc_ind);
                       sv.setPrecision(0);
                       const std::string value_qc = boost::apply_visitor(sv, ts_qc_k[row_num].value);

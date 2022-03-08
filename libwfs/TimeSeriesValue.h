@@ -3,7 +3,7 @@
 #include <boost/date_time/posix_time/posix_time.hpp>
 #include <macgyver/StringConversion.h>
 #include <macgyver/Exception.h>
-#include <spine/TimeSeries.h>
+#include <timeseries/TimeSeriesInclude.h>
 
 namespace SmartMet
 {
@@ -14,8 +14,8 @@ namespace WFS
 class TimeSeriesValue
 {
  public:
-  typedef SmartMet::Spine::TimeSeries::LonLat LonLat;
-  typedef SmartMet::Spine::TimeSeries::Value Value;
+  typedef TS::LonLat LonLat;
+  typedef TS::Value Value;
 
   TimeSeriesValue() : m_missingValue(32700.0), m_missingText("NaN") {}
   virtual ~TimeSeriesValue() {}
