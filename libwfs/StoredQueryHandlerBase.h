@@ -12,9 +12,9 @@
 #include <spine/CRSRegistry.h>
 #include <spine/Reactor.h>
 #include <spine/Value.h>
-#include <spine/ValueFormatter.h>
 
 #include <macgyver/TemplateFormatter.h>
+#include <macgyver/ValueFormatter.h>
 
 #include <boost/optional.hpp>
 #include <boost/shared_ptr.hpp>
@@ -73,7 +73,7 @@ class StoredQueryHandlerBase : virtual protected SupportsExtraHandlerParams,
 
   virtual void query(const StoredQuery& query,
                      const std::string& language,
-		     const boost::optional<std::string>& hostname,
+                     const boost::optional<std::string>& hostname,
                      std::ostream& output) const = 0;
 
   /**

@@ -103,7 +103,7 @@ StoredGridQueryHandler::~StoredGridQueryHandler() {}
 StoredGridQueryHandler::Query::Query(boost::shared_ptr<const StoredQueryConfig> config)
     : missing_text("nan"),
       language("lan"),
-      value_formatter(new SmartMet::Spine::ValueFormatter(SmartMet::Spine::ValueFormatterParam())),
+      value_formatter(new Fmi::ValueFormatter(Fmi::ValueFormatterParam())),
       top_left(NFmiPoint::gMissingLatlon),
       top_right(NFmiPoint::gMissingLatlon),
       bottom_left(NFmiPoint::gMissingLatlon),
@@ -768,8 +768,8 @@ StoredGridQueryHandler::Result StoredGridQueryHandler::extract_forecast(
       auto* model_area = grid_info.Area();
       if (!model_area)
       {
-        Fmi::Exception exception(
-            BCP, "Attempted to use producer with no Area specified: " + producer);
+        Fmi::Exception exception(BCP,
+                                 "Attempted to use producer with no Area specified: " + producer);
         exception.addParameter(WFS_EXCEPTION_CODE, WFS_OPERATION_PROCESSING_FAILED);
         throw exception;
       }
@@ -866,7 +866,7 @@ StoredGridQueryHandler::Result StoredGridQueryHandler::extract_forecast(
     auto secondIt = tlist.begin();
     std::advance(secondIt, 1);
 
-	TS::TimeSeriesGenerator::LocalTimeList oneTimeStep(tlist.begin(), secondIt);
+    TS::TimeSeriesGenerator::LocalTimeList oneTimeStep(tlist.begin(), secondIt);
 
     auto lon = ParameterFactory::instance().parse("longitude");
 
@@ -879,7 +879,7 @@ StoredGridQueryHandler::Result StoredGridQueryHandler::extract_forecast(
       query.data_params.push_back(lat);
     }
 
-	TS::LocalTimePoolPtr localTimePool =	boost::make_shared<TS::LocalTimePool>();
+    TS::LocalTimePoolPtr localTimePool = boost::make_shared<TS::LocalTimePool>();
 
     SmartMet::Engine::Querydata::ParameterOptions qengine_lonparam(lon,
                                                                    producer,
@@ -894,7 +894,7 @@ StoredGridQueryHandler::Result StoredGridQueryHandler::extract_forecast(
                                                                    query.find_nearest_valid_point,
                                                                    nearestpoint,
                                                                    query.lastpoint,
-																   localTimePool);
+                                                                   localTimePool);
 
     auto longitudeData = model->values(qengine_lonparam, mask, oneTimeStep);
 
@@ -911,7 +911,7 @@ StoredGridQueryHandler::Result StoredGridQueryHandler::extract_forecast(
                                                                    query.find_nearest_valid_point,
                                                                    nearestpoint,
                                                                    query.lastpoint,
-																   localTimePool);
+                                                                   localTimePool);
 
     auto latitudeData = model->values(qengine_latparam, mask, oneTimeStep);
 
@@ -987,7 +987,7 @@ StoredGridQueryHandler::Result StoredGridQueryHandler::extract_forecast(
               query.find_nearest_valid_point,
               nearestpoint,
               query.lastpoint,
-			  localTimePool);
+              localTimePool);
 
           auto val = model->values(qengine_param, mask, tlist);
 
@@ -1067,7 +1067,7 @@ SmartMet::Engine::Querydata::Producer StoredGridQueryHandler::select_producer(
 
 void StoredGridQueryHandler::query(const StoredQuery& stored_query,
                                    const std::string& language,
-				   const boost::optional<std::string> &hostname,
+                                   const boost::optional<std::string>& hostname,
                                    std::ostream& output) const
 {
   try
@@ -1109,9 +1109,9 @@ void StoredGridQueryHandler::query(const StoredQuery& stored_query,
       }
       query.precision = precision;
 
-      SmartMet::Spine::ValueFormatterParam vf_param;
+      Fmi::ValueFormatterParam vf_param;
       vf_param.missingText = query.missing_text;
-      query.value_formatter.reset(new SmartMet::Spine::ValueFormatter(vf_param));
+      query.value_formatter.reset(new Fmi::ValueFormatter(vf_param));
 
       const std::string dataCrs = params.get_single<std::string>(P_DATA_CRS);
 

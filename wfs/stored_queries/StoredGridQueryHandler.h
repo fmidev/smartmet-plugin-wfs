@@ -86,7 +86,7 @@ class StoredGridQueryHandler : public StoredQueryHandlerBase,
 
     std::unique_ptr<boost::posix_time::ptime> origin_time;
 
-    std::unique_ptr<SmartMet::Spine::ValueFormatter> value_formatter;
+    std::unique_ptr<Fmi::ValueFormatter> value_formatter;
     std::unique_ptr<Fmi::TimeFormatter> time_formatter;
     boost::shared_ptr<TS::TimeSeriesGeneratorOptions> toptions;
 
@@ -123,7 +123,7 @@ class StoredGridQueryHandler : public StoredQueryHandlerBase,
 
   virtual void query(const StoredQuery& query,
                      const std::string& language,
-		     const boost::optional<std::string>& hostname,
+                     const boost::optional<std::string>& hostname,
                      std::ostream& output) const;
 
  private:

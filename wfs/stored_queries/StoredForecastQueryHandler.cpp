@@ -5,8 +5,8 @@
 #include <boost/algorithm/string.hpp>
 #include <boost/format.hpp>
 #include <macgyver/StringConversion.h>
-#include <macgyver/TimeParser.h>
 #include <macgyver/TimeFormatter.h>
+#include <macgyver/TimeParser.h>
 #include <macgyver/TypeName.h>
 #include <newbase/NFmiPoint.h>
 #include <newbase/NFmiQueryData.h>
@@ -59,17 +59,28 @@ bw::StoredForecastQueryHandler::StoredForecastQueryHandler(
       bw::SupportsTimeParameters(config),
       bw::SupportsTimeZone(reactor, config),
       common_params(),
-      ind_geoid(SmartMet::add_param(common_params, "geoid", Parameter::Type::DataIndependent, kFmiGEOID)),
-      ind_epoch(SmartMet::add_param(common_params, "time", Parameter::Type::DataIndependent, kFmiTime)),
-      ind_place(SmartMet::add_param(common_params, "name", Parameter::Type::DataIndependent, kFmiName)),
-      ind_lat(SmartMet::add_param(common_params, "latitude", Parameter::Type::DataIndependent, kFmiLatitude)),
-      ind_lon(SmartMet::add_param(common_params, "longitude", Parameter::Type::DataIndependent, kFmiLongitude)),
-      ind_elev(SmartMet::add_param(common_params, "elevation", Parameter::Type::DataIndependent, kFmiElevation)),
-      ind_level(SmartMet::add_param(common_params, "level", Parameter::Type::DataIndependent, kFmiLevel)),
-      ind_region(SmartMet::add_param(common_params, "region", Parameter::Type::DataIndependent, kFmiRegion)),
-      ind_country(SmartMet::add_param(common_params, "country", Parameter::Type::DataIndependent, kFmiCountry)),
-      ind_country_iso(SmartMet::add_param(common_params, "iso2", Parameter::Type::DataIndependent, kFmiISO2)),
-      ind_localtz(SmartMet::add_param(common_params, "localtz", Parameter::Type::DataIndependent, kFmiLocalTZ))
+      ind_geoid(
+          SmartMet::add_param(common_params, "geoid", Parameter::Type::DataIndependent, kFmiGEOID)),
+      ind_epoch(
+          SmartMet::add_param(common_params, "time", Parameter::Type::DataIndependent, kFmiTime)),
+      ind_place(
+          SmartMet::add_param(common_params, "name", Parameter::Type::DataIndependent, kFmiName)),
+      ind_lat(SmartMet::add_param(
+          common_params, "latitude", Parameter::Type::DataIndependent, kFmiLatitude)),
+      ind_lon(SmartMet::add_param(
+          common_params, "longitude", Parameter::Type::DataIndependent, kFmiLongitude)),
+      ind_elev(SmartMet::add_param(
+          common_params, "elevation", Parameter::Type::DataIndependent, kFmiElevation)),
+      ind_level(
+          SmartMet::add_param(common_params, "level", Parameter::Type::DataIndependent, kFmiLevel)),
+      ind_region(SmartMet::add_param(
+          common_params, "region", Parameter::Type::DataIndependent, kFmiRegion)),
+      ind_country(SmartMet::add_param(
+          common_params, "country", Parameter::Type::DataIndependent, kFmiCountry)),
+      ind_country_iso(
+          SmartMet::add_param(common_params, "iso2", Parameter::Type::DataIndependent, kFmiISO2)),
+      ind_localtz(SmartMet::add_param(
+          common_params, "localtz", Parameter::Type::DataIndependent, kFmiLocalTZ))
 {
   try
   {
@@ -122,7 +133,7 @@ void bw::StoredForecastQueryHandler::query(const StoredQuery& stored_query,
       // Parsing request parameters
       try
       {
-        SmartMet::Spine::ValueFormatterParam vf_param;
+        Fmi::ValueFormatterParam vf_param;
 
         query.missing_text = params.get_single<std::string>(P_MISSING_TEXT);
         vf_param.missingText = query.missing_text;
@@ -139,7 +150,7 @@ void bw::StoredForecastQueryHandler::query(const StoredQuery& stored_query,
         parse_level_heights(params, query);
         parse_levels(params, query);
         parse_params(params, query);
-        query.value_formatter.reset(new SmartMet::Spine::ValueFormatter(vf_param));
+        query.value_formatter.reset(new Fmi::ValueFormatter(vf_param));
         query.time_formatter.reset(Fmi::TimeFormatter::create("iso"));
         parse_times(params, query);
 
@@ -568,7 +579,7 @@ boost::shared_ptr<SmartMet::Spine::Table> bw::StoredForecastQueryHandler::extrac
       }
       */
 
-	  TS::LocalTimePoolPtr localTimePool =	boost::make_shared<TS::LocalTimePool>();
+      TS::LocalTimePoolPtr localTimePool = boost::make_shared<TS::LocalTimePool>();
 
       // Fetch data from an arbitrary height.
       for (const auto& level_height : query.level_heights)
@@ -598,9 +609,8 @@ boost::shared_ptr<SmartMet::Spine::Table> bw::StoredForecastQueryHandler::extrac
                 query.find_nearest_valid_point,
                 nearestpoint,
                 query.lastpoint,
-				localTimePool);
-            TS::Value val =
-                q->valueAtHeight(qengine_param, dt, level_height);
+                localTimePool);
+            TS::Value val = q->valueAtHeight(qengine_param, dt, level_height);
 
             std::stringstream ss;
             TS::OStreamVisitor osv(ss, *query.value_formatter, prec);
@@ -644,7 +654,7 @@ boost::shared_ptr<SmartMet::Spine::Table> bw::StoredForecastQueryHandler::extrac
                   query.find_nearest_valid_point,
                   nearestpoint,
                   query.lastpoint,
-				  localTimePool);
+                  localTimePool);
               TS::Value val = q->value(qengine_param, d);
 
               std::stringstream ss;
@@ -862,7 +872,7 @@ bw::StoredForecastQueryHandler::Query::Query(boost::shared_ptr<const StoredQuery
       missing_text("nan"),
       language("lan"),
       find_nearest_valid_point(false),
-      value_formatter(new SmartMet::Spine::ValueFormatter(SmartMet::Spine::ValueFormatterParam())),
+      value_formatter(new Fmi::ValueFormatter(Fmi::ValueFormatterParam())),
       have_model_area(false),
       top_left(NFmiPoint::gMissingLatlon),
       top_right(NFmiPoint::gMissingLatlon),

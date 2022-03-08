@@ -1,6 +1,8 @@
 #pragma once
 
 #include "ArrayParameterTemplate.h"
+#include "RequiresGeoEngine.h"
+#include "RequiresQEngine.h"
 #include "ScalarParameterTemplate.h"
 #include "StoredQueryHandlerBase.h"
 #include "SupportsExtraHandlerParams.h"
@@ -8,8 +10,6 @@
 #include "SupportsMeteoParameterOptions.h"
 #include "SupportsTimeParameters.h"
 #include "SupportsTimeZone.h"
-#include "RequiresGeoEngine.h"
-#include "RequiresQEngine.h"
 #include <boost/date_time/posix_time/ptime.hpp>
 #include <engines/geonames/Engine.h>
 #include <engines/querydata/Engine.h>
@@ -33,7 +33,7 @@ class StoredForecastQueryHandler : public StoredQueryHandlerBase,
                                    protected SupportsTimeParameters,
                                    protected SupportsTimeZone
 {
-  public:
+ public:
   struct Query
   {
     std::list<std::string> models;
@@ -57,7 +57,7 @@ class StoredForecastQueryHandler : public StoredQueryHandlerBase,
    public:
     boost::shared_ptr<SmartMet::Spine::Table> result;
 
-    std::unique_ptr<SmartMet::Spine::ValueFormatter> value_formatter;
+    std::unique_ptr<Fmi::ValueFormatter> value_formatter;
     std::unique_ptr<Fmi::TimeFormatter> time_formatter;
     boost::shared_ptr<TS::TimeSeriesGeneratorOptions> toptions;
 
@@ -80,7 +80,7 @@ class StoredForecastQueryHandler : public StoredQueryHandlerBase,
     Query(boost::shared_ptr<const StoredQueryConfig> config);
     virtual ~Query();
     void set_locale(const std::string& locale_name);
-    void set_value_formatter(const SmartMet::Spine::ValueFormatterParam& vf_param);
+    void set_value_formatter(const Fmi::ValueFormatterParam& vf_param);
   };
 
  public:
@@ -93,7 +93,7 @@ class StoredForecastQueryHandler : public StoredQueryHandlerBase,
 
   virtual void query(const StoredQuery& query,
                      const std::string& language,
-		     const boost::optional<std::string> &hostname,
+                     const boost::optional<std::string>& hostname,
                      std::ostream& output) const;
 
  private:

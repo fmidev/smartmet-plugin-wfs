@@ -4,8 +4,8 @@
 #include "WfsConst.h"
 #include <fmt/format.h>
 #include <macgyver/StringConversion.h>
-#include <smartmet/spine/Convenience.h>
 #include <smartmet/macgyver/Exception.h>
+#include <smartmet/spine/Convenience.h>
 #include <smartmet/spine/ParameterTools.h>
 #include <smartmet/spine/Value.h>
 
@@ -134,7 +134,7 @@ void bw::StoredFlashQueryHandler::query(const StoredQuery& query,
     try
     {
       SmartMet::Engine::Observation::Settings query_params;
-	  query_params.localTimePool = boost::make_shared<TS::LocalTimePool>();
+      query_params.localTimePool = boost::make_shared<TS::LocalTimePool>();
 
       const char* DATA_CRS_NAME = "urn:ogc:def:crs:EPSG::4326";
       const std::string crs = params.get_single<std::string>(P_CRS);
@@ -151,8 +151,7 @@ void bw::StoredFlashQueryHandler::query(const StoredQuery& query,
       crs_registry.get_attribute(crs, "swapCoord", &swap_coord);
       if (show_height)
       {
-        Fmi::Exception exception(
-            BCP, "Projection '" + crs + "' not supported for lightning data!");
+        Fmi::Exception exception(BCP, "Projection '" + crs + "' not supported for lightning data!");
         exception.addParameter(WFS_EXCEPTION_CODE, WFS_OPERATION_PROCESSING_FAILED);
         throw exception.disableStackTrace();
       }
@@ -238,10 +237,9 @@ void bw::StoredFlashQueryHandler::query(const StoredQuery& query,
         }
       }
 
-      SmartMet::Spine::ValueFormatterParam vf_param;
+      Fmi::ValueFormatterParam vf_param;
       vf_param.missingText = query_params.missingtext;
-      boost::shared_ptr<SmartMet::Spine::ValueFormatter> value_formatter(
-          new SmartMet::Spine::ValueFormatter(vf_param));
+      boost::shared_ptr<Fmi::ValueFormatter> value_formatter(new Fmi::ValueFormatter(vf_param));
 
       if (query_params.starttime > query_params.endtime)
       {
