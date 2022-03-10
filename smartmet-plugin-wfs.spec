@@ -3,7 +3,7 @@
 %define SPECNAME smartmet-plugin-%{DIRNAME}
 Summary: SmartMet WFS plugin
 Name: %{SPECNAME}
-Version: 22.3.8
+Version: 22.3.10
 Release: 1%{?dist}.fmi
 License: MIT
 Group: SmartMet/Plugins
@@ -31,10 +31,10 @@ BuildRequires: smartmet-library-macgyver-devel >= 22.3.8
 BuildRequires: smartmet-engine-contour-devel >= 22.1.21
 BuildRequires: smartmet-engine-geonames-devel >= 22.1.31
 BuildRequires: smartmet-engine-gis-devel >= 22.2.10
-BuildRequires: smartmet-engine-grid-devel >= 22.3.7
+BuildRequires: smartmet-engine-grid-devel >= 22.3.10
 BuildRequires: smartmet-engine-querydata-devel >= 22.3.8
-BuildRequires: smartmet-library-grid-content-devel >= 22.3.7
-BuildRequires: smartmet-library-grid-files-devel >= 22.3.7
+BuildRequires: smartmet-library-grid-content-devel >= 22.3.10
+BuildRequires: smartmet-library-grid-files-devel >= 22.3.8
 %if %{with observation}
 BuildRequires: smartmet-engine-observation-devel >= 22.3.8
 %endif
@@ -50,9 +50,9 @@ Requires: smartmet-library-gis >= 22.1.24
 Requires: smartmet-engine-contour >= 22.1.21
 Requires: smartmet-engine-geonames >= 22.1.31
 Requires: smartmet-engine-gis >= 22.2.10
-Requires: smartmet-engine-grid >= 22.3.7
-Requires: smartmet-library-grid-content >= 22.3.7
-Requires: smartmet-library-grid-files >= 22.3.7
+Requires: smartmet-engine-grid >= 22.3.10
+Requires: smartmet-library-grid-content >= 22.3.10
+Requires: smartmet-library-grid-files >= 22.3.8
 %if %{with observation}
 Requires: smartmet-engine-observation >= 22.3.8
 %endif
@@ -98,7 +98,7 @@ Obsoletes: smartmet-brainstorm-wfs-debuginfo < 16.11.1
 %if %{with observation}
 #TestRequires: smartmet-engine-observation >= 22.3.8
 %endif
-#TestRequires: smartmet-engine-grid >= 22.3.7
+#TestRequires: smartmet-engine-grid >= 22.3.10
 #TestRequires: redis
 #TestRequires: smartmet-engine-grid-test
 # Required by top level Makefile
@@ -109,10 +109,10 @@ SmartMet WFS plugin
 
 %package -n %{SPECNAME}-devel
 Summary: SmartMet WFS plugin development files
-Requires: smartmet-library-spine-devel >= 22.2.10
+Requires: smartmet-library-spine-devel >= 22.3.8
 Requires: smartmet-library-gis-devel >= 22.1.24
 Requires: smartmet-library-locus-devel >= 22.1.31
-Requires: smartmet-library-macgyver-devel >= 22.2.24
+Requires: smartmet-library-macgyver-devel >= 22.3.8
 Requires: %{SPECNAME} = %{version}-%{release}
 %description -n %{SPECNAME}-devel
 SmartMet WFS plugin development files (for building testsuite without rebuilding plugin)
@@ -146,6 +146,9 @@ rm -rf $RPM_BUILD_ROOT
 %{_includedir}/smartmet/plugin/wfs/request/*.h
 
 %changelog
+* Thu Mar 10 2022 Mika Heiskanen <mika.heiskanen@fmi.fi> - 22.3.10-1.fmi
+- Repackaged due to base library ABI changes
+
 * Tue Mar 8 2022 Anssi Reponen <anssi.reponen@fmi.fi> - 22.3.8-1.fmi
 - Started using timeseries-library (BRAINSTORM-2259)
 
