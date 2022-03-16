@@ -31,6 +31,8 @@ void bw::SupportsLocationParameters::engOrFinToEnOrFi(std::string &language)
     std::string lang = Fmi::ascii_tolower_copy(language);
     if (lang == "fin")
       language = "fi";
+    if (lang == "swe")
+      language = "sv";
     if (lang == "eng")
       language = "en";
   }
