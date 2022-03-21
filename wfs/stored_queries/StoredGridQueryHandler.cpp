@@ -26,7 +26,7 @@
 #include <smartmet/engines/gis/GdalUtils.h>
 #include <smartmet/engines/querydata/MetaQueryOptions.h>
 #include <smartmet/spine/Convenience.h>
-#include <smartmet/spine/ParameterFactory.h>
+#include <smartmet/timeseries/ParameterFactory.h>
 
 #include "AreaUtils.h"
 #include "FeatureID.h"
@@ -708,7 +708,7 @@ void StoredGridQueryHandler::parse_params(const RequestParameterMap& param, Quer
   try
   {
     using SmartMet::Spine::Parameter;
-    using SmartMet::Spine::ParameterFactory;
+    using SmartMet::TimeSeries::ParameterFactory;
 
     std::vector<std::string> names;
     param.get<std::string>(P_PARAM, std::back_inserter(names));
@@ -868,9 +868,9 @@ StoredGridQueryHandler::Result StoredGridQueryHandler::extract_forecast(
 
     TS::TimeSeriesGenerator::LocalTimeList oneTimeStep(tlist.begin(), secondIt);
 
-    auto lon = ParameterFactory::instance().parse("longitude");
+    auto lon = TimeSeries::ParameterFactory::instance().parse("longitude");
 
-    auto lat = ParameterFactory::instance().parse("latitude");
+    auto lat = TimeSeries::ParameterFactory::instance().parse("latitude");
 
     // Add these so they will be returned to caller
     if (query.includeDebugData)

@@ -8,10 +8,10 @@
 #include <boost/lambda/lambda.hpp>
 #include <macgyver/Exception.h>
 #include <macgyver/StringConversion.h>
-#include <smartmet/spine/Convenience.h>
-#include <smartmet/spine/ParameterTools.h>
-#include <smartmet/spine/Value.h>
-#include <smartmet/timeseries/TimeSeriesInclude.h>
+#include <spine/Convenience.h>
+#include <spine/Value.h>
+#include <timeseries/TimeSeriesInclude.h>
+#include <timeseries/ParameterTools.h>
 #include <algorithm>
 #include <functional>
 
@@ -656,9 +656,9 @@ void StoredObsQueryHandler::query(const StoredQuery& query,
                     auto geoLoc = sites.at(geoid);
                     if (geoLoc)
                     {
-                      if (SmartMet::Spine::is_location_parameter(name))
+                      if (SmartMet::TimeSeries::is_location_parameter(name))
                       {
-                        const std::string val = SmartMet::Spine::location_parameter(
+                        const std::string val = SmartMet::TimeSeries::location_parameter(
                             geoLoc,
                             name,
                             fmt,
@@ -666,14 +666,14 @@ void StoredObsQueryHandler::query(const StoredQuery& query,
                             get_meteo_parameter_options(name)->precision);
                         obs_rec["data"][k]["value"] = val;
                       }
-                      else if (SmartMet::Spine::is_time_parameter(name))
+                      else if (SmartMet::TimeSeries::is_time_parameter(name))
                       {
                         const std::string timestring = "Not supported";
                         if (not curr_locale)
                         {
                           curr_locale.reset(new std::locale(query_params.localename.c_str()));
                         }
-                        const auto val = SmartMet::Spine::time_parameter(name,
+                        const auto val = SmartMet::TimeSeries::time_parameter(name,
                                                                          ldt,
                                                                          now,
                                                                          *geoLoc,
@@ -766,10 +766,10 @@ bool StoredObsQueryHandler::add_parameters(const RequestParameterMap& params,
                                            SmartMet::Engine::Observation::Settings& query_params,
                                            std::vector<ExtParamIndexEntry>& parameter_index) const
 {
-  using SmartMet::Spine::is_location_parameter;
-  using SmartMet::Spine::is_special_parameter;
-  using SmartMet::Spine::is_time_parameter;
-  using SmartMet::Spine::makeParameter;
+  using SmartMet::TimeSeries::is_location_parameter;
+  using SmartMet::TimeSeries::is_special_parameter;
+  using SmartMet::TimeSeries::is_time_parameter;
+  using SmartMet::TimeSeries::makeParameter;
 
   try
   {
@@ -806,7 +806,7 @@ bool StoredObsQueryHandler::add_parameters(const RequestParameterMap& params,
         entry.p.name = name;
         SmartMet::Spine::Parameter param = makeParameter(name);
         bool sensor_parameter_exists = false;
-        if (not SmartMet::Spine::special(param))
+        if (not SmartMet::TimeSeries::special(param))
         {
           have_meteo_param = true;
           auto parameter_option = get_meteo_parameter_options(name);

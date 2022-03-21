@@ -23,6 +23,7 @@ INCLUDES += \
 	-isystem $(includedir)/jsoncpp
 
 LIBS += -L$(libdir) \
+	-lsmartmet-timeseries \
 	-lsmartmet-spine \
 	-lsmartmet-newbase \
 	-lsmartmet-macgyver \

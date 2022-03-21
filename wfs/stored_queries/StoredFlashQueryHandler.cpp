@@ -4,10 +4,10 @@
 #include "WfsConst.h"
 #include <fmt/format.h>
 #include <macgyver/StringConversion.h>
-#include <smartmet/macgyver/Exception.h>
-#include <smartmet/spine/Convenience.h>
-#include <smartmet/spine/ParameterTools.h>
-#include <smartmet/spine/Value.h>
+#include <macgyver/Exception.h>
+#include <spine/Convenience.h>
+#include <spine/Value.h>
+#include <timeseries/ParameterTools.h>
 
 namespace bw = SmartMet::Plugin::WFS;
 namespace pt = boost::posix_time;
@@ -177,13 +177,13 @@ void bw::StoredFlashQueryHandler::query(const StoredQuery& query,
       int first_param = 0, last_param = 0;
       BOOST_FOREACH (std::string name, param_names)
       {
-        SmartMet::Spine::Parameter param = SmartMet::Spine::makeParameter(name);
+        SmartMet::Spine::Parameter param = SmartMet::TimeSeries::makeParameter(name);
         query_params.parameters.push_back(param);
         int ind = query_params.parameters.size() - 1;
         if (first_param == 0)
           first_param = ind;
         last_param = ind;
-        if (!special(param))
+        if (!TimeSeries::special(param))
           have_meteo_param = true;
       }
 

@@ -10,12 +10,12 @@
 #include <macgyver/TypeName.h>
 #include <newbase/NFmiPoint.h>
 #include <newbase/NFmiQueryData.h>
-#include <smartmet/engines/querydata/MetaQueryOptions.h>
-#include <smartmet/macgyver/Exception.h>
-#include <smartmet/spine/Convenience.h>
-#include <smartmet/spine/ParameterFactory.h>
-#include <smartmet/spine/Table.h>
-#include <smartmet/spine/Value.h>
+#include <engines/querydata/MetaQueryOptions.h>
+#include <macgyver/Exception.h>
+#include <spine/Convenience.h>
+#include <spine/Table.h>
+#include <spine/Value.h>
+#include <timeseries/ParameterFactory.h>
 #include <limits>
 #include <locale>
 #include <map>
@@ -811,7 +811,7 @@ void bw::StoredForecastQueryHandler::parse_params(const RequestParameterMap& par
   try
   {
     using SmartMet::Spine::Parameter;
-    using SmartMet::Spine::ParameterFactory;
+    using SmartMet::TimeSeries::ParameterFactory;
 
     dest.data_params = common_params;
 

@@ -19,14 +19,14 @@
 #include <macgyver/TypeName.h>
 #include <newbase/NFmiPoint.h>
 #include <newbase/NFmiQueryData.h>
-#include <smartmet/engines/querydata/MetaQueryOptions.h>
-#include <smartmet/macgyver/Exception.h>
-#include <smartmet/spine/Convenience.h>
-#include <smartmet/spine/HTTP.h>
-#include <smartmet/spine/ParameterFactory.h>
-#include <smartmet/spine/Table.h>
-#include <smartmet/spine/Value.h>
-#include <smartmet/timeseries/TimeSeriesInclude.h>
+#include <engines/querydata/MetaQueryOptions.h>
+#include <macgyver/Exception.h>
+#include <spine/Convenience.h>
+#include <spine/HTTP.h>
+#include <spine/Table.h>
+#include <spine/Value.h>
+#include <timeseries/ParameterFactory.h>
+#include <timeseries/TimeSeriesInclude.h>
 #include <limits>
 #include <locale>
 #include <map>
@@ -1039,7 +1039,7 @@ void StoredGridForecastQueryHandler::parse_params(const RequestParameterMap& par
   try
   {
     using Spine::Parameter;
-    using Spine::ParameterFactory;
+    using TimeSeries::ParameterFactory;
 
     dest.data_params = common_params;
 
