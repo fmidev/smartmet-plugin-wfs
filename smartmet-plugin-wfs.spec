@@ -3,7 +3,7 @@
 %define SPECNAME smartmet-plugin-%{DIRNAME}
 Summary: SmartMet WFS plugin
 Name: %{SPECNAME}
-Version: 22.3.16
+Version: 22.3.21
 Release: 1%{?dist}.fmi
 License: MIT
 Group: SmartMet/Plugins
@@ -146,6 +146,9 @@ rm -rf $RPM_BUILD_ROOT
 %{_includedir}/smartmet/plugin/wfs/request/*.h
 
 %changelog
+* Mon Mar 21 2022 Andris Pavēnis <andris.pavenis@fmi.fi> 22.3.21-1.fmi
+- Update due to changes in smartmet-library-spine and smartnet-library-timeseries
+
 * Wed Mar 16 2022 Anssi Reponen <anssi.reponen@fmi.fi> - 22.3.16-1.fmi
 - Added support for swe->sv language code conversion (BRAINSTORM-2276)
 
