@@ -1,3 +1,7 @@
 GetFeature/observation/fmi::observations::weather::sounding::multipointcoverage-latest.xml.post
 GetFeature/observation/fmi::observations::weather::sounding::multipointcoverage.xml.post
 GetFeature/observation/fmi::observations::weather::sounding::multipointcoverage-type-1.xml.post
+GetFeature/observation/sounding-several-types-type-1.xml.post
+GetFeature/observation/sounding-several-types-type-2.xml.post
+GetFeature/observation/sounding-several-types-type-3.xml.post
+GetFeature/observation/sounding-several-types-type-all.xml.post
