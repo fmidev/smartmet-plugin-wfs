@@ -206,12 +206,14 @@ void StoredSoundingQueryHandler::query(const StoredQuery& query,
                                                         ++dataLatitudeIt,
                                                         ++dataValueIt,
                                                         ++dataQualityIt,
-                                                        ++dataSignificanceIt)
+                                                        ++dataSignificanceIt
+            )
 
         {
           std::string measurandIdStr =
               SmartMet::Engine::Observation::QueryResult::toString(dataMeasurandIdIt, 0);
           int64_t soundingId = dataContainer->castTo<int64_t>(dataSoundingIdIt);
+          int64_t soundingType = boost::any_cast<int64_t>(*radioSoundingMap.at(soundingId).mSoundingType);
 
           if ((dataSoundingIdIt == dataSoundingIdItBegin) or (currentSoundingId != soundingId))
           {
@@ -259,9 +261,11 @@ void StoredSoundingQueryHandler::query(const StoredQuery& query,
             featureId.erase_param(P_BEGIN_TIME);
             featureId.erase_param(P_END_TIME);
             featureId.erase_param(P_FMISIDS);
+            featureId.erase_param(P_SOUNDING_TYPE);
             featureId.add_param(P_BEGIN_TIME, dataMessageTimeStr);
             featureId.add_param(P_END_TIME, dataMessageTimeStr);
             featureId.add_param(P_FMISIDS, currentStationId);
+            featureId.add_param(P_SOUNDING_TYPE, soundingType);
 
             group["featureId"] = featureId.get_id();
 
@@ -648,11 +652,12 @@ void StoredSoundingQueryHandler::parseSoundingQuery(const RequestParameterMap& p
   ValueVectorConstIt messageTimeIt = soundingQueryResult->begin("MESSAGE_TIME");
   ValueVectorConstIt launchTimeIt = soundingQueryResult->begin("LAUNCH_TIME");
   ValueVectorConstIt soundingEndIt = soundingQueryResult->begin("SOUNDING_END");
+  ValueVectorConstIt soundingTypeIt = soundingQueryResult->begin("SOUNDING_TYPE");
   std::string stationId, prevStationId;
 
   const bool latest = params.get_single<bool>(P_LATEST);
   for (; soundingIdIt != soundingIdItEnd;
-       ++soundingIdIt, ++stationIdIt, ++messageTimeIt, ++launchTimeIt, ++soundingEndIt)
+       ++soundingIdIt, ++stationIdIt, ++messageTimeIt, ++launchTimeIt, ++soundingEndIt, ++soundingTypeIt)
   {
     const int32_t tmpstationId = soundingQueryResult->castTo<int32_t>(stationIdIt);
 
@@ -666,6 +671,7 @@ void StoredSoundingQueryHandler::parseSoundingQuery(const RequestParameterMap& p
       rSounding.mMessageTime = messageTimeIt;
       rSounding.mLaunchTime = launchTimeIt;
       rSounding.mSoundingEnd = soundingEndIt;
+      rSounding.mSoundingType = soundingTypeIt;
       latestSet.insert(tmpstationId);
       radioSoundingMap.emplace(soundingId, rSounding);
     }
@@ -683,6 +689,7 @@ void StoredSoundingQueryHandler::makeSoundingQuery(const RequestParameterMap& pa
   profileQueryParams.addField("MESSAGE_TIME");
   profileQueryParams.addField("LAUNCH_TIME");
   profileQueryParams.addField("SOUNDING_END");
+  profileQueryParams.addField("SOUNDING_TYPE");
 
   // Station identities
   for (auto& station : stations)
@@ -693,10 +700,11 @@ void StoredSoundingQueryHandler::makeSoundingQuery(const RequestParameterMap& pa
 
   std::vector<uint64_t> soundingTypes;
   params.get<uint64_t>(P_SOUNDING_TYPE, std::back_inserter(soundingTypes));
-  for (auto soundingType : soundingTypes) {
-    profileQueryParams.addOperation(
-      "OR_GROUP_sounding_type", "SOUNDING_TYPE", "PropertyIsEqualTo", (long)soundingType);
+  if (soundingTypes.empty()) {
+      soundingTypes.push_back(2);
   }
+  profileQueryParams.addOperation(
+      "OR_GROUP_sounding_type", "SOUNDING_TYPE", "PropertyIsOneOf", soundingTypes);
 
   std::vector<uint64_t> publicityFlags;
   params.get<uint64_t>(P_PUBLICITY, std::back_inserter(publicityFlags));
