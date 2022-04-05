@@ -691,8 +691,9 @@ void StoredSoundingQueryHandler::parseSoundingQuery(const RequestParameterMap& p
 
           if (should_hide)
           {
-              std::cout << "### Removing sounding ID " << curr->first << ": of type 1 when type 2 sounding data are present"
-                        << std::endl;
+              //std::cout << "### Removing sounding ID " << curr->first
+              //          << ": of type 1 when type 2 sounding data are present"
+              //          << std::endl;
               radioSoundingMap.erase(curr);
           }
       }
