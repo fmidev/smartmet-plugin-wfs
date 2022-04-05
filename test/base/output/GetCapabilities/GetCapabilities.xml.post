@@ -317,6 +317,18 @@
         <ows:UpperCorner>180 90</ows:UpperCorner>
       </ows:WGS84BoundingBox>
     </FeatureType>
+    <FeatureType xmlns:omso="http://inspire.ec.europa.eu/schemas/omso/3.0" xsi:schemaLocation="http://inspire.ec.europa.eu/schemas/omso/3.0 https://inspire.ec.europa.eu/schemas/omso/3.0/SpecialisedObservations.xsd">
+      <Name>omso:TrajectoryObservation</Name>
+      <Title>Atmospheric sounding observations</Title>
+      <Abstract>Periodic atmospheric (balloon) sounding observations from the Finnish sounding stations.</Abstract>
+      <DefaultCRS>http://www.opengis.net/def/crs/EPSG/0/7423</DefaultCRS>
+      <OtherCRS>http://www.opengis.net/def/crs/EPSG/0/7409</OtherCRS>
+      <OtherCRS>http://www.opengis.net/def/crs/EPSG/0/3903</OtherCRS>
+      <ows:WGS84BoundingBox>
+        <ows:LowerCorner>-180 -90</ows:LowerCorner>
+        <ows:UpperCorner>180 90</ows:UpperCorner>
+      </ows:WGS84BoundingBox>
+    </FeatureType>
     
   </FeatureTypeList>
 

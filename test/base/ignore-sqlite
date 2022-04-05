@@ -8,3 +8,9 @@ GetFeature/observation/special/22.kvp.get
 ; FIXME: Following 2 tests do not work with Harmony hybrid model provided in smartmet-test-data
 GetFeature/forecast/simple_latlon_and_height_specified.xml.post
 GetFeature/forecast/simple_place_and_height_specified.xml.post
+
+# Supported for Oracle database only
+GetFeature/observation/sounding/several-types-request-type-1.kvp.get
+GetFeature/observation/sounding/several-types-request-type-2.kvp.get
+GetFeature/observation/sounding/several-types-request-type-3.kvp.get
+GetFeature/observation/sounding/several-types-request-all.kvp.get

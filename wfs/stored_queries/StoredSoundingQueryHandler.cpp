@@ -257,6 +257,7 @@ void StoredSoundingQueryHandler::query(const StoredQuery& query,
             group["phenomenonTime"] = dataMessageTimeStr;
             group["resultTime"] = dataMessageTimeStr;
             group["soundingId"] = soundingId;
+            group["soundingType"] = soundingType;
 
             featureId.erase_param(P_BEGIN_TIME);
             featureId.erase_param(P_END_TIME);

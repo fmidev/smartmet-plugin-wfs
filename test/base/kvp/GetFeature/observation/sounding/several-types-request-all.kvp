@@ -1,0 +1,1 @@
+service=WFS&version=2.0.0&request=GetFeature&storedquery_id=SoundingTest&starttime=2017-12-29T12:00:00Z&endtime=2017-12-29T12:00:00Z&fmisid=101932&soundingtype=1,2,3&parameters=TAP_PT1S_avg
