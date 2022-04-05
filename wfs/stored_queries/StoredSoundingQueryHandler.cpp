@@ -673,6 +673,31 @@ void StoredSoundingQueryHandler::parseSoundingQuery(const RequestParameterMap& p
       radioSoundingMap.emplace(soundingId, rSounding);
     }
   }
+
+  RadioSoundingMap::iterator curr, next, it;
+  for (curr = radioSoundingMap.begin(); curr != radioSoundingMap.end(); curr = next)
+  {
+      next = curr;
+      next++;
+      if (curr->second.soundingType == 1) {
+          bool should_hide = false;
+          for (it = radioSoundingMap.begin(); !should_hide && it != radioSoundingMap.end(); ++it)
+          {
+              should_hide |=
+                  (it->second.stationId == curr->second.stationId)
+                  && (it->second.messageTimeStr == curr->second.messageTimeStr)
+                  && (it->second.soundingType == 2);
+          }
+
+          if (should_hide)
+          {
+              std::cout << "### Removing sounding ID " << curr->first << ": of type 1 when type 2 sounding data are present"
+                        << std::endl;
+              radioSoundingMap.erase(curr);
+          }
+      }
+
+  }
 }
 
 void StoredSoundingQueryHandler::makeSoundingQuery(const RequestParameterMap& params,
