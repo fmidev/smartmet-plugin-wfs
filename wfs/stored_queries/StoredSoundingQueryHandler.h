@@ -62,11 +62,11 @@ class StoredSoundingQueryHandler : public StoredQueryHandlerBase,
   {
    public:
     using Id = int;
-    ValueVectorConstIt mStationId;
-    ValueVectorConstIt mMessageTime;
-    ValueVectorConstIt mLaunchTime;
-    ValueVectorConstIt mSoundingEnd;
-    ValueVectorConstIt mSoundingType;
+    std::string stationId;
+    std::string messageTimeStr;
+    std::string launchTimeStr;
+    std::string soundingEndStr;
+    int soundingType;
   };
   using RadioSoundingMap = std::map<RadioSounding::Id, RadioSounding>;
 

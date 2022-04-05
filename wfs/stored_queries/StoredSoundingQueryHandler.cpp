@@ -213,7 +213,7 @@ void StoredSoundingQueryHandler::query(const StoredQuery& query,
           std::string measurandIdStr =
               SmartMet::Engine::Observation::QueryResult::toString(dataMeasurandIdIt, 0);
           int64_t soundingId = dataContainer->castTo<int64_t>(dataSoundingIdIt);
-          int64_t soundingType = boost::any_cast<int64_t>(*radioSoundingMap.at(soundingId).mSoundingType);
+          int64_t soundingType = radioSoundingMap.at(soundingId).soundingType;
 
           if ((dataSoundingIdIt == dataSoundingIdItBegin) or (currentSoundingId != soundingId))
           {
@@ -235,11 +235,9 @@ void StoredSoundingQueryHandler::query(const StoredQuery& query,
               throw exception.disableStackTrace();
             }
 
-            currentStationId =
-                SmartMet::Engine::Observation::QueryResult::toString(rsIt->second.mStationId, 0);
+            currentStationId = rsIt->second.stationId;
 
-            std::string dataMessageTimeStr =
-                SmartMet::Engine::Observation::QueryResult::toString(rsIt->second.mMessageTime);
+            std::string dataMessageTimeStr = rsIt->second.messageTimeStr;
             static const long ref_jd = boost::gregorian::date(1970, 1, 1).julian_day();
             boost::posix_time::ptime epoch = Fmi::TimeParser::parse_iso(dataMessageTimeStr);
             long long jd = epoch.date().julian_day();
@@ -247,11 +245,9 @@ void StoredSoundingQueryHandler::query(const StoredQuery& query,
             sEpoch = 86400LL * (jd - ref_jd) + seconds;
 
             CTPP::CDT& group = hash["groups"][groupId];
-            const std::string launcTimeStr =
-                SmartMet::Engine::Observation::QueryResult::toString(rsIt->second.mLaunchTime);
+            const std::string launcTimeStr = rsIt->second.launchTimeStr;
             group["phenomenonBeginTime"] = launcTimeStr.empty() ? dataMessageTimeStr : launcTimeStr;
-            const std::string soundingEndStr =
-                SmartMet::Engine::Observation::QueryResult::toString(rsIt->second.mSoundingEnd);
+            const std::string soundingEndStr = rsIt->second.soundingEndStr;
             group["phenomenonEndTime"] =
                 soundingEndStr.empty() ? dataMessageTimeStr : soundingEndStr;
             group["phenomenonTime"] = dataMessageTimeStr;
@@ -668,11 +664,11 @@ void StoredSoundingQueryHandler::parseSoundingQuery(const RequestParameterMap& p
     {
       const int32_t soundingId = soundingQueryResult->castTo<int32_t>(soundingIdIt);
       RadioSounding rSounding;
-      rSounding.mStationId = stationIdIt;
-      rSounding.mMessageTime = messageTimeIt;
-      rSounding.mLaunchTime = launchTimeIt;
-      rSounding.mSoundingEnd = soundingEndIt;
-      rSounding.mSoundingType = soundingTypeIt;
+      rSounding.stationId = SmartMet::Engine::Observation::QueryResult::toString(stationIdIt, 0);
+      rSounding.messageTimeStr = SmartMet::Engine::Observation::QueryResult::toString(messageTimeIt);
+      rSounding.launchTimeStr = SmartMet::Engine::Observation::QueryResult::toString(launchTimeIt);
+      rSounding.soundingEndStr = SmartMet::Engine::Observation::QueryResult::toString(soundingEndIt);
+      rSounding.soundingType = SmartMet::Engine::Observation::QueryResult::castTo<int>(soundingTypeIt);
       latestSet.insert(tmpstationId);
       radioSoundingMap.emplace(soundingId, rSounding);
     }
