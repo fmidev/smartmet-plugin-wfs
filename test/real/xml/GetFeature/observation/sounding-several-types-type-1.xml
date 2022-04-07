@@ -10,6 +10,6 @@
      <wfs:Parameter name="starttime">2017-12-30T18:00:00Z</wfs:Parameter>
      <wfs:Parameter name="endtime">2017-12-30T18:00:00Z</wfs:Parameter>
      <wfs:Parameter name="fmisid">101104</wfs:Parameter>
-     <wfs:Parameter name="soundingType">1</wfs:Parameter>
+     <wfs:Parameter name="soundingtype">1</wfs:Parameter>
    </wfs:StoredQuery>
 </wfs:GetFeature>

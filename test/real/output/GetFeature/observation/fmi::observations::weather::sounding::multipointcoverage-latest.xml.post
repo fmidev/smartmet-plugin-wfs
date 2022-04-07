@@ -45,6 +45,12 @@
                     <om:value>meteorology</om:value>
                 </om:NamedValue>
             </om:parameter>
+            <om:parameter>
+                <om:NamedValue>
+                    <om:name xlink:title="soundingType"/>
+                    <om:value>2</om:value>
+                </om:NamedValue>
+            </om:parameter>
             <om:observedProperty  xlink:href="http://opendata.fmi.fi/fmi-apikey/foobar/meta?observableProperty=observation&amp;param=TAP_PT1S_avg&amp;language=eng"/>
             <om:featureOfInterest>
                 <sams:SF_SpatialSamplingFeature gml:id="foi-ssf-1-fmisid-101104">
@@ -5367,6 +5373,12 @@
                 <om:NamedValue>
                     <om:name xlink:href="https://inspire.ec.europa.eu/codeList/ProcessParameterValue/value/groundObservation/observationIntent"/>
                     <om:value>meteorology</om:value>
+                </om:NamedValue>
+            </om:parameter>
+            <om:parameter>
+                <om:NamedValue>
+                    <om:name xlink:title="soundingType"/>
+                    <om:value>2</om:value>
                 </om:NamedValue>
             </om:parameter>
             <om:observedProperty  xlink:href="http://opendata.fmi.fi/fmi-apikey/foobar/meta?observableProperty=observation&amp;param=TAP_PT1S_avg&amp;language=eng"/>
