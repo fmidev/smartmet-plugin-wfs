@@ -781,9 +781,10 @@ void StoredSoundingQueryHandler::makeSoundingDataQuery(const RequestParameterMap
   dataQueryParams.addField("DATA_VALUE");
   dataQueryParams.addField("DATA_QUALITY");
   dataQueryParams.addField("SIGNIFICANCE");
+  dataQueryParams.addField("LEVEL_NO");
   dataQueryParams.addOrderBy("SOUNDING_ID", "ASC");
   dataQueryParams.addOrderBy("MEASURAND_ID", "ASC");
-  dataQueryParams.addOrderBy("LEVEL_TIME", "ASC");
+  dataQueryParams.addOrderBy("LEVEL_NO", "ASC");
 
   for (auto& radioSounding : radioSoundingMap)
   {
