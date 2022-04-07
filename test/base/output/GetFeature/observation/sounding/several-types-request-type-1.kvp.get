@@ -26,14 +26,14 @@ Global data object:
                                        'y' : "26.62901"
                                      },
                                      {
-                                       'altitude' : "17791.0",
+                                       'altitude' : "227.0",
                                        'data' : [
                                                   {
-                                                    'value' : "-73.4"
+                                                    'value' : "-13.8"
                                                   }
                                                 ],
                                        'epochTime' : 1514548800,
-                                       'pressure' : 66,
+                                       'pressure' : 973.7,
                                        'significance' : 0,
                                        'x' : "67.36663",
                                        'y' : "26.62901"
@@ -702,14 +702,14 @@ Global data object:
                                        'y' : "26.62901"
                                      },
                                      {
-                                       'altitude' : "227.0",
+                                       'altitude' : "17791.0",
                                        'data' : [
                                                   {
-                                                    'value' : "-13.8"
+                                                    'value' : "-73.4"
                                                   }
                                                 ],
                                        'epochTime' : 1514548800,
-                                       'pressure' : 973.7,
+                                       'pressure' : 66,
                                        'significance' : 0,
                                        'x' : "67.36663",
                                        'y' : "26.62901"
