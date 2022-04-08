@@ -36,7 +36,7 @@ BuildRequires: smartmet-engine-querydata-devel >= 22.3.18
 BuildRequires: smartmet-library-grid-content-devel >= 22.3.30
 BuildRequires: smartmet-library-grid-files-devel >= 22.3.15
 %if %{with observation}
-BuildRequires: smartmet-engine-observation-devel >= 22.4.4
+BuildRequires: smartmet-engine-observation-devel >= 22.4.8
 %endif
 Requires: ctpp2
 Requires: fmt >= 7.1.3
@@ -54,7 +54,7 @@ Requires: smartmet-engine-grid >= 22.3.30
 Requires: smartmet-library-grid-content >= 22.3.30
 Requires: smartmet-library-grid-files >= 22.3.15
 %if %{with observation}
-Requires: smartmet-engine-observation >= 22.4.4
+Requires: smartmet-engine-observation >= 22.4.8
 %endif
 Requires: smartmet-engine-querydata >= 22.3.18
 Requires: smartmet-server >= 21.11.25
@@ -96,7 +96,7 @@ Obsoletes: smartmet-brainstorm-wfs-debuginfo < 16.11.1
 #TestRequires: smartmet-engine-gis >= 22.2.10
 #TestRequires: smartmet-engine-querydata >= 22.3.18
 %if %{with observation}
-#TestRequires: smartmet-engine-observation >= 22.4.4
+#TestRequires: smartmet-engine-observation >= 22.4.8
 %endif
 #TestRequires: smartmet-engine-grid >= 22.3.30
 #TestRequires: redis

@@ -15,6 +15,7 @@
 #include <engines/observation/QueryResult.h>
 #include <map>
 #include <tuple>
+#include <boost/date_time/posix_time/posix_time.hpp>
 
 // Stored query configuration parameter names.
 const std::string P_BEGIN_TIME = "beginTime";
@@ -63,9 +64,9 @@ class StoredSoundingQueryHandler : public StoredQueryHandlerBase,
    public:
     using Id = int;
     std::string stationId;
-    std::string messageTimeStr;
-    std::string launchTimeStr;
-    std::string soundingEndStr;
+    boost::posix_time::ptime messageTime;
+    boost::posix_time::ptime launchTime;
+    boost::posix_time::ptime soundingEnd;
     int soundingType;
   };
   using RadioSoundingMap = std::map<RadioSounding::Id, RadioSounding>;
