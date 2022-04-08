@@ -715,8 +715,8 @@ Global data object:
                                        'y' : "26.62901"
                                      }
                                    ],
-                'phenomenonBeginTime' : "not-a-date-timeZ",
-                'phenomenonEndTime' : "not-a-date-timeZ",
+                'phenomenonBeginTime' : "2017-12-29T12:00:00Z",
+                'phenomenonEndTime' : "2017-12-29T12:00:00Z",
                 'phenomenonTime' : "2017-12-29T12:00:00Z",
                 'resultTime' : "2017-12-29T12:00:00Z",
                 'soundingId' : 141459,

@@ -2100,8 +2100,8 @@ Global data object:
                                        'y' : "23.49761"
                                      }
                                    ],
-                'phenomenonBeginTime' : "not-a-date-timeZ",
-                'phenomenonEndTime' : "not-a-date-timeZ",
+                'phenomenonBeginTime' : "2013-05-06T12:00:00Z",
+                'phenomenonEndTime' : "2013-05-06T12:00:00Z",
                 'phenomenonTime' : "2013-05-06T12:00:00Z",
                 'resultTime' : "2013-05-06T12:00:00Z",
                 'soundingId' : 131223,
