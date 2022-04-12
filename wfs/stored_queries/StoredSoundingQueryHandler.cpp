@@ -266,8 +266,6 @@ void StoredSoundingQueryHandler::query(const StoredQuery& query,
             group["soundingId"] = soundingId;
             group["soundingType"] = soundingType;
 
-            std::cout << group.Dump() << std::endl;
-
             featureId.erase_param(P_BEGIN_TIME);
             featureId.erase_param(P_END_TIME);
             featureId.erase_param(P_FMISIDS);
@@ -685,13 +683,6 @@ void StoredSoundingQueryHandler::parseSoundingQuery(const RequestParameterMap& p
       rSounding.soundingEnd = QueryResult::castTo<pt::ptime>(soundingEndIt);
       rSounding.soundingType = QueryResult::castTo<int>(soundingTypeIt);
       latestSet.insert(tmpstationId);
-      std::cout << "# soundingId=" << soundingId
-                << " messageTimeStr=" << rSounding.messageTime
-                << " launchTimeStr=" << rSounding.launchTime
-                << " aoundingEndStr=" << rSounding.soundingEnd
-                << " soundingType=" << rSounding.soundingType
-                << " stationId=" << rSounding.stationId
-                << std::endl;
       radioSoundingMap.emplace(soundingId, rSounding);
     }
   }
