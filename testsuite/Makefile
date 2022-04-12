@@ -2,6 +2,7 @@
 INCDIR = smartmet/plugins/$(SUBNAME)
 TOP = $(shell pwd)/..
 
+OPTIMIZE = -O0
 REQUIRES = gdal jsoncpp libpqxx configpp
 
 include $(shell echo $${PREFIX-/usr})/share/smartmet/devel/makefile.inc
