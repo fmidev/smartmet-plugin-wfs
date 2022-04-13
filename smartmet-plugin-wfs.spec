@@ -3,7 +3,7 @@
 %define SPECNAME smartmet-plugin-%{DIRNAME}
 Summary: SmartMet WFS plugin
 Name: %{SPECNAME}
-Version: 22.4.7
+Version: 22.4.13
 Release: 1%{?dist}.fmi
 License: MIT
 Group: SmartMet/Plugins
@@ -146,6 +146,9 @@ rm -rf $RPM_BUILD_ROOT
 %{_includedir}/smartmet/plugin/wfs/request/*.h
 
 %changelog
+* Wed Apr 13 2022 Andris Pavēnis <andris.pavenis@fmi.fi> 22.4.13-1.fmi
+- Update sounding observation support
+
 * Thu Apr  7 2022 Andris Pavēnis <andris.pavenis@fmi.fi> 22.4.7-1.fmi
 - Improved sounding type support for sounding queries
 
