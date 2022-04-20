@@ -6,10 +6,12 @@
          xmlns:gml="http://www.opengis.net/gml/3.2"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://www.opengis.net/wfs/2.0 http://schemas.opengis.net/wfs/2.0/wfs.xsd">
-   <wfs:StoredQuery id="fmi::observations::weather::sounding::multipointcoverage">
-     <wfs:Parameter name="starttime">2017-12-30T18:00:00Z</wfs:Parameter>
-     <wfs:Parameter name="endtime">2017-12-30T18:00:00Z</wfs:Parameter>
+   <wfs:StoredQuery id="SoundingTest">
+     <wfs:Parameter name="starttime">2013-05-06T120000Z</wfs:Parameter>
+     <wfs:Parameter name="endtime">2013-05-06T120000Z</wfs:Parameter>
      <wfs:Parameter name="fmisid">101104</wfs:Parameter>
      <wfs:Parameter name="soundingtype">1</wfs:Parameter>
+     <wfs:Parameter name="soundingtype">2</wfs:Parameter>
+     <wfs:Parameter name="soundingtype">3</wfs:Parameter>
    </wfs:StoredQuery>
 </wfs:GetFeature>

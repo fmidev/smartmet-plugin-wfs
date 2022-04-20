@@ -15,8 +15,8 @@
 	xmlns:sams="http://www.opengis.net/samplingSpatial/2.0"
 	xmlns:target="http://xml.fmi.fi/namespace/om/atmosphericfeatures/1.1"
     timeStamp="2012-12-12T12:12:12Z"
-    numberMatched="3"
-    numberReturned="3"
+    numberMatched="2"
+    numberReturned="2"
     xsi:schemaLocation="http://www.opengis.net/wfs/2.0 http://schemas.opengis.net/wfs/2.0/wfs.xsd
 						http://www.opengis.net/gmlcov/1.0 http://schemas.opengis.net/gmlcov/1.0/gmlcovAll.xsd
 						http://www.opengis.net/sampling/2.0 http://schemas.opengis.net/sampling/2.0/samplingFeature.xsd
@@ -26,11 +26,11 @@
 						http://inspire.ec.europa.eu/schemas/omso/3.0 https://inspire.ec.europa.eu/schemas/omso/3.0/SpecialisedObservations.xsd
 						http://xml.fmi.fi/namespace/om/atmosphericfeatures/1.1 https://xml.fmi.fi/schema/om/atmosphericfeatures/1.1/atmosphericfeatures.xsd">
     <wfs:member>
-        <omso:TrajectoryObservation gml:id="WFS-THscOlS5RTCQrUc7AGJZ_HQo956JTowuIWbbpdOt.Lnl5dsPTTv3c3Trvlw9NGXk6dc9_Xdk07s7p1t67Omnhv07umPf2y8sOfLC0sWXPp3VNO3LXQyYMW61iyWs2FRi4dMGDpgwtMbHy51qRaFOO6dN2jJmzsu7JU07ctdDJgxbrWLJazYVGLh0wYOmDC0zs23Tz05OdZjFgxYsGjo15fPffyyX9_bLy78tPTDi2ZY2Zsw9MvPpE1tuHxE08.mHdjy0rV0IDe25emXfQw8sO3L0y8udbFSDQv0KjGnfw9s9bFSJQv0KjGnfw9s9bFKRQv0KjGnfw9s9bFWDQv0KjGnfw9s9bFenQv0KjGnfw9s9bFeJQv0KjGnfw9s9bFCDQv0KjGnfg1o7W26efPTuz1MvjpWNOwzm1u67Z.an0w9NO_dznCaXDri2acenp5nCa3Hrh2aenmTuzb4mxz39d2TTuz1PPDLJCa3Pph6ad.6p54Za0Kc.rOiSZ0duc.m_llyceuXl5v6cleIWbbpdOt.Lnl5dsPTTv3c3Trvlw9NGXk6dc9_Xdk07s7p1t67Omnhv07umPf2y8sOfKA--">
+        <omso:TrajectoryObservation gml:id="WFS-QEvJpdCGfckHcJ8AQahg2c8p612JTowuIWbbpdOt.Lnl5dsPTTv3c3Trvlw9NGXk6dc9_Xdk07s7p1t67Omnhv07umPf2y8sOfLC0sWXPp3VNO3LXQyYMW61iyWs2FRi4dMGDpgwtMbHy51qRaFOO6dN2jJmzsu7JU07ctdDJgxbrWLJazYVGLh0wYOmDC0zs23Tz05OdZjFgxYsGjo15fPffyyX9_bLy78tPTDi2ZY2Zsw9MvPpE1tuHxE08.mHdjy0rV0IDe25emXfQw8sO3L0y8udbFSDQv0KjGnfw9s9bFSJQv0KjGnfw9s9bFKRQv0KjGnfw9s9bFWDQv0KjGnfw9s9bFenQv0KjGnfw9s9bFeJQv0KjGnfw9s9bFCDQv0KjGnfg1o7W26efPTuz1MvjpWNOwzm1u67Z.an0w9NO_dznCaXDri2acenp5nCa3Hrh2aenmTuzb4mxz39d2TTuz1PPDLJGa3Pph6ad.6p54Za0Kc.rOiSZ0duc.m_llyceuXl5v6cleIWbbpdOt.Lnl5dsPTTv3c3Trvlw9NGXk6dc9_Xdk07s7p1t67Omnhv07umPf2y8sOfKA--">
             <om:phenomenonTime>
                 <gml:TimePeriod gml:id="time1-1">
-                    <gml:beginPosition>2017-12-30T17:30:08Z</gml:beginPosition>
-                    <gml:endPosition>2017-12-30T18:29:48Z</gml:endPosition>
+                    <gml:beginPosition>2017-12-30T18:29:56Z</gml:beginPosition>
+                    <gml:endPosition>2017-12-30T18:50:14Z</gml:endPosition>
                 </gml:TimePeriod>
             </om:phenomenonTime>
             <om:resultTime>
@@ -45,7 +45,13 @@
                     <om:value>meteorology</om:value>
                 </om:NamedValue>
             </om:parameter>
-            <om:observedProperty  xlink:href="http://opendata.fmi.fi/fmi-apikey/foobar/meta?observableProperty=observation&amp;param=PAP_PT1S_AVG,WSP_PT1S_avg,WDP_PT1S_avg,TAP_PT1S_avg,RHP_PT1S_avg&amp;language=eng"/>
+            <om:parameter>
+                <om:NamedValue>
+                    <om:name xlink:title="soundingType"/>
+                    <om:value>3</om:value>
+                </om:NamedValue>
+            </om:parameter>
+            <om:observedProperty  xlink:href="http://opendata.fmi.fi/fmi-apikey/foobar/meta?observableProperty=observation&amp;param=PAP_PT1S_AVG,WSP_PT1S_avg,WDP_PT1S_avg,TAP_PT1S_avg,TDP_PT1S_avg&amp;language=eng"/>
             <om:featureOfInterest>
                 <sams:SF_SpatialSamplingFeature gml:id="foi-ssf-1-fmisid-101104">
                     <sam:sampledFeature xlink:href="http://xml.fmi.fi/sampledFeature/soundingArea.php?id=101104" xlink:title="Jokioinen Ilmala sounding target area"/>
@@ -84,236 +90,11 @@
                             <gml:segments>
                                 <gml:LineStringSegment>
                                     <gml:posList>
-                                    </gml:posList>
-                                </gml:LineStringSegment>
-                            </gml:segments>
-                        </gml:Curve>
-                    </sams:shape>
-                </sams:SF_SpatialSamplingFeature>
-            </om:featureOfInterest>
-            <om:result>
-                <gmlcov:MultiPointCoverage gml:id="mpcv1-1-1">
-                    <gml:domainSet>
-                        <!-- The grid consists of the 4D points where the measurements were
-                            actually made during the flight of the sounding balloon.
-                        -->
-                        <gmlcov:SimpleMultiPoint gml:id="mp1-11" srsName="https://xml.fmi.fi/gml/crs/compoundCRS.php?crs=7423&amp;time=unixtime" srsDimension="4">
-                            <gmlcov:positions>
-                            60.81401 23.49761 104.0 1514656800 
-                            60.81401 23.49761 20154.0 1514656800 
-                            60.81401 23.49761 344.0 1514656800 
-                            60.81401 23.49761 357.0 1514656800 
-                            60.81401 23.49761 583.0 1514656800 
-                            60.81401 23.49761 660.0 1514656800 
-                            60.81401 23.49761 784.0 1514656800 
-                            60.81401 23.49761 877.0 1514656800 
-                            60.81401 23.49761 1226.0 1514656800 
-                            60.81401 23.49761 1325.0 1514656800 
-                            60.81401 23.49761 1406.0 1514656800 
-                            60.81401 23.49761 2759.0 1514656800 
-                            60.81401 23.49761 2810.0 1514656800 
-                            60.81401 23.49761 2876.0 1514656800 
-                            60.81401 23.49761 3246.0 1514656800 
-                            60.81401 23.49761 3268.0 1514656800 
-                            60.81401 23.49761 3390.0 1514656800 
-                            60.81401 23.49761 3564.0 1514656800 
-                            60.81401 23.49761 3589.0 1514656800 
-                            60.81401 23.49761 4865.0 1514656800 
-                            60.81401 23.49761 4941.0 1514656800 
-                            60.81401 23.49761 5000.0 1514656800 
-                            60.81401 23.49761 5035.0 1514656800 
-                            60.81401 23.49761 5198.0 1514656800 
-                            60.81401 23.49761 5256.0 1514656800 
-                            60.81401 23.49761 5261.0 1514656800 
-                            60.81401 23.49761 5463.0 1514656800 
-                            60.81401 23.49761 5861.0 1514656800 
-                            60.81401 23.49761 5920.0 1514656800 
-                            60.81401 23.49761 6271.0 1514656800 
-                            60.81401 23.49761 6798.0 1514656800 
-                            60.81401 23.49761 7846.0 1514656800 
-                            60.81401 23.49761 7965.0 1514656800 
-                            60.81401 23.49761 8232.0 1514656800 
-                            60.81401 23.49761 8657.0 1514656800 
-                            60.81401 23.49761 8660.0 1514656800 
-                            60.81401 23.49761 8775.0 1514656800 
-                            60.81401 23.49761 8994.0 1514656800 
-                            60.81401 23.49761 9096.0 1514656800 
-                            60.81401 23.49761 9286.0 1514656800 
-                            60.81401 23.49761 9330.0 1514656800 
-                            60.81401 23.49761 9612.0 1514656800 
-                            60.81401 23.49761 9813.0 1514656800 
-                            60.81401 23.49761 10791.0 1514656800 
-                            60.81401 23.49761 11236.0 1514656800 
-                            60.81401 23.49761 12370.0 1514656800 
-                            60.81401 23.49761 12522.0 1514656800 
-                            60.81401 23.49761 13069.0 1514656800 
-                            60.81401 23.49761 13451.0 1514656800 
-                            60.81401 23.49761 13790.0 1514656800 
-                            60.81401 23.49761 14823.0 1514656800 
-                            60.81401 23.49761 15136.0 1514656800 
-                            60.81401 23.49761 15646.0 1514656800 
-                            60.81401 23.49761 15647.0 1514656800 
-                            60.81401 23.49761 17882.0 1514656800 
-                            60.81401 23.49761 18160.0 1514656800 
-                            60.81401 23.49761 18423.0 1514656800 
-                            60.81401 23.49761 19387.0 1514656800 
-                            60.81401 23.49761 19849.0 1514656800 
-                            60.81401 23.49761 19965.0 1514656800 
-                            60.81401 23.49761 287.0 1514656800 
-                            </gmlcov:positions>
-                        </gmlcov:SimpleMultiPoint>
-                    </gml:domainSet>
-                    <gml:rangeSet>
-                        <!-- The values of the observed properties at each grid point -->
-                        <gml:DataBlock>
-                            <gml:rangeParameters/>
-                            <gml:doubleOrNilReasonTupleList>
-                              991.7 3.0 213.0 -3.2 86.0 
-                              48.5 33.0 224.0 -2.1 86.0 
-                              962.5 10.0 226.0 -6.7 33.0 
-                              960.9 10.0 235.0 -7.2 32.0 
-                              934 10.0 236.0 -7.8 30.0 
-                              925 9.0 232.0 -17.0 36.0 
-                              910.7 9.0 230.0 -17.4 36.0 
-                              900 10.0 231.0 -17.6 22.0 
-                              860.8 14.0 228.0 -20.9 6.0 
-                              850 13.0 229.0 -21.1 5.0 
-                              841.2 13.0 231.0 -21.3 17.0 
-                              704.8 11.0 239.0 -20.6 21.0 
-                              700 11.0 242.0 -20.5 66.0 
-                              693.8 12.0 250.0 -29.3 23.0 
-                              660.1 11.0 256.0 -29.9 60.0 
-                              658.2 11.0 256.0 -30.3 9.0 
-                              647.4 12.0 256.0 -30.1 10.0 
-                              632.3 11.0 258.0 -31.5 9.0 
-                              630.2 12.0 257.0 -31.7 11.0 
-                              528.7 17.0 256.0 -31.8 12.0 
-                              523.1 18.0 252.0 -32.8 56.0 
-                              518.8 18.0 251.0 -36.4 54.0 
-                              516.2 19.0 251.0 -37.0 49.0 
-                              504.5 18.0 249.0 -39.8 41.0 
-                              500.3 17.0 245.0 -44.2 49.0 
-                              500 17.0 246.0 -53.3 63.0 
-                              485.9 15.0 256.0 -54.1 63.0 
-                              459 15.0 250.0 -56.4 49.0 
-                              455.1 16.0 255.0 -59.4 1.0 
-                              432.4 16.0 251.0 -59.4 5.0 
-                              400 19.0 257.0 -60.1 9.0 
-                              341.1 21.0 249.0 -55.3 8.0 
-                              334.8 22.0 249.0 -56.0 5.0 
-                              321.1 23.0 247.0 -57.3 5.0 
-                              300.1 21.0 251.0 -57.4 3.0 
-                              300 21.0 253.0 -56.1 2.0 
-                              294.5 20.0 234.0 -56.0 2.0 
-                              284.4 19.0 232.0 -55.2 2.0 
-                              279.9 16.0 218.0 -55.0 2.0 
-                              271.7 15.0 222.0 -54.2 2.0 
-                              269.8 15.0 242.0 -55.0 2.0 
-                              258 16.0 237.0 -56.5 2.0 
-                              250 17.0 248.0 -57.4 2.0 
-                              214.5 18.0 255.0 -55.5 2.0 
-                              200 20.0 254.0 -55.0 2.0 
-                              167.4 17.0 254.0 -55.6 2.0 
-                              163.5 18.0 247.0 -56.9 2.0 
-                              150 19.0 273.0 -56.9 2.0 
-                              141.2 17.0 280.0 -61.4 2.0 
-                              133.9 19.0 274.0 -62.1 2.0 
-                              113.8 22.0 274.0 -60.4 2.0 
-                              108.4 20.0 276.0 -61.9 2.0 
-                              100 20.0 268.0 -63.1 98.0 
-                              100 20.0 283.0 -62.8 100.0 
-                              70 26.0 283.0 -62.7 90.0 
-                              66.9 29.0 288.0 -0.3 89.0 
-                              64.1 30.0 288.0 -1.1 71.0 
-                              54.9 34.0 286.0 0.0 73.0 
-                              50.9 31.0 166.0 0.0 76.0 
-                              50 32.0 204.0 -1.5 77.0 
-                              969.2 9.0 212.0 -4.0 88.0 
-                            </gml:doubleOrNilReasonTupleList>
-                        </gml:DataBlock>
-                    </gml:rangeSet>
-                    <gml:coverageFunction>
-                        <gml:CoverageMappingRule>
-                            <gml:ruleDefinition>Linear</gml:ruleDefinition>
-                        </gml:CoverageMappingRule>
-                    </gml:coverageFunction>
-                    <gmlcov:rangeType>
-                        <swe:DataRecord>
-                          <swe:field name="PAP_PT1S_AVG"  xlink:href="http://opendata.fmi.fi/fmi-apikey/foobar/meta?observableProperty=observation&amp;param=PAP_PT1S_AVG&amp;language=eng"/>
-                      <swe:field name="WSP_PT1S_avg"  xlink:href="http://opendata.fmi.fi/fmi-apikey/foobar/meta?observableProperty=observation&amp;param=WSP_PT1S_avg&amp;language=eng"/>
-                      <swe:field name="WDP_PT1S_avg"  xlink:href="http://opendata.fmi.fi/fmi-apikey/foobar/meta?observableProperty=observation&amp;param=WDP_PT1S_avg&amp;language=eng"/>
-                      <swe:field name="TAP_PT1S_avg"  xlink:href="http://opendata.fmi.fi/fmi-apikey/foobar/meta?observableProperty=observation&amp;param=TAP_PT1S_avg&amp;language=eng"/>
-                      <swe:field name="RHP_PT1S_avg"  xlink:href="http://opendata.fmi.fi/fmi-apikey/foobar/meta?observableProperty=observation&amp;param=RHP_PT1S_avg&amp;language=eng"/>
-                      
-                    </swe:DataRecord>
-                  </gmlcov:rangeType>
-                </gmlcov:MultiPointCoverage>
-            </om:result>
-        </omso:TrajectoryObservation>
-    </wfs:member><wfs:member>
-        <omso:TrajectoryObservation gml:id="WFS-QEvJpdCGfckHcJ8AQahg2c8p612JTowuIWbbpdOt.Lnl5dsPTTv3c3Trvlw9NGXk6dc9_Xdk07s7p1t67Omnhv07umPf2y8sOfLC0sWXPp3VNO3LXQyYMW61iyWs2FRi4dMGDpgwtMbHy51qRaFOO6dN2jJmzsu7JU07ctdDJgxbrWLJazYVGLh0wYOmDC0zs23Tz05OdZjFgxYsGjo15fPffyyX9_bLy78tPTDi2ZY2Zsw9MvPpE1tuHxE08.mHdjy0rV0IDe25emXfQw8sO3L0y8udbFSDQv0KjGnfw9s9bFSJQv0KjGnfw9s9bFKRQv0KjGnfw9s9bFWDQv0KjGnfw9s9bFenQv0KjGnfw9s9bFeJQv0KjGnfw9s9bFCDQv0KjGnfg1o7W26efPTuz1MvjpWNOwzm1u67Z.an0w9NO_dznCaXDri2acenp5nCa3Hrh2aenmTuzb4mxz39d2TTuz1PPDLJGa3Pph6ad.6p54Za0Kc.rOiSZ0duc.m_llyceuXl5v6cleIWbbpdOt.Lnl5dsPTTv3c3Trvlw9NGXk6dc9_Xdk07s7p1t67Omnhv07umPf2y8sOfKA--">
-            <om:phenomenonTime>
-                <gml:TimePeriod gml:id="time1-2">
-                    <gml:beginPosition>2017-12-30T18:29:56Z</gml:beginPosition>
-                    <gml:endPosition>2017-12-30T18:50:14Z</gml:endPosition>
-                </gml:TimePeriod>
-            </om:phenomenonTime>
-            <om:resultTime>
-                <gml:TimeInstant gml:id="time2-2">
-                    <gml:timePosition>2017-12-30T18:00:00Z</gml:timePosition>
-                </gml:TimeInstant>
-            </om:resultTime>
-            <om:procedure xlink:href="http://xml.fmi.fi/inspire/process/opendata"/>
-            <om:parameter>
-                <om:NamedValue>
-                    <om:name xlink:href="https://inspire.ec.europa.eu/codeList/ProcessParameterValue/value/groundObservation/observationIntent"/>
-                    <om:value>meteorology</om:value>
-                </om:NamedValue>
-            </om:parameter>
-            <om:observedProperty  xlink:href="http://opendata.fmi.fi/fmi-apikey/foobar/meta?observableProperty=observation&amp;param=PAP_PT1S_AVG,WSP_PT1S_avg,WDP_PT1S_avg,TAP_PT1S_avg,TDP_PT1S_avg&amp;language=eng"/>
-            <om:featureOfInterest>
-                <sams:SF_SpatialSamplingFeature gml:id="foi-ssf-2-fmisid-101104">
-                    <sam:sampledFeature xlink:href="http://xml.fmi.fi/sampledFeature/soundingArea.php?id=101104" xlink:title="Jokioinen Ilmala sounding target area"/>
-                    <sam:relatedSamplingFeature>
-                        <sam:SamplingFeatureComplex>
-                            <sam:role xlink:title="Launched from" xlink:href="http://xml.fmi.fi/namespace/samplingFeatureRelation/launchedFrom"/>
-                            <sam:relatedSamplingFeature>
-                                <sams:SF_SpatialSamplingFeature gml:id="ssf-ssf-2-fmisid-101104">
-                                    <sam:sampledFeature>
-                                        <target:Location gml:id="foi-ssf-ssf-loc-2-fmisid-101104">
-                                            <gml:identifier codeSpace="http://xml.fmi.fi/namespace/stationcode/fmisid">101104</gml:identifier>
-                                            <gml:name codeSpace="http://xml.fmi.fi/namespace/locationcode/name">Jokioinen Ilmala</gml:name>
-                                            
-                                            <gml:name codeSpace="http://xml.fmi.fi/namespace/locationcode/wmo">2963</gml:name>
-                                            <target:representativePoint xlink:href="#point-101104"/>
-                                            <target:region codeSpace="http://xml.fmi.fi/namespace/location/region">Jokioinen</target:region>
-                                        </target:Location>
-                                    </sam:sampledFeature>
-                                    <sams:shape>
-                                        <gml:Point gml:id="foi-ssf-ssf-point-2-fmisid-101104" srsName="http://www.opengis.net/def/crs/EPSG/0/7423" srsDimension="3">
-                                            <gml:name>Jokioinen Ilmala</gml:name>
-                                            <gml:pos>60.81401 23.49761 104</gml:pos>
-                                        </gml:Point>
-                                    </sams:shape>
-                                </sams:SF_SpatialSamplingFeature>
-                            </sam:relatedSamplingFeature>
-                        </sam:SamplingFeatureComplex>
-                    </sam:relatedSamplingFeature>
-                    <sams:shape>
-                        <!-- Geometry of the sampling feature is a continuous 3D curve
-                            of the sounding balloon flight
-                            modeled here as a linestring with positions picked
-                            at selected pressure levels.
-                        -->
-                        <gml:Curve gml:id="foi-ssf-curve-2-fmisid-101104" srsName="http://www.opengis.net/def/crs/EPSG/0/7423" srsDimension="3">
-                            <gml:segments>
-                                <gml:LineStringSegment>
-                                    <gml:posList>
                                       60.81401 23.49761 20163.0 
                                       60.81305 23.50517 19965.0 
                                       60.80738 23.55951 17882.0 
-                                      60.80697 23.61311 15640.0 
                                       60.80697 23.61308 15641.0 
+                                      60.80697 23.61311 15640.0 
                                       60.80672 23.63451 14602.0 
                                       60.80961 23.65811 13396.0 
                                       60.81030 23.66362 13066.0 
@@ -362,12 +143,12 @@
                 </sams:SF_SpatialSamplingFeature>
             </om:featureOfInterest>
             <om:result>
-                <gmlcov:MultiPointCoverage gml:id="mpcv1-1-2">
+                <gmlcov:MultiPointCoverage gml:id="mpcv1-1-1">
                     <gml:domainSet>
                         <!-- The grid consists of the 4D points where the measurements were
                             actually made during the flight of the sounding balloon.
                         -->
-                        <gmlcov:SimpleMultiPoint gml:id="mp1-12" srsName="https://xml.fmi.fi/gml/crs/compoundCRS.php?crs=7423&amp;time=unixtime" srsDimension="4">
+                        <gmlcov:SimpleMultiPoint gml:id="mp1-11" srsName="https://xml.fmi.fi/gml/crs/compoundCRS.php?crs=7423&amp;time=unixtime" srsDimension="4">
                             <gmlcov:positions>
                             60.81401 23.49761 20163.0 1514656794 
                             60.81385 23.49879 20156.0 1514656796 
@@ -376,10 +157,10 @@
                             60.81346 23.50236 20056.0 1514656802 
                             60.81331 23.50353 20020.0 1514656804 
                             60.81313 23.50469 19981.0 1514656806 
+                            60.81305 23.50517 19965.0 1514656813 
                             60.81293 23.50584 19941.0 1514656808 
                             60.81274 23.50696 19900.0 1514656810 
                             60.81256 23.50805 19860.0 1514656812 
-                            60.81305 23.50517 19965.0 1514656813 
                             60.81240 23.50912 19819.0 1514656814 
                             60.81223 23.51017 19778.0 1514656816 
                             60.81207 23.51122 19741.0 1514656818 
@@ -429,10 +210,10 @@
                             60.80737 23.55715 17970.0 1514656906 
                             60.80737 23.55815 17934.0 1514656908 
                             60.80738 23.55913 17897.0 1514656910 
+                            60.80738 23.55951 17882.0 1514656917 
                             60.80738 23.56007 17859.0 1514656912 
                             60.80738 23.56097 17823.0 1514656914 
                             60.80735 23.56182 17786.0 1514656916 
-                            60.80738 23.55951 17882.0 1514656917 
                             60.80730 23.56266 17749.0 1514656918 
                             60.80724 23.56350 17711.0 1514656920 
                             60.80718 23.56436 17668.0 1514656922 
@@ -494,11 +275,11 @@
                             60.80695 23.61084 15735.0 1514657034 
                             60.80696 23.61159 15704.0 1514657036 
                             60.80696 23.61234 15674.0 1514657038 
+                            60.80697 23.61308 15641.0 1514657046 
                             60.80697 23.61311 15640.0 1514657040 
                             60.80697 23.61389 15605.0 1514657042 
                             60.80698 23.61470 15569.0 1514657044 
                             60.80700 23.61554 15533.0 1514657046 
-                            60.80697 23.61308 15641.0 1514657046 
                             60.80702 23.61637 15498.0 1514657048 
                             60.80704 23.61720 15462.0 1514657050 
                             60.80706 23.61802 15425.0 1514657052 
@@ -566,10 +347,10 @@
                             60.81008 23.66199 13149.0 1514657176 
                             60.81016 23.66263 13116.0 1514657178 
                             60.81024 23.66327 13083.0 1514657180 
+                            60.81030 23.66362 13066.0 1514657187 
                             60.81034 23.66390 13052.0 1514657182 
                             60.81044 23.66452 13020.0 1514657184 
                             60.81054 23.66511 12988.0 1514657186 
-                            60.81030 23.66362 13066.0 1514657187 
                             60.81064 23.66567 12957.0 1514657188 
                             60.81074 23.66624 12925.0 1514657190 
                             60.81084 23.66681 12894.0 1514657192 
@@ -623,10 +404,10 @@
                             60.81758 23.69436 11326.0 1514657288 
                             60.81781 23.69478 11289.0 1514657290 
                             60.81804 23.69520 11254.0 1514657292 
+                            60.81816 23.69543 11237.0 1514657299 
                             60.81827 23.69565 11221.0 1514657294 
                             60.81848 23.69612 11187.0 1514657296 
                             60.81867 23.69662 11154.0 1514657298 
-                            60.81816 23.69543 11237.0 1514657299 
                             60.81886 23.69715 11122.0 1514657300 
                             60.81905 23.69771 11089.0 1514657302 
                             60.81922 23.69831 11055.0 1514657304 
@@ -671,10 +452,10 @@
                             60.82708 23.71926 9892.0 1514657382 
                             60.82731 23.71983 9863.0 1514657384 
                             60.82754 23.72040 9834.0 1514657386 
+                            60.82775 23.72090 9808.0 1514657394 
                             60.82777 23.72095 9805.0 1514657388 
                             60.82799 23.72149 9775.0 1514657390 
                             60.82821 23.72202 9747.0 1514657392 
-                            60.82775 23.72090 9808.0 1514657394 
                             60.82843 23.72255 9720.0 1514657394 
                             60.82866 23.72308 9693.0 1514657396 
                             60.82891 23.72361 9663.0 1514657398 
@@ -713,10 +494,10 @@
                             60.83521 23.74120 8715.0 1514657464 
                             60.83533 23.74182 8693.0 1514657466 
                             60.83545 23.74245 8675.0 1514657468 
+                            60.83554 23.74300 8656.0 1514657476 
                             60.83556 23.74310 8653.0 1514657470 
                             60.83565 23.74376 8626.0 1514657472 
                             60.83574 23.74443 8596.0 1514657474 
-                            60.83554 23.74300 8656.0 1514657476 
                             60.83582 23.74511 8567.0 1514657476 
                             60.83590 23.74581 8540.0 1514657478 
                             60.83597 23.74652 8513.0 1514657480 
@@ -774,10 +555,10 @@
                             60.84173 23.78120 6898.0 1514657584 
                             60.84184 23.78182 6862.0 1514657586 
                             60.84195 23.78244 6826.0 1514657588 
+                            60.84206 23.78298 6795.0 1514657596 
                             60.84207 23.78305 6791.0 1514657590 
                             60.84219 23.78367 6752.0 1514657592 
                             60.84231 23.78428 6712.0 1514657594 
-                            60.84206 23.78298 6795.0 1514657596 
                             60.84244 23.78489 6670.0 1514657596 
                             60.84257 23.78549 6628.0 1514657598 
                             60.84271 23.78608 6587.0 1514657600 
@@ -819,10 +600,10 @@
                             60.84685 23.80510 5338.0 1514657672 
                             60.84697 23.80560 5301.0 1514657674 
                             60.84709 23.80611 5266.0 1514657676 
+                            60.84712 23.80626 5255.0 1514657683 
                             60.84721 23.80663 5232.0 1514657678 
                             60.84732 23.80716 5198.0 1514657680 
                             60.84743 23.80770 5164.0 1514657682 
-                            60.84712 23.80626 5255.0 1514657683 
                             60.84754 23.80825 5129.0 1514657684 
                             60.84764 23.80881 5094.0 1514657686 
                             60.84773 23.80938 5058.0 1514657688 
@@ -905,10 +686,10 @@
                             60.85608 23.84173 2856.0 1514657842 
                             60.85623 23.84203 2831.0 1514657844 
                             60.85638 23.84233 2806.0 1514657846 
+                            60.85641 23.84239 2801.0 1514657852 
                             60.85652 23.84265 2782.0 1514657848 
                             60.85667 23.84295 2758.0 1514657850 
                             60.85681 23.84325 2734.0 1514657852 
-                            60.85641 23.84239 2801.0 1514657852 
                             60.85695 23.84356 2709.0 1514657854 
                             60.85709 23.84387 2684.0 1514657856 
                             60.85723 23.84419 2661.0 1514657858 
@@ -969,10 +750,10 @@
                             60.86554 23.86287 1389.0 1514657968 
                             60.86566 23.86321 1363.0 1514657970 
                             60.86577 23.86356 1336.0 1514657972 
+                            60.86586 23.86383 1315.0 1514657980 
                             60.86588 23.86390 1309.0 1514657974 
                             60.86599 23.86425 1283.0 1514657976 
                             60.86608 23.86461 1255.0 1514657978 
-                            60.86586 23.86383 1315.0 1514657980 
                             60.86618 23.86498 1227.0 1514657980 
                             60.86628 23.86534 1199.0 1514657982 
                             60.86637 23.86569 1172.0 1514657984 
@@ -1008,10 +789,10 @@
                               49.3 32.6 286.0 -62.6 -89.3 
                               49.6 32.4 286.0 -62.6 -89.3 
                               49.9 32.3 286.0 -62.7 -89.4 
+                              50 32.1 286.0 -62.7 -89.4 
                               50.2 32.1 286.0 -62.7 -89.4 
                               50.5 31.9 287.0 -62.8 -89.5 
                               50.9 31.8 287.0 -63.0 -89.6 
-                              50 32.1 286.0 -62.7 -89.4 
                               51.2 31.7 287.0 -62.9 -89.5 
                               51.5 31.6 287.0 -62.6 -89.3 
                               51.8 31.5 287.0 -62.4 -89.2 
@@ -1061,10 +842,10 @@
                               69 26.5 275.0 -60.0 -88.1 
                               69.4 26.2 274.0 -60.1 -88.2 
                               69.8 25.9 274.0 -60.0 -88.1 
+                              70 25.5 274.0 -59.9 -88.0 
                               70.3 25.5 274.0 -59.8 -88.0 
                               70.7 25.2 274.0 -59.7 -87.9 
                               71.1 24.9 274.0 -59.5 -87.9 
-                              70 25.5 274.0 -59.9 -88.0 
                               71.5 24.6 274.0 -59.6 -87.9 
                               71.9 24.4 274.0 -59.5 -87.8 
                               72.4 24.2 275.0 -59.1 -87.7 
@@ -1126,11 +907,11 @@
                               98.5 21.4 267.0 -57.2 -86.2 
                               99 21.4 267.0 -57.4 -86.3 
                               99.5 21.4 268.0 -57.2 -86.1 
+                              100 21.4 268.0 -57.1 -86.0 
                               100 21.5 268.0 -57.1 -86.0 
                               100.6 21.5 268.0 -57.1 -86.0 
                               101.1 21.5 269.0 -57.1 -86.1 
-                              101.7 21.5 268.0 -57.1 -86.0 
-                              100 21.4 269.0 -57.1 -86.1 
+                              101.7 21.5 269.0 -57.1 -86.1 
                               102.3 21.4 270.0 -56.9 -86.0 
                               102.9 21.4 270.0 -56.7 -85.8 
                               103.5 21.3 270.0 -56.6 -85.8 
@@ -1198,10 +979,10 @@
                               148.1 16.4 254.0 -56.2 -84.6 
                               148.8 16.6 253.0 -56.1 -84.5 
                               149.6 16.8 253.0 -55.9 -84.4 
+                              150 16.8 253.0 -55.8 -84.3 
                               150.3 16.9 253.0 -55.6 -84.2 
                               151.1 17.0 252.0 -55.4 -84.1 
                               151.9 17.1 252.0 -55.4 -84.1 
-                              150 16.8 253.0 -55.8 -84.3 
                               152.6 17.2 251.0 -55.4 -84.2 
                               153.4 17.3 251.0 -55.3 -84.1 
                               154.1 17.4 250.0 -55.1 -84.0 
@@ -1255,10 +1036,10 @@
                               197.2 17.4 227.0 -54.8 -82.6 
                               198.4 17.5 228.0 -54.6 -82.5 
                               199.5 17.5 228.0 -54.4 -82.4 
+                              200 17.6 229.0 -54.4 -82.4 
                               200.5 17.6 229.0 -54.4 -82.5 
                               201.6 17.7 230.0 -54.3 -82.4 
                               202.6 17.8 231.0 -54.2 -82.4 
-                              200 17.6 229.0 -54.4 -82.4 
                               203.6 17.8 233.0 -54.2 -82.4 
                               204.7 17.9 234.0 -54.1 -82.3 
                               205.8 18.0 235.0 -53.9 -82.3 
@@ -1303,11 +1084,11 @@
                               246.7 19.4 229.0 -55.7 -78.4 
                               247.8 19.4 229.0 -55.5 -78.1 
                               249 19.5 229.0 -55.4 -77.9 
+                              250 19.5 229.0 -55.4 -77.7 
                               250.1 19.6 228.0 -55.4 -77.7 
                               251.3 19.7 228.0 -55.4 -77.5 
                               252.4 19.7 228.0 -55.5 -77.4 
-                              250 19.5 229.0 -55.5 -77.7 
-                              253.5 19.8 227.0 -55.4 -77.3 
+                              253.5 19.8 227.0 -55.5 -77.3 
                               254.5 19.8 227.0 -55.6 -77.1 
                               255.7 19.8 226.0 -55.8 -77.0 
                               256.9 19.8 226.0 -55.9 -76.8 
@@ -1345,11 +1126,11 @@
                               297.2 18.3 248.0 -60.0 -61.8 
                               298.3 18.3 249.0 -59.9 -61.7 
                               299.1 18.4 250.0 -59.8 -61.6 
+                              300 18.4 250.0 -59.7 -61.7 
                               300.2 18.6 251.0 -59.6 -61.7 
                               301.5 18.7 252.0 -59.4 -61.7 
                               302.9 18.9 253.0 -59.2 -61.7 
-                              300 18.4 254.0 -59.7 -61.7 
-                              304.3 19.1 250.0 -58.9 -61.6 
+                              304.3 19.1 254.0 -58.9 -61.6 
                               305.7 19.2 254.0 -58.7 -61.6 
                               306.9 19.4 255.0 -58.5 -61.4 
                               308.3 19.6 255.0 -58.3 -61.3 
@@ -1406,11 +1187,11 @@
                               393.9 18.2 249.0 -44.8 -51.6 
                               396.1 18.1 248.0 -44.5 -51.4 
                               398.1 18.1 248.0 -44.1 -51.4 
+                              400 18.1 248.0 -43.9 -51.3 
                               400.3 18.0 248.0 -43.8 -51.3 
                               402.6 18.0 247.0 -43.4 -51.0 
                               405 18.0 247.0 -43.1 -50.4 
-                              400 18.1 247.0 -42.8 -51.3 
-                              407.5 17.9 248.0 -43.9 -50.1 
+                              407.5 17.9 247.0 -42.8 -50.1 
                               410.1 17.9 246.0 -42.4 -50.1 
                               412.6 17.8 246.0 -42.0 -50.4 
                               414.9 17.8 246.0 -41.6 -50.7 
@@ -1451,10 +1232,10 @@
                               494.2 15.2 247.0 -31.5 -56.5 
                               496.8 15.3 247.0 -31.1 -57.0 
                               499.3 15.4 247.0 -30.9 -57.7 
+                              500 15.5 248.0 -30.8 -57.5 
                               501.7 15.5 248.0 -30.7 -57.1 
                               504.1 15.6 248.0 -30.4 -56.1 
                               506.5 15.7 249.0 -30.2 -55.3 
-                              500 15.5 248.0 -30.8 -57.5 
                               508.9 15.7 250.0 -30.0 -54.2 
                               511.5 15.8 250.0 -30.0 -53.4 
                               514.1 15.9 251.0 -29.7 -53.4 
@@ -1537,10 +1318,10 @@
                               695 11.9 225.0 -17.7 -24.2 
                               697.3 11.8 225.0 -17.5 -25.1 
                               699.6 11.8 225.0 -17.3 -26.3 
+                              700 11.8 225.0 -17.2 -26.2 
                               701.9 11.8 225.0 -17.1 -25.9 
                               704.1 11.8 226.0 -16.9 -25.6 
-                              706.3 11.8 226.0 -16.6 -26.2 
-                              700 11.8 225.0 -17.2 -25.6 
+                              706.3 11.8 226.0 -16.6 -25.6 
                               708.7 11.8 226.0 -16.4 -25.4 
                               711 11.9 227.0 -16.2 -25.3 
                               713.2 11.9 227.0 -15.9 -24.8 
@@ -1601,10 +1382,10 @@
                               842 11.6 233.0 -7.9 -8.7 
                               844.8 11.5 234.0 -7.6 -8.6 
                               847.7 11.5 235.0 -7.4 -8.4 
+                              850 11.5 235.0 -7.2 -8.3 
                               850.7 11.4 236.0 -7.2 -8.3 
                               853.5 11.3 236.0 -7.0 -8.3 
                               856.6 11.2 237.0 -6.8 -8.3 
-                              850 11.5 235.0 -7.2 -8.3 
                               859.6 11.1 237.0 -6.6 -8.5 
                               862.7 11.0 237.0 -6.4 -8.3 
                               865.7 11.0 236.0 -6.2 -7.8 
@@ -1649,13 +1430,13 @@
     </wfs:member><wfs:member>
         <omso:TrajectoryObservation gml:id="WFS-iolr5ktj9aVsLtX67Uwpd4SxNe2JTowuIWbbpdOt.Lnl5dsPTTv3c3Trvlw9NGXk6dc9_Xdk07s7p1t67Omnhv07umPf2y8sOfLC0sWXPp3VNO3LXQyYMW61iyWs2FRi4dMGDpgwtMbHy51qRaFOO6dN2jJmzsu7JU07ctdDJgxbrWLJazYVGLh0wYOmDC0zs23Tz05OdZjFgxYsGjo15fPffyyX9_bLy78tPTDi2ZY2Zsw9MvPpE1tuHxE08.mHdjy0rV0IDe25emXfQw8sO3L0y8udbFSDQv0KjGnfw9s9bFSJQv0KjGnfw9s9bFKRQv0KjGnfw9s9bFWDQv0KjGnfw9s9bFenQv0KjGnfw9s9bFeJQv0KjGnfw9s9bFCDQv0KjGnfg1o7W26efPTuz1MvjpWNOwzm1u67Z.an0w9NO_dznCaXDri2acenp5nCa3Hrh2aenmTuzb4mxz39d2TTuz1PPDLJEa3Pph6ad.6p54Za0Kc.rOiSZ0duc.m_llyceuXl5v6cleIWbbpdOt.Lnl5dsPTTv3c3Trvlw9NGXk6dc9_Xdk07s7p1t67Omnhv07umPf2y8sOfKA--">
             <om:phenomenonTime>
-                <gml:TimePeriod gml:id="time1-3">
+                <gml:TimePeriod gml:id="time1-2">
                     <gml:beginPosition>2017-12-30T17:30:08Z</gml:beginPosition>
                     <gml:endPosition>2017-12-30T18:29:48Z</gml:endPosition>
                 </gml:TimePeriod>
             </om:phenomenonTime>
             <om:resultTime>
-                <gml:TimeInstant gml:id="time2-3">
+                <gml:TimeInstant gml:id="time2-2">
                     <gml:timePosition>2017-12-30T18:00:00Z</gml:timePosition>
                 </gml:TimeInstant>
             </om:resultTime>
@@ -1666,17 +1447,23 @@
                     <om:value>meteorology</om:value>
                 </om:NamedValue>
             </om:parameter>
+            <om:parameter>
+                <om:NamedValue>
+                    <om:name xlink:title="soundingType"/>
+                    <om:value>2</om:value>
+                </om:NamedValue>
+            </om:parameter>
             <om:observedProperty  xlink:href="http://opendata.fmi.fi/fmi-apikey/foobar/meta?observableProperty=observation&amp;param=PAP_PT1S_AVG,WSP_PT1S_avg,WDP_PT1S_avg,TAP_PT1S_avg,TDP_PT1S_avg&amp;language=eng"/>
             <om:featureOfInterest>
-                <sams:SF_SpatialSamplingFeature gml:id="foi-ssf-3-fmisid-101104">
+                <sams:SF_SpatialSamplingFeature gml:id="foi-ssf-2-fmisid-101104">
                     <sam:sampledFeature xlink:href="http://xml.fmi.fi/sampledFeature/soundingArea.php?id=101104" xlink:title="Jokioinen Ilmala sounding target area"/>
                     <sam:relatedSamplingFeature>
                         <sam:SamplingFeatureComplex>
                             <sam:role xlink:title="Launched from" xlink:href="http://xml.fmi.fi/namespace/samplingFeatureRelation/launchedFrom"/>
                             <sam:relatedSamplingFeature>
-                                <sams:SF_SpatialSamplingFeature gml:id="ssf-ssf-3-fmisid-101104">
+                                <sams:SF_SpatialSamplingFeature gml:id="ssf-ssf-2-fmisid-101104">
                                     <sam:sampledFeature>
-                                        <target:Location gml:id="foi-ssf-ssf-loc-3-fmisid-101104">
+                                        <target:Location gml:id="foi-ssf-ssf-loc-2-fmisid-101104">
                                             <gml:identifier codeSpace="http://xml.fmi.fi/namespace/stationcode/fmisid">101104</gml:identifier>
                                             <gml:name codeSpace="http://xml.fmi.fi/namespace/locationcode/name">Jokioinen Ilmala</gml:name>
                                             
@@ -1686,7 +1473,7 @@
                                         </target:Location>
                                     </sam:sampledFeature>
                                     <sams:shape>
-                                        <gml:Point gml:id="foi-ssf-ssf-point-3-fmisid-101104" srsName="http://www.opengis.net/def/crs/EPSG/0/7423" srsDimension="3">
+                                        <gml:Point gml:id="foi-ssf-ssf-point-2-fmisid-101104" srsName="http://www.opengis.net/def/crs/EPSG/0/7423" srsDimension="3">
                                             <gml:name>Jokioinen Ilmala</gml:name>
                                             <gml:pos>60.81401 23.49761 104</gml:pos>
                                         </gml:Point>
@@ -1701,7 +1488,7 @@
                             modeled here as a linestring with positions picked
                             at selected pressure levels.
                         -->
-                        <gml:Curve gml:id="foi-ssf-curve-3-fmisid-101104" srsName="http://www.opengis.net/def/crs/EPSG/0/7423" srsDimension="3">
+                        <gml:Curve gml:id="foi-ssf-curve-2-fmisid-101104" srsName="http://www.opengis.net/def/crs/EPSG/0/7423" srsDimension="3">
                             <gml:segments>
                                 <gml:LineStringSegment>
                                     <gml:posList>
@@ -1738,8 +1525,8 @@
                                       60.88619 23.79947 7846.0 
                                       60.88729 23.80729 7965.0 
                                       60.88999 23.82506 8232.0 
-                                      60.89304 23.85215 8660.0 
                                       60.89301 23.85203 8657.0 
+                                      60.89304 23.85215 8660.0 
                                       60.89440 23.85842 8775.0 
                                       60.89683 23.87061 8994.0 
                                       60.89752 23.87542 9096.0 
@@ -1773,12 +1560,12 @@
                 </sams:SF_SpatialSamplingFeature>
             </om:featureOfInterest>
             <om:result>
-                <gmlcov:MultiPointCoverage gml:id="mpcv1-1-3">
+                <gmlcov:MultiPointCoverage gml:id="mpcv1-1-2">
                     <gml:domainSet>
                         <!-- The grid consists of the 4D points where the measurements were
                             actually made during the flight of the sounding balloon.
                         -->
-                        <gmlcov:SimpleMultiPoint gml:id="mp1-13" srsName="https://xml.fmi.fi/gml/crs/compoundCRS.php?crs=7423&amp;time=unixtime" srsDimension="4">
+                        <gmlcov:SimpleMultiPoint gml:id="mp1-12" srsName="https://xml.fmi.fi/gml/crs/compoundCRS.php?crs=7423&amp;time=unixtime" srsDimension="4">
                             <gmlcov:positions>
                             60.81401 23.49761 104.0 1514656800 
                             60.81408 23.49763 116.0 1514656802 
@@ -2365,8 +2152,8 @@
                             60.87723 23.73718 6760.0 1514657950 
                             60.87734 23.73785 6770.0 1514657952 
                             60.87744 23.73858 6782.0 1514657954 
-                            60.87756 23.73936 6798.0 1514657956 
                             60.87755 23.73926 6796.0 1514657956 
+                            60.87756 23.73936 6798.0 1514657956 
                             60.87763 23.73988 6808.0 1514657958 
                             60.87772 23.74055 6820.0 1514657960 
                             60.87784 23.74129 6835.0 1514657962 
@@ -2523,8 +2310,8 @@
                             60.89267 23.84991 8614.0 1514658264 
                             60.89282 23.85058 8627.0 1514658266 
                             60.89292 23.85127 8642.0 1514658268 
-                            60.89304 23.85215 8660.0 1514658270 
                             60.89301 23.85203 8657.0 1514658270 
+                            60.89304 23.85215 8660.0 1514658270 
                             60.89316 23.85284 8674.0 1514658272 
                             60.89336 23.85360 8691.0 1514658274 
                             60.89358 23.85427 8706.0 1514658276 
@@ -4179,8 +3966,8 @@
                               402.3 18.8 249.0 -43.8 -50.2 
                               401.7 18.8 249.0 -43.9 -50.1 
                               401 18.9 249.0 -44.0 -49.9 
-                              400 19.1 249.0 -44.1 -49.7 
-                              400.1 19.0 250.0 -44.2 -49.7 
+                              400.1 19.0 249.0 -44.1 -49.7 
+                              400 19.1 250.0 -44.2 -49.7 
                               399.4 19.1 250.0 -44.3 -49.8 
                               398.7 19.1 250.0 -44.4 -49.8 
                               397.9 19.2 250.0 -44.5 -49.9 
@@ -4337,8 +4124,8 @@
                               302.2 20.4 252.0 -59.2 -62.9 
                               301.6 20.5 251.0 -59.2 -63.0 
                               300.8 20.6 250.0 -59.3 -63.0 
-                              300 20.7 249.0 -59.4 -63.1 
                               300.1 20.7 249.0 -59.4 -63.1 
+                              300 20.7 249.0 -59.4 -63.1 
                               299.3 20.7 249.0 -59.5 -63.2 
                               298.5 20.7 248.0 -59.6 -63.3 
                               297.7 20.7 248.0 -59.7 -63.4 

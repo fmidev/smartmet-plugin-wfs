@@ -157,16 +157,13 @@ html::
 objdir:
 	@mkdir -p $(objdir)
 
-# Forcibly lower RPM_BUILD_NCPUs in CircleCI cloud(but not on local builds)
-RPMBUILD=$(shell test "$$CIRCLE_BUILD_NUM" && echo RPM_BUILD_NCPUS=2 rpmbuild || echo rpmbuild)
-
 rpm: $(SPEC).spec
 	$(MAKE) clean
 	$(MAKE) file-list
 	rm -f $(SPEC).tar.gz # Clean a possible leftover from previous attempt
 	tar -czvf $(SPEC).tar.gz --exclude test --exclude-vcs \
 		--transform "s,^,plugins/$(SPEC)/," --files-from files.list
-	$(RPMBUILD) -ta $(SPEC).tar.gz
+	rpmbuild -ta $(SPEC).tar.gz
 	rm -f $(SPEC).tar.gz
 
 file-list:

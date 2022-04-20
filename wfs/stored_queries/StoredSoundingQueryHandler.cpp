@@ -14,6 +14,8 @@
 #include <tuple>
 
 namespace pt = boost::posix_time;
+
+namespace pt = boost::posix_time;
 namespace bo = SmartMet::Engine::Observation;
 
 namespace SmartMet
@@ -213,7 +215,7 @@ void StoredSoundingQueryHandler::query(const StoredQuery& query,
           std::string measurandIdStr =
               SmartMet::Engine::Observation::QueryResult::toString(dataMeasurandIdIt, 0);
           int64_t soundingId = dataContainer->castTo<int64_t>(dataSoundingIdIt);
-          int64_t soundingType = boost::any_cast<int64_t>(*radioSoundingMap.at(soundingId).mSoundingType);
+          int64_t soundingType = radioSoundingMap.at(soundingId).soundingType;
 
           if ((dataSoundingIdIt == dataSoundingIdItBegin) or (currentSoundingId != soundingId))
           {
@@ -235,28 +237,34 @@ void StoredSoundingQueryHandler::query(const StoredQuery& query,
               throw exception.disableStackTrace();
             }
 
-            currentStationId =
-                SmartMet::Engine::Observation::QueryResult::toString(rsIt->second.mStationId, 0);
+            const auto ptime2str = [&missingValue](const boost::posix_time::ptime& t) -> std::string
+                                   {
+                                       return t.is_special()
+                                           ? missingValue
+                                           : boost::posix_time::to_iso_extended_string(t) + "Z";
+                                   };
 
-            std::string dataMessageTimeStr =
-                SmartMet::Engine::Observation::QueryResult::toString(rsIt->second.mMessageTime);
+            currentStationId = rsIt->second.stationId;
+
+            const boost::posix_time::ptime epoch = rsIt->second.messageTime;
+            const auto dataMessageTimeStr = ptime2str(epoch);
             static const long ref_jd = boost::gregorian::date(1970, 1, 1).julian_day();
-            boost::posix_time::ptime epoch = Fmi::TimeParser::parse_iso(dataMessageTimeStr);
             long long jd = epoch.date().julian_day();
             long seconds = epoch.time_of_day().total_seconds();
             sEpoch = 86400LL * (jd - ref_jd) + seconds;
 
+
             CTPP::CDT& group = hash["groups"][groupId];
-            const std::string launcTimeStr =
-                SmartMet::Engine::Observation::QueryResult::toString(rsIt->second.mLaunchTime);
-            group["phenomenonBeginTime"] = launcTimeStr.empty() ? dataMessageTimeStr : launcTimeStr;
-            const std::string soundingEndStr =
-                SmartMet::Engine::Observation::QueryResult::toString(rsIt->second.mSoundingEnd);
+            const auto& launchTime = rsIt->second.launchTime;
+            group["phenomenonBeginTime"] =
+                ptime2str(launchTime.is_special() ? epoch : launchTime);
+            const auto& soundingEnd = rsIt->second.soundingEnd;
             group["phenomenonEndTime"] =
-                soundingEndStr.empty() ? dataMessageTimeStr : soundingEndStr;
+                ptime2str(soundingEnd.is_special() ? epoch : soundingEnd);
             group["phenomenonTime"] = dataMessageTimeStr;
             group["resultTime"] = dataMessageTimeStr;
             group["soundingId"] = soundingId;
+            group["soundingType"] = soundingType;
 
             featureId.erase_param(P_BEGIN_TIME);
             featureId.erase_param(P_END_TIME);
@@ -638,6 +646,8 @@ void StoredSoundingQueryHandler::parseSoundingQuery(const RequestParameterMap& p
                                                     const QueryResultShared& soundingQueryResult,
                                                     RadioSoundingMap& radioSoundingMap) const
 {
+  using SmartMet::Engine::Observation::QueryResult;
+
   // At least one id row is required for data search.
   if (not soundingQueryResult or (soundingQueryResult->size("STATION_ID") == 0))
     return;
@@ -667,14 +677,40 @@ void StoredSoundingQueryHandler::parseSoundingQuery(const RequestParameterMap& p
     {
       const int32_t soundingId = soundingQueryResult->castTo<int32_t>(soundingIdIt);
       RadioSounding rSounding;
-      rSounding.mStationId = stationIdIt;
-      rSounding.mMessageTime = messageTimeIt;
-      rSounding.mLaunchTime = launchTimeIt;
-      rSounding.mSoundingEnd = soundingEndIt;
-      rSounding.mSoundingType = soundingTypeIt;
+      rSounding.stationId = QueryResult::toString(stationIdIt, 0);
+      rSounding.messageTime = QueryResult::castTo<pt::ptime>(messageTimeIt);
+      rSounding.launchTime = QueryResult::castTo<pt::ptime>(launchTimeIt);
+      rSounding.soundingEnd = QueryResult::castTo<pt::ptime>(soundingEndIt);
+      rSounding.soundingType = QueryResult::castTo<int>(soundingTypeIt);
       latestSet.insert(tmpstationId);
       radioSoundingMap.emplace(soundingId, rSounding);
     }
+  }
+
+  RadioSoundingMap::iterator curr, next, it;
+  for (curr = radioSoundingMap.begin(); curr != radioSoundingMap.end(); curr = next)
+  {
+      next = curr;
+      next++;
+      if (curr->second.soundingType == 1) {
+          bool should_hide = false;
+          for (it = radioSoundingMap.begin(); !should_hide && it != radioSoundingMap.end(); ++it)
+          {
+              should_hide |=
+                  (it->second.stationId == curr->second.stationId)
+                  && (it->second.messageTime == curr->second.messageTime)
+                  && (it->second.soundingType == 2);
+          }
+
+          if (should_hide)
+          {
+              //std::cout << "### Removing sounding ID " << curr->first
+              //          << ": of type 1 when type 2 sounding data are present"
+              //          << std::endl;
+              radioSoundingMap.erase(curr);
+          }
+      }
+
   }
 }
 
@@ -758,9 +794,10 @@ void StoredSoundingQueryHandler::makeSoundingDataQuery(const RequestParameterMap
   dataQueryParams.addField("DATA_VALUE");
   dataQueryParams.addField("DATA_QUALITY");
   dataQueryParams.addField("SIGNIFICANCE");
+  dataQueryParams.addField("LEVEL_NO");
   dataQueryParams.addOrderBy("SOUNDING_ID", "ASC");
   dataQueryParams.addOrderBy("MEASURAND_ID", "ASC");
-  dataQueryParams.addOrderBy("LEVEL_TIME", "ASC");
+  dataQueryParams.addOrderBy("LEVEL_NO", "ASC");
 
   for (auto& radioSounding : radioSoundingMap)
   {

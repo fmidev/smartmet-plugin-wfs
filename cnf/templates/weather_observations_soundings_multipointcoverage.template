@@ -45,6 +45,12 @@
                     <om:value>meteorology</om:value>
                 </om:NamedValue>
             </om:parameter>
+            <om:parameter>
+                <om:NamedValue>
+                    <om:name xlink:title="soundingType"/>
+                    <om:value><TMPL_var group.soundingType></om:value>
+                </om:NamedValue>
+            </om:parameter>
             <om:observedProperty <TMPL_include "include/link_observable_property.template">/>
             <om:featureOfInterest>
                 <sams:SF_SpatialSamplingFeature gml:id="<TMPL_var CONCAT("foi-ssf-",group.__index__ + 1,"-fmisid-",group.station.fmisid)>">

@@ -45,6 +45,12 @@
                     <om:value>meteorology</om:value>
                 </om:NamedValue>
             </om:parameter>
+            <om:parameter>
+                <om:NamedValue>
+                    <om:name xlink:title="soundingType"/>
+                    <om:value>2</om:value>
+                </om:NamedValue>
+            </om:parameter>
             <om:observedProperty  xlink:href="http://opendata.fmi.fi/fmi-apikey/foobar/meta?observableProperty=observation&amp;param=TAP_PT1S_avg&amp;language=eng"/>
             <om:featureOfInterest>
                 <sams:SF_SpatialSamplingFeature gml:id="foi-ssf-1-fmisid-101104">
@@ -2643,8 +2649,8 @@
                             61.01152 23.39144 27006.0 1559827242 
                             61.01147 23.39109 27018.0 1559827244 
                             61.01140 23.39075 27032.0 1559827246 
-                            61.01133 23.39033 27047.0 1559827248 
                             61.01133 23.39040 27045.0 1559827248 
+                            61.01133 23.39033 27047.0 1559827248 
                             61.01129 23.39000 27058.0 1559827250 
                             61.01128 23.38956 27072.0 1559827252 
                             61.01130 23.38910 27086.0 1559827254 
@@ -5369,6 +5375,12 @@
                     <om:value>meteorology</om:value>
                 </om:NamedValue>
             </om:parameter>
+            <om:parameter>
+                <om:NamedValue>
+                    <om:name xlink:title="soundingType"/>
+                    <om:value>2</om:value>
+                </om:NamedValue>
+            </om:parameter>
             <om:observedProperty  xlink:href="http://opendata.fmi.fi/fmi-apikey/foobar/meta?observableProperty=observation&amp;param=TAP_PT1S_avg&amp;language=eng"/>
             <om:featureOfInterest>
                 <sams:SF_SpatialSamplingFeature gml:id="foi-ssf-2-fmisid-101104">
@@ -6016,8 +6028,8 @@
                             60.84812 23.59876 5772.0 1559780132 
                             60.84816 23.59908 5783.0 1559780134 
                             60.84824 23.59939 5793.0 1559780136 
-                            60.84833 23.59971 5803.0 1559780138 
                             60.84832 23.59970 5803.0 1559780138 
+                            60.84833 23.59971 5803.0 1559780138 
                             60.84841 23.60004 5813.0 1559780140 
                             60.84848 23.60037 5825.0 1559780142 
                             60.84853 23.60068 5838.0 1559780144 
@@ -10541,6 +10553,12 @@
                 <om:NamedValue>
                     <om:name xlink:href="https://inspire.ec.europa.eu/codeList/ProcessParameterValue/value/groundObservation/observationIntent"/>
                     <om:value>meteorology</om:value>
+                </om:NamedValue>
+            </om:parameter>
+            <om:parameter>
+                <om:NamedValue>
+                    <om:name xlink:title="soundingType"/>
+                    <om:value>2</om:value>
                 </om:NamedValue>
             </om:parameter>
             <om:observedProperty  xlink:href="http://opendata.fmi.fi/fmi-apikey/foobar/meta?observableProperty=observation&amp;param=TAP_PT1S_avg&amp;language=eng"/>
@@ -17444,6 +17462,12 @@
                     <om:value>meteorology</om:value>
                 </om:NamedValue>
             </om:parameter>
+            <om:parameter>
+                <om:NamedValue>
+                    <om:name xlink:title="soundingType"/>
+                    <om:value>2</om:value>
+                </om:NamedValue>
+            </om:parameter>
             <om:observedProperty  xlink:href="http://opendata.fmi.fi/fmi-apikey/foobar/meta?observableProperty=observation&amp;param=TAP_PT1S_avg&amp;language=eng"/>
             <om:featureOfInterest>
                 <sams:SF_SpatialSamplingFeature gml:id="foi-ssf-4-fmisid-101104">
@@ -17727,8 +17751,8 @@
                             60.82499 23.50538 1532.0 1559801056 
                             60.82505 23.50545 1543.0 1559801058 
                             60.82510 23.50559 1554.0 1559801060 
-                            60.82512 23.50571 1567.0 1559801062 
                             60.82512 23.50571 1565.0 1559801062 
+                            60.82512 23.50571 1567.0 1559801062 
                             60.82515 23.50574 1576.0 1559801064 
                             60.82522 23.50580 1587.0 1559801066 
                             60.82529 23.50593 1597.0 1559801068 
@@ -22554,6 +22578,12 @@
                     <om:value>meteorology</om:value>
                 </om:NamedValue>
             </om:parameter>
+            <om:parameter>
+                <om:NamedValue>
+                    <om:name xlink:title="soundingType"/>
+                    <om:value>2</om:value>
+                </om:NamedValue>
+            </om:parameter>
             <om:observedProperty  xlink:href="http://opendata.fmi.fi/fmi-apikey/foobar/meta?observableProperty=observation&amp;param=TAP_PT1S_avg&amp;language=eng"/>
             <om:featureOfInterest>
                 <sams:SF_SpatialSamplingFeature gml:id="foi-ssf-5-fmisid-101932">
@@ -22655,8 +22685,8 @@
                                       67.32593 28.72660 16088.0 
                                       67.32481 28.73310 16274.0 
                                       67.32468 28.73524 16380.0 
-                                      67.32505 28.73737 16501.0 
                                       67.32504 28.73734 16500.0 
+                                      67.32505 28.73737 16501.0 
                                       67.32589 28.75917 17054.0 
                                       67.32582 28.76589 17267.0 
                                       67.32621 28.76927 17368.0 
@@ -22795,8 +22825,8 @@
                             67.37118 26.66081 1150.0 1559822580 
                             67.37119 26.66115 1160.0 1559822582 
                             67.37119 26.66154 1170.0 1559822584 
-                            67.37119 26.66193 1180.0 1559822586 
                             67.37119 26.66193 1179.0 1559822586 
+                            67.37119 26.66193 1180.0 1559822586 
                             67.37121 26.66234 1189.0 1559822588 
                             67.37121 26.66279 1198.0 1559822590 
                             67.37121 26.66323 1207.0 1559822592 
@@ -24430,8 +24460,8 @@
                             67.32491 28.73693 16471.0 1559825828 
                             67.32495 28.73704 16481.0 1559825830 
                             67.32499 28.73717 16490.0 1559825832 
-                            67.32505 28.73737 16501.0 1559825834 
                             67.32504 28.73734 16500.0 1559825834 
+                            67.32505 28.73737 16501.0 1559825834 
                             67.32510 28.73754 16509.0 1559825836 
                             67.32517 28.73777 16519.0 1559825838 
                             67.32525 28.73799 16529.0 1559825840 

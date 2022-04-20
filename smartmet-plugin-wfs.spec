@@ -3,7 +3,7 @@
 %define SPECNAME smartmet-plugin-%{DIRNAME}
 Summary: SmartMet WFS plugin
 Name: %{SPECNAME}
-Version: 22.3.28
+Version: 22.4.13
 Release: 1%{?dist}.fmi
 License: MIT
 Group: SmartMet/Plugins
@@ -31,12 +31,12 @@ BuildRequires: smartmet-library-macgyver-devel >= 22.3.28
 BuildRequires: smartmet-engine-contour-devel >= 22.3.11
 BuildRequires: smartmet-engine-geonames-devel >= 22.3.21
 BuildRequires: smartmet-engine-gis-devel >= 22.2.10
-BuildRequires: smartmet-engine-grid-devel >= 22.3.28
+BuildRequires: smartmet-engine-grid-devel >= 22.3.30
 BuildRequires: smartmet-engine-querydata-devel >= 22.3.18
-BuildRequires: smartmet-library-grid-content-devel >= 22.3.28
+BuildRequires: smartmet-library-grid-content-devel >= 22.3.30
 BuildRequires: smartmet-library-grid-files-devel >= 22.3.15
 %if %{with observation}
-BuildRequires: smartmet-engine-observation-devel >= 22.4.1
+BuildRequires: smartmet-engine-observation-devel >= 22.4.8
 %endif
 Requires: ctpp2
 Requires: fmt >= 7.1.3
@@ -50,11 +50,11 @@ Requires: smartmet-library-gis >= 22.1.24
 Requires: smartmet-engine-contour >= 22.3.11
 Requires: smartmet-engine-geonames >= 22.3.21
 Requires: smartmet-engine-gis >= 22.2.10
-Requires: smartmet-engine-grid >= 22.3.28
-Requires: smartmet-library-grid-content >= 22.3.28
+Requires: smartmet-engine-grid >= 22.3.30
+Requires: smartmet-library-grid-content >= 22.3.30
 Requires: smartmet-library-grid-files >= 22.3.15
 %if %{with observation}
-Requires: smartmet-engine-observation >= 22.4.1
+Requires: smartmet-engine-observation >= 22.4.8
 %endif
 Requires: smartmet-engine-querydata >= 22.3.18
 Requires: smartmet-server >= 21.11.25
@@ -96,9 +96,9 @@ Obsoletes: smartmet-brainstorm-wfs-debuginfo < 16.11.1
 #TestRequires: smartmet-engine-gis >= 22.2.10
 #TestRequires: smartmet-engine-querydata >= 22.3.18
 %if %{with observation}
-#TestRequires: smartmet-engine-observation >= 22.4.1
+#TestRequires: smartmet-engine-observation >= 22.4.8
 %endif
-#TestRequires: smartmet-engine-grid >= 22.3.28
+#TestRequires: smartmet-engine-grid >= 22.3.30
 #TestRequires: redis
 #TestRequires: smartmet-engine-grid-test
 # Required by top level Makefile
@@ -146,6 +146,15 @@ rm -rf $RPM_BUILD_ROOT
 %{_includedir}/smartmet/plugin/wfs/request/*.h
 
 %changelog
+* Wed Apr 13 2022 Andris Pavēnis <andris.pavenis@fmi.fi> 22.4.13-1.fmi
+- Update sounding observation support
+
+* Thu Apr  7 2022 Andris Pavēnis <andris.pavenis@fmi.fi> 22.4.7-1.fmi
+- Improved sounding type support for sounding queries
+
+* Mon Apr  4 2022 Andris Pavēnis <andris.pavenis@fmi.fi> 22.4.4-1.fmi
+- Add support for querying several sounding types
+
 * Mon Mar 28 2022 Mika Heiskanen <mika.heiskanen@fmi.fi> - 22.3.28-1.fmi
 - Repackaged due to ABI changes in grid-content library
 

@@ -1,0 +1,768 @@
+Global data object:
+
+   axisLabels = "Lat Long Height";
+   fmi_apikey = "foobar";
+   fmi_apikey_prefix = "/fmi-apikey/";
+   groups = [
+              {
+                'featureId' : "WFS-9zl3XIaqCpaq5wTmmDZpo4sXdC6JTowrFPf13ZNO7PUy8.kLSxZc.ndU07ctdDJgxbrWLJayc1GLJ0wYOmDC0xsfLnWpFoU47p03aMmbOy7slTTty10MmDFutYslrJzUYsnTBg6YMLTOzbdPPTk51mMWDFyzZOjXl899_LJf39svLvy09MOLZljZmzD0y8.kTW24fETTz6Yd2PLStXQgN7bl6Zd9DDyw7cvTLy51sVINC_QqMad_D2ztbbp589O7PUy.OlY07DObW7rtn5qfTD00793OcJpcOuLZpx6enmcJrceuHZp6eZO7NvibHPf13ZNO7PU88MskJrc.mHpp37qnnhlrQpz6s6JJnR25z6b.WXJx65eXm_pyVsU9_Xdk07s9TLz6AA--",
+                'obsParamList' : [
+                                   {
+                                     'name' : "TAP_PT1S_avg"
+                                   }
+                                 ],
+                'obsReturnArray' : [
+                                     {
+                                       'altitude' : "180.0",
+                                       'data' : [
+                                                  {
+                                                    'value' : "-17.0"
+                                                  }
+                                                ],
+                                       'epochTime' : 1514548800,
+                                       'pressure' : 979.7,
+                                       'significance' : 0,
+                                       'x' : "67.36663",
+                                       'y' : "26.62901"
+                                     },
+                                     {
+                                       'altitude' : "227.0",
+                                       'data' : [
+                                                  {
+                                                    'value' : "-13.8"
+                                                  }
+                                                ],
+                                       'epochTime' : 1514548800,
+                                       'pressure' : 973.7,
+                                       'significance' : 0,
+                                       'x' : "67.36663",
+                                       'y' : "26.62901"
+                                     },
+                                     {
+                                       'altitude' : "272.0",
+                                       'data' : [
+                                                  {
+                                                    'value' : "-13.2"
+                                                  }
+                                                ],
+                                       'epochTime' : 1514548800,
+                                       'pressure' : 967.8,
+                                       'significance' : 0,
+                                       'x' : "67.36663",
+                                       'y' : "26.62901"
+                                     },
+                                     {
+                                       'altitude' : "385.0",
+                                       'data' : [
+                                                  {
+                                                    'value' : "-10.0"
+                                                  }
+                                                ],
+                                       'epochTime' : 1514548800,
+                                       'pressure' : 953.8,
+                                       'significance' : 0,
+                                       'x' : "67.36663",
+                                       'y' : "26.62901"
+                                     },
+                                     {
+                                       'altitude' : "395.0",
+                                       'data' : [
+                                                  {
+                                                    'value' : "-9.8"
+                                                  }
+                                                ],
+                                       'epochTime' : 1514548800,
+                                       'pressure' : 952.6,
+                                       'significance' : 0,
+                                       'x' : "67.36663",
+                                       'y' : "26.62901"
+                                     },
+                                     {
+                                       'altitude' : "573.0",
+                                       'data' : [
+                                                  {
+                                                    'value' : "-7.8"
+                                                  }
+                                                ],
+                                       'epochTime' : 1514548800,
+                                       'pressure' : 930.9,
+                                       'significance' : 0,
+                                       'x' : "67.36663",
+                                       'y' : "26.62901"
+                                     },
+                                     {
+                                       'altitude' : "587.0",
+                                       'data' : [
+                                                  {
+                                                    'value' : "-7.8"
+                                                  }
+                                                ],
+                                       'epochTime' : 1514548800,
+                                       'pressure' : 929.3,
+                                       'significance' : 0,
+                                       'x' : "67.36663",
+                                       'y' : "26.62901"
+                                     },
+                                     {
+                                       'altitude' : "623.0",
+                                       'data' : [
+                                                  {
+                                                    'value' : "-6.7"
+                                                  }
+                                                ],
+                                       'epochTime' : 1514548800,
+                                       'pressure' : 925,
+                                       'significance' : 0,
+                                       'x' : "67.36663",
+                                       'y' : "26.62901"
+                                     },
+                                     {
+                                       'altitude' : "656.0",
+                                       'data' : [
+                                                  {
+                                                    'value' : "-5.8"
+                                                  }
+                                                ],
+                                       'epochTime' : 1514548800,
+                                       'pressure' : 921,
+                                       'significance' : 0,
+                                       'x' : "67.36663",
+                                       'y' : "26.62901"
+                                     },
+                                     {
+                                       'altitude' : "675.0",
+                                       'data' : [
+                                                  {
+                                                    'value' : "-5.1"
+                                                  }
+                                                ],
+                                       'epochTime' : 1514548800,
+                                       'pressure' : 918.8,
+                                       'significance' : 0,
+                                       'x' : "67.36663",
+                                       'y' : "26.62901"
+                                     },
+                                     {
+                                       'altitude' : "838.0",
+                                       'data' : [
+                                                  {
+                                                    'value' : "-4.7"
+                                                  }
+                                                ],
+                                       'epochTime' : 1514548800,
+                                       'pressure' : 900,
+                                       'significance' : 0,
+                                       'x' : "67.36663",
+                                       'y' : "26.62901"
+                                     },
+                                     {
+                                       'altitude' : "1029.0",
+                                       'data' : [
+                                                  {
+                                                    'value' : "-3.2"
+                                                  }
+                                                ],
+                                       'epochTime' : 1514548800,
+                                       'pressure' : 878.4,
+                                       'significance' : 0,
+                                       'x' : "67.36663",
+                                       'y' : "26.62901"
+                                     },
+                                     {
+                                       'altitude' : "1196.0",
+                                       'data' : [
+                                                  {
+                                                    'value' : "-4.2"
+                                                  }
+                                                ],
+                                       'epochTime' : 1514548800,
+                                       'pressure' : 860.1,
+                                       'significance' : 0,
+                                       'x' : "67.36663",
+                                       'y' : "26.62901"
+                                     },
+                                     {
+                                       'altitude' : "1288.0",
+                                       'data' : [
+                                                  {
+                                                    'value' : "-4.7"
+                                                  }
+                                                ],
+                                       'epochTime' : 1514548800,
+                                       'pressure' : 850,
+                                       'significance' : 0,
+                                       'x' : "67.36663",
+                                       'y' : "26.62901"
+                                     },
+                                     {
+                                       'altitude' : "1994.0",
+                                       'data' : [
+                                                  {
+                                                    'value' : "-7.5"
+                                                  }
+                                                ],
+                                       'epochTime' : 1514548800,
+                                       'pressure' : 776.8,
+                                       'significance' : 0,
+                                       'x' : "67.36663",
+                                       'y' : "26.62901"
+                                     },
+                                     {
+                                       'altitude' : "2799.0",
+                                       'data' : [
+                                                  {
+                                                    'value' : "-10.7"
+                                                  }
+                                                ],
+                                       'epochTime' : 1514548800,
+                                       'pressure' : 700,
+                                       'significance' : 0,
+                                       'x' : "67.36663",
+                                       'y' : "26.62901"
+                                     },
+                                     {
+                                       'altitude' : "2817.0",
+                                       'data' : [
+                                                  {
+                                                    'value' : "-10.6"
+                                                  }
+                                                ],
+                                       'epochTime' : 1514548800,
+                                       'pressure' : 698.4,
+                                       'significance' : 0,
+                                       'x' : "67.36663",
+                                       'y' : "26.62901"
+                                     },
+                                     {
+                                       'altitude' : "2957.0",
+                                       'data' : [
+                                                  {
+                                                    'value' : "-11.5"
+                                                  }
+                                                ],
+                                       'epochTime' : 1514548800,
+                                       'pressure' : 685.8,
+                                       'significance' : 0,
+                                       'x' : "67.36663",
+                                       'y' : "26.62901"
+                                     },
+                                     {
+                                       'altitude' : "3416.0",
+                                       'data' : [
+                                                  {
+                                                    'value' : "-14.0"
+                                                  }
+                                                ],
+                                       'epochTime' : 1514548800,
+                                       'pressure' : 645.7,
+                                       'significance' : 0,
+                                       'x' : "67.36663",
+                                       'y' : "26.62901"
+                                     },
+                                     {
+                                       'altitude' : "4075.0",
+                                       'data' : [
+                                                  {
+                                                    'value' : "-18.0"
+                                                  }
+                                                ],
+                                       'epochTime' : 1514548800,
+                                       'pressure' : 591.7,
+                                       'significance' : 0,
+                                       'x' : "67.36663",
+                                       'y' : "26.62901"
+                                     },
+                                     {
+                                       'altitude' : "4164.0",
+                                       'data' : [
+                                                  {
+                                                    'value' : "-18.5"
+                                                  }
+                                                ],
+                                       'epochTime' : 1514548800,
+                                       'pressure' : 584.7,
+                                       'significance' : 0,
+                                       'x' : "67.36663",
+                                       'y' : "26.62901"
+                                     },
+                                     {
+                                       'altitude' : "5309.0",
+                                       'data' : [
+                                                  {
+                                                    'value' : "-27.7"
+                                                  }
+                                                ],
+                                       'epochTime' : 1514548800,
+                                       'pressure' : 500,
+                                       'significance' : 0,
+                                       'x' : "67.36663",
+                                       'y' : "26.62901"
+                                     },
+                                     {
+                                       'altitude' : "5928.0",
+                                       'data' : [
+                                                  {
+                                                    'value' : "-32.9"
+                                                  }
+                                                ],
+                                       'epochTime' : 1514548800,
+                                       'pressure' : 458.4,
+                                       'significance' : 0,
+                                       'x' : "67.36663",
+                                       'y' : "26.62901"
+                                     },
+                                     {
+                                       'altitude' : "6489.0",
+                                       'data' : [
+                                                  {
+                                                    'value' : "-37.3"
+                                                  }
+                                                ],
+                                       'epochTime' : 1514548800,
+                                       'pressure' : 422.9,
+                                       'significance' : 0,
+                                       'x' : "67.36663",
+                                       'y' : "26.62901"
+                                     },
+                                     {
+                                       'altitude' : "6871.0",
+                                       'data' : [
+                                                  {
+                                                    'value' : "-40.6"
+                                                  }
+                                                ],
+                                       'epochTime' : 1514548800,
+                                       'pressure' : 400,
+                                       'significance' : 0,
+                                       'x' : "67.36663",
+                                       'y' : "26.62901"
+                                     },
+                                     {
+                                       'altitude' : "7201.0",
+                                       'data' : [
+                                                  {
+                                                    'value' : "-43.5"
+                                                  }
+                                                ],
+                                       'epochTime' : 1514548800,
+                                       'pressure' : 381,
+                                       'significance' : 0,
+                                       'x' : "67.36663",
+                                       'y' : "26.62901"
+                                     },
+                                     {
+                                       'altitude' : "8759.0",
+                                       'data' : [
+                                                  {
+                                                    'value' : "-57.3"
+                                                  }
+                                                ],
+                                       'epochTime' : 1514548800,
+                                       'pressure' : 300,
+                                       'significance' : 0,
+                                       'x' : "67.36663",
+                                       'y' : "26.62901"
+                                     },
+                                     {
+                                       'altitude' : "9181.0",
+                                       'data' : [
+                                                  {
+                                                    'value' : "-61.1"
+                                                  }
+                                                ],
+                                       'epochTime' : 1514548800,
+                                       'pressure' : 280.5,
+                                       'significance' : 0,
+                                       'x' : "67.36663",
+                                       'y' : "26.62901"
+                                     },
+                                     {
+                                       'altitude' : "9885.0",
+                                       'data' : [
+                                                  {
+                                                    'value' : "-66.6"
+                                                  }
+                                                ],
+                                       'epochTime' : 1514548800,
+                                       'pressure' : 250,
+                                       'significance' : 0,
+                                       'x' : "67.36663",
+                                       'y' : "26.62901"
+                                     },
+                                     {
+                                       'altitude' : "10169.0",
+                                       'data' : [
+                                                  {
+                                                    'value' : "-69.0"
+                                                  }
+                                                ],
+                                       'epochTime' : 1514548800,
+                                       'pressure' : 238.5,
+                                       'significance' : 0,
+                                       'x' : "67.36663",
+                                       'y' : "26.62901"
+                                     },
+                                     {
+                                       'altitude' : "10531.0",
+                                       'data' : [
+                                                  {
+                                                    'value' : "-71.8"
+                                                  }
+                                                ],
+                                       'epochTime' : 1514548800,
+                                       'pressure' : 224.4,
+                                       'significance' : 0,
+                                       'x' : "67.36663",
+                                       'y' : "26.62901"
+                                     },
+                                     {
+                                       'altitude' : "10605.0",
+                                       'data' : [
+                                                  {
+                                                    'value' : "-71.6"
+                                                  }
+                                                ],
+                                       'epochTime' : 1514548800,
+                                       'pressure' : 221.6,
+                                       'significance' : 0,
+                                       'x' : "67.36663",
+                                       'y' : "26.62901"
+                                     },
+                                     {
+                                       'altitude' : "10876.0",
+                                       'data' : [
+                                                  {
+                                                    'value' : "-70.3"
+                                                  }
+                                                ],
+                                       'epochTime' : 1514548800,
+                                       'pressure' : 211.6,
+                                       'significance' : 0,
+                                       'x' : "67.36663",
+                                       'y' : "26.62901"
+                                     },
+                                     {
+                                       'altitude' : "11213.0",
+                                       'data' : [
+                                                  {
+                                                    'value' : "-69.3"
+                                                  }
+                                                ],
+                                       'epochTime' : 1514548800,
+                                       'pressure' : 200,
+                                       'significance' : 0,
+                                       'x' : "67.36663",
+                                       'y' : "26.62901"
+                                     },
+                                     {
+                                       'altitude' : "11230.0",
+                                       'data' : [
+                                                  {
+                                                    'value' : "-69.4"
+                                                  }
+                                                ],
+                                       'epochTime' : 1514548800,
+                                       'pressure' : 199.4,
+                                       'significance' : 0,
+                                       'x' : "67.36663",
+                                       'y' : "26.62901"
+                                     },
+                                     {
+                                       'altitude' : "11380.0",
+                                       'data' : [
+                                                  {
+                                                    'value' : "-70.8"
+                                                  }
+                                                ],
+                                       'epochTime' : 1514548800,
+                                       'pressure' : 194.5,
+                                       'significance' : 0,
+                                       'x' : "67.36663",
+                                       'y' : "26.62901"
+                                     },
+                                     {
+                                       'altitude' : "11626.0",
+                                       'data' : [
+                                                  {
+                                                    'value' : "-70.4"
+                                                  }
+                                                ],
+                                       'epochTime' : 1514548800,
+                                       'pressure' : 186.5,
+                                       'significance' : 0,
+                                       'x' : "67.36663",
+                                       'y' : "26.62901"
+                                     },
+                                     {
+                                       'altitude' : "12035.0",
+                                       'data' : [
+                                                  {
+                                                    'value' : "-69.9"
+                                                  }
+                                                ],
+                                       'epochTime' : 1514548800,
+                                       'pressure' : 174.1,
+                                       'significance' : 0,
+                                       'x' : "67.36663",
+                                       'y' : "26.62901"
+                                     },
+                                     {
+                                       'altitude' : "12454.0",
+                                       'data' : [
+                                                  {
+                                                    'value' : "-68.6"
+                                                  }
+                                                ],
+                                       'epochTime' : 1514548800,
+                                       'pressure' : 162.4,
+                                       'significance' : 0,
+                                       'x' : "67.36663",
+                                       'y' : "26.62901"
+                                     },
+                                     {
+                                       'altitude' : "12926.0",
+                                       'data' : [
+                                                  {
+                                                    'value' : "-69.4"
+                                                  }
+                                                ],
+                                       'epochTime' : 1514548800,
+                                       'pressure' : 150,
+                                       'significance' : 0,
+                                       'x' : "67.36663",
+                                       'y' : "26.62901"
+                                     },
+                                     {
+                                       'altitude' : "13240.0",
+                                       'data' : [
+                                                  {
+                                                    'value' : "-69.1"
+                                                  }
+                                                ],
+                                       'epochTime' : 1514548800,
+                                       'pressure' : 142.3,
+                                       'significance' : 0,
+                                       'x' : "67.36663",
+                                       'y' : "26.62901"
+                                     },
+                                     {
+                                       'altitude' : "13696.0",
+                                       'data' : [
+                                                  {
+                                                    'value' : "-69.2"
+                                                  }
+                                                ],
+                                       'epochTime' : 1514548800,
+                                       'pressure' : 131.9,
+                                       'significance' : 0,
+                                       'x' : "67.36663",
+                                       'y' : "26.62901"
+                                     },
+                                     {
+                                       'altitude' : "13936.0",
+                                       'data' : [
+                                                  {
+                                                    'value' : "-69.3"
+                                                  }
+                                                ],
+                                       'epochTime' : 1514548800,
+                                       'pressure' : 126.7,
+                                       'significance' : 0,
+                                       'x' : "67.36663",
+                                       'y' : "26.62901"
+                                     },
+                                     {
+                                       'altitude' : "14593.0",
+                                       'data' : [
+                                                  {
+                                                    'value' : "-69.6"
+                                                  }
+                                                ],
+                                       'epochTime' : 1514548800,
+                                       'pressure' : 113.4,
+                                       'significance' : 0,
+                                       'x' : "67.36663",
+                                       'y' : "26.62901"
+                                     },
+                                     {
+                                       'altitude' : "14852.0",
+                                       'data' : [
+                                                  {
+                                                    'value' : "-69.4"
+                                                  }
+                                                ],
+                                       'epochTime' : 1514548800,
+                                       'pressure' : 108.6,
+                                       'significance' : 0,
+                                       'x' : "67.36663",
+                                       'y' : "26.62901"
+                                     },
+                                     {
+                                       'altitude' : "15113.0",
+                                       'data' : [
+                                                  {
+                                                    'value' : "-70.5"
+                                                  }
+                                                ],
+                                       'epochTime' : 1514548800,
+                                       'pressure' : 104,
+                                       'significance' : 0,
+                                       'x' : "67.36663",
+                                       'y' : "26.62901"
+                                     },
+                                     {
+                                       'altitude' : "15340.0",
+                                       'data' : [
+                                                  {
+                                                    'value' : "-70.8"
+                                                  }
+                                                ],
+                                       'epochTime' : 1514548800,
+                                       'pressure' : 100,
+                                       'significance' : 0,
+                                       'x' : "67.36663",
+                                       'y' : "26.62901"
+                                     },
+                                     {
+                                       'altitude' : "15343.0",
+                                       'data' : [
+                                                  {
+                                                    'value' : "-70.8"
+                                                  }
+                                                ],
+                                       'epochTime' : 1514548800,
+                                       'pressure' : 100,
+                                       'significance' : 0,
+                                       'x' : "67.36663",
+                                       'y' : "26.62901"
+                                     },
+                                     {
+                                       'altitude' : "16294.0",
+                                       'data' : [
+                                                  {
+                                                    'value' : "-71.9"
+                                                  }
+                                                ],
+                                       'epochTime' : 1514548800,
+                                       'pressure' : 85.1,
+                                       'significance' : 0,
+                                       'x' : "67.36663",
+                                       'y' : "26.62901"
+                                     },
+                                     {
+                                       'altitude' : "16686.0",
+                                       'data' : [
+                                                  {
+                                                    'value' : "-72.0"
+                                                  }
+                                                ],
+                                       'epochTime' : 1514548800,
+                                       'pressure' : 79.7,
+                                       'significance' : 0,
+                                       'x' : "67.36663",
+                                       'y' : "26.62901"
+                                     },
+                                     {
+                                       'altitude' : "17116.0",
+                                       'data' : [
+                                                  {
+                                                    'value' : "-73.0"
+                                                  }
+                                                ],
+                                       'epochTime' : 1514548800,
+                                       'pressure' : 74,
+                                       'significance' : 0,
+                                       'x' : "67.36663",
+                                       'y' : "26.62901"
+                                     },
+                                     {
+                                       'altitude' : "17445.0",
+                                       'data' : [
+                                                  {
+                                                    'value' : "-74.3"
+                                                  }
+                                                ],
+                                       'epochTime' : 1514548800,
+                                       'pressure' : 70,
+                                       'significance' : 0,
+                                       'x' : "67.36663",
+                                       'y' : "26.62901"
+                                     },
+                                     {
+                                       'altitude' : "17526.0",
+                                       'data' : [
+                                                  {
+                                                    'value' : "-74.1"
+                                                  }
+                                                ],
+                                       'epochTime' : 1514548800,
+                                       'pressure' : 69,
+                                       'significance' : 0,
+                                       'x' : "67.36663",
+                                       'y' : "26.62901"
+                                     },
+                                     {
+                                       'altitude' : "17791.0",
+                                       'data' : [
+                                                  {
+                                                    'value' : "-73.4"
+                                                  }
+                                                ],
+                                       'epochTime' : 1514548800,
+                                       'pressure' : 66,
+                                       'significance' : 0,
+                                       'x' : "67.36663",
+                                       'y' : "26.62901"
+                                     }
+                                   ],
+                'phenomenonBeginTime' : "2017-12-29T12:00:00Z",
+                'phenomenonEndTime' : "2017-12-29T12:00:00Z",
+                'phenomenonTime' : "2017-12-29T12:00:00Z",
+                'resultTime' : "2017-12-29T12:00:00Z",
+                'soundingId' : 141459,
+                'soundingType' : 1,
+                'station' : {
+                              'elevation' : "179",
+                              'fmisid' : "101932",
+                              'name' : "Sodankylä Tähtelä",
+                              'region' : "Sodankylä",
+                              'wmo' : "2836",
+                              'x' : "67.36663",
+                              'y' : "26.62901"
+                            }
+              }
+            ];
+   hostname = "opendata.fmi.fi";
+   language = "eng";
+   named_parameters = {
+                        'defaultfmisids' : [
+                                             "101104",
+                                             "101339",
+                                             "101932"
+                                           ],
+                        'defaultmeteoparam' : [
+                                                "TAP_PT1S_avg",
+                                                "TDP_PT1S_avg",
+                                                "RHP_PT1S_avg",
+                                                "UAP_PT1S_avg",
+                                                "WSP_PT1S_avg",
+                                                "WDP_PT1S_avg",
+                                                "PAP_PT1S_AVG"
+                                              ],
+                        'defaultsoundingtypes' : [
+                                                   "2"
+                                                 ]
+                      };
+   numberMatched = 1;
+   numberReturned = 1;
+   phenomenonBeginTime = "2017-12-29T12:00:00Z";
+   phenomenonEndTime = "2017-12-29T12:00:00Z";
+   projEpochSrsDim = 4;
+   projEpochSrsName = "https://xml.fmi.fi/gml/crs/compoundCRS.php?crs=7423&amp;time=unixtime";
+   projSrsDim = 3;
+   projSrsName = "http://www.opengis.net/def/crs/EPSG/0/7423";
+   protocol = "http://";
+   queryName = "SoundingTest";
+   queryNum = 1;
+   responseTimestamp = "2012-12-12T12:12:12Z"
+ 
