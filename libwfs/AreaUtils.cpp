@@ -1,5 +1,4 @@
 #include "AreaUtils.h"
-#include <boost/bind.hpp>
 #include <boost/lambda/lambda.hpp>
 #include <boost/shared_ptr.hpp>
 #include <macgyver/Exception.h>

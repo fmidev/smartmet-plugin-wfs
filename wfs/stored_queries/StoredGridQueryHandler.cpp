@@ -4,7 +4,7 @@
 #include <string>
 
 #include <boost/algorithm/string.hpp>
-#include <boost/bind.hpp>
+#include <boost/bind/bind.hpp>
 #include <boost/format.hpp>
 #include <boost/lambda/lambda.hpp>
 #include <boost/shared_array.hpp>

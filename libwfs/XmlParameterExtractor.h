@@ -1,6 +1,6 @@
 #pragma once
 
-#include <boost/bind.hpp>
+#include <boost/bind/bind.hpp>
 #include <boost/function.hpp>
 #include <spine/Value.h>
 #include <xercesc/dom/DOMElement.hpp>
@@ -83,7 +83,7 @@ void ParameterExtractor::add_int_type(const std::string& name)
   {
     add_type(name,
              boost::bind(&extract_integer,
-                         ::_1,
+                         boost::placeholders::_1,
                          std::numeric_limits<IntType>::min(),
                          std::numeric_limits<IntType>::max()));
   }
@@ -91,7 +91,7 @@ void ParameterExtractor::add_int_type(const std::string& name)
   {
     add_type(name,
              boost::bind(&extract_unsigned_integer,
-                         ::_1,
+                         boost::placeholders::_1,
                          std::numeric_limits<IntType>::min(),
                          std::numeric_limits<IntType>::max()));
   }

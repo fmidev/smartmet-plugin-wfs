@@ -2,6 +2,9 @@
 #include <macgyver/Exception.h>
 #include <algorithm>
 #include <typeinfo>
+#include <boost/bind/bind.hpp>
+
+namespace ph = boost::placeholders;
 
 namespace SmartMet
 {
@@ -180,7 +183,7 @@ std::vector<int64_t> ArrayParameterTemplate::get_int_array(
       std::transform(tmp.begin(),
                      tmp.end(),
                      std::back_inserter(result),
-                     boost::bind(&SmartMet::Spine::Value::get_int, ::_1));
+                     boost::bind(&SmartMet::Spine::Value::get_int,  ph::_1));
       return result;
     }
     catch (...)
@@ -206,7 +209,7 @@ std::vector<uint64_t> ArrayParameterTemplate::get_uint_array(
       std::transform(tmp.begin(),
                      tmp.end(),
                      std::back_inserter(result),
-                     boost::bind(&SmartMet::Spine::Value::get_uint, ::_1));
+                     boost::bind(&SmartMet::Spine::Value::get_uint,  ph::_1));
       return result;
     }
     catch (...)
@@ -232,7 +235,7 @@ std::vector<double> ArrayParameterTemplate::get_double_array(
       std::transform(tmp.begin(),
                      tmp.end(),
                      std::back_inserter(result),
-                     boost::bind(&SmartMet::Spine::Value::get_double, ::_1));
+                     boost::bind(&SmartMet::Spine::Value::get_double,  ph::_1));
       return result;
     }
     catch (...)
@@ -258,7 +261,7 @@ std::vector<std::string> ArrayParameterTemplate::get_string_array(
       std::transform(tmp.begin(),
                      tmp.end(),
                      std::back_inserter(result),
-                     boost::bind(&SmartMet::Spine::Value::get_string, ::_1));
+                     boost::bind(&SmartMet::Spine::Value::get_string,  ph::_1));
       return result;
     }
     catch (...)
@@ -284,7 +287,7 @@ std::vector<boost::posix_time::ptime> ArrayParameterTemplate::get_ptime_array(
       std::transform(tmp.begin(),
                      tmp.end(),
                      std::back_inserter(result),
-                     boost::bind(&SmartMet::Spine::Value::get_ptime, ::_1, true));
+                     boost::bind(&SmartMet::Spine::Value::get_ptime,  ph::_1, true));
       return result;
     }
     catch (...)
@@ -310,7 +313,7 @@ std::vector<SmartMet::Spine::Point> ArrayParameterTemplate::get_point_array(
       std::transform(tmp.begin(),
                      tmp.end(),
                      std::back_inserter(result),
-                     boost::bind(&SmartMet::Spine::Value::get_point, ::_1));
+                     boost::bind(&SmartMet::Spine::Value::get_point,  ph::_1));
       return result;
     }
     catch (...)
@@ -336,7 +339,7 @@ std::vector<SmartMet::Spine::BoundingBox> ArrayParameterTemplate::get_bbox_array
       std::transform(tmp.begin(),
                      tmp.end(),
                      std::back_inserter(result),
-                     boost::bind(&SmartMet::Spine::Value::get_bbox, ::_1));
+                     boost::bind(&SmartMet::Spine::Value::get_bbox,  ph::_1));
       return result;
     }
     catch (...)

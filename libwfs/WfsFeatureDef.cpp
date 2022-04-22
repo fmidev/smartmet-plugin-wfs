@@ -1,10 +1,11 @@
 #include "WfsFeatureDef.h"
-#include <boost/bind.hpp>
+#include <boost/bind/bind.hpp>
 #include <boost/ref.hpp>
 #include <macgyver/Exception.h>
 #include <algorithm>
 
 namespace bw = SmartMet::Plugin::WFS;
+namespace ph = boost::placeholders;
 
 bw::WfsFeatureDef::WfsFeatureDef(SmartMet::Spine::CRSRegistry& crs_registry,
                                  const std::string& default_language,
@@ -46,7 +47,7 @@ bw::WfsFeatureDef::WfsFeatureDef(SmartMet::Spine::CRSRegistry& crs_registry,
         tmp1.begin(),
         tmp1.end(),
         std::back_inserter(other_crs_urls),
-        boost::bind(&bw::WfsFeatureDef::resolve_crs_url, ::_1, boost::ref(crs_registry)));
+        boost::bind(&bw::WfsFeatureDef::resolve_crs_url, ph::_1, boost::ref(crs_registry)));
 
     std::vector<double> tmp2;
     if (config->get_config_array(setting, "boundingBox", tmp2, 4, 4))

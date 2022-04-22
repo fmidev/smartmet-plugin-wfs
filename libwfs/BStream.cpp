@@ -1,5 +1,5 @@
 #include "BStream.h"
-#include <boost/bind.hpp>
+#include <boost/bind/bind.hpp>
 #include <macgyver/Base64.h>
 #include <macgyver/TypeName.h>
 #include <macgyver/Exception.h>
@@ -8,6 +8,7 @@
 #include <set>
 
 namespace bw = SmartMet::Plugin::WFS;
+namespace ph = boost::placeholders;
 
 using bw::IBStream;
 using bw::OBStream;
@@ -340,7 +341,7 @@ void OBStream::put_value_map(const std::multimap<std::string, SmartMet::Spine::V
     std::transform(data.begin(),
                    data.end(),
                    std::inserter(keys, keys.begin()),
-                   boost::bind(&std::pair<const std::string, SmartMet::Spine::Value>::first, ::_1));
+                   boost::bind(&std::pair<const std::string, SmartMet::Spine::Value>::first, ph::_1));
 
     for (const auto& key : keys)
     {

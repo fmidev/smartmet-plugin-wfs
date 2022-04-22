@@ -8,8 +8,10 @@
 #include <macgyver/Exception.h>
 #include <algorithm>
 #include <sstream>
+#include <boost/bind/bind.hpp>
 
 namespace bw = SmartMet::Plugin::WFS;
+namespace ph = boost::placeholders;
 
 using bw::StoredQueryParamRegistry;
 using SmartMet::Spine::Value;
@@ -234,7 +236,7 @@ std::set<std::string> StoredQueryParamRegistry::get_param_names() const
         param_map.begin(),
         param_map.end(),
         std::inserter(result, result.begin()),
-        boost::bind(&std::pair<const std::string, boost::shared_ptr<ParamRecBase> >::first, ::_1));
+        boost::bind(&std::pair<const std::string, boost::shared_ptr<ParamRecBase> >::first, ph::_1));
     return result;
   }
   catch (...)

@@ -1,7 +1,7 @@
 #include "UrlTemplateGenerator.h"
 #include <boost/algorithm/hex.hpp>
 #include <boost/algorithm/string.hpp>
-#include <boost/bind.hpp>
+#include <boost/bind/bind.hpp>
 #include <boost/format.hpp>
 #include <boost/lambda/lambda.hpp>
 #include <boost/spirit/include/qi.hpp>
@@ -16,6 +16,7 @@
 
 namespace ba = boost::algorithm;
 namespace bw = SmartMet::Plugin::WFS;
+namespace ph = boost::placeholders;
 
 namespace
 {
@@ -59,7 +60,7 @@ bw::UrlTemplateGenerator::UrlTemplateGenerator(const std::string& url,
   {
     std::for_each(param_templates.begin(),
                   param_templates.end(),
-                  boost::bind(&bw::UrlTemplateGenerator::parse_param_def, this, ::_1));
+                  boost::bind(&bw::UrlTemplateGenerator::parse_param_def, this, ph::_1));
   }
   catch (...)
   {

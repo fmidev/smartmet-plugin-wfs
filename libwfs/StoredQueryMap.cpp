@@ -1,7 +1,7 @@
 #include "StoredQueryMap.h"
 #include "StoredQueryHandlerFactoryDef.h"
 #include <boost/algorithm/string.hpp>
-#include <boost/bind.hpp>
+#include <boost/bind/bind.hpp>
 #include <boost/chrono.hpp>
 #include <boost/filesystem.hpp>
 #include <spine/Convenience.h>
@@ -15,6 +15,7 @@
 namespace ba = boost::algorithm;
 namespace bw = SmartMet::Plugin::WFS;
 namespace fs = boost::filesystem;
+namespace ph = boost::placeholders;
 
 bw::StoredQueryMap::StoredQueryMap(SmartMet::Spine::Reactor* theReactor, PluginImpl& plugin_impl)
   : bw::FileContentChecker(131072, (plugin_impl.get_debug_level() >= 2))
@@ -60,8 +61,8 @@ void bw::StoredQueryMap::add_config_dir(const boost::filesystem::path& config_di
   ci.template_dir = template_dir;
   ci.watcher = directory_monitor
     .watch(config_dir,
-	   boost::bind(&bw::StoredQueryMap::on_config_change, this, ::_1, ::_2, ::_3, ::_4),
-	   boost::bind(&bw::StoredQueryMap::on_config_error, this, ::_1, ::_2, ::_3, ::_4),
+	   boost::bind(&bw::StoredQueryMap::on_config_change, this,  ph::_1,  ph::_2,  ph::_3, ph::_4),
+	   boost::bind(&bw::StoredQueryMap::on_config_error, this,  ph::_1,  ph::_2,  ph::_3, ph::_4),
 	   5, Fmi::DirectoryMonitor::CREATE | Fmi::DirectoryMonitor::DELETE | Fmi::DirectoryMonitor::MODIFY);
   if (config_dirs.empty()) {
     std::thread tmp(std::bind(&bw::StoredQueryMap::directory_monitor_thread_proc, this));

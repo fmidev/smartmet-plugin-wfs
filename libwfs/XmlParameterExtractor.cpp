@@ -4,6 +4,7 @@
 #include "XmlGmlTypes.h"
 #include "XmlUtils.h"
 #include <boost/algorithm/string.hpp>
+#include <boost/bind/bind.hpp>
 #include <boost/date_time/posix_time/posix_time.hpp>
 #include <macgyver/TimeParser.h>
 #include <macgyver/TypeName.h>
@@ -11,6 +12,8 @@
 #include <sstream>
 #include <stdexcept>
 #include <stdint.h>
+
+namespace ph = boost::placeholders;
 
 namespace SmartMet
 {
@@ -39,16 +42,16 @@ ParameterExtractor::ParameterExtractor()
     add_int_type<uint64_t>("unsignedInteger");
 
     add_type("negativeInteger",
-             boost::bind(&extract_integer, ::_1, std::numeric_limits<int64_t>::min(), -1));
+             boost::bind(&extract_integer,  ph::_1, std::numeric_limits<int64_t>::min(), -1));
 
     add_type("nonNegativeInteger",
-             boost::bind(&extract_integer, ::_1, 0, std::numeric_limits<int64_t>::max()));
+             boost::bind(&extract_integer,  ph::_1, 0, std::numeric_limits<int64_t>::max()));
 
     add_type("nonPositiveInteger",
-             boost::bind(&extract_integer, ::_1, std::numeric_limits<int64_t>::min(), 0));
+             boost::bind(&extract_integer,  ph::_1, std::numeric_limits<int64_t>::min(), 0));
 
     add_type("positiveInteger",
-             boost::bind(&extract_integer, ::_1, 1, std::numeric_limits<int64_t>::max()));
+             boost::bind(&extract_integer,  ph::_1, 1, std::numeric_limits<int64_t>::max()));
 
     add_type("boolean", &extract_boolean);
     add_type("float", &extract_double);

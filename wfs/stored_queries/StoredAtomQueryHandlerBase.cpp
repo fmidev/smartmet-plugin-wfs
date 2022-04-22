@@ -1,5 +1,6 @@
 #include "stored_queries/StoredAtomQueryHandlerBase.h"
 #include "StoredQueryHandlerFactoryDef.h"
+#include <boost/bind/bind.hpp>
 #include <boost/date_time/posix_time/posix_time.hpp>
 #include <boost/variant.hpp>
 #include <macgyver/Exception.h>
@@ -12,6 +13,7 @@
 
 namespace bw = SmartMet::Plugin::WFS;
 namespace pt = boost::posix_time;
+namespace ph = boost::placeholders;
 using SmartMet::Spine::Value;
 
 bw::StoredAtomQueryHandlerBase::StoredAtomQueryHandlerBase(
@@ -105,7 +107,7 @@ void bw::StoredAtomQueryHandlerBase::query(const bw::StoredQuery& query,
       const auto& param_set = *param_sets.at(i);
       CTPP::CDT& hash_item = hash[PS_NAME][i];
       auto get_param_cb =
-          boost::bind(&bw::StoredAtomQueryHandlerBase::get_param_callback, this, ::_1, &param_set);
+          boost::bind(&bw::StoredAtomQueryHandlerBase::get_param_callback, this,  ph::_1, &param_set);
       const std::string url = url_generator->generate(get_param_cb);
       hash_item["URL"] = url;
 

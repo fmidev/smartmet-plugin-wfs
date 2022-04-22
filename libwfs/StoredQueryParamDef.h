@@ -2,7 +2,7 @@
 
 #include "WfsException.h"
 #include <boost/algorithm/string.hpp>
-#include <boost/bind.hpp>
+#include <boost/bind/bind.hpp>
 #include <boost/date_time/posix_time/ptime.hpp>
 #include <boost/spirit/include/qi.hpp>
 #include <macgyver/TypeName.h>

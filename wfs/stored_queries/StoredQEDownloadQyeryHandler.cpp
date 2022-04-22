@@ -4,7 +4,7 @@
 #include "WfsConvenience.h"
 #include "stored_queries/StoredQEDownloadQueryHandler.h"
 #include <boost/algorithm/string.hpp>
-#include <boost/bind.hpp>
+#include <boost/bind/bind.hpp>
 #include <boost/date_time/posix_time/ptime.hpp>
 #include <boost/format.hpp>
 #include <boost/lambda/lambda.hpp>
@@ -28,6 +28,7 @@ namespace ba = boost::algorithm;
 namespace bl = boost::lambda;
 namespace pt = boost::posix_time;
 namespace bg = boost::geometry;
+namespace ph = boost::placeholders;
 
 using boost::format;
 using boost::str;
@@ -306,19 +307,19 @@ void StoredQEDownloadQueryHandler::update_parameters(
     params.get<std::string>(P_PARAM, std::inserter(req_params, req_params.begin()));
     std::for_each(req_params.begin(),
                   req_params.end(),
-                  boost::bind(&qe::MetaQueryOptions::addParameter, opt, ::_1));
+                  boost::bind(&qe::MetaQueryOptions::addParameter, opt,  ph::_1));
 
     std::set<std::string, CaseInsensitiveLess> req_level_types;
     params.get<std::string>(P_LEVEL_TYPE, std::inserter(req_level_types, req_level_types.begin()));
     std::for_each(req_level_types.begin(),
                   req_level_types.end(),
-                  boost::bind(&qe::MetaQueryOptions::addLevelType, opt, ::_1));
+                  boost::bind(&qe::MetaQueryOptions::addLevelType, opt,  ph::_1));
 
     std::set<float> req_level_values;
     params.get<double>(P_LEVEL_VALUE, std::inserter(req_level_values, req_level_values.begin()));
     std::for_each(req_level_values.begin(),
                   req_level_values.end(),
-                  boost::bind(&qe::MetaQueryOptions::addLevelValue, opt, ::_1));
+                  boost::bind(&qe::MetaQueryOptions::addLevelValue, opt,  ph::_1));
 
     SmartMet::Spine::BoundingBox requested_bbox;
     SmartMet::Spine::BoundingBox query_bbox;

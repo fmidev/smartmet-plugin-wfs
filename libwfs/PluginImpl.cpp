@@ -9,9 +9,9 @@
 #include "request/GetPropertyValue.h"
 #include "request/ListStoredQueries.h"
 #include <boost/algorithm/string.hpp>
-#include <boost/bind.hpp>
 #include <boost/date_time/gregorian/gregorian.hpp>
 #include <boost/date_time/posix_time/posix_time.hpp>
+#include <boost/bind/bind.hpp>
 #include <boost/format.hpp>
 #include <boost/lambda/lambda.hpp>
 #include <json/json.h>
@@ -26,6 +26,7 @@ using namespace SmartMet::Plugin::WFS;
 namespace ba = boost::algorithm;
 namespace bl = boost::lambda;
 namespace pt = boost::posix_time;
+namespace ph = boost::placeholders;
 
 struct PluginImpl::RequestResult
 {
@@ -66,38 +67,38 @@ PluginImpl::PluginImpl(
         ->register_request_type(
             "GetCapabilities",
             "",
-            boost::bind(&PluginImpl::parse_kvp_get_capabilities_request, this, _1, _2),
-            boost::bind(&PluginImpl::parse_xml_get_capabilities_request, this, _1, _2, _3))
+            boost::bind(&PluginImpl::parse_kvp_get_capabilities_request, this, ph::_1, ph::_2),
+            boost::bind(&PluginImpl::parse_xml_get_capabilities_request, this, ph::_1, ph::_2, ph::_3))
 
         .register_request_type(
             "DescribeFeatureType",
             "supportsDescribeFeatureType",
-            boost::bind(&PluginImpl::parse_kvp_describe_feature_type_request, this, _1, _2),
-            boost::bind(&PluginImpl::parse_xml_describe_feature_type_request, this, _1, _2, _3))
+            boost::bind(&PluginImpl::parse_kvp_describe_feature_type_request, this, ph::_1, ph::_2),
+            boost::bind(&PluginImpl::parse_xml_describe_feature_type_request, this, ph::_1, ph::_2, ph::_3))
 
         .register_request_type(
             "GetFeature",
             "supportsGetFeature",
-            boost::bind(&PluginImpl::parse_kvp_get_feature_request, this, _1, _2),
-            boost::bind(&PluginImpl::parse_xml_get_feature_request, this, _1, _2, _3))
+            boost::bind(&PluginImpl::parse_kvp_get_feature_request, this, ph::_1, ph::_2),
+            boost::bind(&PluginImpl::parse_xml_get_feature_request, this, ph::_1, ph::_2, ph::_3))
 
         .register_request_type(
             "GetPropertyValue",
             "supportsGetPropertyValue",
-            boost::bind(&PluginImpl::parse_kvp_get_property_value_request, this, _1, _2),
-            boost::bind(&PluginImpl::parse_xml_get_property_value_request, this, _1, _2, _3))
+            boost::bind(&PluginImpl::parse_kvp_get_property_value_request, this, ph::_1, ph::_2),
+            boost::bind(&PluginImpl::parse_xml_get_property_value_request, this, ph::_1, ph::_2, ph::_3))
 
         .register_request_type(
             "ListStoredQueries",
             "supportsListStoredQueries",
-            boost::bind(&PluginImpl::parse_kvp_list_stored_queries_request, this, _1, _2),
-            boost::bind(&PluginImpl::parse_xml_list_stored_queries_request, this, _1, _2, _3))
+            boost::bind(&PluginImpl::parse_kvp_list_stored_queries_request, this, ph::_1, ph::_2),
+            boost::bind(&PluginImpl::parse_xml_list_stored_queries_request, this, ph::_1, ph::_2, ph::_3))
 
         .register_request_type(
             "DescribeStoredQueries",
             "supportsDescribeStoredQueries",
-            boost::bind(&PluginImpl::parse_kvp_describe_stored_queries_request, this, _1, _2),
-            boost::bind(&PluginImpl::parse_xml_describe_stored_queries_request, this, _1, _2, _3))
+            boost::bind(&PluginImpl::parse_kvp_describe_stored_queries_request, this, ph::_1, ph::_2),
+            boost::bind(&PluginImpl::parse_xml_describe_stored_queries_request, this, ph::_1, ph::_2, ph::_3))
 
         .register_unimplemented_request_type("LockFeature")
         .register_unimplemented_request_type("GetFeatureWithLock")
