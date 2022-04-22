@@ -23,6 +23,8 @@ INCLUDES += \
 	-isystem $(includedir)/jsoncpp
 
 LIBS += -L$(libdir) \
+        -lsmartmet-grid-files \
+        -lsmartmet-locus \
 	-lsmartmet-timeseries \
 	-lsmartmet-spine \
 	-lsmartmet-newbase \
@@ -102,6 +104,14 @@ configtest:
 
 $(LIBFILE): $(OBJS) $(LIBWFS)
 	$(CXX) $(CFLAGS) -shared -rdynamic $(LDFLAGS) -o $@ $(OBJS) $(LIBWFS) $(LIBS)
+	@echo Checking $(LIBFILE) for unresolved references
+	@if ldd -r $(LIBFILE) 2>&1 | c++filt | grep ^undefined\ symbol |\
+			grep -Pv 'SmartMet::(?:T|Engine|QueryServer)::' | \
+			grep -Pv ':\ __(?:(?:a|t|ub)san_|sanitizer_)'; \
+	then \
+		rm -v $(LIBFILE); \
+		exit 1; \
+	fi
 
 $(LIBWFS): $(LIBWFS_OBJS)
 	ar rcs $@ $(LIBWFS_OBJS)
