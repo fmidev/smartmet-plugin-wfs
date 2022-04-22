@@ -1,6 +1,5 @@
 #include "BStream.h"
 #include <boost/bind.hpp>
-#include <boost/foreach.hpp>
 #include <macgyver/Base64.h>
 #include <macgyver/TypeName.h>
 #include <macgyver/Exception.h>
@@ -343,7 +342,7 @@ void OBStream::put_value_map(const std::multimap<std::string, SmartMet::Spine::V
                    std::inserter(keys, keys.begin()),
                    boost::bind(&std::pair<const std::string, SmartMet::Spine::Value>::first, ::_1));
 
-    BOOST_FOREACH (const auto& key, keys)
+    for (const auto& key : keys)
     {
       put_bit(1);
       put_string(key);

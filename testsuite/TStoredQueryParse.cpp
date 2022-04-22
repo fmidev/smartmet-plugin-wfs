@@ -192,7 +192,7 @@ class StoredQueryWrapper : public bw::StoredQuery
 template <typename T>
 std::ostream& operator<<(std::ostream& stream, const std::multimap<std::string, T>& m)
 {
-  BOOST_FOREACH (const auto& item, m)
+  for (const auto& item : m)
   {
     std::cout << "item[" << item.first << "] = '" << item.second << "'\n";
   }

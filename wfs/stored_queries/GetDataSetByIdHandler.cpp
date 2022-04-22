@@ -4,7 +4,6 @@
 #include "StoredQueryMap.h"
 #include "WfsConvenience.h"
 #include <boost/algorithm/string.hpp>
-#include <boost/foreach.hpp>
 #include <macgyver/StringConversion.h>
 #include <macgyver/TypeName.h>
 #include <smartmet/macgyver/Exception.h>
@@ -95,7 +94,7 @@ bool bw::GetDataSetByIdHandler::redirect(const StoredQuery& query,
       bool start = true;
       std::ostringstream msg;
       msg << "Available data set IDs are ";
-      BOOST_FOREACH (const auto& x, data_set_map)
+      for (const auto& x : data_set_map)
       {
         if (not start)
           msg << ", ";

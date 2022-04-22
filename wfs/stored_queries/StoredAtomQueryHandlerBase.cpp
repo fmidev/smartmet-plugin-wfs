@@ -111,7 +111,7 @@ void bw::StoredAtomQueryHandlerBase::query(const bw::StoredQuery& query,
 
       std::set<std::string> param_names = param_set.get_keys();
 
-      BOOST_FOREACH (auto param_name, param_names)
+      for (const auto& param_name : param_names)
       {
         int cnt = 0;
         auto range = param_set.get_map().equal_range(param_name);

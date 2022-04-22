@@ -364,7 +364,7 @@ void bw::StoredQuery::extract_kvp_parameters(const SmartMet::Spine::HTTP::Reques
     std::multiset<std::string> param_name_set;
     std::set<std::string> forbidden;
 
-    BOOST_FOREACH (const auto& item, params)
+    for (const auto& item : params)
     {
       const std::string& param_name = Fmi::ascii_tolower_copy(item.first);
       const std::string& value_str = item.second;
@@ -414,7 +414,7 @@ void bw::StoredQuery::extract_kvp_parameters(const SmartMet::Spine::HTTP::Reques
             ba::split(parts, value_str, ba::is_any_of(","));
             // FIXME: unescape parts if needed (for example escaped ','
             std::vector<SmartMet::Spine::Value> new_values = param_def.readValues(parts);
-            BOOST_FOREACH (const auto& value, new_values)
+            for (const auto& value : new_values)
             {
               value.check_limits(param_desc.lower_limit, param_desc.upper_limit);
               query.params->insert_value(param_name, value);
@@ -454,7 +454,7 @@ void bw::StoredQuery::extract_kvp_parameters(const SmartMet::Spine::HTTP::Reques
     }
 
     // Now verify that all mandatory parameters are specified enough times
-    BOOST_FOREACH (const auto& param_desc, param_desc_map)
+    for (const auto& param_desc : param_desc_map)
     {
       check_param_min_occurs(param_name_set.count(param_desc.second.name),
                              param_desc.second.min_occurs,
@@ -488,7 +488,7 @@ void bw::StoredQuery::extract_xml_parameters(const xercesc::DOMElement& query_ro
 
     const auto& param_desc_map = config.get_param_descriptions();
 
-    BOOST_FOREACH (const xercesc::DOMElement* element, param_elements)
+    for (const xercesc::DOMElement* element : param_elements)
     {
       const std::string& param_name = bwx::get_mandatory_attr(*element, WFS_NAMESPACE_URI, "name");
 
@@ -532,7 +532,7 @@ void bw::StoredQuery::extract_xml_parameters(const xercesc::DOMElement& query_ro
 	try {
 	  const auto values = param_extractor.extract_param(*element, param_desc.xml_type);
 
-	  BOOST_FOREACH (const auto& value, values)
+	  for (const auto& value : values)
 	    {
 	      value.check_limits(param_desc.lower_limit, param_desc.upper_limit);
 	      query.params->insert_value(param_name, value);
@@ -547,7 +547,7 @@ void bw::StoredQuery::extract_xml_parameters(const xercesc::DOMElement& query_ro
     }
 
     // Now verify that all mandatory parameters are specified enough times
-    BOOST_FOREACH (const auto& param_desc, param_desc_map)
+    for (const auto& param_desc : param_desc_map)
     {
       check_param_min_occurs(param_name_set.count(param_desc.second.name),
                              param_desc.second.min_occurs,
@@ -576,7 +576,7 @@ void bw::StoredQuery::dump_query_info(std::ostream& output) const
     // Collect parameter names for message
     const auto names = params->get_keys();
 
-    BOOST_FOREACH (const auto& name, names)
+    for (const auto& name : names)
     {
       msg << sep << name << "=(";
       auto range = params->get_map().equal_range(name);
@@ -593,7 +593,7 @@ void bw::StoredQuery::dump_query_info(std::ostream& output) const
     {
       sep = "";
       msg << "skipped_params=(";
-      BOOST_FOREACH (const auto& param, skipped_params)
+      for (const auto& param : skipped_params)
       {
         msg << sep << '"' << param << '"';
         sep = ", ";
@@ -671,7 +671,7 @@ std::ostream& bw::operator<<(
   try
   {
     ost << '{';
-    BOOST_FOREACH (const auto& item, params)
+    for (const auto& item : params)
     {
       ost << "('" << item.first << "' ==> (";
       std::copy(item.second.begin(),

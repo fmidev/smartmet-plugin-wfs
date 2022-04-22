@@ -1,6 +1,5 @@
 #include "RequestParameterMap.h"
 #include <boost/bind.hpp>
-#include <boost/foreach.hpp>
 #include <macgyver/Exception.h>
 #include <algorithm>
 
@@ -144,7 +143,7 @@ std::string bw::RequestParameterMap::as_string() const
     const auto keys = get_keys();
     std::ostringstream output;
     output << "(PARAMETERS";
-    BOOST_FOREACH (const auto& key, keys)
+    for (const auto& key : keys)
     {
       output << " (" << key;
       auto range = params.equal_range(key);

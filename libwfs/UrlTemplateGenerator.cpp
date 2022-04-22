@@ -2,7 +2,6 @@
 #include <boost/algorithm/hex.hpp>
 #include <boost/algorithm/string.hpp>
 #include <boost/bind.hpp>
-#include <boost/foreach.hpp>
 #include <boost/format.hpp>
 #include <boost/lambda/lambda.hpp>
 #include <boost/spirit/include/qi.hpp>
@@ -26,7 +25,7 @@ void encode(std::ostream& stream, const std::string& text)
   {
     // const char *special = "$&+,:/;=?@'\"<>#%{}|\\^~[]";
     const char* special = "$&+/=?@'\"<>#%{}|\\^~[]";
-    BOOST_FOREACH (unsigned char ch, text)
+    for (unsigned char ch : text)
     {
       if ((ch <= 0x1F) or (ch >= 0x7F) or strchr(special, ch))
       {
@@ -93,7 +92,7 @@ std::string bw::UrlTemplateGenerator::generate(
         }
       }
 
-      BOOST_FOREACH (const auto param, params)
+      for (const auto& param : params)
       {
         if (param.type() == typeid(ParamRef))
         {
@@ -101,7 +100,7 @@ std::string bw::UrlTemplateGenerator::generate(
           const auto value_vect = param_getter_cb(ref.name);
           if (ref.separate_param)
           {
-            BOOST_FOREACH (const auto& item, value_vect)
+              for (const auto& item : value_vect)
             {
               result << sep;
               encode(result, ref.name);
@@ -116,7 +115,7 @@ std::string bw::UrlTemplateGenerator::generate(
             result << sep;
             encode(result, ref.name);
             result << '=';
-            BOOST_FOREACH (const auto& item, value_vect)
+            for (const auto& item : value_vect)
             {
               if (std::strchr(item.c_str(), ',') != nullptr)
               {

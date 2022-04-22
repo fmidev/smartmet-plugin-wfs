@@ -158,7 +158,7 @@ std::vector<std::string> bw::StoredQueryMap::get_return_type_names() const
   {
     std::set<std::string> return_type_set;
     boost::shared_lock<boost::shared_mutex> lock(mutex);
-    BOOST_FOREACH (const auto& handler_map_item, handler_map)
+    for (auto& handler_map_item : handler_map)
     {
       // NOTE: Cannot call StoredQueryHandlerBase::get_return_type_names() here to
       //       avoid recursion as hander itself may call StoredQueryMap::get_return_type_names().

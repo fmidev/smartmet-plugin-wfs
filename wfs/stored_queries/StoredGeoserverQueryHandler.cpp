@@ -76,7 +76,7 @@ bw::StoredGeoserverQueryHandler::StoredGeoserverQueryHandler(
           throw Fmi::Exception(BCP, "Duplicate layer name '" + name + "'!");
         }
 
-        BOOST_FOREACH (const auto& alias, aliases)
+        for (const auto& alias : aliases)
         {
           const std::string alias_name = Fmi::ascii_tolower_copy(alias);
           if (not layer_alias_map.insert(std::make_pair(alias_name, name)).second)
@@ -172,8 +172,9 @@ void bw::StoredGeoserverQueryHandler::update_parameters(
     unsigned height = params.get_single<uint64_t>(P_HEIGHT);
     const std::string selected_name = params.get_optional<std::string>(P_SELECTED_NAME, "");
     params.get<std::string>(P_LAYERS, std::back_inserter(layers));
-    BOOST_FOREACH (std::string& layer, layers)
+    for (std::string& layer : layers)
     {
+        // FIXME: cycle parameter modified below. Is it correct?
       auto pos = layer_alias_map.find(Fmi::ascii_tolower_copy(layer));
       if (pos != layer_alias_map.end())
       {
@@ -298,13 +299,13 @@ void bw::StoredGeoserverQueryHandler::update_parameters(
           ba::split(orig_axisLabels_vect, orig_axis_labels, ba::is_any_of(" "));
           ba::split(dest_axisLabels_vect, dest_axis_labels, ba::is_any_of(" "));
 
-          BOOST_FOREACH (const std::string& label, orig_axisLabels_vect)
+          for (const std::string& label : orig_axisLabels_vect)
             pm1->add("origSrsAxisLabels", label);
-          BOOST_FOREACH (const std::string& label, dest_axisLabels_vect)
+          for (const std::string& label : dest_axisLabels_vect)
             pm1->add("destSrsAxisLabels", label);
 
           const auto orig_coords = it2->get_orig_coords();
-          BOOST_FOREACH (double value, orig_coords)
+          for (double value : orig_coords)
           {
             pm1->add("origBoundary", value);
           }
@@ -338,7 +339,7 @@ void bw::StoredGeoserverQueryHandler::update_parameters(
             pm1->add("layerParam", layerParamNameIt->second);
 
           const auto dest_coords = it2->get_dest_coords();
-          BOOST_FOREACH (double value, dest_coords)
+          for (double value : dest_coords)
           {
             char tmp[80];
 	    snprintf(tmp, sizeof(tmp), "%.6f", value);
@@ -348,7 +349,7 @@ void bw::StoredGeoserverQueryHandler::update_parameters(
           pm1->add("origSrsDim", it2->orig_geom->getCoordinateDimension());
           pm1->add("destSrsDim", it2->dest_geom->getCoordinateDimension());
 
-          BOOST_FOREACH (const auto& map_item, it2->data_map)
+          for (const auto& map_item : it2->data_map)
           {
             pm1->add(std::string("db_") + map_item.first, map_item.second.to_string());
           }

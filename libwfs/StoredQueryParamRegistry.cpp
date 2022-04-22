@@ -2,7 +2,6 @@
 #include "ArrayParameterTemplate.h"
 #include "ScalarParameterTemplate.h"
 #include "SupportsExtraHandlerParams.h"
-#include <boost/foreach.hpp>
 #include <macgyver/DistanceParser.h>
 #include <macgyver/StringConversion.h>
 #include <macgyver/TypeName.h>
@@ -60,7 +59,7 @@ boost::shared_ptr<bw::RequestParameterMap> StoredQueryParamRegistry::process_par
   {
     boost::shared_ptr<bw::RequestParameterMap> result(new bw::RequestParameterMap);
 
-    BOOST_FOREACH (const auto& map_item, param_map)
+    for (const auto& map_item : param_map)
     {
       const std::string& name = map_item.first;
       auto& item_ref = *map_item.second;
@@ -180,7 +179,7 @@ boost::shared_ptr<bw::RequestParameterMap> StoredQueryParamRegistry::process_par
           throw Fmi::Exception(BCP, msg.str());
         }
 
-        BOOST_FOREACH (const SmartMet::Spine::Value& value, values)
+        for (const SmartMet::Spine::Value& value : values)
         {
           switch (type_ind)
           {
@@ -302,7 +301,7 @@ void StoredQueryParamRegistry::add_param_rec(boost::shared_ptr<ParamRecBase> rec
           << "['" << type_name << "']";
 
       msg2 << "Use one of ";
-      BOOST_FOREACH (const auto& map_item, supported_type_names)
+      for (const auto& map_item : supported_type_names)
       {
         msg2 << sep << '\'' << demangle_cpp_type_name(map_item.first) << '\'';
         sep = ", ";

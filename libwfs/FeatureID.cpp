@@ -1,6 +1,5 @@
 #include "FeatureID.h"
 #include "BStream.h"
-#include <boost/foreach.hpp>
 #include <boost/shared_array.hpp>
 #include <macgyver/Base64.h>
 #include <macgyver/StringConversion.h>
@@ -45,7 +44,7 @@ boost::shared_ptr<FeatureID> FeatureID::create_from_id(const std::string& id)
     }
 
     std::ostringstream tmp;
-    BOOST_FOREACH (char c, id.substr(4))
+    for (char c : id.substr(4))
     {
       switch (c)
       {
@@ -162,7 +161,7 @@ std::string FeatureID::get_id() const
     const std::string id = Fmi::Base64::encode(raw_id);
     std::ostringstream tmp;
     tmp << prefix;
-    BOOST_FOREACH (char c, id)
+    for (char c : id)
     {
       switch (c)
       {

@@ -3,7 +3,6 @@
 #include "WfsException.h"
 #include "XmlUtils.h"
 #include <boost/algorithm/string.hpp>
-#include <boost/foreach.hpp>
 #include <ctpp2/CDT.hpp>
 #include <macgyver/TypeName.h>
 
@@ -60,13 +59,13 @@ void GetCapabilities::execute(std::ostream& output) const
 
     hash["language"] = language;
 
-    BOOST_FOREACH (const std::string& operation, capabilities.get_operations())
+    for (const std::string& operation : capabilities.get_operations())
     {
       hash["operation"][operation] = "1";
     }
 
     int ind = 0;
-    BOOST_FOREACH (const std::string& name, capabilities.get_used_features())
+    for (const std::string& name : capabilities.get_used_features())
     {
       auto feature = capabilities.get_features().at(name);
       if (not feature->is_hidden()) {
@@ -87,7 +86,7 @@ void GetCapabilities::execute(std::ostream& output) const
 	f["abstract"] = feature->get_abstract(language);
 	f["defaultCrs"] = feature->get_default_crs();
 	int k = 0;
-	BOOST_FOREACH (const std::string& crs, feature->get_other_crs())
+	for (const std::string& crs : feature->get_other_crs())
 	  {
 	    f["otherCrs"][k++] = crs;
 	  }
@@ -95,7 +94,7 @@ void GetCapabilities::execute(std::ostream& output) const
     }
 
     ind = 0;
-    BOOST_FOREACH (const auto& map_item, capabilities.get_data_set_map())
+    for (const auto& map_item : capabilities.get_data_set_map())
     {
       CTPP::CDT& f = hash["dataSets"][ind++];
       f["code"] = map_item.first;

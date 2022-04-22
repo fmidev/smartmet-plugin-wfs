@@ -394,7 +394,7 @@ void StoredObsQueryHandler::query(const StoredQuery& query,
       {
         // Assign group IDs to stations for separate groups requested
         int group_cnt = 0;
-        BOOST_FOREACH (auto& item, site_map)
+        for (auto& item : site_map)
         {
           const std::string& fmisid = item.first;
           const int group_id = group_cnt++;
@@ -410,7 +410,7 @@ void StoredObsQueryHandler::query(const StoredQuery& query,
           feature_id.add_param(P_FMISIDS, fmisid);
           group_map[group_id].feature_id = feature_id.get_id();
 
-          BOOST_FOREACH (const std::string& param_name, param_names)
+          for (const std::string& param_name : param_names)
           {
             feature_id.erase_param(P_METEO_PARAMETERS);
             feature_id.add_param(P_METEO_PARAMETERS, param_name);
@@ -422,7 +422,7 @@ void StoredObsQueryHandler::query(const StoredQuery& query,
       {
         const int group_id = 0;
         int ind_in_group = 0;
-        BOOST_FOREACH (auto& item, site_map)
+        for (auto& item : site_map)
         {
           item.second.group_id = group_id;
           item.second.ind_in_group = ind_in_group++;
@@ -430,7 +430,7 @@ void StoredObsQueryHandler::query(const StoredQuery& query,
 
         group_map[group_id].feature_id = feature_id.get_id();
 
-        BOOST_FOREACH (const std::string& param_name, param_names)
+        for (const std::string& param_name : param_names)
         {
           feature_id.erase_param(P_METEO_PARAMETERS);
           feature_id.add_param(P_METEO_PARAMETERS, param_name);
@@ -471,7 +471,7 @@ void StoredObsQueryHandler::query(const StoredQuery& query,
 
         std::map<std::string, SmartMet::Spine::LocationPtr> sites;
 
-        BOOST_FOREACH (const auto& it1, site_map)
+        for (const auto& it1 : site_map)
         {
           const std::string& fmisid = it1.first;
           const int group_id = it1.second.group_id;
@@ -583,7 +583,7 @@ void StoredObsQueryHandler::query(const StoredQuery& query,
           group["groupId"] = group_id_str;
           group["groupNum"] = group_id + 1;
 
-          BOOST_FOREACH (const auto& it1, site_map)
+          for (const auto& it1 : site_map)
           {
             const int row_1 = it1.second.row_index_vect.at(0);
 
@@ -593,7 +593,7 @@ void StoredObsQueryHandler::query(const StoredQuery& query,
               lt::time_zone_ptr tzp;
 
               const TS::TimeSeries& ts_epoch = obsengine_result->at(initial_bs_param.size());
-              BOOST_FOREACH (int row_num, it1.second.row_index_vect)
+              for (int row_num : it1.second.row_index_vect)
               {
                 static const long ref_jd = boost::gregorian::date(1970, 1, 1).julian_day();
 

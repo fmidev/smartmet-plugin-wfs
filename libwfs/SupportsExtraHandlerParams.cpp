@@ -111,7 +111,7 @@ const bw::ParameterTemplateBase& bw::SupportsExtraHandlerParams::get_param(
       {
         char sep = ' ';
         msg << " Available:";
-        BOOST_FOREACH (const auto& item, handler_params)
+        for (const auto& item : handler_params)
         {
           msg << sep << '\'' << item.first << '\'';
           sep = ',';
@@ -137,7 +137,7 @@ void bw::SupportsExtraHandlerParams::dump_named_params(const bw::RequestParamete
 {
   try
   {
-    BOOST_FOREACH (const auto& map_item, handler_params)
+    for (const auto& map_item : handler_params)
     {
       const std::string& name = map_item.first;
       bw::ParameterTemplateBase& param_template = *map_item.second;

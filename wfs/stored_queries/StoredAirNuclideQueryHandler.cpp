@@ -76,7 +76,7 @@ void bw::StoredAirNuclideQueryHandler::query(const StoredQuery& query,
 
       std::vector<std::string> nuclideCodes;
       params.get<std::string>(P_NUCLIDE_CODES, std::back_inserter(nuclideCodes));
-      BOOST_FOREACH (auto& n, nuclideCodes)
+      for (auto& n : nuclideCodes)
         n = prepare_nuclide(n);
 
       const char* DATA_CRS_NAME = "urn:ogc:def:crs:EPSG::4326";
@@ -104,7 +104,7 @@ void bw::StoredAirNuclideQueryHandler::query(const StoredQuery& query,
       const int debug_level = get_config()->get_debug_level();
       if (debug_level > 2)
       {
-        BOOST_FOREACH (auto id, locations_list)
+          for (auto id : locations_list)
           std::cerr << "Found location: name: " << id.first << " geoid: " << id.second->geoid
                     << "\n";
       }

@@ -3,7 +3,6 @@
 #include "WfsException.h"
 #include "XmlUtils.h"
 #include <boost/algorithm/string.hpp>
-#include <boost/foreach.hpp>
 #include <boost/format.hpp>
 #include <ctpp2/CDT.hpp>
 #include <macgyver/TypeName.h>
@@ -40,7 +39,7 @@ void bw::Request::DescribeFeatureType::execute(std::ostream& output) const
     if (type_names.empty())
     {
       // No type names specified: collect all types from WfsCapabilities object
-      BOOST_FOREACH (const auto& name, plugin_impl.get_capabilities().get_used_features())
+        for (const auto& name : plugin_impl.get_capabilities().get_used_features())
       {
         auto feature = features.at(name);
         const std::string& ns = feature->get_xml_namespace();
@@ -53,7 +52,7 @@ void bw::Request::DescribeFeatureType::execute(std::ostream& output) const
     }
     else
     {
-      BOOST_FOREACH (const auto& item, type_names)
+        for (const auto& item : type_names)
       {
         bool found = false;
         const std::string& name = item.second;
@@ -169,7 +168,7 @@ bw::Request::DescribeFeatureType::create_from_kvp(
       ba::split(type_params, tmp, ba::is_any_of(","));
     }
 
-    BOOST_FOREACH (const auto& item, type_params)
+    for (const auto& item : type_params)
     {
       // FIXME: do real parsing
       // Currently simply ignore namespace prefix as we have no means how to map it
@@ -212,7 +211,7 @@ bw::Request::DescribeFeatureType::create_from_xml(const std::string& language,
 
     std::vector<xercesc::DOMElement*> elems =
         bwx::get_child_elements(*root, WFS_NAMESPACE_URI, "TypeName");
-    BOOST_FOREACH (const xercesc::DOMElement* elem, elems)
+    for (const xercesc::DOMElement* elem : elems)
     {
       const std::string item = ba::trim_copy(bwx::extract_text(*elem));
       const std::size_t pos = item.find_last_of(":");

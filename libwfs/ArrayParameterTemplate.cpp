@@ -90,7 +90,7 @@ boost::tribool ArrayParameterTemplate::get_value(
     // bool check_lower_limit = true;
     std::vector<SmartMet::Spine::Value> tmp_result;
 
-    BOOST_FOREACH (auto& item, items)
+    for (const auto& item : items)
     {
       bool found = true;
       boost::variant<SmartMet::Spine::Value, std::vector<SmartMet::Spine::Value> > item_value;

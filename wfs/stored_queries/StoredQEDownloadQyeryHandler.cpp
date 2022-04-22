@@ -146,7 +146,7 @@ StoredQEDownloadQueryHandler::StoredQEDownloadQueryHandler(
       formats.insert(formatList, formatList + 3);
     }
 
-    BOOST_FOREACH (auto format, formats)
+    for (auto format : formats)
       Fmi::ascii_tolower(format);
 
     if (debug_level > 0)
@@ -230,7 +230,7 @@ void dump_meta_query_options(const qe::MetaQueryOptions& opt)
     if (opt.hasParameters())
     {
       std::cout << " parameters=[";
-      BOOST_FOREACH (const auto& param, opt.getParameters())
+      for (const auto& param : opt.getParameters())
       {
         std::cout << "'" << param << "' ";
       }
@@ -249,7 +249,7 @@ void dump_meta_query_options(const qe::MetaQueryOptions& opt)
       std::string sep = "";
       const auto level_types = opt.getLevelTypes();
       std::cout << " levelTypes=[";
-      BOOST_FOREACH (const auto& item, level_types)
+      for (const auto& item : level_types)
       {
         std::cout << sep << "'" << item << "'";
         sep = " ";
@@ -262,7 +262,7 @@ void dump_meta_query_options(const qe::MetaQueryOptions& opt)
       std::string sep = "";
       const auto level_values = opt.getLevelValues();
       std::cout << " levelValues=[";
-      BOOST_FOREACH (const auto& item, level_values)
+      for (const auto& item : level_values)
       {
         std::cout << sep << item;
         sep = " ";
@@ -567,7 +567,7 @@ void StoredQEDownloadQueryHandler::update_parameters(
             << " producer='" << meta_info.producer << "',"
             << " origintime='" << (Fmi::to_iso_extended_string(meta_info.originTime) + "Z'")
             << " params=(";
-        BOOST_FOREACH (const auto& param, meta_info.parameters)
+        for (const auto& param : meta_info.parameters)
         {
           msg << " '" << param.name << "'";
         }

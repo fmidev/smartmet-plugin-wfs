@@ -2,7 +2,6 @@
 #include "WfsConvenience.h"
 #include "WfsException.h"
 #include <boost/date_time/posix_time/posix_time.hpp>
-#include <boost/foreach.hpp>
 #include <boost/optional/optional_io.hpp>
 #include <macgyver/Exception.h>
 #include <stdint.h>
@@ -57,7 +56,7 @@ bw::SupportsTimeParameters::get_time_generator_options(const RequestParameterMap
     if (not hours.empty())
     {
       options->mode = TS::TimeSeriesGeneratorOptions::FixedTimes;
-      BOOST_FOREACH (int64_t hour, hours)
+      for (int64_t hour : hours)
       {
         if ((hour >= 0) and (hour <= 23))
         {
@@ -78,7 +77,7 @@ bw::SupportsTimeParameters::get_time_generator_options(const RequestParameterMap
     if (not times.empty())
     {
       options->mode = TS::TimeSeriesGeneratorOptions::FixedTimes;
-      BOOST_FOREACH (int64_t tm, times)
+      for (int64_t tm : times)
       {
         int h = tm / 100;
         int m = tm % 100;

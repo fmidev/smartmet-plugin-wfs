@@ -1,5 +1,4 @@
 #include "WfsCapabilities.h"
-#include <boost/foreach.hpp>
 #include <macgyver/TypeName.h>
 #include <spine/Convenience.h>
 #include <macgyver/Exception.h>
@@ -108,7 +107,7 @@ void bw::WfsCapabilities::register_feature_use(const std::string& name)
       std::string sep = "";
       std::ostringstream msg;
       msg << "Available features are:";
-      BOOST_FOREACH (const auto& item, features)
+      for (const auto& item : features)
       {
         msg << sep << " '" << item.first << "'";
         sep = ",";

@@ -80,7 +80,7 @@ void SmartMet::Plugin::WFS::StoredQueryConfig::warn_about_unused_params(
       return;
     }
 
-    BOOST_FOREACH (const auto& map_item, param_map)
+    for (const auto& map_item : param_map)
     {
       const ParamDesc& desc = map_item.second;
       if (not desc.get_used())
@@ -161,7 +161,7 @@ void SmartMet::Plugin::WFS::StoredQueryConfig::parse_config()
       std::vector<std::string> formats;
       if (get_config_array("formats", formats))
       {
-        BOOST_FOREACH (const std::string format, formats)
+        for (const std::string& format : formats)
         {
           if (format.empty())
           {
@@ -415,14 +415,14 @@ void SmartMet::Plugin::WFS::StoredQueryConfig::ParamDesc::dump(std::ostream& str
     stream << "')";
 
     stream << "(title ";
-    BOOST_FOREACH (const auto& item, title->get_content())
+    for (const auto& item : title->get_content())
     {
       stream << "('" << item.first << "' '" << item.second << "')";
     }
     stream << ')';
 
     stream << "(abstract ";
-    BOOST_FOREACH (const auto& item, abstract->get_content())
+    for (const auto& item : abstract->get_content())
     {
       stream << "('" << item.first << "' '" << item.second << "')";
     }
@@ -439,7 +439,7 @@ void SmartMet::Plugin::WFS::StoredQueryConfig::dump_params(std::ostream& stream)
 {
   try
   {
-    BOOST_FOREACH (const auto& item, param_map)
+    for (const auto& item : param_map)
     {
       stream << "(PARAMETER '" << item.first << "'";
       item.second.dump(stream);

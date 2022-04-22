@@ -5,7 +5,6 @@
 #include "XmlUtils.h"
 #include <boost/algorithm/string.hpp>
 #include <boost/date_time/posix_time/posix_time.hpp>
-#include <boost/foreach.hpp>
 #include <macgyver/TimeParser.h>
 #include <macgyver/TypeName.h>
 #include <macgyver/Exception.h>
@@ -272,7 +271,7 @@ std::vector<SmartMet::Spine::Value> ParameterExtractor::extract_name_list(
     std::vector<std::string> parts;
     const std::string content = ba::trim_copy(extract_text(elem));
     ba::split(parts, content, ba::is_any_of(" \t\r\n"), ba::token_compress_on);
-    BOOST_FOREACH (const std::string& name, parts)
+    for (const std::string& name : parts)
     {
       SmartMet::Spine::Value value(name);
       result.push_back(value);
@@ -295,7 +294,7 @@ std::vector<SmartMet::Spine::Value> ParameterExtractor::extract_double_list(
     std::vector<std::string> parts;
     const std::string content = ba::trim_copy(extract_text(elem));
     ba::split(parts, content, ba::is_any_of(" "), ba::token_compress_on);
-    BOOST_FOREACH (const std::string& name, parts)
+    for (const std::string& name : parts)
     {
       SmartMet::Spine::Value value(std::stod(name));
       result.push_back(value);
@@ -318,7 +317,7 @@ std::vector<SmartMet::Spine::Value> ParameterExtractor::extract_integer_list(
     std::vector<std::string> parts;
     const std::string content = ba::trim_copy(extract_text(elem));
     ba::split(parts, content, ba::is_any_of(" "), ba::token_compress_on);
-    BOOST_FOREACH (const std::string& name, parts)
+    for (const std::string& name : parts)
     {
       int64_t int_value = std::stol(name);
       SmartMet::Spine::Value value(int_value);

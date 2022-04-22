@@ -2,7 +2,6 @@
 #define BOOST_TEST_DYN_LINK 1
 #include <iostream>
 #include <random>
-#include <boost/foreach.hpp>
 #include <boost/test/unit_test.hpp>
 #include <newbase/NFmiPoint.h>
 #include "FeatureID.h"
@@ -29,7 +28,7 @@ namespace
 void dump(const std::multimap<std::string, Value>& data)
 {
   std::cout << '(';
-  BOOST_FOREACH (const auto& item, data)
+  for (const auto& item : data)
   {
     std::cout << "('" << item.first << "' " << item.second << ')';
   }

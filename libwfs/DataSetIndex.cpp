@@ -1,6 +1,5 @@
 #include "DataSetIndex.h"
 #include <boost/algorithm/string.hpp>
-#include <boost/foreach.hpp>
 #include <boost/regex.hpp>
 #include <macgyver/TimeParser.h>
 #include <macgyver/TypeName.h>
@@ -22,7 +21,7 @@ std::set<T> vect2set(const std::vector<T>& src)
   try
   {
     std::set<T> result;
-    BOOST_FOREACH (const auto& item, src)
+    for (const auto& item : src)
     {
       if (not result.insert(item).second)
       {

@@ -5,7 +5,6 @@
 
 #include <boost/algorithm/string.hpp>
 #include <boost/bind.hpp>
-#include <boost/foreach.hpp>
 #include <boost/format.hpp>
 #include <boost/lambda/lambda.hpp>
 #include <boost/shared_array.hpp>
@@ -341,7 +340,7 @@ void dump_meta_query_options(const qe::MetaQueryOptions& opt)
     if (opt.hasParameters())
     {
       std::cout << " parameters=[";
-      BOOST_FOREACH (const auto& param, opt.getParameters())
+      for (const auto& param : opt.getParameters())
       {
         std::cout << "'" << param << "' ";
       }
@@ -360,7 +359,7 @@ void dump_meta_query_options(const qe::MetaQueryOptions& opt)
       std::string sep = "";
       const auto level_types = opt.getLevelTypes();
       std::cout << " levelTypes=[";
-      BOOST_FOREACH (const auto& item, level_types)
+      for (const auto& item : level_types)
       {
         std::cout << sep << "'" << item << "'";
         sep = " ";
@@ -373,7 +372,7 @@ void dump_meta_query_options(const qe::MetaQueryOptions& opt)
       std::string sep = "";
       const auto level_values = opt.getLevelValues();
       std::cout << " levelValues=[";
-      BOOST_FOREACH (const auto& item, level_values)
+      for (const auto& item : level_values)
       {
         std::cout << sep << item;
         sep = " ";
@@ -422,9 +421,9 @@ std::pair<unsigned int, unsigned int> StoredGridQueryHandler::getDataIndexExtent
     std::vector<double> locationVecLon;
     std::vector<double> locationVecLat;
 
-    BOOST_FOREACH (const auto& item, *longitudes)
+    for (const auto& item : *longitudes)
       locationVecLon.push_back(item.lonlat.lon);
-    BOOST_FOREACH (const auto& item, *latitudes)
+    for (const auto& item : *latitudes)
       locationVecLat.push_back(item.lonlat.lat);
 
     double firstLon = locationVecLon[0];
@@ -639,10 +638,10 @@ SmartMet::Plugin::WFS::StoredGridQueryHandler::get_model_parameters(
     qopt.setOriginTime(origin_time);
     std::list<MetaData> meta_info = q_engine->getEngineMetadata(qopt);
     std::map<std::string, SmartMet::Engine::Querydata::ModelParameter> result;
-    BOOST_FOREACH (const auto& item, meta_info)
+    for (const auto& item : meta_info)
     {
       // std::cout << "### " << item.producer << std::endl;
-      BOOST_FOREACH (const auto& param, item.parameters)
+      for (const auto& param : item.parameters)
       {
         // std::cout << "=== " << param.name << " : " << param.precision << " : "
         //          << param.description << std::endl;
@@ -670,7 +669,7 @@ void StoredGridQueryHandler::parse_levels(
 
     std::vector<int64_t> levels;
     params.get<int64_t>(P_LEVEL, std::back_inserter(levels));
-    BOOST_FOREACH (int64_t level, levels)
+    for (int64_t level : levels)
     {
       int tmp = cast_int_type<int>(level);
       if (!dest.levels.insert(tmp).second)
@@ -712,7 +711,7 @@ void StoredGridQueryHandler::parse_params(const RequestParameterMap& param, Quer
 
     std::vector<std::string> names;
     param.get<std::string>(P_PARAM, std::back_inserter(names));
-    BOOST_FOREACH (const std::string& name, names)
+    for (const std::string& name : names)
     {
       std::size_t ind = dest.data_params.size();
       dest.data_params.push_back(ParameterFactory::instance().parse(name));
@@ -805,7 +804,7 @@ StoredGridQueryHandler::Result StoredGridQueryHandler::extract_forecast(
     if (debug_level > 2)
     {
       std::cout << __FILE__ << "#" << __LINE__ << ": generated times:";
-      BOOST_FOREACH (const auto& t, tlist)
+      for (const auto& t : tlist)
       {
         std::cout << " '" << t << "'";
       }
@@ -815,7 +814,7 @@ StoredGridQueryHandler::Result StoredGridQueryHandler::extract_forecast(
     const int default_prec = 6;
     const auto param_map = get_model_parameters(producer, model->originTime());
     std::map<std::string, int> param_precision_map;
-    BOOST_FOREACH (const Parameter& param, query.data_params)
+    for (const Parameter& param : query.data_params)
     {
       const std::string& name = param.name();
       auto pos = param_map.find(Fmi::ascii_tolower_copy(name));
@@ -843,7 +842,7 @@ StoredGridQueryHandler::Result StoredGridQueryHandler::extract_forecast(
     Result theResult;
 
     // Times
-    BOOST_FOREACH (auto& time, tlist)
+    for (auto& time : tlist)
     {
       theResult.timesteps.push_back(time.local_time());
     }
@@ -928,9 +927,9 @@ StoredGridQueryHandler::Result StoredGridQueryHandler::extract_forecast(
 
     std::vector<double> locationVecLon;
     std::vector<double> locationVecLat;
-    BOOST_FOREACH (const auto& item, *longitudeData)
+    for (const auto& item : *longitudeData)
       locationVecLon.push_back(item.lonlat.lon);
-    BOOST_FOREACH (const auto& item, *latitudeData)
+    for (const auto& item : *latitudeData)
       locationVecLat.push_back(item.lonlat.lat);
 
     // Set the corresponding geographical coordinates
@@ -959,7 +958,7 @@ StoredGridQueryHandler::Result StoredGridQueryHandler::extract_forecast(
         theResult.dataLevels.push_back(Result::LevelData());
         auto& thisLevel = theResult.dataLevels.back();
 
-        BOOST_FOREACH (const Parameter& param, query.data_params)
+        for (const Parameter& param : query.data_params)
         {
           // Get the metadata infos if not already in the vector
           auto paramInfo = std::make_pair(param.name(), param.number());
@@ -1200,13 +1199,13 @@ void StoredGridQueryHandler::query(const StoredQuery& stored_query,
 
       std::size_t levelindex = 0;
 
-      BOOST_FOREACH (auto& leveldata, query.result.dataLevels)
+      for (auto& leveldata : query.result.dataLevels)
       {
         CTPP::CDT& returnArray = hash["returnArray"][levelindex];
 
         std::size_t paramIndex = 0;
 
-        BOOST_FOREACH (auto& param, leveldata)
+        for (auto& param : leveldata)
         {
           auto paramName = query.result.paramInfos[paramIndex].first;
           auto paramNumber = query.result.paramInfos[paramIndex].second;
@@ -1218,7 +1217,7 @@ void StoredGridQueryHandler::query(const StoredQuery& stored_query,
 
           std::size_t timeindex = 0;
 
-          BOOST_FOREACH (auto& timestep, param)
+          for (auto& timestep : param)
           {
             CTPP::CDT& thisTime = thisParam["timeSteps"][timeindex];
 

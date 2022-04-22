@@ -57,7 +57,7 @@ void bw::AdHocQuery::create_from_kvp(const std::string& language,
 
     const auto& params = http_request.getParameterMap();
 
-    BOOST_FOREACH (const auto& item, params)
+    for (const auto& item : params)
     {
       const std::string& param_name = Fmi::ascii_toupper_copy(item.first);
 
@@ -167,7 +167,7 @@ void bw::AdHocQuery::create_from_kvp(const std::string& language,
     else
     {
       // No filter or parameters were defined, create query/ies with default values.
-      BOOST_FOREACH (const auto& query_id, stored_query_ids)
+      for (const auto& query_id : stored_query_ids)
       {
         std::vector<boost::shared_ptr<bw::QueryBase>> batch_of_queries;
 
@@ -231,7 +231,7 @@ void bw::AdHocQuery::create_filter_query_from_kvp(
         throw exception.disableStackTrace();
       }
 
-      BOOST_FOREACH (const auto& query_id, stored_query_ids)
+      for (const auto& query_id : stored_query_ids)
       {
         std::vector<boost::shared_ptr<bw::QueryBase>> batch_of_queries;
 
@@ -275,7 +275,7 @@ void bw::AdHocQuery::create_bbox_query_from_kvp(
 {
   try
   {
-    BOOST_FOREACH (const auto& query_id, stored_query_ids)
+      for (const auto& query_id : stored_query_ids)
     {
       boost::shared_ptr<bw::StoredQueryHandlerBase> handler =
           stored_query_map.get_handler_by_name(query_id);
@@ -385,7 +385,7 @@ void bw::AdHocQuery::create_from_xml(const std::string& language,
     std::vector<xercesc::DOMElement*> filter_root =
         bwx::get_child_elements(query_root, FES_NAMESPACE_URI, "Filter");
 
-    BOOST_FOREACH (const auto& query_id, stored_query_ids)
+    for (const auto& query_id : stored_query_ids)
     {
       std::vector<boost::shared_ptr<bw::QueryBase>> batch_of_queries;
 
@@ -507,7 +507,7 @@ void bw::AdHocQuery::add_projection_clause_from_xml(
 
     std::vector<std::string> property_names;
 
-    BOOST_FOREACH (const xercesc::DOMElement* property, property_elements)
+    for (const xercesc::DOMElement* property : property_elements)
     {
       // Read PropertyName-element value.
       const auto values = param_extractor.extract_param(*property, "xsi:string");
@@ -547,7 +547,7 @@ void bw::AdHocQuery::add_projection_clause(const std::vector<std::string>& prope
       projection += ")";
 
       // Loop through the queries and add projection clause to each of them.
-      BOOST_FOREACH (boost::shared_ptr<bw::QueryBase> base_query, queries)
+      for (boost::shared_ptr<bw::QueryBase> base_query : queries)
       {
         AdHocQuery* query = &dynamic_cast<AdHocQuery&>(*base_query);
 
@@ -615,7 +615,7 @@ void bw::AdHocQuery::replace_aliases(const std::vector<std::string>& aliases,
       }
 
       // Loop through the queries and replace aliases in each of the filtering expressions.
-      BOOST_FOREACH (boost::shared_ptr<bw::QueryBase> base_query, queries)
+      for (boost::shared_ptr<bw::QueryBase> base_query : queries)
       {
         AdHocQuery* query = &dynamic_cast<AdHocQuery&>(*base_query);
 
@@ -632,9 +632,9 @@ void bw::AdHocQuery::replace_aliases(const std::vector<std::string>& aliases,
 
               ba::replace_all(query->filter_expression, old_expr, new_expr);
             }
-          }  // for (...)
+          }
         }
-      }  // BOOST_FOREACH(...)
+      }
     }
   }
   catch (...)
@@ -651,7 +651,7 @@ void bw::AdHocQuery::process_parms(const std::string& language,
   try
   {
     // Loop through the created queries and process parameters etc.
-    BOOST_FOREACH (boost::shared_ptr<bw::QueryBase> base_query, queries)
+    for (boost::shared_ptr<bw::QueryBase> base_query : queries)
     {
       AdHocQuery* query = &dynamic_cast<AdHocQuery&>(*base_query);
 
@@ -693,7 +693,7 @@ void bw::AdHocQuery::extract_filter_elements(const xercesc::DOMElement& root_ele
         bwx::get_child_elements(root_element, "*", "*");
 
     // Loop through the filter elements.
-    BOOST_FOREACH (const xercesc::DOMElement* element, filter_elements)
+    for (const xercesc::DOMElement* element : filter_elements)
     {
       const std::string& tag_name = XMLString::transcode(element->getTagName());
       std::string element_name = Fmi::ascii_tolower_copy(tag_name);
@@ -1007,7 +1007,7 @@ void bw::AdHocQuery::read_comparison_operation(const xercesc::DOMElement& elemen
         bwx::get_child_elements(element, FES_NAMESPACE_URI, "*");
 
     // Loop through the filter child elements.
-    BOOST_FOREACH (const xercesc::DOMElement* child_element, child_elements)
+    for (const xercesc::DOMElement* child_element : child_elements)
     {
       // Read element name.
       const std::string& tag_name = XMLString::transcode(child_element->getTagName());
@@ -1223,7 +1223,7 @@ void bw::AdHocQuery::read_query_parameter(const xercesc::DOMElement& element,
       // Read parameter value from XML.
       const auto values = param_extractor.extract_param(element, xml_type);
 
-      BOOST_FOREACH (const auto& value, values)
+      for (const auto& value : values)
       {
         value.check_limits(param_desc.lower_limit, param_desc.upper_limit);
 
@@ -1248,7 +1248,7 @@ void bw::AdHocQuery::copy_params(const AdHocQuery* src_query, AdHocQuery* target
     const std::set<std::string> src_query_param_map_keys = src_query_param_map.get_keys();
 
     // Copy parameters from src_query to target_query.
-    BOOST_FOREACH (const auto& src_query_param_key, src_query_param_map_keys)
+    for (const auto& src_query_param_key : src_query_param_map_keys)
     {
       target_query->params->insert_value(src_query_param_key,
                                          src_query->get_param(src_query_param_key));
@@ -1327,7 +1327,7 @@ void bw::AdHocQuery::get_stored_query_ids_from_typenames(
 {
   try
   {
-    BOOST_FOREACH (const auto& type_name, type_names)
+    for (const auto& type_name : type_names)
     {
       const std::string& lname = Fmi::ascii_tolower_copy(type_name);
       const std::vector<std::string>& tmp =
