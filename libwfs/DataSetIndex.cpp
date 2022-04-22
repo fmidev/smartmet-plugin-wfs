@@ -253,7 +253,6 @@ pt::ptime bw::DataSetDefinition::extract_origintime(const boost::filesystem::pat
 {
   try
   {
-    pt::ptime result;
     std::string s_t0;
     boost::match_results<std::string::const_iterator> what;
     const std::string fn = p.filename().string();
