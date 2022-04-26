@@ -29,8 +29,8 @@
         <omso:TrajectoryObservation gml:id="WFS-dSWBGl.zhMY4XszGPj5GcIIpNqeJTowuIWbbpdOt.Lnl5dsPTTv3c3Trvlw9NGXk6dc9_Xdk07s7p1t67Omnhv07umPf2y8sOfLC0sWXPp3VNO3LXQyYMWa1g1WsG1RiydMGDpgwtMbHy51qRaFOO6dN2jJmzsu7JU07ctdDJgxZrWDVawbVGLJ0wYOmDC0zs23Tz05OdZjFgxYsGjo15fPffyyX9_bLy78tPTDi2ZY2Zsw9MvPpE1tuHxE08.mHdjy0rV0IDe25emXfQw8sO3L0y8udbFSDQv0KjGnfw9s9bFSJQv0KjGnfw9s9bFKRQv0KjGnfw9s9bFWDQv0KjGnfw9s9bFenQv0KjGnfw9s9bFeJQv0KjGnfw9s9bFCDQv0KjGnfg1o7W26efPTuz1MvjpWNOwzm1u67Z.an0w9NO_dznCaXDri2acenp5nCa3Hrh2aenmTuzb4mxz39d2TTuz1PPDLJCa3Pph6ad.6p54Za0Kc.rOiSZ0duc.m_llyceuXl5v6cleIWbbpdOt.Lnl5dsPTTv3c3Trvlw9NGXk6dc9_Xdk07s7p1t67Omnhv07umPf2y8sOfKA--">
             <om:phenomenonTime>
                 <gml:TimePeriod gml:id="time1-1">
-                    <gml:beginPosition>not-a-date-timeZ</gml:beginPosition>
-                    <gml:endPosition>not-a-date-timeZ</gml:endPosition>
+                    <gml:beginPosition>2013-05-06T12:00:00Z</gml:beginPosition>
+                    <gml:endPosition>2013-05-06T12:00:00Z</gml:endPosition>
                 </gml:TimePeriod>
             </om:phenomenonTime>
             <om:resultTime>
