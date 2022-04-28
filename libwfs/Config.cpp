@@ -62,6 +62,8 @@ Config::Config(const string& configfile)
     enable_configuration_polling =
         get_optional_config_param<bool>("enableConfigurationPolling", false);
     silence_init_warnings = get_optional_config_param<bool>("silence_init_warnings", false);
+    enable_case_sensitive_params = get_optional_config_param<bool>(
+        "case_sensitive_params", false);
 
     sq_restrictions = get_optional_config_param<bool>("storedQueryRestrictions", true);
     httpProxy = get_optional_config_param<std::string>("httpProxy", "");
