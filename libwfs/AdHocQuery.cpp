@@ -284,10 +284,9 @@ void bw::AdHocQuery::create_bbox_query_from_kvp(
       const std::string param_name = "bbox";
       boost::shared_ptr<const SmartMet::Plugin::WFS::StoredQueryConfig> config =
           handler->get_config();
-      const auto& param_desc_map = config->get_param_descriptions();
-      auto desc_it = param_desc_map.find(param_name);
+      const auto* param_desc = config->get_param_desc(param_name);
 
-      if (desc_it == param_desc_map.end())
+      if (param_desc == nullptr)
       {
         // This stored query does not support BBOX, nothing to do.
         std::ostringstream msg;
@@ -302,10 +301,9 @@ void bw::AdHocQuery::create_bbox_query_from_kvp(
       {
         try
         {
-          const auto& param_desc = desc_it->second;
-          const bw::StoredQueryParamDef& param_def = param_desc.param_def;
+          const bw::StoredQueryParamDef& param_def = param_desc->param_def;
           SmartMet::Spine::Value value = param_def.readValue(bbox_string);
-          value.check_limits(param_desc.lower_limit, param_desc.upper_limit);
+          value.check_limits(param_desc->lower_limit, param_desc->upper_limit);
 
           boost::shared_ptr<bw::AdHocQuery> query(new bw::AdHocQuery);
           query->handler = handler;
@@ -1174,10 +1172,9 @@ void bw::AdHocQuery::read_query_parameter(const xercesc::DOMElement& element,
 
     boost::shared_ptr<const SmartMet::Plugin::WFS::StoredQueryConfig> config =
         query->handler->get_config();
-    const auto& param_desc_map = config->get_param_descriptions();
-    auto desc_it = param_desc_map.find(Fmi::ascii_tolower_copy(param_name));
+    const auto* param_desc = config->get_param_desc(param_name);
 
-    if (desc_it == param_desc_map.end())
+    if (param_desc == nullptr)
     {
       // Skip unknown parameters (required to support GetFeatureById)
       // Save skipped parameters information however for logging purposes
@@ -1185,15 +1182,13 @@ void bw::AdHocQuery::read_query_parameter(const xercesc::DOMElement& element,
     }
     else
     {
-      const auto& param_desc = desc_it->second;
-
       if (forbidden.count(param_name))
       {
         std::string sep = " ";
         std::ostringstream msg;
         msg << method << ": stored query parameter '" << param_name << "' conflicts with";
 
-        for (auto it = param_desc.conflicts_with.begin(); it != param_desc.conflicts_with.end();
+        for (auto it = param_desc->conflicts_with.begin(); it != param_desc->conflicts_with.end();
              ++it)
         {
           msg << sep << "'" << *it << "'";
@@ -1204,20 +1199,20 @@ void bw::AdHocQuery::read_query_parameter(const xercesc::DOMElement& element,
         throw exception.disableStackTrace();
       }
 
-      for (auto it = param_desc.conflicts_with.begin(); it != param_desc.conflicts_with.end(); ++it)
+      for (auto it = param_desc->conflicts_with.begin(); it != param_desc->conflicts_with.end(); ++it)
       {
         forbidden.insert(Fmi::ascii_tolower_copy(*it));
       }
 
       check_param_max_occurs(param_name_set.count(param_name) + 1,
-                             param_desc.max_occurs,
+                             param_desc->max_occurs,
                              "SmartMet::Plugin::WFS::AdHocQuery::extract_filter_elements",
                              param_name);
 
       // If the xml type is yet undefined, use the type in the parameter description.
       if (xml_type == "")
       {
-        xml_type = param_desc.xml_type;
+        xml_type = param_desc->xml_type;
       }
 
       // Read parameter value from XML.
@@ -1225,7 +1220,7 @@ void bw::AdHocQuery::read_query_parameter(const xercesc::DOMElement& element,
 
       for (const auto& value : values)
       {
-        value.check_limits(param_desc.lower_limit, param_desc.upper_limit);
+        value.check_limits(param_desc->lower_limit, param_desc->upper_limit);
 
         // Write parameter value to query.
         query->params->insert_value(param_name, value);

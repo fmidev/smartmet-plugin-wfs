@@ -357,27 +357,26 @@ void bw::StoredQuery::extract_kvp_parameters(const SmartMet::Spine::HTTP::Reques
     query.orig_params = query.params;
     query.skipped_params.clear();
 
-    auto param_desc_map = config.get_param_descriptions();
+//    auto param_desc_map = config.get_param_descriptions();
 
     const auto& params = request.getParameterMap();
 
-    std::multiset<std::string> param_name_set;
+     std::multiset<std::string> param_name_set;
     std::set<std::string> forbidden;
 
     for (const auto& item : params)
     {
-      const std::string& param_name = Fmi::ascii_tolower_copy(item.first);
+      const std::string& param_name = item.first;
       const std::string& value_str = item.second;
 
-      auto desc_it = param_desc_map.find(param_name);
-      const auto& param_desc = desc_it->second;
+      const auto* param_desc = config.get_param_desc(param_name);
 
       if (forbidden.count(param_name))
       {
         std::string sep = " ";
         std::ostringstream msg;
         msg << method << ": stored query parameter '" << item.first << "' conflicts with";
-        for (auto it = param_desc.conflicts_with.begin(); it != param_desc.conflicts_with.end();
+        for (auto it = param_desc->conflicts_with.begin(); it != param_desc->conflicts_with.end();
              ++it)
         {
           msg << sep << "'" << *it << "'";
@@ -388,8 +387,8 @@ void bw::StoredQuery::extract_kvp_parameters(const SmartMet::Spine::HTTP::Reques
         throw exception;
       }
 
-      const bw::StoredQueryParamDef& param_def = param_desc.param_def;
-      if (desc_it == param_desc_map.end())
+      const bw::StoredQueryParamDef& param_def = param_desc->param_def;
+      if (param_desc == nullptr)
       {
         /* Skip unknown parameters (required to support GetFeatureById) */
         /* Save skipped parameters information however for logging purposes */
@@ -402,7 +401,7 @@ void bw::StoredQuery::extract_kvp_parameters(const SmartMet::Spine::HTTP::Reques
       {
         // Parameter is not yet processed, therefore compare with count + 1
         check_param_max_occurs(param_name_set.count(param_name) + 1,
-                               param_desc.max_occurs,
+                               param_desc->max_occurs,
                                "SmartMet::Plugin::WFS::StoredQuery::extract_kvp_parameters",
                                param_name);
 
@@ -416,7 +415,7 @@ void bw::StoredQuery::extract_kvp_parameters(const SmartMet::Spine::HTTP::Reques
             std::vector<SmartMet::Spine::Value> new_values = param_def.readValues(parts);
             for (const auto& value : new_values)
             {
-              value.check_limits(param_desc.lower_limit, param_desc.upper_limit);
+              value.check_limits(param_desc->lower_limit, param_desc->upper_limit);
               query.params->insert_value(param_name, value);
             }
           }
@@ -429,11 +428,11 @@ void bw::StoredQuery::extract_kvp_parameters(const SmartMet::Spine::HTTP::Reques
 			else
 			  value = param_def.readValue(value_str);
 
-            value.check_limits(param_desc.lower_limit, param_desc.upper_limit);
+            value.check_limits(param_desc->lower_limit, param_desc->upper_limit);
             query.params->insert_value(param_name, value);
           }
 
-          for (auto it = param_desc.conflicts_with.begin(); it != param_desc.conflicts_with.end();
+          for (auto it = param_desc->conflicts_with.begin(); it != param_desc->conflicts_with.end();
                ++it)
           {
             forbidden.insert(Fmi::ascii_tolower_copy(*it));
@@ -454,7 +453,7 @@ void bw::StoredQuery::extract_kvp_parameters(const SmartMet::Spine::HTTP::Reques
     }
 
     // Now verify that all mandatory parameters are specified enough times
-    for (const auto& param_desc : param_desc_map)
+    for (const auto& param_desc : config.get_param_descriptions())
     {
       check_param_min_occurs(param_name_set.count(param_desc.second.name),
                              param_desc.second.min_occurs,
@@ -492,8 +491,8 @@ void bw::StoredQuery::extract_xml_parameters(const xercesc::DOMElement& query_ro
     {
       const std::string& param_name = bwx::get_mandatory_attr(*element, WFS_NAMESPACE_URI, "name");
 
-      auto desc_it = param_desc_map.find(Fmi::ascii_tolower_copy(param_name));
-      if (desc_it == param_desc_map.end())
+      const auto* param_desc = config.get_param_desc(param_name);
+      if (param_desc == nullptr)
       {
         /* Skip unknown parameters (required to support GetFeatureById) */
         /* Save skipped parameters information however for logging purposes */
@@ -501,14 +500,12 @@ void bw::StoredQuery::extract_xml_parameters(const xercesc::DOMElement& query_ro
       }
       else
       {
-        const auto& param_desc = desc_it->second;
-
         if (forbidden.count(param_name))
         {
           std::string sep = " ";
           std::ostringstream msg;
           msg << method << ": stored query parameter '" << param_name << "' conflicts with";
-          for (auto it = param_desc.conflicts_with.begin(); it != param_desc.conflicts_with.end();
+          for (auto it = param_desc->conflicts_with.begin(); it != param_desc->conflicts_with.end();
                ++it)
           {
             msg << sep << "'" << *it << "'";
@@ -518,23 +515,23 @@ void bw::StoredQuery::extract_xml_parameters(const xercesc::DOMElement& query_ro
           throw exception;
         }
 
-        for (auto it = param_desc.conflicts_with.begin(); it != param_desc.conflicts_with.end();
+        for (auto it = param_desc->conflicts_with.begin(); it != param_desc->conflicts_with.end();
              ++it)
         {
           forbidden.insert(Fmi::ascii_tolower_copy(*it));
         }
 
         check_param_max_occurs(param_name_set.count(param_name) + 1,
-                               param_desc.max_occurs,
+                               param_desc->max_occurs,
                                "SmartMet::Plugin::WFS::StoredQuery::extract_xml_parameters",
                                param_name);
 
 	try {
-	  const auto values = param_extractor.extract_param(*element, param_desc.xml_type);
+	  const auto values = param_extractor.extract_param(*element, param_desc->xml_type);
 
 	  for (const auto& value : values)
 	    {
-	      value.check_limits(param_desc.lower_limit, param_desc.upper_limit);
+	      value.check_limits(param_desc->lower_limit, param_desc->upper_limit);
 	      query.params->insert_value(param_name, value);
 	    }
 
