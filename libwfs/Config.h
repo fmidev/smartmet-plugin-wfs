@@ -43,6 +43,7 @@ class Config : private boost::noncopyable, public SmartMet::Spine::ConfigBase
 {
  public:
   Config(const std::string& configfile);
+  virtual ~Config();
 
   const std::string& defaultUrl() const { return itsDefaultUrl; }
   const std::vector<std::string>& getStoredQueriesConfigDirs() const { return sq_config_dirs; }

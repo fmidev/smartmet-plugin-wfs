@@ -1,4 +1,5 @@
 #include "StoredQueryConfig.h"
+#include "StoredQueryConfigWrapper.h"
 #include "Config.h"
 #include "ParameterTemplateBase.h"
 #include "StoredQueryHandlerBase.h"
@@ -69,7 +70,8 @@ SmartMet::Plugin::WFS::StoredQueryConfig::StoredQueryConfig(
   }
 }
 
-SmartMet::Plugin::WFS::StoredQueryConfig::~StoredQueryConfig() {}
+SmartMet::Plugin::WFS::StoredQueryConfig::~StoredQueryConfig() = default;
+SmartMet::Plugin::WFS::StoredQueryConfigWrapper::~StoredQueryConfigWrapper() = default;
 
 void SmartMet::Plugin::WFS::StoredQueryConfig::warn_about_unused_params(
     const StoredQueryHandlerBase* handler)

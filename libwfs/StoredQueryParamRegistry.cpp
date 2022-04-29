@@ -52,7 +52,11 @@ StoredQueryParamRegistry::StoredQueryParamRegistry(StoredQueryConfig::Ptr config
   }
 }
 
-StoredQueryParamRegistry::~StoredQueryParamRegistry() {}
+StoredQueryParamRegistry::~StoredQueryParamRegistry() = default;
+StoredQueryParamRegistry::ParamRecBase::~ParamRecBase() = default;
+StoredQueryParamRegistry::ScalarParameterRec::~ScalarParameterRec() = default;
+StoredQueryParamRegistry::ArrayParameterRec::~ArrayParameterRec() = default;
+
 
 boost::shared_ptr<bw::RequestParameterMap> StoredQueryParamRegistry::process_parameters(
     const bw::RequestParameterMap& src, const SupportsExtraHandlerParams* extra_params) const
@@ -108,7 +112,7 @@ boost::shared_ptr<bw::RequestParameterMap> StoredQueryParamRegistry::process_par
 			  else
 				{
 				  result->add(name, value.get_double());
-				}				
+				}
 			}
             break;
 

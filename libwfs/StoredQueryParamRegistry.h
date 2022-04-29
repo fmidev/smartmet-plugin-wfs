@@ -31,13 +31,15 @@ class StoredQueryParamRegistry : public StoredQueryConfig::Wrapper
     std::string name;
     std::string type_name;
 
-    virtual ~ParamRecBase() {}
+    virtual ~ParamRecBase();
   };
 
   struct ScalarParameterRec : public ParamRecBase
   {
     boost::shared_ptr<ScalarParameterTemplate> param_def;
     bool required;
+
+    virtual  ~ScalarParameterRec();
   };
 
   struct ArrayParameterRec : public ParamRecBase
@@ -46,6 +48,8 @@ class StoredQueryParamRegistry : public StoredQueryConfig::Wrapper
     std::size_t min_size;
     std::size_t max_size;
     std::size_t step;
+
+    virtual ~ArrayParameterRec();
   };
 
  public:

@@ -17,7 +17,7 @@ namespace SmartMet
       {
       public:
         StoredQueryConfigWrapper(StoredQueryConfigPtr config_p) : config_p(config_p) {}
-        virtual ~StoredQueryConfigWrapper() {}
+          virtual ~StoredQueryConfigWrapper();
         StoredQueryConfigPtr get_config() const { return config_p; }
       private:
         StoredQueryConfigPtr config_p;
