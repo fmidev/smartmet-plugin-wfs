@@ -93,8 +93,8 @@ boost::shared_ptr<FeatureID> FeatureID::create_from_id(const std::string& id)
 
     bw::IBStream input(reinterpret_cast<const uint8_t*>(raw_id.c_str()), raw_id.length());
 
-    const std::string prefix = input.get_string();
-    if (prefix != "SQ")
+    const std::string prefix_ = input.get_string();
+    if (prefix_ != "SQ")
     {
       std::ostringstream msg;
       msg << "SmartMet::Plugin::WFS::FeatureID::create_feature_id(): invalid feature ID '" << id

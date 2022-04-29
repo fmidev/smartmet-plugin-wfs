@@ -128,9 +128,9 @@ bool bw::RequestBase::may_validate_xml() const
   return true;
 }
 
-void bw::RequestBase::set_fmi_apikey(const std::string& fmi_apikey)
+void bw::RequestBase::set_fmi_apikey(const std::string& new_fmi_apikey)
 {
-  this->fmi_apikey = fmi_apikey;
+  this->fmi_apikey = new_fmi_apikey;
 }
 
 void bw::RequestBase::set_fmi_apikey_prefix(const std::string& fmi_apikey_prefix)
@@ -138,14 +138,14 @@ void bw::RequestBase::set_fmi_apikey_prefix(const std::string& fmi_apikey_prefix
   this->fmi_apikey_prefix = fmi_apikey_prefix;
 }
 
-void bw::RequestBase::set_hostname(const std::string& hostname)
+void bw::RequestBase::set_hostname(const std::string& new_hostname)
 {
-  this->hostname = hostname;
+  this->hostname = new_hostname;
 }
 
-void bw::RequestBase::set_protocol(const std::string& protocol)
+void bw::RequestBase::set_protocol(const std::string& new_protocol)
 {
-  this->protocol = protocol;
+  this->protocol = new_protocol;
 }
 
 void bw::RequestBase::substitute_all(const std::string& src, std::ostream& output) const
