@@ -61,8 +61,6 @@ std::vector<NFmiPoint> bbox_exclude_point(const NFmiPoint& p1,
       const double y4 = std::max(qy, xy.Y()) + p_off;
 
       OGRLinearRing r2;
-
-      OGRLinearRing r1;
       r2.addPoint(x3, y3);
       r2.addPoint(x3, y4);
       r2.addPoint(x4, y4);
