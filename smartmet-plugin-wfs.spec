@@ -3,7 +3,7 @@
 %define SPECNAME smartmet-plugin-%{DIRNAME}
 Summary: SmartMet WFS plugin
 Name: %{SPECNAME}
-Version: 22.4.28
+Version: 22.5.3
 Release: 1%{?dist}.fmi
 License: MIT
 Group: SmartMet/Plugins
@@ -146,6 +146,9 @@ rm -rf $RPM_BUILD_ROOT
 %{_includedir}/smartmet/plugin/wfs/request/*.h
 
 %changelog
+* Tue May  3 2022 Andris Pavēnis <andris.pavenis@fmi.fi> 22.5.3-1.fmi
+- Update of stored query parameter handling
+
 * Thu Apr 28 2022 Andris Pavenis <andris.pavenis@fmi.fi> 22.4.28-1.fmi
 - Repackage due to SmartMet::Spine::Reactor ABI changes
 
