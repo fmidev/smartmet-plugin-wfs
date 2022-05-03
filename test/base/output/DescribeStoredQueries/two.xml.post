@@ -88,7 +88,7 @@
       </Abstract>
     </Parameter>
     
-    <Parameter name="missingtext" type="string">
+    <Parameter name="missingText" type="string">
       <Title>string to show for missing values</Title>
       <Abstract>
       string to show for missing values

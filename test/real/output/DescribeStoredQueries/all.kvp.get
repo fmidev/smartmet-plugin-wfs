@@ -4782,7 +4782,7 @@
       </Abstract>
     </Parameter>
     
-    <Parameter name="soundingtype" type="int">
+    <Parameter name="soundingType" type="int">
       <Title>Sounding type</Title>
       <Abstract>
       Sounding type

@@ -95,7 +95,7 @@
       </Abstract>
     </Parameter>
     
-    <Parameter name="missingtext" type="string">
+    <Parameter name="missingText" type="string">
       <Title>missingText</Title>
       <Abstract>
       missingText

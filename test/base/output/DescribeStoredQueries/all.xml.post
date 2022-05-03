@@ -164,7 +164,7 @@
       </Abstract>
     </Parameter>
     
-    <Parameter name="missingtext" type="string">
+    <Parameter name="missingText" type="string">
       <Title>string to show for missing values</Title>
       <Abstract>
       string to show for missing values
@@ -295,7 +295,7 @@
       </Abstract>
     </Parameter>
     
-    <Parameter name="missingtext" type="string">
+    <Parameter name="missingText" type="string">
       <Title>string to show for missing values</Title>
       <Abstract>
       string to show for missing values
@@ -517,7 +517,7 @@
       </Abstract>
     </Parameter>
     
-    <Parameter name="missingtext" type="string">
+    <Parameter name="missingText" type="string">
       <Title>missingText</Title>
       <Abstract>
       missingText
@@ -531,7 +531,7 @@
       </Abstract>
     </Parameter>
     
-    <Parameter name="qualityinfo" type="xsi:boolean">
+    <Parameter name="qualityInfo" type="xsi:boolean">
       <Title>Quality info</Title>
       <Abstract>
       Specifies whether to include quality info
@@ -635,7 +635,7 @@
       </Abstract>
     </Parameter>
     
-    <Parameter name="missingtext" type="string">
+    <Parameter name="missingText" type="string">
       <Title>missingText</Title>
       <Abstract>
       missingText
