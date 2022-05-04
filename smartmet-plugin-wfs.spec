@@ -26,6 +26,7 @@ BuildRequires: bzip2-devel
 BuildRequires: smartmet-library-timeseries-devel >= 22.3.18
 BuildRequires: smartmet-library-spine-devel >= 22.4.29
 BuildRequires: smartmet-library-gis-devel >= 22.5.4
+BuildRequires: smartmet-library-trax-devel >= 22.5.3
 BuildRequires: smartmet-library-locus-devel >= 22.3.28
 BuildRequires: smartmet-library-macgyver-devel >= 22.3.28
 BuildRequires: smartmet-engine-contour-devel >= 22.5.4
@@ -47,6 +48,7 @@ Requires: smartmet-library-macgyver >= 22.3.28
 Requires: smartmet-library-spine >= 22.4.29
 Requires: smartmet-library-timeseries >= 22.3.18
 Requires: smartmet-library-gis >= 22.5.4
+Requires: smartmet-library-trax >= 22.5.3
 Requires: smartmet-engine-contour >= 22.5.4
 Requires: smartmet-engine-geonames >= 22.3.21
 Requires: smartmet-engine-gis >= 22.2.10
