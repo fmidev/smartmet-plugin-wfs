@@ -164,12 +164,7 @@ bw::ContourQueryResultSet bw::StoredContourQueryHandler::getContours_qEngine(
         auto matrix = q_engine->getValues(queryParameter.q, valueshash, options.time);
         CoordinatesPtr coords = q_engine->getWorldCoordinates(queryParameter.q, queryParameter.sr);
 
-        geoms = contour_engine->contour(qhash,
-                                        queryParameter.q->SpatialReference(),
-                                        queryParameter.sr,
-                                        *matrix,
-                                        *coords,
-                                        options);
+        geoms = contour_engine->contour(qhash, queryParameter.sr, *matrix, *coords, options);
       }
       catch (const std::exception& e)
       {
@@ -244,7 +239,7 @@ bw::ContourQueryResultSet bw::StoredContourQueryHandler::getContours_gridEngine(
 
     std::shared_ptr<ContentServer::ServiceInterface> contentServer =
         grid_engine->getContentServer_sptr();
-	TS::Value missing_value = TS::None();
+    TS::Value missing_value = TS::None();
     ContourQueryResultSet ret;
 
     const char* urnStr = queryParameter.gridQuery.mAttributeList.getAttributeValue("grid.urn");
@@ -358,7 +353,7 @@ bw::ContourQueryResultSet bw::StoredContourQueryHandler::getContours_gridEngine(
             if (width > 0 && height > 0)
             {
               double mp = 10;
-              ImagePaint imagePaint(width, height, 0xFFFFFFFF,0x000000,0xFFFF00,false,true);
+              ImagePaint imagePaint(width, height, 0xFFFFFFFF, 0x000000, 0xFFFF00, false, true);
 
               // ### Painting contours into the image:
 
