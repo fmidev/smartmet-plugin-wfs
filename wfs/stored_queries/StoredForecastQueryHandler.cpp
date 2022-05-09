@@ -178,7 +178,7 @@ void bw::StoredForecastQueryHandler::query(const StoredQuery& stored_query,
         }
 
         std::size_t num_groups = 0;
-        BOOST_FOREACH (const auto& geo_id, geo_id_set)
+        for (const auto& geo_id : geo_id_set)
         {
           group_map.insert(std::make_pair(num_groups, geo_id));
           if (separate_groups)
@@ -407,7 +407,7 @@ boost::shared_ptr<SmartMet::Spine::Table> bw::StoredForecastQueryHandler::extrac
     }
 
     int row = 0;
-    BOOST_FOREACH (const auto& tloc, query.locations)
+    for (const auto& tloc : query.locations)
     {
       SmartMet::Spine::LocationPtr loc = tloc.second;
       const std::string place = tloc.second->name;
@@ -524,7 +524,7 @@ boost::shared_ptr<SmartMet::Spine::Table> bw::StoredForecastQueryHandler::extrac
       if (debug_level > 2)
       {
         std::cout << __FILE__ << "#" << __LINE__ << ": generated times:";
-        BOOST_FOREACH (const auto& t, tlist)
+        for (const auto& t : tlist)
         {
           std::cout << " '" << t << "'";
         }
@@ -534,7 +534,7 @@ boost::shared_ptr<SmartMet::Spine::Table> bw::StoredForecastQueryHandler::extrac
       const int default_prec = 6;
       const auto param_map = get_model_parameters(producer, q->originTime());
       std::map<std::string, int> param_precision_map;
-      BOOST_FOREACH (const Parameter& param, query.data_params)
+      for (const Parameter& param : query.data_params)
       {
         const std::string& name = param.name();
         auto pos = param_map.find(Fmi::ascii_tolower_copy(name));
@@ -629,12 +629,12 @@ boost::shared_ptr<SmartMet::Spine::Table> bw::StoredForecastQueryHandler::extrac
       {
         if (query.levels.empty() || query.levels.count(static_cast<int>(q->levelValue())) > 0)
         {
-          BOOST_FOREACH (const lt::local_date_time& d, tlist)
+          for (const lt::local_date_time& d : tlist)
           {
             using SmartMet::Spine::Parameter;
 
             int column = 0;
-            BOOST_FOREACH (const Parameter& param, query.data_params)
+            for (const Parameter& param : query.data_params)
             {
               int prec = param_precision_map.at(param.name());
 
@@ -771,7 +771,7 @@ void bw::StoredForecastQueryHandler::parse_levels(const RequestParameterMap& par
 
     std::vector<int64_t> levels;
     params.get<int64_t>(P_LEVEL, std::back_inserter(levels));
-    BOOST_FOREACH (int64_t level, levels)
+    for (int64_t level : levels)
     {
       int tmp = cast_int_type<int>(level);
       if (!dest.levels.insert(tmp).second)
@@ -817,7 +817,7 @@ void bw::StoredForecastQueryHandler::parse_params(const RequestParameterMap& par
 
     std::vector<std::string> names;
     param.get<std::string>(P_PARAM, std::back_inserter(names));
-    BOOST_FOREACH (const std::string& name, names)
+    for (const std::string& name : names)
     {
       std::size_t ind = dest.data_params.size();
       auto p = ParameterFactory::instance().parse(name);
@@ -848,10 +848,10 @@ bw::StoredForecastQueryHandler::get_model_parameters(const std::string& producer
     qopt.setOriginTime(origin_time);
     std::list<MetaData> meta_info = q_engine->getEngineMetadata(qopt);
     std::map<std::string, SmartMet::Engine::Querydata::ModelParameter> result;
-    BOOST_FOREACH (const auto& item, meta_info)
+    for (const auto& item : meta_info)
     {
       // std::cout << "### " << item.producer << std::endl;
-      BOOST_FOREACH (const auto& param, item.parameters)
+      for (const auto& param : item.parameters)
       {
         // std::cout << "=== " << param.name << " : " << param.precision << " : "
         //          << param.description << std::endl;

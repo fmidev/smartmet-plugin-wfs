@@ -1,4 +1,5 @@
 #include "StoredQueryConfig.h"
+#include "StoredQueryConfigWrapper.h"
 #include "Config.h"
 #include "ParameterTemplateBase.h"
 #include "StoredQueryHandlerBase.h"
@@ -7,6 +8,7 @@
 #include <macgyver/TypeName.h>
 #include <spine/Convenience.h>
 #include <macgyver/Exception.h>
+#include <macgyver/StringConversion.h>
 #include <iostream>
 #include <sstream>
 #include <stdexcept>
@@ -47,8 +49,9 @@ SmartMet::Plugin::WFS::StoredQueryConfig::StoredQueryConfig(const std::string& c
 SmartMet::Plugin::WFS::StoredQueryConfig::StoredQueryConfig(
     boost::shared_ptr<libconfig::Config> config, const Config* plugin_config)
 
-    : SmartMet::Spine::ConfigBase(config, "WFS stored query configuration"),
-      hosts(plugin_config ? plugin_config->get_hosts() : default_hosts)
+    : SmartMet::Spine::ConfigBase(config, "WFS stored query configuration")
+    , hosts(plugin_config ? plugin_config->get_hosts() : default_hosts)
+    , plugin_config(plugin_config)
 {
   try
   {
@@ -69,7 +72,8 @@ SmartMet::Plugin::WFS::StoredQueryConfig::StoredQueryConfig(
   }
 }
 
-SmartMet::Plugin::WFS::StoredQueryConfig::~StoredQueryConfig() {}
+SmartMet::Plugin::WFS::StoredQueryConfig::~StoredQueryConfig() = default;
+SmartMet::Plugin::WFS::StoredQueryConfigWrapper::~StoredQueryConfigWrapper() = default;
 
 void SmartMet::Plugin::WFS::StoredQueryConfig::warn_about_unused_params(
     const StoredQueryHandlerBase* handler)
@@ -80,7 +84,7 @@ void SmartMet::Plugin::WFS::StoredQueryConfig::warn_about_unused_params(
       return;
     }
 
-    BOOST_FOREACH (const auto& map_item, param_map)
+    for (const auto& map_item : param_map)
     {
       const ParamDesc& desc = map_item.second;
       if (not desc.get_used())
@@ -161,7 +165,7 @@ void SmartMet::Plugin::WFS::StoredQueryConfig::parse_config()
       std::vector<std::string> formats;
       if (get_config_array("formats", formats))
       {
-        BOOST_FOREACH (const std::string format, formats)
+        for (const std::string& format : formats)
         {
           if (format.empty())
           {
@@ -185,6 +189,13 @@ void SmartMet::Plugin::WFS::StoredQueryConfig::parse_config()
         {
           assert_is_group(c_param_desc[i]);
           item.name = get_mandatory_config_param<std::string>(c_item, "name");
+          if (not (plugin_config != nullptr and plugin_config->use_case_sensitive_params())) {
+              const std::string lc_name = Fmi::ascii_tolower_copy(item.name);
+              if (not case_map.emplace(lc_name, item.name).second) {
+                  throw Fmi::Exception(BCP, "Query parameter nane conflict: " + item.name +
+                      " conflicts with " + case_map.at(lc_name));
+              }
+          }
           item.xml_type = get_mandatory_config_param<std::string>(c_item, "xmlType");
           auto& s1 = get_mandatory_config_param<libconfig::Setting&>(c_item, "title");
           item.title = SmartMet::Spine::MultiLanguageString::create(default_language, s1);
@@ -227,8 +238,6 @@ void SmartMet::Plugin::WFS::StoredQueryConfig::parse_config()
             dump_setting(msg, c_item, 16);
             throw Fmi::Exception(BCP, msg.str());
           }
-
-          Fmi::ascii_tolower(item.name);
 
           if (!param_map.insert(std::make_pair(item.name, item)).second)
           {
@@ -335,6 +344,43 @@ std::string SmartMet::Plugin::WFS::StoredQueryConfig::get_template_fn() const
   }
 }
 
+const SmartMet::Plugin::WFS::StoredQueryConfig::ParamDesc*
+SmartMet::Plugin::WFS::StoredQueryConfig::get_param_desc(const std::string& name) const
+{
+    if (case_map.empty()) {
+        // Case sensitive parameters
+        auto desc_it = param_map.find(name);
+        if (desc_it == param_map.end()) {
+            return nullptr;
+        } else {
+              return &desc_it->second;
+        }
+    } else {
+        // Case insensitive parameters
+        const std::string tmp = Fmi::ascii_tolower_copy(name);
+        auto case_it = case_map.find(tmp);
+        if (case_it == case_map.end()) {
+            return nullptr;
+        } else {
+            const std::string& real_name = case_it->second;
+            auto desc_it = param_map.find(real_name);
+            if (desc_it == param_map.end()) {
+                std::vector<std::string> available;
+                for (const auto& item : param_map) { available.push_back(item.first); }
+                throw Fmi::Exception(BCP, "[INTERNAL ERROR] Parameter " + real_name
+                    + " description not found when lovercase name " + tmp
+                    + " is present")
+                    .addParameter("Provided parameter name", name)
+                    .addParameter("Requested parameter name", real_name)
+                    .addParameter("Found parameter names", boost::algorithm::join(available, " "))
+                    .disableStackTrace();
+            } else {
+                return &desc_it->second;
+            }
+        }
+    }
+}
+
 std::string SmartMet::Plugin::WFS::StoredQueryConfig::get_title(const std::string& language) const
 {
   try
@@ -415,14 +461,14 @@ void SmartMet::Plugin::WFS::StoredQueryConfig::ParamDesc::dump(std::ostream& str
     stream << "')";
 
     stream << "(title ";
-    BOOST_FOREACH (const auto& item, title->get_content())
+    for (const auto& item : title->get_content())
     {
       stream << "('" << item.first << "' '" << item.second << "')";
     }
     stream << ')';
 
     stream << "(abstract ";
-    BOOST_FOREACH (const auto& item, abstract->get_content())
+    for (const auto& item : abstract->get_content())
     {
       stream << "('" << item.first << "' '" << item.second << "')";
     }
@@ -439,7 +485,7 @@ void SmartMet::Plugin::WFS::StoredQueryConfig::dump_params(std::ostream& stream)
 {
   try
   {
-    BOOST_FOREACH (const auto& item, param_map)
+    for (const auto& item : param_map)
     {
       stream << "(PARAMETER '" << item.first << "'";
       item.second.dump(stream);

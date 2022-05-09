@@ -85,7 +85,7 @@ class GeoServerDataIndex
   inline std::size_t size() const { return data.size(); }
   std::string get_db_table_name(const std::string& layer_name) const;
 
-  inline void set_debug_level(int debug_level) { this->debug_level = debug_level; }
+  inline void set_debug_level(int new_debug_level) { this->debug_level = new_debug_level; }
 
  private:
   std::string create_sql_request(const boost::posix_time::ptime& begin,

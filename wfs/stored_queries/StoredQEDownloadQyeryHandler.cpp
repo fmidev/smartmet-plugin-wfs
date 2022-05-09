@@ -4,7 +4,7 @@
 #include "WfsConvenience.h"
 #include "stored_queries/StoredQEDownloadQueryHandler.h"
 #include <boost/algorithm/string.hpp>
-#include <boost/bind.hpp>
+#include <boost/bind/bind.hpp>
 #include <boost/date_time/posix_time/ptime.hpp>
 #include <boost/format.hpp>
 #include <boost/lambda/lambda.hpp>
@@ -28,6 +28,7 @@ namespace ba = boost::algorithm;
 namespace bl = boost::lambda;
 namespace pt = boost::posix_time;
 namespace bg = boost::geometry;
+namespace ph = boost::placeholders;
 
 using boost::format;
 using boost::str;
@@ -146,7 +147,7 @@ StoredQEDownloadQueryHandler::StoredQEDownloadQueryHandler(
       formats.insert(formatList, formatList + 3);
     }
 
-    BOOST_FOREACH (auto format, formats)
+    for (auto format : formats)
       Fmi::ascii_tolower(format);
 
     if (debug_level > 0)
@@ -230,7 +231,7 @@ void dump_meta_query_options(const qe::MetaQueryOptions& opt)
     if (opt.hasParameters())
     {
       std::cout << " parameters=[";
-      BOOST_FOREACH (const auto& param, opt.getParameters())
+      for (const auto& param : opt.getParameters())
       {
         std::cout << "'" << param << "' ";
       }
@@ -249,7 +250,7 @@ void dump_meta_query_options(const qe::MetaQueryOptions& opt)
       std::string sep = "";
       const auto level_types = opt.getLevelTypes();
       std::cout << " levelTypes=[";
-      BOOST_FOREACH (const auto& item, level_types)
+      for (const auto& item : level_types)
       {
         std::cout << sep << "'" << item << "'";
         sep = " ";
@@ -262,7 +263,7 @@ void dump_meta_query_options(const qe::MetaQueryOptions& opt)
       std::string sep = "";
       const auto level_values = opt.getLevelValues();
       std::cout << " levelValues=[";
-      BOOST_FOREACH (const auto& item, level_values)
+      for (const auto& item : level_values)
       {
         std::cout << sep << item;
         sep = " ";
@@ -306,19 +307,19 @@ void StoredQEDownloadQueryHandler::update_parameters(
     params.get<std::string>(P_PARAM, std::inserter(req_params, req_params.begin()));
     std::for_each(req_params.begin(),
                   req_params.end(),
-                  boost::bind(&qe::MetaQueryOptions::addParameter, opt, ::_1));
+                  boost::bind(&qe::MetaQueryOptions::addParameter, opt,  ph::_1));
 
     std::set<std::string, CaseInsensitiveLess> req_level_types;
     params.get<std::string>(P_LEVEL_TYPE, std::inserter(req_level_types, req_level_types.begin()));
     std::for_each(req_level_types.begin(),
                   req_level_types.end(),
-                  boost::bind(&qe::MetaQueryOptions::addLevelType, opt, ::_1));
+                  boost::bind(&qe::MetaQueryOptions::addLevelType, opt,  ph::_1));
 
     std::set<float> req_level_values;
     params.get<double>(P_LEVEL_VALUE, std::inserter(req_level_values, req_level_values.begin()));
     std::for_each(req_level_values.begin(),
                   req_level_values.end(),
-                  boost::bind(&qe::MetaQueryOptions::addLevelValue, opt, ::_1));
+                  boost::bind(&qe::MetaQueryOptions::addLevelValue, opt,  ph::_1));
 
     SmartMet::Spine::BoundingBox requested_bbox;
     SmartMet::Spine::BoundingBox query_bbox;
@@ -567,7 +568,7 @@ void StoredQEDownloadQueryHandler::update_parameters(
             << " producer='" << meta_info.producer << "',"
             << " origintime='" << (Fmi::to_iso_extended_string(meta_info.originTime) + "Z'")
             << " params=(";
-        BOOST_FOREACH (const auto& param, meta_info.parameters)
+        for (const auto& param : meta_info.parameters)
         {
           msg << " '" << param.name << "'";
         }

@@ -2,7 +2,6 @@
 #define BOOST_TEST_DYN_LINK 1
 #include <iostream>
 #include <boost/date_time/posix_time/posix_time.hpp>
-#include <boost/foreach.hpp>
 #include <boost/test/unit_test.hpp>
 #include <BStream.h>
 #include <boost/algorithm/hex.hpp>

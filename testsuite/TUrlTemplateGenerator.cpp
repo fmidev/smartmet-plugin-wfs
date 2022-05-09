@@ -1,7 +1,7 @@
 #define BOOST_TEST_MODULE TUrlTemplateGenerator
 #define BOOST_TEST_DYN_LINK 1
 #include <iostream>
-#include <boost/bind.hpp>
+#include <boost/bind/bind.hpp>
 #include <boost/shared_ptr.hpp>
 #include <boost/test/unit_test.hpp>
 #include <newbase/NFmiPoint.h>
@@ -10,6 +10,8 @@
 #include "UrlTemplateGenerator.h"
 
 using namespace boost::unit_test;
+
+namespace ph = boost::placeholders;
 
 test_suite* init_unit_test_suite(int argc, char* argv[])
 {
@@ -69,12 +71,12 @@ BOOST_AUTO_TEST_CASE(test_template_url_generator_1)
   boost::shared_ptr<UrlTemplateGenerator> test;
   BOOST_REQUIRE_NO_THROW(
       test.reset(new UrlTemplateGenerator("http://www.example.com/test", params)));
-  BOOST_REQUIRE_NO_THROW(result = test->generate(boost::bind(&get_param, ::_1, &param_map)));
+  BOOST_REQUIRE_NO_THROW(result = test->generate(boost::bind(&get_param,  ph::_1, &param_map)));
   BOOST_CHECK_EQUAL(std::string("http://www.example.com/test?foo=bar"), result);
 
   BOOST_REQUIRE_NO_THROW(
       test.reset(new UrlTemplateGenerator("http://www.example.com/test?", params)));
-  BOOST_REQUIRE_NO_THROW(result = test->generate(boost::bind(&get_param, ::_1, &param_map)));
+  BOOST_REQUIRE_NO_THROW(result = test->generate(boost::bind(&get_param,  ph::_1, &param_map)));
   BOOST_CHECK_EQUAL(std::string("http://www.example.com/test?foo=bar"), result);
 }
 
@@ -95,11 +97,11 @@ BOOST_AUTO_TEST_CASE(test_template_url_generator_2)
   BOOST_REQUIRE_EQUAL(1, (int)pm.size());
   BOOST_REQUIRE(pm.at(0).type() == typeid(UrlTemplateGenerator::ParamRef));
 
-  BOOST_REQUIRE_NO_THROW(result = test->generate(boost::bind(&get_param, ::_1, &param_map)));
+  BOOST_REQUIRE_NO_THROW(result = test->generate(boost::bind(&get_param,  ph::_1, &param_map)));
   // std::cout << result << std::endl;
   BOOST_CHECK_EQUAL(std::string("http://www.example.com/test?foo="), result);
   param_map.insert(std::make_pair("foo", "bar"));
-  BOOST_REQUIRE_NO_THROW(result = test->generate(boost::bind(&get_param, ::_1, &param_map)));
+  BOOST_REQUIRE_NO_THROW(result = test->generate(boost::bind(&get_param,  ph::_1, &param_map)));
   BOOST_CHECK_EQUAL(std::string("http://www.example.com/test?foo=bar"), result);
 }
 
@@ -125,11 +127,11 @@ BOOST_AUTO_TEST_CASE(test_template_url_generator_3)
   BOOST_REQUIRE(pm.at(1).type() == typeid(UrlTemplateGenerator::ParamRef));
   BOOST_REQUIRE(pm.at(2).type() == typeid(UrlTemplateGenerator::StringParam));
 
-  BOOST_REQUIRE_NO_THROW(result = test->generate(boost::bind(&get_param, ::_1, &param_map)));
+  BOOST_REQUIRE_NO_THROW(result = test->generate(boost::bind(&get_param,  ph::_1, &param_map)));
   // std::cout << result << std::endl;
   BOOST_CHECK_EQUAL(std::string("http://www.example.com/test?a1=A1&b1=f%3Doo"), result);
   param_map.insert(std::make_pair("a2", "A2"));
-  BOOST_REQUIRE_NO_THROW(result = test->generate(boost::bind(&get_param, ::_1, &param_map)));
+  BOOST_REQUIRE_NO_THROW(result = test->generate(boost::bind(&get_param,  ph::_1, &param_map)));
   BOOST_CHECK_EQUAL(std::string("http://www.example.com/test?a1=A1&a2=A2&b1=f%3Doo"), result);
 }
 
@@ -157,7 +159,7 @@ BOOST_AUTO_TEST_CASE(test_template_url_generator_4)
   BOOST_REQUIRE(pm.at(1).type() == typeid(UrlTemplateGenerator::ParamRef));
   BOOST_REQUIRE(pm.at(2).type() == typeid(UrlTemplateGenerator::StringParam));
 
-  BOOST_REQUIRE_NO_THROW(result = test->generate(boost::bind(&get_param, ::_1, &param_map)));
+  BOOST_REQUIRE_NO_THROW(result = test->generate(boost::bind(&get_param,  ph::_1, &param_map)));
   BOOST_CHECK_EQUAL(std::string("http://www.example.com/test?a1=A1&a2=A2A&a2=A2B&b1=f%3Doo"),
                     result);
 }
@@ -175,12 +177,12 @@ BOOST_AUTO_TEST_CASE(test_template_url_generator_5)
   boost::shared_ptr<UrlTemplateGenerator> test;
   BOOST_REQUIRE_NO_THROW(
       test.reset(new UrlTemplateGenerator("http://www.example.com/test?a1=A1", params)));
-  BOOST_REQUIRE_NO_THROW(result = test->generate(boost::bind(&get_param, ::_1, &param_map)));
+  BOOST_REQUIRE_NO_THROW(result = test->generate(boost::bind(&get_param,  ph::_1, &param_map)));
   BOOST_CHECK_EQUAL(std::string("http://www.example.com/test?a1=A1&foo=bar"), result);
 
   BOOST_REQUIRE_NO_THROW(
       test.reset(new UrlTemplateGenerator("http://www.example.com/test?a1=A1&", params)));
-  BOOST_REQUIRE_NO_THROW(result = test->generate(boost::bind(&get_param, ::_1, &param_map)));
+  BOOST_REQUIRE_NO_THROW(result = test->generate(boost::bind(&get_param,  ph::_1, &param_map)));
   BOOST_CHECK_EQUAL(std::string("http://www.example.com/test?a1=A1&foo=bar"), result);
 }
 
@@ -208,7 +210,7 @@ BOOST_AUTO_TEST_CASE(test_template_url_generator_6)
   BOOST_REQUIRE(pm.at(1).type() == typeid(UrlTemplateGenerator::ParamRef));
   BOOST_REQUIRE(pm.at(2).type() == typeid(UrlTemplateGenerator::StringParam));
 
-  BOOST_REQUIRE_NO_THROW(LOG(result = test->generate(boost::bind(&get_param, ::_1, &param_map))));
+  BOOST_REQUIRE_NO_THROW(LOG(result = test->generate(boost::bind(&get_param,  ph::_1, &param_map))));
   BOOST_CHECK_EQUAL(std::string("http://www.example.com/test?a1=A1&a2=A2A&a2=A2B&b1=foo-A1-bar"),
                     result);
 }
@@ -232,7 +234,7 @@ BOOST_AUTO_TEST_CASE(test_template_url_generator_7)
   const auto& pm = test->get_content();
   BOOST_REQUIRE_EQUAL(0, (int)pm.size());
 
-  BOOST_REQUIRE_NO_THROW(LOG(result = test->generate(boost::bind(&get_param, ::_1, &param_map))));
+  BOOST_REQUIRE_NO_THROW(LOG(result = test->generate(boost::bind(&get_param,  ph::_1, &param_map))));
   BOOST_CHECK_EQUAL(std::string("http://www.example.com/test/A1/A2A/foo"), result);
 }
 
@@ -255,6 +257,6 @@ BOOST_AUTO_TEST_CASE(test_template_url_generator_8)
   const auto& pm = test->get_content();
   BOOST_REQUIRE_EQUAL(0, (int)pm.size());
 
-  BOOST_REQUIRE_THROW(result = test->generate(boost::bind(&get_param, ::_1, &param_map)),
+  BOOST_REQUIRE_THROW(result = test->generate(boost::bind(&get_param,  ph::_1, &param_map)),
                       Fmi::Exception);
 }

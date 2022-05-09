@@ -3,7 +3,6 @@
 #include "WfsConvenience.h"
 #include "XmlUtils.h"
 #include <boost/algorithm/string.hpp>
-#include <boost/foreach.hpp>
 #include <boost/format.hpp>
 #include <boost/optional.hpp>
 #include <algorithm>
@@ -83,7 +82,7 @@ void bw::Request::DescribeStoredQueries::execute(std::ostream& output) const
     auto protocol = get_protocol();
     hash["protocol"] = (protocol ? *protocol : plugin_impl.get_fallback_protocol()) + "://";
 
-    BOOST_FOREACH (const auto& id, ids)
+    for (const auto& id : ids)
     {
       boost::shared_ptr<const StoredQueryHandlerBase> handler =
           stored_query_map.get_handler_by_name(id);
@@ -222,7 +221,7 @@ bw::Request::DescribeStoredQueries::create_from_kvp(
     {
       std::string s_ids = ba::trim_copy(std::string(*ids_str));
       ba::split(ids, s_ids, ba::is_any_of(","), ba::token_compress_on);
-      BOOST_FOREACH (auto& id, ids)
+      for (auto& id : ids)
       {
         ba::trim(id);
       }
@@ -253,7 +252,7 @@ bw::Request::DescribeStoredQueries::create_from_xml(const std::string& language,
     std::vector<std::string> ids;
     std::vector<xercesc::DOMElement*> elems =
         bwx::get_child_elements(*root, WFS_NAMESPACE_URI, "StoredQueryId");
-    BOOST_FOREACH (const xercesc::DOMElement* elem, elems)
+    for (const xercesc::DOMElement* elem : elems)
     {
       ids.push_back(ba::trim_copy(bwx::extract_text(*elem)));
     }

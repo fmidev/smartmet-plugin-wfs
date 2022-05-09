@@ -3,7 +3,6 @@
 #include "WfsException.h"
 #include "XmlUtils.h"
 #include <boost/algorithm/string.hpp>
-#include <boost/foreach.hpp>
 #include <boost/optional/optional_io.hpp>
 #include <macgyver/TypeName.h>
 #include <macgyver/Exception.h>
@@ -100,7 +99,7 @@ GmlDirectPositionType read_gml_direct_position_type(const xercesc::DOMElement& e
     const std::string content = ba::trim_copy(extract_text(element));
     std::vector<std::string> items;
     ba::split(items, content, ba::is_any_of(" \t\r\n"), ba::token_compress_on);
-    BOOST_FOREACH (const std::string& item, items)
+    for (const std::string& item : items)
     {
       result.data.push_back(std::stod(item));
     }

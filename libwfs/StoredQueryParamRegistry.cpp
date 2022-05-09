@@ -2,15 +2,16 @@
 #include "ArrayParameterTemplate.h"
 #include "ScalarParameterTemplate.h"
 #include "SupportsExtraHandlerParams.h"
-#include <boost/foreach.hpp>
 #include <macgyver/DistanceParser.h>
 #include <macgyver/StringConversion.h>
 #include <macgyver/TypeName.h>
 #include <macgyver/Exception.h>
 #include <algorithm>
 #include <sstream>
+#include <boost/bind/bind.hpp>
 
 namespace bw = SmartMet::Plugin::WFS;
+namespace ph = boost::placeholders;
 
 using bw::StoredQueryParamRegistry;
 using SmartMet::Spine::Value;
@@ -51,7 +52,11 @@ StoredQueryParamRegistry::StoredQueryParamRegistry(StoredQueryConfig::Ptr config
   }
 }
 
-StoredQueryParamRegistry::~StoredQueryParamRegistry() {}
+StoredQueryParamRegistry::~StoredQueryParamRegistry() = default;
+StoredQueryParamRegistry::ParamRecBase::~ParamRecBase() = default;
+StoredQueryParamRegistry::ScalarParameterRec::~ScalarParameterRec() = default;
+StoredQueryParamRegistry::ArrayParameterRec::~ArrayParameterRec() = default;
+
 
 boost::shared_ptr<bw::RequestParameterMap> StoredQueryParamRegistry::process_parameters(
     const bw::RequestParameterMap& src, const SupportsExtraHandlerParams* extra_params) const
@@ -60,7 +65,7 @@ boost::shared_ptr<bw::RequestParameterMap> StoredQueryParamRegistry::process_par
   {
     boost::shared_ptr<bw::RequestParameterMap> result(new bw::RequestParameterMap);
 
-    BOOST_FOREACH (const auto& map_item, param_map)
+    for (const auto& map_item : param_map)
     {
       const std::string& name = map_item.first;
       auto& item_ref = *map_item.second;
@@ -107,7 +112,7 @@ boost::shared_ptr<bw::RequestParameterMap> StoredQueryParamRegistry::process_par
 			  else
 				{
 				  result->add(name, value.get_double());
-				}				
+				}
 			}
             break;
 
@@ -180,7 +185,7 @@ boost::shared_ptr<bw::RequestParameterMap> StoredQueryParamRegistry::process_par
           throw Fmi::Exception(BCP, msg.str());
         }
 
-        BOOST_FOREACH (const SmartMet::Spine::Value& value, values)
+        for (const SmartMet::Spine::Value& value : values)
         {
           switch (type_ind)
           {
@@ -235,7 +240,7 @@ std::set<std::string> StoredQueryParamRegistry::get_param_names() const
         param_map.begin(),
         param_map.end(),
         std::inserter(result, result.begin()),
-        boost::bind(&std::pair<const std::string, boost::shared_ptr<ParamRecBase> >::first, ::_1));
+        boost::bind(&std::pair<const std::string, boost::shared_ptr<ParamRecBase> >::first, ph::_1));
     return result;
   }
   catch (...)
@@ -302,7 +307,7 @@ void StoredQueryParamRegistry::add_param_rec(boost::shared_ptr<ParamRecBase> rec
           << "['" << type_name << "']";
 
       msg2 << "Use one of ";
-      BOOST_FOREACH (const auto& map_item, supported_type_names)
+      for (const auto& map_item : supported_type_names)
       {
         msg2 << sep << '\'' << demangle_cpp_type_name(map_item.first) << '\'';
         sep = ", ";

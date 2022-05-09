@@ -13,6 +13,8 @@ FileContentChecker::FileContentChecker(std::size_t max_size, int debug_level)
 {
 }
 
+FileContentChecker::~FileContentChecker() = default;
+
 bool FileContentChecker::check_file_hash(const std::string& fn)
 {
   SHA256_CTX ctx;

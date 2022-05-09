@@ -204,7 +204,7 @@ void GetPropertyValue::add_responses(boost::shared_ptr<xercesc::DOMDocument> res
       {
         std::cerr << METHOD_NAME << ": XML parsing (non validating) failed:\n" << err.what();
 
-        BOOST_FOREACH (const auto& msg, err.get_messages())
+        for (const auto& msg : err.get_messages())
         {
           std::cerr << "XML_PARSE_MSG: " << msg << std::endl;
         }
@@ -548,7 +548,7 @@ boost::shared_ptr<GetPropertyValue> GetPropertyValue::create_from_xml(
     allowed_children.insert("StoredQuery");
 
     auto children = bwx::get_child_elements(*root, WFS_NAMESPACE_URI, "*");
-    BOOST_FOREACH (const xercesc::DOMElement* child, children)
+    for (const xercesc::DOMElement* child : children)
     {
       const std::string name =
           bwx::check_name_info(child, WFS_NAMESPACE_URI, allowed_children, method_name);
@@ -593,7 +593,7 @@ bool GetPropertyValue::collect_query_responses(std::vector<std::string>& query_r
   {
     bool some_succeeded = false;
 
-    BOOST_FOREACH (auto query_ptr, queries)
+    for (auto query_ptr : queries)
     {
       boost::optional<std::string> cached_response = query_ptr->get_cached_response();
 

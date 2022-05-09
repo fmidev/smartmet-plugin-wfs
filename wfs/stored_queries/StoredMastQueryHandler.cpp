@@ -99,7 +99,7 @@ void bw::StoredMastQueryHandler::query(const StoredQuery& query,
       const int debug_level = get_config()->get_debug_level();
       if (debug_level > 2)
       {
-        BOOST_FOREACH (auto id, locations_list)
+          for (auto id : locations_list)
           std::cerr << "Found location: name: " << id.first << " geoid: " << id.second->geoid
                     << "\n";
       }
@@ -223,7 +223,7 @@ void bw::StoredMastQueryHandler::query(const StoredQuery& query,
       typedef std::map<std::string, std::tuple<uint64_t, std::string, std::string, bool, bool> >
           MeteoParameterMap;
       MeteoParameterMap meteoParameterMap;
-      BOOST_FOREACH (std::string name, meteoParametersVector)
+      for (std::string name : meteoParametersVector)
       {
         const uint64_t paramId = obs_engine->getParameterId(name, stationType);
         if (paramId == 0)

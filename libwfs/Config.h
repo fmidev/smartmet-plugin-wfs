@@ -43,6 +43,7 @@ class Config : private boost::noncopyable, public SmartMet::Spine::ConfigBase
 {
  public:
   Config(const std::string& configfile);
+  virtual ~Config();
 
   const std::string& defaultUrl() const { return itsDefaultUrl; }
   const std::vector<std::string>& getStoredQueriesConfigDirs() const { return sq_config_dirs; }
@@ -64,6 +65,7 @@ class Config : private boost::noncopyable, public SmartMet::Spine::ConfigBase
   inline int getCacheTimeConstant() const { return cache_time_constant; }
   inline bool silenceInitWarnings() const { return silence_init_warnings; }
   inline const std::string& get_default_locale() const { return default_locale; }
+  inline bool use_case_sensitive_params() const { return enable_case_sensitive_params; }
   std::vector<boost::shared_ptr<WfsFeatureDef> > read_features_config(
       SmartMet::Spine::CRSRegistry& theCRSRegistry);
   const CapabilitiesConf& get_capabilities_config() const { return capabilities_conf; }
@@ -101,6 +103,7 @@ class Config : private boost::noncopyable, public SmartMet::Spine::ConfigBase
   bool enable_demo_queries;
   bool enable_test_queries;
   bool enable_configuration_polling;
+  bool enable_case_sensitive_params;
   bool silence_init_warnings;
   bool sq_restrictions;
   SmartMet::Spine::MultiLanguageStringP fallback_encoding;

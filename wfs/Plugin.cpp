@@ -6,7 +6,7 @@
 
 #include "WfsConst.h"
 #include "WfsException.h"
-#include <boost/bind.hpp>
+#include <boost/bind/bind.hpp>
 #include <json/json.h>
 #include <spine/Convenience.h>
 #include <macgyver/Exception.h>
@@ -15,6 +15,8 @@
 #include <Plugin.h>
 #include <sstream>
 #include <thread>
+
+namespace ph = boost::placeholders;
 
 namespace SmartMet
 {
@@ -65,7 +67,7 @@ void Plugin::init()
       {
         const std::string url = new_impl->get_config().defaultUrl() + "/" + language;
         if (!itsReactor->addContentHandler(
-                this, url, boost::bind(&Plugin::realRequestHandler, this, _1, language, _2, _3)))
+                this, url, boost::bind(&Plugin::realRequestHandler, this, ph::_1, language, ph::_2, ph::_3)))
         {
           std::ostringstream msg;
           msg << "Failed to register WFS content handler for language '" << language << "'";
@@ -86,7 +88,7 @@ void Plugin::init()
     if (!itsReactor->addContentHandler(
             this,
             plugin_impl.load()->get_config().defaultUrl(),
-            boost::bind(&Plugin::realRequestHandler, this, _1, "", _2, _3)))
+            boost::bind(&Plugin::realRequestHandler, this, ph::_1, "", ph::_2, ph::_3)))
     {
       throw Fmi::Exception(
           BCP, "Failed to register WFS content handler for default language");
@@ -99,7 +101,7 @@ void Plugin::init()
     }
 
     itsReactor->addPrivateContentHandler(
-        this, "/wfs/admin", boost::bind(&Plugin::adminHandler, this, _1, _2, _3));
+        this, "/wfs/admin", boost::bind(&Plugin::adminHandler, this, ph::_1, ph::_2, ph::_3));
   }
   catch (...)
   {

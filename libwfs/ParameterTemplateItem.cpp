@@ -69,23 +69,23 @@ void ParameterTemplateItem::parse(const std::string& item_def, bool allow_absent
     this->param_ref = this->default_value = boost::optional<std::string>();
     this->param_ind = boost::optional<std::size_t>();
 
-    bool weak = false;
-    std::string param_ref;
-    boost::optional<std::size_t> param_ind;
-    boost::optional<std::string> default_value;
-    boost::optional<std::string> redirect_name;
+    bool is_weak = false;
+    std::string curr_param_ref;
+    boost::optional<std::size_t> curr_param_ind;
+    boost::optional<std::string> new_default_value;
+    boost::optional<std::string> new_redirect_name;
 
     qi_rule name_p = qi::lexeme[+(ns::alnum | qi::char_('_'))];
-    qi_rule ind_p = qi::char_('[') >> qi::uint_[bl::var(param_ind) = bl::_1] >> qi::char_(']');
+    qi_rule ind_p = qi::char_('[') >> qi::uint_[bl::var(curr_param_ind) = bl::_1] >> qi::char_(']');
     qi_rule dflt_p = qi::lexeme[*(qi::char_ - qi::char_('}'))];
-    qi_rule cond_ind_p = (ind_p | qi::eps[bl::var(param_ind) = boost::optional<std::size_t>()]);
+    qi_rule cond_ind_p = (ind_p | qi::eps[bl::var(curr_param_ind) = boost::optional<std::size_t>()]);
     qi_rule ref_type_p =
-        (qi::char_('$')[bl::var(weak) = false] | qi::char_('%')[bl::var(weak) = true]);
+        (qi::char_('$')[bl::var(is_weak) = false] | qi::char_('%')[bl::var(is_weak) = true]);
 
-    qi_rule cond_dflt_p = ((qi::char_(':') >> dflt_p[bl::var(default_value) = bl::_1]) |
-                           (qi::char_('>') >> name_p[bl::var(redirect_name) = bl::_1]) |
-                           qi::eps[bl::var(default_value) = boost::optional<std::string>(),
-                                   bl::var(redirect_name) = boost::optional<std::string>()]);
+    qi_rule cond_dflt_p = ((qi::char_(':') >> dflt_p[bl::var(new_default_value) = bl::_1]) |
+                           (qi::char_('>') >> name_p[bl::var(new_redirect_name) = bl::_1]) |
+                           qi::eps[bl::var(new_default_value) = boost::optional<std::string>(),
+                                   bl::var(new_redirect_name) = boost::optional<std::string>()]);
 
     qi_rule absent_p = ns::string("${") >> ns::string("}") >> qi::eoi;
 
@@ -94,7 +94,7 @@ void ParameterTemplateItem::parse(const std::string& item_def, bool allow_absent
 
     qi_rule ref_p = ref_type_p >> qi::char_('{') >>
                     (qi::char_('?')[boost::bind(&optional_deprecate_notice, item_def)] | qi::eps) >>
-                    name_p[bl::var(param_ref) = bl::_1] >> cond_ind_p >> cond_dflt_p >>
+                    name_p[bl::var(curr_param_ref) = bl::_1] >> cond_ind_p >> cond_dflt_p >>
                     qi::char_('}') >> qi::eoi;
 
     const std::string src = ba::trim_copy(item_def);
@@ -102,11 +102,11 @@ void ParameterTemplateItem::parse(const std::string& item_def, bool allow_absent
     {
       this->reset();
       this->absent = false;
-      this->weak = weak;
-      this->param_ref = param_ref;
-      this->param_ind = param_ind;
-      this->default_value = default_value;
-      this->redirect_name = redirect_name;
+      this->weak = is_weak;
+      this->param_ref = curr_param_ref;
+      this->param_ind = curr_param_ind;
+      this->default_value = new_default_value;
+      this->redirect_name = new_redirect_name;
     }
     else if (allow_absent and qi::phrase_parse(src.begin(), src.end(), absent_p, ns::space))
     {

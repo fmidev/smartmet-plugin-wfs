@@ -175,7 +175,7 @@ void bw::StoredFlashQueryHandler::query(const StoredQuery& query,
       std::vector<std::string> param_names;
       params.get<std::string>(P_PARAM, std::back_inserter(param_names));
       int first_param = 0, last_param = 0;
-      BOOST_FOREACH (std::string name, param_names)
+      for (std::string name : param_names)
       {
         SmartMet::Spine::Parameter param = SmartMet::TimeSeries::makeParameter(name);
         query_params.parameters.push_back(param);

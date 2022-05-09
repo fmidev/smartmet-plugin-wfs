@@ -7,7 +7,6 @@
 #include "Config.h"
 #include "WfsConvenience.h"
 #include <boost/algorithm/string.hpp>
-#include <boost/foreach.hpp>
 #include <boost/format.hpp>
 #include <spine/ConfigTools.h>
 #include <spine/Convenience.h>
@@ -29,6 +28,8 @@ namespace WFS
 {
 const char* default_url = "/wfs";
 const char* c_get_feature_by_id = "urn:ogc:def:query:OGC-WFS::GetFeatureById";
+
+Config::~Config() = default;
 
 // ----------------------------------------------------------------------
 /*!
@@ -61,6 +62,8 @@ Config::Config(const string& configfile)
     enable_configuration_polling =
         get_optional_config_param<bool>("enableConfigurationPolling", false);
     silence_init_warnings = get_optional_config_param<bool>("silence_init_warnings", false);
+    enable_case_sensitive_params = get_optional_config_param<bool>(
+        "case_sensitive_params", false);
 
     sq_restrictions = get_optional_config_param<bool>("storedQueryRestrictions", true);
     httpProxy = get_optional_config_param<std::string>("httpProxy", "");
@@ -76,7 +79,7 @@ Config::Config(const string& configfile)
 
     // Not get the dump
     bool xgp_found = false;
-    BOOST_FOREACH (const auto& fn, grammarpaths)
+    for (const auto& fn : grammarpaths)
     {
       if (fs::exists(fn))
       {
@@ -98,7 +101,7 @@ Config::Config(const string& configfile)
     }
 
     languages = get_mandatory_config_array<std::string>("languages", 1);
-    BOOST_FOREACH (std::string& language, languages)
+    for (std::string& language : languages)
     {
       Fmi::ascii_tolower(language);
     }
@@ -108,7 +111,7 @@ Config::Config(const string& configfile)
       fallback_encoding = SmartMet::Spine::MultiLanguageString::create(languages.at(0), *s_fallback_encoding);
     }
 
-    BOOST_FOREACH (std::string& sq_config_dir, sq_config_dirs)
+    for (std::string& sq_config_dir : sq_config_dirs)
     {
       fs::path sqcd(sq_config_dir);
       if (!fs::exists(sqcd) || !fs::is_directory(sqcd))

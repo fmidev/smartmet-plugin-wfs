@@ -1,7 +1,6 @@
 
 #include "XmlUtils.h"
 #include <boost/algorithm/string.hpp>
-#include <boost/foreach.hpp>
 #include <boost/regex.hpp>
 #include <macgyver/Exception.h>
 #include <xercesc/dom/DOMImplementation.hpp>
@@ -139,7 +138,7 @@ std::string check_name_info(const xercesc::DOMNode* node,
       std::ostringstream msg;
       msg << location << ": invalid element name {" << name_info.second << "}" << name_info.first
           << " ({" << ns << "}(";
-      BOOST_FOREACH (const std::string nm, allowed_names)
+      for (const std::string& nm : allowed_names)
       {
         msg << d << nm;
         d = "|";

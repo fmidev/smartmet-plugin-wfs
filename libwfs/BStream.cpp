@@ -1,6 +1,5 @@
 #include "BStream.h"
-#include <boost/bind.hpp>
-#include <boost/foreach.hpp>
+#include <boost/bind/bind.hpp>
 #include <macgyver/Base64.h>
 #include <macgyver/TypeName.h>
 #include <macgyver/Exception.h>
@@ -9,6 +8,7 @@
 #include <set>
 
 namespace bw = SmartMet::Plugin::WFS;
+namespace ph = boost::placeholders;
 
 using bw::IBStream;
 using bw::OBStream;
@@ -212,9 +212,9 @@ void OBStream::put_string(const std::string& text)
   {
     const std::size_t len = text.length();
     put_unsigned(len);
-    const char* data = text.c_str();
+    const char* tmp = text.c_str();
     for (std::size_t i = 0; i < len; i++)
-      put_char(data[i]);
+      put_char(tmp[i]);
   }
   catch (...)
   {
@@ -333,21 +333,21 @@ void OBStream::put_value(const SmartMet::Spine::Value& value)
   }
 }
 
-void OBStream::put_value_map(const std::multimap<std::string, SmartMet::Spine::Value>& data)
+void OBStream::put_value_map(const std::multimap<std::string, SmartMet::Spine::Value>& arg)
 {
   try
   {
     std::set<std::string> keys;
-    std::transform(data.begin(),
-                   data.end(),
+    std::transform(arg.begin(),
+                   arg.end(),
                    std::inserter(keys, keys.begin()),
-                   boost::bind(&std::pair<const std::string, SmartMet::Spine::Value>::first, ::_1));
+                   boost::bind(&std::pair<const std::string, SmartMet::Spine::Value>::first, ph::_1));
 
-    BOOST_FOREACH (const auto& key, keys)
+    for (const auto& key : keys)
     {
       put_bit(1);
       put_string(key);
-      auto range = data.equal_range(key);
+      auto range = arg.equal_range(key);
       for (auto it = range.first; it != range.second; ++it)
       {
         put_bit(1);
@@ -627,18 +627,18 @@ std::multimap<std::string, SmartMet::Spine::Value> IBStream::get_value_map()
 {
   try
   {
-    std::multimap<std::string, SmartMet::Spine::Value> data;
+    std::multimap<std::string, SmartMet::Spine::Value> result;
     while (get_bit())
     {
       const std::string key = get_string();
       while (get_bit())
       {
         SmartMet::Spine::Value value = get_value();
-        data.insert(std::make_pair(key, value));
+        result.insert(std::make_pair(key, value));
       }
     }
 
-    return data;
+    return result;
   }
   catch (...)
   {

@@ -1,6 +1,5 @@
 #include "GeoServerDataIndex.h"
 #include <boost/date_time/posix_time/posix_time.hpp>
-#include <boost/foreach.hpp>
 #include <boost/regex.hpp>
 #include <gis/OGR.h>
 #include <macgyver/StringConversion.h>
@@ -292,7 +291,7 @@ std::string bw::GeoServerDataIndex::get_db_table_name(const std::string& layer_n
         std::string sep = " ";
         std::ostringstream msg;
         msg << "Available layers are";
-        BOOST_FOREACH (const auto& item, name_map)
+        for (const auto& item : name_map)
         {
           msg << sep << '\'' << item.first << '\'';
           sep = ", ";

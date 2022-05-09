@@ -46,9 +46,8 @@ const StoredQueryConfig::ParamDesc& ParameterTemplateBase::get_param_desc(
   {
     namespace ba = boost::algorithm;
 
-    auto& desc_map = config.get_param_descriptions();
-    auto loc = desc_map.find(Fmi::ascii_tolower_copy(link_name));
-    if (loc == desc_map.end())
+    const auto* param_desc = config.get_param_desc(link_name);
+    if (not param_desc)
     {
       std::ostringstream msg;
       throw Fmi::Exception(
@@ -56,8 +55,8 @@ const StoredQueryConfig::ParamDesc& ParameterTemplateBase::get_param_desc(
     }
     else
     {
-      loc->second.set_used();
-      return loc->second;
+      param_desc->set_used();
+      return *param_desc;
     }
   }
   catch (...)

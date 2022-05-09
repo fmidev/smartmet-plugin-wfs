@@ -1,10 +1,10 @@
 #include "RequestParameterMap.h"
-#include <boost/bind.hpp>
-#include <boost/foreach.hpp>
+#include <boost/bind/bind.hpp>
 #include <macgyver/Exception.h>
 #include <algorithm>
 
 namespace bw = SmartMet::Plugin::WFS;
+namespace ph = boost::placeholders;
 
 bw::RequestParameterMap::RequestParameterMap() : params() {}
 
@@ -73,7 +73,7 @@ std::set<std::string> bw::RequestParameterMap::get_keys() const
     std::transform(params.begin(),
                    params.end(),
                    std::inserter(result, result.begin()),
-                   boost::bind(&std::pair<const std::string, SmartMet::Spine::Value>::first, ::_1));
+                   boost::bind(&std::pair<const std::string, SmartMet::Spine::Value>::first, ph::_1));
     return result;
   }
   catch (...)
@@ -93,7 +93,7 @@ std::vector<SmartMet::Spine::Value> bw::RequestParameterMap::get_values(
         range.first,
         range.second,
         std::back_inserter(result),
-        boost::bind(&std::pair<const std::string, SmartMet::Spine::Value>::second, ::_1));
+        boost::bind(&std::pair<const std::string, SmartMet::Spine::Value>::second, ph::_1));
     return result;
   }
   catch (...)
@@ -144,7 +144,7 @@ std::string bw::RequestParameterMap::as_string() const
     const auto keys = get_keys();
     std::ostringstream output;
     output << "(PARAMETERS";
-    BOOST_FOREACH (const auto& key, keys)
+    for (const auto& key : keys)
     {
       output << " (" << key;
       auto range = params.equal_range(key);
@@ -227,7 +227,7 @@ std::string bw::RequestParameterMap::subst(const std::string& input) const
             range.first,
             range.second,
             std::back_inserter(data),
-            boost::bind(&std::pair<const std::string, SmartMet::Spine::Value>::second, ::_1));
+            boost::bind(&std::pair<const std::string, SmartMet::Spine::Value>::second, ph::_1));
 
         if (is_array)
         {

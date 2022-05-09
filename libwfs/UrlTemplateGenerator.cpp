@@ -1,8 +1,7 @@
 #include "UrlTemplateGenerator.h"
 #include <boost/algorithm/hex.hpp>
 #include <boost/algorithm/string.hpp>
-#include <boost/bind.hpp>
-#include <boost/foreach.hpp>
+#include <boost/bind/bind.hpp>
 #include <boost/format.hpp>
 #include <boost/lambda/lambda.hpp>
 #include <boost/spirit/include/qi.hpp>
@@ -17,6 +16,7 @@
 
 namespace ba = boost::algorithm;
 namespace bw = SmartMet::Plugin::WFS;
+namespace ph = boost::placeholders;
 
 namespace
 {
@@ -26,7 +26,7 @@ void encode(std::ostream& stream, const std::string& text)
   {
     // const char *special = "$&+,:/;=?@'\"<>#%{}|\\^~[]";
     const char* special = "$&+/=?@'\"<>#%{}|\\^~[]";
-    BOOST_FOREACH (unsigned char ch, text)
+    for (unsigned char ch : text)
     {
       if ((ch <= 0x1F) or (ch >= 0x7F) or strchr(special, ch))
       {
@@ -60,7 +60,7 @@ bw::UrlTemplateGenerator::UrlTemplateGenerator(const std::string& url,
   {
     std::for_each(param_templates.begin(),
                   param_templates.end(),
-                  boost::bind(&bw::UrlTemplateGenerator::parse_param_def, this, ::_1));
+                  boost::bind(&bw::UrlTemplateGenerator::parse_param_def, this, ph::_1));
   }
   catch (...)
   {
@@ -93,7 +93,7 @@ std::string bw::UrlTemplateGenerator::generate(
         }
       }
 
-      BOOST_FOREACH (const auto param, params)
+      for (const auto& param : params)
       {
         if (param.type() == typeid(ParamRef))
         {
@@ -101,7 +101,7 @@ std::string bw::UrlTemplateGenerator::generate(
           const auto value_vect = param_getter_cb(ref.name);
           if (ref.separate_param)
           {
-            BOOST_FOREACH (const auto& item, value_vect)
+              for (const auto& item : value_vect)
             {
               result << sep;
               encode(result, ref.name);
@@ -116,7 +116,7 @@ std::string bw::UrlTemplateGenerator::generate(
             result << sep;
             encode(result, ref.name);
             result << '=';
-            BOOST_FOREACH (const auto& item, value_vect)
+            for (const auto& item : value_vect)
             {
               if (std::strchr(item.c_str(), ',') != nullptr)
               {

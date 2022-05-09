@@ -2,7 +2,6 @@
 #include "WfsException.h"
 #include <boost/algorithm/string.hpp>
 #include <boost/date_time/posix_time/posix_time.hpp>
-#include <boost/foreach.hpp>
 #include <boost/lambda/lambda.hpp>
 #include <boost/spirit/include/qi.hpp>
 #include <macgyver/TimeParser.h>
@@ -22,7 +21,7 @@ std::string xml_escape(const std::string& src)
   {
     std::ostringstream output;
 
-    BOOST_FOREACH (char c, src)
+    for (char c : src)
     {
       switch (c)
       {
@@ -127,7 +126,7 @@ std::string as_string(const std::vector<SmartMet::Spine::Value>& src)
   {
     std::ostringstream ost;
     ost << "(ValueArray ";
-    BOOST_FOREACH (const auto& item, src)
+    for (const auto& item : src)
     {
       ost << item;
     }

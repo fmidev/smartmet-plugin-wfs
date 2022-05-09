@@ -2,7 +2,6 @@
 #include "WfsConvenience.h"
 #include "WfsException.h"
 #include <boost/algorithm/string.hpp>
-#include <boost/bind.hpp>
 #include <boost/lambda/lambda.hpp>
 #include <boost/spirit/include/qi.hpp>
 #include <macgyver/TimeParser.h>
@@ -232,7 +231,7 @@ std::vector<SmartMet::Spine::Value> StoredQueryParamDef::readValues(
       std::transform(values.begin(),
                      values.end(),
                      std::back_inserter(result),
-                     boost::bind(&StoredQueryParamDef::readValue, this, ::_1));
+          boost::bind(&StoredQueryParamDef::readValue, this, boost::placeholders::_1));
       return result;
     }
     else

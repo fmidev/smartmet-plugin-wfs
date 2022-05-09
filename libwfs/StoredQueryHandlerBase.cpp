@@ -1,7 +1,6 @@
 #include "StoredQueryHandlerBase.h"
 #include "WfsException.h"
 #include <boost/algorithm/string.hpp>
-#include <boost/foreach.hpp>
 #include <fmt/format.h>
 #include <macgyver/TypeName.h>
 #include <newbase/NFmiPoint.h>
@@ -42,7 +41,7 @@ StoredQueryHandlerBase::StoredQueryHandlerBase(SmartMet::Spine::Reactor* reactor
 
     if (not hidden)
     {
-      BOOST_FOREACH (const auto& tn, return_types)
+      for (const auto& tn : return_types)
       {
         plugin_impl.get_capabilities().register_feature_use(tn);
       }

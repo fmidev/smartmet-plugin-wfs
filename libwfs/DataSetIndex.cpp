@@ -1,6 +1,5 @@
 #include "DataSetIndex.h"
 #include <boost/algorithm/string.hpp>
-#include <boost/foreach.hpp>
 #include <boost/regex.hpp>
 #include <macgyver/TimeParser.h>
 #include <macgyver/TypeName.h>
@@ -22,7 +21,7 @@ std::set<T> vect2set(const std::vector<T>& src)
   try
   {
     std::set<T> result;
-    BOOST_FOREACH (const auto& item, src)
+    for (const auto& item : src)
     {
       if (not result.insert(item).second)
       {
@@ -253,7 +252,6 @@ pt::ptime bw::DataSetDefinition::extract_origintime(const boost::filesystem::pat
 {
   try
   {
-    pt::ptime result;
     std::string s_t0;
     boost::match_results<std::string::const_iterator> what;
     const std::string fn = p.filename().string();

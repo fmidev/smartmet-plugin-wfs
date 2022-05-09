@@ -135,7 +135,7 @@ void bw::SupportsLocationParameters::get_location_options(
 
     std::vector<std::string> names;
     param.get<std::string>(P_PLACES, std::back_inserter(names));
-    BOOST_FOREACH (const std::string name, names)
+    for (const std::string& name : names)
     {
       std::string utfname;
       if (Fmi::is_utf8(name)) {
@@ -181,7 +181,7 @@ void bw::SupportsLocationParameters::get_location_options(
         }
         else
         {
-          BOOST_FOREACH (SmartMet::Spine::LocationPtr loc, places)
+          for (SmartMet::Spine::LocationPtr loc : places)
           {
             locations->push_back(std::make_pair(loc->name, loc));
           }
@@ -206,7 +206,7 @@ void bw::SupportsLocationParameters::get_geoids(
     {
       std::vector<int64_t> ids;
       param.get<int64_t>(P_GEOIDS, std::back_inserter(ids));
-      BOOST_FOREACH (int64_t id, ids)
+      for (int64_t id : ids)
       {
         if (id < std::numeric_limits<long>::min() || id > std::numeric_limits<long>::max())
         {
@@ -246,7 +246,7 @@ void bw::SupportsLocationParameters::get_fmisids(
 
     std::vector<int64_t> ids;
     param.get<int64_t>(P_FMISIDS, std::back_inserter(ids));
-    BOOST_FOREACH (int64_t id, ids)
+    for (int64_t id : ids)
     {
       if (id < std::numeric_limits<long>::min() || id > std::numeric_limits<long>::max())
       {
@@ -295,7 +295,7 @@ void bw::SupportsLocationParameters::get_wmos(
 
     std::vector<int64_t> ids;
     param.get<int64_t>(P_WMOS, std::back_inserter(ids));
-    BOOST_FOREACH (int64_t id, ids)
+    for (int64_t id : ids)
     {
       if (id < std::numeric_limits<long>::min() || id > std::numeric_limits<long>::max())
       {
@@ -344,7 +344,7 @@ void bw::SupportsLocationParameters::get_lpnns(
 
     std::vector<int64_t> ids;
     param.get<int64_t>(P_LPNNS, std::back_inserter(ids));
-    BOOST_FOREACH (int64_t id, ids)
+    for (int64_t id : ids)
     {
       if (id < std::numeric_limits<long>::min() || id > std::numeric_limits<long>::max())
       {

@@ -8,7 +8,6 @@
 #include <vector>
 #include <boost/algorithm/string.hpp>
 #include <boost/archive/text_oarchive.hpp>
-#include <boost/foreach.hpp>
 #include <boost/filesystem.hpp>
 #include <boost/optional.hpp>
 #include <boost/serialization/map.hpp>
@@ -407,7 +406,7 @@ int run(int argc, char *argv[])
     }
 
     std::sort(ns_vect.begin(), ns_vect.end());
-    BOOST_FOREACH (const auto &ns, ns_vect)
+    for (const auto &ns : ns_vect)
     {
       std::cout << "CACHED NAMESPACE: '" << ns << "'" << std::endl;
     }

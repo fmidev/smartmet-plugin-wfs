@@ -23,6 +23,8 @@ INCLUDES += \
 	-isystem $(includedir)/jsoncpp
 
 LIBS += -L$(libdir) \
+        -lsmartmet-grid-files \
+        -lsmartmet-locus \
 	-lsmartmet-timeseries \
 	-lsmartmet-spine \
 	-lsmartmet-newbase \
@@ -50,9 +52,7 @@ INCLUDES := -I$(TOP)/libwfs -I$(TOP)/wfs $(INCLUDES)
 
 obj/%.o : %.cpp ; @echo Compiling $<
 	@mkdir -p obj
-	$(CXX) $(CFLAGS) $(INCLUDES) -c -MD -MF $(patsubst obj/%.o, obj/%.d.new, $@) -o $@ $<
-	@sed -e "s|^$(notdir $@):|$@:|" $(patsubst obj/%.o, obj/%.d.new, $@) >$(patsubst obj/%.o, obj/%.d, $@)
-	@rm -f $(patsubst obj/%.o, obj/%.d.new, $@)
+	$(CXX) $(CFLAGS) $(INCLUDES) -c -MD -MF $(patsubst obj/%.o, obj/%.d, $@) -MT $@ -o $@ $<
 
 # What to install
 
@@ -104,6 +104,14 @@ configtest:
 
 $(LIBFILE): $(OBJS) $(LIBWFS)
 	$(CXX) $(CFLAGS) -shared -rdynamic $(LDFLAGS) -o $@ $(OBJS) $(LIBWFS) $(LIBS)
+	@echo Checking $(LIBFILE) for unresolved references
+	@if ldd -r $(LIBFILE) 2>&1 | c++filt | grep ^undefined\ symbol |\
+			grep -Pv 'SmartMet::(?:T|Engine|QueryServer)::' | \
+			grep -Pv ':\ __(?:(?:a|t|ub)san_|sanitizer_)'; \
+	then \
+		rm -v $(LIBFILE); \
+		exit 1; \
+	fi
 
 $(LIBWFS): $(LIBWFS_OBJS)
 	ar rcs $@ $(LIBWFS_OBJS)

@@ -131,7 +131,19 @@ class StoredQueryConfig : public SmartMet::Spine::ConfigBase
 
   std::string get_abstract(const std::string& language) const;
 
-  inline const std::vector<std::string>& get_return_type_names() const { return return_type_names; }
+  const ParamDesc* get_param_desc(const std::string& name) const;
+
+  inline const std::vector<std::string>& get_return_type_names() const
+  {
+    return return_type_names;
+  }
+
+  /**
+   *  @brief Get reference to internal map with parameter descriptions
+   *
+   *  NOTE: MUST NOT be used for looking up parameter descriptions.
+   *        Use method get_param_desc(const std::string&) instead
+   */
   inline const std::map<std::string, ParamDesc>& get_param_descriptions() const
   {
     return param_map;
@@ -215,6 +227,15 @@ class StoredQueryConfig : public SmartMet::Spine::ConfigBase
   SmartMet::Spine::MultiLanguageStringP abstract;
   std::vector<std::string> return_type_names;
   std::map<std::string, ParamDesc> param_map;
+
+  /**
+   *  @brief Map case provided parameter name to actual query parameter name
+   *
+   *  Use in case when plugin configuration parameters case_sensitive_params value
+   *  is false (defauls). Otherwise empty.
+   */
+  std::map<std::string, std::string> case_map;
+
   std::vector<std::string> param_names;
   bool disabled;
   bool demo;

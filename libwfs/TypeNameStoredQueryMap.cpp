@@ -7,7 +7,6 @@
 #include "TypeNameStoredQueryMap.h"
 #include "WfsException.h"
 #include <boost/algorithm/string.hpp>
-#include <boost/foreach.hpp>
 #include <macgyver/StringConversion.h>
 #include <macgyver/Exception.h>
 #include <sstream>
@@ -24,7 +23,7 @@ void bw::TypeNameStoredQueryMap::init(const std::map<std::string, std::string>& 
 {
   try
   {
-    BOOST_FOREACH (const auto& item, typename_storedqry)
+      for (const auto& item : typename_storedqry)
     {
       const std::string& type_name = Fmi::ascii_tolower_copy(item.first);
 

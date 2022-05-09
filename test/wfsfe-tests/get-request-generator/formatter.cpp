@@ -1,8 +1,7 @@
 #include <boost/function_output_iterator.hpp>
-#include <boost/bind.hpp>
+#include <boost/bind/bind.hpp>
 #include <boost/algorithm/string.hpp>
 #include <boost/algorithm/string/join.hpp>
-#include <boost/foreach.hpp>
 #include <boost/filesystem.hpp>
 #include <boost/range/iterator_range.hpp>
 #include <xercesc/dom/DOM.hpp>
@@ -116,7 +115,7 @@ std::string string_encode(const std::string& str)
       boost::make_function_output_iterator(boost::bind(
           static_cast<std::string& (std::string::*)(const std::string&)>(&std::string::append),
           &qstr,
-          _1)),
+          boost::placeholders::_1)),
       encimpl);
   return qstr;
 }
