@@ -33,11 +33,11 @@ BuildRequires: smartmet-engine-contour-devel >= 22.5.24
 BuildRequires: smartmet-engine-geonames-devel >= 22.5.24
 BuildRequires: smartmet-engine-gis-devel >= 22.5.24
 BuildRequires: smartmet-engine-grid-devel >= 22.5.24
-BuildRequires: smartmet-engine-querydata-devel >= 22.5.24
+BuildRequires: smartmet-engine-querydata-devel >= 22.5.31
 BuildRequires: smartmet-library-grid-content-devel >= 22.5.24
 BuildRequires: smartmet-library-grid-files-devel >= 22.5.24
 %if %{with observation}
-BuildRequires: smartmet-engine-observation-devel >= 22.5.24
+BuildRequires: smartmet-engine-observation-devel >= 22.5.31
 %endif
 Requires: ctpp2
 Requires: fmt >= 7.1.3
@@ -56,9 +56,9 @@ Requires: smartmet-engine-grid >= 22.5.24
 Requires: smartmet-library-grid-content >= 22.5.24
 Requires: smartmet-library-grid-files >= 22.5.24
 %if %{with observation}
-Requires: smartmet-engine-observation >= 22.5.24
+Requires: smartmet-engine-observation >= 22.5.31
 %endif
-Requires: smartmet-engine-querydata >= 22.5.24
+Requires: smartmet-engine-querydata >= 22.5.31
 Requires: smartmet-server >= 22.5.16
 Requires: xerces-c
 Requires: xqilla
@@ -96,9 +96,9 @@ Obsoletes: smartmet-brainstorm-wfs-debuginfo < 16.11.1
 #TestRequires: smartmet-library-spine-plugin-test >= 22.4.26
 #TestRequires: smartmet-engine-geonames >= 22.5.24
 #TestRequires: smartmet-engine-gis >= 22.5.24
-#TestRequires: smartmet-engine-querydata >= 22.5.24
+#TestRequires: smartmet-engine-querydata >= 22.5.31
 %if %{with observation}
-#TestRequires: smartmet-engine-observation >= 22.5.24
+#TestRequires: smartmet-engine-observation >= 22.5.31
 %endif
 #TestRequires: smartmet-engine-grid >= 22.5.24
 #TestRequires: redis
