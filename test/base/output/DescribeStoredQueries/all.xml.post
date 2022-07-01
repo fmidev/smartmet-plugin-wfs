@@ -663,6 +663,60 @@
                          isPrivate="true"/>
   </StoredQueryDescription>
 
+  <StoredQueryDescription id="ParamTest1">
+    <Title>Parameter test 1</Title>
+    <Abstract>
+    Parameter test 1
+    </Abstract>
+    
+    <Parameter name="scalar" type="xsi:string">
+      <Title>Scalar test parameter</Title>
+      <Abstract>
+      Scalar test parameter
+      </Abstract>
+    </Parameter>
+    
+    <Parameter name="array" type="NameList">
+      <Title>Array test parameter</Title>
+      <Abstract>
+      Array test parameter
+      </Abstract>
+    </Parameter>
+    
+    <QueryExpressionText xmlns:wfs_001="http://inspire.ec.europa.eu/schemas/omso/3.0"
+                         xsi:schemaLocation="http://inspire.ec.europa.eu/schemas/omso/3.0 https://inspire.ec.europa.eu/schemas/omso/3.0/SpecialisedObservations.xsd"
+                         returnFeatureTypes="wfs_001:GridSeriesObservation"
+                         language="urn:ogc:def:queryLanguage:OGC-WFS::WFS_QueryExpression"
+                         isPrivate="true"/>
+  </StoredQueryDescription>
+
+  <StoredQueryDescription id="ParamTest2">
+    <Title>Parameter test 2</Title>
+    <Abstract>
+    Parameter test 2
+    </Abstract>
+    
+    <Parameter name="Scalar" type="xsi:string">
+      <Title>Scalar test parameter</Title>
+      <Abstract>
+      Scalar test parameter
+      </Abstract>
+    </Parameter>
+    
+    <Parameter name="Array" type="NameList">
+      <Title>Array test parameter</Title>
+      <Abstract>
+      Array test parameter
+      </Abstract>
+    </Parameter>
+    
+    <QueryExpressionText xmlns:wfs_001="http://inspire.ec.europa.eu/schemas/omso/3.0"
+                         xsi:schemaLocation="http://inspire.ec.europa.eu/schemas/omso/3.0 https://inspire.ec.europa.eu/schemas/omso/3.0/SpecialisedObservations.xsd"
+                         returnFeatureTypes="wfs_001:GridSeriesObservation"
+                         language="urn:ogc:def:queryLanguage:OGC-WFS::WFS_QueryExpression"
+                         isPrivate="true"/>
+  </StoredQueryDescription>
+
   <StoredQueryDescription id="RadarHclassTest">
     <Title>Weather radar - hydro class - lowest angle.</Title>
     <Abstract>

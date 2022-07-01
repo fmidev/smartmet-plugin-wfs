@@ -44,6 +44,16 @@
     <ReturnFeatureType xmlns:wfstype="http://inspire.ec.europa.eu/schemas/omso/3.0"  xsi:schemaLocation="http://inspire.ec.europa.eu/schemas/omso/3.0 https://inspire.ec.europa.eu/schemas/omso/3.0/SpecialisedObservations.xsd">wfstype:PointTimeSeriesObservation</ReturnFeatureType>
   </StoredQuery>
 
+  <StoredQuery id="ParamTest1">
+    <Title>Parameter test 1</Title>
+    <ReturnFeatureType xmlns:wfstype="http://inspire.ec.europa.eu/schemas/omso/3.0"  xsi:schemaLocation="http://inspire.ec.europa.eu/schemas/omso/3.0 https://inspire.ec.europa.eu/schemas/omso/3.0/SpecialisedObservations.xsd">wfstype:GridSeriesObservation</ReturnFeatureType>
+  </StoredQuery>
+
+  <StoredQuery id="ParamTest2">
+    <Title>Parameter test 2</Title>
+    <ReturnFeatureType xmlns:wfstype="http://inspire.ec.europa.eu/schemas/omso/3.0"  xsi:schemaLocation="http://inspire.ec.europa.eu/schemas/omso/3.0 https://inspire.ec.europa.eu/schemas/omso/3.0/SpecialisedObservations.xsd">wfstype:GridSeriesObservation</ReturnFeatureType>
+  </StoredQuery>
+
   <StoredQuery id="RadarHclassTest">
     <Title>Weather radar - hydro class - lowest angle.</Title>
     <ReturnFeatureType xmlns:wfstype="http://inspire.ec.europa.eu/schemas/omso/3.0"  xsi:schemaLocation="http://inspire.ec.europa.eu/schemas/omso/3.0 https://inspire.ec.europa.eu/schemas/omso/3.0/SpecialisedObservations.xsd">wfstype:GridSeriesObservation</ReturnFeatureType>
