@@ -38,7 +38,7 @@ BuildRequires: smartmet-library-spine-devel >= 22.6.16
 BuildRequires: smartmet-library-gis-devel >= 22.6.16
 BuildRequires: smartmet-library-trax-devel >= 22.6.16
 BuildRequires: smartmet-library-locus-devel >= 22.6.16
-BuildRequires: smartmet-library-macgyver-devel >= 22.6.16
+BuildRequires: smartmet-library-macgyver-devel >= 22.7.8
 BuildRequires: smartmet-engine-contour-devel >= 22.6.17
 BuildRequires: smartmet-engine-geonames-devel >= 22.6.17
 BuildRequires: smartmet-engine-gis-devel >= 22.6.17
@@ -54,7 +54,7 @@ Requires: fmt >= %{smartmet_fmt_min}, fmt < %{smartmet_fmt_max}
 Requires: libcurl
 Requires: jsoncpp
 Requires: smartmet-library-locus >= 22.6.16
-Requires: smartmet-library-macgyver >= 22.6.16
+Requires: smartmet-library-macgyver >= 22.7.8
 Requires: smartmet-library-spine >= 22.6.16
 Requires: smartmet-library-timeseries >= 22.6.16
 Requires: smartmet-library-gis >= 22.6.16
@@ -124,7 +124,7 @@ Summary: SmartMet WFS plugin development files
 Requires: smartmet-library-spine-devel >= 22.6.16
 Requires: smartmet-library-gis-devel >= 22.6.16
 Requires: smartmet-library-locus-devel >= 22.6.16
-Requires: smartmet-library-macgyver-devel >= 22.6.16
+Requires: smartmet-library-macgyver-devel >= 22.7.8
 Requires: %{SPECNAME} = %{version}-%{release}
 %description -n %{SPECNAME}-devel
 SmartMet WFS plugin development files (for building testsuite without rebuilding plugin)

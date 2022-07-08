@@ -218,7 +218,7 @@ void bw::StoredQueryMap::add_handler(StoredQueryConfig::Ptr sqh_config,
           << sqh_config->get_file_name() << "\n";
       std::cout << msg.str() << std::flush;
 
-      throw Fmi::Exception::Trace(BCP, "Failed to add stored query handler!");
+      throw Fmi::Exception::Trace(BCP, "Failed to add stored query handler!").disableStackTrace();
     }
   }
   catch (...)
@@ -301,7 +301,7 @@ void bw::StoredQueryMap::on_config_change(Fmi::DirectoryMonitor::Watcher watcher
 	      break;
 
 	    default:
-	      if (change & (change - 1)) {
+	      if (change & (change - 1)) { // Is any 1-bit value in variable change?
 		throw Fmi::Exception::Trace(BCP, "INTERNAL ERROR: Unsupported change type "
 							+ std::to_string(int(change)));
 	      }
@@ -311,10 +311,10 @@ void bw::StoredQueryMap::on_config_change(Fmi::DirectoryMonitor::Watcher watcher
 
 	config_dirs.at(watcher).num_updates++;
       } catch (...) {
-        if (true || !Spine::Reactor::isShuttingDown()) {
+        if (!Spine::Reactor::isShuttingDown()) {
 	  have_errors++;
-	  auto err = Fmi::Exception::Trace(BCP, "Operation failed!");
-	  std::cout << err.getStackTrace() << std::endl;
+	  auto err = Fmi::Exception::Trace(BCP, "Operation failed!").disableStackTraceRecursive();
+	  std::cout << err << std::endl;
         }
       }
     }
@@ -325,8 +325,10 @@ void bw::StoredQueryMap::on_config_change(Fmi::DirectoryMonitor::Watcher watcher
 	try {
 	  handle_query_add(fn, template_dir, initial_update, true);
 	} catch (...) {
-	  auto err = Fmi::Exception::Trace(BCP, "Operation failed!");
-	  std::cout << err.getStackTrace() << std::endl;
+            if (!Spine::Reactor::isShuttingDown()) {
+                auto err = Fmi::Exception::Trace(BCP, "Operation failed!").disableStackTraceRecursive();
+                std::cout << err << std::endl;
+            }
 	}
       }
     }
@@ -334,11 +336,13 @@ void bw::StoredQueryMap::on_config_change(Fmi::DirectoryMonitor::Watcher watcher
     if (have_errors) {
       std::ostringstream msg;
       msg << "Failed to process " << have_errors << " store query configuration files";
-      auto err = Fmi::Exception::Trace(BCP, msg.str());
-      if (initial_update && !Spine::Reactor::isShuttingDown()) {
-	throw err;
-      } else {
-	std::cout << err.getStackTrace() << std::endl;
+      auto err = Fmi::Exception::Trace(BCP, msg.str()).disableStackTrace();
+      if (!Spine::Reactor::isShuttingDown()) {
+          if (initial_update) {
+              throw err;
+          } else {
+              std::cout << err.disableStackTraceRecursive() << std::endl;
+          }
       }
     }
 

@@ -247,14 +247,22 @@ void SmartMet::Plugin::WFS::StoredQueryConfig::parse_config()
             throw Fmi::Exception(BCP, msg.str());
           }
         }
-        catch (const std::exception& err)
+        catch (std::exception& err)
         {
+	  Fmi::Exception *e1 = dynamic_cast<Fmi::Exception*>(&err);
+	  if (e1) {
+	    std::cout << e1->disableStackTraceRecursive() << std::endl;
+	  }
+
           std::ostringstream msg;
-          msg << "Error while parsing stored query parameter description in '" + get_file_name() + "':\n";
           dump_setting(msg, c_item, 16);
-          msg << std::endl;
-          std::cerr << msg.str();
-          throw Fmi::Exception(BCP, msg.str());
+	  Fmi::Exception error(BCP, "Error while parsing stored query parameter description");
+	  error.addParameter("input_file", get_file_name());
+	  error.addParameter("storedquery_id", query_id);
+	  error.addParameter("error_message", err.what());
+	  error.addParameter("config_fragment", msg.str());
+	  error.disableStackTrace();
+	  throw error;
         }
 
         param_names.push_back(item.name);
@@ -305,15 +313,32 @@ void SmartMet::Plugin::WFS::StoredQueryConfig::parse_config()
 
       if (have_error)
       {
-        throw Fmi::Exception(
-            BCP, "Conflicting parameter specifications found for stored query '" + query_id + "'!");
+	Fmi::Exception error(BCP, "Conflicting parameter specifications found for stored query");
+	error.addParameter("input_file", get_file_name());
+	error.addParameter("storedquery_id", query_id);
+	error.disableStackTraceRecursive();
+	throw error;
       }
     }
     catch (const libconfig::ConfigException& err)
     {
       std::cerr << "Failed to parse stored query configuration file '" << get_file_name() << "'"
                 << std::endl;
-      handle_libconfig_exceptions(METHOD_NAME);
+      try {
+	handle_libconfig_exceptions(METHOD_NAME);
+      } catch (Fmi::Exception& e) {
+	Fmi::Exception *e1 = dynamic_cast<Fmi::Exception*>(&e);
+	if (e1) {
+	  std::cout << e1->disableStackTraceRecursive() << std::endl;
+	}
+
+	Fmi::Exception error(BCP, "Failed to parse stored query configuration file");
+	error.addParameter("input_file", get_file_name());
+	error.addParameter("storedquery_id", query_id);
+	error.addParameter("error_message", e.what());
+	error.disableStackTrace();
+	throw error;
+      }
     }
   }
   catch (...)
