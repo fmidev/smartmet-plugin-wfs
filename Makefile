@@ -54,6 +54,10 @@ obj/%.o : %.cpp ; @echo Compiling $<
 	@mkdir -p obj
 	$(CXX) $(CFLAGS) $(INCLUDES) -c -MD -MF $(patsubst obj/%.o, obj/%.d, $@) -MT $@ -o $@ $<
 
+obj/FeatureID.o: CFLAGS += -Wno-deprecated-declarations
+obj/FileContentChecker.o: CFLAGS += -Wno-deprecated-declarations
+obj/StoredQueryHandlerFactoryDef.o: CFLAGS += -Wno-deprecated-declarations
+
 # What to install
 
 LIBFILE = $(SUBNAME).so
