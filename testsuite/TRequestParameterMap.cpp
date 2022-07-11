@@ -25,13 +25,14 @@ BOOST_AUTO_TEST_CASE(test_1)
 
   BOOST_TEST_MESSAGE("+ [Basic use of RequestParameterMap]");
 
-  RequestParameterMap params;
+  RequestParameterMap params(false);
   params.add<int64_t>("A", 123, true);
   params.add<std::string>("B", "foo", true);
   params.add<std::string>("B", "bar", false);
   params.add<std::string>("B", "baz", false);
 
   BOOST_REQUIRE_EQUAL(1, params.count("A"));
+  BOOST_REQUIRE_EQUAL(1, params.count("a"));
 
   std::size_t n = 0;
   std::vector<int> i1v;
@@ -65,7 +66,7 @@ BOOST_AUTO_TEST_CASE(test_substitution_into_string)
 {
   using namespace SmartMet::Plugin::WFS;
 
-  RequestParameterMap params;
+  RequestParameterMap params(false);
   params.add<int64_t>("A", 123, true);
   params.add<std::string>("B", "foo", true);
   params.add<std::string>("B", "bar", false);

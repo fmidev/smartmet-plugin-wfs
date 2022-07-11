@@ -158,6 +158,7 @@ void bw::StoredGeoserverQueryHandler::update_parameters(
 
     const unsigned MIN_SIZE = 10;
     const char* P_SELECTED_NAME = "selectedName";
+    const bool case_sensitive_params = get_config()->use_case_sensitive_params();
 
     std::vector<std::string> layers;  //  = t_layers.get_string_array(params, this);
     const std::string crs_name = params.get_single<std::string>(P_CRS);
@@ -262,7 +263,7 @@ void bw::StoredGeoserverQueryHandler::update_parameters(
 
     result.clear();
 
-    bw::FeatureID feature_id(get_config()->get_query_id(), params.get_map(), seq_id);
+    bw::FeatureID feature_id(get_config()->get_query_id(), params.get_map(true), seq_id);
 
     for (auto it1 = gs_index->begin(); it1 != gs_index->end(); ++it1)
     {
@@ -278,7 +279,8 @@ void bw::StoredGeoserverQueryHandler::update_parameters(
           feature_id.erase_param(P_SELECTED_NAME);
           feature_id.add_param(P_SELECTED_NAME, it2->name);
 
-          boost::shared_ptr<RequestParameterMap> pm1(new RequestParameterMap);
+          boost::shared_ptr<RequestParameterMap> pm1(
+	       new RequestParameterMap(case_sensitive_params));
           pm1->add("epoch", Fmi::to_iso_extended_string(it1->second.epoch) + "Z");
           pm1->add("name", it2->name);
           pm1->add("layer", it2->layer);

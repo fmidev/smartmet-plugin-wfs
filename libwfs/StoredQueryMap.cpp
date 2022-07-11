@@ -689,3 +689,8 @@ Json::Value bw::StoredQueryMap::get_constructor_map() const
   }
   return result;
 }
+
+bool bw::StoredQueryMap::use_case_sensitive_params() const
+{
+  return plugin_impl.get_config().use_case_sensitive_params();
+}

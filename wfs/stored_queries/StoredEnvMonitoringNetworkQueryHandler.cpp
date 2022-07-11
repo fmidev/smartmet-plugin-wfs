@@ -71,7 +71,7 @@ void bw::StoredEnvMonitoringNetworkQueryHandler::query(const StoredQuery& query,
 
     // Get the sequence number of query in the request
     auto sqId = query.get_query_id();
-    FeatureID featureId(get_config()->get_query_id(), params.get_map(), sqId);
+    FeatureID featureId(get_config()->get_query_id(), params.get_map(true), sqId);
 
     // Removing some feature id parameters
     const char* removeParams[] = {

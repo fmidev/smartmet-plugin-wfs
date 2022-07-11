@@ -58,6 +58,8 @@ class StoredQueryMap final
 
   Json::Value get_constructor_map() const;
 
+  bool use_case_sensitive_params() const;
+
  private:
   void add_handler(boost::shared_ptr<StoredQueryHandlerBase> handler);
 

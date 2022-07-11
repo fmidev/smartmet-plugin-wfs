@@ -221,7 +221,8 @@ class AdHocQuery : public StoredQuery
    *
    */
   static void create_query(boost::shared_ptr<const StoredQueryHandlerBase> handler,
-                           std::vector<boost::shared_ptr<QueryBase>>& queries);
+                           std::vector<boost::shared_ptr<QueryBase>>& queries,
+			   bool case_sensitive_params);
 
   /**
    *   @brief Parses query XML elements for extracting stored query parameters and filtering
@@ -232,13 +233,15 @@ class AdHocQuery : public StoredQuery
    *   @param queries Pointers to created query objects.
    *   @param upper_level_and_query Query object for AND element.
    *   @param or_query_indexes List of first query object indexes of OR elements.
+   *   @param case_sensitive_params whether parameters are case sensitive
    *
    */
   static void extract_filter_elements(const xercesc::DOMElement& root_element,
                                       std::vector<std::string>& element_tree,
                                       std::vector<boost::shared_ptr<QueryBase>>& queries,
                                       AdHocQuery* upper_level_and_query,
-                                      std::vector<unsigned int>& or_query_indexes);
+                                      std::vector<unsigned int>& or_query_indexes,
+				      bool case_sensitive_params);
 
   /**
    *   @brief Performs parsing actions when finding end of and-element.
@@ -254,7 +257,8 @@ class AdHocQuery : public StoredQuery
   static void handle_end_of_and_element(std::vector<boost::shared_ptr<QueryBase>>& queries,
                                         std::vector<unsigned int>& or_query_indexes,
                                         unsigned int and_query_index,
-                                        AdHocQuery* and_query);
+                                        AdHocQuery* and_query,
+					bool case_sensitive_params);
 
   /**
    *   @brief Reads comparison definitions from XML query.

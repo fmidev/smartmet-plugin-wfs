@@ -216,7 +216,7 @@ void bw::StoredForecastQueryHandler::query(const StoredQuery& stored_query,
           auto site_range = group_map.equal_range(group_id);
           CTPP::CDT& group = hash["groups"][group_id];
 
-          FeatureID feature_id(get_config()->get_query_id(), params.get_map(), sq_id);
+          FeatureID feature_id(get_config()->get_query_id(), params.get_map(true), sq_id);
           for (std::size_t i = 0; i < sizeof(location_params) / sizeof(*location_params); i++)
           {
             feature_id.erase_param(location_params[i]);

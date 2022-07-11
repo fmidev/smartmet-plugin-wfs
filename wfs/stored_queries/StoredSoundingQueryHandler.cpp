@@ -152,7 +152,7 @@ void StoredSoundingQueryHandler::query(const StoredQuery& query,
                   << " seconds\n";
 
       int sq_id = query.get_query_id();
-      FeatureID featureId(get_config()->get_query_id(), params.get_map(), sq_id);
+      FeatureID featureId(get_config()->get_query_id(), params.get_map(true), sq_id);
       const char* placeParams[] = {
           P_WMOS, P_FMISIDS, P_PLACES, P_LATLONS, P_GEOIDS, P_KEYWORD, P_BOUNDING_BOX};
       for (unsigned i = 0; i < sizeof(placeParams) / sizeof(*placeParams); i++)

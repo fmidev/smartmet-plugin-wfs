@@ -565,6 +565,13 @@ SmartMet::Plugin::WFS::StoredQueryConfig::guess_fallback_encoding(const std::str
   return plugin_config ? plugin_config->guess_fallback_encoding(language) : std::string("ISO-8859-1");
 }
 
+
+bool
+SmartMet::Plugin::WFS::StoredQueryConfig::use_case_sensitive_params() const
+{
+  return plugin_config ? plugin_config->use_case_sensitive_params() : false;
+}
+
 /**
 
 @page WFS_CFG_STORED_QUERY Stored query configuration

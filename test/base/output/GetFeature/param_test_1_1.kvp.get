@@ -1,10 +1,10 @@
 {
-	"ArrayParam" : 
+	"arrayparam" : 
 	[
 		"1",
 		"2",
 		"3"
 	],
-	"ScalarParam" : "foo",
+	"scalarparam" : "foo",
 	"storedquery_id" : "ParamTest1"
 }

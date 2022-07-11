@@ -142,7 +142,7 @@ void bw::SupportsExtraHandlerParams::dump_named_params(const bw::RequestParamete
       const std::string& name = map_item.first;
       bw::ParameterTemplateBase& param_template = *map_item.second;
       boost::variant<SmartMet::Spine::Value, std::vector<SmartMet::Spine::Value> > value;
-      auto found = param_template.get_value(value, req_param_map.get_map(), this, false);
+      auto found = param_template.get_value(value, req_param_map, this, false);
       if (found != false)
       {
         if (value.which() == 0)

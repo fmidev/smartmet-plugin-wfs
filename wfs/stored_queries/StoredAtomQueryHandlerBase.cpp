@@ -64,6 +64,7 @@ void bw::StoredAtomQueryHandlerBase::query(const bw::StoredQuery& query,
         Fmi::to_iso_extended_string(get_plugin_impl().get_time_stamp()) + "Z";
 
     const RequestParameterMap& req_param_map = query.get_param_map();
+
     std::vector<boost::shared_ptr<RequestParameterMap> > param_sets;
     update_parameters(req_param_map, query.get_query_id(), param_sets);
 
@@ -76,7 +77,7 @@ void bw::StoredAtomQueryHandlerBase::query(const bw::StoredQuery& query,
 
     if(!hostname)
       throw Fmi::Exception(BCP, "Hostname unknown");
-    
+
     CTPP::CDT h_hosts;
     h_hosts["wms"] = get_config()->get_hosts().getWMSHost(*hostname);
     hash["hosts"] = h_hosts;
@@ -116,11 +117,11 @@ void bw::StoredAtomQueryHandlerBase::query(const bw::StoredQuery& query,
       for (const auto& param_name : param_names)
       {
         int cnt = 0;
-        auto range = param_set.get_map().equal_range(param_name);
-        for (auto it = range.first; it != range.second; ++it)
-        {
-          hash_item["params"][param_name][cnt++] = it->second.to_string();
-        }
+	const std::vector<SmartMet::Spine::Value> values = param_set.get_values(param_name);
+	for (auto v : values)
+	{
+	  hash_item["params"][param_name][cnt++] = v.to_string();
+	}
       }
     }
 
@@ -140,9 +141,11 @@ void bw::StoredAtomQueryHandlerBase::update_parameters(
   try
   {
     result.clear();
-    boost::shared_ptr<bw::RequestParameterMap> tmp(new bw::RequestParameterMap(request_params));
+    boost::shared_ptr<bw::RequestParameterMap> tmp(
+	new bw::RequestParameterMap(request_params.get_map(true), true));
     tmp->add("queryNum", seq_id);
     result.push_back(tmp);
+    std::cout << tmp->as_string() << std::endl;
   }
   catch (...)
   {

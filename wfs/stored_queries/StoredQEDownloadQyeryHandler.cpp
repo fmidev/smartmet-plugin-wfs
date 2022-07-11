@@ -288,6 +288,8 @@ void StoredQEDownloadQueryHandler::update_parameters(
   {
     qe::MetaQueryOptions opt;
 
+    const bool case_sensitive_params = get_config()->use_case_sensitive_params();
+
     handle_opt_param(params, P_PRODUCER, opt, &qe::MetaQueryOptions::setProducer);
     handle_opt_param(params, P_ORIGIN_TIME, opt, &qe::MetaQueryOptions::setOriginTime);
 
@@ -352,7 +354,7 @@ void StoredQEDownloadQueryHandler::update_parameters(
       dump_meta_query_options(opt);
     }
 
-    bw::FeatureID feature_id(get_config()->get_query_id(), params.get_map(), seq_id);
+    bw::FeatureID feature_id(get_config()->get_query_id(), params.get_map(true), seq_id);
 
     const auto md_list = q_engine->getEngineMetadata(opt);
     for (auto md_iter = md_list.begin(); md_iter != md_list.end(); ++md_iter)
@@ -426,7 +428,7 @@ void StoredQEDownloadQueryHandler::update_parameters(
         }
       }
 
-      boost::shared_ptr<RequestParameterMap> pm(new RequestParameterMap);
+      boost::shared_ptr<RequestParameterMap> pm(new RequestParameterMap(true));
 
       if (debug_level > 1)
       {

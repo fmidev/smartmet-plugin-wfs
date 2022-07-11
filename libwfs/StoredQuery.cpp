@@ -99,7 +99,7 @@ boost::shared_ptr<bw::StoredQuery> bw::StoredQuery::create_from_kvp(
     query->debug_format = spp.get_output_format() == "debug";
     // We do not need query sequence number here
 
-    bw::FeatureID feature_id(query_id, query->params->get_map(), 0);
+    bw::FeatureID feature_id(query_id, query->params->get_map(true), 0);
     feature_id.add_param("source", query->handler->get_data_source());
     feature_id.add_param("language", language);
     if (query->debug_format)
@@ -172,7 +172,7 @@ boost::shared_ptr<bw::StoredQuery> bw::StoredQuery::create_from_xml(
     query->id = query_id;
     query->debug_format = spp.get_output_format() == "debug";
 
-    bw::FeatureID feature_id(query_id, query->params->get_map(), 0);
+    bw::FeatureID feature_id(query_id, query->params->get_map(true), 0);
     feature_id.add_param("source", query->handler->get_data_source());
     feature_id.add_param("language", language);
     if (query->debug_format)
@@ -201,7 +201,8 @@ boost::shared_ptr<bw::StoredQuery> bw::StoredQuery::create_from_feature_id(
     boost::shared_ptr<bw::StoredQuery> query(new bw::StoredQuery);
     query->id = query_id;
     boost::shared_ptr<bw::RequestParameterMap> param_map(
-        new RequestParameterMap(feature_id->get_params()));
+	new RequestParameterMap(feature_id->get_params(),
+				sq_map.use_case_sensitive_params()));
     query->params = param_map;
     query->orig_params = param_map;
     query->handler = sq_map.get_handler_by_name(query_id);
@@ -209,7 +210,7 @@ boost::shared_ptr<bw::StoredQuery> bw::StoredQuery::create_from_feature_id(
     query->language = orig_query.language;
     query->debug_format = orig_query.debug_format;
 
-    bw::FeatureID cache_feature_id(query_id, query->params->get_map(), 0);
+    bw::FeatureID cache_feature_id(query_id, query->params->get_map(true), 0);
     cache_feature_id.add_param("source", query->handler->get_data_source());
     cache_feature_id.add_param("language", query->language);
     if (query->debug_format)
@@ -243,7 +244,7 @@ const SmartMet::Spine::Value& bw::StoredQuery::get_param(const std::string& name
 {
   try
   {
-    auto range = params->get_map().equal_range(name);
+    auto range = params->get_map(false).equal_range(name);
     if (range.first == range.second)
     {
       Fmi::Exception exception(BCP, "Mandatory parameter '" + name + "' missing!");
@@ -353,7 +354,7 @@ void bw::StoredQuery::extract_kvp_parameters(const SmartMet::Spine::HTTP::Reques
   {
     const char* method = "SmartMet::Plugin::WFS::StoredQuery::extract_kvp_parameters";
 
-    query.params.reset(new bw::RequestParameterMap);
+    query.params.reset(new bw::RequestParameterMap(config.use_case_sensitive_params()));
     query.orig_params = query.params;
     query.skipped_params.clear();
 
@@ -475,7 +476,7 @@ void bw::StoredQuery::extract_xml_parameters(const xercesc::DOMElement& query_ro
   {
     const char* method = "SmartMet::Plugin::WFS::StoredQuery::extract_xml_parameters";
 
-    query.params.reset(new bw::RequestParameterMap);
+    query.params.reset(new bw::RequestParameterMap(config.use_case_sensitive_params()));
     query.orig_params = query.params;
     query.skipped_params.clear();
 
@@ -571,12 +572,16 @@ void bw::StoredQuery::dump_query_info(std::ostream& output) const
     msg << "params={";
 
     // Collect parameter names for message
-    const auto names = params->get_keys();
+    const auto p = params->get_map(true);
+    std::set<std::string> names;
+    for (const auto& item : p) {
+      names.insert(item.first);
+    }
 
     for (const auto& name : names)
     {
       msg << sep << name << "=(";
-      auto range = params->get_map().equal_range(name);
+      auto range = p.equal_range(name);
       for (auto it = range.first; it != range.second; ++it)
       {
         msg << '(' << it->second << ')';

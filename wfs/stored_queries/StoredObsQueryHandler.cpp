@@ -388,7 +388,7 @@ void StoredObsQueryHandler::query(const StoredQuery& query,
 
       const int num_groups = separate_groups ? site_map.size() : ((site_map.size() != 0) ? 1 : 0);
 
-      FeatureID feature_id(get_config()->get_query_id(), params.get_map(), sq_id);
+      FeatureID feature_id(get_config()->get_query_id(), params.get_map(true), sq_id);
 
       if (separate_groups)
       {
