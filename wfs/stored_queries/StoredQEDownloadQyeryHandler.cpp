@@ -288,8 +288,6 @@ void StoredQEDownloadQueryHandler::update_parameters(
   {
     qe::MetaQueryOptions opt;
 
-    const bool case_sensitive_params = get_config()->use_case_sensitive_params();
-
     handle_opt_param(params, P_PRODUCER, opt, &qe::MetaQueryOptions::setProducer);
     handle_opt_param(params, P_ORIGIN_TIME, opt, &qe::MetaQueryOptions::setOriginTime);
 

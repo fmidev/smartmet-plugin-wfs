@@ -102,8 +102,6 @@ void bw::StoredFileQueryHandler::update_parameters(
     typedef DataSetDefinition::point_t point_t;
     typedef DataSetDefinition::box_t box_t;
 
-    const bool case_sensitive_params = get_config()->use_case_sensitive_params();
-
     std::set<int> level_set, common_levels;
     std::set<std::string> param_set, common_params;
     std::vector<double> bbox;
@@ -178,7 +176,7 @@ void bw::StoredFileQueryHandler::update_parameters(
         {
           pt::ptime origin_time = ds_def.extract_origintime(*it2);
           boost::shared_ptr<RequestParameterMap> pm1(
-	      new RequestParameterMap(case_sensitive_params));
+	      new RequestParameterMap(true));
           pm1->add("name", ds_def.get_name());
           pm1->add("basename", it2->filename().string());
           pm1->add("levels", common_levels.begin(), common_levels.end());
