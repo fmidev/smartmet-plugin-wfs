@@ -411,7 +411,7 @@ BOOST_AUTO_TEST_CASE(test_kvp_single_scalar_parameter_too_many_occurrences)
   try
   {
     bw::StoredQuery::extract_kvp_parameters(request, *config, Q1);
-    std::cout << Q1.get_param_map().get_map() << "\n";
+    std::cout << Q1.get_param_map() << "\n";
     BOOST_REQUIRE(false);
   }
   catch (const std::exception& err)
