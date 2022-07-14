@@ -48,6 +48,17 @@ void bw::StoredQueryMap::set_background_init(bool value)
   background_init = value;
   if (background_init) {
     init_tasks.reset(new Fmi::AsyncTaskGroup(10));
+    init_tasks->on_task_error(
+        [] (const std::string& name) -> void
+        {
+            try {
+                throw;
+            } catch (...) {
+                auto exception = Fmi::Exception::Trace(BCP, "Stored query loading failed:"
+                    " task name:" + name);
+                std::cout << exception << std::endl;
+            }
+        });
   } else {
     init_tasks.reset();
   }
