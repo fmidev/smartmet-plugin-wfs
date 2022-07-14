@@ -22,6 +22,7 @@ bw::StoredQueryMap::StoredQueryMap(SmartMet::Spine::Reactor* theReactor, PluginI
   , background_init(false)
   , reload_required(false)
   , loading_started(false)
+  , initial_load_failed(false)
   , theReactor(theReactor)
   , plugin_impl(plugin_impl)
 {
@@ -88,8 +89,13 @@ void bw::StoredQueryMap::wait_for_init()
     init_tasks->wait();
   }
 
-  std::cout << SmartMet::Spine::log_time_str() << ": [WFS] Initial loading of stored query configuration files finished"
-	    << std::endl;
+  if (initial_load_failed) {
+      throw Fmi::Exception(BCP, "Failed to load one or more stored query configuration")
+          .disableStackTrace();
+  } else {
+      std::cout << SmartMet::Spine::log_time_str() << ": [WFS] Initial loading of stored query configuration files finished"
+                << std::endl;
+  }
 }
 
 bool bw::StoredQueryMap::is_reload_required(bool reset)
@@ -339,6 +345,7 @@ void bw::StoredQueryMap::on_config_change(Fmi::DirectoryMonitor::Watcher watcher
       auto err = Fmi::Exception::Trace(BCP, msg.str()).disableStackTrace();
       if (!Spine::Reactor::isShuttingDown()) {
           if (initial_update) {
+              initial_load_failed = true;
               throw err;
           } else {
               std::cout << err.disableStackTraceRecursive() << std::endl;
