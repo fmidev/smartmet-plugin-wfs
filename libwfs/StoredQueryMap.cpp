@@ -22,7 +22,7 @@ bw::StoredQueryMap::StoredQueryMap(SmartMet::Spine::Reactor* theReactor, PluginI
   , background_init(false)
   , reload_required(false)
   , loading_started(false)
-  , initial_load_failed(false)
+  , load_failed(false)
   , theReactor(theReactor)
   , plugin_impl(plugin_impl)
 {
@@ -49,14 +49,16 @@ void bw::StoredQueryMap::set_background_init(bool value)
   if (background_init) {
     init_tasks.reset(new Fmi::AsyncTaskGroup(10));
     init_tasks->on_task_error(
-        [] (const std::string& name) -> void
+        [this] (const std::string& name) -> void
         {
             try {
                 throw;
             } catch (...) {
-                auto exception = Fmi::Exception::Trace(BCP, "Stored query loading failed:"
-                    " task name:" + name);
-                std::cout << exception << std::endl;
+                Fmi::Exception error = Fmi::Exception::SquashTrace(BCP, "Operation Failed");
+                error.addDetail("Stored query loading failed - task name " + name);
+                std::cout << error << std::endl;
+                // This is only checked in wait_for_init(). Later changes fave no effect
+                load_failed = true;
             }
         });
   } else {
@@ -100,7 +102,7 @@ void bw::StoredQueryMap::wait_for_init()
     init_tasks->wait();
   }
 
-  if (initial_load_failed) {
+  if (load_failed) {
       throw Fmi::Exception(BCP, "Failed to load one or more stored query configuration")
           .disableStackTrace();
   } else {
@@ -235,7 +237,7 @@ void bw::StoredQueryMap::add_handler(StoredQueryConfig::Ptr sqh_config,
           << sqh_config->get_file_name() << "\n";
       std::cout << msg.str() << std::flush;
 
-      throw Fmi::Exception::Trace(BCP, "Failed to add stored query handler!").disableStackTrace();
+      throw Fmi::Exception::Trace(BCP, "Failed to add stored query handler!");
     }
   }
   catch (...)
@@ -356,7 +358,7 @@ void bw::StoredQueryMap::on_config_change(Fmi::DirectoryMonitor::Watcher watcher
       auto err = Fmi::Exception::Trace(BCP, msg.str()).disableStackTrace();
       if (!Spine::Reactor::isShuttingDown()) {
           if (initial_update) {
-              initial_load_failed = true;
+              load_failed = true;
               throw err;
           } else {
               std::cout << err.disableStackTraceRecursive() << std::endl;

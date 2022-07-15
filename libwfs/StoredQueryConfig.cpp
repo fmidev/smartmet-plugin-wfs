@@ -247,19 +247,14 @@ void SmartMet::Plugin::WFS::StoredQueryConfig::parse_config()
             throw Fmi::Exception(BCP, msg.str());
           }
         }
-        catch (std::exception& err)
+        catch (...)
         {
-	  Fmi::Exception *e1 = dynamic_cast<Fmi::Exception*>(&err);
-	  if (e1) {
-	    std::cout << e1->disableStackTraceRecursive() << std::endl;
-	  }
-
+          Fmi::Exception error = Fmi::Exception::SquashTrace(BCP, "Operation failed");
           std::ostringstream msg;
           dump_setting(msg, c_item, 16);
-	  Fmi::Exception error(BCP, "Error while parsing stored query parameter description");
+	  error.addDetail("Error while parsing stored query parameter description");
 	  error.addParameter("input_file", get_file_name());
 	  error.addParameter("storedquery_id", query_id);
-	  error.addParameter("error_message", err.what());
 	  error.addParameter("config_fragment", msg.str());
 	  error.disableStackTrace();
 	  throw error;

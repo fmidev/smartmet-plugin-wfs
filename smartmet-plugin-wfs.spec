@@ -39,7 +39,7 @@ BuildRequires: smartmet-library-spine-devel >= 22.6.16
 BuildRequires: smartmet-library-gis-devel >= 22.6.16
 BuildRequires: smartmet-library-trax-devel >= 22.6.16
 BuildRequires: smartmet-library-locus-devel >= 22.6.16
-BuildRequires: smartmet-library-macgyver-devel >= 22.7.8
+BuildRequires: smartmet-library-macgyver-devel >= 22.7.15
 BuildRequires: smartmet-engine-contour-devel >= 22.6.17
 BuildRequires: smartmet-engine-geonames-devel >= 22.6.17
 BuildRequires: smartmet-engine-gis-devel >= 22.6.17
@@ -56,7 +56,7 @@ Requires: libcurl
 Requires: jsoncpp
 Requires: zlib
 Requires: smartmet-library-locus >= 22.6.16
-Requires: smartmet-library-macgyver >= 22.7.8
+Requires: smartmet-library-macgyver >= 22.7.15
 Requires: smartmet-library-spine >= 22.6.16
 Requires: smartmet-library-timeseries >= 22.6.16
 Requires: smartmet-library-gis >= 22.6.16
@@ -103,6 +103,7 @@ Obsoletes: smartmet-brainstorm-wfs-debuginfo < 16.11.1
 #TestRequires: smartmet-test-db >= 21.1.21
 #TestRequires: smartmet-test-data >= 20.6.30
 #TestRequires: smartmet-utils-devel
+#TestRequires: smartmet-library-macgyver >= 22.7.15
 #TestRequires: smartmet-library-gis >= 22.6.16
 #TestRequires: smartmet-library-newbase >= 22.6.16
 #TestRequires: smartmet-library-spine-plugin-test >= 22.6.16

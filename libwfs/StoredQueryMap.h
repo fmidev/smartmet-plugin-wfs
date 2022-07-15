@@ -115,7 +115,7 @@ class StoredQueryMap final
   bool background_init;
   std::atomic<bool> reload_required;
   std::atomic<bool> loading_started;
-  std::atomic<bool> initial_load_failed;
+  std::atomic<bool> load_failed;
   mutable boost::shared_mutex mutex;
   mutable std::mutex mutex2;
   std::condition_variable cond;
