@@ -33,6 +33,7 @@ BuildRequires: xerces-c-devel
 BuildRequires: xqilla-devel
 BuildRequires: openssl-devel
 BuildRequires: bzip2-devel
+BuildRequires: zlib-devel
 BuildRequires: smartmet-library-timeseries-devel >= 22.6.16
 BuildRequires: smartmet-library-spine-devel >= 22.6.16
 BuildRequires: smartmet-library-gis-devel >= 22.6.16
@@ -53,6 +54,7 @@ Requires: ctpp2
 Requires: fmt >= %{smartmet_fmt_min}, fmt < %{smartmet_fmt_max}
 Requires: libcurl
 Requires: jsoncpp
+Requires: zlib
 Requires: smartmet-library-locus >= 22.6.16
 Requires: smartmet-library-macgyver >= 22.7.8
 Requires: smartmet-library-spine >= 22.6.16
