@@ -103,8 +103,7 @@ void bw::StoredQueryMap::wait_for_init()
   }
 
   if (load_failed) {
-      throw Fmi::Exception(BCP, "Failed to load one or more stored query configuration")
-          .disableStackTrace();
+      throw Fmi::Exception(BCP, "Failed to load one or more stored query configuration");
   } else {
       std::cout << SmartMet::Spine::log_time_str() << ": [WFS] Initial loading of stored query configuration files finished"
                 << std::endl;
@@ -332,7 +331,7 @@ void bw::StoredQueryMap::on_config_change(Fmi::DirectoryMonitor::Watcher watcher
       } catch (...) {
         if (!Spine::Reactor::isShuttingDown()) {
 	  have_errors++;
-	  auto err = Fmi::Exception::Trace(BCP, "Operation failed!").disableStackTraceRecursive();
+	  auto err = Fmi::Exception::Trace(BCP, "Operation failed!");
 	  std::cout << err << std::endl;
         }
       }
@@ -345,7 +344,7 @@ void bw::StoredQueryMap::on_config_change(Fmi::DirectoryMonitor::Watcher watcher
 	  handle_query_add(fn, template_dir, initial_update, true);
 	} catch (...) {
             if (!Spine::Reactor::isShuttingDown()) {
-                auto err = Fmi::Exception::Trace(BCP, "Operation failed!").disableStackTraceRecursive();
+                auto err = Fmi::Exception::Trace(BCP, "Operation failed!");
                 std::cout << err << std::endl;
             }
 	}
@@ -355,7 +354,7 @@ void bw::StoredQueryMap::on_config_change(Fmi::DirectoryMonitor::Watcher watcher
     if (have_errors) {
       std::ostringstream msg;
       msg << "Failed to process " << have_errors << " store query configuration files";
-      auto err = Fmi::Exception::Trace(BCP, msg.str()).disableStackTrace();
+      auto err = Fmi::Exception::Trace(BCP, msg.str());
       if (!Spine::Reactor::isShuttingDown()) {
           if (initial_update) {
               load_failed = true;
