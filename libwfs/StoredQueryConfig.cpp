@@ -256,7 +256,6 @@ void SmartMet::Plugin::WFS::StoredQueryConfig::parse_config()
 	  error.addParameter("input_file", get_file_name());
 	  error.addParameter("storedquery_id", query_id);
 	  error.addParameter("config_fragment", msg.str());
-	  error.disableStackTrace();
 	  throw error;
         }
 

@@ -331,7 +331,7 @@ void bw::StoredQueryMap::on_config_change(Fmi::DirectoryMonitor::Watcher watcher
       } catch (...) {
         if (!Spine::Reactor::isShuttingDown()) {
 	  have_errors++;
-	  auto err = Fmi::Exception::Trace(BCP, "Operation failed!");
+	  auto err = Fmi::Exception::SquashTrace(BCP, "Operation failed!");
 	  std::cout << err << std::endl;
         }
       }
@@ -344,7 +344,7 @@ void bw::StoredQueryMap::on_config_change(Fmi::DirectoryMonitor::Watcher watcher
 	  handle_query_add(fn, template_dir, initial_update, true);
 	} catch (...) {
             if (!Spine::Reactor::isShuttingDown()) {
-                auto err = Fmi::Exception::Trace(BCP, "Operation failed!");
+                auto err = Fmi::Exception::SquashTrace(BCP, "Operation failed!");
                 std::cout << err << std::endl;
             }
 	}
