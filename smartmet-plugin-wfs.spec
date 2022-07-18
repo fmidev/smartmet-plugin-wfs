@@ -74,6 +74,7 @@ Requires: smartmet-engine-querydata >= 22.6.17
 Requires: smartmet-server >= 22.5.16
 Requires: xerces-c
 Requires: xqilla
+Requires: zlib
 Requires: %{smartmet_boost}-chrono
 Requires: %{smartmet_boost}-date-time
 Requires: %{smartmet_boost}-filesystem
