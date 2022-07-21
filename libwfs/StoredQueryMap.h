@@ -66,9 +66,6 @@ class StoredQueryMap final
     void add_handler(boost::shared_ptr<StoredQueryConfig> sqh_config,
                    const boost::filesystem::path& template_dir);
 
-  void add_handler_thread_proc(boost::shared_ptr<StoredQueryConfig> config,
-                               const boost::filesystem::path& template_dir);
-
   void on_config_change(Fmi::DirectoryMonitor::Watcher watcher,
 			const boost::filesystem::path& path,
 			const boost::regex& pattern,
@@ -110,6 +107,8 @@ class StoredQueryMap final
   boost::shared_ptr<StoredQueryHandlerBase> get_handler_by_name_nothrow(const std::string name) const;
 
   void directory_monitor_thread_proc();
+
+  void notify_failed();
 
  private:
   bool background_init;

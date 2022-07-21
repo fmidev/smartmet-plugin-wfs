@@ -87,22 +87,34 @@ void bw::StoredQueryMap::add_config_dir(const boost::filesystem::path& config_di
 
 void bw::StoredQueryMap::wait_for_init()
 {
+  const auto done = [this]() -> bool
+                             {
+                                 return Spine::Reactor::isShuttingDown()
+                                     or directory_monitor.ready()
+                                     or load_failed;
+                             };
   do {
     std::time_t start = std::time(nullptr);
     std::unique_lock<std::mutex> lock(mutex2);
-    while (!Spine::Reactor::isShuttingDown() && !directory_monitor.ready()) {
-      cond.wait_for(lock, std::chrono::milliseconds(100));
-      if (not loading_started and (std::time(nullptr) - start > 180)) {
-	throw Fmi::Exception::Trace(BCP, "Timed out while waiting for stored query configuration loading to start");
+    while (not cond.wait_for(lock, std::chrono::seconds(1), done)) {
+        if (not loading_started and (std::time(nullptr) - start > 180)) {
+            throw Fmi::Exception::Trace(BCP, "Timed out while waiting for stored query"
+                " configuration loading to start");
       }
     }
   } while (false);
 
   if (init_tasks) {
+    if (Spine::Reactor::isShuttingDown() or load_failed) {
+      init_tasks->stop();
+    }
+
     init_tasks->wait();
   }
 
-  if (load_failed) {
+  if (Spine::Reactor::isShuttingDown()) {
+      // No need to say anything in this case
+  } else if (load_failed) {
       throw Fmi::Exception(BCP, "Failed to load one or more stored query configuration");
   } else {
       std::cout << SmartMet::Spine::log_time_str() << ": [WFS] Initial loading of stored query configuration files finished"
@@ -241,31 +253,7 @@ void bw::StoredQueryMap::add_handler(StoredQueryConfig::Ptr sqh_config,
   }
   catch (...)
   {
-    throw Fmi::Exception::Trace(BCP, "Operation failed!");
-  }
-}
-
-void bw::StoredQueryMap::add_handler_thread_proc(StoredQueryConfig::Ptr config,
-                                                 const boost::filesystem::path& template_dir)
-{
-  try
-  {
-    try
-    {
-      add_handler(config, template_dir);
-    }
-    catch (const std::exception& err)
-    {
-      std::ostringstream msg;
-      msg << SmartMet::Spine::log_time_str() << ": [WFS] [ERROR] [C++ exception of type '"
-          << Fmi::current_exception_type() << "']: " << err.what() << "\n";
-      msg << "### Terminated ###\n";
-      std::cerr << msg.str() << std::flush;
-      abort();
-    }
-  }
-  catch (...)
-  {
+    notify_failed();
     throw Fmi::Exception::Trace(BCP, "Operation failed!");
   }
 }
@@ -716,4 +704,11 @@ Json::Value bw::StoredQueryMap::get_constructor_map() const
 bool bw::StoredQueryMap::use_case_sensitive_params() const
 {
   return plugin_impl.get_config().use_case_sensitive_params();
+}
+
+void bw::StoredQueryMap::notify_failed()
+{
+    std::unique_lock<std::mutex> lock(mutex2);
+    load_failed = true;
+    cond.notify_all();
 }
