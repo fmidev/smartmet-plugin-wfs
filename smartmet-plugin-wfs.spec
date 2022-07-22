@@ -3,7 +3,7 @@
 %define SPECNAME smartmet-plugin-%{DIRNAME}
 Summary: SmartMet WFS plugin
 Name: %{SPECNAME}
-Version: 22.7.20
+Version: 22.7.22
 Release: 1%{?dist}.fmi
 License: MIT
 Group: SmartMet/Plugins
@@ -162,6 +162,9 @@ rm -rf $RPM_BUILD_ROOT
 %{_includedir}/smartmet/plugin/wfs/request/*.h
 
 %changelog
+* Fri Jul 22 2022 Andris Pavēnis <andris.pavenis@fmi.fi> 22.7.22-1.fmi
+- Plugin initialization error hanldling update
+
 * Wed Jul 20 2022 Andris Pavēnis <andris.pavenis@fmi.fi> 22.7.20-1.fmi
 - Repackage due to macgyver API changes
 
