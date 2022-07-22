@@ -230,25 +230,31 @@ void bw::StoredQueryMap::add_handler(StoredQueryConfig::Ptr sqh_config,
       if (plugin_impl.get_debug_level() < 1)
         return;
 
-      std::ostringstream msg;
-      std::string prefix = "";
-      if (sqh_config->is_demo())
-        prefix = "DEMO ";
-      if (sqh_config->is_test())
-        prefix = "TEST ";
-      msg << SmartMet::Spine::log_time_str() << ": [WFS] [" << prefix << "stored query ready] id='"
-          << p_handler->get_query_name() << "' config='" << sqh_config->get_file_name() << "'\n";
-      std::cout << msg.str() << std::flush;
+      if (not Spine::Reactor::isShuttingDown()) {
+	std::ostringstream msg;
+	std::string prefix = "";
+	if (sqh_config->is_demo())
+	  prefix = "DEMO ";
+	if (sqh_config->is_test())
+	  prefix = "TEST ";
+	msg << SmartMet::Spine::log_time_str() << ": [WFS] ["
+	    << prefix << "stored query ready] id='"
+	    << p_handler->get_query_name() << "' config='"
+	    << sqh_config->get_file_name() << "'\n";
+	std::cout << msg.str() << std::flush;
+      }
     }
     catch (const std::exception&)
     {
-      std::ostringstream msg;
-      msg << SmartMet::Spine::log_time_str()
-          << ": [WFS] [ERROR] Failed to add stored query handler. Configuration '"
-          << sqh_config->get_file_name() << "\n";
-      std::cout << msg.str() << std::flush;
+      if (not Spine::Reactor::isShuttingDown()) {
+	std::ostringstream msg;
+	msg << SmartMet::Spine::log_time_str()
+	    << ": [WFS] [ERROR] Failed to add stored query handler. Configuration '"
+	    << sqh_config->get_file_name() << "\n";
+	std::cout << msg.str() << std::flush;
 
-      throw Fmi::Exception::Trace(BCP, "Failed to add stored query handler!");
+	throw Fmi::Exception::Trace(BCP, "Failed to add stored query handler!");
+      }
     }
   }
   catch (...)
@@ -317,7 +323,7 @@ void bw::StoredQueryMap::on_config_change(Fmi::DirectoryMonitor::Watcher watcher
 
 	config_dirs.at(watcher).num_updates++;
       } catch (...) {
-        if (!Spine::Reactor::isShuttingDown()) {
+        if (not Spine::Reactor::isShuttingDown()) {
 	  have_errors++;
 	  auto err = Fmi::Exception::SquashTrace(BCP, "Operation failed!");
 	  std::cout << err << std::endl;
@@ -334,7 +340,7 @@ void bw::StoredQueryMap::on_config_change(Fmi::DirectoryMonitor::Watcher watcher
 	try {
 	  handle_query_add(fn, template_dir, initial_update, true);
 	} catch (...) {
-            if (!Spine::Reactor::isShuttingDown()) {
+            if (not Spine::Reactor::isShuttingDown()) {
                 auto err = Fmi::Exception::SquashTrace(BCP, "Operation failed!");
                 std::cout << err << std::endl;
             }
@@ -346,7 +352,7 @@ void bw::StoredQueryMap::on_config_change(Fmi::DirectoryMonitor::Watcher watcher
       std::ostringstream msg;
       msg << "Failed to process " << have_errors << " store query configuration files";
       auto err = Fmi::Exception::Trace(BCP, msg.str());
-      if (!Spine::Reactor::isShuttingDown()) {
+      if (not Spine::Reactor::isShuttingDown()) {
           if (initial_update) {
               load_failed = true;
               throw err;
@@ -502,7 +508,7 @@ void bw::StoredQueryMap::handle_query_add(const std::string& config_file_name,
       if (should_be_ignored(*sqh_config)) {
 	handle_query_ignore(*sqh_config, initial_update);
       } else {
-	if (verbose) {
+	if (verbose and not Spine::Reactor::isShuttingDown()) {
 	  std::ostringstream msg;
 	  msg << SmartMet::Spine::log_time_str() << ": [WFS] Adding stored query: id='"
 	      << sqh_config->get_query_id() << "' config='" << config_file_name << "'\n";
@@ -583,15 +589,17 @@ void bw::StoredQueryMap::handle_query_ignore(const StoredQueryConfig& sqh_config
     auto prev_handler = get_handler_by_name_nothrow(sqh_config.get_query_id());
     if (prev_handler) {
       if (sqh_config.get_file_name() == prev_handler->get_config()->get_file_name()) {
-	std::ostringstream msg;
-	msg << SmartMet::Spine::log_time_str() << ": [WFS] ";
-	if (reason) {
-	  msg << '[' << *reason << "] ";
-	} else {
-	  msg << "[Disabled stored query] ";
+	if (not Spine::Reactor::isShuttingDown()) {
+	  std::ostringstream msg;
+	  msg << SmartMet::Spine::log_time_str() << ": [WFS] ";
+	  if (reason) {
+	    msg << '[' << *reason << "] ";
+	  } else {
+	    msg << "[Disabled stored query] ";
+	  }
+	  msg << "Removing previous handler for " << sqh_config.get_query_id() << '\n';
+	  std::cout << msg.str() << std::flush;
 	}
-	msg << "Removing previous handler for " << sqh_config.get_query_id() << '\n';
-	std::cout << msg.str() << std::flush;
 
 	boost::unique_lock<boost::shared_mutex> lock(mutex);
 	handler_map.erase(Fmi::ascii_tolower_copy(id));
