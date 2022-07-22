@@ -321,6 +321,9 @@ void bw::StoredQueryMap::on_config_change(Fmi::DirectoryMonitor::Watcher watcher
 	  have_errors++;
 	  auto err = Fmi::Exception::SquashTrace(BCP, "Operation failed!");
 	  std::cout << err << std::endl;
+	  if (initial_update) {
+	    notify_failed();
+	  }
         }
       }
     }
