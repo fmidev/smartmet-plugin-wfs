@@ -3,7 +3,7 @@
 %define SPECNAME smartmet-plugin-%{DIRNAME}
 Summary: SmartMet WFS plugin
 Name: %{SPECNAME}
-Version: 22.7.27
+Version: 22.7.28
 Release: 1%{?dist}.fmi
 License: MIT
 Group: SmartMet/Plugins
@@ -44,7 +44,7 @@ BuildRequires: smartmet-engine-contour-devel >= 22.7.27
 BuildRequires: smartmet-engine-geonames-devel >= 22.7.27
 BuildRequires: smartmet-engine-gis-devel >= 22.7.27
 BuildRequires: smartmet-engine-grid-devel >= 22.6.17
-BuildRequires: smartmet-engine-querydata-devel >= 22.7.27
+BuildRequires: smartmet-engine-querydata-devel >= 22.7.28
 BuildRequires: smartmet-library-grid-content-devel >= 22.5.24
 BuildRequires: smartmet-library-grid-files-devel >= 22.5.24
 %if %{with observation}
@@ -70,7 +70,7 @@ Requires: smartmet-library-grid-files >= 22.5.24
 %if %{with observation}
 Requires: smartmet-engine-observation >= 22.7.27
 %endif
-Requires: smartmet-engine-querydata >= 22.7.27
+Requires: smartmet-engine-querydata >= 22.7.28
 Requires: smartmet-server >= 22.7.20
 Requires: xerces-c
 Requires: xqilla
@@ -110,7 +110,7 @@ Obsoletes: smartmet-brainstorm-wfs-debuginfo < 16.11.1
 #TestRequires: smartmet-library-spine-plugin-test >= 22.7.27
 #TestRequires: smartmet-engine-geonames >= 22.7.27
 #TestRequires: smartmet-engine-gis >= 22.7.27
-#TestRequires: smartmet-engine-querydata >= 22.7.27
+#TestRequires: smartmet-engine-querydata >= 22.7.28
 %if %{with observation}
 #TestRequires: smartmet-engine-observation >= 22.7.27
 %endif
@@ -162,6 +162,9 @@ rm -rf $RPM_BUILD_ROOT
 %{_includedir}/smartmet/plugin/wfs/request/*.h
 
 %changelog
+* Thu Jul 28 2022 Mika Heiskanen <mika.heiskanen@fmi.fi> - 22.7.28-1.fmi
+- Repackaged due to QEngine ABI change
+
 * Wed Jul 27 2022 Mika Heiskanen <mika.heiskanen@fmi.fi> - 22.7.27-1.fmi
 - Repackaged since macgyver CacheStats ABI changed
 
