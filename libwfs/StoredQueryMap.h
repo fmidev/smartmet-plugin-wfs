@@ -58,14 +58,13 @@ class StoredQueryMap final
 
   Json::Value get_constructor_map() const;
 
+  bool use_case_sensitive_params() const;
+
  private:
   void add_handler(boost::shared_ptr<StoredQueryHandlerBase> handler);
 
     void add_handler(boost::shared_ptr<StoredQueryConfig> sqh_config,
                    const boost::filesystem::path& template_dir);
-
-  void add_handler_thread_proc(boost::shared_ptr<StoredQueryConfig> config,
-                               const boost::filesystem::path& template_dir);
 
   void on_config_change(Fmi::DirectoryMonitor::Watcher watcher,
 			const boost::filesystem::path& path,
@@ -109,10 +108,13 @@ class StoredQueryMap final
 
   void directory_monitor_thread_proc();
 
+  void notify_failed();
+
  private:
   bool background_init;
   std::atomic<bool> reload_required;
   std::atomic<bool> loading_started;
+  std::atomic<bool> load_failed;
   mutable boost::shared_mutex mutex;
   mutable std::mutex mutex2;
   std::condition_variable cond;

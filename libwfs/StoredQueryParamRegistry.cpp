@@ -63,7 +63,9 @@ boost::shared_ptr<bw::RequestParameterMap> StoredQueryParamRegistry::process_par
 {
   try
   {
-    boost::shared_ptr<bw::RequestParameterMap> result(new bw::RequestParameterMap);
+    bool case_sensitive_params = get_config()->use_case_sensitive_params();
+    boost::shared_ptr<bw::RequestParameterMap> result(
+	new bw::RequestParameterMap(case_sensitive_params));
 
     for (const auto& map_item : param_map)
     {

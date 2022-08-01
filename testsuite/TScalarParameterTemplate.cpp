@@ -118,7 +118,7 @@ BOOST_AUTO_TEST_CASE(simple_point_param)
   BOOST_REQUIRE_NO_THROW(pt.reset(new ScalarParameterTemplate(*config, "foo", false)));
 
   Point value;
-  RequestParameterMap param_map;
+  RequestParameterMap param_map(false);
 
   add(param_map, "test", "24.32,61.12,EPSG:4258");
   BOOST_CHECK_NO_THROW(value = pt->get<SmartMet::Spine::Point>(param_map));
@@ -150,7 +150,7 @@ BOOST_AUTO_TEST_CASE(simple_bbox_param)
   BOOST_REQUIRE_NO_THROW(pt.reset(new ScalarParameterTemplate(*config, "foo", false)));
 
   BoundingBox value;
-  RequestParameterMap param_map;
+  RequestParameterMap param_map(false);
 
   add(param_map, "test", "24.32,61.12,25.99,62.17,EPSG:4258");
   BOOST_CHECK_NO_THROW(value = pt->get<SmartMet::Spine::BoundingBox>(param_map));
@@ -242,7 +242,7 @@ BOOST_AUTO_TEST_CASE(simple_param_with_default)
   BOOST_REQUIRE(item.default_value);
   BOOST_CHECK_EQUAL(*item.default_value, std::string("bar"));
 
-  RequestParameterMap param_map;
+  RequestParameterMap param_map(false);
   add(param_map, "test2", "baz");
 
   std::string value;
@@ -282,7 +282,7 @@ BOOST_AUTO_TEST_CASE(simple_param_weak_ref_with_default)
   BOOST_REQUIRE(item.default_value);
   BOOST_CHECK_EQUAL(*item.default_value, std::string("bar"));
 
-  RequestParameterMap param_map;
+  RequestParameterMap param_map(false);
   add(param_map, "test3", "baz");
 
   std::string value;
@@ -318,7 +318,7 @@ BOOST_AUTO_TEST_CASE(simple_param_with_default_containing_space)
   BOOST_REQUIRE(item.default_value);
   BOOST_CHECK_EQUAL(*item.default_value, std::string("bar baz 2"));
 
-  RequestParameterMap param_map;
+  RequestParameterMap param_map(false);
   add(param_map, "test2", "baz");
 
   std::string value;
@@ -357,7 +357,7 @@ BOOST_AUTO_TEST_CASE(simple_param_from_array_no_default)
   BOOST_CHECK_EQUAL(*item.param_ind, (std::size_t)3);
   BOOST_CHECK(not item.default_value);
 
-  RequestParameterMap param_map;
+  RequestParameterMap param_map(false);
   add(param_map, "test", (int64_t)1);
   add(param_map, "test", (int64_t)2);
   add(param_map, "test", (int64_t)3);
@@ -421,7 +421,7 @@ BOOST_AUTO_TEST_CASE(simple_param_from_array_with_default)
   const ptime t3(time_from_string("2012-10-24 14:02"));
   const ptime t4(time_from_string("2012-10-24 15:43"));
 
-  RequestParameterMap param_map;
+  RequestParameterMap param_map(false);
   ptime value;
   BOOST_CHECK_NO_THROW(value = pt->get<boost::posix_time::ptime>(param_map));
   BOOST_CHECK_EQUAL(value, t0);
@@ -488,7 +488,7 @@ BOOST_AUTO_TEST_CASE(using_absent_parameters)
   BOOST_CHECK(not item.default_value);
 
   double foo;
-  RequestParameterMap param_map;
+  RequestParameterMap param_map(false);
   add(param_map, "test", 1.0);
   BOOST_CHECK_THROW(pt->get<double>(param_map), Fmi::Exception);
   BOOST_CHECK_NO_THROW(pt->get(param_map, &foo));

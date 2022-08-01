@@ -271,7 +271,7 @@ void bw::StoredFlashQueryHandler::query(const StoredQuery& query,
 
       auto projSrsDim = (show_height ? 3 : 2);
 
-      bw::FeatureID feature_id(get_config()->get_query_id(), params.get_map(), sq_id);
+      bw::FeatureID feature_id(get_config()->get_query_id(), params.get_map(true), sq_id);
 
       hash["language"] = language;
 

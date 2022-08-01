@@ -3,19 +3,29 @@
 %define SPECNAME smartmet-plugin-%{DIRNAME}
 Summary: SmartMet WFS plugin
 Name: %{SPECNAME}
-Version: 22.5.31
+Version: 22.7.28
 Release: 1%{?dist}.fmi
 License: MIT
 Group: SmartMet/Plugins
 URL: https://github.com/fmidev/smartmet-plugin-wfs
 Source0: %{name}.tar.gz
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
+
+%if 0%{?rhel} && 0%{rhel} < 9
+%define smartmet_boost boost169
+%else
+%define smartmet_boost boost
+%endif
+
+%define smartmet_fmt_min 8.1.1
+%define smartmet_fmt_max 8.2.0
+
 BuildRequires: rpm-build
 BuildRequires: gcc-c++
 BuildRequires: make
-BuildRequires: boost169-devel
+BuildRequires: %{smartmet_boost}-devel
 BuildRequires: ctpp2-devel
-BuildRequires: fmt-devel >= 7.1.3
+BuildRequires: fmt-devel >= %{smartmet_fmt_min}, fmt-devel < %{smartmet_fmt_max}
 BuildRequires: gdal34-devel
 BuildRequires: jsoncpp-devel
 BuildRequires: libcurl-devel
@@ -23,60 +33,63 @@ BuildRequires: xerces-c-devel
 BuildRequires: xqilla-devel
 BuildRequires: openssl-devel
 BuildRequires: bzip2-devel
-BuildRequires: smartmet-library-timeseries-devel >= 22.5.24
-BuildRequires: smartmet-library-spine-devel >= 22.5.24
-BuildRequires: smartmet-library-gis-devel >= 22.5.4
-BuildRequires: smartmet-library-trax-devel >= 22.5.23
-BuildRequires: smartmet-library-locus-devel >= 22.3.28
-BuildRequires: smartmet-library-macgyver-devel >= 22.5.24
-BuildRequires: smartmet-engine-contour-devel >= 22.5.24
-BuildRequires: smartmet-engine-geonames-devel >= 22.5.24
-BuildRequires: smartmet-engine-gis-devel >= 22.5.24
-BuildRequires: smartmet-engine-grid-devel >= 22.5.24
-BuildRequires: smartmet-engine-querydata-devel >= 22.5.31
+BuildRequires: zlib-devel
+BuildRequires: smartmet-library-timeseries-devel >= 22.7.27
+BuildRequires: smartmet-library-spine-devel >= 22.7.27
+BuildRequires: smartmet-library-gis-devel >= 22.7.27
+BuildRequires: smartmet-library-trax-devel >= 22.6.16
+BuildRequires: smartmet-library-locus-devel >= 22.6.16
+BuildRequires: smartmet-library-macgyver-devel >= 22.7.27
+BuildRequires: smartmet-engine-contour-devel >= 22.7.27
+BuildRequires: smartmet-engine-geonames-devel >= 22.7.27
+BuildRequires: smartmet-engine-gis-devel >= 22.7.27
+BuildRequires: smartmet-engine-grid-devel >= 22.6.17
+BuildRequires: smartmet-engine-querydata-devel >= 22.7.28
 BuildRequires: smartmet-library-grid-content-devel >= 22.5.24
 BuildRequires: smartmet-library-grid-files-devel >= 22.5.24
 %if %{with observation}
-BuildRequires: smartmet-engine-observation-devel >= 22.5.31
+BuildRequires: smartmet-engine-observation-devel >= 22.7.27
 %endif
 Requires: ctpp2
-Requires: fmt >= 7.1.3
+Requires: fmt >= %{smartmet_fmt_min}, fmt < %{smartmet_fmt_max}
 Requires: libcurl
 Requires: jsoncpp
-Requires: smartmet-library-locus >= 22.3.28
-Requires: smartmet-library-macgyver >= 22.5.24
-Requires: smartmet-library-spine >= 22.5.24
-Requires: smartmet-library-timeseries >= 22.5.24
-Requires: smartmet-library-gis >= 22.5.4
-Requires: smartmet-library-trax >= 22.5.23
-Requires: smartmet-engine-contour >= 22.5.24
-Requires: smartmet-engine-geonames >= 22.5.24
-Requires: smartmet-engine-gis >= 22.5.24
-Requires: smartmet-engine-grid >= 22.5.24
+Requires: zlib
+Requires: smartmet-library-locus >= 22.6.16
+Requires: smartmet-library-macgyver >= 22.7.27
+Requires: smartmet-library-spine >= 22.7.27
+Requires: smartmet-library-timeseries >= 22.7.27
+Requires: smartmet-library-gis >= 22.7.27
+Requires: smartmet-library-trax >= 22.6.16
+Requires: smartmet-engine-contour >= 22.7.27
+Requires: smartmet-engine-geonames >= 22.7.27
+Requires: smartmet-engine-gis >= 22.7.27
+Requires: smartmet-engine-grid >= 22.6.17
 Requires: smartmet-library-grid-content >= 22.5.24
 Requires: smartmet-library-grid-files >= 22.5.24
 %if %{with observation}
-Requires: smartmet-engine-observation >= 22.5.31
+Requires: smartmet-engine-observation >= 22.7.27
 %endif
-Requires: smartmet-engine-querydata >= 22.5.31
-Requires: smartmet-server >= 22.5.16
+Requires: smartmet-engine-querydata >= 22.7.28
+Requires: smartmet-server >= 22.7.20
 Requires: xerces-c
 Requires: xqilla
-Requires: boost169-chrono
-Requires: boost169-date-time
-Requires: boost169-filesystem
-Requires: boost169-iostreams
-Requires: boost169-serialization
-Requires: boost169-system
-Requires: boost169-thread
+Requires: zlib
+Requires: %{smartmet_boost}-chrono
+Requires: %{smartmet_boost}-date-time
+Requires: %{smartmet_boost}-filesystem
+Requires: %{smartmet_boost}-iostreams
+Requires: %{smartmet_boost}-serialization
+Requires: %{smartmet_boost}-system
+Requires: %{smartmet_boost}-thread
 
 %if %{defined el7}
 Requires: libpqxx < 1:7.0
 BuildRequires: libpqxx-devel < 1:7.0
 %else
-%if %{defined el8}
-Requires: libpqxx >= 6.2.5
-BuildRequires: libpqxx-devel >= 6.2.5
+%if 0%{?rhel} && 0%{rhel} >= 8
+Requires: libpqxx >= 1:7.7.0, libpqxx < 1:7.8.0
+BuildRequires: libpqxx-devel >= 1:7.7.0, libpqxx-devel < 1:7.8.0
 %else
 Requires: libpqxx
 BuildRequires: libpqxx-devel
@@ -91,16 +104,17 @@ Obsoletes: smartmet-brainstorm-wfs-debuginfo < 16.11.1
 #TestRequires: smartmet-test-db >= 21.1.21
 #TestRequires: smartmet-test-data >= 20.6.30
 #TestRequires: smartmet-utils-devel
-#TestRequires: smartmet-library-gis >= 22.5.4
-#TestRequires: smartmet-library-newbase >= 21.1.21
-#TestRequires: smartmet-library-spine-plugin-test >= 22.4.26
-#TestRequires: smartmet-engine-geonames >= 22.5.24
-#TestRequires: smartmet-engine-gis >= 22.5.24
-#TestRequires: smartmet-engine-querydata >= 22.5.31
+#TestRequires: smartmet-library-macgyver >= 22.7.27
+#TestRequires: smartmet-library-gis >= 22.7.27
+#TestRequires: smartmet-library-newbase >= 22.6.16
+#TestRequires: smartmet-library-spine-plugin-test >= 22.7.27
+#TestRequires: smartmet-engine-geonames >= 22.7.27
+#TestRequires: smartmet-engine-gis >= 22.7.27
+#TestRequires: smartmet-engine-querydata >= 22.7.28
 %if %{with observation}
-#TestRequires: smartmet-engine-observation >= 22.5.31
+#TestRequires: smartmet-engine-observation >= 22.7.27
 %endif
-#TestRequires: smartmet-engine-grid >= 22.5.24
+#TestRequires: smartmet-engine-grid >= 22.6.17
 #TestRequires: redis
 #TestRequires: smartmet-engine-grid-test
 # Required by top level Makefile
@@ -111,10 +125,10 @@ SmartMet WFS plugin
 
 %package -n %{SPECNAME}-devel
 Summary: SmartMet WFS plugin development files
-Requires: smartmet-library-spine-devel >= 22.5.24
-Requires: smartmet-library-gis-devel >= 22.5.4
-Requires: smartmet-library-locus-devel >= 22.3.28
-Requires: smartmet-library-macgyver-devel >= 22.5.24
+Requires: smartmet-library-spine-devel >= 22.7.27
+Requires: smartmet-library-gis-devel >= 22.7.27
+Requires: smartmet-library-locus-devel >= 22.6.16
+Requires: smartmet-library-macgyver-devel >= 22.7.27
 Requires: %{SPECNAME} = %{version}-%{release}
 %description -n %{SPECNAME}-devel
 SmartMet WFS plugin development files (for building testsuite without rebuilding plugin)
@@ -135,7 +149,7 @@ make %{_smp_mflags} \
 rm -rf $RPM_BUILD_ROOT
 
 %files
-%defattr(0775,root,root,0775)
+%defattr(0775,root,root,07.27
 %{_datadir}/smartmet/plugins/wfs.so
 %defattr(0664,root,root,0775)
 %{_sysconfdir}/smartmet/plugins/wfs/templates/*.c2t
@@ -148,6 +162,24 @@ rm -rf $RPM_BUILD_ROOT
 %{_includedir}/smartmet/plugin/wfs/request/*.h
 
 %changelog
+* Thu Jul 28 2022 Mika Heiskanen <mika.heiskanen@fmi.fi> - 22.7.28-1.fmi
+- Repackaged due to QEngine ABI change
+
+* Wed Jul 27 2022 Mika Heiskanen <mika.heiskanen@fmi.fi> - 22.7.27-1.fmi
+- Repackaged since macgyver CacheStats ABI changed
+
+* Fri Jul 22 2022 Andris Pavēnis <andris.pavenis@fmi.fi> 22.7.22-1.fmi
+- Plugin initialization error hanldling update
+
+* Wed Jul 20 2022 Andris Pavēnis <andris.pavenis@fmi.fi> 22.7.20-1.fmi
+- Repackage due to macgyver API changes
+
+* Mon Jul 18 2022 Andris Pavēnis <andris.pavenis@fmi.fi> 22.7.18-1.fmi
+- Parameter case sensitivity update, fail loading plugin in case of stored query config errors
+
+* Tue Jun 21 2022 Andris Pavēnis <andris.pavenis@fmi.fi> 22.6.21-1.fmi
+- Add support for RHEL9, upgrade libpqxx to 7.7.0 (rhel8+) and fmt to 8.1.1
+
 * Tue May 31 2022 Andris Pavēnis <andris.pavenis@fmi.fi> 22.5.31-1.fmi
 - Repackage due to smartmet-engine-querydata and smartmet-engine-observation ABI changes
 

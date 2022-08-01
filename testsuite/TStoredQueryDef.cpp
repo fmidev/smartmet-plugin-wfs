@@ -152,3 +152,25 @@ BOOST_AUTO_TEST_CASE(test_scalar_time_def)
   BOOST_CHECK(param_def.getMinSize() == 1);
   BOOST_CHECK(param_def.getMaxSize() == 1);
 }
+
+BOOST_AUTO_TEST_CASE(test_valid_array_def)
+{
+  StoredQueryParamDef param_def;
+  BOOST_TEST_MESSAGE(
+      "+ [StoredQueryParamDef] Testing valid array parameter specifications (parse only)");
+  BOOST_CHECK_NO_THROW(param_def.parse_def("int"));
+  BOOST_CHECK_NO_THROW(param_def.parse_def("integer"));
+  BOOST_CHECK_NO_THROW(param_def.parse_def("integer[1..999]"));
+}
+
+BOOST_AUTO_TEST_CASE(test_invalid_array_def)
+{
+  StoredQueryParamDef param_def;
+  BOOST_TEST_MESSAGE(
+      "+ [StoredQueryParamDef] Testing invalid array parameter specifications");
+  BOOST_CHECK_THROW(param_def.parse_def("int[a..b]"), Fmi::Exception);
+  BOOST_CHECK_THROW(param_def.parse_def("int[1..99X]"), Fmi::Exception);
+  BOOST_CHECK_THROW(param_def.parse_def("int[1...99]"), Fmi::Exception);
+  BOOST_CHECK_THROW(param_def.parse_def("int[1C..99]"), Fmi::Exception);
+  BOOST_CHECK_THROW(param_def.parse_def("int[1..-99]"), Fmi::Exception);
+}

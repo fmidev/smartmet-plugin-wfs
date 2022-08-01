@@ -145,7 +145,7 @@ BOOST_AUTO_TEST_CASE(test_parameters_redirection_1)
   BOOST_REQUIRE_NO_THROW(LOG_EXCEPTION(
       extra_params.reset(new SupportsExtraHandlerParams(config, true, "named_params"))));
 
-  std::multimap<std::string, Value> param_map;
+  RequestParameterMap param_map(false);
 
   std::vector<double> bbox;
   BOOST_REQUIRE_NO_THROW(bbox = pt->get_double_array(param_map, extra_params.get()));
@@ -155,10 +155,10 @@ BOOST_AUTO_TEST_CASE(test_parameters_redirection_1)
   BOOST_REQUIRE_CLOSE(25.0, bbox.at(2), 1e-10);
   BOOST_REQUIRE_CLOSE(65.0, bbox.at(3), 1e-10);
 
-  add(param_map, "bbox", 21.0);
-  add(param_map, "bbox", 61.0);
-  add(param_map, "bbox", 22.0);
-  add(param_map, "bbox", 62.0);
+  param_map.add<double>("bbox", 21.0);
+  param_map.add<double>("bbox", 61.0);
+  param_map.add<double>("bbox", 22.0);
+  param_map.add<double>("bbox", 62.0);
   BOOST_REQUIRE_NO_THROW(bbox = pt->get_double_array(param_map, extra_params.get()));
   BOOST_REQUIRE_EQUAL(4, (int)bbox.size());
   BOOST_REQUIRE_CLOSE(21.0, bbox.at(0), 1e-10);

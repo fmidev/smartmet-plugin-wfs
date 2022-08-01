@@ -128,7 +128,7 @@ BOOST_AUTO_TEST_CASE(array_param_1)
   BOOST_CHECK(not item.param_ind);
   BOOST_CHECK(not item.default_value);
 
-  RequestParameterMap param_map;
+  RequestParameterMap param_map(false);
   add(param_map, "test2", "baz");
 
   std::vector<std::string> value;
@@ -174,7 +174,7 @@ BOOST_AUTO_TEST_CASE(array_param_1_non_root)
   BOOST_CHECK(not item.param_ind);
   BOOST_CHECK(not item.default_value);
 
-  RequestParameterMap param_map;
+  RequestParameterMap param_map(false);
   add(param_map, "test2", "baz");
 
   std::vector<std::string> value;
@@ -232,7 +232,7 @@ BOOST_AUTO_TEST_CASE(mix_of_predefined_and_given_parameters_1)
   BOOST_CHECK(not item1.param_ind);
   BOOST_CHECK(not item1.default_value);
 
-  RequestParameterMap param_map;
+  RequestParameterMap param_map(false);
   add(param_map, "test", 1.2);
 
   std::vector<double> value;
@@ -282,7 +282,7 @@ BOOST_AUTO_TEST_CASE(mix_of_predefined_and_given_parameters_2)
   BOOST_CHECK(not item1.param_ind);
   BOOST_CHECK(not item1.default_value);
 
-  RequestParameterMap param_map;
+  RequestParameterMap param_map(false);
   add(param_map, "test", 1.2);
   add(param_map, "test", 1.21);
 
@@ -364,7 +364,7 @@ BOOST_AUTO_TEST_CASE(array_parameter_shuffle_2)
     BOOST_CHECK(item.default_value);
   }
 
-  RequestParameterMap param_map;
+  RequestParameterMap param_map(false);
   std::vector<std::string> t1;
   BOOST_REQUIRE_NO_THROW(t1 = pt->get_string_array(param_map));
   BOOST_REQUIRE_EQUAL(4, (int)t1.size());

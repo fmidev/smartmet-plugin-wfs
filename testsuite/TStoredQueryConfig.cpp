@@ -109,7 +109,7 @@ BOOST_AUTO_TEST_CASE(test_single_scalar_parameter_without_default)
   raw_config->add_scalar("p", "${foo}");
 
   int val;
-  RequestParameterMap param_map;
+  RequestParameterMap param_map(false);
   StoredQueryConfigP config;
   ScalarParameterTemplateP param;
   // SmartMet::Spine::ConfigBase::dump_config(std::cout, *raw_config);
@@ -144,7 +144,7 @@ BOOST_AUTO_TEST_CASE(test_single_scalar_parameter_with_default_value)
   raw_config->add_scalar("p", "${foo : 512}");
 
   int val;
-  RequestParameterMap param_map;
+  RequestParameterMap param_map(false);
   StoredQueryConfigP config;
   ScalarParameterTemplateP param;
   // SmartMet::Spine::ConfigBase::dump_config(std::cout, *raw_config);
@@ -180,7 +180,7 @@ BOOST_AUTO_TEST_CASE(test_single_scalar_parameter_with_lower_limit)
   raw_config->add_scalar("p", "${foo}");
 
   pt::ptime val;
-  RequestParameterMap param_map;
+  RequestParameterMap param_map(false);
   StoredQueryConfigP config;
   ScalarParameterTemplateP param;
   // SmartMet::Spine::ConfigBase::dump_config(std::cout, *raw_config);
@@ -221,7 +221,7 @@ BOOST_AUTO_TEST_CASE(test_single_mandatory_array_parameter_with_fixed_length)
   raw_config->add_array<1>("p", p001);
 
   std::vector<double> data;
-  RequestParameterMap param_map;
+  RequestParameterMap param_map(false);
   StoredQueryConfigP config;
   ArrayParameterTemplateP param;
 

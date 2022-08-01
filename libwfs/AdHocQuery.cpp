@@ -176,7 +176,9 @@ void bw::AdHocQuery::create_from_kvp(const std::string& language,
             stored_query_map.get_handler_by_name(query_id);
 
         // Create query object to the query list.
-        bw::AdHocQuery::create_query(handler, batch_of_queries);
+        bw::AdHocQuery::create_query(handler,
+				     batch_of_queries,
+				     stored_query_map.use_case_sensitive_params());
 
         bw::AdHocQuery::process_parms(language, query_id, spp, batch_of_queries);
 
@@ -301,6 +303,7 @@ void bw::AdHocQuery::create_bbox_query_from_kvp(
       {
         try
         {
+	  bool case_sensitive_params = stored_query_map.use_case_sensitive_params();
           const bw::StoredQueryParamDef& param_def = param_desc->param_def;
           SmartMet::Spine::Value value = param_def.readValue(bbox_string);
           value.check_limits(param_desc->lower_limit, param_desc->upper_limit);
@@ -312,7 +315,7 @@ void bw::AdHocQuery::create_bbox_query_from_kvp(
           query->language = language;
           query->set_stale_seconds(config->get_expires_seconds());
 
-          query->params.reset(new bw::RequestParameterMap);
+          query->params.reset(new bw::RequestParameterMap(case_sensitive_params));
           query->orig_params = query->params;
           query->skipped_params.clear();
 
@@ -320,7 +323,7 @@ void bw::AdHocQuery::create_bbox_query_from_kvp(
 
           query->params = query->handler->process_params(query_id, query->orig_params);
 
-          bw::FeatureID feature_id(query_id, query->params->get_map(), 0);
+          bw::FeatureID feature_id(query_id, query->params->get_map(true), 0);
           feature_id.add_param("language", language);
 
           if (query->debug_format)
@@ -409,7 +412,9 @@ void bw::AdHocQuery::create_from_xml(const std::string& language,
       else
       {
         // No filter were defined, create query with default values.
-        bw::AdHocQuery::create_query(handler, batch_of_queries);
+        bw::AdHocQuery::create_query(handler,
+				     batch_of_queries,
+				     stored_query_map.use_case_sensitive_params());
       }
 
       bw::AdHocQuery::process_parms(language, query_id, spp, batch_of_queries);
@@ -458,15 +463,16 @@ void bw::AdHocQuery::extract_xml_parameters(
 {
   try
   {
+    const bool case_sensitive_params = handler->get_config()->use_case_sensitive_params();
     // List for storing first query object indexes of OR elements.
     std::vector<unsigned int> or_query_indexes;
 
     // Create first query object to the query list.
-    bw::AdHocQuery::create_query(handler, queries);
+    bw::AdHocQuery::create_query(handler, queries, case_sensitive_params);
 
     // Parse filter xml elements in the query.
     bw::AdHocQuery::extract_filter_elements(
-        root_element, element_tree, queries, nullptr, or_query_indexes);
+        root_element, element_tree, queries, nullptr, or_query_indexes, case_sensitive_params);
   }
   catch (...)
   {
@@ -475,13 +481,14 @@ void bw::AdHocQuery::extract_xml_parameters(
 }
 
 void bw::AdHocQuery::create_query(boost::shared_ptr<const bw::StoredQueryHandlerBase> handler,
-                                  std::vector<boost::shared_ptr<bw::QueryBase>>& queries)
+                                  std::vector<boost::shared_ptr<bw::QueryBase>>& queries,
+				  bool case_sensitive_params)
 {
   try
   {
     boost::shared_ptr<bw::AdHocQuery> query(new bw::AdHocQuery);
 
-    query->params.reset(new bw::RequestParameterMap);
+    query->params.reset(new bw::RequestParameterMap(case_sensitive_params));
     query->orig_params = query->params;
     query->skipped_params.clear();
     query->handler = handler;
@@ -658,7 +665,7 @@ void bw::AdHocQuery::process_parms(const std::string& language,
       query->id = query_id;
       query->debug_format = spp.get_output_format() == "debug";
 
-      bw::FeatureID feature_id(query_id, query->params->get_map(), 0);
+      bw::FeatureID feature_id(query_id, query->params->get_map(true), 0);
       feature_id.add_param("language", language);
 
       if (query->debug_format)
@@ -678,7 +685,8 @@ void bw::AdHocQuery::extract_filter_elements(const xercesc::DOMElement& root_ele
                                              std::vector<std::string>& element_tree,
                                              std::vector<boost::shared_ptr<QueryBase>>& queries,
                                              AdHocQuery* upper_level_and_query,
-                                             std::vector<unsigned int>& or_query_indexes)
+                                             std::vector<unsigned int>& or_query_indexes,
+					     bool case_sensitive_params)
 {
   try
   {
@@ -715,7 +723,7 @@ void bw::AdHocQuery::extract_filter_elements(const xercesc::DOMElement& root_ele
           (is_query_used(query) || (query == upper_level_and_query)))
       {
         // New query object needs to be created for the current element.
-        bw::AdHocQuery::create_query(query->handler, queries);
+        bw::AdHocQuery::create_query(query->handler, queries, case_sensitive_params);
 
         // Get pointer to the last query in the list.
         query = &dynamic_cast<AdHocQuery&>(*queries.back());
@@ -792,8 +800,12 @@ void bw::AdHocQuery::extract_filter_elements(const xercesc::DOMElement& root_ele
         element_tree.push_back(element_name);
 
         // Parse the child elements of the current element.
-        bw::AdHocQuery::extract_filter_elements(
-            *element, element_tree, queries, and_query, or_query_indexes);
+        bw::AdHocQuery::extract_filter_elements(*element,
+						element_tree,
+						queries,
+						and_query,
+						or_query_indexes,
+						case_sensitive_params);
 
         // Remove the current element name from list.
         element_tree.pop_back();
@@ -801,7 +813,11 @@ void bw::AdHocQuery::extract_filter_elements(const xercesc::DOMElement& root_ele
         // Did we finish parsing AND-element?
         if (element_name == "fes:and")
         {
-          handle_end_of_and_element(queries, or_query_indexes, and_query_index, and_query);
+          handle_end_of_and_element(queries,
+				    or_query_indexes,
+				    and_query_index,
+				    and_query,
+				    case_sensitive_params);
         }
       }
       else  // Read parameter values / comparison operations from XML.
@@ -833,7 +849,8 @@ void bw::AdHocQuery::extract_filter_elements(const xercesc::DOMElement& root_ele
 void bw::AdHocQuery::handle_end_of_and_element(std::vector<boost::shared_ptr<QueryBase>>& queries,
                                                std::vector<unsigned int>& or_query_indexes,
                                                unsigned int and_query_index,
-                                               AdHocQuery* and_query)
+                                               AdHocQuery* and_query,
+					       bool case_sensitive_params)
 {
   try
   {
@@ -895,7 +912,7 @@ void bw::AdHocQuery::handle_end_of_and_element(std::vector<boost::shared_ptr<Que
             const AdHocQuery* or_query_2 = &dynamic_cast<AdHocQuery&>(*queries[index_2]);
 
             // Create a new query for containing the combined parameters.
-            bw::AdHocQuery::create_query(and_query->handler, queries);
+            bw::AdHocQuery::create_query(and_query->handler, queries, case_sensitive_params);
             AdHocQuery* combined_query = &dynamic_cast<AdHocQuery&>(*queries.back());
 
             // Copy parameters.

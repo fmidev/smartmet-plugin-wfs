@@ -45,7 +45,7 @@
             xmlns:saf="http://icao.int/saf/1.0">
             om:observedProperty/@xlink:href
           </fes:ValueReference>
-          <fes:Literal>http://beta.fmi.fi/fmi-apikey/foobar/meta?observableProperty=observation&amp;param=t2m&amp;language=eng</fes:Literal>
+          <fes:Literal>http://opendata.fmi.fi/fmi-apikey/foobar/meta?observableProperty=observation&amp;param=t2m&amp;language=eng</fes:Literal>
         </fes:PropertyIsEqualTo>
       </fes:And>
     </fes:Filter>

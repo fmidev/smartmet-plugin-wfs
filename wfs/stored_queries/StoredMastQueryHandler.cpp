@@ -421,7 +421,7 @@ void bw::StoredMastQueryHandler::query(const StoredQuery& query,
 
       // Get the sequence number of query in the request
       int sq_id = query.get_query_id();
-      FeatureID feature_id(get_config()->get_query_id(), params.get_map(), sq_id);
+      FeatureID feature_id(get_config()->get_query_id(), params.get_map(true), sq_id);
       const std::string fullFeatureId = feature_id.get_id();
 
       // Removing some feature id parameters

@@ -63,7 +63,7 @@ boost::shared_ptr<StoredQueryHandlerBase> StoredQueryHandlerFactoryDef::construc
   }
   catch (...)
   {
-    throw Fmi::Exception::Trace(BCP, "Operation failed!");
+    throw Fmi::Exception::SquashTrace(BCP, "Operation failed!");
   }
 }
 

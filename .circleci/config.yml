@@ -62,9 +62,9 @@ jobs:
           path: /dist
           destination: dist/
 
-  build-rhel8:
+  build-rhel9:
     docker:
-      - image: fmidev/smartmet-cibase-8:latest
+      - image: fmidev/smartmet-cibase-9:latest
     resource_class: xlarge
     environment:
       RPM_BUILD_NCPUS: 8
@@ -79,9 +79,9 @@ jobs:
       - persist_to_workspace:
           root: /dist
           paths: ./*.rpm
-  test-rhel8:
+  test-rhel9:
     docker:
-      - image: fmidev/smartmet-cibase-8:latest
+      - image: fmidev/smartmet-cibase-9:latest
     resource_class: xlarge
     environment:
       RPM_BUILD_NCPUS: 8
@@ -101,9 +101,9 @@ jobs:
       - store_artifacts:
           path: /dist
           destination: dist/
-  unit-test-rhel8:
+  unit-test-rhel9:
     docker:
-      - image: fmidev/smartmet-cibase-8:latest
+      - image: fmidev/smartmet-cibase-9:latest
     resource_class: xlarge
     environment:
       RPM_BUILD_NCPUS: 8
@@ -141,7 +141,7 @@ jobs:
           command: |
             export PATH=$PATH:~/.local/bin
             aws s3 cp /dist s3://fmi-smartmet-cicd-beta/centos7/ --recursive
-  upload-rhel8:
+  upload-rhel9:
     docker:
       - image: fmidev/smartmet-cibase-7:latest
     steps:
@@ -158,7 +158,7 @@ jobs:
           name: Sync artifacts to S3
           command: |
             export PATH=$PATH:~/.local/bin
-            aws s3 cp /dist s3://fmi-smartmet-cicd-beta/centos8/ --recursive
+            aws s3 cp /dist s3://fmi-smartmet-cicd-beta/centos9/ --recursive
 
 
 workflows:
@@ -166,26 +166,26 @@ workflows:
   build-test:
     jobs:
       - build-rhel7
-      - build-rhel8
+      - build-rhel9
       - test-rhel7:
           requires:
             - build-rhel7
       - unit-test-rhel7:
           requires:
             - build-rhel7
-      - test-rhel8:
+      - test-rhel9:
           requires:
-            - build-rhel8
-      - unit-test-rhel8:
+            - build-rhel9
+      - unit-test-rhel9:
           requires:
-            - build-rhel8
+            - build-rhel9
       - upload-rhel7:
           context: fmi-global
           requires:
             - test-rhel7
             - unit-test-rhel7
-      - upload-rhel8:
+      - upload-rhel9:
           context: fmi-global
           requires:
-            - test-rhel8
-            - unit-test-rhel8
+            - test-rhel9
+            - unit-test-rhel9

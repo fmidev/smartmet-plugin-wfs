@@ -6,15 +6,35 @@
 namespace bw = SmartMet::Plugin::WFS;
 namespace ph = boost::placeholders;
 
-bw::RequestParameterMap::RequestParameterMap() : params() {}
-
-bw::RequestParameterMap::RequestParameterMap(
-    const std::multimap<std::string, SmartMet::Spine::Value>& params)
-    : params(params)
+bw::RequestParameterMap::RequestParameterMap(bool case_sensitive_params)
+  : params()
+  , case_sensitive_params(case_sensitive_params)
 {
 }
 
+bw::RequestParameterMap::RequestParameterMap(
+    const std::multimap<std::string, SmartMet::Spine::Value>& params,
+    bool case_sensitive_params)
+  : params()
+  , case_sensitive_params(case_sensitive_params)
+{
+  for (const auto& item : params) {
+    insert_value(item.first, item.second);
+  }
+}
+
 bw::RequestParameterMap::~RequestParameterMap() {}
+
+std::multimap<std::string, SmartMet::Spine::Value>
+bw::RequestParameterMap::get_map(bool case_sensitive) const
+{
+  std::multimap<std::string, SmartMet::Spine::Value> result;
+  for (const auto& item : params) {
+    result.emplace(case_sensitive ? item.second.real_name : item.first,
+		   item.second.value);
+  }
+  return result;
+}
 
 void bw::RequestParameterMap::clear()
 {
@@ -44,7 +64,7 @@ std::size_t bw::RequestParameterMap::count(const std::string& name) const
 {
   try
   {
-    return params.count(name);
+    return params.count(case_sensitive_params ? name : Fmi::ascii_tolower_copy(name));
   }
   catch (...)
   {
@@ -57,7 +77,22 @@ void bw::RequestParameterMap::insert_value(const std::string& name,
 {
   try
   {
-    params.insert(std::make_pair(name, value));
+    params.insert(
+	std::make_pair(
+	    case_sensitive_params ? name : Fmi::ascii_tolower_copy(name),
+	    ParamInfo(name, value)));
+  }
+  catch (...)
+  {
+    throw Fmi::Exception::Trace(BCP, "Operation failed!");
+  }
+}
+
+void bw::RequestParameterMap::remove_key(const std::string& name)
+{
+  try
+  {
+    params.erase(case_sensitive_params ? name : Fmi::ascii_tolower_copy(name));
   }
   catch (...)
   {
@@ -73,7 +108,7 @@ std::set<std::string> bw::RequestParameterMap::get_keys() const
     std::transform(params.begin(),
                    params.end(),
                    std::inserter(result, result.begin()),
-                   boost::bind(&std::pair<const std::string, SmartMet::Spine::Value>::first, ph::_1));
+                   boost::bind(&ParamMapType::value_type::first, ph::_1));
     return result;
   }
   catch (...)
@@ -88,12 +123,13 @@ std::vector<SmartMet::Spine::Value> bw::RequestParameterMap::get_values(
   try
   {
     std::vector<SmartMet::Spine::Value> result;
-    auto range = params.equal_range(name);
+    auto range = params.equal_range(
+        case_sensitive_params ? name : Fmi::ascii_tolower_copy(name));
     std::transform(
         range.first,
         range.second,
         std::back_inserter(result),
-        boost::bind(&std::pair<const std::string, SmartMet::Spine::Value>::second, ph::_1));
+	[](const ParamMapType::value_type x) { return x.second.value; });
     return result;
   }
   catch (...)
@@ -107,16 +143,11 @@ void bw::RequestParameterMap::dump_params(CTPP::CDT& hash) const
   try
   {
     const auto keys = get_keys();
-    for (auto it1 = keys.begin(); it1 != keys.end(); ++it1)
+    for (auto& item : params)
     {
-      int ind = 0;
-      const std::string& key = *it1;
-      auto range = params.equal_range(key);
-      for (auto it2 = range.first; it2 != range.second; ++it2)
-      {
-        const auto str = it2->second.to_string();
-        hash[key][ind++] = str;
-      }
+        const std::string str = item.second.value.to_string();
+        CTPP::CDT& hash_item = hash[item.second.real_name];
+        hash_item[hash_item.Size()] = str;
     }
   }
   catch (...)
@@ -129,7 +160,7 @@ void bw::RequestParameterMap::remove(const std::string& name)
 {
   try
   {
-    params.erase(name);
+    params.erase(case_sensitive_params ? name : Fmi::ascii_tolower_copy(name));
   }
   catch (...)
   {
@@ -141,13 +172,17 @@ std::string bw::RequestParameterMap::as_string() const
 {
   try
   {
-    const auto keys = get_keys();
+    const auto tmp = get_map(true);
+    std::set<std::string> keys;
+    for (const auto& item : tmp) {
+        keys.insert(item.first);
+    }
     std::ostringstream output;
     output << "(PARAMETERS";
     for (const auto& key : keys)
     {
       output << " (" << key;
-      auto range = params.equal_range(key);
+      auto range = tmp.equal_range(key);
       for (auto map_it = range.first; map_it != range.second; ++map_it)
       {
         output << " " << map_it->second;
@@ -222,12 +257,14 @@ std::string bw::RequestParameterMap::subst(const std::string& input) const
         src++;
 
         std::vector<SmartMet::Spine::Value> data;
-        auto range = params.equal_range(ref_name);
+        auto range = params.equal_range(
+	    case_sensitive_params ? ref_name : Fmi::ascii_tolower_copy(ref_name));
+
         std::transform(
             range.first,
             range.second,
             std::back_inserter(data),
-            boost::bind(&std::pair<const std::string, SmartMet::Spine::Value>::second, ph::_1));
+            [](const ParamMapType::value_type& x) { return x.second.value; });
 
         if (is_array)
         {

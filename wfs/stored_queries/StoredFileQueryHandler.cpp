@@ -116,7 +116,7 @@ void bw::StoredFileQueryHandler::update_parameters(
 
     result.clear();
 
-    bw::FeatureID feature_id(get_config()->get_query_id(), params.get_map(), seq_id);
+    bw::FeatureID feature_id(get_config()->get_query_id(), params.get_map(true), seq_id);
 
     for (auto it1 = ds_list.begin(); it1 != ds_list.end(); ++it1)
     {
@@ -175,7 +175,8 @@ void bw::StoredFileQueryHandler::update_parameters(
         if ((file == "") or (file == it2->string()))
         {
           pt::ptime origin_time = ds_def.extract_origintime(*it2);
-          boost::shared_ptr<RequestParameterMap> pm1(new RequestParameterMap);
+          boost::shared_ptr<RequestParameterMap> pm1(
+	      new RequestParameterMap(true));
           pm1->add("name", ds_def.get_name());
           pm1->add("basename", it2->filename().string());
           pm1->add("levels", common_levels.begin(), common_levels.end());

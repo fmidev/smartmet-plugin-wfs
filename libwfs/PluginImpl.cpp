@@ -9,17 +9,17 @@
 #include "request/GetPropertyValue.h"
 #include "request/ListStoredQueries.h"
 #include <boost/algorithm/string.hpp>
+#include <boost/bind/bind.hpp>
 #include <boost/date_time/gregorian/gregorian.hpp>
 #include <boost/date_time/posix_time/posix_time.hpp>
-#include <boost/bind/bind.hpp>
 #include <boost/format.hpp>
 #include <boost/lambda/lambda.hpp>
 #include <json/json.h>
+#include <macgyver/Exception.h>
 #include <macgyver/StringConversion.h>
 #include <macgyver/TimeParser.h>
-#include <spine/Convenience.h>
 #include <spine/CRSRegistry.h>
-#include <macgyver/Exception.h>
+#include <spine/Convenience.h>
 #include <spine/FmiApiKey.h>
 
 using namespace SmartMet::Plugin::WFS;
@@ -39,14 +39,11 @@ struct PluginImpl::RequestResult
   RequestResult() : status(SmartMet::Spine::HTTP::not_a_status), may_validate_xml(true), output() {}
 };
 
-PluginImpl::PluginImpl(
-    SmartMet::Spine::Reactor* theReactor,
-    const char* theConfig,
-    Spine::CRSRegistry& crs_registry)
+PluginImpl::PluginImpl(SmartMet::Spine::Reactor* theReactor,
+                       const char* theConfig,
+                       Spine::CRSRegistry& crs_registry)
 
-    : itsConfig(theConfig)
-    , itsCRSRegistry(crs_registry)
-    , wfs_capabilities(new WfsCapabilities)
+    : itsConfig(theConfig), itsCRSRegistry(crs_registry), wfs_capabilities(new WfsCapabilities)
 {
   try
   {
@@ -68,13 +65,15 @@ PluginImpl::PluginImpl(
             "GetCapabilities",
             "",
             boost::bind(&PluginImpl::parse_kvp_get_capabilities_request, this, ph::_1, ph::_2),
-            boost::bind(&PluginImpl::parse_xml_get_capabilities_request, this, ph::_1, ph::_2, ph::_3))
+            boost::bind(
+                &PluginImpl::parse_xml_get_capabilities_request, this, ph::_1, ph::_2, ph::_3))
 
         .register_request_type(
             "DescribeFeatureType",
             "supportsDescribeFeatureType",
             boost::bind(&PluginImpl::parse_kvp_describe_feature_type_request, this, ph::_1, ph::_2),
-            boost::bind(&PluginImpl::parse_xml_describe_feature_type_request, this, ph::_1, ph::_2, ph::_3))
+            boost::bind(
+                &PluginImpl::parse_xml_describe_feature_type_request, this, ph::_1, ph::_2, ph::_3))
 
         .register_request_type(
             "GetFeature",
@@ -86,19 +85,26 @@ PluginImpl::PluginImpl(
             "GetPropertyValue",
             "supportsGetPropertyValue",
             boost::bind(&PluginImpl::parse_kvp_get_property_value_request, this, ph::_1, ph::_2),
-            boost::bind(&PluginImpl::parse_xml_get_property_value_request, this, ph::_1, ph::_2, ph::_3))
+            boost::bind(
+                &PluginImpl::parse_xml_get_property_value_request, this, ph::_1, ph::_2, ph::_3))
 
         .register_request_type(
             "ListStoredQueries",
             "supportsListStoredQueries",
             boost::bind(&PluginImpl::parse_kvp_list_stored_queries_request, this, ph::_1, ph::_2),
-            boost::bind(&PluginImpl::parse_xml_list_stored_queries_request, this, ph::_1, ph::_2, ph::_3))
+            boost::bind(
+                &PluginImpl::parse_xml_list_stored_queries_request, this, ph::_1, ph::_2, ph::_3))
 
         .register_request_type(
             "DescribeStoredQueries",
             "supportsDescribeStoredQueries",
-            boost::bind(&PluginImpl::parse_kvp_describe_stored_queries_request, this, ph::_1, ph::_2),
-            boost::bind(&PluginImpl::parse_xml_describe_stored_queries_request, this, ph::_1, ph::_2, ph::_3))
+            boost::bind(
+                &PluginImpl::parse_kvp_describe_stored_queries_request, this, ph::_1, ph::_2),
+            boost::bind(&PluginImpl::parse_xml_describe_stored_queries_request,
+                        this,
+                        ph::_1,
+                        ph::_2,
+                        ph::_3))
 
         .register_unimplemented_request_type("LockFeature")
         .register_unimplemented_request_type("GetFeatureWithLock")
@@ -106,7 +112,7 @@ PluginImpl::PluginImpl(
         .register_unimplemented_request_type("DropStoredQuery")
         .register_unimplemented_request_type("Transaction");
 
-    //itsGisEngine = theReactor->getEngine<SmartMet::Engine::Gis::Engine>("Gis");
+    // itsGisEngine = theReactor->getEngine<SmartMet::Engine::Gis::Engine>("Gis");
 
     debug_level = itsConfig.get_optional_config_param<int>("debugLevel", 1);
     fallback_hostname =
@@ -152,9 +158,7 @@ void PluginImpl::shutdown()
   stored_query_map->shutdown();
 }
 
-PluginImpl::~PluginImpl()
-{
-}
+PluginImpl::~PluginImpl() {}
 
 boost::posix_time::ptime PluginImpl::get_time_stamp() const
 {
@@ -618,8 +622,7 @@ void PluginImpl::query(const std::string& req_language,
           {
             if (root_info.attr_map.count("service") == 0)
             {
-              Fmi::Exception exception(
-                  BCP, "Missing the 'service' attribute!", nullptr);
+              Fmi::Exception exception(BCP, "Missing the 'service' attribute!", nullptr);
               exception.addDetails(messages);
               if (exception.getExceptionByParameterName(WFS_EXCEPTION_CODE) == nullptr)
                 exception.addParameter(WFS_EXCEPTION_CODE, WFS_MISSING_PARAMETER_VALUE);
@@ -643,8 +646,7 @@ void PluginImpl::query(const std::string& req_language,
 
             if (root_info.attr_map.count("version") == 0)
             {
-              Fmi::Exception exception(
-                  BCP, "Missing the 'version' attribute!", nullptr);
+              Fmi::Exception exception(BCP, "Missing the 'version' attribute!", nullptr);
               exception.addDetails(messages);
               if (exception.getExceptionByParameterName(WFS_EXCEPTION_CODE) == nullptr)
                 exception.addParameter(WFS_EXCEPTION_CODE, WFS_MISSING_PARAMETER_VALUE);
@@ -667,8 +669,7 @@ void PluginImpl::query(const std::string& req_language,
             }
           }
 
-          Fmi::Exception exception(
-              BCP, "Parsing of the incoming XML request failed", nullptr);
+          Fmi::Exception exception(BCP, "Parsing of the incoming XML request failed", nullptr);
           exception.addDetails(messages);
           if (exception.getExceptionByParameterName(WFS_EXCEPTION_CODE) == nullptr)
             exception.addParameter(WFS_EXCEPTION_CODE, WFS_OPERATION_PARSING_FAILED);
@@ -702,8 +703,8 @@ void PluginImpl::query(const std::string& req_language,
     }
     else
     {
-      Fmi::Exception exception(
-          BCP, "HTTP method '" + req.getMethodString() + "' is not supported!");
+      Fmi::Exception exception(BCP,
+                               "HTTP method '" + req.getMethodString() + "' is not supported!");
       if (exception.getExceptionByParameterName(WFS_EXCEPTION_CODE) == nullptr)
         exception.addParameter(WFS_EXCEPTION_CODE, WFS_OPERATION_PARSING_FAILED);
       exception.addParameter(WFS_LANGUAGE, req_language);
@@ -791,33 +792,40 @@ void PluginImpl::realRequestHandler(SmartMet::Spine::Reactor& /* theReactor */,
       }
 
       if (result.may_validate_xml)
-	try {
-	  maybe_validate_output(theRequest, theResponse);
-	} catch (...) {
-	  auto err = Fmi::Exception::Trace(BCP, "Response XML validation failed");
-	  if (get_config().getFailOnValidateErrors()) {
-	    std::ostringstream msg;
-	    const std::string content = theResponse.getContent();
-	    std::vector<std::string> lines;
-	    ba::split(lines, content, ba::is_any_of("\n"));
-	    msg << "########################################################################\n"
-		<< "# Validation of XML response has failed\n"
-		<< "########################################################################\n"
-		<< theRequest.toString() << '\n'
-		<< "########################################################################\n";
-	    for (std::size_t i = 0; i < lines.size(); i++) {
-	      msg << (boost::format("%06d: %s\n") % (i+1) % lines.at(i)).str();
-	    }
-	    msg << "########################################################################\n";
-	    msg << err.getStackTrace();
-	    msg << "########################################################################\n";
-	    std::cout << msg.str();
-	    err.addParameter(WFS_EXCEPTION_CODE, WFS_OPERATION_PROCESSING_FAILED);
-	    throw err;
-	  } else {
-	    Fmi::Exception::Trace(BCP, "Response validation failed!").printError();
-	  }
-	}
+        try
+        {
+          maybe_validate_output(theRequest, theResponse);
+        }
+        catch (...)
+        {
+          auto err = Fmi::Exception::Trace(BCP, "Response XML validation failed");
+          if (get_config().getFailOnValidateErrors())
+          {
+            std::ostringstream msg;
+            const std::string content = theResponse.getContent();
+            std::vector<std::string> lines;
+            ba::split(lines, content, ba::is_any_of("\n"));
+            msg << "########################################################################\n"
+                << "# Validation of XML response has failed\n"
+                << "########################################################################\n"
+                << theRequest.toString() << '\n'
+                << "########################################################################\n";
+            for (std::size_t i = 0; i < lines.size(); i++)
+            {
+              msg << (boost::format("%06d: %s\n") % (i + 1) % lines.at(i)).str();
+            }
+            msg << "########################################################################\n";
+            msg << err.getStackTrace();
+            msg << "########################################################################\n";
+            std::cout << msg.str();
+            err.addParameter(WFS_EXCEPTION_CODE, WFS_OPERATION_PROCESSING_FAILED);
+            throw err;
+          }
+          else
+          {
+            Fmi::Exception::Trace(BCP, "Response validation failed!").printError();
+          }
+        }
     }
     catch (...)
     {
@@ -937,14 +945,25 @@ bool PluginImpl::is_reload_required(bool reset)
   return stored_query_map->is_reload_required(reset);
 }
 
+// Convert TimedCache statistics to regular statistics
+template <typename T>
+Fmi::Cache::CacheStats convert_stats(const T& cache)
+{
+  auto stats = cache.getCacheStatistics();
+  auto time = boost::posix_time::from_time_t(std::chrono::duration_cast<std::chrono::seconds>(
+                                                 stats.getConstructionTime().time_since_epoch())
+                                                 .count());
+  return {time,
+          cache.maxSize(),
+          cache.size(),
+          stats.getHits(),
+          stats.getMisses(),
+          stats.getInsertSuccesses()};
+}
+
 Fmi::Cache::CacheStatistics PluginImpl::getCacheStats() const
 {
   Fmi::Cache::CacheStatistics ret;
-
-  Fmi::TimedCache::CacheStatistics query_cache_stats = query_cache->getCacheStatistics();
-  boost::posix_time::ptime start_time = boost::posix_time::from_time_t(std::chrono::duration_cast<std::chrono::seconds>(query_cache_stats.getConstructionTime().time_since_epoch()).count());
-  ret.insert(std::make_pair("Wfs::query_cache", Fmi::Cache::CacheStats(query_cache_stats.getHits(), query_cache_stats.getMisses(), start_time)));
-  
+  ret["Wfs::query_cache"] = convert_stats(*query_cache);
   return ret;
 }
-

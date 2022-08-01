@@ -247,14 +247,16 @@ void SmartMet::Plugin::WFS::StoredQueryConfig::parse_config()
             throw Fmi::Exception(BCP, msg.str());
           }
         }
-        catch (const std::exception& err)
+        catch (...)
         {
+          Fmi::Exception error = Fmi::Exception::SquashTrace(BCP, "Operation failed");
           std::ostringstream msg;
-          msg << "Error while parsing stored query parameter description in '" + get_file_name() + "':\n";
           dump_setting(msg, c_item, 16);
-          msg << std::endl;
-          std::cerr << msg.str();
-          throw Fmi::Exception(BCP, msg.str());
+	  error.addDetail("Error while parsing stored query parameter description");
+	  error.addParameter("input_file", get_file_name());
+	  error.addParameter("storedquery_id", query_id);
+	  error.addParameter("config_fragment", msg.str());
+	  throw error;
         }
 
         param_names.push_back(item.name);
@@ -305,15 +307,32 @@ void SmartMet::Plugin::WFS::StoredQueryConfig::parse_config()
 
       if (have_error)
       {
-        throw Fmi::Exception(
-            BCP, "Conflicting parameter specifications found for stored query '" + query_id + "'!");
+	Fmi::Exception error(BCP, "Conflicting parameter specifications found for stored query");
+	error.addParameter("input_file", get_file_name());
+	error.addParameter("storedquery_id", query_id);
+	error.disableStackTraceRecursive();
+	throw error;
       }
     }
     catch (const libconfig::ConfigException& err)
     {
       std::cerr << "Failed to parse stored query configuration file '" << get_file_name() << "'"
                 << std::endl;
-      handle_libconfig_exceptions(METHOD_NAME);
+      try {
+	handle_libconfig_exceptions(METHOD_NAME);
+      } catch (Fmi::Exception& e) {
+	Fmi::Exception *e1 = dynamic_cast<Fmi::Exception*>(&e);
+	if (e1) {
+	  std::cout << e1->disableStackTraceRecursive() << std::endl;
+	}
+
+	Fmi::Exception error(BCP, "Failed to parse stored query configuration file");
+	error.addParameter("input_file", get_file_name());
+	error.addParameter("storedquery_id", query_id);
+	error.addParameter("error_message", e.what());
+	error.disableStackTrace();
+	throw error;
+      }
     }
   }
   catch (...)
@@ -563,6 +582,13 @@ std::string
 SmartMet::Plugin::WFS::StoredQueryConfig::guess_fallback_encoding(const std::string& language) const
 {
   return plugin_config ? plugin_config->guess_fallback_encoding(language) : std::string("ISO-8859-1");
+}
+
+
+bool
+SmartMet::Plugin::WFS::StoredQueryConfig::use_case_sensitive_params() const
+{
+  return plugin_config ? plugin_config->use_case_sensitive_params() : false;
 }
 
 /**

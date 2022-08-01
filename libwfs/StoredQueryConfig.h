@@ -205,6 +205,8 @@ class StoredQueryConfig : public SmartMet::Spine::ConfigBase
 
   std::string guess_fallback_encoding(const std::string& language) const;
 
+  bool use_case_sensitive_params() const;
+
  private:
   void parse_config();
 

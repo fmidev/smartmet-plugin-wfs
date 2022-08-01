@@ -42,21 +42,30 @@ void StoredQueryParamDef::parse_def(const std::string& desc)
     unsigned min_size = 1;
     unsigned max_size = 1;
 
-    qi_rule type_p = (ns::string("string")[bl::var(value_type) = STRING] |
-                      ns::string("int")[bl::var(value_type) = INT] |
-                      ns::string("uint")[bl::var(value_type) = UINT] |
-                      ns::string("double")[bl::var(value_type) = DOUBLE] |
-                      ns::string("time")[bl::var(value_type) = TIME] |
-                      ns::string("bool")[bl::var(value_type) = BOOL] |
-                      ns::string("point")[bl::var(value_type) = POINT] |
-                      ns::string("bbox")[bl::var(value_type) = BBOX]);
+    qi_rule string_p = qi::string("string");
+    qi_rule int_p = qi::string("integer") | qi::string("int");
+    qi_rule uint_p = qi::string("uint");
+    qi_rule double_p = qi::string("double");
+    qi_rule time_p = qi::string("time");
+    qi_rule bool_p = qi::string("bool");
+    qi_rule point_p = qi::string("point");
+    qi_rule bbox_p = qi::string("bbox");
+
+    qi_rule type_p = (string_p   [bl::var(value_type) = STRING] |
+                      int_p      [bl::var(value_type) = INT] |
+                      uint_p     [bl::var(value_type) = UINT] |
+                      double_p   [bl::var(value_type) = DOUBLE] |
+                      time_p     [bl::var(value_type) = TIME] |
+                      bool_p     [bl::var(value_type) = BOOL] |
+                      point_p    [bl::var(value_type) = POINT] |
+                      bbox_p     [bl::var(value_type) = BBOX]);
     ;
 
     qi_rule array_dim_p =
         qi::char_('[') >> qi::uint_[bl::var(min_size) = bl::_1, bl::var(max_size) = bl::_1] >>
         -(ns::string("..") >> qi::uint_[bl::var(max_size) = bl::_1]) >> qi::char_(']');
 
-    qi_rule param_p = type_p >> -(array_dim_p[bl::var(is_array) = true]);
+    qi_rule param_p = type_p >> -(array_dim_p[bl::var(is_array) = true]) >> qi::eoi;
 
     bool ok = qi::phrase_parse(desc.begin(), desc.end(), param_p, ns::space);
 

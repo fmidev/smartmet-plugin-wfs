@@ -3,6 +3,7 @@
 #include <ctpp2/CDT.hpp>
 #include <macgyver/TypeName.h>
 #include <macgyver/Exception.h>
+#include <macgyver/StringConversion.h>
 #include <spine/Value.h>
 #include <iterator>
 #include <limits>
@@ -18,19 +19,32 @@ namespace WFS
 {
 class RequestParameterMap
 {
-  std::multimap<std::string, SmartMet::Spine::Value> params;
+  struct ParamInfo
+  {
+    std::string real_name;
+    SmartMet::Spine::Value value;
+
+    ParamInfo(const std::string& real_name_, const SmartMet::Spine::Value& value_)
+      : real_name(real_name_)
+      , value(value_)
+    {
+    }
+  };
+
+  typedef std::multimap<std::string, ParamInfo> ParamMapType;
+
+  ParamMapType params;
 
  public:
-  RequestParameterMap();
+  RequestParameterMap(bool case_sensitive_params);
 
-  RequestParameterMap(const std::multimap<std::string, SmartMet::Spine::Value>& params);
+  RequestParameterMap(const std::multimap<std::string, SmartMet::Spine::Value>& params,
+		      bool case_sensitive_params);
 
   virtual ~RequestParameterMap();
 
-  inline const std::multimap<std::string, SmartMet::Spine::Value>& get_map() const
-  {
-    return params;
-  }
+  std::multimap<std::string, SmartMet::Spine::Value> get_map(bool case_sensitive) const;
+
   void clear();
 
   std::size_t size() const;
@@ -38,6 +52,8 @@ class RequestParameterMap
   std::size_t count(const std::string& name) const;
 
   void insert_value(const std::string& name, const SmartMet::Spine::Value& value);
+
+  void remove_key(const std::string& name);
 
   std::set<std::string> get_keys() const;
 
@@ -82,6 +98,11 @@ class RequestParameterMap
   std::string as_string() const;
 
   std::string subst(const std::string& src) const;
+
+  bool is_case_sensitive() const { return case_sensitive_params; }
+
+private:
+  bool case_sensitive_params;
 };
 
 template <typename ValueType>
@@ -89,9 +110,11 @@ void RequestParameterMap::add(const std::string& name, const ValueType& value, b
 {
   try
   {
+    // FIXME: optimize (convert name only once)
+    const std::string key = case_sensitive_params ? name : Fmi::ascii_tolower_copy(name);
     if (replace)
-      params.erase(name);
-    params.insert(std::make_pair(name, SmartMet::Spine::Value(value)));
+      remove_key(name);
+    insert_value(name, SmartMet::Spine::Value(value));
   }
   catch (...)
   {
@@ -110,11 +133,11 @@ void RequestParameterMap::add(const std::string& name,
     typedef typename std::iterator_traits<IteratorType>::value_type SourceType;
 
     if (replace)
-      params.erase(name);
+      remove_key(name);
     while (begin != end)
     {
       const SourceType& tmp = *begin++;
-      params.insert(std::make_pair(name, SmartMet::Spine::Value(tmp)));
+      insert_value(name, SmartMet::Spine::Value(tmp));
     }
   }
   catch (...)
@@ -132,11 +155,11 @@ void RequestParameterMap::extract_to(
     typedef typename std::iterator_traits<IteratorType>::value_type SourceType;
 
     if (replace)
-      params.erase(name);
+      remove_key(name);
     while (begin != end)
     {
       const SourceType& tmp = *begin++;
-      params.insert(std::make_pair(name, SmartMet::Spine::Value(tmp.*member)));
+      insert_value(name, SmartMet::Spine::Value(tmp.*member));
     }
   }
   catch (...)
@@ -170,7 +193,8 @@ std::size_t RequestParameterMap::get(const std::string& name,
   try
   {
     std::size_t cnt = 0;
-    auto range = params.equal_range(name);
+    const std::string key = case_sensitive_params ? name : Fmi::ascii_tolower_copy(name);
+    auto range = params.equal_range(key);
     while (range.first != range.second)
     {
       if (++cnt > max_size)
@@ -184,7 +208,7 @@ std::size_t RequestParameterMap::get(const std::string& name,
         throw Fmi::Exception(BCP, msg.str());
       }
       const auto& item = *range.first++;
-      const SmartMet::Spine::Value& value = item.second;
+      const SmartMet::Spine::Value& value = item.second.value;
       ValueType tmp = value.get<ValueType>();
       *output++ = tmp;
     }
