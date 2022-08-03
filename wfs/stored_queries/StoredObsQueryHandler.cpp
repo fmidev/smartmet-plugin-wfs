@@ -99,7 +99,6 @@ StoredObsQueryHandler::StoredObsQueryHandler(SmartMet::Spine::Reactor* reactor,
     register_array_param<int64_t>(P_FMISIDS);
     register_array_param<int64_t>(P_WMOS);
     register_scalar_param<std::string>(P_LANGUAGE, false, true);
-    register_scalar_param<bool>(P_HANDLE_SPEC_PARAM, false, true);
 
     max_hours = config->get_optional_config_param<double>("maxHours", 7.0 * 24.0);
     max_station_count = config->get_optional_config_param<unsigned>("maxStationCount", 0);
