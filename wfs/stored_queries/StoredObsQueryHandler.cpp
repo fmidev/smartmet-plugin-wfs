@@ -218,6 +218,8 @@ void StoredObsQueryHandler::query(const StoredQuery& query,
       crs_registry.get_attribute(crs, "projUri", &proj_uri);
       crs_registry.get_attribute(crs, "projEpochUri", &proj_epoch_uri);
 
+      curr_lang = params.get_optional<std::string>(P_LANGUAGE, curr_lang);
+
       uint64_t timestep = params.get_single<uint64_t>(P_TIME_STEP);
       // query_params.timestep = (timestep > 0 ? timestep : 1);
       query_params.timestep = (timestep > 0 ? timestep : 0);
@@ -238,7 +240,7 @@ void StoredObsQueryHandler::query(const StoredQuery& query,
 
       query_params.starttimeGiven = true;
 
-      query_params.language = language;
+      query_params.language = curr_lang;
 
       params.get<int64_t>(P_HOURS, std::back_inserter(query_params.hours));
 
@@ -255,8 +257,6 @@ void StoredObsQueryHandler::query(const StoredQuery& query,
       params.get<int64_t>(P_LPNNS, std::back_inserter(stationSettings.lpnns));
 
       params.get<int64_t>(P_FMISIDS, std::back_inserter(stationSettings.fmisids));
-
-      curr_lang = params.get_optional<std::string>(P_LANGUAGE, curr_lang);
 
       std::list<std::pair<std::string, SmartMet::Spine::LocationPtr> > locations_list;
       get_location_options(params, curr_lang, &locations_list);
