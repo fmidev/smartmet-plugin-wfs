@@ -1,0 +1,217 @@
+Global data object:
+
+   fmi_apikey = "foobar";
+   fmi_apikey_prefix = "/fmi-apikey/";
+   groups = [
+              {
+                'crs' : "EPSG::4326",
+                'featureId' : "WFS-PnKct77S1form3lgPAcsZD0L00.JTowqk_Fzo46mXn0ZQtLFlz6d1TTty2pP4VCVgk8MbHy51qRaFOO6dNGbJszsu7JU07ctqT.FQlYJqoTOzbdPPTk51mMWDBy3YujXl899_LJf39svLvy09MOLZliZmzD0y8.kTM2b8eHZlrUzab8aSu69MzhrbcPiJp59MO7HlpWroQGltw.IvDfj0c50TG9ty9Mu.hh5YduXpl5c6xujLbWRs4bt1ZW3fky7Gtt08.endnqZfHSsbdh3Nrd12z81Pph6ad.7nOE1uPXDs09PMndm3xtbn0w9NO_dU88MtaG_hl3ZMPTC3OfTfyy5OPXLy839OStSfi50cdTLz6Mmh007ctPpl4T8hNDpp25bW_dlrGq1IYA-",
+                'groupId' : "1-1",
+                'groupNum' : 1,
+                'obsParamList' : [
+                                   {
+                                     'featureId' : "WFS-Eq28QqDQni19B.dUkFVT5RAOov2JTowqk_Fzo46mXn0ZQtLFlz6d1TTty2pP4VCVgk8MbHy51qRaFOO6dNGbJszsu7JU07ctqT.FQlYJqoTOzbdPPTk51mMWDBy3YujXl899_LJf39svLvy09MOLZliZmzD0y8.kTM2b8eHZlrUzab8aSu69MzhrbcPiJp59MO7HlpWroQGltw.IvDfj0c50TG9ty9Mu.hh5YduXpl5c6xujLa1tunnz07s9TL46VjbsO5tbuu2fmp9MPTTv3c5wmtx64dmnp5k7s2.Nrc.mHpp37qnnhlrQ38Mu7Jh6YW5z6b.WXJx65eXm_pyVqT8XOjjqZefRk0Omnblp9MvCfkJodNO3La37stY1WpDA",
+                                     'name' : "t2m"
+                                   },
+                                   {
+                                     'featureId' : "WFS-Bn9JyosVV2UTfZOnbWwbJJYuDR6JTowqk_Fzo46mXn0ZQtLFlz6d1TTty2pP4VCVgk8MbHy51qRaFOO6dNGbJszsu7JU07ctqT.FQlYJqoTOzbdPPTk51mMWDBy3YujXl899_LJf39svLvy09MOLZliZmzD0y8.kTM2b8eHZlrUzab8aSu69MzhrbcPiJp59MO7HlpWroQGltw.IvDfj0c50TG9ty9Mu.hh5YduXpl5c6yNnDdua23Tz56d2epl8dKxt2Hc2t3XbPzU.mHpp37uc4TW49cOzT08yd2bfG1ufTD00791Tzwy1ob.GXdkw9MLc59N_LLk49cvLzf05K1J.LnRx1MvPoyaHTTty0.mXhPyE0Omnbltb92WsarUhgA--",
+                                     'name' : "lpnn"
+                                   },
+                                   {
+                                     'featureId' : "WFS-GdDIsvL9H211qzdvyqmvTIhm5uSJTowqk_Fzo46mXn0ZQtLFlz6d1TTty2pP4VCVgk8MbHy51qRaFOO6dNGbJszsu7JU07ctqT.FQlYJqoTOzbdPPTk51mMWDBy3YujXl899_LJf39svLvy09MOLZliZmzD0y8.kTM2b8eHZlrUzab8aSu69MzhrbcPiJp59MO7HlpWroQGltw.IvDfj0c50TG9ty9Mu.hh5YduXpl5c6ytu_Jl2Nbbp589O7PUy.OlY27DubW7rtn5qfTD00793OcJrceuHZp6eZO7Nvja3Pph6ad.6p54Za0N_DLuyYemFuc.m_llyceuXl5v6clak_Fzo46mXn0ZNDpp25afTLwn5CaHTTty2t.7LWNVqQwA-",
+                                     'name' : "model"
+                                   }
+                                 ],
+                'obsPhenomenonEndTime' : "2020-08-05T12:00:00Z",
+                'obsPhenomenonStartTime' : "2020-08-05T08:00:00Z",
+                'obsResultTime' : "2020-08-05T12:00:00Z",
+                'obsReturnArray' : [
+                                     {
+                                       'data' : [
+                                                  {
+                                                    'qcValue' : "1",
+                                                    'value' : "18.2"
+                                                  },
+                                                  {
+                                                    'value' : "304"
+                                                  },
+                                                  {
+                                                    'value' : "opendata"
+                                                  }
+                                                ],
+                                       'epochTime' : 1596614400,
+                                       'epochTimeStr' : "2020-08-05T08:00:00Z",
+                                       'x' : "60.17523",
+                                       'y' : "24.94459"
+                                     },
+                                     {
+                                       'data' : [
+                                                  {
+                                                    'qcValue' : "1",
+                                                    'value' : "19.0"
+                                                  },
+                                                  {
+                                                    'value' : "304"
+                                                  },
+                                                  {
+                                                    'value' : "opendata"
+                                                  }
+                                                ],
+                                       'epochTime' : 1596618000,
+                                       'epochTimeStr' : "2020-08-05T09:00:00Z",
+                                       'x' : "60.17523",
+                                       'y' : "24.94459"
+                                     },
+                                     {
+                                       'data' : [
+                                                  {
+                                                    'qcValue' : "1",
+                                                    'value' : "19.3"
+                                                  },
+                                                  {
+                                                    'value' : "304"
+                                                  },
+                                                  {
+                                                    'value' : "opendata"
+                                                  }
+                                                ],
+                                       'epochTime' : 1596621600,
+                                       'epochTimeStr' : "2020-08-05T10:00:00Z",
+                                       'x' : "60.17523",
+                                       'y' : "24.94459"
+                                     },
+                                     {
+                                       'data' : [
+                                                  {
+                                                    'qcValue' : "1",
+                                                    'value' : "19.4"
+                                                  },
+                                                  {
+                                                    'value' : "304"
+                                                  },
+                                                  {
+                                                    'value' : "opendata"
+                                                  }
+                                                ],
+                                       'epochTime' : 1596625200,
+                                       'epochTimeStr' : "2020-08-05T11:00:00Z",
+                                       'x' : "60.17523",
+                                       'y' : "24.94459"
+                                     },
+                                     {
+                                       'data' : [
+                                                  {
+                                                    'qcValue' : "1",
+                                                    'value' : "20.0"
+                                                  },
+                                                  {
+                                                    'value' : "304"
+                                                  },
+                                                  {
+                                                    'value' : "opendata"
+                                                  }
+                                                ],
+                                       'epochTime' : 1596628800,
+                                       'epochTimeStr' : "2020-08-05T12:00:00Z",
+                                       'x' : "60.17523",
+                                       'y' : "24.94459"
+                                     }
+                                   ],
+                'obsStationList' : [
+                                     {
+                                       'bearing' : "290.8",
+                                       'distance' : "0.1",
+                                       'fmisid' : "100971",
+                                       'geoid' : "-16000150",
+                                       'name' : "Helsinki Kaisaniemi",
+                                       'region' : "Helsinki",
+                                       'wmo' : "2978",
+                                       'x' : "60.17523",
+                                       'y' : "24.94459"
+                                     }
+                                   ],
+                'qualityInfo' : "on",
+                'timestep' : 60
+              }
+            ];
+   hostname = "opendata.fmi.fi";
+   language = "eng";
+   named_parameters = {
+                        'defaultmeteoparam' : [
+                                                "Temperature",
+                                                "pressure",
+                                                "WindSpeedMS",
+                                                "WindDirection",
+                                                "Precipitation1h"
+                                              ]
+                      };
+   numMatched = 1;
+   numParam = 3;
+   numReturned = 1;
+   projEpochSrsDim = 3;
+   projEpochSrsName = "https://xml.fmi.fi/gml/crs/compoundCRS.php?crs=4326&amp;time=unixtime";
+   projSrsDim = 2;
+   projSrsName = "http://www.opengis.net/def/crs/EPSG/0/4326";
+   protocol = "http://";
+   queryName = "ObsQcTest2";
+   queryNum = 1;
+   query_parameters = {
+                        'beginTime' : [
+                                        "20200805T080000Z"
+                                      ],
+                        'crs' : [
+                                  "EPSG::4326"
+                                ],
+                        'endTime' : [
+                                      "20200805T120000Z"
+                                    ],
+                        'keyword' : [
+                                      ""
+                                    ],
+                        'keyword_overwritable' : [
+                                                   "false"
+                                                 ],
+                        'latest' : [
+                                     "false"
+                                   ],
+                        'locale' : [
+                                     "fi_FI.utf8"
+                                   ],
+                        'maxDistance' : [
+                                          "50000"
+                                        ],
+                        'maxEpochs' : [
+                                        "200"
+                                      ],
+                        'meteoParameters' : [
+                                              "t2m",
+                                              "lpnn",
+                                              "model"
+                                            ],
+                        'missingText' : [
+                                          "nan"
+                                        ],
+                        'numOfStations' : [
+                                            "1"
+                                          ],
+                        'places' : [
+                                     "Kaisaniemi"
+                                   ],
+                        'qualityInfo' : [
+                                          "true"
+                                        ],
+                        'stationType' : [
+                                          "opendata"
+                                        ],
+                        'storedquery_id' : [
+                                             "ObsQcTest2"
+                                           ],
+                        'timeStep' : [
+                                       "60"
+                                     ],
+                        'timeZone' : [
+                                       "UTC"
+                                     ]
+                      };
+   responseTimestamp = "2012-12-12T12:12:12Z"
+ 
