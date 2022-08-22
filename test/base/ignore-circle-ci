@@ -4,4 +4,3 @@ GetFeature/radar/RadarPartOfArea.xml.post
 GetFeature/radar/RadarTest2.xml.post
 GetFeature/radar/prepare-GetFeatureById.xml.post
 GetFeature/radar/GetFeatureById.xml.post
-GetFeature/observation/fill-missing-values-at-end-2.xml.post XFAIL for now (missing timestamps not filled properly)
