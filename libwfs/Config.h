@@ -39,10 +39,12 @@ namespace WFS
  *
  *   @endverbatim
  */
-class Config : private boost::noncopyable, public SmartMet::Spine::ConfigBase
+class Config : public SmartMet::Spine::ConfigBase
 {
  public:
   Config(const std::string& configfile);
+  Config(const Config&) = delete;
+  Config& operator = (const Config&) = delete;
   virtual ~Config();
 
   const std::string& defaultUrl() const { return itsDefaultUrl; }

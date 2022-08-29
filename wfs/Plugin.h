@@ -39,12 +39,13 @@ namespace Plugin
 namespace WFS
 {
 class Plugin : public SmartMetPlugin,
-               virtual private boost::noncopyable,
                private Xml::EnvInit,
                private SmartMet::Spine::HTTP::Authentication
 {
  public:
   Plugin(SmartMet::Spine::Reactor* theReactor, const char* theConfig);
+  Plugin(const Plugin&) = delete;
+  Plugin& operator = (const Plugin&) = delete;
   virtual ~Plugin();
 
   const std::string& getPluginName() const override;

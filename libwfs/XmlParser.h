@@ -2,7 +2,6 @@
 
 #include "XmlError.h"
 #include "XmlErrorHandler.h"
-#include <boost/core/noncopyable.hpp>
 #include <boost/function.hpp>
 #include <boost/shared_ptr.hpp>
 #include <boost/thread.hpp>
@@ -90,10 +89,12 @@ class Parser : public xercesc::XercesDOMParser
   root_element_cb_t root_element_cb;
 };
 
-class ParserMT : public boost::noncopyable
+class ParserMT
 {
  public:
   ParserMT(const std::string& grammar_pool_file_name, bool stop_on_error = true);
+  ParserMT(const ParserMT&) = delete;
+  ParserMT& operator = (const ParserMT&) = delete;
 
   virtual ~ParserMT();
 

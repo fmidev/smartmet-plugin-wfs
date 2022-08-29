@@ -32,7 +32,7 @@ class StoredQueryMap;
 
 typedef Fmi::TimedCache::Cache<std::string, std::string> QueryResponseCache;
 
-class PluginImpl : public boost::noncopyable
+class PluginImpl
 {
   struct RequestResult;
 
@@ -41,6 +41,9 @@ class PluginImpl : public boost::noncopyable
       SmartMet::Spine::Reactor* theReactor,
       const char* theConfig,
       Spine::CRSRegistry& crs_registry);
+
+  PluginImpl(const PluginImpl&) = delete;
+  PluginImpl& operator = (const PluginImpl&) = delete;
 
   virtual ~PluginImpl();
 

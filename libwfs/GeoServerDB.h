@@ -1,7 +1,6 @@
 #pragma once
 
 #include <memory>
-#include <boost/noncopyable.hpp>
 #include <macgyver/WorkerPool.h>
 #include <macgyver/PostgreSQLConnection.h>
 
@@ -11,7 +10,7 @@ namespace Plugin
 {
 namespace WFS
 {
-class GeoServerDB : virtual protected boost::noncopyable
+class GeoServerDB
 {
  public:
   typedef Fmi::Database::PostgreSQLConnection Connection;
@@ -21,6 +20,8 @@ class GeoServerDB : virtual protected boost::noncopyable
 
  public:
   GeoServerDB(const std::string& conn_str, std::size_t keep_conn = 5);
+  GeoServerDB(const GeoServerDB&) = delete;
+  GeoServerDB& operator = (const GeoServerDB&) = delete;
 
   virtual ~GeoServerDB();
 
