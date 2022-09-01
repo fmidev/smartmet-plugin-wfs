@@ -251,6 +251,32 @@ std::set<std::string> StoredQueryParamRegistry::get_param_names() const
   }
 }
 
+Json::Value StoredQueryParamRegistry::get_param_info() const
+{
+    Json::Value result(Json::arrayValue);
+    for (const auto& map_item : param_map) {
+        Json::Value param_info(Json::objectValue);
+        const ParamRecBase* p1 = map_item.second.get();
+        param_info["name"] = p1->name;
+        param_info["type"] = p1->type_name;
+        const auto* p_scalar = dynamic_cast<const ScalarParameterRec*>(p1);
+        if (p_scalar) {
+            param_info["is_array"] = false;
+            param_info["mandatory"] = p_scalar->required;
+        } else {
+            const auto* p_array = dynamic_cast<const ArrayParameterRec*>(p1);
+            if (p_array) {
+                param_info["is_array"] = true;
+                param_info["min_size"] = p_array->min_size;
+                param_info["max_size"] = p_array->max_size;
+                param_info["step"] = p_array->step;
+            }
+        }
+        result.append(param_info);
+    }
+    return result;
+}
+
 void StoredQueryParamRegistry::register_scalar_param(
     const std::string& name, boost::shared_ptr<ScalarParameterTemplate> param_def, bool required)
 {

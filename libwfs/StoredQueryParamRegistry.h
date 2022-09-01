@@ -6,6 +6,7 @@
 #include "StoredQueryConfig.h"
 #include <boost/shared_ptr.hpp>
 #include <boost/variant.hpp>
+#include <json/value.h>
 #include <map>
 #include <set>
 #include <typeinfo>
@@ -65,6 +66,8 @@ class StoredQueryParamRegistry : public StoredQueryConfig::Wrapper
       const RequestParameterMap& src, const SupportsExtraHandlerParams* extra_params = nullptr) const;
 
   std::set<std::string> get_param_names() const;
+
+  Json::Value get_param_info() const;
 
   template <typename ParamType>
   void register_scalar_param(const std::string& name,

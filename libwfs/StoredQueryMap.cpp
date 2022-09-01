@@ -685,7 +685,8 @@ Json::Value bw::StoredQueryMap::get_constructor_map() const
   std::map<std::string, std::set<std::string> > m1, m2;
   boost::shared_lock<boost::shared_mutex> lock(mutex);
   for (const auto& map_item : handler_map) {
-    auto sq_conf = map_item.second->get_config();
+    boost::shared_ptr<StoredQueryHandlerBase> constructor_ptr = map_item.second;
+    auto sq_conf = constructor_ptr->get_config();
     if (sq_conf->have_template_fn()) {
       const std::string& c_name = sq_conf->get_constructor_name();
       const std::string& t_fn = sq_conf->get_template_fn();
@@ -707,6 +708,7 @@ Json::Value bw::StoredQueryMap::get_constructor_map() const
 	  t1[t1.size()] = x;
 	}
       }
+      a["parameters"] = constructor_ptr->get_param_info();
     }
   }
   return result;
