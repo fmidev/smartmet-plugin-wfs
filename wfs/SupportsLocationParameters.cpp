@@ -58,20 +58,51 @@ bw::SupportsLocationParameters::SupportsLocationParameters(
 {
   try
   {
-    register_array_param<std::string>(P_PLACES);
-    register_array_param<double>(P_LATLONS, 0, 999, 2);
+    register_array_param<std::string>(
+        P_PLACES,
+        "The location for which to provide data (0 or more values)" );
+
+    register_array_param<double>(
+        P_LATLONS,
+        "Location coordinates for which to return data (0 or more latitude/longitude pairs).",
+        0, 999, 2
+        );
+
     if (include_fmisids)
-      register_array_param<int64_t>(P_FMISIDS);
-    register_array_param<int64_t>(P_GEOIDS);
+      register_array_param<int64_t>(
+          P_FMISIDS,
+          "FMI observation station identifiers (0 or more values)."
+          );
+
+    register_array_param<int64_t>(
+        P_GEOIDS,
+        "GEOIDs of the locations for which to return data (0 or more values)."
+        );
+
     if (include_wmos)
-      register_array_param<int64_t>(P_WMOS);
+      register_array_param<int64_t>(
+          P_WMOS,
+          "WMO code of the location for which to return data (0 or more values)"
+          );
+
     if (include_lpnns)
-      register_array_param<int64_t>(P_LPNNS);
-    register_scalar_param<double>(P_MAX_DISTANCE);
+        register_array_param<int64_t>(
+            P_LPNNS,
+            "LPNN code of the location for which to return data (0 or more values)"
+            );
+
+    register_scalar_param<double>(
+        P_MAX_DISTANCE,
+        "Maximal distance of sites from specified place for which to provide data (mandatory real value)"
+        );
+
     if (support_keywords)
     {
-      register_scalar_param<std::string>(P_KEYWORD);
-      register_scalar_param<bool>(P_KEYWORD_OVERWRITABLE);
+        register_scalar_param<std::string>(P_KEYWORD,
+            "");
+
+        register_scalar_param<bool>(P_KEYWORD_OVERWRITABLE,
+            "");
     }
   }
   catch (...)

@@ -34,12 +34,12 @@ bw::StoredFileQueryHandler::StoredFileQueryHandler(SmartMet::Spine::Reactor* rea
 {
   try
   {
-    register_scalar_param<std::string>(P_NAME, false);
-    register_array_param<int64_t>(P_LEVEL);
-    register_array_param<std::string>(P_PARAM);
-    register_array_param<double>(P_BBOX, 0, 4, 4);
-    register_array_param<pt::ptime>(P_BEGIN);
-    register_array_param<pt::ptime>(P_END);
+    register_scalar_param<std::string>(P_NAME, "", false);
+    register_array_param<int64_t>(P_LEVEL, "");
+    register_array_param<std::string>(P_PARAM, "");
+    register_array_param<double>(P_BBOX, "", 0, 4, 4);
+    register_array_param<pt::ptime>(P_BEGIN, "");
+    register_array_param<pt::ptime>(P_END, "");
 
     auto& ds_list_cfg = config->get_mandatory_config_param<libconfig::Setting&>("dataSets");
     config->assert_is_list(ds_list_cfg, 1);

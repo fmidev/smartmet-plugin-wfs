@@ -270,6 +270,7 @@ Json::Value StoredQueryParamRegistry::get_param_info() const
         param_info["type"] = iter == name_remap.end()
             ? Fmi::demangle_cpp_type_name(p1->type_name)
             : iter->second;
+        param_info["description"] = p1->description;
         const auto* p_scalar = dynamic_cast<const ScalarParameterRec*>(p1);
         if (p_scalar) {
             param_info["is_array"] = false;
@@ -289,12 +290,16 @@ Json::Value StoredQueryParamRegistry::get_param_info() const
 }
 
 void StoredQueryParamRegistry::register_scalar_param(
-    const std::string& name, boost::shared_ptr<ScalarParameterTemplate> param_def, bool required)
+    const std::string& name,
+    const std::string& description,
+    boost::shared_ptr<ScalarParameterTemplate> param_def,
+    bool required)
 {
   try
   {
     boost::shared_ptr<ScalarParameterRec> rec(new ScalarParameterRec);
     rec->name = name;
+    rec->description = description;
     rec->param_def = param_def;
     rec->type_name = typeid(std::string).name();
     rec->required = required;
@@ -309,6 +314,7 @@ void StoredQueryParamRegistry::register_scalar_param(
 /* Full scope here only to satisfy Doxygen */
 void SmartMet::Plugin::WFS::StoredQueryParamRegistry::register_array_param(
     const std::string& name,
+    const std::string& description,
     boost::shared_ptr<ArrayParameterTemplate> param_def,
     std::size_t min_size,
     std::size_t max_size)
@@ -317,6 +323,7 @@ void SmartMet::Plugin::WFS::StoredQueryParamRegistry::register_array_param(
   {
     boost::shared_ptr<ArrayParameterRec> rec(new ArrayParameterRec);
     rec->name = name;
+    rec->description = description;
     rec->param_def = param_def;
     rec->type_name = typeid(std::string).name();
     rec->min_size = min_size;

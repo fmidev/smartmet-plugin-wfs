@@ -19,8 +19,8 @@ bw::DummyStoredQueryHandler::DummyStoredQueryHandler(SmartMet::Spine::Reactor* r
 {
   try
   {
-    register_scalar_param<std::string>(P_ID_SCALAR, false);
-    register_array_param<std::string>(P_ID_ARRAY, 0, 99, 1);
+    register_scalar_param<std::string>(P_ID_SCALAR, "Scalar parameter for testing only", false);
+    register_array_param<std::string>(P_ID_ARRAY, "Array parameter for testing only", 0, 99, 1);
   }
   catch (...)
   {
@@ -45,7 +45,7 @@ bw::DummyStoredQueryHandler::query(const StoredQuery& query,
       auto params = query.get_param_map();
 
       Json::Value result = Json::objectValue;
-  
+
       std::set<std::string> keys = params.get_keys();
       for (auto k : keys)
 	{

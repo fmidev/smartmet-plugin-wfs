@@ -19,6 +19,9 @@ namespace Plugin
 {
 namespace WFS
 {
+
+//  FIXME: why SupportsLocationparameters and SupportsTimeParameters are not used
+
 class StoredObsQueryHandler : public StoredQueryHandlerBase,
                               protected SupportsLocationParameters,
                               protected SupportsBoundingBox,

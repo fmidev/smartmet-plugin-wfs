@@ -23,7 +23,14 @@ bw::GetFeatureByIdHandler::GetFeatureByIdHandler(SmartMet::Spine::Reactor* react
 {
   try
   {
-    register_scalar_param<std::string>(P_ID);
+    register_scalar_param<std::string>(
+        P_ID,
+        "The GetFeatureById stored query is mandatory by WFS 2.0 spec.\n"
+        "In the FMI case it's mostly useless however, because most of the\n"
+        "features only have temporary IDs that are generated on-the-fly\n"
+        "during the response generation, and thus cannot be used as permanent\n"
+        "identifiers for those features"
+        );
   }
   catch (...)
   {

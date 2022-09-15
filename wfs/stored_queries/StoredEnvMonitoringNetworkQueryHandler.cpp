@@ -39,14 +39,45 @@ bw::StoredEnvMonitoringNetworkQueryHandler::StoredEnvMonitoringNetworkQueryHandl
 {
   try
   {
-    register_array_param<int64_t>(P_NETWORK_ID);
-    register_array_param<int64_t>(P_CLASS_ID);
-    register_array_param<std::string>(P_CLASS_NAME, false);
-    register_array_param<int64_t>(P_GROUP_ID);
-    register_array_param<int64_t>(P_STATION_ID);
-    register_array_param<std::string>(P_STATION_NAME, false);
-    register_scalar_param<std::string>(P_INSPIRE_NAMESPACE);
-    register_scalar_param<std::string>(P_AUTHORITY_DOMAIN);
+    register_array_param<int64_t>(
+        P_NETWORK_ID,
+        ""
+        );
+
+    register_array_param<int64_t>(
+        P_CLASS_ID,
+        ""
+        );
+
+    register_array_param<std::string>(
+        P_CLASS_NAME,
+        "",
+        false);
+
+    register_array_param<int64_t>(
+        P_GROUP_ID,
+        ""
+        );
+
+    register_array_param<int64_t>(
+        P_STATION_ID,
+        ""
+        );
+
+    register_array_param<std::string>(
+        P_STATION_NAME,
+        "",
+        false
+        );
+
+    register_scalar_param<std::string>(
+        P_INSPIRE_NAMESPACE,
+        "");
+
+    register_scalar_param<std::string>(
+        P_AUTHORITY_DOMAIN,
+        "");
+
     m_missingText = config->get_optional_config_param<std::string>(P_MISSING_TEXT, "NaN");
     m_debugLevel = config->get_debug_level();
   }

@@ -19,7 +19,11 @@ bw::SupportsBoundingBox::SupportsBoundingBox(StoredQueryConfig::Ptr config,
 {
   try
   {
-    register_scalar_param<BoundingBox>(P_BOUNDING_BOX, mandatory);
+    register_scalar_param<BoundingBox>(
+        P_BOUNDING_BOX,
+        std::string("Bounding box of area for which to return data ()")
+        + (mandatory ? "mandatory" : "optional") + ")",
+        mandatory);
   }
   catch (...)
   {

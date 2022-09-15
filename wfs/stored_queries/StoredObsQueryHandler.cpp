@@ -82,23 +82,23 @@ StoredObsQueryHandler::StoredObsQueryHandler(SmartMet::Spine::Reactor* reactor,
 {
   try
   {
-    register_scalar_param<pt::ptime>(P_BEGIN_TIME);
-    register_scalar_param<pt::ptime>(P_END_TIME);
-    register_scalar_param<bool>(P_LATEST);
-    register_array_param<std::string>(P_METEO_PARAMETERS, 1);
-    register_scalar_param<std::string>(P_STATION_TYPE);
-    register_scalar_param<uint64_t>(P_TIME_STEP);
-    register_array_param<int64_t>(P_LPNNS);
-    register_scalar_param<uint64_t>(P_NUM_OF_STATIONS);
-    register_array_param<int64_t>(P_HOURS);
-    register_array_param<int64_t>(P_WEEK_DAYS);
-    register_scalar_param<std::string>(P_LOCALE);
-    register_scalar_param<std::string>(P_MISSING_TEXT);
-    register_scalar_param<uint64_t>(P_MAX_EPOCHS);
-    register_scalar_param<std::string>(P_CRS);
-    register_array_param<int64_t>(P_FMISIDS);
-    register_array_param<int64_t>(P_WMOS);
-    register_scalar_param<std::string>(P_LANGUAGE, false, true);
+    register_scalar_param<pt::ptime>(P_BEGIN_TIME, "");
+    register_scalar_param<pt::ptime>(P_END_TIME, "");
+    register_scalar_param<bool>(P_LATEST, "");
+    register_array_param<std::string>(P_METEO_PARAMETERS, "", 1);
+    register_scalar_param<std::string>(P_STATION_TYPE, "");
+    register_scalar_param<uint64_t>(P_TIME_STEP, "");
+    register_array_param<int64_t>(P_LPNNS, "");
+    register_scalar_param<uint64_t>(P_NUM_OF_STATIONS, "");
+    register_array_param<int64_t>(P_HOURS, "");
+    register_array_param<int64_t>(P_WEEK_DAYS, "");
+    register_scalar_param<std::string>(P_LOCALE, "");
+    register_scalar_param<std::string>(P_MISSING_TEXT, "");
+    register_scalar_param<uint64_t>(P_MAX_EPOCHS, "");
+    register_scalar_param<std::string>(P_CRS, "");
+    register_array_param<int64_t>(P_FMISIDS, "");
+    register_array_param<int64_t>(P_WMOS, "");
+    register_scalar_param<std::string>(P_LANGUAGE, "", false, true);
 
     max_hours = config->get_optional_config_param<double>("maxHours", 7.0 * 24.0);
     max_station_count = config->get_optional_config_param<unsigned>("maxStationCount", 0);

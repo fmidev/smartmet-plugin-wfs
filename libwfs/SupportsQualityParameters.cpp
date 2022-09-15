@@ -14,7 +14,9 @@ bw::SupportsQualityParameters::SupportsQualityParameters(
 {
   try
   {
-    register_scalar_param<bool>(P_QUALITY_INFO);
+      register_scalar_param<bool>(
+          P_QUALITY_INFO,
+          "Specifies whether to requst quality info");
   }
   catch (...)
   {

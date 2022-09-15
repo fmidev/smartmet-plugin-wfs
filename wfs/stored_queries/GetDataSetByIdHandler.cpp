@@ -28,7 +28,10 @@ bw::GetDataSetByIdHandler::GetDataSetByIdHandler(SmartMet::Spine::Reactor* react
 {
   try
   {
-    register_scalar_param<std::string>(P_DATA_SET_ID);
+    register_scalar_param<std::string>(
+        P_DATA_SET_ID,
+        "Specifies ID of INSPIRE data set to return."
+        );
 
     auto& ds_list = config->get_mandatory_config_param<libconfig::Setting&>("datasetids");
     config->assert_is_list(ds_list);

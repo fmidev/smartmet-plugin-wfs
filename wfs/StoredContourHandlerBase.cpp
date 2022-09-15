@@ -47,23 +47,58 @@ bw::StoredContourQueryHandler::StoredContourQueryHandler(
 {
   try
   {
-    register_scalar_param<std::string>(P_PRODUCER);
-    register_scalar_param<boost::posix_time::ptime>(P_ORIGIN_TIME, false);
-    register_scalar_param<std::string>(P_CRS);
+    register_scalar_param<std::string>(
+        P_PRODUCER,
+        ""
+        );
+
+    register_scalar_param<boost::posix_time::ptime>(
+        P_ORIGIN_TIME,
+        "",
+        false);
+
+    register_scalar_param<std::string>(
+        P_CRS,
+        ""
+        );
 
     if (config->find_setting(config->get_root(), "handler_params.imageDir", false))
-      register_scalar_param<std::string>(P_IMAGE_DIR);
+      register_scalar_param<std::string>(
+          P_IMAGE_DIR,
+          ""
+          );
+
     if (config->find_setting(config->get_root(), "handler_params.imageFile", false))
-      register_scalar_param<std::string>(P_IMAGE_FILE);
+      register_scalar_param<std::string>(
+          P_IMAGE_FILE,
+          ""
+          );
 
     if (config->find_setting(config->get_root(), "handler_params.limits", false))
-      register_array_param<double>(P_LIMITS, 0, 999, 2);
+      register_array_param<double>(
+          P_LIMITS,
+          "",
+          0,
+          999,
+          2);
+
     if (config->find_setting(config->get_root(), "handler_params.smoothing", false))
-      register_scalar_param<bool>(P_SMOOTHING);
+        register_scalar_param<bool>(
+            P_SMOOTHING,
+            ""
+            );
+
     if (config->find_setting(config->get_root(), "handler_params.smoothing_degree", false))
-      register_scalar_param<uint64_t>(P_SMOOTHING_DEGREE);
+      register_scalar_param<uint64_t>(
+          P_SMOOTHING_DEGREE,
+          ""
+          );
+
     if (config->find_setting(config->get_root(), "handler_params.smoothing_size", false))
-      register_scalar_param<uint64_t>(P_SMOOTHING_SIZE);
+      register_scalar_param<uint64_t>(
+          P_SMOOTHING_SIZE,
+          ""
+          );
 
     // read contour parameters from config and check validity
     name = config->get_mandatory_config_param<std::string>("contour_param.name");

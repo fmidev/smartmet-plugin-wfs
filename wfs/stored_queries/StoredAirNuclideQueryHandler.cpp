@@ -30,14 +30,14 @@ bw::StoredAirNuclideQueryHandler::StoredAirNuclideQueryHandler(
 {
   try
   {
-    register_scalar_param<pt::ptime>(P_BEGIN_TIME);
-    register_scalar_param<pt::ptime>(P_END_TIME);
-    register_scalar_param<std::string>(P_STATION_TYPE);
-    register_scalar_param<uint64_t>(P_TIME_STEP);
-    register_scalar_param<uint64_t>(P_NUM_OF_STATIONS);
-    register_scalar_param<std::string>(P_CRS);
-    register_scalar_param<bool>(P_LATEST);
-    register_array_param<std::string>(P_NUCLIDE_CODES);
+    register_scalar_param<pt::ptime>(P_BEGIN_TIME, "");
+    register_scalar_param<pt::ptime>(P_END_TIME, "");
+    register_scalar_param<std::string>(P_STATION_TYPE, "");
+    register_scalar_param<uint64_t>(P_TIME_STEP, "");
+    register_scalar_param<uint64_t>(P_NUM_OF_STATIONS, "");
+    register_scalar_param<std::string>(P_CRS, "");
+    register_scalar_param<bool>(P_LATEST, "");
+    register_array_param<std::string>(P_NUCLIDE_CODES, "");
 
     m_maxHours = config->get_optional_config_param<double>("maxHours", 365 * 24.0);
     m_sqRestrictions = plugin_data.get_config().getSQRestrictions();

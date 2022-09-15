@@ -55,7 +55,7 @@ bw::SupportsExtraHandlerParams::SupportsExtraHandlerParams(
         array_param_def.reset(
             new ArrayParameterTemplate(*config, item_path, "def", min_size, max_size));
         if (reg)
-          register_array_param(name, array_param_def, min_size, max_size);
+            register_array_param(name, "", array_param_def, min_size, max_size);
         param_def = array_param_def;
       }
       else if (def.isScalar())
@@ -63,7 +63,7 @@ bw::SupportsExtraHandlerParams::SupportsExtraHandlerParams(
         boost::shared_ptr<ScalarParameterTemplate> scalar_param_def;
         scalar_param_def.reset(new ScalarParameterTemplate(*config, item_path, "def", false));
         if (reg)
-          register_scalar_param(name, scalar_param_def, false);
+            register_scalar_param(name, "", scalar_param_def, false);
         param_def = scalar_param_def;
       }
       else

@@ -24,13 +24,44 @@ bw::SupportsTimeParameters::SupportsTimeParameters(bw::StoredQueryConfig::Ptr co
 {
   try
   {
-    register_array_param<uint64_t>(P_HOURS);
-    register_array_param<uint64_t>(P_TIMES);
-    register_scalar_param<pt::ptime>(P_BEGIN_TIME, false);
-    register_scalar_param<uint64_t>(P_START_STEP, false);
-    register_scalar_param<pt::ptime>(P_END_TIME, false);
-    register_scalar_param<uint64_t>(P_TIME_STEP, false);
-    register_scalar_param<uint64_t>(P_NUM_STEPS, false);
+    register_array_param<uint64_t>(
+        P_HOURS,
+        "Hour values for which to report data (0 or more integer values)."
+        );
+
+    register_array_param<uint64_t>(
+        P_TIMES,
+        "Time values for whih to return data. (0 or more values)."
+        );
+
+    register_scalar_param<pt::ptime>(
+        P_BEGIN_TIME,
+        "Parameter begin specifies the begin of time interval in ISO-format (for example 2012-02-27T00:00:00Z).",
+        false
+        );
+
+    register_scalar_param<uint64_t>(
+        P_START_STEP,
+        "",
+        false
+        );
+
+    register_scalar_param<pt::ptime>(
+        P_END_TIME,
+        "End of time interval in ISO-format (for example 2012-02-27T00:00:00Z).",
+        false
+        );
+
+    register_scalar_param<uint64_t>(
+        P_TIME_STEP,
+        "The time step of data in minutes. Notice that timestep is calculated from start of the ongoing hour or day.",
+        false
+        );
+
+    register_scalar_param<uint64_t>(
+        P_NUM_STEPS,
+        "Number of timesteps in result set.",
+        false);
   }
   catch (...)
   {

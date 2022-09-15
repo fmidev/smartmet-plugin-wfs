@@ -46,6 +46,7 @@ namespace Plugin
 {
 namespace WFS
 {
+//  FIXME: why SupportsTimeParameters is not used
 class StoredMastQueryHandler : public StoredQueryHandlerBase,
                                protected virtual RequiresGeoEngine,
                                protected virtual RequiresObsEngine,

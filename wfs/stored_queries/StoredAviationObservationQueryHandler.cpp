@@ -42,12 +42,33 @@ bw::StoredAviationObservationQueryHandler::StoredAviationObservationQueryHandler
 {
   try
   {
-    register_array_param<std::string>(P_ICAO_CODE);
-    register_scalar_param<pt::ptime>(P_BEGIN_TIME);
-    register_scalar_param<pt::ptime>(P_END_TIME);
-    register_scalar_param<std::string>(P_STATION_TYPE);
-    register_scalar_param<std::string>(P_RETURN_ONLY_LATEST, "false");
+    register_array_param<std::string>(
+        P_ICAO_CODE,
+        "Four-character alphanumeric code designating each airport around the world. (for example EFHK)."
+        );
+
+    register_scalar_param<pt::ptime>(
+        P_BEGIN_TIME,
+        "Parameter begin specifies the begin of time interval in ISO-format (for example 2012-02-27T00:00:00Z)."
+        );
+
+    register_scalar_param<pt::ptime>(
+        P_END_TIME,
+         "End of time interval in ISO-format (for example 2012-02-27T00:00:00Z)."
+        );
+
+    register_scalar_param<std::string>(
+        P_STATION_TYPE,
+        ""
+        );
+
+    register_scalar_param<std::string>(
+        P_RETURN_ONLY_LATEST,
+        "false"
+        );
+
     m_sqRestrictions = plugin_data.get_config().getSQRestrictions();
+
     m_maxHours = config->get_optional_config_param<double>("maxHours", 7.0 * 24.0);
   }
   catch (...)

@@ -179,13 +179,13 @@ StoredWWProbabilityQueryHandler::StoredWWProbabilityQueryHandler(
 {
   try
   {
-    register_scalar_param<int64_t>(P_FIND_NEAREST_VALID);
-    register_scalar_param<std::string>(P_LOCALE);
-    register_scalar_param<std::string>(P_MISSING_TEXT);
-    register_scalar_param<std::string>(P_PRODUCER);
-    register_scalar_param<boost::posix_time::ptime>(P_ORIGIN_TIME, false);
-    register_scalar_param<std::string>(P_CRS);
-    register_array_param<std::string>(P_ICAO_CODE);
+    register_scalar_param<int64_t>(P_FIND_NEAREST_VALID, "");
+    register_scalar_param<std::string>(P_LOCALE, "");
+    register_scalar_param<std::string>(P_MISSING_TEXT, "");
+    register_scalar_param<std::string>(P_PRODUCER, "");
+    register_scalar_param<boost::posix_time::ptime>(P_ORIGIN_TIME, "", false);
+    register_scalar_param<std::string>(P_CRS, "");
+    register_array_param<std::string>(P_ICAO_CODE, "");
 
     itsProbabilityConfigParams.probabilityUnit =
         config->get_mandatory_config_param<std::string>("probability_params.probabilityUnit");
