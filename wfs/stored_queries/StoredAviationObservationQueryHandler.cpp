@@ -64,7 +64,8 @@ bw::StoredAviationObservationQueryHandler::StoredAviationObservationQueryHandler
 
     register_scalar_param<std::string>(
         P_RETURN_ONLY_LATEST,
-        "false"
+        "",
+        false
         );
 
     m_sqRestrictions = plugin_data.get_config().getSQRestrictions();
@@ -93,7 +94,7 @@ void bw::StoredAviationObservationQueryHandler::query(const StoredQuery& query,
       std::map<std::string, SmartMet::Spine::LocationPtr> validIcaoCodes;
 
       const bool returnOnlyLatest =
-          (params.get_single<std::string>(P_RETURN_ONLY_LATEST) == "true");
+          (params.get_optional<bool>(P_RETURN_ONLY_LATEST), false);
 
       // Search the name
       Locus::QueryOptions nameSearchOptions;
