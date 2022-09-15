@@ -256,9 +256,9 @@ Json::Value StoredQueryParamRegistry::get_param_info() const
     // Explicit specifications of readable type names. For others C++ type name demangling is being used
     static std::map<std::string, std::string> name_remap =
         {
-            { Fmi::demangle_cpp_type_name(typeid(std::string).name()), "string" }
-            , { Fmi::demangle_cpp_type_name(typeid(boost::posix_time::ptime).name()), "posix_time" }
-            , { Fmi::demangle_cpp_type_name(typeid(SmartMet::Spine::BoundingBox).name()), "bounding_box" }
+            { typeid(std::string).name(), "string" }
+            , { typeid(boost::posix_time::ptime).name(), "posix_time" }
+            , { typeid(SmartMet::Spine::BoundingBox).name(), "bounding_box" }
         };
 
     Json::Value result(Json::arrayValue);
