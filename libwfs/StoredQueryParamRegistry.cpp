@@ -258,7 +258,7 @@ Json::Value StoredQueryParamRegistry::get_param_info() const
         Json::Value param_info(Json::objectValue);
         const ParamRecBase* p1 = map_item.second.get();
         param_info["name"] = p1->name;
-        param_info["type"] = p1->type_name;
+        param_info["type"] = Fmi::demangle_cpp_type_name(p1->type_name);
         const auto* p_scalar = dynamic_cast<const ScalarParameterRec*>(p1);
         if (p_scalar) {
             param_info["is_array"] = false;
