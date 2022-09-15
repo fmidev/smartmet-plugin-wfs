@@ -253,12 +253,23 @@ std::set<std::string> StoredQueryParamRegistry::get_param_names() const
 
 Json::Value StoredQueryParamRegistry::get_param_info() const
 {
+    // Explicit specifications of readable type names. For others C++ type name demangling is being used
+    static std::map<std::string, std::string> name_remap =
+        {
+            { Fmi::demangle_cpp_type_name(typeid(std::string).name()), "string" }
+            , { Fmi::demangle_cpp_type_name(typeid(boost::posix_time::ptime).name()), "posix_time" }
+            , { Fmi::demangle_cpp_type_name(typeid(SmartMet::Spine::BoundingBox).name()), "bounding_box" }
+        };
+
     Json::Value result(Json::arrayValue);
     for (const auto& map_item : param_map) {
         Json::Value param_info(Json::objectValue);
         const ParamRecBase* p1 = map_item.second.get();
         param_info["name"] = p1->name;
-        param_info["type"] = Fmi::demangle_cpp_type_name(p1->type_name);
+        auto iter = name_remap.find(p1->type_name);
+        param_info["type"] = iter == name_remap.end()
+            ? Fmi::demangle_cpp_type_name(p1->type_name)
+            : iter->second;
         const auto* p_scalar = dynamic_cast<const ScalarParameterRec*>(p1);
         if (p_scalar) {
             param_info["is_array"] = false;
