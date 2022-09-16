@@ -12,6 +12,7 @@
 #include "SupportsQualityParameters.h"
 #include "SupportsTimeZone.h"
 #include "RequiresGeoEngine.h"
+#include "SupportsTimeParameters.h"
 #include "RequiresObsEngine.h"
 namespace SmartMet
 {
@@ -28,6 +29,7 @@ class StoredObsQueryHandler : public StoredQueryHandlerBase,
                               protected SupportsTimeZone,
                               protected SupportsQualityParameters,
                               protected SupportsMeteoParameterOptions,
+                              protected SupportsTimeParameters,
                               protected virtual RequiresGeoEngine,
                               protected virtual RequiresObsEngine
 {

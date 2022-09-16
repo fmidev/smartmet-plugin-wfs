@@ -55,11 +55,12 @@ StoredObsQueryHandler::StoredObsQueryHandler(SmartMet::Spine::Reactor* reactor,
       RequiresGeoEngine(reactor),
       RequiresObsEngine(reactor),
       StoredQueryHandlerBase(reactor, config, plugin_data, template_file_name),
-      SupportsLocationParameters(reactor, config, SUPPORT_KEYWORDS | INCLUDE_GEOIDS),
+      SupportsLocationParameters(reactor, config, SUPPORT_KEYWORDS | INCLUDE_GEOIDS | INCLUDE_FMISIDS | INCLUDE_WMOS | INCLUDE_LPNNS),
       SupportsBoundingBox(config, plugin_data.get_crs_registry()),
       SupportsTimeZone(reactor, config),
       SupportsQualityParameters(config),
       SupportsMeteoParameterOptions(config),
+      SupportsTimeParameters(config),
       initial_bs_param(),
       fmisid_ind(SmartMet::add_param(
           initial_bs_param, "fmisid", Parameter::Type::DataIndependent, kFmiFMISID)),
@@ -82,23 +83,58 @@ StoredObsQueryHandler::StoredObsQueryHandler(SmartMet::Spine::Reactor* reactor,
 {
   try
   {
-    register_scalar_param<pt::ptime>(P_BEGIN_TIME, "");
-    register_scalar_param<pt::ptime>(P_END_TIME, "");
-    register_scalar_param<bool>(P_LATEST, "");
-    register_array_param<std::string>(P_METEO_PARAMETERS, "", 1);
-    register_scalar_param<std::string>(P_STATION_TYPE, "");
-    register_scalar_param<uint64_t>(P_TIME_STEP, "");
-    register_array_param<int64_t>(P_LPNNS, "");
-    register_scalar_param<uint64_t>(P_NUM_OF_STATIONS, "");
-    register_array_param<int64_t>(P_HOURS, "");
-    register_array_param<int64_t>(P_WEEK_DAYS, "");
-    register_scalar_param<std::string>(P_LOCALE, "");
-    register_scalar_param<std::string>(P_MISSING_TEXT, "");
-    register_scalar_param<uint64_t>(P_MAX_EPOCHS, "");
-    register_scalar_param<std::string>(P_CRS, "");
-    register_array_param<int64_t>(P_FMISIDS, "");
-    register_array_param<int64_t>(P_WMOS, "");
-    register_scalar_param<std::string>(P_LANGUAGE, "", false, true);
+    register_scalar_param<bool>(
+        P_LATEST,
+        ""
+        );
+
+    register_array_param<std::string>(
+        P_METEO_PARAMETERS,
+        "Comma separated list of meteorological parameters to return.",
+        true
+        );
+
+    register_scalar_param<std::string>(
+        P_STATION_TYPE,
+        ""
+        );
+
+    register_scalar_param<uint64_t>(
+        P_NUM_OF_STATIONS,
+        "How many observation stations are fetched around queried locations. Note that stations that are nly searched with "
+        );
+
+    register_array_param<int64_t>(
+        P_WEEK_DAYS,
+        ""
+        );
+
+    register_scalar_param<std::string>(
+        P_LOCALE,
+        "Specifies what locale to use for output"
+        );
+
+    register_scalar_param<std::string>(
+        P_MISSING_TEXT,
+        "Specifies what text to display for missing values"
+        );
+
+    register_scalar_param<uint64_t>(
+        P_MAX_EPOCHS,
+        ""
+        );
+
+    register_scalar_param<std::string>(
+        P_CRS,
+        "Coordinate projection to use in results. For example EPSG::3067"
+        );
+
+    register_scalar_param<std::string>(
+        P_LANGUAGE,
+        "",
+        false,
+        true
+        );
 
     max_hours = config->get_optional_config_param<double>("maxHours", 7.0 * 24.0);
     max_station_count = config->get_optional_config_param<unsigned>("maxStationCount", 0);
