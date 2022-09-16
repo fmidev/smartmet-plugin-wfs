@@ -285,8 +285,9 @@ void Plugin::adminHandler(SmartMet::Spine::Reactor& theReactor,
       }
       else if (*operation == "constructors")
       {
+        const auto handler = theRequest.getParameter("handler");
         std::ostringstream content;
-        impl->dump_constructor_map(content);
+        impl->dump_constructor_map(content, handler ? *handler : "");
         theResponse.setStatus(200);
         theResponse.setHeader("Content-type", "application/json");
         theResponse.setContent(content.str());

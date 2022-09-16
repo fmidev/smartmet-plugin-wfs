@@ -677,7 +677,7 @@ void bw::StoredQueryMap::directory_monitor_thread_proc()
 	    << std::endl;
 }
 
-Json::Value bw::StoredQueryMap::get_constructor_map() const
+Json::Value bw::StoredQueryMap::get_constructor_map(const std::string& handler) const
 {
   Json::Value result;
   Json::Value& constructors = result["constructors"];
@@ -689,26 +689,28 @@ Json::Value bw::StoredQueryMap::get_constructor_map() const
     auto sq_conf = constructor_ptr->get_config();
     if (sq_conf->have_template_fn()) {
       const std::string& c_name = sq_conf->get_constructor_name();
-      const std::string& t_fn = sq_conf->get_template_fn();
-      const std::vector<std::string>& r_names = sq_conf->get_return_type_names();
-      Json::Value& a = constructors[c_name];
-      Json::Value& a1 = a["templates"];
-      if (m1[c_name].insert(t_fn).second) {
-	a1[a1.size()] = t_fn;
+      if ((handler == "") or (c_name == handler)) {
+          const std::string& t_fn = sq_conf->get_template_fn();
+          const std::vector<std::string>& r_names = sq_conf->get_return_type_names();
+          Json::Value& a = constructors[c_name];
+          Json::Value& a1 = a["templates"];
+          if (m1[c_name].insert(t_fn).second) {
+              a1[a1.size()] = t_fn;
+          }
+          Json::Value& a2 = a["stored_queries"];
+          Json::Value& b = a2[a2.size()];
+          b["name"] = sq_conf->get_query_id();
+          b["template"] = sq_conf->get_template_fn();
+          Json::Value& b2 = b["return_types"];
+          Json::Value& t1 = templates[t_fn];
+          for (const auto& x : r_names) {
+              b2[b2.size()] = x;
+              if (m2[t_fn].insert(x).second) {
+                  t1[t1.size()] = x;
+              }
+          }
+          a["parameters"] = constructor_ptr->get_param_info();
       }
-      Json::Value& a2 = a["stored_queries"];
-      Json::Value& b = a2[a2.size()];
-      b["name"] = sq_conf->get_query_id();
-      b["template"] = sq_conf->get_template_fn();
-      Json::Value& b2 = b["return_types"];
-      Json::Value& t1 = templates[t_fn];
-      for (const auto& x : r_names) {
-	b2[b2.size()] = x;
-	if (m2[t_fn].insert(x).second) {
-	  t1[t1.size()] = x;
-	}
-      }
-      a["parameters"] = constructor_ptr->get_param_info();
     }
   }
   return result;

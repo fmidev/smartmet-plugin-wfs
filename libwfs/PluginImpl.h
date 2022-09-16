@@ -133,7 +133,14 @@ class PluginImpl
 
   void dump_xml_schema_cache(std::ostream& os);
 
-  void dump_constructor_map(std::ostream& os);
+  /**
+   *  @brief Dump stored query handler map in JSON format
+   *
+   *  @param os output stream to which to write JSON document
+   *  @param handler stored query handler for which to output information or
+   *         all handlers when empty string is specified
+   */
+  void dump_constructor_map(std::ostream& os, const std::string& handler = "");
 
   bool is_reload_required(bool reset = false);
 
