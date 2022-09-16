@@ -81,6 +81,10 @@ s-input-files:
 	@rm -f $(shell find input -name '*.xml.post' -o -name '*.kvp.get')
 	@$(MAKE) $(XML_POST_TESTS)
 	@$(MAKE) $(KVP_GET_TESTS)
+	-if [ -d extra_input ] ; then \
+		mkdir -p input/extra_tests && \
+		cp -vpR extra_input/* input/extra_tests/; \
+	fi
 
 input/%.xml.post : xml/%.xml ; @mkdir -p $(shell dirname $@)
 	@perl ../MakeXMLPOST.pl $< $@ /wfs
