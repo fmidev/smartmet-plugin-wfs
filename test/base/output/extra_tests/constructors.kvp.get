@@ -1,0 +1,1252 @@
+{
+	"constructors" : 
+	{
+		"wfs_coverage_query_handler_factory" : 
+		{
+			"parameters" : 
+			{
+				"beginTime" : 
+				{
+					"description" : "Parameter begin specifies the begin of time interval in ISO-format (for example 2012-02-27T00:00:00Z).",
+					"is_array" : false,
+					"mandatory" : false,
+					"type" : "posix_time"
+				},
+				"boundingBox" : 
+				{
+					"description" : "Bounding box of area for which to return data.",
+					"is_array" : false,
+					"mandatory" : false,
+					"type" : "bounding_box"
+				},
+				"crs" : 
+				{
+					"description" : "",
+					"is_array" : false,
+					"mandatory" : true,
+					"type" : "string"
+				},
+				"endTime" : 
+				{
+					"description" : "End of time interval in ISO-format (for example 2012-02-27T00:00:00Z).",
+					"is_array" : false,
+					"mandatory" : false,
+					"type" : "posix_time"
+				},
+				"hours" : 
+				{
+					"description" : "Hour values for which to report data (0 or more integer values).",
+					"is_array" : true,
+					"max_size" : 65535,
+					"min_size" : 0,
+					"step" : 0,
+					"type" : "unsigned long"
+				},
+				"originTime" : 
+				{
+					"description" : "",
+					"is_array" : false,
+					"mandatory" : false,
+					"type" : "posix_time"
+				},
+				"producer" : 
+				{
+					"description" : "",
+					"is_array" : false,
+					"mandatory" : true,
+					"type" : "string"
+				},
+				"startStep" : 
+				{
+					"description" : "",
+					"is_array" : false,
+					"mandatory" : false,
+					"type" : "unsigned long"
+				},
+				"timeStep" : 
+				{
+					"description" : "The time step of data in minutes. Notice that timestep is calculated from start of the ongoing hour or day.",
+					"is_array" : false,
+					"mandatory" : false,
+					"type" : "unsigned long"
+				},
+				"timeSteps" : 
+				{
+					"description" : "Number of timesteps in result set.",
+					"is_array" : false,
+					"mandatory" : false,
+					"type" : "unsigned long"
+				},
+				"timeZone" : 
+				{
+					"description" : "Time zone of the time instant of the data point in the form Area/Location (for example America/Costa_Rica).The default value is UTC.",
+					"is_array" : false,
+					"mandatory" : true,
+					"type" : "string"
+				},
+				"times" : 
+				{
+					"description" : "Time values for which to return data. (0 or more values).",
+					"is_array" : true,
+					"max_size" : 999,
+					"min_size" : 0,
+					"step" : 1,
+					"type" : "unsigned long"
+				}
+			},
+			"stored_queries" : 
+			[
+				{
+					"name" : "CoverageTest",
+					"return_types" : 
+					[
+						"omso:GridSeriesObservation"
+					],
+					"template" : "coverage_countours.c2t"
+				}
+			],
+			"templates" : 
+			[
+				"coverage_countours.c2t"
+			]
+		},
+		"wfs_forecast_handler_factory" : 
+		{
+			"parameters" : 
+			{
+				"beginTime" : 
+				{
+					"description" : "Parameter begin specifies the begin of time interval in ISO-format (for example 2012-02-27T00:00:00Z).",
+					"is_array" : false,
+					"mandatory" : false,
+					"type" : "posix_time"
+				},
+				"crs" : 
+				{
+					"description" : "",
+					"is_array" : false,
+					"mandatory" : true,
+					"type" : "string"
+				},
+				"endTime" : 
+				{
+					"description" : "End of time interval in ISO-format (for example 2012-02-27T00:00:00Z).",
+					"is_array" : false,
+					"mandatory" : false,
+					"type" : "posix_time"
+				},
+				"findNearestValid" : 
+				{
+					"description" : "",
+					"is_array" : false,
+					"mandatory" : true,
+					"type" : "long"
+				},
+				"fmisids" : 
+				{
+					"description" : "FMI observation station identifiers (0 or more values).",
+					"is_array" : true,
+					"max_size" : 65535,
+					"min_size" : 0,
+					"step" : 0,
+					"type" : "long"
+				},
+				"geoids" : 
+				{
+					"description" : "GEOIDs of the locations for which to return data (0 or more values).",
+					"is_array" : true,
+					"max_size" : 65535,
+					"min_size" : 0,
+					"step" : 0,
+					"type" : "long"
+				},
+				"hours" : 
+				{
+					"description" : "Hour values for which to report data (0 or more integer values).",
+					"is_array" : true,
+					"max_size" : 65535,
+					"min_size" : 0,
+					"step" : 0,
+					"type" : "unsigned long"
+				},
+				"keyword" : 
+				{
+					"description" : "",
+					"is_array" : false,
+					"mandatory" : true,
+					"type" : "string"
+				},
+				"keyword_overwritable" : 
+				{
+					"description" : "",
+					"is_array" : false,
+					"mandatory" : true,
+					"type" : "bool"
+				},
+				"latlons" : 
+				{
+					"description" : "Location coordinates for which to return data (0 or more latitude/longitude pairs).",
+					"is_array" : true,
+					"max_size" : 999,
+					"min_size" : 0,
+					"step" : 2,
+					"type" : "double"
+				},
+				"level" : 
+				{
+					"description" : "",
+					"is_array" : true,
+					"max_size" : 99,
+					"min_size" : 0,
+					"step" : 0,
+					"type" : "long"
+				},
+				"levelHeights" : 
+				{
+					"description" : "",
+					"is_array" : true,
+					"max_size" : 99,
+					"min_size" : 0,
+					"step" : 0,
+					"type" : "double"
+				},
+				"levelType" : 
+				{
+					"description" : "",
+					"is_array" : false,
+					"mandatory" : true,
+					"type" : "string"
+				},
+				"locale" : 
+				{
+					"description" : "",
+					"is_array" : false,
+					"mandatory" : true,
+					"type" : "string"
+				},
+				"lpnns" : 
+				{
+					"description" : "LPNN code of the location for which to return data (0 or more values)",
+					"is_array" : true,
+					"max_size" : 65535,
+					"min_size" : 0,
+					"step" : 0,
+					"type" : "long"
+				},
+				"maxDistance" : 
+				{
+					"description" : "Maximal distance of sites from specified place for which to provide data (mandatory real value)",
+					"is_array" : false,
+					"mandatory" : true,
+					"type" : "double"
+				},
+				"missingText" : 
+				{
+					"description" : "",
+					"is_array" : false,
+					"mandatory" : true,
+					"type" : "string"
+				},
+				"model" : 
+				{
+					"description" : "",
+					"is_array" : true,
+					"max_size" : 65535,
+					"min_size" : 0,
+					"step" : 0,
+					"type" : "string"
+				},
+				"originTime" : 
+				{
+					"description" : "",
+					"is_array" : false,
+					"mandatory" : false,
+					"type" : "posix_time"
+				},
+				"param" : 
+				{
+					"description" : "",
+					"is_array" : true,
+					"max_size" : 99,
+					"min_size" : 1,
+					"step" : 0,
+					"type" : "string"
+				},
+				"places" : 
+				{
+					"description" : "The location for which to provide data (0 or more values)",
+					"is_array" : true,
+					"max_size" : 65535,
+					"min_size" : 0,
+					"step" : 0,
+					"type" : "string"
+				},
+				"startStep" : 
+				{
+					"description" : "",
+					"is_array" : false,
+					"mandatory" : false,
+					"type" : "unsigned long"
+				},
+				"timeStep" : 
+				{
+					"description" : "The time step of data in minutes. Notice that timestep is calculated from start of the ongoing hour or day.",
+					"is_array" : false,
+					"mandatory" : false,
+					"type" : "unsigned long"
+				},
+				"timeSteps" : 
+				{
+					"description" : "Number of timesteps in result set.",
+					"is_array" : false,
+					"mandatory" : false,
+					"type" : "unsigned long"
+				},
+				"timeZone" : 
+				{
+					"description" : "Time zone of the time instant of the data point in the form Area/Location (for example America/Costa_Rica).The default value is UTC.",
+					"is_array" : false,
+					"mandatory" : true,
+					"type" : "string"
+				},
+				"times" : 
+				{
+					"description" : "Time values for which to return data. (0 or more values).",
+					"is_array" : true,
+					"max_size" : 999,
+					"min_size" : 0,
+					"step" : 1,
+					"type" : "unsigned long"
+				},
+				"wmos" : 
+				{
+					"description" : "WMO code of the location for which to return data (0 or more values)",
+					"is_array" : true,
+					"max_size" : 65535,
+					"min_size" : 0,
+					"step" : 0,
+					"type" : "long"
+				}
+			},
+			"stored_queries" : 
+			[
+				{
+					"name" : "ForecastTest",
+					"return_types" : 
+					[
+						"omso:PointTimeSeriesObservation"
+					],
+					"template" : "hash_dump.c2t"
+				}
+			],
+			"templates" : 
+			[
+				"hash_dump.c2t"
+			]
+		},
+		"wfs_grid_forecast_handler_factory" : 
+		{
+			"parameters" : 
+			{
+				"beginTime" : 
+				{
+					"description" : "Parameter begin specifies the begin of time interval in ISO-format (for example 2012-02-27T00:00:00Z).",
+					"is_array" : false,
+					"mandatory" : false,
+					"type" : "posix_time"
+				},
+				"crs" : 
+				{
+					"description" : "",
+					"is_array" : false,
+					"mandatory" : true,
+					"type" : "string"
+				},
+				"endTime" : 
+				{
+					"description" : "End of time interval in ISO-format (for example 2012-02-27T00:00:00Z).",
+					"is_array" : false,
+					"mandatory" : false,
+					"type" : "posix_time"
+				},
+				"findNearestValid" : 
+				{
+					"description" : "",
+					"is_array" : false,
+					"mandatory" : true,
+					"type" : "long"
+				},
+				"geoids" : 
+				{
+					"description" : "GEOIDs of the locations for which to return data (0 or more values).",
+					"is_array" : true,
+					"max_size" : 65535,
+					"min_size" : 0,
+					"step" : 0,
+					"type" : "long"
+				},
+				"hours" : 
+				{
+					"description" : "Hour values for which to report data (0 or more integer values).",
+					"is_array" : true,
+					"max_size" : 65535,
+					"min_size" : 0,
+					"step" : 0,
+					"type" : "unsigned long"
+				},
+				"keyword" : 
+				{
+					"description" : "",
+					"is_array" : false,
+					"mandatory" : true,
+					"type" : "string"
+				},
+				"keyword_overwritable" : 
+				{
+					"description" : "",
+					"is_array" : false,
+					"mandatory" : true,
+					"type" : "bool"
+				},
+				"latlons" : 
+				{
+					"description" : "Location coordinates for which to return data (0 or more latitude/longitude pairs).",
+					"is_array" : true,
+					"max_size" : 999,
+					"min_size" : 0,
+					"step" : 2,
+					"type" : "double"
+				},
+				"level" : 
+				{
+					"description" : "",
+					"is_array" : true,
+					"max_size" : 99,
+					"min_size" : 0,
+					"step" : 0,
+					"type" : "long"
+				},
+				"levelHeights" : 
+				{
+					"description" : "",
+					"is_array" : true,
+					"max_size" : 99,
+					"min_size" : 0,
+					"step" : 0,
+					"type" : "double"
+				},
+				"levelType" : 
+				{
+					"description" : "",
+					"is_array" : false,
+					"mandatory" : true,
+					"type" : "string"
+				},
+				"locale" : 
+				{
+					"description" : "",
+					"is_array" : false,
+					"mandatory" : true,
+					"type" : "string"
+				},
+				"maxDistance" : 
+				{
+					"description" : "Maximal distance of sites from specified place for which to provide data (mandatory real value)",
+					"is_array" : false,
+					"mandatory" : true,
+					"type" : "double"
+				},
+				"missingText" : 
+				{
+					"description" : "",
+					"is_array" : false,
+					"mandatory" : true,
+					"type" : "string"
+				},
+				"model" : 
+				{
+					"description" : "",
+					"is_array" : true,
+					"max_size" : 65535,
+					"min_size" : 0,
+					"step" : 0,
+					"type" : "string"
+				},
+				"originTime" : 
+				{
+					"description" : "",
+					"is_array" : false,
+					"mandatory" : false,
+					"type" : "posix_time"
+				},
+				"param" : 
+				{
+					"description" : "",
+					"is_array" : true,
+					"max_size" : 99,
+					"min_size" : 1,
+					"step" : 0,
+					"type" : "string"
+				},
+				"places" : 
+				{
+					"description" : "The location for which to provide data (0 or more values)",
+					"is_array" : true,
+					"max_size" : 65535,
+					"min_size" : 0,
+					"step" : 0,
+					"type" : "string"
+				},
+				"startStep" : 
+				{
+					"description" : "",
+					"is_array" : false,
+					"mandatory" : false,
+					"type" : "unsigned long"
+				},
+				"timeStep" : 
+				{
+					"description" : "The time step of data in minutes. Notice that timestep is calculated from start of the ongoing hour or day.",
+					"is_array" : false,
+					"mandatory" : false,
+					"type" : "unsigned long"
+				},
+				"timeSteps" : 
+				{
+					"description" : "Number of timesteps in result set.",
+					"is_array" : false,
+					"mandatory" : false,
+					"type" : "unsigned long"
+				},
+				"timeZone" : 
+				{
+					"description" : "Time zone of the time instant of the data point in the form Area/Location (for example America/Costa_Rica).The default value is UTC.",
+					"is_array" : false,
+					"mandatory" : true,
+					"type" : "string"
+				},
+				"times" : 
+				{
+					"description" : "Time values for which to return data. (0 or more values).",
+					"is_array" : true,
+					"max_size" : 999,
+					"min_size" : 0,
+					"step" : 1,
+					"type" : "unsigned long"
+				}
+			},
+			"stored_queries" : 
+			[
+				{
+					"name" : "GridForecastTest",
+					"return_types" : 
+					[
+						"omso:PointTimeSeriesObservation"
+					],
+					"template" : "hash_dump.c2t"
+				}
+			],
+			"templates" : 
+			[
+				"hash_dump.c2t"
+			]
+		},
+		"wfs_isoline_query_handler_factory" : 
+		{
+			"parameters" : 
+			{
+				"beginTime" : 
+				{
+					"description" : "Parameter begin specifies the begin of time interval in ISO-format (for example 2012-02-27T00:00:00Z).",
+					"is_array" : false,
+					"mandatory" : false,
+					"type" : "posix_time"
+				},
+				"boundingBox" : 
+				{
+					"description" : "Bounding box of area for which to return data.",
+					"is_array" : false,
+					"mandatory" : false,
+					"type" : "bounding_box"
+				},
+				"crs" : 
+				{
+					"description" : "",
+					"is_array" : false,
+					"mandatory" : true,
+					"type" : "string"
+				},
+				"endTime" : 
+				{
+					"description" : "End of time interval in ISO-format (for example 2012-02-27T00:00:00Z).",
+					"is_array" : false,
+					"mandatory" : false,
+					"type" : "posix_time"
+				},
+				"hours" : 
+				{
+					"description" : "Hour values for which to report data (0 or more integer values).",
+					"is_array" : true,
+					"max_size" : 65535,
+					"min_size" : 0,
+					"step" : 0,
+					"type" : "unsigned long"
+				},
+				"imageFile" : 
+				{
+					"description" : "",
+					"is_array" : false,
+					"mandatory" : true,
+					"type" : "string"
+				},
+				"originTime" : 
+				{
+					"description" : "",
+					"is_array" : false,
+					"mandatory" : false,
+					"type" : "posix_time"
+				},
+				"producer" : 
+				{
+					"description" : "",
+					"is_array" : false,
+					"mandatory" : true,
+					"type" : "string"
+				},
+				"smoothing" : 
+				{
+					"description" : "",
+					"is_array" : false,
+					"mandatory" : true,
+					"type" : "bool"
+				},
+				"smoothing_degree" : 
+				{
+					"description" : "",
+					"is_array" : false,
+					"mandatory" : true,
+					"type" : "unsigned long"
+				},
+				"smoothing_size" : 
+				{
+					"description" : "",
+					"is_array" : false,
+					"mandatory" : true,
+					"type" : "unsigned long"
+				},
+				"startStep" : 
+				{
+					"description" : "",
+					"is_array" : false,
+					"mandatory" : false,
+					"type" : "unsigned long"
+				},
+				"timeStep" : 
+				{
+					"description" : "The time step of data in minutes. Notice that timestep is calculated from start of the ongoing hour or day.",
+					"is_array" : false,
+					"mandatory" : false,
+					"type" : "unsigned long"
+				},
+				"timeSteps" : 
+				{
+					"description" : "Number of timesteps in result set.",
+					"is_array" : false,
+					"mandatory" : false,
+					"type" : "unsigned long"
+				},
+				"timeZone" : 
+				{
+					"description" : "Time zone of the time instant of the data point in the form Area/Location (for example America/Costa_Rica).The default value is UTC.",
+					"is_array" : false,
+					"mandatory" : true,
+					"type" : "string"
+				},
+				"times" : 
+				{
+					"description" : "Time values for which to return data. (0 or more values).",
+					"is_array" : true,
+					"max_size" : 999,
+					"min_size" : 0,
+					"step" : 1,
+					"type" : "unsigned long"
+				}
+			},
+			"stored_queries" : 
+			[
+				{
+					"name" : "IsolineTest",
+					"return_types" : 
+					[
+						"omso:GridSeriesObservation"
+					],
+					"template" : "isoline_countours.c2t"
+				}
+			],
+			"templates" : 
+			[
+				"isoline_countours.c2t"
+			]
+		},
+		"wfs_obs_handler_factory" : 
+		{
+			"parameters" : 
+			{
+				"beginTime" : 
+				{
+					"description" : "Parameter begin specifies the begin of time interval in ISO-format (for example 2012-02-27T00:00:00Z).",
+					"is_array" : false,
+					"mandatory" : false,
+					"type" : "posix_time"
+				},
+				"boundingBox" : 
+				{
+					"description" : "Bounding box of area for which to return data.",
+					"is_array" : false,
+					"mandatory" : false,
+					"type" : "bounding_box"
+				},
+				"crs" : 
+				{
+					"description" : "Coordinate projection to use in results. For example EPSG::3067",
+					"is_array" : false,
+					"mandatory" : true,
+					"type" : "string"
+				},
+				"endTime" : 
+				{
+					"description" : "End of time interval in ISO-format (for example 2012-02-27T00:00:00Z).",
+					"is_array" : false,
+					"mandatory" : false,
+					"type" : "posix_time"
+				},
+				"fmisids" : 
+				{
+					"description" : "FMI observation station identifiers (0 or more values).",
+					"is_array" : true,
+					"max_size" : 65535,
+					"min_size" : 0,
+					"step" : 0,
+					"type" : "long"
+				},
+				"geoids" : 
+				{
+					"description" : "GEOIDs of the locations for which to return data (0 or more values).",
+					"is_array" : true,
+					"max_size" : 65535,
+					"min_size" : 0,
+					"step" : 0,
+					"type" : "long"
+				},
+				"hours" : 
+				{
+					"description" : "Hour values for which to report data (0 or more integer values).",
+					"is_array" : true,
+					"max_size" : 65535,
+					"min_size" : 0,
+					"step" : 0,
+					"type" : "unsigned long"
+				},
+				"keyword" : 
+				{
+					"description" : "",
+					"is_array" : false,
+					"mandatory" : true,
+					"type" : "string"
+				},
+				"keyword_overwritable" : 
+				{
+					"description" : "",
+					"is_array" : false,
+					"mandatory" : true,
+					"type" : "bool"
+				},
+				"language" : 
+				{
+					"description" : "",
+					"is_array" : false,
+					"mandatory" : false,
+					"type" : "string"
+				},
+				"latest" : 
+				{
+					"description" : "",
+					"is_array" : false,
+					"mandatory" : true,
+					"type" : "bool"
+				},
+				"latlons" : 
+				{
+					"description" : "Location coordinates for which to return data (0 or more latitude/longitude pairs).",
+					"is_array" : true,
+					"max_size" : 999,
+					"min_size" : 0,
+					"step" : 2,
+					"type" : "double"
+				},
+				"locale" : 
+				{
+					"description" : "Specifies what locale to use for output",
+					"is_array" : false,
+					"mandatory" : true,
+					"type" : "string"
+				},
+				"lpnns" : 
+				{
+					"description" : "LPNN code of the location for which to return data (0 or more values)",
+					"is_array" : true,
+					"max_size" : 65535,
+					"min_size" : 0,
+					"step" : 0,
+					"type" : "long"
+				},
+				"maxDistance" : 
+				{
+					"description" : "Maximal distance of sites from specified place for which to provide data (mandatory real value)",
+					"is_array" : false,
+					"mandatory" : true,
+					"type" : "double"
+				},
+				"maxEpochs" : 
+				{
+					"description" : "",
+					"is_array" : false,
+					"mandatory" : true,
+					"type" : "unsigned long"
+				},
+				"meteoParameters" : 
+				{
+					"description" : "Comma separated list of meteorological parameters to return.",
+					"is_array" : true,
+					"max_size" : 65535,
+					"min_size" : 1,
+					"step" : 0,
+					"type" : "string"
+				},
+				"missingText" : 
+				{
+					"description" : "Specifies what text to display for missing values",
+					"is_array" : false,
+					"mandatory" : true,
+					"type" : "string"
+				},
+				"numOfStations" : 
+				{
+					"description" : "How many observation stations are fetched around queried locations. Note that stations that are nly searched with ",
+					"is_array" : false,
+					"mandatory" : true,
+					"type" : "unsigned long"
+				},
+				"places" : 
+				{
+					"description" : "The location for which to provide data (0 or more values)",
+					"is_array" : true,
+					"max_size" : 65535,
+					"min_size" : 0,
+					"step" : 0,
+					"type" : "string"
+				},
+				"qualityInfo" : 
+				{
+					"description" : "Specifies whether to requst quality info",
+					"is_array" : false,
+					"mandatory" : true,
+					"type" : "bool"
+				},
+				"startStep" : 
+				{
+					"description" : "",
+					"is_array" : false,
+					"mandatory" : false,
+					"type" : "unsigned long"
+				},
+				"stationType" : 
+				{
+					"description" : "",
+					"is_array" : false,
+					"mandatory" : true,
+					"type" : "string"
+				},
+				"timeStep" : 
+				{
+					"description" : "The time step of data in minutes. Notice that timestep is calculated from start of the ongoing hour or day.",
+					"is_array" : false,
+					"mandatory" : false,
+					"type" : "unsigned long"
+				},
+				"timeSteps" : 
+				{
+					"description" : "Number of timesteps in result set.",
+					"is_array" : false,
+					"mandatory" : false,
+					"type" : "unsigned long"
+				},
+				"timeZone" : 
+				{
+					"description" : "Time zone of the time instant of the data point in the form Area/Location (for example America/Costa_Rica).The default value is UTC.",
+					"is_array" : false,
+					"mandatory" : true,
+					"type" : "string"
+				},
+				"times" : 
+				{
+					"description" : "Time values for which to return data. (0 or more values).",
+					"is_array" : true,
+					"max_size" : 999,
+					"min_size" : 0,
+					"step" : 1,
+					"type" : "unsigned long"
+				},
+				"weekDays" : 
+				{
+					"description" : "",
+					"is_array" : true,
+					"max_size" : 65535,
+					"min_size" : 0,
+					"step" : 0,
+					"type" : "long"
+				},
+				"wmos" : 
+				{
+					"description" : "WMO code of the location for which to return data (0 or more values)",
+					"is_array" : true,
+					"max_size" : 65535,
+					"min_size" : 0,
+					"step" : 0,
+					"type" : "long"
+				}
+			},
+			"stored_queries" : 
+			[
+				{
+					"name" : "HiddenObsTest",
+					"return_types" : 
+					[
+						"omso:PointTimeSeriesObservation"
+					],
+					"template" : "hash_dump.c2t"
+				},
+				{
+					"name" : "ObsQcTest",
+					"return_types" : 
+					[
+						"omso:PointTimeSeriesObservation"
+					],
+					"template" : "hash_dump.c2t"
+				},
+				{
+					"name" : "ObsQcTest2",
+					"return_types" : 
+					[
+						"omso:PointTimeSeriesObservation"
+					],
+					"template" : "hash_dump.c2t"
+				},
+				{
+					"name" : "ObsTest",
+					"return_types" : 
+					[
+						"omso:PointTimeSeriesObservation"
+					],
+					"template" : "hash_dump.c2t"
+				}
+			],
+			"templates" : 
+			[
+				"hash_dump.c2t"
+			]
+		},
+		"wfs_stored_geoserver_handler_factory" : 
+		{
+			"parameters" : 
+			{
+				"begin" : 
+				{
+					"description" : "Parameter begin specifies the begin of time interval in ISO-format (for example 2012-02-27T00:00:00Z).",
+					"is_array" : false,
+					"mandatory" : true,
+					"type" : "posix_time"
+				},
+				"boundingBox" : 
+				{
+					"description" : "Bounding box of area for which to return data.",
+					"is_array" : false,
+					"mandatory" : false,
+					"type" : "bounding_box"
+				},
+				"crs" : 
+				{
+					"description" : "",
+					"is_array" : false,
+					"mandatory" : true,
+					"type" : "string"
+				},
+				"end" : 
+				{
+					"description" : "End of time interval in ISO-format (for example 2012-02-27T00:00:00Z).",
+					"is_array" : false,
+					"mandatory" : true,
+					"type" : "posix_time"
+				},
+				"height" : 
+				{
+					"description" : "",
+					"is_array" : false,
+					"mandatory" : true,
+					"type" : "unsigned long"
+				},
+				"layers" : 
+				{
+					"description" : "",
+					"is_array" : true,
+					"max_size" : 999,
+					"min_size" : 1,
+					"step" : 0,
+					"type" : "string"
+				},
+				"width" : 
+				{
+					"description" : "",
+					"is_array" : false,
+					"mandatory" : true,
+					"type" : "unsigned long"
+				}
+			},
+			"stored_queries" : 
+			[
+				{
+					"name" : "RadarHclassTest",
+					"return_types" : 
+					[
+						"omso:GridSeriesObservation"
+					],
+					"template" : "hash_dump.c2t"
+				},
+				{
+					"name" : "RadarHclassTest2",
+					"return_types" : 
+					[
+						"omso:GridSeriesObservation"
+					],
+					"template" : "hash_dump.c2t"
+				}
+			],
+			"templates" : 
+			[
+				"hash_dump.c2t"
+			]
+		},
+		"wfs_stored_sounding_handler_factory" : 
+		{
+			"parameters" : 
+			{
+				"altitudeRanges" : 
+				{
+					"description" : "",
+					"is_array" : true,
+					"max_size" : 2,
+					"min_size" : 0,
+					"step" : 2,
+					"type" : "double"
+				},
+				"beginTime" : 
+				{
+					"description" : "",
+					"is_array" : false,
+					"mandatory" : true,
+					"type" : "posix_time"
+				},
+				"boundingBox" : 
+				{
+					"description" : "Bounding box of area for which to return data.",
+					"is_array" : false,
+					"mandatory" : false,
+					"type" : "bounding_box"
+				},
+				"crs" : 
+				{
+					"description" : "",
+					"is_array" : false,
+					"mandatory" : true,
+					"type" : "string"
+				},
+				"endTime" : 
+				{
+					"description" : "",
+					"is_array" : false,
+					"mandatory" : true,
+					"type" : "posix_time"
+				},
+				"fmisids" : 
+				{
+					"description" : "FMI observation station identifiers (0 or more values).",
+					"is_array" : true,
+					"max_size" : 65535,
+					"min_size" : 0,
+					"step" : 0,
+					"type" : "long"
+				},
+				"geoids" : 
+				{
+					"description" : "GEOIDs of the locations for which to return data (0 or more values).",
+					"is_array" : true,
+					"max_size" : 65535,
+					"min_size" : 0,
+					"step" : 0,
+					"type" : "long"
+				},
+				"keyword" : 
+				{
+					"description" : "",
+					"is_array" : false,
+					"mandatory" : true,
+					"type" : "string"
+				},
+				"keyword_overwritable" : 
+				{
+					"description" : "",
+					"is_array" : false,
+					"mandatory" : true,
+					"type" : "bool"
+				},
+				"latest" : 
+				{
+					"description" : "",
+					"is_array" : false,
+					"mandatory" : true,
+					"type" : "bool"
+				},
+				"latlons" : 
+				{
+					"description" : "Location coordinates for which to return data (0 or more latitude/longitude pairs).",
+					"is_array" : true,
+					"max_size" : 999,
+					"min_size" : 0,
+					"step" : 2,
+					"type" : "double"
+				},
+				"maxDistance" : 
+				{
+					"description" : "Maximal distance of sites from specified place for which to provide data (mandatory real value)",
+					"is_array" : false,
+					"mandatory" : true,
+					"type" : "double"
+				},
+				"meteoParameters" : 
+				{
+					"description" : "",
+					"is_array" : true,
+					"max_size" : 65535,
+					"min_size" : 1,
+					"step" : 0,
+					"type" : "string"
+				},
+				"missingText" : 
+				{
+					"description" : "",
+					"is_array" : false,
+					"mandatory" : true,
+					"type" : "string"
+				},
+				"numOfStations" : 
+				{
+					"description" : "",
+					"is_array" : false,
+					"mandatory" : true,
+					"type" : "unsigned long"
+				},
+				"places" : 
+				{
+					"description" : "The location for which to provide data (0 or more values)",
+					"is_array" : true,
+					"max_size" : 65535,
+					"min_size" : 0,
+					"step" : 0,
+					"type" : "string"
+				},
+				"pressureRages" : 
+				{
+					"description" : "",
+					"is_array" : true,
+					"max_size" : 2,
+					"min_size" : 0,
+					"step" : 2,
+					"type" : "double"
+				},
+				"publicity" : 
+				{
+					"description" : "",
+					"is_array" : true,
+					"max_size" : 65535,
+					"min_size" : 1,
+					"step" : 0,
+					"type" : "unsigned long"
+				},
+				"qualityInfo" : 
+				{
+					"description" : "Specifies whether to requst quality info",
+					"is_array" : false,
+					"mandatory" : true,
+					"type" : "bool"
+				},
+				"soundingType" : 
+				{
+					"description" : "",
+					"is_array" : true,
+					"max_size" : 65535,
+					"min_size" : 0,
+					"step" : 0,
+					"type" : "unsigned long"
+				},
+				"stationType" : 
+				{
+					"description" : "",
+					"is_array" : false,
+					"mandatory" : true,
+					"type" : "string"
+				},
+				"wmos" : 
+				{
+					"description" : "WMO code of the location for which to return data (0 or more values)",
+					"is_array" : true,
+					"max_size" : 65535,
+					"min_size" : 0,
+					"step" : 0,
+					"type" : "long"
+				}
+			},
+			"stored_queries" : 
+			[
+				{
+					"name" : "SoundingTest",
+					"return_types" : 
+					[
+						"omso:TrajectoryObservation"
+					],
+					"template" : "hash_dump.c2t"
+				}
+			],
+			"templates" : 
+			[
+				"hash_dump.c2t"
+			]
+		}
+	},
+	"templates" : 
+	{
+		"coverage_countours.c2t" : 
+		[
+			"omso:GridSeriesObservation"
+		],
+		"hash_dump.c2t" : 
+		[
+			"omso:PointTimeSeriesObservation",
+			"omso:GridSeriesObservation",
+			"omso:TrajectoryObservation"
+		],
+		"isoline_countours.c2t" : 
+		[
+			"omso:GridSeriesObservation"
+		]
+	}
+}
