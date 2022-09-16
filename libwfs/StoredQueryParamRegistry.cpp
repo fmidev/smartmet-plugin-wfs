@@ -261,12 +261,11 @@ Json::Value StoredQueryParamRegistry::get_param_info() const
             , { typeid(SmartMet::Spine::BoundingBox).name(), "bounding_box" }
         };
 
-    Json::Value result(Json::arrayValue);
+    Json::Value result(Json::objectValue);
     for (const auto& map_item : param_map) {
-        Json::Value param_info(Json::objectValue);
         const ParamRecBase* p1 = map_item.second.get();
-        param_info["name"] = p1->name;
         auto iter = name_remap.find(p1->type_name);
+        Json::Value& param_info = result[p1->name];
         param_info["type"] = iter == name_remap.end()
             ? Fmi::demangle_cpp_type_name(p1->type_name)
             : iter->second;
@@ -284,7 +283,6 @@ Json::Value StoredQueryParamRegistry::get_param_info() const
                 param_info["step"] = p_array->step;
             }
         }
-        result.append(param_info);
     }
     return result;
 }
