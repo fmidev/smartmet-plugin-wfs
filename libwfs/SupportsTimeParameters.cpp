@@ -31,7 +31,8 @@ bw::SupportsTimeParameters::SupportsTimeParameters(bw::StoredQueryConfig::Ptr co
 
     register_array_param<uint64_t>(
         P_TIMES,
-        "Time values for whih to return data. (0 or more values)."
+        "Time values for which to return data. (0 or more values).",
+        0, 999, 1, true
         );
 
     register_scalar_param<pt::ptime>(
@@ -43,7 +44,8 @@ bw::SupportsTimeParameters::SupportsTimeParameters(bw::StoredQueryConfig::Ptr co
     register_scalar_param<uint64_t>(
         P_START_STEP,
         "",
-        false
+        false,
+        true
         );
 
     register_scalar_param<pt::ptime>(
@@ -61,7 +63,7 @@ bw::SupportsTimeParameters::SupportsTimeParameters(bw::StoredQueryConfig::Ptr co
     register_scalar_param<uint64_t>(
         P_NUM_STEPS,
         "Number of timesteps in result set.",
-        false);
+        false, true);
   }
   catch (...)
   {
