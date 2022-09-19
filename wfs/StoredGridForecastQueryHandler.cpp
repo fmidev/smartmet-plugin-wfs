@@ -97,16 +97,61 @@ StoredGridForecastQueryHandler::StoredGridForecastQueryHandler(
 {
   try
   {
-    register_array_param<std::string>(P_MODEL);
-    register_scalar_param<pt::ptime>(P_ORIGIN_TIME, false);
-    register_array_param<double>(P_LEVEL_HEIGHTS, 0, 99);
-    register_array_param<int64_t>(P_LEVEL, 0, 99);
-    register_scalar_param<std::string>(P_LEVEL_TYPE);
-    register_array_param<std::string>(P_PARAM, 1, 99);
-    register_scalar_param<int64_t>(P_FIND_NEAREST_VALID);
-    register_scalar_param<std::string>(P_LOCALE);
-    register_scalar_param<std::string>(P_MISSING_TEXT);
-    register_scalar_param<std::string>(P_CRS);
+    register_array_param<std::string>(
+        P_MODEL,
+        ""
+        );
+
+    register_scalar_param<pt::ptime>(
+        P_ORIGIN_TIME,
+        "",
+        false
+        );
+
+    register_array_param<double>(
+        P_LEVEL_HEIGHTS,
+        "",
+        0,
+        99
+        );
+
+    register_array_param<int64_t>(
+        P_LEVEL,
+        "",
+        0,
+        99);
+
+    register_scalar_param<std::string>(
+        P_LEVEL_TYPE,
+        ""
+        );
+
+    register_array_param<std::string>(
+        P_PARAM,
+        "",
+        1,
+        99
+        );
+
+    register_scalar_param<int64_t>(
+        P_FIND_NEAREST_VALID,
+        ""
+        );
+
+    register_scalar_param<std::string>(
+        P_LOCALE,
+        ""
+        );
+
+    register_scalar_param<std::string>(
+        P_MISSING_TEXT,
+        ""
+        );
+
+    register_scalar_param<std::string>(
+        P_CRS,
+        ""
+        );
 
     max_np_distance = config->get_optional_config_param<double>("maxNpDistance", -1.0);
     separate_groups = config->get_optional_config_param<bool>("separateGroups", false);

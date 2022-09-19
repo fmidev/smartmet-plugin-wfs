@@ -58,7 +58,7 @@ StoredQueryParamRegistry::ScalarParameterRec::~ScalarParameterRec() = default;
 StoredQueryParamRegistry::ArrayParameterRec::~ArrayParameterRec() = default;
 
 
-boost::shared_ptr<bw::RequestParameterMap> StoredQueryParamRegistry::process_parameters(
+boost::shared_ptr<bw::RequestParameterMap> StoredQueryParamRegistry::resolve_handler_parameters(
     const bw::RequestParameterMap& src, const SupportsExtraHandlerParams* extra_params) const
 {
   try
@@ -251,13 +251,53 @@ std::set<std::string> StoredQueryParamRegistry::get_param_names() const
   }
 }
 
+Json::Value StoredQueryParamRegistry::get_param_info() const
+{
+    // Explicit specifications of readable type names. For others C++ type name demangling is being used
+    static std::map<std::string, std::string> name_remap =
+        {
+            { typeid(std::string).name(), "string" }
+            , { typeid(boost::posix_time::ptime).name(), "posix_time" }
+            , { typeid(SmartMet::Spine::BoundingBox).name(), "bounding_box" }
+        };
+
+    Json::Value result(Json::objectValue);
+    for (const auto& map_item : param_map) {
+        const ParamRecBase* p1 = map_item.second.get();
+        auto iter = name_remap.find(p1->type_name);
+        Json::Value& param_info = result[p1->name];
+        param_info["type"] = iter == name_remap.end()
+            ? Fmi::demangle_cpp_type_name(p1->type_name)
+            : iter->second;
+        param_info["description"] = p1->description;
+        const auto* p_scalar = dynamic_cast<const ScalarParameterRec*>(p1);
+        if (p_scalar) {
+            param_info["is_array"] = false;
+            param_info["mandatory"] = p_scalar->required;
+        } else {
+            const auto* p_array = dynamic_cast<const ArrayParameterRec*>(p1);
+            if (p_array) {
+                param_info["is_array"] = true;
+                param_info["min_size"] = p_array->min_size;
+                param_info["max_size"] = p_array->max_size;
+                param_info["step"] = p_array->step;
+            }
+        }
+    }
+    return result;
+}
+
 void StoredQueryParamRegistry::register_scalar_param(
-    const std::string& name, boost::shared_ptr<ScalarParameterTemplate> param_def, bool required)
+    const std::string& name,
+    const std::string& description,
+    boost::shared_ptr<ScalarParameterTemplate> param_def,
+    bool required)
 {
   try
   {
     boost::shared_ptr<ScalarParameterRec> rec(new ScalarParameterRec);
     rec->name = name;
+    rec->description = description;
     rec->param_def = param_def;
     rec->type_name = typeid(std::string).name();
     rec->required = required;
@@ -272,6 +312,7 @@ void StoredQueryParamRegistry::register_scalar_param(
 /* Full scope here only to satisfy Doxygen */
 void SmartMet::Plugin::WFS::StoredQueryParamRegistry::register_array_param(
     const std::string& name,
+    const std::string& description,
     boost::shared_ptr<ArrayParameterTemplate> param_def,
     std::size_t min_size,
     std::size_t max_size)
@@ -280,6 +321,7 @@ void SmartMet::Plugin::WFS::StoredQueryParamRegistry::register_array_param(
   {
     boost::shared_ptr<ArrayParameterRec> rec(new ArrayParameterRec);
     rec->name = name;
+    rec->description = description;
     rec->param_def = param_def;
     rec->type_name = typeid(std::string).name();
     rec->min_size = min_size;

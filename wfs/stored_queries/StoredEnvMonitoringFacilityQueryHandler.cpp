@@ -51,20 +51,20 @@ bw::StoredEnvMonitoringFacilityQueryHandler::StoredEnvMonitoringFacilityQueryHan
 {
   try
   {
-    register_scalar_param<pt::ptime>(P_BEGIN_TIME);
-    register_scalar_param<pt::ptime>(P_END_TIME);
-    register_array_param<int64_t>(P_CLASS_ID);
-    register_array_param<int64_t>(P_GROUP_ID);
-    register_array_param<int64_t>(P_STATION_ID);
-    register_array_param<std::string>(P_STATION_NAME, false);
-    register_array_param<std::string>(P_AGGREGATE_FUNCTION);
-    register_array_param<std::string>(P_AGGREGATE_PERIOD);
-    register_array_param<std::string>(P_BASE_PHENOMENON);
-    register_array_param<std::string>(P_MEASURAND_CODE);
-    register_array_param<int64_t>(P_STORAGE_ID);
-    register_scalar_param<std::string>(P_INSPIRE_NAMESPACE);
-    register_scalar_param<std::string>(P_AUTHORITY_DOMAIN);
-    register_scalar_param<bool>(P_SHOW_OBSERVING_CAPABILITY, false);
+    register_scalar_param<pt::ptime>(P_BEGIN_TIME, "");
+    register_scalar_param<pt::ptime>(P_END_TIME, "");
+    register_array_param<int64_t>(P_CLASS_ID, "");
+    register_array_param<int64_t>(P_GROUP_ID, "");
+    register_array_param<int64_t>(P_STATION_ID, "");
+    register_array_param<std::string>(P_STATION_NAME, "", false);
+    register_array_param<std::string>(P_AGGREGATE_FUNCTION, "");
+    register_array_param<std::string>(P_AGGREGATE_PERIOD, "");
+    register_array_param<std::string>(P_BASE_PHENOMENON, "");
+    register_array_param<std::string>(P_MEASURAND_CODE, "");
+    register_array_param<int64_t>(P_STORAGE_ID, "");
+    register_scalar_param<std::string>(P_INSPIRE_NAMESPACE, "");
+    register_scalar_param<std::string>(P_AUTHORITY_DOMAIN, "");
+    register_scalar_param<bool>(P_SHOW_OBSERVING_CAPABILITY, "", false);
     m_missingText = config->get_optional_config_param<std::string>(P_MISSING_TEXT, "NaN");
     m_debugLevel = config->get_debug_level();
   }

@@ -105,16 +105,16 @@ StoredQEDownloadQueryHandler::StoredQEDownloadQueryHandler(
 {
   try
   {
-    register_array_param<std::string>(P_PRODUCER, 0, 1);
-    register_array_param<pt::ptime>(P_ORIGIN_TIME, 0, 1);
-    register_array_param<pt::ptime>(P_BEGIN, 0, 1);
-    register_array_param<pt::ptime>(P_END, 0, 1);
-    register_scalar_param<int64_t>(P_FULL_INTERVAL, false);
-    register_array_param<std::string>(P_PARAM);
-    register_array_param<std::string>(P_LEVEL_TYPE, 0);
-    register_array_param<double>(P_LEVEL_VALUE, 0);
-    register_array_param<std::string>(P_FORMAT, 0, 1);
-    register_array_param<std::string>(P_PROJECTION, 0, 1);
+    register_array_param<std::string>(P_PRODUCER, "", 0, 1);
+    register_array_param<pt::ptime>(P_ORIGIN_TIME, "", 0, 1);
+    register_array_param<pt::ptime>(P_BEGIN, "", 0, 1);
+    register_array_param<pt::ptime>(P_END, "", 0, 1);
+    register_scalar_param<int64_t>(P_FULL_INTERVAL, "", false);
+    register_array_param<std::string>(P_PARAM, "");
+    register_array_param<std::string>(P_LEVEL_TYPE, "", 0);
+    register_array_param<double>(P_LEVEL_VALUE, "", 0);
+    register_array_param<std::string>(P_FORMAT, "", 0, 1);
+    register_array_param<std::string>(P_PROJECTION, "", 0, 1);
 
     std::vector<std::string> tmp1;
     if (config->get_config_array<std::string>("producers", tmp1))

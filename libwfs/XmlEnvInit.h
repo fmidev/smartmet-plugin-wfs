@@ -1,7 +1,5 @@
 #pragma once
 
-#include <boost/noncopyable.hpp>
-
 namespace SmartMet
 {
 namespace Plugin
@@ -13,10 +11,12 @@ namespace Xml
 /**
  *   @brief Wraps Xerces-C library initialization and deinitialization
  */
-class EnvInit : virtual private boost::noncopyable
+class EnvInit
 {
  public:
   EnvInit();
+  EnvInit(const EnvInit&) = delete;
+  EnvInit& operator = (const EnvInit&) = delete;
 
   virtual ~EnvInit();
 };

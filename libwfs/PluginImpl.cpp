@@ -934,9 +934,9 @@ void PluginImpl::dump_xml_schema_cache(std::ostream& os)
   xml_parser->dump_schema_cache(os);
 }
 
-void PluginImpl::dump_constructor_map(std::ostream& os)
+void PluginImpl::dump_constructor_map(std::ostream& os, const std::string& handler)
 {
-  const auto value = get_stored_query_map().get_constructor_map();
+  const auto value = get_stored_query_map().get_constructor_map(handler);
   os << value;
 }
 

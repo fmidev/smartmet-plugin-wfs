@@ -40,18 +40,18 @@ StoredSoundingQueryHandler::StoredSoundingQueryHandler(
       SupportsBoundingBox(config, pluginData.get_crs_registry()),
       SupportsQualityParameters(config)
 {
-  register_scalar_param<pt::ptime>(P_BEGIN_TIME);
-  register_scalar_param<pt::ptime>(P_END_TIME);
-  register_array_param<std::string>(P_METEO_PARAMETERS, 1);
-  register_scalar_param<std::string>(P_STATION_TYPE);
-  register_scalar_param<uint64_t>(P_NUM_OF_STATIONS);
-  register_scalar_param<std::string>(P_MISSING_TEXT);
-  register_scalar_param<std::string>(P_CRS);
-  register_scalar_param<bool>(P_LATEST);
-  register_array_param<uint64_t>(P_SOUNDING_TYPE);
-  register_array_param<uint64_t>(P_PUBLICITY, 1);
-  register_array_param<double>(P_ALTITUDE_RANGES, 0, 2, 2);
-  register_array_param<double>(P_PRESSURE_RANGES, 0, 2, 2);
+  register_scalar_param<pt::ptime>(P_BEGIN_TIME, "");
+  register_scalar_param<pt::ptime>(P_END_TIME, "");
+  register_array_param<std::string>(P_METEO_PARAMETERS, "", 1);
+  register_scalar_param<std::string>(P_STATION_TYPE, "");
+  register_scalar_param<uint64_t>(P_NUM_OF_STATIONS, "");
+  register_scalar_param<std::string>(P_MISSING_TEXT, "");
+  register_scalar_param<std::string>(P_CRS, "");
+  register_scalar_param<bool>(P_LATEST, "");
+  register_array_param<uint64_t>(P_SOUNDING_TYPE, "");
+  register_array_param<uint64_t>(P_PUBLICITY, "", 1);
+  register_array_param<double>(P_ALTITUDE_RANGES, "", 0, 2, 2);
+  register_array_param<double>(P_PRESSURE_RANGES, "", 0, 2, 2);
 
   mMaxHours = config->get_optional_config_param<double>("maxHours", 7.0 * 24.0);
   mSqRestrictions = pluginData.get_config().getSQRestrictions();

@@ -20,6 +20,8 @@ namespace WFS
 {
 /**
  *  @brief This handler class is designed to fetch IWXXM messages from ObsEngine
+ *
+ *  FIXME: why SupportsTimeParameters is not used
  */
 class StoredAviationObservationQueryHandler : public StoredQueryHandlerBase,
                                               protected virtual RequiresGeoEngine,

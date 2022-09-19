@@ -8,7 +8,6 @@
 #include "XmlEnvInit.h"
 #include "XmlUtils.h"
 #include <boost/date_time/posix_time/posix_time.hpp>
-#include <boost/noncopyable.hpp>
 #include <boost/test/unit_test.hpp>
 #include <macgyver/StringConversion.h>
 #include <spine/HTTP.h>
@@ -109,7 +108,7 @@ void output_exception_info(const std::exception& err)
 
 namespace
 {
-class TemporaryConfigFile : public boost::noncopyable
+class TemporaryConfigFile
 {
   std::string name;
 
@@ -129,6 +128,9 @@ class TemporaryConfigFile : public boost::noncopyable
     fclose(output);
     // close(handle);  /* Not needed as fclose() does it according to fdopen() manual */
   };
+
+  TemporaryConfigFile(const TemporaryConfigFile&) = delete;
+  TemporaryConfigFile& operator = (const TemporaryConfigFile&) = delete;
 
   virtual ~TemporaryConfigFile() { unlink(name.c_str()); }
   inline const std::string& get_name() const { return name; }

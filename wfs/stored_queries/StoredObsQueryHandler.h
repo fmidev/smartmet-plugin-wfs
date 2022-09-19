@@ -12,6 +12,7 @@
 #include "SupportsQualityParameters.h"
 #include "SupportsTimeZone.h"
 #include "RequiresGeoEngine.h"
+#include "SupportsTimeParameters.h"
 #include "RequiresObsEngine.h"
 namespace SmartMet
 {
@@ -19,12 +20,16 @@ namespace Plugin
 {
 namespace WFS
 {
+
+//  FIXME: why SupportsLocationparameters and SupportsTimeParameters are not used
+
 class StoredObsQueryHandler : public StoredQueryHandlerBase,
                               protected SupportsLocationParameters,
                               protected SupportsBoundingBox,
                               protected SupportsTimeZone,
                               protected SupportsQualityParameters,
                               protected SupportsMeteoParameterOptions,
+                              protected SupportsTimeParameters,
                               protected virtual RequiresGeoEngine,
                               protected virtual RequiresObsEngine
 {
@@ -137,6 +142,12 @@ class StoredObsQueryHandler : public StoredQueryHandlerBase,
    * @brief Support parameters with "qc_" prefix
    */
   bool m_support_qc_parameters;
+
+  /**
+   * @brief Specifies whether to handle special parameters in WFS plugin (value true - default) or in
+   *        obsengine (value false)
+   */
+  bool handleSpecialParams;
 };
 
 }  // namespace WFS

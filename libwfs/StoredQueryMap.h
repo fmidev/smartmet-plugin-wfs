@@ -56,7 +56,7 @@ class StoredQueryMap final
 
   bool is_reload_required(bool reset = false);
 
-  Json::Value get_constructor_map() const;
+  Json::Value get_constructor_map(const std::string& handler) const;
 
   bool use_case_sensitive_params() const;
 

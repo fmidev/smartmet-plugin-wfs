@@ -1,0 +1,272 @@
+Global data object:
+
+   fmi_apikey = "foobar";
+   fmi_apikey_prefix = "/fmi-apikey/";
+   groups = [
+              {
+                'crs' : "EPSG::4326",
+                'featureId' : "WFS-w6SiT3R83_2t1qasAuEBEz_WGzqJTowqk_Fzo46mXn0ZQtLFlz6d1TTty2vfoVCVgv.MbHy51qRaFOO6dNGbJszsu7JU07ctr36FQldMvzOzbdPPTk51mMWDFizYOjXl899_LJf39svLvy09MOLZliZmzD0y8.kTM2b8eHZlrUzab8aSu69MzhrbcPiJp59MO7HlpWroQGltw.IvDfj0c50TG9ty9Mu.hh5YduXpl5c6ztPPf007ctY3Rlta23Tz56d2epl8dKxt2Hc2t3XbPzU.mHpp37uc4TW49cOzT08yd2bfG1ufTD00791Tzwy1ob.GXdkw9MLc59N_LLk49cvLzf05K1J.LnRx1MvPoyaHTTty0.mXhOI0Omnbltb92WsarUhg",
+                'groupId' : "1-1",
+                'groupNum' : 1,
+                'obsParamList' : [
+                                   {
+                                     'featureId' : "WFS-mjAjCjEa_Hc2daJ7cXdqdoOPzjiJTowqk_Fzo46mXn0ZQtLFlz6d1TTty2vfoVCVgv.MbHy51qRaFOO6dNGbJszsu7JU07ctr36FQldMvzOzbdPPTk51mMWDFizYOjXl899_LJf39svLvy09MOLZliZmzD0y8.kTM2b8eHZlrUzab8aSu69MzhrbcPiJp59MO7HlpWroQGltw.IvDfj0c50TG9ty9Mu.hh5YduXpl5c6ztPPf007crW26efPTuz1MvjpWNuw7m1u67Z.an0w9NO_dznCa3Hrh2aenmTuzb42tz6YemnfuqeeGWtDfwy7smHphbnPpv5ZcnHrl5eb.nJWpPxc6OOpl59GTQ6aduWn0y8JxGh007ctrfuy1jVakMA-",
+                                     'name' : "isotime"
+                                   },
+                                   {
+                                     'featureId' : "WFS-BAIfMfxe_i1DV6G4r0.Jwk59OSGJTowqk_Fzo46mXn0ZQtLFlz6d1TTty2vfoVCVgv.MbHy51qRaFOO6dNGbJszsu7JU07ctr36FQldMvzOzbdPPTk51mMWDFizYOjXl899_LJf39svLvy09MOLZliZmzD0y8.kTM2b8eHZlrUzab8aSu69MzhrbcPiJp59MO7HlpWroQGltw.IvDfj0c50TG9ty9Mu.hh5YduXpl5c6xujLa1tunnz07s9TL46VjbsO5tbuu2fmp9MPTTv3c5wmtx64dmnp5k7s2.Nrc.mHpp37qnnhlrQ38Mu7Jh6YW5z6b.WXJx65eXm_pyVqT8XOjjqZefRk0Omnblp9MvCcRodNO3La37stY1WpDA--",
+                                     'name' : "t2m"
+                                   }
+                                 ],
+                'obsPhenomenonEndTime' : "2013-08-05T08:59:00Z",
+                'obsPhenomenonStartTime' : "2013-08-05T08:40:00Z",
+                'obsResultTime' : "2013-08-05T08:59:00Z",
+                'obsReturnArray' : [
+                                     {
+                                       'data' : [
+                                                  {
+                                                    'value' : "20130805T084000"
+                                                  },
+                                                  {
+                                                    'qcValue' : "1",
+                                                    'value' : "19.7"
+                                                  }
+                                                ],
+                                       'epochTime' : 1375692000,
+                                       'epochTimeStr' : "2013-08-05T08:40:00Z",
+                                       'x' : "60.59589",
+                                       'y' : "24.80297"
+                                     },
+                                     {
+                                       'data' : [
+                                                  {
+                                                    'value' : "20130805T084200"
+                                                  },
+                                                  {
+                                                    'qcValue' : "nan",
+                                                    'value' : "nan"
+                                                  }
+                                                ],
+                                       'epochTime' : 1375692120,
+                                       'epochTimeStr' : "2013-08-05T08:42:00Z",
+                                       'x' : "60.59589",
+                                       'y' : "24.80297"
+                                     },
+                                     {
+                                       'data' : [
+                                                  {
+                                                    'value' : "20130805T084400"
+                                                  },
+                                                  {
+                                                    'qcValue' : "nan",
+                                                    'value' : "nan"
+                                                  }
+                                                ],
+                                       'epochTime' : 1375692240,
+                                       'epochTimeStr' : "2013-08-05T08:44:00Z",
+                                       'x' : "60.59589",
+                                       'y' : "24.80297"
+                                     },
+                                     {
+                                       'data' : [
+                                                  {
+                                                    'value' : "20130805T084600"
+                                                  },
+                                                  {
+                                                    'qcValue' : "nan",
+                                                    'value' : "nan"
+                                                  }
+                                                ],
+                                       'epochTime' : 1375692360,
+                                       'epochTimeStr' : "2013-08-05T08:46:00Z",
+                                       'x' : "60.59589",
+                                       'y' : "24.80297"
+                                     },
+                                     {
+                                       'data' : [
+                                                  {
+                                                    'value' : "20130805T084800"
+                                                  },
+                                                  {
+                                                    'qcValue' : "nan",
+                                                    'value' : "nan"
+                                                  }
+                                                ],
+                                       'epochTime' : 1375692480,
+                                       'epochTimeStr' : "2013-08-05T08:48:00Z",
+                                       'x' : "60.59589",
+                                       'y' : "24.80297"
+                                     },
+                                     {
+                                       'data' : [
+                                                  {
+                                                    'value' : "20130805T085000"
+                                                  },
+                                                  {
+                                                    'qcValue' : "1",
+                                                    'value' : "20.0"
+                                                  }
+                                                ],
+                                       'epochTime' : 1375692600,
+                                       'epochTimeStr' : "2013-08-05T08:50:00Z",
+                                       'x' : "60.59589",
+                                       'y' : "24.80297"
+                                     },
+                                     {
+                                       'data' : [
+                                                  {
+                                                    'value' : "20130805T085200"
+                                                  },
+                                                  {
+                                                    'qcValue' : "nan",
+                                                    'value' : "nan"
+                                                  }
+                                                ],
+                                       'epochTime' : 1375692720,
+                                       'epochTimeStr' : "2013-08-05T08:52:00Z",
+                                       'x' : "60.59589",
+                                       'y' : "24.80297"
+                                     },
+                                     {
+                                       'data' : [
+                                                  {
+                                                    'value' : "20130805T085400"
+                                                  },
+                                                  {
+                                                    'qcValue' : "nan",
+                                                    'value' : "nan"
+                                                  }
+                                                ],
+                                       'epochTime' : 1375692840,
+                                       'epochTimeStr' : "2013-08-05T08:54:00Z",
+                                       'x' : "60.59589",
+                                       'y' : "24.80297"
+                                     },
+                                     {
+                                       'data' : [
+                                                  {
+                                                    'value' : "20130805T085600"
+                                                  },
+                                                  {
+                                                    'qcValue' : "nan",
+                                                    'value' : "nan"
+                                                  }
+                                                ],
+                                       'epochTime' : 1375692960,
+                                       'epochTimeStr' : "2013-08-05T08:56:00Z",
+                                       'x' : "60.59589",
+                                       'y' : "24.80297"
+                                     },
+                                     {
+                                       'data' : [
+                                                  {
+                                                    'value' : "20130805T085800"
+                                                  },
+                                                  {
+                                                    'qcValue' : "nan",
+                                                    'value' : "nan"
+                                                  }
+                                                ],
+                                       'epochTime' : 1375693080,
+                                       'epochTimeStr' : "2013-08-05T08:58:00Z",
+                                       'x' : "60.59589",
+                                       'y' : "24.80297"
+                                     }
+                                   ],
+                'obsStationList' : [
+                                     {
+                                       'bearing' : "219.9",
+                                       'distance' : "5.4",
+                                       'fmisid' : "101130",
+                                       'geoid' : "-16000152",
+                                       'name' : "Hyvinkää Hyvinkäänkylä",
+                                       'region' : "Hyvinkää",
+                                       'wmo' : "2829",
+                                       'x' : "60.59589",
+                                       'y' : "24.80297"
+                                     }
+                                   ],
+                'qualityInfo' : "on",
+                'timestep' : 2
+              }
+            ];
+   hostname = "opendata.fmi.fi";
+   language = "eng";
+   named_parameters = {
+                        'defaultmeteoparam' : [
+                                                "Temperature",
+                                                "pressure",
+                                                "WindSpeedMS",
+                                                "WindDirection",
+                                                "Precipitation1h"
+                                              ]
+                      };
+   numMatched = 1;
+   numParam = 2;
+   numReturned = 1;
+   projEpochSrsDim = 3;
+   projEpochSrsName = "https://xml.fmi.fi/gml/crs/compoundCRS.php?crs=4326&amp;time=unixtime";
+   projSrsDim = 2;
+   projSrsName = "http://www.opengis.net/def/crs/EPSG/0/4326";
+   protocol = "http://";
+   queryName = "ObsQcTest2";
+   queryNum = 1;
+   query_parameters = {
+                        'beginTime' : [
+                                        "20130805T084000Z"
+                                      ],
+                        'crs' : [
+                                  "EPSG::4326"
+                                ],
+                        'endTime' : [
+                                      "20130805T085900Z"
+                                    ],
+                        'keyword' : [
+                                      ""
+                                    ],
+                        'keyword_overwritable' : [
+                                                   "false"
+                                                 ],
+                        'latest' : [
+                                     "false"
+                                   ],
+                        'locale' : [
+                                     "fi_FI.utf8"
+                                   ],
+                        'maxDistance' : [
+                                          "50000"
+                                        ],
+                        'maxEpochs' : [
+                                        "200"
+                                      ],
+                        'meteoParameters' : [
+                                              "isotime",
+                                              "t2m"
+                                            ],
+                        'missingText' : [
+                                          "nan"
+                                        ],
+                        'numOfStations' : [
+                                            "1"
+                                          ],
+                        'places' : [
+                                     "Hyvinkää"
+                                   ],
+                        'qualityInfo' : [
+                                          "true"
+                                        ],
+                        'stationType' : [
+                                          "opendata"
+                                        ],
+                        'storedquery_id' : [
+                                             "ObsQcTest2"
+                                           ],
+                        'timeStep' : [
+                                       "2"
+                                     ],
+                        'timeZone' : [
+                                       "UTC"
+                                     ]
+                      };
+   responseTimestamp = "2012-12-12T12:12:12Z"
+ 

@@ -4,7 +4,6 @@
 #include <queue>
 #include <string>
 #include <utility>
-#include <boost/noncopyable.hpp>
 
 namespace SmartMet
 {
@@ -18,10 +17,12 @@ class StoredQueryHandlerFactoryDef;
 /**
  *   @brief Virtual base class for registering stored query handler initialization actions and executing them.
  */
-class StoredQueryHandlerInitBase : public boost::noncopyable
+class StoredQueryHandlerInitBase
 {
 protected:
     StoredQueryHandlerInitBase();
+    StoredQueryHandlerInitBase(const StoredQueryHandlerInitBase&) = delete;
+    StoredQueryHandlerInitBase& operator = (const StoredQueryHandlerInitBase&) = delete;
 
 public:
     virtual ~StoredQueryHandlerInitBase();

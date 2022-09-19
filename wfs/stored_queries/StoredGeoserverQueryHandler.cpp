@@ -37,12 +37,36 @@ bw::StoredGeoserverQueryHandler::StoredGeoserverQueryHandler(
 {
   try
   {
-    register_scalar_param<pt::ptime>(P_BEGIN_TIME);
-    register_scalar_param<pt::ptime>(P_END_TIME);
-    register_array_param<std::string>(P_LAYERS, 1, 999);
-    register_scalar_param<uint64_t>(P_WIDTH);
-    register_scalar_param<uint64_t>(P_HEIGHT);
-    register_scalar_param<std::string>(P_CRS);
+    register_scalar_param<pt::ptime>(
+        P_BEGIN_TIME,
+        "Parameter begin specifies the begin of time interval in ISO-format (for example 2012-02-27T00:00:00Z)."
+        );
+
+    register_scalar_param<pt::ptime>(
+        P_END_TIME,
+        "End of time interval in ISO-format (for example 2012-02-27T00:00:00Z)."
+        );
+
+    register_array_param<std::string>(
+        P_LAYERS,
+        "",
+        1,
+        999);
+
+    register_scalar_param<uint64_t>(
+        P_WIDTH,
+        ""
+        );
+
+    register_scalar_param<uint64_t>(
+        P_HEIGHT,
+        ""
+        );
+
+    register_scalar_param<std::string>(
+        P_CRS,
+        ""
+        );
 
     std::string table_name_format;
     if (config->get_config().lookupValue("layerDbTableNameFormat", table_name_format))

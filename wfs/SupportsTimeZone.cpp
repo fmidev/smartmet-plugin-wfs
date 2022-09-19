@@ -24,7 +24,10 @@ bw::SupportsTimeZone::SupportsTimeZone(SmartMet::Spine::Reactor* reactor, Stored
 {
   try
   {
-    register_scalar_param<std::string>(P_TZ);
+    register_scalar_param<std::string>(
+        P_TZ,
+        "Time zone of the time instant of the data point in the form Area/Location (for example America/Costa_Rica)."
+        "The default value is UTC.");
   }
   catch (...)
   {

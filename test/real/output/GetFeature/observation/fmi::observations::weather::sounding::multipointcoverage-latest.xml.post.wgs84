@@ -13,7 +13,7 @@
 	xmlns:gmlcov="http://www.opengis.net/gmlcov/1.0"
 	xmlns:sam="http://www.opengis.net/sampling/2.0"
 	xmlns:sams="http://www.opengis.net/samplingSpatial/2.0"
-	xmlns:target="http://xml.fmi.fi/namespace/om/atmosphericfeatures/1.0"
+	xmlns:target="http://xml.fmi.fi/namespace/om/atmosphericfeatures/1.1"
     timeStamp="2012-12-12T12:12:12Z"
     numberMatched="2"
     numberReturned="2"
@@ -22,11 +22,11 @@
 						http://www.opengis.net/sampling/2.0 http://schemas.opengis.net/sampling/2.0/samplingFeature.xsd
 						http://www.opengis.net/samplingSpatial/2.0 http://schemas.opengis.net/samplingSpatial/2.0/spatialSamplingFeature.xsd
 						http://www.opengis.net/swe/2.0 http://schemas.opengis.net/sweCommon/2.0/swe.xsd
-						http://inspire.ec.europa.eu/schemas/ompr/2.0 http://inspire.ec.europa.eu/schemas/ompr/2.0/Processes.xsd
-						http://inspire.ec.europa.eu/schemas/omso/3.0 http://inspire.ec.europa.eu/schemas/omso/3.0/SpecialisedObservations.xsd
-						http://xml.fmi.fi/namespace/om/atmosphericfeatures/1.0 http://xml.fmi.fi/schema/om/atmosphericfeatures/1.0/atmosphericfeatures.xsd">
+						http://inspire.ec.europa.eu/schemas/ompr/2.0 https://inspire.ec.europa.eu/schemas/ompr/2.0/Processes.xsd
+						http://inspire.ec.europa.eu/schemas/omso/3.0 https://inspire.ec.europa.eu/schemas/omso/3.0/SpecialisedObservations.xsd
+						http://xml.fmi.fi/namespace/om/atmosphericfeatures/1.1 https://xml.fmi.fi/schema/om/atmosphericfeatures/1.1/atmosphericfeatures.xsd">
     <wfs:member>
-        <omso:TrajectoryObservation gml:id="WFS-ajheHY3EhK7O2m8f_BrneBmT_ZSJTowuIWbbpdOt.Lnl5dsPTTv3c3Trvlw9NGXk6dc9_Xdk07s7p1t67Omnhv07umPf2y8sOfLC0sWXPp3VNO3LXQyYMXK1g2WsG1RiydMGDpgwtMbHy51qRaFOO6dN2jJmzsu7JU07ctdDJgxcrWDZawbVGLJ0wYOmDC0zs23Tz05OdZjFgxYsGjo15fPffyyX9_bLy78tPTDi2ZY2Zsw9MvPpG1tuHxE08.mHdjy0rV0IDe25emXfQw8sO3L0y8udbFSDQv0KjGnfw9s7W26efPTuz1MvjpWNOwzm1u67Z.an0w9NO_dznCaXDri2acenp5nCa3Hrh2aenmTuzb4mxz39d2TTuz1PPDLOI1ufTD00791Tzwy1oU59WdEkzo7c59N_LLk49cvLzf05K8Qs23S6db8XPLy7Yemnfu5unXfLh6aMvJ0657.u7Jp3Z3Trb12dNPDfp3dMe_tl5Yc.UA--">
+        <omso:TrajectoryObservation gml:id="WFS-9P2DwccbyKbycUphUOsWOCZMx..JTowuIWbbpdOt.Lnl5dsPTTv3c3Trvlw9NGXk6dc9_Xdk07s7p1t67Omnhv07umPf2y8sOfLC0sWXPp3VNO3LXQyYMXK1g2WsG1RiydMGDpgwtMbHy51qRaFOO6dN2jJmzsu7JU07ctdDJgxcrWDZawbVGLJ0wYOmDC0zs23Tz05OdZjFgxYsGjo15fPffyyX9_bLy78tPTDi2ZY2Zsw9MvPpG1tuHxE08.mHdjy0rV0IDe25emXfQw8sO3L0y8udbFSDQv0KjGnfw9s7W26efPTuz1MvjpWNOwzm1u67Z.an0w9NO_dznCaXDri2acenp5nCa3Hrh2aenmTuzb4mxz39d2TTuz1PPDLJEa3Pph6ad.6p54Za0Kc.rOiSZ0duc.m_llyceuXl5v6cleIWbbpdOt.Lnl5dsPTTv3c3Trvlw9NGXk6dc9_Xdk07s7p1t67Omnhv07umPf2y8sOfKA--">
             <om:phenomenonTime>
                 <gml:TimePeriod gml:id="time1-1">
                     <gml:beginPosition>2019-06-06T11:30:06Z</gml:beginPosition>
@@ -41,11 +41,17 @@
             <om:procedure xlink:href="http://xml.fmi.fi/inspire/process/opendata"/>
             <om:parameter>
                 <om:NamedValue>
-                    <om:name xlink:href="http://inspire.ec.europa.eu/codeList/ProcessParameterValue/value/groundObservation/observationIntent"/>
+                    <om:name xlink:href="https://inspire.ec.europa.eu/codeList/ProcessParameterValue/value/groundObservation/observationIntent"/>
                     <om:value>meteorology</om:value>
                 </om:NamedValue>
             </om:parameter>
-            <om:observedProperty  xlink:href="http://beta.fmi.fi/fmi-apikey/foobar/meta?observableProperty=observation&amp;param=TAP_PT1S_avg&amp;language=eng"/>
+            <om:parameter>
+                <om:NamedValue>
+                    <om:name xlink:title="soundingType"/>
+                    <om:value>2</om:value>
+                </om:NamedValue>
+            </om:parameter>
+            <om:observedProperty  xlink:href="http://opendata.fmi.fi/fmi-apikey/foobar/meta?observableProperty=observation&amp;param=TAP_PT1S_avg&amp;language=eng"/>
             <om:featureOfInterest>
                 <sams:SF_SpatialSamplingFeature gml:id="foi-ssf-1-fmisid-101104">
                     <sam:sampledFeature xlink:href="http://xml.fmi.fi/sampledFeature/soundingArea.php?id=101104" xlink:title="Jokioinen Ilmala sounding target area"/>
@@ -200,7 +206,7 @@
                         <!-- The grid consists of the 4D points where the measurements were
                             actually made during the flight of the sounding balloon.
                         -->
-                        <gmlcov:SimpleMultiPoint gml:id="mp1-11" srsName="http://xml.fmi.fi/gml/crs/compoundCRS.php?crs=7423&amp;time=unixtime" srsDimension="4">
+                        <gmlcov:SimpleMultiPoint gml:id="mp1-11" srsName="https://xml.fmi.fi/gml/crs/compoundCRS.php?crs=7423&amp;time=unixtime" srsDimension="4">
                             <gmlcov:positions>
                             60.81401 23.49761 105.0 1559822400 
                             60.81415 23.49765 125.0 1559822402 
@@ -5342,7 +5348,7 @@
                     </gml:coverageFunction>
                     <gmlcov:rangeType>
                         <swe:DataRecord>
-                          <swe:field name="TAP_PT1S_avg"  xlink:href="http://beta.fmi.fi/fmi-apikey/foobar/meta?observableProperty=observation&amp;param=TAP_PT1S_avg&amp;language=eng"/>
+                          <swe:field name="TAP_PT1S_avg"  xlink:href="http://opendata.fmi.fi/fmi-apikey/foobar/meta?observableProperty=observation&amp;param=TAP_PT1S_avg&amp;language=eng"/>
                       
                     </swe:DataRecord>
                   </gmlcov:rangeType>
@@ -5350,7 +5356,7 @@
             </om:result>
         </omso:TrajectoryObservation>
     </wfs:member><wfs:member>
-        <omso:TrajectoryObservation gml:id="WFS-hST3yeQ7NBMzLpnBvWVo3YmTxPGJTowuIWbbpdOt.Lnl5dsPTTv3c3Trvlw9NGXk6dc9_Xdk07s7p1t67Omnhv07umPf2y8sOfLC0sWXPp3VNO3LXQyYMXK1g2WsG1RiydMGDpgwtMbHy51qRaFOO6dN2jJmzsu7JU07ctdDJgxcrWDZawbVGLJ0wYOmDC0zs23Tz05OdZjFgxcs2To15fPffyyX9_bLy78tPTDi2ZY2Zsw9MvPpG1tuHxE08.mHdjy0rV0IDe25emXfQw8sO3L0y8udbFSDQv0KjGnfw9s7W26efPTuz1MvjpWNOwzm1u67Z.an0w9NO_dznCaXDri2acenp5nCa3Hrh2aenmTuzb4mxz39d2TTuz1PPDLOI1ufTD00791Tzwy1oU59WdEkzo7c59N_LLk49cvLzf05K8Qs23S6db8XPLy7Yemnfu5unXfLh6aMvJ0657.u7Jp3Z3Trb12dNPDfp3dMe_tl5Yc.UA--">
+        <omso:TrajectoryObservation gml:id="WFS-u9bp1Xez9o_MeU.ll2EuekSEaVaJTowuIWbbpdOt.Lnl5dsPTTv3c3Trvlw9NGXk6dc9_Xdk07s7p1t67Omnhv07umPf2y8sOfLC0sWXPp3VNO3LXQyYMXK1g2WsG1RiydMGDpgwtMbHy51qRaFOO6dN2jJmzsu7JU07ctdDJgxcrWDZawbVGLJ0wYOmDC0zs23Tz05OdZjFgxcs2To15fPffyyX9_bLy78tPTDi2ZY2Zsw9MvPpG1tuHxE08.mHdjy0rV0IDe25emXfQw8sO3L0y8udbFSDQv0KjGnfw9s7W26efPTuz1MvjpWNOwzm1u67Z.an0w9NO_dznCaXDri2acenp5nCa3Hrh2aenmTuzb4mxz39d2TTuz1PPDLJEa3Pph6ad.6p54Za0Kc.rOiSZ0duc.m_llyceuXl5v6cleIWbbpdOt.Lnl5dsPTTv3c3Trvlw9NGXk6dc9_Xdk07s7p1t67Omnhv07umPf2y8sOfKA--">
             <om:phenomenonTime>
                 <gml:TimePeriod gml:id="time1-2">
                     <gml:beginPosition>2019-06-06T11:30:05Z</gml:beginPosition>
@@ -5365,11 +5371,17 @@
             <om:procedure xlink:href="http://xml.fmi.fi/inspire/process/opendata"/>
             <om:parameter>
                 <om:NamedValue>
-                    <om:name xlink:href="http://inspire.ec.europa.eu/codeList/ProcessParameterValue/value/groundObservation/observationIntent"/>
+                    <om:name xlink:href="https://inspire.ec.europa.eu/codeList/ProcessParameterValue/value/groundObservation/observationIntent"/>
                     <om:value>meteorology</om:value>
                 </om:NamedValue>
             </om:parameter>
-            <om:observedProperty  xlink:href="http://beta.fmi.fi/fmi-apikey/foobar/meta?observableProperty=observation&amp;param=TAP_PT1S_avg&amp;language=eng"/>
+            <om:parameter>
+                <om:NamedValue>
+                    <om:name xlink:title="soundingType"/>
+                    <om:value>2</om:value>
+                </om:NamedValue>
+            </om:parameter>
+            <om:observedProperty  xlink:href="http://opendata.fmi.fi/fmi-apikey/foobar/meta?observableProperty=observation&amp;param=TAP_PT1S_avg&amp;language=eng"/>
             <om:featureOfInterest>
                 <sams:SF_SpatialSamplingFeature gml:id="foi-ssf-2-fmisid-101932">
                     <sam:sampledFeature xlink:href="http://xml.fmi.fi/sampledFeature/soundingArea.php?id=101932" xlink:title="Sodankylä Tähtelä sounding target area"/>
@@ -5514,7 +5526,7 @@
                         <!-- The grid consists of the 4D points where the measurements were
                             actually made during the flight of the sounding balloon.
                         -->
-                        <gmlcov:SimpleMultiPoint gml:id="mp1-12" srsName="http://xml.fmi.fi/gml/crs/compoundCRS.php?crs=7423&amp;time=unixtime" srsDimension="4">
+                        <gmlcov:SimpleMultiPoint gml:id="mp1-12" srsName="https://xml.fmi.fi/gml/crs/compoundCRS.php?crs=7423&amp;time=unixtime" srsDimension="4">
                             <gmlcov:positions>
                             67.36663 26.62901 180.0 1559822400 
                             67.36670 26.62909 194.0 1559822402 
@@ -11200,7 +11212,7 @@
                     </gml:coverageFunction>
                     <gmlcov:rangeType>
                         <swe:DataRecord>
-                          <swe:field name="TAP_PT1S_avg"  xlink:href="http://beta.fmi.fi/fmi-apikey/foobar/meta?observableProperty=observation&amp;param=TAP_PT1S_avg&amp;language=eng"/>
+                          <swe:field name="TAP_PT1S_avg"  xlink:href="http://opendata.fmi.fi/fmi-apikey/foobar/meta?observableProperty=observation&amp;param=TAP_PT1S_avg&amp;language=eng"/>
                       
                     </swe:DataRecord>
                   </gmlcov:rangeType>

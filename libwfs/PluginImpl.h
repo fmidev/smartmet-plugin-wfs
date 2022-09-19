@@ -32,7 +32,7 @@ class StoredQueryMap;
 
 typedef Fmi::TimedCache::Cache<std::string, std::string> QueryResponseCache;
 
-class PluginImpl : public boost::noncopyable
+class PluginImpl
 {
   struct RequestResult;
 
@@ -41,6 +41,9 @@ class PluginImpl : public boost::noncopyable
       SmartMet::Spine::Reactor* theReactor,
       const char* theConfig,
       Spine::CRSRegistry& crs_registry);
+
+  PluginImpl(const PluginImpl&) = delete;
+  PluginImpl& operator = (const PluginImpl&) = delete;
 
   virtual ~PluginImpl();
 
@@ -130,7 +133,14 @@ class PluginImpl : public boost::noncopyable
 
   void dump_xml_schema_cache(std::ostream& os);
 
-  void dump_constructor_map(std::ostream& os);
+  /**
+   *  @brief Dump stored query handler map in JSON format
+   *
+   *  @param os output stream to which to write JSON document
+   *  @param handler stored query handler for which to output information or
+   *         all handlers when empty string is specified
+   */
+  void dump_constructor_map(std::ostream& os, const std::string& handler = "");
 
   bool is_reload_required(bool reset = false);
 

@@ -6,6 +6,8 @@ ifeq ($(wildcard $(TOP)/cnf/observation_common.conf),)
 $(error "Cannot find configuration files")
 endif
 
+-include $(HOME)/.smartmet.mk
+
 XML_TEST_SRC = $(shell find xml -name '*.xml')
 XML_POST_TESTS = $(subst :,\:,$(patsubst xml/%.xml, input/%.xml.post, $(XML_TEST_SRC)))
 KVP_TEST_SRC = $(shell find kvp -name '*.kvp')
@@ -34,8 +36,13 @@ ifdef CI
 TEST_TARGETS := test-sqlite
 EXTRA_IGNORE := ignore-circle-ci
 else
+ifdef LOCAL_TESTS_ONLY
+TEST_TARGETS := test-sqlite
+EXTRA_IGNORE := ignore-circle-ci
+else
 TEST_TARGETS := test-sqlite test-oracle test-postgresql
 EXTRA_IGNORE :=
+endif
 endif
 
 test:	all
@@ -74,6 +81,10 @@ s-input-files:
 	@rm -f $(shell find input -name '*.xml.post' -o -name '*.kvp.get')
 	@$(MAKE) $(XML_POST_TESTS)
 	@$(MAKE) $(KVP_GET_TESTS)
+	-if [ -d extra_input ] ; then \
+		mkdir -p input/extra_tests && \
+		cp -vpR extra_input/* input/extra_tests/; \
+	fi
 
 input/%.xml.post : xml/%.xml ; @mkdir -p $(shell dirname $@)
 	@perl ../MakeXMLPOST.pl $< $@ /wfs
