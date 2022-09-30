@@ -2076,6 +2076,82 @@
                          isPrivate="true"/>
   </StoredQueryDescription>
 
+  <StoredQueryDescription id="fmi::observations::magnetometer::simple">
+    <Title>Magnetometer Observations</Title>
+    <Abstract>
+    Magnetometer observations from 12 locations. The data is retuned in simple feature format.
+    </Abstract>
+    
+    <Parameter name="starttime" type="dateTime">
+      <Title>Begin of the time interval</Title>
+      <Abstract>
+      Parameter begin specifies the begin of time interval in ISO-format (for example 2012-02-27T00:00:00Z).
+      </Abstract>
+    </Parameter>
+    
+    <Parameter name="endtime" type="dateTime">
+      <Title>End of time interval</Title>
+      <Abstract>
+      End of time interval in ISO-format (for example 2012-02-27T00:00:00Z).
+      </Abstract>
+    </Parameter>
+    
+    <Parameter name="timestep" type="int">
+      <Title>The time step of data in minutes</Title>
+      <Abstract>
+      The time step of data in minutes. Notice that timestep is calculated from start of the ongoing hour or day. 
+      </Abstract>
+    </Parameter>
+    
+    <Parameter name="parameters" type="NameList">
+      <Title>Parameters to return</Title>
+      <Abstract>
+      Comma separated list of meteorological parameters to return.
+      </Abstract>
+    </Parameter>
+    
+    <Parameter name="crs" type="xsi:string">
+      <Title>Coordinate projection to use in results</Title>
+      <Abstract>
+      Coordinate projection to use in results. For example EPSG::3067
+      </Abstract>
+    </Parameter>
+    
+    <Parameter name="bbox" type="xsi:string">
+      <Title>Bounding box of area for which to return data.</Title>
+      <Abstract>
+      Bounding box of area for which to return data (lon,lat,lon,lat). For example 21,61,22,62.
+      </Abstract>
+    </Parameter>
+    
+    <Parameter name="place" type="xsi:string">
+      <Title>The location for which to provide data</Title>
+      <Abstract>
+      The location for which to provide forecast. Region can be given after location name separated by comma (for example Utti).
+      </Abstract>
+    </Parameter>
+    
+    <Parameter name="fmisid" type="int">
+      <Title>FMI observation station identifier.</Title>
+      <Abstract>
+      Identifier of the observation station.
+      </Abstract>
+    </Parameter>
+    
+    <Parameter name="maxlocations" type="xsi:int">
+      <Title>Amount of locations</Title>
+      <Abstract>
+      How many observation stations are fetched around queried locations. Note that stations are only searched with 50 kilometers radius around the location (place/fmisid/geoid). By default, one location is returned.
+      </Abstract>
+    </Parameter>
+    
+    <QueryExpressionText xmlns:wfs_001="http://xml.fmi.fi/schema/wfs/2.0"
+                         xsi:schemaLocation="http://xml.fmi.fi/schema/wfs/2.0 https://xml.fmi.fi/schema/wfs/2.0/fmi_wfs_simplefeature.xsd"
+                         returnFeatureTypes="wfs_001:BsWfsElement"
+                         language="urn:ogc:def:queryLanguage:OGC-WFS::WFS_QueryExpression"
+                         isPrivate="true"/>
+  </StoredQueryDescription>
+
   <StoredQueryDescription id="fmi::observations::mareograph::daily::multipointcoverage">
     <Title>Mareograph Water Temperature Daily Statistical Values</Title>
     <Abstract>
