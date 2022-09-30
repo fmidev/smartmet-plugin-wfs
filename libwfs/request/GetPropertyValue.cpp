@@ -197,7 +197,8 @@ void GetPropertyValue::add_responses(boost::shared_ptr<xercesc::DOMDocument> res
       catch (const xercesc::DOMException& err)
       {
         std::cerr << METHOD_NAME << ": DOM exception: code=" << (int)err.code
-                  << " message=" << err.getMessage() << std::endl;
+                  << " message=" << Xml::to_opt_string(err.getMessage()).first
+                  << std::endl;
         throw Fmi::Exception::Trace(BCP, "DOM exception received!");
       }
       catch (const bwx::XmlError& err)

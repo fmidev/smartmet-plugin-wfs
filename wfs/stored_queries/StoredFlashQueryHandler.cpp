@@ -463,7 +463,7 @@ void bw::StoredFlashQueryHandler::query(const StoredQuery& query,
   <BsWfs:ParameterValue>{8}</BsWfs:ParameterValue>
  </BsWfs:BsWfsElement>
 </wfs:member>)";
-              simple_rows += fmt::format(fmt,
+              simple_rows += fmt::format(fmt::runtime(fmt),
                                          used_rows,
                                          k - first_param + 1,
                                          projSrsDim,
