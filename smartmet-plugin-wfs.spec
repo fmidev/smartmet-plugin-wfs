@@ -3,7 +3,7 @@
 %define SPECNAME smartmet-plugin-%{DIRNAME}
 Summary: SmartMet WFS plugin
 Name: %{SPECNAME}
-Version: 22.10.5
+Version: 22.10.10
 Release: 1%{?dist}.fmi
 License: MIT
 Group: SmartMet/Plugins
@@ -34,7 +34,7 @@ BuildRequires: xqilla-devel
 BuildRequires: openssl-devel
 BuildRequires: bzip2-devel
 BuildRequires: zlib-devel
-BuildRequires: smartmet-library-timeseries-devel >= 22.10.4
+BuildRequires: smartmet-library-timeseries-devel >= 22.10.10
 BuildRequires: smartmet-library-spine-devel >= 22.9.5
 BuildRequires: smartmet-library-gis-devel >= 22.9.28
 BuildRequires: smartmet-library-trax-devel >= 22.10.3
@@ -43,12 +43,12 @@ BuildRequires: smartmet-library-macgyver-devel >= 22.8.23
 BuildRequires: smartmet-engine-contour-devel >= 22.10.5
 BuildRequires: smartmet-engine-geonames-devel >= 22.10.5
 BuildRequires: smartmet-engine-gis-devel >= 22.10.5
-BuildRequires: smartmet-engine-grid-devel >= 22.9.9
+BuildRequires: smartmet-engine-grid-devel >= 22.10.10
 BuildRequires: smartmet-engine-querydata-devel >= 22.10.5
-BuildRequires: smartmet-library-grid-content-devel >= 22.9.29
-BuildRequires: smartmet-library-grid-files-devel >= 22.9.29
+BuildRequires: smartmet-library-grid-content-devel >= 22.10.10
+BuildRequires: smartmet-library-grid-files-devel >= 22.10.10
 %if %{with observation}
-BuildRequires: smartmet-engine-observation-devel >= 22.10.4
+BuildRequires: smartmet-engine-observation-devel >= 22.10.10
 %endif
 Requires: ctpp2
 Requires: fmt >= %{smartmet_fmt_min}, fmt < %{smartmet_fmt_max}
@@ -58,17 +58,17 @@ Requires: zlib
 Requires: smartmet-library-locus >= 22.6.17
 Requires: smartmet-library-macgyver >= 22.8.23
 Requires: smartmet-library-spine >= 22.9.5
-Requires: smartmet-library-timeseries >= 22.10.4
+Requires: smartmet-library-timeseries >= 22.10.10
 Requires: smartmet-library-gis >= 22.9.28
 Requires: smartmet-library-trax >= 22.10.3
 Requires: smartmet-engine-contour >= 22.10.5
 Requires: smartmet-engine-geonames >= 22.10.5
 Requires: smartmet-engine-gis >= 22.10.5
-Requires: smartmet-engine-grid >= 22.9.9
-Requires: smartmet-library-grid-content >= 22.9.29
-Requires: smartmet-library-grid-files >= 22.9.29
+Requires: smartmet-engine-grid >= 22.10.10
+Requires: smartmet-library-grid-content >= 22.10.10
+Requires: smartmet-library-grid-files >= 22.10.10
 %if %{with observation}
-Requires: smartmet-engine-observation >= 22.10.4
+Requires: smartmet-engine-observation >= 22.10.10
 %endif
 Requires: smartmet-engine-querydata >= 22.10.5
 Requires: smartmet-server >= 22.10.5
@@ -112,9 +112,9 @@ Obsoletes: smartmet-brainstorm-wfs-debuginfo < 16.11.1
 #TestRequires: smartmet-engine-gis >= 22.10.5
 #TestRequires: smartmet-engine-querydata >= 22.10.5
 %if %{with observation}
-#TestRequires: smartmet-engine-observation >= 22.10.4
+#TestRequires: smartmet-engine-observation >= 22.10.10
 %endif
-#TestRequires: smartmet-engine-grid >= 22.9.9
+#TestRequires: smartmet-engine-grid >= 22.10.10
 #TestRequires: redis
 #TestRequires: smartmet-engine-grid-test
 # Required by top level Makefile
@@ -162,6 +162,9 @@ rm -rf $RPM_BUILD_ROOT
 %{_includedir}/smartmet/plugin/wfs/request/*.h
 
 %changelog
+* Mon Oct 10 2022 Mika Heiskanen <mika.heiskanen@fmi.fi> - 22.10.10-1.fmi
+- Repackaged due to base library ABI changes
+
 * Wed Oct  5 2022 Mika Heiskanen <mika.heiskanen@fmi.fi> - 22.10.5-1.fmi
 - Repackaged since QEngine::Model ABI changed
 
