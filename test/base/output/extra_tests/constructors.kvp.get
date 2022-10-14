@@ -935,14 +935,6 @@
 					"template" : "hash_dump.c2t"
 				},
 				{
-					"name" : "ObsQcTest2",
-					"return_types" : 
-					[
-						"omso:PointTimeSeriesObservation"
-					],
-					"template" : "hash_dump.c2t"
-				},
-				{
 					"name" : "ObsTest",
 					"return_types" : 
 					[
