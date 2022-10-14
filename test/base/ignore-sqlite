@@ -4,9 +4,6 @@ GetFeature/observation/obs-test-1s_maxdistance.kvp.get
 GetFeature/observation/special/16.kvp.get
 GetFeature/observation/special/17.kvp.get
 GetFeature/observation/special/22.kvp.get
-GetFeature/observation/special2/16.kvp.get
-GetFeature/observation/special2/17.kvp.get
-GetFeature/observation/special2/22.kvp.get
 
 ; FIXME: Following 2 tests do not work with Harmony hybrid model provided in smartmet-test-data
 GetFeature/forecast/simple_latlon_and_height_specified.xml.post
