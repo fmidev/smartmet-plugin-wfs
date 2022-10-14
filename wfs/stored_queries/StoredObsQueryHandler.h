@@ -142,12 +142,6 @@ class StoredObsQueryHandler : public StoredQueryHandlerBase,
    * @brief Support parameters with "qc_" prefix
    */
   bool m_support_qc_parameters;
-
-  /**
-   * @brief Specifies whether to handle special parameters in WFS plugin (value true - default) or in
-   *        obsengine (value false)
-   */
-  bool handleSpecialParams;
 };
 
 }  // namespace WFS

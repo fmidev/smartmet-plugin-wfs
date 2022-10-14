@@ -141,7 +141,6 @@ StoredObsQueryHandler::StoredObsQueryHandler(SmartMet::Spine::Reactor* reactor,
     separate_groups = config->get_optional_config_param<bool>("separateGroups", false);
     sq_restrictions = plugin_data.get_config().getSQRestrictions();
     m_support_qc_parameters = config->get_optional_config_param<bool>("supportQCParameters", false);
-    handleSpecialParams = config->get_optional_config_param<bool>("handleSpecialParams", true);
   }
   catch (...)
   {
@@ -690,54 +689,47 @@ void StoredObsQueryHandler::query(const StoredQuery& query,
                   }
                   else
                   {
-                    if (handleSpecialParams)
+                    auto geoLoc = sites.at(geoid);
+                    if (geoLoc)
                     {
-                        auto geoLoc = sites.at(geoid);
-                        if (geoLoc)
+                      if (SmartMet::TimeSeries::is_location_parameter(name))
+                      {
+                        const std::string val = SmartMet::TimeSeries::location_parameter(
+                            geoLoc,
+                            name,
+                            fmt,
+                            tz_name,
+                            get_meteo_parameter_options(name)->precision);
+                        obs_rec["data"][k]["value"] = val;
+                      }
+                      else if (SmartMet::TimeSeries::is_time_parameter(name))
+                      {
+                        const std::string timestring = "Not supported";
+                        if (not curr_locale)
                         {
-                            if (SmartMet::TimeSeries::is_location_parameter(name))
-                            {
-                                const std::string val = SmartMet::TimeSeries::location_parameter(
-                                    geoLoc,
-                                    name,
-                                    fmt,
-                                    tz_name,
-                                    get_meteo_parameter_options(name)->precision);
-                                obs_rec["data"][k]["value"] = val;
-                            }
-                            else if (SmartMet::TimeSeries::is_time_parameter(name))
-                            {
-                                const std::string timestring = "Not supported";
-                                if (not curr_locale)
-                                {
-                                    curr_locale.reset(new std::locale(query_params.localename.c_str()));
-                                }
-                                const auto val = SmartMet::TimeSeries::time_parameter(name,
-                                    ldt,
-                                    now,
-                                    *geoLoc,
-                                    tz_name,
-                                    geo_engine->getTimeZones(),
-                                    *curr_locale,
-                                    *tfmt,
-                                    timestring);
-                                std::ostringstream val_str;
-                                val_str << val;
-                                obs_rec["data"][k]["value"] = val_str.str();
-                            }
-                            else
-                            {
-                                assert(0 /* Not supposed to be here */);
-                            }
+                          curr_locale.reset(new std::locale(query_params.localename.c_str()));
                         }
-                        else
-                        {
-                            obs_rec["data"][k]["value"] = query_params.missingtext;
-                        }
+                        const auto val = SmartMet::TimeSeries::time_parameter(name,
+                                                                         ldt,
+                                                                         now,
+                                                                         *geoLoc,
+                                                                         tz_name,
+                                                                         geo_engine->getTimeZones(),
+                                                                         *curr_locale,
+                                                                         *tfmt,
+                                                                         timestring);
+                        std::ostringstream val_str;
+                        val_str << val;
+                        obs_rec["data"][k]["value"] = val_str.str();
+                      }
+                      else
+                      {
+                        assert(0 /* Not supposed to be here */);
+                      }
                     }
                     else
-                    {   // ! handleSpecialParams
-                        assert(0 /* Not supposed to be here */);
+                    {
+                      obs_rec["data"][k]["value"] = query_params.missingtext;
                     }
                   }
                 }
@@ -916,7 +908,7 @@ bool StoredObsQueryHandler::add_parameters(const RequestParameterMap& params,
         }
         else
         {
-          if (handleSpecialParams and (is_location_parameter(name) or is_time_parameter(name)))
+          if (is_location_parameter(name) or is_time_parameter(name))
           {
             ExtParamIndexEntry entry;
             entry.p.ind = -1;
