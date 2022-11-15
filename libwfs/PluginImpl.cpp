@@ -846,7 +846,9 @@ void PluginImpl::realRequestHandler(SmartMet::Spine::Reactor& /* theReactor */,
       theResponse.setHeader("Access-Control-Allow-Origin", "*");
       theResponse.setHeader("X-WFS-Error", error_response.wfs_err_code);
       maybe_validate_output(theRequest, theResponse);
-      std::cerr << error_response.log_message;
+
+      if (!exception.loggingDisabled())
+        std::cerr << error_response.log_message;
     }
   }
   catch (...)

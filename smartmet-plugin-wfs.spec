@@ -3,7 +3,7 @@
 %define SPECNAME smartmet-plugin-%{DIRNAME}
 Summary: SmartMet WFS plugin
 Name: %{SPECNAME}
-Version: 22.11.8
+Version: 22.11.15
 Release: 1%{?dist}.fmi
 License: MIT
 Group: SmartMet/Plugins
@@ -106,7 +106,7 @@ Obsoletes: smartmet-brainstorm-wfs-debuginfo < 16.11.1
 #TestRequires: smartmet-utils-devel
 #TestRequires: smartmet-library-macgyver >= 22.10.20
 #TestRequires: smartmet-library-gis >= 22.9.28
-#TestRequires: smartmet-library-newbase >= 22.8.29
+#TestRequires: smartmet-library-newbase >= 22.11.14
 #TestRequires: smartmet-library-spine-plugin-test >= 22.10.26
 #TestRequires: smartmet-engine-geonames >= 22.10.5
 #TestRequires: smartmet-engine-gis >= 22.10.5
@@ -162,6 +162,9 @@ rm -rf $RPM_BUILD_ROOT
 %{_includedir}/smartmet/plugin/wfs/request/*.h
 
 %changelog
+* Tue Nov 15 2022 Mika Heiskanen <mika.heiskanen@fmi.fi> - 22.11.15-1.fmi
+- Disable logging of error messages on unknown handlers due to too many errors after HIRLAM was stopped
+
 * Tue Nov  8 2022 Mika Heiskanen <mika.heiskanen@fmi.fi> - 22.11.8-1.fmi
 - Repackaged due to base library ABI changes
 
