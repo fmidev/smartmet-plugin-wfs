@@ -834,6 +834,11 @@ void PluginImpl::realRequestHandler(SmartMet::Spine::Reactor& /* theReactor */,
       Fmi::Exception exception(BCP, "Request processing exception!", nullptr);
       exception.addParameter("URI", theRequest.getURI());
       exception.addParameter("ClientIP", theRequest.getClientIP());
+
+      const bool check_token = true;
+      auto apikey = Spine::FmiApiKey::getFmiApiKey(theRequest, check_token);
+      exception.addParameter("Apikey", (apikey ? *apikey : std::string("-")));
+
       exception.printError();
 
       // FIXME: implement correct processing phase support (parsing, processing)

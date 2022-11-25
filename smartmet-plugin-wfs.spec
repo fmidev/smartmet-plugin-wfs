@@ -3,7 +3,7 @@
 %define SPECNAME smartmet-plugin-%{DIRNAME}
 Summary: SmartMet WFS plugin
 Name: %{SPECNAME}
-Version: 22.11.15
+Version: 22.11.25
 Release: 1%{?dist}.fmi
 License: MIT
 Group: SmartMet/Plugins
@@ -35,16 +35,16 @@ BuildRequires: openssl-devel
 BuildRequires: bzip2-devel
 BuildRequires: zlib-devel
 BuildRequires: smartmet-library-timeseries-devel >= 22.10.25
-BuildRequires: smartmet-library-spine-devel >= 22.10.26
+BuildRequires: smartmet-library-spine-devel >= 22.11.25
 BuildRequires: smartmet-library-gis-devel >= 22.9.28
-BuildRequires: smartmet-library-trax-devel >= 22.10.3
+BuildRequires: smartmet-library-trax-devel >= 22.11.25
 BuildRequires: smartmet-library-locus-devel >= 22.6.17
 BuildRequires: smartmet-library-macgyver-devel >= 22.10.20
 BuildRequires: smartmet-engine-contour-devel >= 22.10.5
 BuildRequires: smartmet-engine-geonames-devel >= 22.10.5
 BuildRequires: smartmet-engine-gis-devel >= 22.10.5
 BuildRequires: smartmet-engine-grid-devel >= 22.11.8
-BuildRequires: smartmet-engine-querydata-devel >= 22.10.5
+BuildRequires: smartmet-engine-querydata-devel >= 22.11.23
 BuildRequires: smartmet-library-grid-content-devel >= 22.11.8
 BuildRequires: smartmet-library-grid-files-devel >= 22.11.8
 %if %{with observation}
@@ -57,10 +57,10 @@ Requires: jsoncpp
 Requires: zlib
 Requires: smartmet-library-locus >= 22.6.17
 Requires: smartmet-library-macgyver >= 22.10.20
-Requires: smartmet-library-spine >= 22.10.26
+Requires: smartmet-library-spine >= 22.11.25
 Requires: smartmet-library-timeseries >= 22.10.25
 Requires: smartmet-library-gis >= 22.9.28
-Requires: smartmet-library-trax >= 22.10.3
+Requires: smartmet-library-trax >= 22.11.25
 Requires: smartmet-engine-contour >= 22.10.5
 Requires: smartmet-engine-geonames >= 22.10.5
 Requires: smartmet-engine-gis >= 22.10.5
@@ -70,7 +70,7 @@ Requires: smartmet-library-grid-files >= 22.11.8
 %if %{with observation}
 Requires: smartmet-engine-observation >= 22.10.12
 %endif
-Requires: smartmet-engine-querydata >= 22.10.5
+Requires: smartmet-engine-querydata >= 22.11.23
 Requires: smartmet-server >= 22.11.7
 Requires: xerces-c
 Requires: xqilla
@@ -107,10 +107,10 @@ Obsoletes: smartmet-brainstorm-wfs-debuginfo < 16.11.1
 #TestRequires: smartmet-library-macgyver >= 22.10.20
 #TestRequires: smartmet-library-gis >= 22.9.28
 #TestRequires: smartmet-library-newbase >= 22.11.14
-#TestRequires: smartmet-library-spine-plugin-test >= 22.10.26
+#TestRequires: smartmet-library-spine-plugin-test >= 22.11.25
 #TestRequires: smartmet-engine-geonames >= 22.10.5
 #TestRequires: smartmet-engine-gis >= 22.10.5
-#TestRequires: smartmet-engine-querydata >= 22.10.5
+#TestRequires: smartmet-engine-querydata >= 22.11.23
 %if %{with observation}
 #TestRequires: smartmet-engine-observation >= 22.10.12
 %endif
@@ -125,7 +125,7 @@ SmartMet WFS plugin
 
 %package -n %{SPECNAME}-devel
 Summary: SmartMet WFS plugin development files
-Requires: smartmet-library-spine-devel >= 22.10.26
+Requires: smartmet-library-spine-devel >= 22.11.25
 Requires: smartmet-library-gis-devel >= 22.9.28
 Requires: smartmet-library-locus-devel >= 22.6.17
 Requires: smartmet-library-macgyver-devel >= 22.10.20
@@ -162,6 +162,9 @@ rm -rf $RPM_BUILD_ROOT
 %{_includedir}/smartmet/plugin/wfs/request/*.h
 
 %changelog
+* Fri Nov 25 2022 Mika Heiskanen <mika.heiskanen@fmi.fi> - 22.11.25-1.fmi
+- Added apikey to stack traces
+
 * Tue Nov 15 2022 Mika Heiskanen <mika.heiskanen@fmi.fi> - 22.11.15-1.fmi
 - Disable logging of error messages on unknown handlers due to too many errors after HIRLAM was stopped
 
