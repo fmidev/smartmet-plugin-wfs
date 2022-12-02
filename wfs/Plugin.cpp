@@ -219,6 +219,11 @@ void Plugin::realRequestHandler(SmartMet::Spine::Reactor& theReactor,
 {
   try
   {
+    // Check request method (support GET, POST, OPTIONS)
+    if (checkRequest(theRequest, theResponse, true)) {
+        return;
+    }
+
     auto impl = plugin_impl.load();
     std::string data_source = Spine::optional_string(theRequest.getParameter("source"),
                                                      impl->get_primary_data_source());
