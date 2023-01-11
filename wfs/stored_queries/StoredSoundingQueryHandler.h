@@ -116,8 +116,8 @@ class StoredSoundingQueryHandler : public StoredQueryHandlerBase,
                                 const RequestParameterMap& params,
                                 const std::string& language) const;
 
-  void checkMaxSoundings(const pt::ptime startTime,
-                         const pt::ptime& endTime,
+  void checkMaxSoundings(const boost::posix_time::ptime startTime,
+                         const boost::posix_time::ptime& endTime,
                          const RadioSoundingMap& radioSoundingMap) const;
 
   double mMaxHours;

@@ -3,7 +3,7 @@
 %define SPECNAME smartmet-plugin-%{DIRNAME}
 Summary: SmartMet WFS plugin
 Name: %{SPECNAME}
-Version: 22.12.16
+Version: 23.1.11
 Release: 1%{?dist}.fmi
 License: MIT
 Group: SmartMet/Plugins
@@ -48,7 +48,7 @@ BuildRequires: smartmet-engine-querydata-devel >= 22.12.15
 BuildRequires: smartmet-library-grid-content-devel >= 22.12.12
 BuildRequires: smartmet-library-grid-files-devel >= 22.12.12
 %if %{with observation}
-BuildRequires: smartmet-engine-observation-devel >= 22.12.16
+BuildRequires: smartmet-engine-observation-devel >= 23.1.11
 %endif
 Requires: ctpp2
 Requires: fmt >= %{smartmet_fmt_min}, fmt < %{smartmet_fmt_max}
@@ -68,7 +68,7 @@ Requires: smartmet-engine-grid >= 22.12.12
 Requires: smartmet-library-grid-content >= 22.12.12
 Requires: smartmet-library-grid-files >= 22.12.12
 %if %{with observation}
-Requires: smartmet-engine-observation >= 22.12.16
+Requires: smartmet-engine-observation >= 23.1.11
 %endif
 Requires: smartmet-engine-querydata >= 22.12.15
 Requires: smartmet-server >= 22.12.5
@@ -112,7 +112,7 @@ Obsoletes: smartmet-brainstorm-wfs-debuginfo < 16.11.1
 #TestRequires: smartmet-engine-gis >= 22.10.5
 #TestRequires: smartmet-engine-querydata >= 22.12.15
 %if %{with observation}
-#TestRequires: smartmet-engine-observation >= 22.12.16
+#TestRequires: smartmet-engine-observation >= 23.1.11
 %endif
 #TestRequires: smartmet-engine-grid >= 22.12.12
 #TestRequires: redis
@@ -162,6 +162,9 @@ rm -rf $RPM_BUILD_ROOT
 %{_includedir}/smartmet/plugin/wfs/request/*.h
 
 %changelog
+* Wed Jan 11 2023 Anssi Reponen <anssi.reponen@fmi.fi> - 23.1.11-1.fmi
+- Added support for moving stations icebuoy and copernicus (BRAINSTORM-2409)
+
 * Fri Dec 16 2022 Mika Heiskanen <mika.heiskanen@fmi.fi> - 22.12.16-1.fmi
 - Repackaged since PostgreSQLConnection ABI changed
 

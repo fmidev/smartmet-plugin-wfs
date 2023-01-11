@@ -293,18 +293,21 @@ void StoredObsQueryHandler::query(const StoredQuery& query,
 
       params.get<int64_t>(P_FMISIDS, std::back_inserter(stationSettings.fmisids));
 
-      std::list<std::pair<std::string, SmartMet::Spine::LocationPtr> > locations_list;
-      get_location_options(params, curr_lang, &locations_list);
-
-      for (const auto& item : locations_list)
-      {
-        stationSettings.nearest_station_settings.emplace_back(item.second->longitude,
-                                                              item.second->latitude,
-                                                              query_params.maxdistance,
-                                                              query_params.numberofstations,
-                                                              item.first,
-                                                              item.second->fmisid);
-      }
+	  if(query_params.stationtype != ICEBUOY_PRODUCER && query_params.stationtype != COPERNICUS_PRODUCER)
+		{
+		  std::list<std::pair<std::string, SmartMet::Spine::LocationPtr> > locations_list;
+		  get_location_options(params, curr_lang, &locations_list);
+		  
+		  for (const auto& item : locations_list)
+			{
+			  stationSettings.nearest_station_settings.emplace_back(item.second->longitude,
+																	item.second->latitude,
+																	query_params.maxdistance,
+																	query_params.numberofstations,
+																	item.first,
+																	item.second->fmisid);
+			}
+		}
 
       params.get<int64_t>(P_GEOIDS, std::back_inserter(stationSettings.geoid_settings.geoids));
       if (stationSettings.geoid_settings.geoids.size() > 0)
