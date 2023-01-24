@@ -119,6 +119,7 @@ Obsoletes: smartmet-brainstorm-wfs-debuginfo < 16.11.1
 #TestRequires: smartmet-engine-grid-test
 # Required by top level Makefile
 #TestRequires: jsoncpp-devel
+#TestRequires: libwebp13
 
 %description
 SmartMet WFS plugin
