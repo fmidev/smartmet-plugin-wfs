@@ -3,7 +3,7 @@
 %define SPECNAME smartmet-plugin-%{DIRNAME}
 Summary: SmartMet WFS plugin
 Name: %{SPECNAME}
-Version: 23.1.19
+Version: 23.1.26
 Release: 1%{?dist}.fmi
 License: MIT
 Group: SmartMet/Plugins
@@ -40,15 +40,15 @@ BuildRequires: smartmet-library-gis-devel >= 23.1.5
 BuildRequires: smartmet-library-trax-devel >= 22.12.22
 BuildRequires: smartmet-library-locus-devel >= 22.12.16
 BuildRequires: smartmet-library-macgyver-devel >= 22.12.16
-BuildRequires: smartmet-engine-contour-devel >= 22.12.19
-BuildRequires: smartmet-engine-geonames-devel >= 22.12.21
+BuildRequires: smartmet-engine-contour-devel >= 23.1.26
+BuildRequires: smartmet-engine-geonames-devel >= 23.1.18
 BuildRequires: smartmet-engine-gis-devel >= 22.12.21
 BuildRequires: smartmet-engine-grid-devel >= 23.1.19
 BuildRequires: smartmet-engine-querydata-devel >= 22.12.15
 BuildRequires: smartmet-library-grid-content-devel >= 23.1.19
-BuildRequires: smartmet-library-grid-files-devel >= 23.1.19
+BuildRequires: smartmet-library-grid-files-devel >= 23.1.24
 %if %{with observation}
-BuildRequires: smartmet-engine-observation-devel >= 23.1.11
+BuildRequires: smartmet-engine-observation-devel >= 23.1.24
 %endif
 Requires: ctpp2
 Requires: fmt >= %{smartmet_fmt_min}, fmt < %{smartmet_fmt_max}
@@ -61,14 +61,14 @@ Requires: smartmet-library-spine >= 23.1.16
 Requires: smartmet-library-timeseries >= 22.10.25
 Requires: smartmet-library-gis >= 23.1.5
 Requires: smartmet-library-trax >= 22.12.22
-Requires: smartmet-engine-contour >= 22.12.19
-Requires: smartmet-engine-geonames >= 22.12.21
+Requires: smartmet-engine-contour >= 23.1.26
+Requires: smartmet-engine-geonames >= 23.1.18
 Requires: smartmet-engine-gis >= 22.12.21
 Requires: smartmet-engine-grid >= 23.1.19
 Requires: smartmet-library-grid-content >= 23.1.19
-Requires: smartmet-library-grid-files >= 23.1.19
+Requires: smartmet-library-grid-files >= 23.1.24
 %if %{with observation}
-Requires: smartmet-engine-observation >= 23.1.11
+Requires: smartmet-engine-observation >= 23.1.24
 %endif
 Requires: smartmet-engine-querydata >= 22.12.15
 Requires: smartmet-server >= 23.1.10
@@ -108,11 +108,11 @@ Obsoletes: smartmet-brainstorm-wfs-debuginfo < 16.11.1
 #TestRequires: smartmet-library-gis >= 23.1.5
 #TestRequires: smartmet-library-newbase >= 22.11.14
 #TestRequires: smartmet-library-spine-plugin-test >= 23.1.16
-#TestRequires: smartmet-engine-geonames >= 22.12.21
+#TestRequires: smartmet-engine-geonames >= 23.1.18
 #TestRequires: smartmet-engine-gis >= 22.12.21
 #TestRequires: smartmet-engine-querydata >= 22.12.15
 %if %{with observation}
-#TestRequires: smartmet-engine-observation >= 23.1.11
+#TestRequires: smartmet-engine-observation >= 23.1.24
 %endif
 #TestRequires: smartmet-engine-grid >= 23.1.19
 #TestRequires: redis
@@ -163,6 +163,9 @@ rm -rf $RPM_BUILD_ROOT
 %{_includedir}/smartmet/plugin/wfs/request/*.h
 
 %changelog
+* Thu Jan 26 2023 Mika Heiskanen <mika.heiskanen@fmi.fi> - 23.1.26-1.fmi
+- Repackaged due to contour-engine API changes
+
 * Thu Jan 19 2023 Mika Heiskanen <mika.heiskanen@fmi.fi> - 23.1.19-1.fmi
 - Repackaged due to ABI changes in grid libraries
 
