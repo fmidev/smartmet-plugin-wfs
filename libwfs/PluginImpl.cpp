@@ -947,6 +947,75 @@ void PluginImpl::dump_constructor_map(std::ostream& os, const std::string& handl
   os << value;
 }
 
+void PluginImpl::dump_constructor_map_html(std::ostream& os, const std::string& handler)
+{
+  const auto value = get_stored_query_map().get_constructor_map(handler);
+
+  try {
+      os << "<html>\n";
+
+      const auto constructor_list = value["constructors"];
+      const auto constructor_names = constructor_list.getMemberNames();
+
+      if (handler == "") {
+          os << "<h1>Stored query handler constructors</h1>\n";
+          os << "<br>\n";
+          os << "<b>Only those stored query handler constructors, that are used for at least"
+             << " one stored query are listed</b>\n";
+          os << "<br>\n";
+          os << "<ul>\n";
+          for (const auto& name : constructor_names) {
+              os << "<li> ";
+              os << "<a href=\"/wfs/admin?request=constructors&handler=" << name
+                 << "&format=html\">";
+              os << name <<  "</li>\n";
+          }
+          os << "</ul>\n";
+      } else {
+          os << "<h1>Stored query handler constructor: " << handler << "</h1>\n";
+          os << "<table border=\"1px solid black\", padding: 5px; >\n";
+          for (const auto& name : constructor_names) {
+              const auto& item = constructor_list[name]["parameters"];
+              os << "<br>";
+              os << "<table border=\"1px solid black\">";
+              os << "<tr>";
+              os << "<th> </th>";
+              os << "<th>Parameter</th>";
+              os << "<th>Mandatory</th>";
+              os << "<th>Type</th>";
+              os << "<th>Min size</th>";
+              os << "<th>Max size</th>";
+              os << "<th>Step</th>";
+              os << "<th>Description</th>";
+              os << "</tr>\n";
+
+              const auto param_names = item.getMemberNames();
+              for (const auto& pn : param_names) {
+                  const auto& param = item[pn];
+                  const bool mandatory = param["mandatory"].asBool();
+                  const bool is_array = param["is_array"].asBool();
+                  os << "<tr>";
+                  os << "<td> " << (is_array ? "Array" : "Scalar") << "</td>";
+                  os << "<td> " << pn << "</td>";
+                  os << "<td> " << (mandatory ? "yes" : "no") << "</td>";
+                  os << "<td> " << param["type"].asString() << "</td>";
+                  os << "<td> " << (is_array ? param["min_size"].asString() : " ") << "</td>";
+                  os << "<td> " << (is_array ? param["max_size"].asString() : " ") << "</td>";
+                  os << "<td> " << (is_array ? param["step"].asString() : " ") << "</td>";
+                  os << "<td> " << param["description"].asString() << "</td>";
+                  os << "</tr>\n";
+              }
+
+              os << "</table>\n";
+              os << "</html>\n";
+          }
+      }
+
+  } catch (...) {
+      throw Fmi::Exception::Trace(BCP, "Operation failed!");
+  }
+}
+
 bool PluginImpl::is_reload_required(bool reset)
 {
   return stored_query_map->is_reload_required(reset);

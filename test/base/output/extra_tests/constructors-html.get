@@ -1,0 +1,14 @@
+<html>
+<h1>Stored query handler constructors</h1>
+<br>
+<b>Only those stored query handler constructors, that are used for at least one stored query are listed</b>
+<br>
+<ul>
+<li> <a href="/wfs/admin?request=constructors&handler=wfs_coverage_query_handler_factory&format=html">wfs_coverage_query_handler_factory</li>
+<li> <a href="/wfs/admin?request=constructors&handler=wfs_forecast_handler_factory&format=html">wfs_forecast_handler_factory</li>
+<li> <a href="/wfs/admin?request=constructors&handler=wfs_grid_forecast_handler_factory&format=html">wfs_grid_forecast_handler_factory</li>
+<li> <a href="/wfs/admin?request=constructors&handler=wfs_isoline_query_handler_factory&format=html">wfs_isoline_query_handler_factory</li>
+<li> <a href="/wfs/admin?request=constructors&handler=wfs_obs_handler_factory&format=html">wfs_obs_handler_factory</li>
+<li> <a href="/wfs/admin?request=constructors&handler=wfs_stored_geoserver_handler_factory&format=html">wfs_stored_geoserver_handler_factory</li>
+<li> <a href="/wfs/admin?request=constructors&handler=wfs_stored_sounding_handler_factory&format=html">wfs_stored_sounding_handler_factory</li>
+</ul>

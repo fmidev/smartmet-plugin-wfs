@@ -1,0 +1,18 @@
+<html>
+<h1>Stored query handler constructor: wfs_coverage_query_handler_factory</h1>
+<table border="1px solid black", padding: 5px; >
+<br><table border="1px solid black"><tr><th> </th><th>Parameter</th><th>Mandatory</th><th>Type</th><th>Min size</th><th>Max size</th><th>Step</th><th>Description</th></tr>
+<tr><td> Scalar</td><td> beginTime</td><td> no</td><td> posix_time</td><td>  </td><td>  </td><td>  </td><td> Parameter begin specifies the begin of time interval in ISO-format (for example 2012-02-27T00:00:00Z).</td></tr>
+<tr><td> Scalar</td><td> boundingBox</td><td> no</td><td> bounding_box</td><td>  </td><td>  </td><td>  </td><td> Bounding box of area for which to return data.</td></tr>
+<tr><td> Scalar</td><td> crs</td><td> yes</td><td> string</td><td>  </td><td>  </td><td>  </td><td> </td></tr>
+<tr><td> Scalar</td><td> endTime</td><td> no</td><td> posix_time</td><td>  </td><td>  </td><td>  </td><td> End of time interval in ISO-format (for example 2012-02-27T00:00:00Z).</td></tr>
+<tr><td> Array</td><td> hours</td><td> no</td><td> unsigned long</td><td> 0</td><td> 65535</td><td> 0</td><td> Hour values for which to report data (0 or more integer values).</td></tr>
+<tr><td> Scalar</td><td> originTime</td><td> no</td><td> posix_time</td><td>  </td><td>  </td><td>  </td><td> </td></tr>
+<tr><td> Scalar</td><td> producer</td><td> yes</td><td> string</td><td>  </td><td>  </td><td>  </td><td> </td></tr>
+<tr><td> Scalar</td><td> startStep</td><td> no</td><td> unsigned long</td><td>  </td><td>  </td><td>  </td><td> </td></tr>
+<tr><td> Scalar</td><td> timeStep</td><td> no</td><td> unsigned long</td><td>  </td><td>  </td><td>  </td><td> The time step of data in minutes. Notice that timestep is calculated from start of the ongoing hour or day.</td></tr>
+<tr><td> Scalar</td><td> timeSteps</td><td> no</td><td> unsigned long</td><td>  </td><td>  </td><td>  </td><td> Number of timesteps in result set.</td></tr>
+<tr><td> Scalar</td><td> timeZone</td><td> yes</td><td> string</td><td>  </td><td>  </td><td>  </td><td> Time zone of the time instant of the data point in the form Area/Location (for example America/Costa_Rica).The default value is UTC.</td></tr>
+<tr><td> Array</td><td> times</td><td> no</td><td> unsigned long</td><td> 0</td><td> 999</td><td> 1</td><td> Time values for which to return data. (0 or more values).</td></tr>
+</table>
+</html>

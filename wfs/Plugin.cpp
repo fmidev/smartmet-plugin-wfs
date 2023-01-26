@@ -291,10 +291,20 @@ void Plugin::adminHandler(SmartMet::Spine::Reactor& theReactor,
       else if (*operation == "constructors")
       {
         const auto handler = theRequest.getParameter("handler");
+        const auto format = theRequest.getParameter("format");
         std::ostringstream content;
-        impl->dump_constructor_map(content, handler ? *handler : "");
-        theResponse.setStatus(200);
-        theResponse.setHeader("Content-type", "application/json");
+        if (not format or *format == "json") {
+            impl->dump_constructor_map(content, handler ? *handler : "");
+            theResponse.setStatus(200);
+            theResponse.setHeader("Content-type", "application/json");
+        } else if (*format == "HTML" or *format == "html") {
+            impl->dump_constructor_map_html(content, handler ? *handler : "");
+            theResponse.setStatus(200);
+            theResponse.setHeader("Content-type", "text/html; charset=UTF-8");
+        } else {
+            std::cout << "#### BAD format \n";
+            throw std::runtime_error("format " + *format + " is not supported");
+        }
         theResponse.setContent(content.str());
       }
       else

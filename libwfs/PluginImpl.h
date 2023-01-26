@@ -142,6 +142,8 @@ class PluginImpl
    */
   void dump_constructor_map(std::ostream& os, const std::string& handler = "");
 
+  void dump_constructor_map_html(std::ostream& os, const std::string& handler = "");
+
   bool is_reload_required(bool reset = false);
 
   Fmi::Cache::CacheStatistics getCacheStats() const;
