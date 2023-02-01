@@ -523,7 +523,7 @@ void bw::StoredMastQueryHandler::query(const StoredQuery& query,
               {
                 station_geoid = std::to_string(static_cast<long long int>(sit->geoid));
                 station_wmo = std::to_string(static_cast<long long int>(sit->wmo));
-                station_name = sit->station_formal_name;
+				station_name = sit->station_formal_name(language);
                 station_region = sit->region;
                 station_latitude = std::to_string(static_cast<long double>(sit->latitude_out));
                 station_longitude = std::to_string(static_cast<long double>(sit->longitude_out));

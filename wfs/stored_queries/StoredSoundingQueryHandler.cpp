@@ -291,8 +291,9 @@ void StoredSoundingQueryHandler::query(const StoredQuery& query,
                 std::string wmo = std::to_string(static_cast<long long int>(sit->wmo));
                 if (not wmo.empty() && sit->wmo > 0)
                   station["wmo"] = wmo;
-                if (not sit->station_formal_name.empty())
-                  station["name"] = sit->station_formal_name;
+				auto station_formal_name = sit->station_formal_name(language);
+                if (not station_formal_name.empty())
+                  station["name"] = station_formal_name;
                 if (not sit->region.empty())
                   station["region"] = sit->region;
 

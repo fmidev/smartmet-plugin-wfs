@@ -3,7 +3,7 @@
 %define SPECNAME smartmet-plugin-%{DIRNAME}
 Summary: SmartMet WFS plugin
 Name: %{SPECNAME}
-Version: 23.1.26
+Version: 23.2.1
 Release: 2%{?dist}.fmi
 License: MIT
 Group: SmartMet/Plugins
@@ -35,7 +35,7 @@ BuildRequires: openssl-devel
 BuildRequires: bzip2-devel
 BuildRequires: zlib-devel
 BuildRequires: smartmet-library-timeseries-devel >= 23.1.26
-BuildRequires: smartmet-library-spine-devel >= 23.1.16
+BuildRequires: smartmet-library-spine-devel >= 23.2.1
 BuildRequires: smartmet-library-gis-devel >= 23.1.5
 BuildRequires: smartmet-library-trax-devel >= 22.12.22
 BuildRequires: smartmet-library-locus-devel >= 22.12.16
@@ -48,7 +48,7 @@ BuildRequires: smartmet-engine-querydata-devel >= 22.12.15
 BuildRequires: smartmet-library-grid-content-devel >= 23.1.19
 BuildRequires: smartmet-library-grid-files-devel >= 23.1.24
 %if %{with observation}
-BuildRequires: smartmet-engine-observation-devel >= 23.1.26
+BuildRequires: smartmet-engine-observation-devel >= 23.2.1
 %endif
 Requires: ctpp2
 Requires: fmt >= %{smartmet_fmt_min}, fmt < %{smartmet_fmt_max}
@@ -57,7 +57,7 @@ Requires: jsoncpp
 Requires: zlib
 Requires: smartmet-library-locus >= 22.12.16
 Requires: smartmet-library-macgyver >= 22.12.16
-Requires: smartmet-library-spine >= 23.1.16
+Requires: smartmet-library-spine >= 23.2.1
 Requires: smartmet-library-timeseries >= 23.1.26
 Requires: smartmet-library-gis >= 23.1.5
 Requires: smartmet-library-trax >= 22.12.22
@@ -68,7 +68,7 @@ Requires: smartmet-engine-grid >= 23.1.19
 Requires: smartmet-library-grid-content >= 23.1.19
 Requires: smartmet-library-grid-files >= 23.1.24
 %if %{with observation}
-Requires: smartmet-engine-observation >= 23.1.26
+Requires: smartmet-engine-observation >= 23.2.1
 %endif
 Requires: smartmet-engine-querydata >= 22.12.15
 Requires: smartmet-server >= 23.1.10
@@ -107,12 +107,12 @@ Obsoletes: smartmet-brainstorm-wfs-debuginfo < 16.11.1
 #TestRequires: smartmet-library-macgyver >= 22.12.16
 #TestRequires: smartmet-library-gis >= 23.1.5
 #TestRequires: smartmet-library-newbase >= 22.11.14
-#TestRequires: smartmet-library-spine-plugin-test >= 23.1.16
+#TestRequires: smartmet-library-spine-plugin-test >= 23.2.1
 #TestRequires: smartmet-engine-geonames >= 23.1.18
 #TestRequires: smartmet-engine-gis >= 22.12.21
 #TestRequires: smartmet-engine-querydata >= 22.12.15
 %if %{with observation}
-#TestRequires: smartmet-engine-observation >= 23.1.26
+#TestRequires: smartmet-engine-observation >= 23.2.1
 %endif
 #TestRequires: smartmet-engine-grid >= 23.1.19
 #TestRequires: redis
@@ -126,7 +126,7 @@ SmartMet WFS plugin
 
 %package -n %{SPECNAME}-devel
 Summary: SmartMet WFS plugin development files
-Requires: smartmet-library-spine-devel >= 23.1.16
+Requires: smartmet-library-spine-devel >= 23.2.1
 Requires: smartmet-library-gis-devel >= 23.1.5
 Requires: smartmet-library-locus-devel >= 22.12.16
 Requires: smartmet-library-macgyver-devel >= 22.12.16
@@ -163,6 +163,9 @@ rm -rf $RPM_BUILD_ROOT
 %{_includedir}/smartmet/plugin/wfs/request/*.h
 
 %changelog
+* Wed Feb 1 2023 Anssi Reponen <anssi.reponen@fmi.fi> - 23.2.1-1.fmi
+- Added language support for station names (BRAINSTORM-2514)
+
 * Thu Jan 26 2023 Mika Heiskanen <mika.heiskanen@fmi.fi> - 23.1.26-2.fmi
 - Repackaged due to timeseries API changes
 
