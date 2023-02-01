@@ -34,7 +34,7 @@ BuildRequires: xqilla-devel
 BuildRequires: openssl-devel
 BuildRequires: bzip2-devel
 BuildRequires: zlib-devel
-BuildRequires: smartmet-library-timeseries-devel >= 23.1.26
+BuildRequires: smartmet-library-timeseries-devel >= 23.1.31
 BuildRequires: smartmet-library-spine-devel >= 23.2.1
 BuildRequires: smartmet-library-gis-devel >= 23.1.5
 BuildRequires: smartmet-library-trax-devel >= 22.12.22
@@ -58,7 +58,7 @@ Requires: zlib
 Requires: smartmet-library-locus >= 22.12.16
 Requires: smartmet-library-macgyver >= 22.12.16
 Requires: smartmet-library-spine >= 23.2.1
-Requires: smartmet-library-timeseries >= 23.1.26
+Requires: smartmet-library-timeseries >= 23.1.31
 Requires: smartmet-library-gis >= 23.1.5
 Requires: smartmet-library-trax >= 22.12.22
 Requires: smartmet-engine-contour >= 23.1.26
@@ -71,7 +71,7 @@ Requires: smartmet-library-grid-files >= 23.1.24
 Requires: smartmet-engine-observation >= 23.2.1
 %endif
 Requires: smartmet-engine-querydata >= 22.12.15
-Requires: smartmet-server >= 23.1.10
+Requires: smartmet-server >= 23.2.1
 Requires: xerces-c
 Requires: xqilla
 Requires: zlib
