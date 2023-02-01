@@ -491,8 +491,10 @@ void bw::StoredAirNuclideQueryHandler::query(const StoredQuery& query,
           group["groupNum"] = groupId + 1;
           group["obsParamList"][0]["name"] = paramName;
 
-          if (not sit->second.station_formal_name.empty())
-            group["stationFormalName"] = sit->second.station_formal_name;
+		  auto station_formal_name = sit->second.station_formal_name(language);
+		  if (not station_formal_name.empty())
+			group["stationFormalName"] = station_formal_name;
+
           if (not sit->second.region.empty())
             group["region"] = sit->second.region;
           if (not sit->second.country.empty())
