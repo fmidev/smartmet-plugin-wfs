@@ -102,7 +102,7 @@ Obsoletes: smartmet-brainstorm-wfs-debuginfo < 16.11.1
 
 #TestRequires: ctpp2
 #TestRequires: smartmet-test-db >= 22.4.14
-#TestRequires: smartmet-test-data >= 20.12.1
+#TestRequires: smartmet-test-data >= 23.2.2
 #TestRequires: smartmet-utils-devel
 #TestRequires: smartmet-library-macgyver >= 22.12.16
 #TestRequires: smartmet-library-gis >= 23.1.5
