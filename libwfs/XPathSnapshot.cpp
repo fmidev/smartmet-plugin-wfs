@@ -86,12 +86,6 @@ XPathSnapshot::XPathSnapshot()
 
 XPathSnapshot::~XPathSnapshot()
 {
-  if (xpath_result)
-    xpath_result->release();
-  if (expression)
-    expression->release();
-  if (resolver)
-    resolver->release();
 }
 
 void XPathSnapshot::parse_dom_document(const std::string& src, const std::string& public_id)
@@ -122,9 +116,9 @@ void XPathSnapshot::parse_dom_document(xercesc::InputSource* input_source)
         throw Fmi::Exception(BCP, "Failed to parse stored query result");
       }
 
-      if (resolver)
-        resolver->release();
-      resolver = document->createNSResolver(document->getDocumentElement());
+      resolver = std::shared_ptr<xercesc::DOMXPathNSResolver>(
+          document->createNSResolver(document->getDocumentElement()),
+          [](xercesc::DOMXPathNSResolver* ptr) { ptr->release(); });
     }
     catch (...)
     {
@@ -145,21 +139,13 @@ std::size_t XPathSnapshot::xpath_query(const std::string& xpath_string)
 
     try
     {
-      if (xpath_result)
-      {
-        xpath_result->release();
-        xpath_result = nullptr;
-      }
+      expression = std::shared_ptr<xercesc::DOMXPathExpression>(
+          document->createExpression(X(xpath_string.c_str()), resolver.get()),
+          [] (xercesc::DOMXPathExpression* ptr) { ptr->release(); });
 
-      if (expression)
-      {
-        expression->release();
-        expression = nullptr;
-      }
-
-      expression = document->createExpression(X(xpath_string.c_str()), resolver);
-      xpath_result =
-          expression->evaluate(document, DOMXPathResult::UNORDERED_NODE_SNAPSHOT_TYPE, 0);
+      xpath_result = std::shared_ptr<xercesc::DOMXPathResult>(
+          expression->evaluate(document, DOMXPathResult::UNORDERED_NODE_SNAPSHOT_TYPE, 0),
+          [] (xercesc::DOMXPathResult* ptr) { ptr->release(); });
 
       return xpath_result->getSnapshotLength();
     }

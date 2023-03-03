@@ -1,7 +1,7 @@
 #pragma once
 
 #include "XmlDomErrorHandler.h"
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 #include <xercesc/dom/DOM.hpp>
 #include <xercesc/sax/InputSource.hpp>
 #include <xqilla/xqilla-dom3.hpp>
@@ -46,9 +46,9 @@ class XPathSnapshot : private XmlDomErrorHandler
   xercesc::DOMImplementation* xqillaImplementation;
   AutoRelease<xercesc::DOMLSParser> parser;
   xercesc::DOMDocument* document;
-  xercesc::DOMXPathNSResolver* resolver;
-  xercesc::DOMXPathExpression* expression;
-  xercesc::DOMXPathResult* xpath_result;
+  std::shared_ptr<xercesc::DOMXPathNSResolver> resolver;
+  std::shared_ptr<xercesc::DOMXPathExpression> expression;
+  std::shared_ptr<xercesc::DOMXPathResult> xpath_result;
 };
 
 }  // namespace Xml
