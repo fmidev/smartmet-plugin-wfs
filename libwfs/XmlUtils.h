@@ -6,6 +6,7 @@
 #include <xercesc/dom/DOMLSSerializer.hpp>
 #include <xercesc/dom/DOMNode.hpp>
 #include <xercesc/util/XMLString.hpp>
+#include <memory>
 #include <set>
 #include <string>
 #include <utility>
@@ -22,6 +23,8 @@ namespace Xml
 std::pair<std::string, bool> to_opt_string(const XMLCh* src);
 
 std::string to_string(const XMLCh* src);
+
+std::shared_ptr<XMLCh> to_xmlch(const char* src);
 
 std::pair<std::string, std::string> get_name_info(const xercesc::DOMNode* node);
 

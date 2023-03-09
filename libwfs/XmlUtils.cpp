@@ -2,6 +2,7 @@
 #include "XmlUtils.h"
 #include <boost/algorithm/string.hpp>
 #include <boost/regex.hpp>
+#include <boost/scoped_array.hpp>
 #include <macgyver/Exception.h>
 #include <xercesc/dom/DOMImplementation.hpp>
 #include <xercesc/dom/DOMImplementationLS.hpp>
@@ -9,6 +10,7 @@
 #include <xercesc/dom/DOMText.hpp>
 #include <xercesc/util/Janitor.hpp>
 #include <xercesc/util/XMLUni.hpp>
+#include <memory>
 #include <sstream>
 #include <stdexcept>
 
@@ -22,15 +24,14 @@ namespace WFS
 {
 namespace Xml
 {
+
 std::pair<std::string, bool> to_opt_string(const XMLCh* src)
 {
   try
   {
     if (src)
     {
-      xercesc::Janitor<char> tmp(xercesc::XMLString::transcode(src));
-      return std::make_pair<std::string, bool>(tmp.get(), true);
-      ;
+      return std::make_pair(to_string(src), true);
     }
     else
     {
@@ -50,7 +51,10 @@ std::string to_string(const XMLCh* src)
   {
     if (src)
     {
-      xercesc::Janitor<char> tmp(xercesc::XMLString::transcode(src));
+      std::shared_ptr<char> tmp(
+          xercesc::XMLString::transcode(src),
+          [] (char *ptr) -> void { xercesc::XMLString::release(&ptr); });
+
       return tmp.get();
     }
     else
@@ -58,6 +62,22 @@ std::string to_string(const XMLCh* src)
       throw Fmi::Exception(
           BCP, "SmartMet::Plugin::WFS::Xml::to_string: XML string expected but got nullptr");
     }
+  }
+  catch (...)
+  {
+    throw Fmi::Exception::Trace(BCP, "Operation failed!");
+  }
+}
+
+std::shared_ptr<XMLCh> to_xmlch(const char* src)
+{
+  try
+  {
+    std::shared_ptr<XMLCh> tmp(
+        xercesc::XMLString::transcode(src),
+        [] (XMLCh* ptr) -> void { xercesc::XMLString::release(&ptr); });
+
+    return tmp;
   }
   catch (...)
   {
@@ -164,7 +184,7 @@ std::pair<std::string, bool> get_attr(const xercesc::DOMElement& elem,
   try
   {
     (void)ns;
-    xercesc::Janitor<XMLCh> x_name(xercesc::XMLString::transcode(name.c_str()));
+    auto x_name = to_xmlch(name.c_str());
     if (elem.hasAttribute(x_name.get()))
     {
       const XMLCh* x_val = elem.getAttribute(x_name.get());
@@ -188,7 +208,7 @@ std::string get_mandatory_attr(const xercesc::DOMElement& elem,
   try
   {
     (void)ns;
-    xercesc::Janitor<XMLCh> x_name(xercesc::XMLString::transcode(name.c_str()));
+    auto x_name = to_xmlch(name.c_str());
     if (elem.hasAttribute(x_name.get()))
     {
       const XMLCh* x_val = elem.getAttribute(x_name.get());
@@ -286,7 +306,7 @@ xercesc::DOMLSSerializer* create_dom_serializer()
 {
   try
   {
-    xercesc::Janitor<XMLCh> features(xercesc::XMLString::transcode("LS"));
+      auto features = to_xmlch("LS");;
 
     xercesc::DOMImplementationLS* impl = nullptr;
     xercesc::DOMImplementation* impl_base =
@@ -315,16 +335,17 @@ std::string xml2string(const xercesc::DOMNode* node)
 {
   try
   {
-    xercesc::DOMLSSerializer* serializer = create_dom_serializer();
+    xercesc::Janitor<xercesc::DOMLSSerializer> serializer(create_dom_serializer());
 
     // Make the output more human readable by inserting line feeds.
     if (serializer->getDomConfig()->canSetParameter(xercesc::XMLUni::fgDOMWRTFormatPrettyPrint,
                                                     true))
       serializer->getDomConfig()->setParameter(xercesc::XMLUni::fgDOMWRTFormatPrettyPrint, true);
 
-    xercesc::Janitor<XMLCh> x_result(serializer->writeToString(node));
+    std::shared_ptr<XMLCh> x_result(
+        serializer->writeToString(node),
+        [] (XMLCh * ptr) -> void { xercesc::XMLString::release(&ptr); }) ;
     std::string result = to_string(x_result.get());
-    serializer->release();
     ba::trim_if(result, ba::is_any_of(" \t\r\n"));
     return result;
   }
@@ -341,8 +362,8 @@ std::vector<xercesc::DOMElement*> get_child_elements(const xercesc::DOMElement& 
   try
   {
     std::vector<xercesc::DOMElement*> result;
-    xercesc::Janitor<XMLCh> x_ns(xercesc::XMLString::transcode(ns.c_str()));
-    xercesc::Janitor<XMLCh> x_name(xercesc::XMLString::transcode(name.c_str()));
+    auto x_ns = to_xmlch(ns.c_str());
+    auto x_name =  to_xmlch(name.c_str());
     for (xercesc::DOMNode* child = element.getFirstChild(); child; child = child->getNextSibling())
     {
       if (child->getNodeType() == xercesc::DOMNode::ELEMENT_NODE)
@@ -371,7 +392,7 @@ boost::shared_ptr<xercesc::DOMDocument> create_dom_document(const std::string& n
 {
   try
   {
-    xercesc::Janitor<XMLCh> features(xercesc::XMLString::transcode("LS"));
+    auto features =  to_xmlch("LS");
 
     xercesc::DOMImplementation* impl =
         xercesc::DOMImplementationRegistry::getDOMImplementation(features.get());
@@ -399,8 +420,8 @@ xercesc::DOMElement* create_element(xercesc::DOMDocument& doc,
 {
   try
   {
-    xercesc::Janitor<XMLCh> x_ns(xercesc::XMLString::transcode(ns.c_str()));
-    xercesc::Janitor<XMLCh> x_name(xercesc::XMLString::transcode(name.c_str()));
+    auto x_ns =  to_xmlch(ns.c_str());
+    auto x_name = to_xmlch(name.c_str());
     xercesc::DOMElement* element = doc.createElementNS(x_ns.get(), x_name.get());
     return element;
   }
@@ -416,8 +437,8 @@ xercesc::DOMElement* append_child_element(xercesc::DOMElement& parent,
 {
   try
   {
-    xercesc::Janitor<XMLCh> x_ns(xercesc::XMLString::transcode(ns.c_str()));
-    xercesc::Janitor<XMLCh> x_name(xercesc::XMLString::transcode(name.c_str()));
+    auto x_ns =  to_xmlch(ns.c_str());
+    auto x_name =  to_xmlch(name.c_str());
     xercesc::DOMElement* child =
         parent.getOwnerDocument()->createElementNS(x_ns.get(), x_name.get());
     parent.appendChild(child);
@@ -436,7 +457,7 @@ xercesc::DOMElement* append_child_text_element(xercesc::DOMElement& parent,
 {
   try
   {
-    xercesc::Janitor<XMLCh> x_value(xercesc::XMLString::transcode(value.c_str()));
+    auto x_value = to_xmlch(value.c_str());
     xercesc::DOMElement* child = append_child_element(parent, ns, name);
     xercesc::DOMText* text = parent.getOwnerDocument()->createTextNode(x_value.get());
     child->appendChild(text);
@@ -452,8 +473,8 @@ void set_attr(xercesc::DOMElement& element, const std::string& name, const std::
 {
   try
   {
-    xercesc::Janitor<XMLCh> x_name(xercesc::XMLString::transcode(name.c_str()));
-    xercesc::Janitor<XMLCh> x_value(xercesc::XMLString::transcode(value.c_str()));
+    auto x_name =  to_xmlch(name.c_str());
+    auto x_value = to_xmlch(value.c_str());
     element.setAttribute(x_name.get(), x_value.get());
   }
   catch (...)
