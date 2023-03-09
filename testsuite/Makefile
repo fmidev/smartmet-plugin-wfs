@@ -86,7 +86,7 @@ check-valgrind:	$(TESTSUITE_TARGETS)
 	$$ok;
 
 %.test : obj/%.o ; @echo "Building $@"
-	$(CXX) -o $@ $(TESTSUITE_CFLAGS) $(INCLUDES) $< -Ltestsuite $(LIBWFS_LDFLAGS) $(LIBS)
+	$(CXX) -o $@ $(TESTSUITE_CFLAGS) $(CFLAGS) $(INCLUDES) $< -Ltestsuite $(LIBWFS_LDFLAGS) $(LIBS)
 
 CFLAGS += -I include -I $(TOP)/libwfs
 
