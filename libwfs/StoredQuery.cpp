@@ -388,7 +388,6 @@ void bw::StoredQuery::extract_kvp_parameters(const SmartMet::Spine::HTTP::Reques
         throw exception;
       }
 
-      const bw::StoredQueryParamDef& param_def = param_desc->param_def;
       if (param_desc == nullptr)
       {
         /* Skip unknown parameters (required to support GetFeatureById) */
@@ -400,6 +399,7 @@ void bw::StoredQuery::extract_kvp_parameters(const SmartMet::Spine::HTTP::Reques
       }
       else
       {
+        const bw::StoredQueryParamDef& param_def = param_desc->param_def;
         // Parameter is not yet processed, therefore compare with count + 1
         check_param_max_occurs(param_name_set.count(param_name) + 1,
                                param_desc->max_occurs,
