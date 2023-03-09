@@ -1,7 +1,6 @@
 #include "XmlEntityResolver.h"
 #include <xercesc/framework/MemBufInputSource.hpp>
 #include <xercesc/framework/LocalFileInputSource.hpp>
-#include <xercesc/util/Janitor.hpp>
 #include <macgyver/Exception.h>
 #include <spine/Convenience.h>
 #include "XmlUtils.h"
@@ -118,7 +117,7 @@ try
       std::size_t len = src.length();
       char *data = new char[len + 1];
       memcpy(data, src.c_str(), len + 1);
-      xercesc::Janitor<XMLCh> x_remote_id(xercesc::XMLString::transcode(remote_uri.c_str()));
+      auto x_remote_id = to_xmlch(remote_uri.c_str());
       return new xercesc::MemBufInputSource(reinterpret_cast<XMLByte *>(data),
 					    len,
 					    x_remote_id.get(),

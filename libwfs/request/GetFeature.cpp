@@ -18,7 +18,6 @@
 #include <xercesc/dom/DOMXPathNSResolver.hpp>
 #include <xercesc/dom/DOMXPathResult.hpp>
 #include <xercesc/framework/MemBufInputSource.hpp>
-#include <xercesc/util/Janitor.hpp>
 #include <xqilla/xqilla-dom3.hpp>
 #include <set>
 
@@ -244,7 +243,7 @@ void bw::Request::GetFeature::execute_multiple_queries(std::ostream& ost) const
                   "http://www.opengis.net/wfs/2.0 http://schemas.opengis.net/wfs/2.0/wfs.xsd "
                   "http://www.opengis.net/gml/3.2 http://schemas.opengis.net/gml/3.2.1/gml.xsd");
 
-    Janitor<XMLCh> a_timeStamp(xercesc::XMLString::transcode("timeStamp"));
+    auto a_timeStamp = Xml::to_xmlch("timeStamp");
 
     boost::optional<std::string> time_stamp;
 

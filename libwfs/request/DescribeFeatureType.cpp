@@ -226,7 +226,7 @@ bw::Request::DescribeFeatureType::create_from_xml(const std::string& language,
       {
         const std::string prefix = item.substr(0, pos);
         name = item.substr(pos + 1);
-        xercesc::Janitor<XMLCh> x_prefix(xercesc::XMLString::transcode(prefix.c_str()));
+        auto x_prefix = Xml::to_xmlch(prefix.c_str());
         x_uri = document.lookupNamespaceURI(x_prefix.get());
       }
 

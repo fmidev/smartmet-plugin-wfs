@@ -14,7 +14,6 @@
 #include <xercesc/sax/ErrorHandler.hpp>
 #include <xercesc/sax/SAXParseException.hpp>
 #include <xercesc/util/BinFileInputStream.hpp>
-#include <xercesc/util/Janitor.hpp>
 #include <cerrno>
 #include <fstream>
 #include <iostream>
@@ -75,7 +74,7 @@ boost::shared_ptr<xercesc::DOMDocument> Parser::parse_file(
 {
   try
   {
-    xercesc::Janitor<XMLCh> fn(xercesc::XMLString::transcode(file_name.c_str()));
+    auto fn = to_xmlch(file_name.c_str());
     xercesc::LocalFileInputSource input(fn.get());
     return parse_input(input, root_element_cb);
   }
