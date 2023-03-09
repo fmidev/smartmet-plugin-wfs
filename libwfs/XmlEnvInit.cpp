@@ -2,6 +2,7 @@
 #include <macgyver/TypeName.h>
 #include <macgyver/Exception.h>
 #include <xercesc/util/PlatformUtils.hpp>
+#include <xercesc/util/XMLNetAccessor.hpp>
 #include <xqilla/utils/UTF8Str.hpp>
 #include <xqilla/utils/XQillaPlatformUtils.hpp>
 #include <sstream>
@@ -32,6 +33,7 @@ EnvInit::EnvInit()
     }
 
     // Disable Xerces-C net accessor for now
+    delete xercesc::XMLPlatformUtils::fgNetAccessor;
     xercesc::XMLPlatformUtils::fgNetAccessor = nullptr;
   }
   catch (...)
