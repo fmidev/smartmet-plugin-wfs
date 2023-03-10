@@ -82,6 +82,8 @@ void bw::StoredQueryMap::add_config_dir(const boost::filesystem::path& config_di
     std::thread tmp(std::bind(&bw::StoredQueryMap::directory_monitor_thread_proc, this));
     directory_monitor_thread.swap(tmp);
   }
+
+  boost::unique_lock<boost::shared_mutex> lock(mutex);
   config_dirs[ci.watcher] = ci;
 }
 
@@ -275,7 +277,10 @@ void bw::StoredQueryMap::on_config_change(Fmi::DirectoryMonitor::Watcher watcher
     loading_started = true;
 
     int have_errors = 0;
-    const bool initial_update = config_dirs.at(watcher).num_updates == 0;
+    const bool initial_update = [this, &watcher]() {
+        boost::shared_lock<boost::shared_mutex> lock(mutex);
+        return config_dirs.at(watcher).num_updates == 0; } ();
+
     const auto template_dir = config_dirs.at(watcher).template_dir;
 
     (void)path;
