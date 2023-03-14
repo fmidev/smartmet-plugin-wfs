@@ -224,7 +224,7 @@ void bw::AdHocQuery::create_filter_query_from_kvp(
         throw exception.disableStackTrace();
       }
 
-      const std::string& root_name = XMLString::transcode(root->getTagName());
+      const std::string root_name = Xml::to_string(root->getTagName());
 
       if (root_name != "fes:Filter")
       {
@@ -399,7 +399,7 @@ void bw::AdHocQuery::create_from_xml(const std::string& language,
       {
         // Filter is defined, we need to parse it.
 
-        const std::string& root_name = XMLString::transcode(filter_root[0]->getTagName());
+          const std::string root_name = Xml::to_string(filter_root[0]->getTagName());
 
         // Store element name to element tree.
         std::vector<std::string> element_tree;
@@ -701,7 +701,7 @@ void bw::AdHocQuery::extract_filter_elements(const xercesc::DOMElement& root_ele
     // Loop through the filter elements.
     for (const xercesc::DOMElement* element : filter_elements)
     {
-      const std::string& tag_name = XMLString::transcode(element->getTagName());
+      const std::string tag_name = Xml::to_string(element->getTagName());
       std::string element_name = Fmi::ascii_tolower_copy(tag_name);
 
       // fes:Not filtering element is not supported.
@@ -1025,7 +1025,7 @@ void bw::AdHocQuery::read_comparison_operation(const xercesc::DOMElement& elemen
     for (const xercesc::DOMElement* child_element : child_elements)
     {
       // Read element name.
-      const std::string& tag_name = XMLString::transcode(child_element->getTagName());
+        const std::string tag_name = Xml::to_string(child_element->getTagName());
       std::string child_name = Fmi::ascii_tolower_copy(tag_name);
 
       // Read element value.
@@ -1155,7 +1155,7 @@ void bw::AdHocQuery::read_query_parameter(const xercesc::DOMElement& element,
   try
   {
     const char* method = "SmartMet::Plugin::WFS::AdHocQuery::read_query_parameter";
-    const std::string& local_name = XMLString::transcode(element.getLocalName());
+    const std::string& local_name = Xml::to_string(element.getLocalName());
     std::string param_name = Fmi::ascii_tolower_copy(local_name);
 
     // Decide parameter names/types from XML element names.
