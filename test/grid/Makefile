@@ -4,6 +4,7 @@ include $(shell echo $${PREFIX-/usr})/share/smartmet/devel/makefile.inc
 #    TEST_RUNNER="gdb --args"
 #    TEST_RUNNER="valgrind --log-file=valgrind.out --leak-check=full --leak-resolution=high"
 TEST_RUNNER ?=
+TEST_TIMEOUT ?= 300
 
 test test-grid:	start-redis-db
 	if $(MAKE) test-impl; then ok=true; else ok=false; fi; $(MAKE) stop-redis-db; $$ok
@@ -12,7 +13,7 @@ test-impl:
 	$(TEST_RUNNER) smartmet-plugin-test --handler /wfs \
 		--reactor-config cnf/reactor.conf \
 		--failures-dir failures \
-		--timeout 300
+		--timeout $(TEST_TIMEOUT)
 
 clean:
 	rm -rf failures

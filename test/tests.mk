@@ -25,6 +25,8 @@ foo:
 
 all:
 
+TEST_TIMEOUT ?= 300
+
 TEST_DEPEND :=
 
 # Examples (default: run smartmet-plugin-test directly)
@@ -75,7 +77,7 @@ test-oracle test-postgresql test-sqlite: s-input-files $(TEST_DEPEND)
 		--reactor-config cnf/wfs_plugin_test_$(DB_TYPE).conf \
 		--failures-dir failures-$(DB_TYPE) \
 		$(foreach fn, ignore-$(DB_TYPE) $(EXTRA_IGNORE), --ignore $(fn)) \
-		--timeout 300
+		--timeout $(TEST_TIMEOUT)
 
 s-input-files:
 	@rm -f $(shell find input -name '*.xml.post' -o -name '*.kvp.get')
