@@ -3,7 +3,7 @@
 %define SPECNAME smartmet-plugin-%{DIRNAME}
 Summary: SmartMet WFS plugin
 Name: %{SPECNAME}
-Version: 23.3.15
+Version: 23.3.22
 Release: 1%{?dist}.fmi
 License: MIT
 Group: SmartMet/Plugins
@@ -41,14 +41,14 @@ BuildRequires: smartmet-library-trax-devel >= 22.12.22
 BuildRequires: smartmet-library-locus-devel >= 23.3.7
 BuildRequires: smartmet-library-macgyver-devel >= 23.3.3
 BuildRequires: smartmet-engine-contour-devel >= 23.3.9
-BuildRequires: smartmet-engine-geonames-devel >= 23.2.27
+BuildRequires: smartmet-engine-geonames-devel >= 23.3.16
 BuildRequires: smartmet-engine-gis-devel >= 22.12.21
 BuildRequires: smartmet-engine-grid-devel >= 23.3.9
 BuildRequires: smartmet-engine-querydata-devel >= 23.3.21
 BuildRequires: smartmet-library-grid-content-devel >= 23.3.9
 BuildRequires: smartmet-library-grid-files-devel >= 23.3.9
 %if %{with observation}
-BuildRequires: smartmet-engine-observation-devel >= 23.3.21
+BuildRequires: smartmet-engine-observation-devel >= 23.3.22
 %endif
 Requires: ctpp2
 Requires: fmt >= %{smartmet_fmt_min}, fmt < %{smartmet_fmt_max}
@@ -62,16 +62,16 @@ Requires: smartmet-library-timeseries >= 23.3.15
 Requires: smartmet-library-gis >= 23.3.14
 Requires: smartmet-library-trax >= 22.12.22
 Requires: smartmet-engine-contour >= 23.3.9
-Requires: smartmet-engine-geonames >= 23.2.27
+Requires: smartmet-engine-geonames >= 23.3.16
 Requires: smartmet-engine-gis >= 22.12.21
 Requires: smartmet-engine-grid >= 23.3.9
 Requires: smartmet-library-grid-content >= 23.3.9
 Requires: smartmet-library-grid-files >= 23.3.9
 %if %{with observation}
-Requires: smartmet-engine-observation >= 23.3.21
+Requires: smartmet-engine-observation >= 23.3.22
 %endif
 Requires: smartmet-engine-querydata >= 23.3.21
-Requires: smartmet-server >= 23.3.6
+Requires: smartmet-server >= 23.3.21
 Requires: xerces-c
 Requires: xqilla
 Requires: zlib
@@ -108,11 +108,11 @@ Obsoletes: smartmet-brainstorm-wfs-debuginfo < 16.11.1
 #TestRequires: smartmet-library-gis >= 23.3.14
 #TestRequires: smartmet-library-newbase >= 23.2.9
 #TestRequires: smartmet-library-spine-plugin-test >= 23.3.14
-#TestRequires: smartmet-engine-geonames >= 23.2.27
+#TestRequires: smartmet-engine-geonames >= 23.3.16
 #TestRequires: smartmet-engine-gis >= 22.12.21
 #TestRequires: smartmet-engine-querydata >= 23.3.21
 %if %{with observation}
-#TestRequires: smartmet-engine-observation >= 23.3.21
+#TestRequires: smartmet-engine-observation >= 23.3.22
 %endif
 #TestRequires: smartmet-engine-grid >= 23.3.9
 #TestRequires: redis
@@ -163,6 +163,9 @@ rm -rf $RPM_BUILD_ROOT
 %{_includedir}/smartmet/plugin/wfs/request/*.h
 
 %changelog
+* Wed Mar 22 2023 Mika Heiskanen <mika.heiskanen@fmi.fi> - 23.3.22-1.fmi
+- Repackaged due to ObsEngine API changes
+
 * Wed Mar 15 2023 Mika Heiskanen <mika.heiskanen@fmi.fi> - 23.3.15-1.fmi
 - Repackaged due to ObsEngine API changes
 
