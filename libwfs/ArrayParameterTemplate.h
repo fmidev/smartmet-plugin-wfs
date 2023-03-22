@@ -31,20 +31,20 @@ class ArrayParameterTemplate : public ParameterTemplateBase
                          std::size_t max_size = 999,
 			 bool silent = false);
 
-  virtual ~ArrayParameterTemplate();
+  ~ArrayParameterTemplate() override = default;
 
-  inline const std::vector<ParameterTemplateItem> get_items() const { return items; }
+  inline const std::vector<ParameterTemplateItem>& get_items() const { return items; }
   inline std::size_t get_num_items() const { return items.size(); }
   inline const ParameterTemplateItem& get_item(std::size_t ind) const { return items.at(ind); }
   std::vector<SmartMet::Spine::Value> get_value(
       const RequestParameterMap& req_param_map,
       const SupportsExtraHandlerParams* extra_params = nullptr) const;
 
-  virtual boost::tribool get_value(
+  boost::tribool get_value(
       boost::variant<SmartMet::Spine::Value, std::vector<SmartMet::Spine::Value> >& result,
       const RequestParameterMap& req_param_map,
       const SupportsExtraHandlerParams* extra = nullptr,
-      bool strict = true) const;
+      bool strict = true) const override;
 
   std::vector<int64_t> get_int_array(const RequestParameterMap& req_param_map,
                                      const SupportsExtraHandlerParams* extra_params = nullptr) const;

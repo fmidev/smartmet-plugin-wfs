@@ -9,14 +9,6 @@ namespace bwx = SmartMet::Plugin::WFS::Xml;
 
 bwx::XmlErrorHandler::XmlErrorHandler(bool throw_on_error) : throw_on_error(throw_on_error)
 {
-  try
-  {
-    resetErrors();
-  }
-  catch (...)
-  {
-    throw Fmi::Exception::Trace(BCP, "Operation failed!");
-  }
 }
 
 bwx::XmlErrorHandler::~XmlErrorHandler() {}

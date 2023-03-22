@@ -603,8 +603,8 @@ StoredGridQueryHandler::Result::Grid StoredGridQueryHandler::rearrangeGrid(
       // If array dimensions change (i.e. queried bbox is in different projection than data, the
       // following segfaults
 
-      outputIt = std::copy(inputGrid.begin() + arrayWidth * stepsSoFar,
-                           inputGrid.begin() + arrayWidth * (stepsSoFar + 1),
+        outputIt = std::copy(inputGrid.begin() + std::size_t(arrayWidth) * stepsSoFar,
+                           inputGrid.begin() + std::size_t(arrayWidth) * (stepsSoFar + 1),
                            outputIt);
 
       if (outputIt == orderedGrid.begin() + arrayWidth)

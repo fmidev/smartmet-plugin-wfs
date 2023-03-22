@@ -31,10 +31,7 @@ bool bw::SupportsQualityParameters::isQCParameter(const std::string& name) const
   try
   {
     const std::string prefix = Fmi::ascii_tolower_copy(name.substr(0, 3));
-    if (prefix.compare(0, 3, "qc_") == 0)
-      return true;
-
-    return false;
+    return prefix.compare(0, 3, "qc_") == 0;
   }
   catch (...)
   {

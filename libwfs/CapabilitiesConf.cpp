@@ -106,10 +106,6 @@ CapabilitiesConf::CapabilitiesConf()
   supportedFormats.insert("application/gml+xml; version=3.2");
 }
 
-CapabilitiesConf::~CapabilitiesConf()
-{
-}
-
 void CapabilitiesConf::parse(const std::string& default_language, libconfig::Setting& setting)
 {
   using namespace SmartMet::Spine;

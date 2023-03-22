@@ -793,7 +793,7 @@ void bw::StoredContourQueryHandler::query_gridEngine(const StoredQuery& stored_q
 
     char tmp[100];
     query_param->gridQuery.mAttributeList.addAttribute("grid.urn", targetURN);
-    sprintf(tmp,
+    (void)snprintf(tmp, sizeof(tmp),
             "%f,%f,%f,%f",
             query_param->bbox.xMin,
             query_param->bbox.yMin,

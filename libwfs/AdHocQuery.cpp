@@ -1060,7 +1060,7 @@ void bw::AdHocQuery::read_comparison_operation(const xercesc::DOMElement& elemen
             is_value_string = true;
 
             // Should value be changed to lower case value?
-            if (match_case == false)
+            if (not match_case)
             {
               limit_value = Fmi::ascii_tolower_copy(limit_value);
             }
@@ -1085,19 +1085,19 @@ void bw::AdHocQuery::read_comparison_operation(const xercesc::DOMElement& elemen
     }
     // Is caseless search requested?
     // (This is else branch because XPath query "lower-case(number(...))" causes exception.)
-    else if ((match_case == false)
+    else if ((not match_case)
              // Avoid XPath query "lower-case(...) for elements with numerical values because it
              // causes exception.
              // But it can be used when comparing two ValueReference elements.
-             && ((is_value_string == true) || (nb_of_value_references == 2)))
+             && (is_value_string || (nb_of_value_references == 2)))
     {
       // Avoid XPath query "lower-case(descendant::*/@attribute)=..." because it causes exception.
-      if (is_reference_attribute == false)
+      if (not is_reference_attribute)
       {
         reference = "lower-case(" + reference + ")";
       }
 
-      if ((nb_of_value_references == 2) && (is_2nd_reference_attribute == false))
+      if ((nb_of_value_references == 2) && (not is_2nd_reference_attribute))
       {
         limit_value = "lower-case(" + limit_value + ")";
       }

@@ -112,8 +112,13 @@ bw::GeoServerDataIndex::LayerRec::LayerRec(
 }
 
 bw::GeoServerDataIndex::LayerRec::~LayerRec()
+try
 {
   clear();
+}
+catch (...)
+{
+  std::cout << Fmi::Exception(BCP, "EXCEPTION IN DESTRUCTOR") << std::endl;
 }
 
 bw::GeoServerDataIndex::LayerRec& bw::GeoServerDataIndex::LayerRec::operator=(
@@ -121,15 +126,16 @@ bw::GeoServerDataIndex::LayerRec& bw::GeoServerDataIndex::LayerRec::operator=(
 {
   try
   {
-    name = rec.name;
-    layer = rec.layer;
-    orig_geom = rec.orig_geom ? &dynamic_cast<OGRLineString&>(*(rec.orig_geom->clone())) : nullptr;
-    dest_geom = rec.dest_geom ? &dynamic_cast<OGRLineString&>(*(rec.dest_geom->clone())) : nullptr;
-    orig_srs = rec.orig_srs;
-    dest_srs = rec.dest_srs;
-    orig_srs_swapped = rec.orig_srs_swapped;
-    dest_srs_swapped = rec.dest_srs_swapped;
-
+    if (this != &rec) {
+        name = rec.name;
+        layer = rec.layer;
+        orig_geom = rec.orig_geom ? &dynamic_cast<OGRLineString&>(*(rec.orig_geom->clone())) : nullptr;
+        dest_geom = rec.dest_geom ? &dynamic_cast<OGRLineString&>(*(rec.dest_geom->clone())) : nullptr;
+        orig_srs = rec.orig_srs;
+        dest_srs = rec.dest_srs;
+        orig_srs_swapped = rec.orig_srs_swapped;
+        dest_srs_swapped = rec.dest_srs_swapped;
+    }
     return *this;
   }
   catch (...)

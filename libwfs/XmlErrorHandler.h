@@ -32,13 +32,14 @@ class XmlErrorHandler : public xercesc::ErrorHandler
  private:
   void add_message(const std::string& prefix, const xercesc::SAXParseException& exc);
   void check_terminate(const std::string& prefix, XmlError::error_level_t error_level);
+  void local_reset_errors();
 
  private:
   bool throw_on_error;
   std::list<std::string> messages;
-  int num_warnings;
-  int num_errors;
-  int num_fatal_errors;
+    int num_warnings = 0;
+  int num_errors = 0;
+  int num_fatal_errors = 0;
 };
 
 }  // namespace Xml

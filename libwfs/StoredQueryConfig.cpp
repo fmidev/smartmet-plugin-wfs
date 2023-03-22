@@ -550,10 +550,7 @@ bool SmartMet::Plugin::WFS::StoredQueryConfig::last_write_time_changed() const
 {
   try
   {
-    if (config_write_time() == config_last_write_time)
-      return false;
-
-    return true;
+      return config_write_time() != config_last_write_time;
   }
   catch (const Fmi::Exception& e)
   {

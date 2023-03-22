@@ -742,7 +742,7 @@ uint StoredGridForecastQueryHandler::processGridQuery(Query& wfsQuery,
                         gridQuery.mQueryParameterList[p].mValueList[r]->mProducerId, producer))
                   producerName = producer.mName;
 
-                sprintf(tmp,
+                (void)snprintf(tmp, sizeof(tmp),
                         "%s:%d:%d:%d:%d:%s",
                         gridQuery.mQueryParameterList[p].mValueList[r]->mParameterKey.c_str(),
                         (int)gridQuery.mQueryParameterList[p].mValueList[r]->mParameterLevelId,

@@ -367,7 +367,7 @@ void bw::StoredGeoserverQueryHandler::update_parameters(
           for (double value : dest_coords)
           {
             char tmp[80];
-	    snprintf(tmp, sizeof(tmp), "%.6f", value);
+	    (void)snprintf(tmp, sizeof(tmp), "%.6f", value);
             pm1->add("destBoundary", tmp);
           }
 

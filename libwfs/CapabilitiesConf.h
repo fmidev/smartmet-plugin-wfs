@@ -35,7 +35,7 @@ namespace WFS
   public:
     CapabilitiesConf();
 
-    virtual ~CapabilitiesConf();
+    virtual ~CapabilitiesConf() = default;
 
     void parse(const std::string& default_language, libconfig::Setting& setting);
 
