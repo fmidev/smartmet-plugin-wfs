@@ -40,7 +40,7 @@ class StoredQueryHandlerBase : virtual protected SupportsExtraHandlerParams,
 {
   SmartMet::Spine::Reactor* reactor;
   StoredQueryConfig::Ptr config;
-  bool hidden;
+  bool hidden{false};
 
  protected:
   const PluginImpl& plugin_impl;
@@ -52,7 +52,7 @@ class StoredQueryHandlerBase : virtual protected SupportsExtraHandlerParams,
                          PluginImpl& plugin_impl,
                          boost::optional<std::string> template_file_name);
 
-  virtual ~StoredQueryHandlerBase();
+  ~StoredQueryHandlerBase() override;
 
   void perform_init();
 

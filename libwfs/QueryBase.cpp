@@ -7,8 +7,8 @@ const char *bw::QueryBase::FMI_APIKEY_PREFIX_SUBST = "@FMI_APIKEY_PREFIX@";
 const char *bw::QueryBase::HOSTNAME_SUBST = "@HOSTNAME@";
 const char *bw::QueryBase::PROTOCOL_SUBST = "@PROTOCOL@";
 
-bw::QueryBase::QueryBase() : query_id(1), stale_seconds(0) {}
-bw::QueryBase::~QueryBase() {}
+bw::QueryBase::QueryBase()  = default;
+bw::QueryBase::~QueryBase() = default;
 void bw::QueryBase::set_query_id(int id)
 {
   this->query_id = id;

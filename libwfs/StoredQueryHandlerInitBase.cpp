@@ -11,8 +11,7 @@ StoredQueryHandlerInitBase::StoredQueryHandlerInitBase()
 }
 
 StoredQueryHandlerInitBase::~StoredQueryHandlerInitBase()
-{
-}
+= default;
 
 void StoredQueryHandlerInitBase::execute_init_actions()
 {

@@ -60,7 +60,7 @@ class QueryBase
   template <typename QueryTypeName>
   QueryTypeName* cast()
   {
-    QueryTypeName& result = dynamic_cast<QueryTypeName&>(*this);
+    auto& result = dynamic_cast<QueryTypeName&>(*this);
     return &result;
   }
 
@@ -88,8 +88,8 @@ class QueryBase
   inline int get_stale_seconds() const { return stale_seconds; }
 
  private:
-  int query_id;
-  int stale_seconds;
+  int query_id{1};
+  int stale_seconds{0};
   boost::optional<std::string> cached_response;
 };
 

@@ -41,7 +41,7 @@ class StoredQueryParamRegistry : public StoredQueryConfig::Wrapper
     boost::shared_ptr<ScalarParameterTemplate> param_def;
     bool required;
 
-    virtual  ~ScalarParameterRec();
+     ~ScalarParameterRec() override;
   };
 
   struct ArrayParameterRec : public ParamRecBase
@@ -51,13 +51,13 @@ class StoredQueryParamRegistry : public StoredQueryConfig::Wrapper
     std::size_t max_size;
     std::size_t step;
 
-    virtual ~ArrayParameterRec();
+    ~ArrayParameterRec() override;
   };
 
  public:
   StoredQueryParamRegistry(StoredQueryConfig::Ptr config);
 
-  virtual ~StoredQueryParamRegistry();
+  ~StoredQueryParamRegistry() override;
 
   /**
    *   @brief Resolve provided stored query handler parameters from provided pre-processed
@@ -101,7 +101,7 @@ class StoredQueryParamRegistry : public StoredQueryConfig::Wrapper
   void add_param_rec(boost::shared_ptr<ParamRecBase> rec);
 
  private:
-  bool silence_param_init_warnings_;
+  bool silence_param_init_warnings_{false};
   std::map<std::string, boost::shared_ptr<ParamRecBase> > param_map;
   std::map<std::string, int> supported_type_names;
 };

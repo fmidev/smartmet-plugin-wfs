@@ -15,9 +15,9 @@
 namespace ba = boost::algorithm;
 namespace bw = SmartMet::Plugin::WFS;
 
-bw::TypeNameStoredQueryMap::TypeNameStoredQueryMap() {}
+bw::TypeNameStoredQueryMap::TypeNameStoredQueryMap() = default;
 
-bw::TypeNameStoredQueryMap::~TypeNameStoredQueryMap() {}
+bw::TypeNameStoredQueryMap::~TypeNameStoredQueryMap() = default;
 
 void bw::TypeNameStoredQueryMap::init(const std::map<std::string, std::string>& typename_storedqry)
 {

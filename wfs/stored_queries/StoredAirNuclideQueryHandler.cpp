@@ -49,11 +49,11 @@ bw::StoredAirNuclideQueryHandler::StoredAirNuclideQueryHandler(
   }
 }
 
-bw::StoredAirNuclideQueryHandler::~StoredAirNuclideQueryHandler() {}
+bw::StoredAirNuclideQueryHandler::~StoredAirNuclideQueryHandler() = default;
 
 void bw::StoredAirNuclideQueryHandler::query(const StoredQuery& query,
                                              const std::string& language,
-                                             const boost::optional<std::string>& hostname,
+                                             const boost::optional<std::string>&  /*hostname*/,
                                              std::ostream& output) const
 {
   try
@@ -67,10 +67,10 @@ void bw::StoredAirNuclideQueryHandler::query(const StoredQuery& query,
 
     try
     {
-      const std::string stationType = params.get_single<std::string>(P_STATION_TYPE);
-      const double maxDistance = params.get_single<double>(P_MAX_DISTANCE);
-      const uint64_t numberOfStations = params.get_single<uint64_t>(P_NUM_OF_STATIONS);
-      const std::string requestedCrs = params.get_single<std::string>(P_CRS);
+      const auto stationType = params.get_single<std::string>(P_STATION_TYPE);
+      const auto maxDistance = params.get_single<double>(P_MAX_DISTANCE);
+      const auto numberOfStations = params.get_single<uint64_t>(P_NUM_OF_STATIONS);
+      const auto requestedCrs = params.get_single<std::string>(P_CRS);
       const bool latest = params.get_single<bool>(P_LATEST);
       const bool showDataQuality = SupportsQualityParameters::supportQualityInfo(params);
 
@@ -89,29 +89,29 @@ void bw::StoredAirNuclideQueryHandler::query(const StoredQuery& query,
       bool show_height = false;
       std::string proj_uri = "UNKNOWN";
       std::string proj_epoch_uri = "UNKNOWN";
-      std::string axis_labels = "";
+      std::string axis_labels;
       crs_registry.get_attribute(crs, "showHeight", &show_height);
       crs_registry.get_attribute(crs, "projUri", &proj_uri);
       crs_registry.get_attribute(crs, "projEpochUri", &proj_epoch_uri);
       crs_registry.get_attribute(crs, "axisLabels", &axis_labels);
 
       // Search and validate the locations.
-      typedef std::pair<std::string, SmartMet::Spine::LocationPtr> LocationListItem;
-      typedef std::list<LocationListItem> LocationList;
+      using LocationListItem = std::pair<std::string, SmartMet::Spine::LocationPtr>;
+      using LocationList = std::list<LocationListItem>;
       LocationList locations_list;
       get_location_options(params, language, &locations_list);
 
       const int debug_level = get_config()->get_debug_level();
       if (debug_level > 2)
       {
-          for (auto id : locations_list)
+          for (const auto& id : locations_list)
           std::cerr << "Found location: name: " << id.first << " geoid: " << id.second->geoid
                     << "\n";
       }
 
-      pt::ptime startTime = params.get_single<pt::ptime>(P_BEGIN_TIME);
-      pt::ptime endTime = params.get_single<pt::ptime>(P_END_TIME);
-      const uint64_t timestep = params.get_single<uint64_t>(P_TIME_STEP);
+      auto startTime = params.get_single<pt::ptime>(P_BEGIN_TIME);
+      auto endTime = params.get_single<pt::ptime>(P_END_TIME);
+      const auto timestep = params.get_single<uint64_t>(P_TIME_STEP);
 
       if (m_sqRestrictions)
         check_time_interval(startTime, endTime, m_maxHours);
@@ -180,17 +180,15 @@ void bw::StoredAirNuclideQueryHandler::query(const StoredQuery& query,
       SupportsLocationParameters::engOrFinToEnOrFi(langCode);
 
       // Get information from GeoEngien. Elevation is required.
-      typedef std::map<std::string, SmartMet::Spine::Station> StationMap;
+      using StationMap = std::map<std::string, SmartMet::Spine::Station>;
       StationMap stations;
       // SmartMet::Spine::Stations stations;
-      for (SmartMet::Spine::Stations::const_iterator it = stationCandidates.begin();
-           it != stationCandidates.end();
-           ++it)
+      for (const auto & stationCandidate : stationCandidates)
       {
-        std::string fmisidStr = std::to_string((*it).fmisid);
-        stations.emplace(fmisidStr, *it);
+        std::string fmisidStr = std::to_string(stationCandidate.fmisid);
+        stations.emplace(fmisidStr, stationCandidate);
 
-        SmartMet::Spine::LocationPtr geoLoc = geo_engine->idSearch(it->geoid, langCode);
+        SmartMet::Spine::LocationPtr geoLoc = geo_engine->idSearch(stationCandidate.geoid, langCode);
         if (geoLoc)
         {
           stations[fmisidStr].country = geoLoc->country;
@@ -219,7 +217,7 @@ void bw::StoredAirNuclideQueryHandler::query(const StoredQuery& query,
                                          "STATION_ID");
 
       // Station identities
-      for (StationMap::const_iterator it = stations.begin();
+      for (auto it = stations.begin();
            queryInitializationOK && it != stations.end();
            ++it)
       {
@@ -270,7 +268,7 @@ void bw::StoredAirNuclideQueryHandler::query(const StoredQuery& query,
       bo::MastQuery dataQuery;
 
       bo::MastQuery radioNuclidesQuery;
-      typedef std::map<std::string, std::string> NuclideNameMap;
+      using NuclideNameMap = std::map<std::string, std::string>;
       NuclideNameMap nuclideNameMap;
 
       // At least one observation_id is required for data search.
@@ -289,11 +287,11 @@ void bw::StoredAirNuclideQueryHandler::query(const StoredQuery& query,
         dataQueryParams.addJoinOnConfig(dbRegistryConfig("STUK_RADIONUCLIDE_DATA_V1"),
                                         "ANALYSIS_ID");
 
-        bo::QueryResult::ValueVectorType::const_iterator analysisIdIt =
+        auto analysisIdIt =
             profileContainer->begin("ANALYSIS_ID");
-        bo::QueryResult::ValueVectorType::const_iterator analysisIdItEnd =
+        auto analysisIdItEnd =
             profileContainer->end("ANALYSIS_ID");
-        bo::QueryResult::ValueVectorType::const_iterator stationIdIt =
+        auto stationIdIt =
             profileContainer->begin("STATION_ID");
 
         // Getting nuclide names in finnish or english
@@ -303,7 +301,7 @@ void bw::StoredAirNuclideQueryHandler::query(const StoredQuery& query,
         radioNuclidesQueryParams.addOperation(
             "OR_GROUP_language_code", "LANGUAGE_CODE", "PropertyIsEqualTo", langCode);
 
-        std::vector<std::string>::const_iterator nucCodeIt = nuclideCodes.begin();
+        auto nucCodeIt = nuclideCodes.begin();
         for (; queryInitializationOK && nucCodeIt != nuclideCodes.end(); ++nucCodeIt)
           radioNuclidesQueryParams.addOperation("OR_GROUP_nuclide_code",
                                                 "NUCLIDE_CODE",
@@ -322,11 +320,11 @@ void bw::StoredAirNuclideQueryHandler::query(const StoredQuery& query,
 
         if (radioNuclidesContainer->size())
         {
-          bo::QueryResult::ValueVectorType::const_iterator nCodeIt =
+          auto nCodeIt =
               radioNuclidesContainer->begin("NUCLIDE_CODE");
-          bo::QueryResult::ValueVectorType::const_iterator nCodeItEnd =
+          auto nCodeItEnd =
               radioNuclidesContainer->end("NUCLIDE_CODE");
-          bo::QueryResult::ValueVectorType::const_iterator nNameIt =
+          auto nNameIt =
               radioNuclidesContainer->begin("NUCLIDE_NAME");
 
           for (; nCodeIt != nCodeItEnd; ++nCodeIt, ++nNameIt)
@@ -336,7 +334,7 @@ void bw::StoredAirNuclideQueryHandler::query(const StoredQuery& query,
           }
         }
 
-        typedef std::set<int> LatestSet;
+        using LatestSet = std::set<int>;
         LatestSet latestSet;
         for (; queryInitializationOK && analysisIdIt != analysisIdItEnd;
              ++analysisIdIt, ++stationIdIt)
@@ -345,7 +343,7 @@ void bw::StoredAirNuclideQueryHandler::query(const StoredQuery& query,
           if (latest)
           {
             const int tmpstationId = std::stoi(bo::QueryResult::toString(stationIdIt, 0));
-            LatestSet::const_iterator latestSetIt = latestSet.find(tmpstationId);
+            auto latestSetIt = latestSet.find(tmpstationId);
             if (latestSetIt == latestSet.end())
             {
               latestSet.insert(tmpstationId);
@@ -362,7 +360,7 @@ void bw::StoredAirNuclideQueryHandler::query(const StoredQuery& query,
           }
         }
 
-        std::vector<std::string>::const_iterator nuclideCodeIt = nuclideCodes.begin();
+        auto nuclideCodeIt = nuclideCodes.begin();
         for (; queryInitializationOK && nuclideCodeIt != nuclideCodes.end(); ++nuclideCodeIt)
           dataQueryParams.addOperation("OR_GROUP_nuclide_code",
                                        "NUCLIDE_CODE",
@@ -401,9 +399,9 @@ void bw::StoredAirNuclideQueryHandler::query(const StoredQuery& query,
       // Removing some feature id parameters
       const char* place_params[] = {
           P_WMOS, P_FMISIDS, P_PLACES, P_LATLONS, P_GEOIDS, P_KEYWORD, P_BOUNDING_BOX};
-      for (unsigned i = 0; i < sizeof(place_params) / sizeof(*place_params); i++)
+      for (auto & place_param : place_params)
       {
-        feature_id.erase_param(place_params[i]);
+        feature_id.erase_param(place_param);
       }
 
       //
@@ -437,31 +435,31 @@ void bw::StoredAirNuclideQueryHandler::query(const StoredQuery& query,
       int numberMatched = 0;
       if (queryInitializationOK and profileContainer and dataContainer)
       {
-        bo::QueryResult::ValueVectorType::const_iterator analysisIdIt =
+        auto analysisIdIt =
             dataContainer->begin("ANALYSIS_ID");
-        bo::QueryResult::ValueVectorType::const_iterator stationIdIt =
+        auto stationIdIt =
             dataContainer->begin("STATION_ID");
-        bo::QueryResult::ValueVectorType::const_iterator stationIdItEnd =
+        auto stationIdItEnd =
             dataContainer->end("STATION_ID");
-        bo::QueryResult::ValueVectorType::const_iterator observationIdIt =
+        auto observationIdIt =
             dataContainer->begin("OBSERVATION_ID");
-        bo::QueryResult::ValueVectorType::const_iterator periodStartIt =
+        auto periodStartIt =
             dataContainer->begin("PERIOD_START");
-        bo::QueryResult::ValueVectorType::const_iterator periodEndIt =
+        auto periodEndIt =
             dataContainer->begin("PERIOD_END");
-        bo::QueryResult::ValueVectorType::const_iterator analysisTimeIt =
+        auto analysisTimeIt =
             dataContainer->begin("ANALYSIS_TIME");
-        bo::QueryResult::ValueVectorType::const_iterator analysisVersionIt =
+        auto analysisVersionIt =
             dataContainer->begin("ANALYSIS_VERSION");
-        bo::QueryResult::ValueVectorType::const_iterator airVolumeIt =
+        auto airVolumeIt =
             dataContainer->begin("AIR_VOLUME");
-        bo::QueryResult::ValueVectorType::const_iterator nuclideCodeIt =
+        auto nuclideCodeIt =
             dataContainer->begin("NUCLIDE_CODE");
-        bo::QueryResult::ValueVectorType::const_iterator concentrationIt =
+        auto concentrationIt =
             dataContainer->begin("CONCENTRATION");
-        bo::QueryResult::ValueVectorType::const_iterator dataQualityIt =
+        auto dataQualityIt =
             dataContainer->begin("DATA_QUALITY");
-        bo::QueryResult::ValueVectorType::const_iterator uncertaintyIt =
+        auto uncertaintyIt =
             dataContainer->begin("UNCERTAINTY");
 
         std::string currentAnalysisIdStr = "dummyAnalysisId";
@@ -475,7 +473,7 @@ void bw::StoredAirNuclideQueryHandler::query(const StoredQuery& query,
           std::string periodStartStr = bo::QueryResult::toString(periodStartIt);
           std::string periodEndStr = bo::QueryResult::toString(periodEndIt);
 
-          StationMap::const_iterator sit = stations.find(stationIdStr);
+          auto sit = stations.find(stationIdStr);
           if (sit == stations.end())
           {
             std::ostringstream msg;
@@ -552,7 +550,7 @@ void bw::StoredAirNuclideQueryHandler::query(const StoredQuery& query,
           {
             const std::string nCode = bo::QueryResult::toString(nuclideCodeIt);
             group["data"][ind]["nuclideCode"] = nCode;
-            NuclideNameMap::const_iterator nNameIt = nuclideNameMap.find(nCode);
+            auto nNameIt = nuclideNameMap.find(nCode);
             if (nNameIt != nuclideNameMap.end())
               group["data"][ind]["nuclideName"] = nNameIt->second;
 
@@ -698,7 +696,7 @@ wfs_stored_air_nuclide_handler_create(SmartMet::Spine::Reactor* reactor,
 {
   try
   {
-    bw::StoredAirNuclideQueryHandler* qh =
+    auto* qh =
         new bw::StoredAirNuclideQueryHandler(reactor, config, plugin_data, template_file_name);
     boost::shared_ptr<SmartMet::Plugin::WFS::StoredQueryHandlerBase> instance(qh);
     return instance;

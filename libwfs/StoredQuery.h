@@ -31,7 +31,7 @@ class StoredQuery : public QueryBase
   StoredQuery();
 
  public:
-  virtual ~StoredQuery();
+  ~StoredQuery() override;
 
   /**
    *   @brief Static method for reading stored query from KVP format request
@@ -72,13 +72,13 @@ class StoredQuery : public QueryBase
                                                                const StoredQueryMap& sq_map,
                                                                const StoredQuery& orig_query);
 
-  virtual QueryType get_type() const;
+  QueryType get_type() const override;
 
   const std::string& get_stored_query_id() const { return id; }
-  virtual std::string get_cache_key() const;
+  std::string get_cache_key() const override;
 
   bool get_use_debug_format() const { return debug_format; }
-  virtual void execute(std::ostream& output, const std::string& language, const boost::optional<std::string>& hostname) const;
+  void execute(std::ostream& output, const std::string& language, const boost::optional<std::string>& hostname) const override;
 
   const SmartMet::Spine::Value& get_param(const std::string& name) const;
 
@@ -152,7 +152,7 @@ class StoredQuery : public QueryBase
   boost::shared_ptr<RequestParameterMap> orig_params;
   std::vector<std::string> skipped_params;
   boost::shared_ptr<const SmartMet::Plugin::WFS::StoredQueryHandlerBase> handler;
-  bool debug_format;
+  bool debug_format{false};
 
   static SmartMet::Plugin::WFS::Xml::ParameterExtractor param_extractor;
 };

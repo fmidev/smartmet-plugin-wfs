@@ -26,13 +26,13 @@ class DescribeFeatureType : public RequestBase
                       const std::vector<std::pair<std::string, std::string> >& qualified_names,
                       const PluginImpl& plugin_impl);
 
-  virtual ~DescribeFeatureType();
+  ~DescribeFeatureType() override;
 
-  virtual RequestType get_type() const;
+  RequestType get_type() const override;
 
-  virtual void execute(std::ostream& output) const;
+  void execute(std::ostream& output) const override;
 
-  virtual bool may_validate_xml() const;
+  bool may_validate_xml() const override;
 
   static boost::shared_ptr<DescribeFeatureType> create_from_kvp(
       const std::string& language,
@@ -44,7 +44,7 @@ class DescribeFeatureType : public RequestBase
       const xercesc::DOMDocument& document,
       const PluginImpl& plugin_impl);
 
-  virtual int get_response_expires_seconds() const;
+  int get_response_expires_seconds() const override;
 
  private:
   std::vector<std::pair<std::string, std::string> > type_names;

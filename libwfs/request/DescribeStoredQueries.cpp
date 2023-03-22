@@ -53,7 +53,7 @@ bw::Request::DescribeStoredQueries::DescribeStoredQueries(const std::string& lan
   }
 }
 
-bw::Request::DescribeStoredQueries::~DescribeStoredQueries() {}
+bw::Request::DescribeStoredQueries::~DescribeStoredQueries() = default;
 
 bw::RequestBase::RequestType bw::Request::DescribeStoredQueries::get_type() const
 {
@@ -94,9 +94,8 @@ void bw::Request::DescribeStoredQueries::execute(std::ostream& output) const
 	// If all descriptions required then skip those at least one feature type is hidden.
 	bool skip_this_id = false;
 	if (show_all) {
-	  for (std::size_t k = 0; k < return_types.size(); k++)
+	  for (const auto & name : return_types)
 	    {
-	      const std::string& name = return_types[k];
 	      const auto* feature = plugin_impl.get_capabilities().find_feature(name);
 	      if (feature->is_hidden()) {
 		skip_this_id = true;
@@ -125,9 +124,8 @@ void bw::Request::DescribeStoredQueries::execute(std::ostream& output) const
 
         bool have_ns_loc = false;
         std::map<std::string, std::string> ns_map;
-        for (std::size_t k = 0; k < return_types.size(); k++)
+        for (const auto & name : return_types)
         {
-          const std::string& name = return_types[k];
           const auto* feature = plugin_impl.get_capabilities().find_feature(name);
           if (feature)
           {

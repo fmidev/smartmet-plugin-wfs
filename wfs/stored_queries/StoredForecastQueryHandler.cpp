@@ -147,11 +147,11 @@ bw::StoredForecastQueryHandler::StoredForecastQueryHandler(
   }
 }
 
-bw::StoredForecastQueryHandler::~StoredForecastQueryHandler() {}
+bw::StoredForecastQueryHandler::~StoredForecastQueryHandler() = default;
 
 void bw::StoredForecastQueryHandler::query(const StoredQuery& stored_query,
                                            const std::string& language,
-                                           const boost::optional<std::string>& hostname,
+                                           const boost::optional<std::string>&  /*hostname*/,
                                            std::ostream& output) const
 {
   try
@@ -197,7 +197,7 @@ void bw::StoredForecastQueryHandler::query(const StoredQuery& stored_query,
         query.time_formatter.reset(Fmi::TimeFormatter::create("iso"));
         parse_times(params, query);
 
-        const std::string crs = params.get_single<std::string>(P_CRS);
+        const auto crs = params.get_single<std::string>(P_CRS);
         auto transformation =
             plugin_impl.get_crs_registry().create_transformation("urn:ogc:def:crs:EPSG::4326", crs);
         bool show_height = false;
@@ -228,7 +228,7 @@ void bw::StoredForecastQueryHandler::query(const StoredQuery& stored_query,
             num_groups++;
         }
 
-        if (not separate_groups and (geo_id_set.size() > 0))
+        if (not separate_groups and (!geo_id_set.empty()))
           num_groups++;
 
         CTPP::CDT hash;
@@ -260,9 +260,9 @@ void bw::StoredForecastQueryHandler::query(const StoredQuery& stored_query,
           CTPP::CDT& group = hash["groups"][group_id];
 
           FeatureID feature_id(get_config()->get_query_id(), params.get_map(true), sq_id);
-          for (std::size_t i = 0; i < sizeof(location_params) / sizeof(*location_params); i++)
+          for (auto & location_param : location_params)
           {
-            feature_id.erase_param(location_params[i]);
+            feature_id.erase_param(location_param);
           }
           auto geoid_range = group_map.equal_range(group_id);
           for (auto it = geoid_range.first; it != geoid_range.second; ++it)
@@ -636,7 +636,7 @@ boost::shared_ptr<SmartMet::Spine::Table> bw::StoredForecastQueryHandler::extrac
           {
             int prec = param_precision_map.at(param.name());
 
-            const std::string timestring = "";
+            const std::string timestring;
 
             SmartMet::Engine::Querydata::ParameterOptions qengine_param(
                 param,
@@ -681,7 +681,7 @@ boost::shared_ptr<SmartMet::Spine::Table> bw::StoredForecastQueryHandler::extrac
             {
               int prec = param_precision_map.at(param.name());
 
-              const std::string timestring = "";
+              const std::string timestring;
 
               SmartMet::Engine::Querydata::ParameterOptions qengine_param(
                   param,
@@ -789,7 +789,7 @@ void bw::StoredForecastQueryHandler::parse_level_heights(const RequestParameterM
     params.get<double>(P_LEVEL_HEIGHTS, std::back_inserter(heights));
     for (const auto& item : heights)
     {
-      float tmp = static_cast<float>(item);
+      auto tmp = static_cast<float>(item);
       if (!dest.level_heights.insert(tmp).second)
       {
         Fmi::Exception exception(BCP, "Duplicate geometric height '" + std::to_string(tmp) + "'!");
@@ -936,7 +936,7 @@ bw::StoredForecastQueryHandler::Query::Query(boost::shared_ptr<const StoredQuery
   }
 }
 
-bw::StoredForecastQueryHandler::Query::~Query() {}
+bw::StoredForecastQueryHandler::Query::~Query() = default;
 
 void bw::StoredForecastQueryHandler::Query::set_locale(const std::string& locale_name)
 {
@@ -972,7 +972,7 @@ boost::shared_ptr<SmartMet::Plugin::WFS::StoredQueryHandlerBase> wfs_forecast_ha
 {
   try
   {
-    StoredForecastQueryHandler* qh =
+    auto* qh =
         new StoredForecastQueryHandler(reactor, config, plugin_impl, template_file_name);
     boost::shared_ptr<SmartMet::Plugin::WFS::StoredQueryHandlerBase> result(qh);
     return result;

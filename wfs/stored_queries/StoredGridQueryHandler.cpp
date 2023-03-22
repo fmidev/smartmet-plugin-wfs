@@ -97,7 +97,7 @@ StoredGridQueryHandler::StoredGridQueryHandler(SmartMet::Spine::Reactor* reactor
   }
 }
 
-StoredGridQueryHandler::~StoredGridQueryHandler() {}
+StoredGridQueryHandler::~StoredGridQueryHandler() = default;
 
 StoredGridQueryHandler::Query::Query(boost::shared_ptr<const StoredQueryConfig> config)
     : missing_text("nan"),
@@ -106,8 +106,8 @@ StoredGridQueryHandler::Query::Query(boost::shared_ptr<const StoredQueryConfig> 
       top_left(NFmiPoint::gMissingLatlon),
       top_right(NFmiPoint::gMissingLatlon),
       bottom_left(NFmiPoint::gMissingLatlon),
-      bottom_right(NFmiPoint::gMissingLatlon),
-      find_nearest_valid_point(false)
+      bottom_right(NFmiPoint::gMissingLatlon)
+      
 
 {
   try
@@ -122,7 +122,7 @@ StoredGridQueryHandler::Query::Query(boost::shared_ptr<const StoredQueryConfig> 
   }
 }
 
-StoredGridQueryHandler::Query::~Query() {}
+StoredGridQueryHandler::Query::~Query() = default;
 
 namespace
 {
@@ -394,7 +394,7 @@ std::pair<unsigned int, unsigned int> StoredGridQueryHandler::getDataIndexExtent
     const TS::TimeSeriesGroupPtr& longitudes,
     const TS::TimeSeriesGroupPtr& latitudes,
     const Query& query,
-    const std::string& dataCrs) const
+    const std::string&  /*dataCrs*/) const
 {
   try
   {
@@ -751,7 +751,7 @@ StoredGridQueryHandler::Result StoredGridQueryHandler::extract_forecast(
       std::cout << "Location: " << loc->name << " in " << country << std::endl;
     }
 
-    SmartMet::Engine::Querydata::Producer producer = params.get_single<std::string>(P_PRODUCER);
+    auto producer = params.get_single<std::string>(P_PRODUCER);
 
     if (debug_level > 0)
     {
@@ -849,7 +849,7 @@ StoredGridQueryHandler::Result StoredGridQueryHandler::extract_forecast(
 
     // Get the given grid step
 
-    unsigned long data_step = params.get_single<unsigned long>(P_DATASTEP);
+    auto data_step = params.get_single<unsigned long>(P_DATASTEP);
 
     if (data_step < 1)
     {
@@ -955,7 +955,7 @@ StoredGridQueryHandler::Result StoredGridQueryHandler::extract_forecast(
       if (query.levels.empty() ||
           query.levels.count(static_cast<int>(model->level().LevelValue())) > 0)
       {
-        theResult.dataLevels.push_back(Result::LevelData());
+        theResult.dataLevels.emplace_back();
         auto& thisLevel = theResult.dataLevels.back();
 
         for (const Parameter& param : query.data_params)
@@ -994,16 +994,16 @@ StoredGridQueryHandler::Result StoredGridQueryHandler::extract_forecast(
 
           Result::ParamTimeSeries result;
 
-          unsigned int timesteps(val->size() == 0 ? 0 : val->begin()->timeseries.size());
+          unsigned int timesteps(val->empty() ? 0 : val->begin()->timeseries.size());
 
           for (unsigned int i = 0; i < timesteps; i++)
           {
             Result::Grid thisXYGrid;
             thisXYGrid.reserve(val->size());
 
-            for (auto locationIt = val->begin(); locationIt != val->end(); ++locationIt)
+            for (auto & locationIt : *val)
             {
-              auto tsValue = locationIt->timeseries[i].value;
+              auto tsValue = locationIt.timeseries[i].value;
 
               if (boost::get<TS::None>(&(tsValue)))
               {
@@ -1066,7 +1066,7 @@ SmartMet::Engine::Querydata::Producer StoredGridQueryHandler::select_producer(
 
 void StoredGridQueryHandler::query(const StoredQuery& stored_query,
                                    const std::string& language,
-                                   const boost::optional<std::string>& hostname,
+                                   const boost::optional<std::string>&  /*hostname*/,
                                    std::ostream& output) const
 {
   try
@@ -1112,7 +1112,7 @@ void StoredGridQueryHandler::query(const StoredQuery& stored_query,
       vf_param.missingText = query.missing_text;
       query.value_formatter.reset(new Fmi::ValueFormatter(vf_param));
 
-      const std::string dataCrs = params.get_single<std::string>(P_DATA_CRS);
+      const auto dataCrs = params.get_single<std::string>(P_DATA_CRS);
 
       // Get bounding box information, should be given in data CRS for rectangular array
       SmartMet::Spine::BoundingBox requested_bbox;

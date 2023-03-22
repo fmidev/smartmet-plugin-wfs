@@ -31,7 +31,7 @@ struct AirportLocation
   }
 };
 
-typedef std::list<AirportLocation> AirportLocationList;
+using AirportLocationList = std::list<AirportLocation>;
 
 struct ProbabilityConfigParam
 {
@@ -41,7 +41,7 @@ struct ProbabilityConfigParam
   FmiParameterName idHeavy;
 };
 
-typedef std::vector<ProbabilityConfigParam> ProbabilityConfigParamVector;
+using ProbabilityConfigParamVector = std::vector<ProbabilityConfigParam>;
 
 struct ProbabilityConfigParams
 {
@@ -97,15 +97,16 @@ struct WinterWeatherProbability
 
 // Winter Weather probability time series
 // for example light/moderate/heavy snow probability at 12:00, 13:00, 14:00
-typedef std::vector<WinterWeatherProbability> WinterWeatherIntensityProbabilities;
+using WinterWeatherIntensityProbabilities = std::vector<WinterWeatherProbability>;
 
 // probabilities precipitation types
-typedef std::map<std::string, WinterWeatherIntensityProbabilities> WinterWeatherTypeProbabilities;
+using WinterWeatherTypeProbabilities = std::map<std::string,
+        WinterWeatherIntensityProbabilities>;
 
 // result set for the whole query: contains probabilities for all
 // locations, precipitation types, intensities, timesteps
-typedef std::map<SmartMet::Spine::LocationPtr, WinterWeatherTypeProbabilities>
-    ProbabilityQueryResultSet;
+using ProbabilityQueryResultSet = std::map<SmartMet::Spine::LocationPtr,
+        WinterWeatherTypeProbabilities>;
 
 /**
  *   @brief Handler for StoredWWProbabilityQuery stored query
@@ -124,12 +125,12 @@ class StoredWWProbabilityQueryHandler : public StoredQueryHandlerBase,
                                   PluginImpl& plugin_impl,
                                   boost::optional<std::string> templateFileileName);
 
-  virtual ~StoredWWProbabilityQueryHandler();
+  ~StoredWWProbabilityQueryHandler() override;
 
-  virtual void query(const StoredQuery& query,
+  void query(const StoredQuery& query,
                      const std::string& language,
 		     const boost::optional<std::string>& hostname,
-                     std::ostream& output) const;
+                     std::ostream& output) const override;
 
  private:
   void parseQueryResults(const ProbabilityQueryResultSet& query_results,

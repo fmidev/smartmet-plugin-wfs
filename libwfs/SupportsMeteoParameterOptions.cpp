@@ -2,9 +2,9 @@
 #include "WfsConvenience.h"
 #include "WfsException.h"
 #include <boost/algorithm/string.hpp>
-#include <macgyver/StringConversion.h>
+#include <cstdint>
 #include <macgyver/Exception.h>
-#include <stdint.h>
+#include <macgyver/StringConversion.h>
 
 namespace bw = SmartMet::Plugin::WFS;
 namespace ba = boost::algorithm;
@@ -18,7 +18,7 @@ bw::SupportsMeteoParameterOptions::SupportsMeteoParameterOptions(
     if (not config->find_setting(config->get_root(), "meteo_parameter_options", false))
       return;
 
-    libconfig::Setting& parameter_options =
+    auto& parameter_options =
         config->get_mandatory_config_param<libconfig::Setting&>("meteo_parameter_options");
 
     config->assert_is_list(parameter_options);
@@ -27,12 +27,12 @@ bw::SupportsMeteoParameterOptions::SupportsMeteoParameterOptions(
     for (int i = 0; i < N; i++)
     {
       auto& param_desc = parameter_options[i];
-      const std::string name = config->get_mandatory_config_param<std::string>(param_desc, "name");
+      const auto name = config->get_mandatory_config_param<std::string>(param_desc, "name");
       const uint precision = config->get_optional_config_param<uint>(
           param_desc, "precision", default_option_item.precision);
-      const double missing_value = config->get_optional_config_param<double>(
+      const auto missing_value = config->get_optional_config_param<double>(
           param_desc, "missing_value", default_option_item.missing_value);
-      const std::string missing_text = config->get_optional_config_param<std::string>(
+      const auto missing_text = config->get_optional_config_param<std::string>(
           param_desc, "missing_text", default_option_item.missing_text);
       const unsigned short sensor_first = config->get_optional_config_param<unsigned int>(param_desc, "sensor_first", default_option_item.sensor_first);
       const unsigned short sensor_last = config->get_optional_config_param<unsigned int>(param_desc, "sensor_last", default_option_item.sensor_last);
@@ -63,14 +63,14 @@ bw::SupportsMeteoParameterOptions::SupportsMeteoParameterOptions(
   }
 }
 
-bw::SupportsMeteoParameterOptions::~SupportsMeteoParameterOptions() {}
+bw::SupportsMeteoParameterOptions::~SupportsMeteoParameterOptions() = default;
 
 std::shared_ptr<bw::MeteoParameterOptionItem>
 bw::SupportsMeteoParameterOptions::get_meteo_parameter_options(const std::string& name) const
 {
   try
   {
-    MeteoParameterOptions::const_iterator it = options_map.find(Fmi::ascii_tolower_copy(name));
+    auto it = options_map.find(Fmi::ascii_tolower_copy(name));
 
     if (it != options_map.end())
       return std::make_shared<MeteoParameterOptionItem>(it->second);
@@ -92,8 +92,8 @@ void bw::SupportsMeteoParameterOptions::setDefaultPrecision(const size_t& value)
 {
   try
   {
-    const size_t lower_limit = boost::numeric_cast<size_t>(std::numeric_limits<uint8_t>::min());
-    const size_t upper_limit = boost::numeric_cast<size_t>(std::numeric_limits<uint8_t>::max());
+    const auto lower_limit = boost::numeric_cast<size_t>(std::numeric_limits<uint8_t>::min());
+    const auto upper_limit = boost::numeric_cast<size_t>(std::numeric_limits<uint8_t>::max());
     if (value >= lower_limit and value <= upper_limit)
     {
       default_option_item.precision = value;
@@ -167,8 +167,8 @@ void bw::SupportsMeteoParameterOptions::setDefaultSensorFirst(const unsigned sho
 {
   try
   {
-    const unsigned short lower_limit = boost::numeric_cast<unsigned short>(std::numeric_limits<uint8_t>::min());
-    const unsigned short upper_limit = boost::numeric_cast<unsigned short>(std::numeric_limits<uint8_t>::max());
+    const auto lower_limit = boost::numeric_cast<unsigned short>(std::numeric_limits<uint8_t>::min());
+    const auto upper_limit = boost::numeric_cast<unsigned short>(std::numeric_limits<uint8_t>::max());
     if (value >= lower_limit and value <= upper_limit)
     {
       default_option_item.sensor_first = value;
@@ -190,8 +190,8 @@ void bw::SupportsMeteoParameterOptions::setDefaultSensorLast(const unsigned shor
 {
   try
   {
-    const unsigned short lower_limit = boost::numeric_cast<unsigned short>(std::numeric_limits<uint8_t>::min());
-    const unsigned short upper_limit = boost::numeric_cast<unsigned short>(std::numeric_limits<uint8_t>::max());
+    const auto lower_limit = boost::numeric_cast<unsigned short>(std::numeric_limits<uint8_t>::min());
+    const auto upper_limit = boost::numeric_cast<unsigned short>(std::numeric_limits<uint8_t>::max());
     if (value >= lower_limit and value <= upper_limit)
     {
       default_option_item.sensor_last = value;
@@ -213,8 +213,8 @@ void bw::SupportsMeteoParameterOptions::setDefaultSensorStep(const unsigned shor
 {
   try
   {
-    const unsigned short lower_limit = boost::numeric_cast<unsigned short>(std::numeric_limits<uint8_t>::min());
-    const unsigned short upper_limit = boost::numeric_cast<unsigned short>(std::numeric_limits<uint8_t>::max());
+    const auto lower_limit = boost::numeric_cast<unsigned short>(std::numeric_limits<uint8_t>::min());
+    const auto upper_limit = boost::numeric_cast<unsigned short>(std::numeric_limits<uint8_t>::max());
     if (value >= lower_limit and value <= upper_limit)
     {
       default_option_item.sensor_step = value;

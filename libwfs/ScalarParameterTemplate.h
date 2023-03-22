@@ -37,7 +37,7 @@ class ScalarParameterTemplate : public ParameterTemplateBase
                           const std::string& config_path,
 			  bool silent);
 
-  virtual ~ScalarParameterTemplate();
+  ~ScalarParameterTemplate() override;
 
   inline const ParameterTemplateItem& get_item() const { return item; }
   /**
@@ -54,11 +54,11 @@ class ScalarParameterTemplate : public ParameterTemplateBase
                  const RequestParameterMap& req_param_map,
                  const SupportsExtraHandlerParams* extra_params = nullptr) const;
 
-  virtual boost::tribool get_value(
+  boost::tribool get_value(
       boost::variant<SmartMet::Spine::Value, std::vector<SmartMet::Spine::Value> >& result,
       const RequestParameterMap& req_param_map,
       const SupportsExtraHandlerParams* extra_params = nullptr,
-      bool strict = true) const;
+      bool strict = true) const override;
 
   template <typename ValueType>
   ValueType get(

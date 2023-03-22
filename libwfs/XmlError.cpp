@@ -16,7 +16,7 @@ XmlError::XmlError(const std::string& text, error_level_t error_level = XmlError
 {
 }
 
-XmlError::~XmlError() throw() {}
+XmlError::~XmlError() throw() = default;
 
 void XmlError::add_messages(const std::list<std::string>& messages)
 {

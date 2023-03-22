@@ -59,11 +59,11 @@ StoredSoundingQueryHandler::StoredSoundingQueryHandler(
   mMaxSoundings = config->get_optional_config_param<uint64_t>("maxSoundings", 15);
 }
 
-StoredSoundingQueryHandler::~StoredSoundingQueryHandler() {}
+StoredSoundingQueryHandler::~StoredSoundingQueryHandler() = default;
 
 void StoredSoundingQueryHandler::query(const StoredQuery& query,
                                        const std::string& language,
-                                       const boost::optional<std::string>& hostname,
+                                       const boost::optional<std::string>&  /*hostname*/,
                                        std::ostream& output) const
 {
   const auto& params = query.get_param_map();
@@ -92,7 +92,7 @@ void StoredSoundingQueryHandler::query(const StoredQuery& query,
 
     std::string projUri = "UNKNOWN";
     std::string projEpochUri = "UNKNOWN";
-    std::string axisLabels = "";
+    std::string axisLabels;
     crsRegistry.get_attribute(crs, "projUri", &projUri);
     crsRegistry.get_attribute(crs, "projEpochUri", &projEpochUri);
     crsRegistry.get_attribute(crs, "axisLabels", &axisLabels);
@@ -110,12 +110,12 @@ void StoredSoundingQueryHandler::query(const StoredQuery& query,
     // Parameter names are needed in the result document.
     // map: id, (id, paramName, paramQCName, showValue, showQualityCode)
     MeteoParameterMap meteoParameterMap;
-    std::string pressureParameterName = "";
+    std::string pressureParameterName;
     validateAndPopulateMeteoParametersToMap(params, meteoParameterMap, pressureParameterName);
 
     // Time range restriction to get data.
-    pt::ptime startTime = params.get_single<pt::ptime>(P_BEGIN_TIME);
-    pt::ptime endTime = params.get_single<pt::ptime>(P_END_TIME);
+    auto startTime = params.get_single<pt::ptime>(P_BEGIN_TIME);
+    auto endTime = params.get_single<pt::ptime>(P_END_TIME);
     if (mSqRestrictions)
       check_time_interval(startTime, endTime, mMaxHours);
 
@@ -155,9 +155,9 @@ void StoredSoundingQueryHandler::query(const StoredQuery& query,
       FeatureID featureId(get_config()->get_query_id(), params.get_map(true), sq_id);
       const char* placeParams[] = {
           P_WMOS, P_FMISIDS, P_PLACES, P_LATLONS, P_GEOIDS, P_KEYWORD, P_BOUNDING_BOX};
-      for (unsigned i = 0; i < sizeof(placeParams) / sizeof(*placeParams); i++)
+      for (auto & placeParam : placeParams)
       {
-        featureId.erase_param(placeParams[i]);
+        featureId.erase_param(placeParam);
       }
 
       hash["projSrsDim"] = 3;
@@ -176,18 +176,18 @@ void StoredSoundingQueryHandler::query(const StoredQuery& query,
 
       if (queryInitializationOK and dataContainer)
       {
-        ValueVectorConstIt dataSoundingIdItBegin = dataContainer->begin("SOUNDING_ID");
-        ValueVectorConstIt dataSoundingIdIt = dataContainer->begin("SOUNDING_ID");
-        ValueVectorConstIt dataSoundingIdItEnd = dataContainer->end("SOUNDING_ID");
-        ValueVectorConstIt dataMeasurandIdIt = dataContainer->begin("MEASURAND_ID");
-        ValueVectorConstIt dataLevelTimeIt = dataContainer->begin("LEVEL_TIME");
-        ValueVectorConstIt dataAltitudeIt = dataContainer->begin("ALTITUDE");
-        ValueVectorConstIt dataPressureIt = dataContainer->begin("PRESSURE");
-        ValueVectorConstIt dataLongitudeIt = dataContainer->begin("LONGITUDE");
-        ValueVectorConstIt dataLatitudeIt = dataContainer->begin("LATITUDE");
-        ValueVectorConstIt dataQualityIt = dataContainer->begin("DATA_QUALITY");
-        ValueVectorConstIt dataValueIt = dataContainer->begin("DATA_VALUE");
-        ValueVectorConstIt dataSignificanceIt = dataContainer->begin("SIGNIFICANCE");
+        auto dataSoundingIdItBegin = dataContainer->begin("SOUNDING_ID");
+        auto dataSoundingIdIt = dataContainer->begin("SOUNDING_ID");
+        auto dataSoundingIdItEnd = dataContainer->end("SOUNDING_ID");
+        auto dataMeasurandIdIt = dataContainer->begin("MEASURAND_ID");
+        auto dataLevelTimeIt = dataContainer->begin("LEVEL_TIME");
+        auto dataAltitudeIt = dataContainer->begin("ALTITUDE");
+        auto dataPressureIt = dataContainer->begin("PRESSURE");
+        auto dataLongitudeIt = dataContainer->begin("LONGITUDE");
+        auto dataLatitudeIt = dataContainer->begin("LATITUDE");
+        auto dataQualityIt = dataContainer->begin("DATA_QUALITY");
+        auto dataValueIt = dataContainer->begin("DATA_VALUE");
+        auto dataSignificanceIt = dataContainer->begin("SIGNIFICANCE");
 
         std::string currentStationId, currentMeasId;
         int dataId = 0, groupId = 0;
@@ -277,7 +277,7 @@ void StoredSoundingQueryHandler::query(const StoredQuery& query,
 
             group["featureId"] = featureId.get_id();
 
-            for (SmartMet::Spine::Stations::const_iterator sit = stations.begin();
+            for (auto sit = stations.begin();
                  sit != stations.end();
                  ++sit)
             {
@@ -326,7 +326,7 @@ void StoredSoundingQueryHandler::query(const StoredQuery& query,
           {
             currentMeasId = measurandIdStr;
 
-            MeteoParameterMap::const_iterator it = meteoParameterMap.find(measurandIdStr);
+            auto it = meteoParameterMap.find(measurandIdStr);
             if (it == meteoParameterMap.end())
             {
               std::ostringstream msg;
@@ -527,7 +527,7 @@ StoredSoundingQueryHandler::dbRegistryConfig(const std::string& configName) cons
 std::string StoredSoundingQueryHandler::solveCrs(const RequestParameterMap& params) const
 {
   // Output CRS priority: user defined -> default in stored query -> feature type default crs
-  const std::string requestedCrs = params.get_single<std::string>(P_CRS);
+  const auto requestedCrs = params.get_single<std::string>(P_CRS);
   return (requestedCrs.empty() ? DATA_CRS_NAME : requestedCrs);
 }
 
@@ -595,7 +595,7 @@ void StoredSoundingQueryHandler::validateAndPopulateMeteoParametersToMap(
 
     // Is the parameter a duplicate.
     const ParamIdStr paramIdStr = Fmi::to_string(paramId);
-    MeteoParameterMap::iterator paramIdIt = meteoParameterMap.find(paramIdStr);
+    auto paramIdIt = meteoParameterMap.find(paramIdStr);
     if (paramIdIt != meteoParameterMap.end())
     {
       // Check if the parameter is already inserted.
@@ -656,14 +656,14 @@ void StoredSoundingQueryHandler::parseSoundingQuery(const RequestParameterMap& p
   using LatestSet = std::set<int>;
   LatestSet latestSet;
 
-  ValueVectorConstIt soundingIdItBegin = soundingQueryResult->begin("SOUNDING_ID");
-  ValueVectorConstIt soundingIdItEnd = soundingQueryResult->end("SOUNDING_ID");
-  ValueVectorConstIt soundingIdIt = soundingIdItBegin;
-  ValueVectorConstIt stationIdIt = soundingQueryResult->begin("STATION_ID");
-  ValueVectorConstIt messageTimeIt = soundingQueryResult->begin("MESSAGE_TIME");
-  ValueVectorConstIt launchTimeIt = soundingQueryResult->begin("LAUNCH_TIME");
-  ValueVectorConstIt soundingEndIt = soundingQueryResult->begin("SOUNDING_END");
-  ValueVectorConstIt soundingTypeIt = soundingQueryResult->begin("SOUNDING_TYPE");
+  auto soundingIdItBegin = soundingQueryResult->begin("SOUNDING_ID");
+  auto soundingIdItEnd = soundingQueryResult->end("SOUNDING_ID");
+  auto soundingIdIt = soundingIdItBegin;
+  auto stationIdIt = soundingQueryResult->begin("STATION_ID");
+  auto messageTimeIt = soundingQueryResult->begin("MESSAGE_TIME");
+  auto launchTimeIt = soundingQueryResult->begin("LAUNCH_TIME");
+  auto soundingEndIt = soundingQueryResult->begin("SOUNDING_END");
+  auto soundingTypeIt = soundingQueryResult->begin("SOUNDING_TYPE");
   std::string stationId, prevStationId;
 
   const bool latest = params.get_single<bool>(P_LATEST);
@@ -751,11 +751,11 @@ void StoredSoundingQueryHandler::makeSoundingQuery(const RequestParameterMap& pa
         "OR_GROUP_publicity", "PUBLICITY", "PropertyIsEqualTo", publicity);
   }
 
-  pt::ptime startTime = params.get_single<pt::ptime>(P_BEGIN_TIME);
+  auto startTime = params.get_single<pt::ptime>(P_BEGIN_TIME);
   profileQueryParams.addOperation(
       "OR_GROUP_data_begin_time", "MESSAGE_TIME", "PropertyIsGreaterThanOrEqualTo", startTime);
 
-  pt::ptime endTime = params.get_single<pt::ptime>(P_END_TIME);
+  auto endTime = params.get_single<pt::ptime>(P_END_TIME);
   profileQueryParams.addOperation(
       "OR_GROUP_data_end_time", "MESSAGE_TIME", "PropertyIsLessThanOrEqualTo", endTime);
 
@@ -782,8 +782,8 @@ void StoredSoundingQueryHandler::makeSoundingDataQuery(const RequestParameterMap
   SmartMet::Engine::Observation::MastQueryParams dataQueryParams(
       dbRegistryConfig("RADIOSOUNDING_LEVELS_V1"));
   std::list<SmartMet::Engine::Observation::MastQueryParams::NameType> levelJoinFields;
-  levelJoinFields.push_back("SOUNDING_ID");
-  levelJoinFields.push_back("LEVEL_NO");
+  levelJoinFields.emplace_back("SOUNDING_ID");
+  levelJoinFields.emplace_back("LEVEL_NO");
   dataQueryParams.addJoinOnConfig(dbRegistryConfig("RADIOSOUNDING_DATA_V1"), levelJoinFields);
   dataQueryParams.addField("SOUNDING_ID");
   dataQueryParams.addField("MEASURAND_ID");
@@ -940,7 +940,7 @@ boost::shared_ptr<SmartMet::Plugin::WFS::StoredQueryHandlerBase> wfsStoredSoundi
 {
   try
   {
-    StoredSoundingQueryHandler* qh =
+    auto* qh =
         new StoredSoundingQueryHandler(reactor, config, pluginData, templateFileName);
     boost::shared_ptr<SmartMet::Plugin::WFS::StoredQueryHandlerBase> instance(qh);
     return instance;

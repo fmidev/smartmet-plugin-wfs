@@ -78,11 +78,11 @@ bw::StoredAviationObservationQueryHandler::StoredAviationObservationQueryHandler
   }
 }
 
-bw::StoredAviationObservationQueryHandler::~StoredAviationObservationQueryHandler() {}
+bw::StoredAviationObservationQueryHandler::~StoredAviationObservationQueryHandler() = default;
 
 void bw::StoredAviationObservationQueryHandler::query(const StoredQuery& query,
                                                       const std::string& language,
-						      const boost::optional<std::string>& hostname,
+						      const boost::optional<std::string>&  /*hostname*/,
                                                       std::ostream& output) const
 {
   try
@@ -119,7 +119,7 @@ void bw::StoredAviationObservationQueryHandler::query(const StoredQuery& query,
       bool show_height = false;
       std::string proj_uri = "UNKNOWN";
       std::string proj_epoch_uri = "UNKNOWN";
-      std::string axis_labels = "";
+      std::string axis_labels;
       crs_registry.get_attribute(crs, "showHeight", &show_height);
       crs_registry.get_attribute(crs, "projUri", &proj_uri);
       crs_registry.get_attribute(crs, "projEpochUri", &proj_epoch_uri);
@@ -145,37 +145,33 @@ void bw::StoredAviationObservationQueryHandler::query(const StoredQuery& query,
         *queryBBox = transform_bounding_box(requestedBBox, DATA_CRS_NAME);
 
         // Select the locations inside the bounding box.
-        for (SmartMet::Spine::LocationList::iterator it = locationsByStationType.begin();
-             it != locationsByStationType.end();
-             ++it)
+        for (auto & it : locationsByStationType)
         {
-          if (queryBBox->xMin <= (*it)->longitude and queryBBox->xMax >= (*it)->longitude and
-              queryBBox->yMin <= (*it)->latitude and queryBBox->yMax >= (*it)->latitude)
+          if (queryBBox->xMin <= it->longitude and queryBBox->xMax >= it->longitude and
+              queryBBox->yMin <= it->latitude and queryBBox->yMax >= it->latitude)
           {
             // Do not add duplicates.
-            if (validIcaoCodes.find((*it)->name) == validIcaoCodes.end())
-              validIcaoCodes.insert(std::make_pair((*it)->name, (*it)));
+            if (validIcaoCodes.find(it->name) == validIcaoCodes.end())
+              validIcaoCodes.insert(std::make_pair(it->name, it));
           }
         }
       }
 
       // Validity of ICAO code(s)
-      for (std::vector<std::string>::const_iterator it = icaoCodeVector.begin();
-           it != icaoCodeVector.end();
-           ++it)
+      for (const auto & it : icaoCodeVector)
       {
         // Check that the icao code length is 4 characters.
-        if (((*it).end() - (*it).begin()) != 4)
+        if ((it.end() - it.begin()) != 4)
           continue;
 
         SmartMet::Spine::LocationList locationList =
-            geo_engine->nameSearch(nameSearchOptions, *it);
+            geo_engine->nameSearch(nameSearchOptions, it);
 
         // ICAO code is uniq so the first one must be the one.
-        if (locationList.size() == 0 or locationList.front()->name != *it)
+        if (locationList.empty() or locationList.front()->name != it)
         {
           std::ostringstream msg;
-          msg << "ICAO code '" << *it << "' not found.";
+          msg << "ICAO code '" << it << "' not found.";
           Fmi::Exception exception(BCP, msg.str());
           exception.addParameter(WFS_EXCEPTION_CODE, WFS_INVALID_PARAMETER_VALUE);
           throw exception.disableStackTrace();
@@ -187,15 +183,12 @@ void bw::StoredAviationObservationQueryHandler::query(const StoredQuery& query,
       }
 
       // Check that the valid location is an airport.
-      for (std::list<std::pair<std::string, SmartMet::Spine::LocationPtr> >::iterator it =
-               validLocations.begin();
-           it != validLocations.end();
-           ++it)
+      for (auto & validLocation : validLocations)
       {
-        SmartMet::Spine::LocationList::const_iterator locIt = locationsByStationType.begin();
+        auto locIt = locationsByStationType.begin();
         for (; locIt != locationsByStationType.end(); ++locIt)
         {
-          if ((*locIt)->geoid == (*it).second->geoid)
+          if ((*locIt)->geoid == validLocation.second->geoid)
             break;
         }
 
@@ -242,23 +235,18 @@ void bw::StoredAviationObservationQueryHandler::query(const StoredQuery& query,
             "STATION_ID", "MESSAGE_TIME", "IWXXM_CONTENT"};
         try
         {
-          for (std::map<std::string, SmartMet::Spine::LocationPtr>::iterator it =
-                   validIcaoCodes.begin();
-               it != validIcaoCodes.end();
-               ++it)
-            queryParams.addStationId((*it).first);
+          for (auto & validIcaoCode : validIcaoCodes)
+            queryParams.addStationId(validIcaoCode.first);
 
-          for (std::list<std::string>::const_iterator it = selectNameList.begin();
-               it != selectNameList.end();
-               ++it)
+          for (const auto & it : selectNameList)
           {
-            if (!queryParams.addSelectName(*it))
-              std::cerr << "SmartMet::Plugin::WFS::query : Add of the select name '" << *it
+            if (!queryParams.addSelectName(it))
+              std::cerr << "SmartMet::Plugin::WFS::query : Add of the select name '" << it
                         << "' failed\n";
           }
 
-          const boost::posix_time::ptime startTime = params.get_single<pt::ptime>(P_BEGIN_TIME);
-          const boost::posix_time::ptime endTime = params.get_single<pt::ptime>(P_END_TIME);
+          const auto startTime = params.get_single<pt::ptime>(P_BEGIN_TIME);
+          const auto endTime = params.get_single<pt::ptime>(P_END_TIME);
 
           if (m_sqRestrictions)
             check_time_interval(startTime, endTime, m_maxHours);
@@ -285,10 +273,10 @@ void bw::StoredAviationObservationQueryHandler::query(const StoredQuery& query,
 
         // Fill the IWXXM data
         CTPP::CDT& group = hash["groups"][0];
-        if (iwxxmContentVector.size() > 0)
+        if (!iwxxmContentVector.empty())
         {
           int i = 0;
-          for (std::vector<std::string>::iterator it = iwxxmContentVector.begin();
+          for (auto it = iwxxmContentVector.begin();
                it != iwxxmContentVector.end();
                ++it)
           {
@@ -306,12 +294,10 @@ void bw::StoredAviationObservationQueryHandler::query(const StoredQuery& query,
           std::vector<std::string> stationIdVector;
           resultContainer->getValueVectorData("STATION_ID", stationIdVector);
           bool initBBox = true;
-          for (std::vector<unsigned int>::iterator it = messagePositions.begin();
-               it != messagePositions.end();
-               ++it)
+          for (unsigned int & messagePosition : messagePositions)
           {
-            std::map<std::string, SmartMet::Spine::LocationPtr>::const_iterator icaoLocation =
-                validIcaoCodes.find(stationIdVector.at(*it));
+            auto icaoLocation =
+                validIcaoCodes.find(stationIdVector.at(messagePosition));
 
             if (icaoLocation == validIcaoCodes.end())
               continue;
@@ -402,7 +388,7 @@ wfs_stored_aviation_observation_handler_create(SmartMet::Spine::Reactor* reactor
 {
   try
   {
-    bw::StoredAviationObservationQueryHandler* qh = new bw::StoredAviationObservationQueryHandler(
+    auto* qh = new bw::StoredAviationObservationQueryHandler(
         reactor, config, plugin_data, template_file_name);
     boost::shared_ptr<SmartMet::Plugin::WFS::StoredQueryHandlerBase> instance(qh);
     return instance;

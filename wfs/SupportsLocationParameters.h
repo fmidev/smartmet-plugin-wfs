@@ -50,7 +50,7 @@ class SupportsLocationParameters : protected virtual SupportsExtraHandlerParams,
         unsigned options);
 
  public:
-  virtual ~SupportsLocationParameters();
+  ~SupportsLocationParameters() override;
 
   void get_location_options(
       const RequestParameterMap &param_values,

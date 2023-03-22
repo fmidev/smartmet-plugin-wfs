@@ -79,7 +79,7 @@ std::vector<NFmiPoint> bbox_exclude_point(const NFmiPoint& p1,
     int num_points = boundary->getNumPoints();
     for (int i = 0; i < num_points; i++)
     {
-      result.push_back(NFmiPoint(boundary->getX(i), boundary->getY(i)));
+      result.emplace_back(boundary->getX(i), boundary->getY(i));
     }
 
     return result;
@@ -90,7 +90,7 @@ std::vector<NFmiPoint> bbox_exclude_point(const NFmiPoint& p1,
   }
 }
 
-void get_latlon_boundary(const NFmiArea* area, OGRPolygon* result, int NP, double w_coeff)
+void get_latlon_boundary(const NFmiArea* area, OGRPolygon* result, int NP, double  /*w_coeff*/)
 {
   try
   {
@@ -137,9 +137,9 @@ void get_latlon_boundary(const NFmiArea* area, OGRPolygon* result, int NP, doubl
       }
     }
 
-    for (auto it = points.begin(); it != points.end(); ++it)
+    for (auto & point : points)
     {
-      *it = area->ToLatLon(*it);
+      point = area->ToLatLon(point);
     }
 
     OGRLinearRing r1;

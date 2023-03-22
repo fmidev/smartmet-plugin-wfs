@@ -66,7 +66,7 @@ bool find_srs(const std::string& gml, int& srs)
     boost::regex r_srs("srsName=[\"]EPSG:([0-9]+)[\"]", boost::regex::perl | boost::regex::icase);
     boost::smatch match_results;
     boost::regex_search(gml, match_results, r_srs);
-    if (match_results.size() >= 1)
+    if (!match_results.empty())
     {
       std::string match = match_results[1];
       srs = std::stoi(match);
@@ -86,16 +86,9 @@ bool find_srs(const std::string& gml, int& srs)
 }  // namespace
 
 bw::GeoServerDataIndex::LayerRec::LayerRec()
-    : name(""),
-      layer(""),
-      orig_geom(nullptr),
-      dest_geom(nullptr),
-      orig_srs(-1),
-      dest_srs(-1),
-      orig_srs_swapped(false),
-      dest_srs_swapped(false)
-{
-}
+    
+      
+= default;
 
 bw::GeoServerDataIndex::LayerRec::LayerRec(
     const SmartMet::Plugin::WFS::GeoServerDataIndex::LayerRec& rec)
@@ -221,7 +214,7 @@ bw::GeoServerDataIndex::GeoServerDataIndex(
   }
 }
 
-bw::GeoServerDataIndex::~GeoServerDataIndex() {}
+bw::GeoServerDataIndex::~GeoServerDataIndex() = default;
 
 void bw::GeoServerDataIndex::query(const boost::posix_time::ptime& begin,
                                    const boost::posix_time::ptime& end,
@@ -400,7 +393,7 @@ void bw::GeoServerDataIndex::process_sql_result(pqxx::result& result, const std:
 
     for (auto row = result.begin(); row != result.end(); ++row)
     {
-      const std::string s_epoch = row[0].as<std::string>();
+      const auto s_epoch = row[0].as<std::string>();
       pt::ptime epoch = pt::time_from_string(s_epoch);
 
       Item& item = data[epoch];
@@ -413,8 +406,8 @@ void bw::GeoServerDataIndex::process_sql_result(pqxx::result& result, const std:
         rec.name = row[1].as<std::string>();
         rec.layer = layer;
 
-        const std::string s_orig_geom = row[2].as<std::string>();
-        const std::string s_dest_geom = row[3].as<std::string>();
+        const auto s_orig_geom = row[2].as<std::string>();
+        const auto s_dest_geom = row[3].as<std::string>();
 
         geom = OGRGeometryFactory::createFromGML(s_orig_geom.c_str());
         check_geometry(geom, __PRETTY_FUNCTION__, s_orig_geom);

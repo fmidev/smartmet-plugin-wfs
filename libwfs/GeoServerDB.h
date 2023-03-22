@@ -13,10 +13,10 @@ namespace WFS
 class GeoServerDB
 {
  public:
-  typedef Fmi::Database::PostgreSQLConnection Connection;
-  typedef Fmi::Database::PostgreSQLConnectionOptions ConnectionOpt;
-  typedef std::shared_ptr<Connection> ConnectionPtr;
-  typedef Fmi::Database::PostgreSQLConnection::Transaction Transaction;
+  using Connection = Fmi::Database::PostgreSQLConnection;
+  using ConnectionOpt = Fmi::Database::PostgreSQLConnectionOptions;
+  using ConnectionPtr = std::shared_ptr<Connection>;
+  using Transaction = Fmi::Database::PostgreSQLConnection::Transaction;
 
  public:
   GeoServerDB(const std::string& conn_str, std::size_t keep_conn = 5);

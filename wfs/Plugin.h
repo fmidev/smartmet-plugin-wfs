@@ -46,7 +46,7 @@ class Plugin : public SmartMetPlugin,
   Plugin(SmartMet::Spine::Reactor* theReactor, const char* theConfig);
   Plugin(const Plugin&) = delete;
   Plugin& operator = (const Plugin&) = delete;
-  virtual ~Plugin();
+  ~Plugin() override;
 
   const std::string& getPluginName() const override;
   int getRequiredAPIVersion() const override;
@@ -62,9 +62,9 @@ class Plugin : public SmartMetPlugin,
   std::string getRealm() const override;
 
  private:
-  Plugin();
+  Plugin() = delete;
 
-  virtual bool queryIsFast(const SmartMet::Spine::HTTP::Request& theRequest) const override;
+  bool queryIsFast(const SmartMet::Spine::HTTP::Request& theRequest) const override;
 
  private:
   void realRequestHandler(SmartMet::Spine::Reactor& theReactor,

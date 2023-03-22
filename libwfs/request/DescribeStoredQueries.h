@@ -28,11 +28,11 @@ class DescribeStoredQueries : public RequestBase
                         const PluginImpl& plugin_impl);
 
  public:
-  virtual ~DescribeStoredQueries();
+  ~DescribeStoredQueries() override;
 
-  virtual RequestType get_type() const;
+  RequestType get_type() const override;
 
-  virtual void execute(std::ostream& ost) const;
+  void execute(std::ostream& ost) const override;
 
   static boost::shared_ptr<DescribeStoredQueries> create_from_kvp(
       const std::string& language,
@@ -44,7 +44,7 @@ class DescribeStoredQueries : public RequestBase
       const xercesc::DOMDocument& document,
       const PluginImpl& plugin_impl);
 
-  virtual int get_response_expires_seconds() const;
+  int get_response_expires_seconds() const override;
 };
 
 }  // namespace Request

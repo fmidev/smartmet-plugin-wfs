@@ -13,7 +13,7 @@ namespace ba = boost::algorithm;
 
 bw::RequestFactory::RequestFactory(PluginImpl& plugin_impl) : plugin_impl(plugin_impl) {}
 
-bw::RequestFactory::~RequestFactory() {}
+bw::RequestFactory::~RequestFactory() = default;
 
 bw::RequestFactory& bw::RequestFactory::register_request_type(const std::string& name,
                                                               const std::string& feature_id,
@@ -40,7 +40,7 @@ bw::RequestFactory& bw::RequestFactory::register_request_type(const std::string&
 
     request_names.insert(name);
 
-    if (feature_id != "")
+    if (!feature_id.empty())
     {
       plugin_impl.get_capabilities().register_operation(feature_id);
     }
@@ -122,7 +122,7 @@ boost::shared_ptr<bw::RequestBase> bw::RequestFactory::parse_xml(
   try
   {
     const xercesc::DOMElement* root = document.getDocumentElement();
-    if (root == 0)
+    if (root == nullptr)
     {
       Fmi::Exception exception(BCP, "The XML root element missing!");
       exception.addParameter(WFS_EXCEPTION_CODE, WFS_OPERATION_PARSING_FAILED);

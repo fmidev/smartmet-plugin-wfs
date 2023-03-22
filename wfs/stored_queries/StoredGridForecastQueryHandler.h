@@ -17,9 +17,9 @@ namespace Plugin
 namespace WFS
 {
 
-typedef StoredForecastQueryHandler::Query Query;
-typedef std::map<std::string, Engine::Querydata::ModelParameter> ModelParameters;
-typedef boost::shared_ptr<Spine::Table> Table_sptr;
+using Query = StoredForecastQueryHandler::Query;
+using ModelParameters = std::map<std::string, Engine::Querydata::ModelParameter>;
+using Table_sptr = boost::shared_ptr<Spine::Table>;
 
 
 
@@ -39,10 +39,10 @@ class StoredGridForecastQueryHandler: public StoredQueryHandlerBase,
                     PluginImpl& plugin_impl,
                     boost::optional<std::string> template_file_name);
 
-    virtual     ~StoredGridForecastQueryHandler();
+        ~StoredGridForecastQueryHandler() override;
 
-    void        init_handler();
-    void        query(const StoredQuery& query, const std::string& language, const boost::optional<std::string>& hostname, std::ostream& output) const;
+    void        init_handler() override;
+    void        query(const StoredQuery& query, const std::string& language, const boost::optional<std::string>& hostname, std::ostream& output) const override;
 
   protected:
 

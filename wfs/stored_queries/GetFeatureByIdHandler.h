@@ -22,14 +22,14 @@ class GetFeatureByIdHandler : public StoredQueryHandlerBase
                         StoredQueryConfig::Ptr config,
                         PluginImpl& plugin_impl);
 
-  virtual ~GetFeatureByIdHandler();
+  ~GetFeatureByIdHandler() override;
 
-  virtual void query(const StoredQuery& query,
+  void query(const StoredQuery& query,
                      const std::string& language,
 		     const boost::optional<std::string>& hostname,
-                     std::ostream& output) const;
+                     std::ostream& output) const override;
 
-  virtual std::vector<std::string> get_return_types() const;
+  std::vector<std::string> get_return_types() const override;
 };
 
 }  // namespace WFS

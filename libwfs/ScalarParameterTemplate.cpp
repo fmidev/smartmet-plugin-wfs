@@ -4,7 +4,7 @@
 
 namespace
 {
-typedef std::map<std::string, std::vector<SmartMet::Spine::Value> > param_map_t;
+using param_map_t = std::map<std::string, std::vector<SmartMet::Spine::Value>>;
 }
 
 namespace SmartMet
@@ -60,7 +60,7 @@ ScalarParameterTemplate::ScalarParameterTemplate(StoredQueryConfig& config,
   }
 }
 
-ScalarParameterTemplate::~ScalarParameterTemplate() {}
+ScalarParameterTemplate::~ScalarParameterTemplate() = default;
 
 SmartMet::Spine::Value ScalarParameterTemplate::get_value(
     const RequestParameterMap& req_param_map, const SupportsExtraHandlerParams* extra_params) const

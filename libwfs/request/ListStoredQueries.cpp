@@ -11,7 +11,7 @@ bw::Request::ListStoredQueries::ListStoredQueries(const std::string& language,
 {
 }
 
-bw::Request::ListStoredQueries::~ListStoredQueries() {}
+bw::Request::ListStoredQueries::~ListStoredQueries() = default;
 
 bw::RequestBase::RequestType bw::Request::ListStoredQueries::get_type() const
 {
@@ -41,10 +41,10 @@ void bw::Request::ListStoredQueries::execute(std::ostream& output) const
     std::sort(names.begin(), names.end());
 
     std::size_t cnt = 0;
-    for (std::size_t ind = 0; ind < names.size(); ind++)
+    for (auto & ind : names)
     {
       boost::shared_ptr<const StoredQueryHandlerBase> p_handler =
-          stored_query_map.get_handler_by_name(names[ind]);
+          stored_query_map.get_handler_by_name(ind);
       if (not p_handler->is_hidden())
       {
         CTPP::CDT& sq = hash["queryList"][cnt++];

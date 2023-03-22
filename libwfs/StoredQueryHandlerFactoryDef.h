@@ -17,11 +17,8 @@ class PluginImpl;
 class StoredQueryHandlerFactoryDef
 {
  public:
-  typedef boost::shared_ptr<StoredQueryHandlerBase> (*factory_t)(
-      SmartMet::Spine::Reactor* reactor,
-      StoredQueryConfig::Ptr config,
-      PluginImpl& plugin_impl,
-      boost::optional<std::string> template_file_name);
+  using factory_t = boost::shared_ptr<StoredQueryHandlerBase>
+        (*)(SmartMet::Spine::Reactor *, StoredQueryConfig::Ptr, PluginImpl &, boost::optional<std::string>);
 
  private:
   unsigned char signature[20];

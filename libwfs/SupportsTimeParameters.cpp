@@ -3,8 +3,8 @@
 #include "WfsException.h"
 #include <boost/date_time/posix_time/posix_time.hpp>
 #include <boost/optional/optional_io.hpp>
+#include <cstdint>
 #include <macgyver/Exception.h>
-#include <stdint.h>
 
 namespace bw = SmartMet::Plugin::WFS;
 namespace pt = boost::posix_time;
@@ -71,7 +71,7 @@ bw::SupportsTimeParameters::SupportsTimeParameters(bw::StoredQueryConfig::Ptr co
   }
 }
 
-bw::SupportsTimeParameters::~SupportsTimeParameters() {}
+bw::SupportsTimeParameters::~SupportsTimeParameters() = default;
 
 boost::shared_ptr<TS::TimeSeriesGeneratorOptions>
 bw::SupportsTimeParameters::get_time_generator_options(const RequestParameterMap &param) const

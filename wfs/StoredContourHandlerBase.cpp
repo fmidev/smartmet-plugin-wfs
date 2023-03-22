@@ -102,7 +102,7 @@ bw::StoredContourQueryHandler::StoredContourQueryHandler(
 
     // read contour parameters from config and check validity
     name = config->get_mandatory_config_param<std::string>("contour_param.name");
-    uint64_t cpid = config->get_mandatory_config_param<uint64_t>("contour_param.id");
+    auto cpid = config->get_mandatory_config_param<uint64_t>("contour_param.id");
 
     // check parameter id
     NFmiEnumConverter ec;
@@ -121,7 +121,7 @@ bw::StoredContourQueryHandler::StoredContourQueryHandler(
   }
 }
 
-bw::StoredContourQueryHandler::~StoredContourQueryHandler() {}
+bw::StoredContourQueryHandler::~StoredContourQueryHandler() = default;
 
 bw::ContourQueryResultSet bw::StoredContourQueryHandler::getContours(
     const ContourQueryParameter& queryParameter) const
@@ -132,7 +132,7 @@ bw::ContourQueryResultSet bw::StoredContourQueryHandler::getContours(
     bool gridengine_disabled = is_gridengine_disabled();
 
     if (!gridengine_disabled && data_source == P_GRID &&
-        queryParameter.gridQuery.mQueryParameterList.size() > 0)
+        !queryParameter.gridQuery.mQueryParameterList.empty())
     {
       return getContours_gridEngine(queryParameter);
     }
@@ -252,7 +252,7 @@ bw::ContourQueryResultSet bw::StoredContourQueryHandler::getContours_qEngine(
       for (auto geom : geoms)
       {
         clipGeometry(geom, bbox);
-        cgr->area_geoms.push_back(WeatherAreaGeometry(utctime, geom));
+        cgr->area_geoms.emplace_back(utctime, geom);
       }
       ret.push_back(cgr);
     }
@@ -296,29 +296,27 @@ bw::ContourQueryResultSet bw::StoredContourQueryHandler::getContours_gridEngine(
     boost::posix_time::ptime utctime;
     SmartMet::Engine::Contour::Options options(getContourEngineOptions(utctime, queryParameter));
 
-    for (auto param = queryParameter.gridQuery.mQueryParameterList.begin();
-         param != queryParameter.gridQuery.mQueryParameterList.end();
-         ++param)
+    for (auto & param : queryParameter.gridQuery.mQueryParameterList)
     {
-      if (options.isovalues.size() > 0)
+      if (!options.isovalues.empty())
       {
-        param->mType = QueryServer::QueryParameter::Type::Isoline;
-        param->mLocationType = QueryServer::QueryParameter::LocationType::Geometry;
+        param.mType = QueryServer::QueryParameter::Type::Isoline;
+        param.mLocationType = QueryServer::QueryParameter::LocationType::Geometry;
 
-        for (auto v = options.isovalues.begin(); v != options.isovalues.end(); ++v)
-          param->mContourLowValues.push_back(*v);
+        for (double & isovalue : options.isovalues)
+          param.mContourLowValues.push_back(isovalue);
       }
       else
       {
-        param->mType = QueryServer::QueryParameter::Type::Isoband;
-        param->mLocationType = QueryServer::QueryParameter::LocationType::Geometry;
+        param.mType = QueryServer::QueryParameter::Type::Isoband;
+        param.mLocationType = QueryServer::QueryParameter::LocationType::Geometry;
 
-        for (auto v = options.limits.begin(); v != options.limits.end(); ++v)
+        for (auto & limit : options.limits)
         {
-          if (v->lolimit && v->hilimit)
+          if (limit.lolimit && limit.hilimit)
           {
-            param->mContourLowValues.push_back(*(v->lolimit));
-            param->mContourHighValues.push_back(*(v->hilimit));
+            param.mContourLowValues.push_back(*(limit.lolimit));
+            param.mContourHighValues.push_back(*(limit.hilimit));
           }
         }
       }
@@ -361,14 +359,14 @@ bw::ContourQueryResultSet bw::StoredContourQueryHandler::getContours_gridEngine(
         boost::posix_time::ptime utcTime = boost::posix_time::from_time_t((*val)->mForecastTimeUTC);
         // boost::posix_time::ptime utcTime = Fmi::TimeParser::parse_iso((*val)->mForecastTime);
 
-        if ((*val)->mValueData.size() > 0)
+        if (!(*val)->mValueData.empty())
         {
-          for (auto wkb = (*val)->mValueData.begin(); wkb != (*val)->mValueData.end(); ++wkb)
+          for (auto & wkb : (*val)->mValueData)
           {
-            unsigned char* cwkb = reinterpret_cast<unsigned char*>(wkb->data());
+            auto* cwkb = reinterpret_cast<unsigned char*>(wkb.data());
 
             OGRGeometry* geom = nullptr;
-            /*OGRErr err =*/OGRGeometryFactory::createFromWkb(cwkb, nullptr, &geom, wkb->size());
+            /*OGRErr err =*/OGRGeometryFactory::createFromWkb(cwkb, nullptr, &geom, wkb.size());
             if (geom != nullptr)
             {
               auto geomPtr = OGRGeometryPtr(geom);
@@ -394,16 +392,16 @@ bw::ContourQueryResultSet bw::StoredContourQueryHandler::getContours_gridEngine(
 
               if (param->mType == QueryServer::QueryParameter::Type::Isoband)
               {
-                if ((*val)->mValueData.size() > 0)
+                if (!(*val)->mValueData.empty())
                 {
                   uint c = 250;
                   uint step = 250 / (*val)->mValueData.size();
 
-                  for (auto it = (*val)->mValueData.begin(); it != (*val)->mValueData.end(); ++it)
+                  for (auto & it : (*val)->mValueData)
                   {
                     uint col = (c << 16) + (c << 8) + c;
                     imagePaint.setFillColor(col);
-                    imagePaint.paintWkb(mp, mp, 180, 90, *it);
+                    imagePaint.paintWkb(mp, mp, 180, 90, it);
                     c = c - step;
                   }
                 }
@@ -423,7 +421,7 @@ bw::ContourQueryResultSet bw::StoredContourQueryHandler::getContours_gridEngine(
           }
         }
 
-        if (geoms.size() > 0)
+        if (!geoms.empty())
         {
           // clip the geometry into bounding box
           Fmi::Box bbox(queryParameter.bbox.xMin,
@@ -437,7 +435,7 @@ bw::ContourQueryResultSet bw::StoredContourQueryHandler::getContours_gridEngine(
           for (auto geom : geoms)
           {
             clipGeometry(geom, bbox);
-            cgr->area_geoms.push_back(WeatherAreaGeometry(utcTime, geom));
+            cgr->area_geoms.emplace_back(utcTime, geom);
           }
           ret.push_back(cgr);
         }
@@ -485,13 +483,13 @@ void bw::StoredContourQueryHandler::parsePolygon(OGRPolygon* polygon,
 
 void bw::StoredContourQueryHandler::query(const StoredQuery& stored_query,
                                           const std::string& language,
-                                          const boost::optional<std::string>& hostname,
+                                          const boost::optional<std::string>&  /*hostname*/,
                                           std::ostream& output) const
 {
   try
   {
     const auto& sq_params = stored_query.get_param_map();
-    std::string producerName = sq_params.get_single<std::string>(P_PRODUCER);
+    auto producerName = sq_params.get_single<std::string>(P_PRODUCER);
     std::string dataSource = get_plugin_impl().get_data_source();
     bool gridengine_disabled = get_plugin_impl().is_gridengine_disabled();
 
@@ -523,7 +521,7 @@ void bw::StoredContourQueryHandler::query_qEngine(const StoredQuery& stored_quer
 
     const auto& sq_params = stored_query.get_param_map();
 
-    std::string requestedCRS = sq_params.get_optional<std::string>(P_CRS, "EPSG::4326");
+    auto requestedCRS = sq_params.get_optional<std::string>(P_CRS, "EPSG::4326");
 
     std::string targetURN("urn:ogc:def:crs:" + requestedCRS);
     OGRSpatialReference sr;
@@ -535,7 +533,7 @@ void bw::StoredContourQueryHandler::query_qEngine(const StoredQuery& stored_quer
       throw exception;
     }
 
-    SmartMet::Engine::Querydata::Producer producer = sq_params.get_single<std::string>(P_PRODUCER);
+    auto producer = sq_params.get_single<std::string>(P_PRODUCER);
     boost::optional<boost::posix_time::ptime> requested_origintime =
         sq_params.get_optional<boost::posix_time::ptime>(P_ORIGIN_TIME);
 
@@ -551,7 +549,7 @@ void bw::StoredContourQueryHandler::query_qEngine(const StoredQuery& stored_quer
     SmartMet::Spine::Parameter parameter(name, SmartMet::Spine::Parameter::Type::Data, id);
 
     boost::shared_ptr<ContourQueryParameter> query_param = getQueryParameter(parameter, q, sr);
-    CoverageQueryParameter* qParam = dynamic_cast<CoverageQueryParameter*>(query_param.get());
+    auto* qParam = dynamic_cast<CoverageQueryParameter*>(query_param.get());
     if (qParam)
     {
       std::vector<double> limits;
@@ -566,7 +564,7 @@ void bw::StoredContourQueryHandler::query_qEngine(const StoredQuery& stored_quer
       {
         const double& lower = limits[i];
         const double& upper = limits[i + 1];
-        qParam->limits.push_back(SmartMet::Engine::Contour::Range(lower, upper));
+        qParam->limits.emplace_back(lower, upper);
       }
     }
 
@@ -628,7 +626,7 @@ void bw::StoredContourQueryHandler::query_gridEngine(const StoredQuery& stored_q
 
     const auto& sq_params = stored_query.get_param_map();
 
-    std::string requestedCRS = sq_params.get_optional<std::string>(P_CRS, "EPSG::4326");
+    auto requestedCRS = sq_params.get_optional<std::string>(P_CRS, "EPSG::4326");
 
     std::string targetURN("urn:ogc:def:crs:" + requestedCRS);
     OGRSpatialReference sr;
@@ -640,7 +638,7 @@ void bw::StoredContourQueryHandler::query_gridEngine(const StoredQuery& stored_q
     }
     sr.SetAxisMappingStrategy(OAMS_TRADITIONAL_GIS_ORDER);
 
-    std::string producer = sq_params.get_single<std::string>(P_PRODUCER);
+    auto producer = sq_params.get_single<std::string>(P_PRODUCER);
 
     boost::optional<boost::posix_time::ptime> requested_origintime =
         sq_params.get_optional<boost::posix_time::ptime>(P_ORIGIN_TIME);
@@ -653,7 +651,7 @@ void bw::StoredContourQueryHandler::query_gridEngine(const StoredQuery& stored_q
     Engine::Grid::ParameterDetails_vec parameters;
 
     std::string pName = name;
-    std::string interpolationMethod = "";
+    std::string interpolationMethod;
     auto pos = pName.find(".raw");
     if (pos != std::string::npos)
     {
@@ -731,7 +729,7 @@ void bw::StoredContourQueryHandler::query_gridEngine(const StoredQuery& stored_q
     SmartMet::Spine::Parameter parameter(name, SmartMet::Spine::Parameter::Type::Data, id);
     boost::shared_ptr<ContourQueryParameter> query_param = getQueryParameter(parameter, q, sr);
 
-    CoverageQueryParameter* qParam = dynamic_cast<CoverageQueryParameter*>(query_param.get());
+    auto* qParam = dynamic_cast<CoverageQueryParameter*>(query_param.get());
     if (qParam)
     {
       std::vector<double> limits;
@@ -746,7 +744,7 @@ void bw::StoredContourQueryHandler::query_gridEngine(const StoredQuery& stored_q
       {
         const double& lower = limits[i];
         const double& upper = limits[i + 1];
-        qParam->limits.push_back(SmartMet::Engine::Contour::Range(lower, upper));
+        qParam->limits.emplace_back(lower, upper);
       }
     }
 
@@ -803,11 +801,11 @@ void bw::StoredContourQueryHandler::query_gridEngine(const StoredQuery& stored_q
     query_param->gridQuery.mAttributeList.addAttribute("grid.width", "1000");
     query_param->gridQuery.mAttributeList.addAttribute("grid.height", "1000");
 
-    std::string imageFile = sq_params.get_optional<std::string>(P_IMAGE_FILE, "");
+    auto imageFile = sq_params.get_optional<std::string>(P_IMAGE_FILE, "");
     if (imageFile > " ")
       query_param->gridQuery.mAttributeList.addAttribute("contour.imageFile", imageFile);
 
-    std::string imageDir = sq_params.get_optional<std::string>(P_IMAGE_DIR, "");
+    auto imageDir = sq_params.get_optional<std::string>(P_IMAGE_DIR, "");
     if (imageDir > " ")
       query_param->gridQuery.mAttributeList.addAttribute("contour.imageDir", imageDir);
 
@@ -820,16 +818,14 @@ void bw::StoredContourQueryHandler::query_gridEngine(const StoredQuery& stored_q
     std::string analysisTimeStr;
     std::string modificationTimeStr;
 
-    for (auto param = query_param->gridQuery.mQueryParameterList.begin();
-         param != query_param->gridQuery.mQueryParameterList.end();
-         ++param)
+    for (auto & param : query_param->gridQuery.mQueryParameterList)
     {
-      for (auto val = param->mValueList.begin(); val != param->mValueList.end(); ++val)
+      for (auto & val : param.mValueList)
       {
-        if ((*val)->mAnalysisTime > " ")
+        if (val->mAnalysisTime > " ")
         {
-          analysisTimeStr = (*val)->mAnalysisTime;
-          modificationTimeStr = utcTimeFromTimeT((*val)->mModificationTime);
+          analysisTimeStr = val->mAnalysisTime;
+          modificationTimeStr = utcTimeFromTimeT(val->mModificationTime);
         }
       }
     }
@@ -930,7 +926,7 @@ std::string bw::StoredContourQueryHandler::formatCoordinates(const OGRGeometry* 
                                                              unsigned int precision) const
 {
   std::string ret;
-  const OGRLineString* lineString = reinterpret_cast<const OGRLineString*>(geom);
+  const auto* lineString = reinterpret_cast<const OGRLineString*>(geom);
 
   int num_points = lineString->getNumPoints();
   OGRPoint point;
@@ -958,14 +954,14 @@ void bw::StoredContourQueryHandler::parseGeometry(OGRGeometry* geom,
     if (geom->getGeometryType() == wkbMultiPolygon)
     {
       result["surface_members"] = CTPP::CDT(CTPP::CDT::ARRAY_VAL);
-      OGRMultiPolygon* pMultiPolygon = reinterpret_cast<OGRMultiPolygon*>(geom);
+      auto* pMultiPolygon = reinterpret_cast<OGRMultiPolygon*>(geom);
       int num_geometries = pMultiPolygon->getNumGeometries();
 
       // iterate polygons
       for (int i = 0; i < num_geometries; i++)
       {
         CTPP::CDT& polygon_patch = result["surface_members"][i];
-        OGRPolygon* pPolygon = reinterpret_cast<OGRPolygon*>(pMultiPolygon->getGeometryRef(i));
+        auto* pPolygon = reinterpret_cast<OGRPolygon*>(pMultiPolygon->getGeometryRef(i));
         pPolygon->assignSpatialReference(pMultiPolygon->getSpatialReference());
         parsePolygon(pPolygon, latLonOrder, precision, polygon_patch);
       }
@@ -973,14 +969,14 @@ void bw::StoredContourQueryHandler::parseGeometry(OGRGeometry* geom,
     else if (geom->getGeometryType() == wkbPolygon)
     {
       result["surface_members"] = CTPP::CDT(CTPP::CDT::ARRAY_VAL);
-      OGRPolygon* pPolygon = reinterpret_cast<OGRPolygon*>(geom);
+      auto* pPolygon = reinterpret_cast<OGRPolygon*>(geom);
       CTPP::CDT& polygon_patch = result["surface_members"][0];
       parsePolygon(pPolygon, latLonOrder, precision, polygon_patch);
     }
     else if (geom->getGeometryType() == wkbLinearRing)
     {
       result["surface_members"] = CTPP::CDT(CTPP::CDT::ARRAY_VAL);
-      OGRLinearRing* pLinearRing = reinterpret_cast<OGRLinearRing*>(geom);
+      auto* pLinearRing = reinterpret_cast<OGRLinearRing*>(geom);
       OGRPolygon polygon;
       polygon.addRing(pLinearRing);
       CTPP::CDT& polygon_patch = result["surface_members"][0];
@@ -989,18 +985,18 @@ void bw::StoredContourQueryHandler::parseGeometry(OGRGeometry* geom,
     else if (geom->getGeometryType() == wkbLineString)
     {
       result["isolines"] = CTPP::CDT(CTPP::CDT::ARRAY_VAL);
-      OGRLineString* pLineString = reinterpret_cast<OGRLineString*>(geom);
+      auto* pLineString = reinterpret_cast<OGRLineString*>(geom);
       CTPP::CDT& linestring_patch = result["isolines"][0];
       linestring_patch["coordinates"] = formatCoordinates(pLineString, latLonOrder, precision);
     }
     else if (geom->getGeometryType() == wkbMultiLineString)
     {
       result["isolines"] = CTPP::CDT(CTPP::CDT::ARRAY_VAL);
-      OGRMultiLineString* pMultiLineString = reinterpret_cast<OGRMultiLineString*>(geom);
+      auto* pMultiLineString = reinterpret_cast<OGRMultiLineString*>(geom);
       for (int i = 0; i < pMultiLineString->getNumGeometries(); i++)
       {
         CTPP::CDT& linestring_patch = result["isolines"][i];
-        OGRLineString* pLineString =
+        auto* pLineString =
             reinterpret_cast<OGRLineString*>(pMultiLineString->getGeometryRef(i));
         linestring_patch["coordinates"] = formatCoordinates(pLineString, latLonOrder, precision);
       }
@@ -1053,7 +1049,7 @@ void bw::StoredContourQueryHandler::parseQueryResults(
     const std::vector<ContourQueryResultPtr>& query_results,
     const SmartMet::Spine::BoundingBox& bbox,
     const std::string& language,
-    SmartMet::Spine::CRSRegistry& crsRegistry,
+    SmartMet::Spine::CRSRegistry&  /*crsRegistry*/,
     const std::string& requestedCRS,
     const boost::posix_time::ptime& origintime,
     const boost::posix_time::ptime& modificationtime,
@@ -1114,7 +1110,7 @@ void bw::StoredContourQueryHandler::parseQueryResults(
 
     // iterate  results
     unsigned int wfs_member_index = 0;
-    for (ContourQueryResultPtr result_item : query_results)
+    for (const ContourQueryResultPtr& result_item : query_results)
     {
       // iterate timesteps
       for (auto& area_geom : result_item->area_geoms)
@@ -1151,11 +1147,11 @@ void bw::StoredContourQueryHandler::parseQueryResults(
         else if (geom->getGeometryType() == wkbGeometryCollection)
         {
           std::vector<CTPP::CDT> results;
-          OGRGeometryCollection* pGeometryCollection =
+          auto* pGeometryCollection =
               reinterpret_cast<OGRGeometryCollection*>(geom.get());
           handleGeometryCollection(pGeometryCollection, latLonOrder, precision, results);
 
-          for (auto res : results)
+          for (const auto& res : results)
           {
             CTPP::CDT& wfs_member = hash["wfs_members"][wfs_member_index];
             wfs_member["phenomenon_time"] = geom_timestamp;

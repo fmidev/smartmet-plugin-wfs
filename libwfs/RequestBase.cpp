@@ -44,12 +44,11 @@ namespace {
 bw::RequestBase::RequestBase(const std::string& language, const PluginImpl& plugin_impl)
   : plugin_impl(plugin_impl)
   , language(language)
-  , soap_request(false)
-  , status(SmartMet::Spine::HTTP::not_a_status)
+   
 {
 }
 
-bw::RequestBase::~RequestBase() {}
+bw::RequestBase::~RequestBase() = default;
 
 void bw::RequestBase::set_is_soap_request(bool value)
 {
@@ -167,9 +166,9 @@ void bw::RequestBase::substitute_all(const std::string& src, std::ostream& outpu
     char chm[256];
 
     std::memset(chm, 0, 256);
-    for (std::size_t i = 0; i < num_subst; i++) {
-      chm[subst_list[i].subst[0] & 255] = 1;
-      subst_list[i].l1 = strlen(subst_list[i].subst);
+    for (auto & i : subst_list) {
+      chm[i.subst[0] & 255] = 1;
+      i.l1 = strlen(i.subst);
     }
 
     while (*in) {

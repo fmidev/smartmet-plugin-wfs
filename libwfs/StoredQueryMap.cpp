@@ -19,8 +19,8 @@ namespace ph = boost::placeholders;
 
 bw::StoredQueryMap::StoredQueryMap(SmartMet::Spine::Reactor* theReactor, PluginImpl& plugin_impl)
   : bw::FileContentChecker(131072, (plugin_impl.get_debug_level() >= 2))
-  , background_init(false)
-  , reload_required(false)
+  , 
+   reload_required(false)
   , loading_started(false)
   , load_failed(false)
   , theReactor(theReactor)
@@ -234,7 +234,7 @@ void bw::StoredQueryMap::add_handler(StoredQueryConfig::Ptr sqh_config,
 
       if (not Spine::Reactor::isShuttingDown()) {
 	std::ostringstream msg;
-	std::string prefix = "";
+	std::string prefix;
 	if (sqh_config->is_demo())
 	  prefix = "DEMO ";
 	if (sqh_config->is_test())
@@ -630,7 +630,7 @@ void bw::StoredQueryMap::request_reload(const std::string& reason)
 {
   std::ostringstream msg;
   msg << SmartMet::Spine::log_time_str() << ": [WFS] [INFO] Requiring WFS reload due to config change";
-  if (reason != "") {
+  if (!reason.empty()) {
     msg << " (" << reason << ')';
   }
   std::cout << msg.str() << std::endl;
@@ -695,7 +695,7 @@ Json::Value bw::StoredQueryMap::get_constructor_map(const std::string& handler) 
           auto sq_conf = constructor_ptr->get_config();
           if (sq_conf->have_template_fn()) {
               const std::string& c_name = sq_conf->get_constructor_name();
-              if ((handler == "") or (c_name == handler)) {
+              if ((handler.empty()) or (c_name == handler)) {
                   const std::string& t_fn = sq_conf->get_template_fn();
                   const std::vector<std::string>& r_names = sq_conf->get_return_type_names();
                   Json::Value& a = constructors[c_name];

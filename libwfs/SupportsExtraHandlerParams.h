@@ -31,7 +31,7 @@ class SupportsExtraHandlerParams : virtual protected StoredQueryParamRegistry
                              bool mandatory = false,
                              const char* path = "named_params");
 
-  virtual ~SupportsExtraHandlerParams();
+  ~SupportsExtraHandlerParams() override;
 
   const ParameterTemplateBase& get_param(const std::string& name) const;
 

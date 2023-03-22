@@ -21,10 +21,10 @@ namespace SmartMet {
 	  struct Download
 	  {
 	    std::shared_future<std::string> task;
-	    int num_failed;
-	    std::time_t last_failed;
+	    int num_failed{0};
+	    std::time_t last_failed{0};
 
-            Download() : num_failed(0), last_failed(0) {}
+            Download()  = default;
 	  };
 
 	  std::mutex mutex;
@@ -32,18 +32,18 @@ namespace SmartMet {
 	  std::string no_proxy;
           std::map<std::string, std::string> cache;
 	  std::map<std::string, Download> download_map;
-	  bool enable_download;
+	  bool enable_download{false};
 
 	public:
           EntityResolver();
 
-          virtual ~EntityResolver();
+          ~EntityResolver() override;
 
 	  void init_schema_download(const std::string& http_proxy = "", const std::string& no_proxy = "");
 
 	  bool merge_downloaded_schemas();
 
-          virtual xercesc::InputSource *resolveEntity(xercesc::XMLResourceIdentifier *resource_identifier);
+          xercesc::InputSource *resolveEntity(xercesc::XMLResourceIdentifier *resource_identifier) override;
 
 
 

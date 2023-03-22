@@ -95,7 +95,7 @@ bw::StoredFlashQueryHandler::StoredFlashQueryHandler(
   }
 }
 
-bw::StoredFlashQueryHandler::~StoredFlashQueryHandler() {}
+bw::StoredFlashQueryHandler::~StoredFlashQueryHandler() = default;
 
 namespace
 {
@@ -117,7 +117,7 @@ pt::ptime round_time(const pt::ptime& t0, unsigned step, int offset = 0)
 
 void bw::StoredFlashQueryHandler::query(const StoredQuery& query,
                                         const std::string& language,
-                                        const boost::optional<std::string>& hostname,
+                                        const boost::optional<std::string>&  /*hostname*/,
                                         std::ostream& output) const
 {
   try
@@ -153,7 +153,7 @@ void bw::StoredFlashQueryHandler::query(const StoredQuery& query,
       query_params.localTimePool = boost::make_shared<TS::LocalTimePool>();
 
       const char* DATA_CRS_NAME = "urn:ogc:def:crs:EPSG::4326";
-      const std::string crs = params.get_single<std::string>(P_CRS);
+      const auto crs = params.get_single<std::string>(P_CRS);
       auto transformation = crs_registry.create_transformation(DATA_CRS_NAME, crs);
       // FIXME: shouldn't we transform at first from FMI sphere to WGS84?
 
@@ -172,9 +172,9 @@ void bw::StoredFlashQueryHandler::query(const StoredQuery& query,
         throw exception.disableStackTrace();
       }
 
-      pt::ptime begin = params.get_single<pt::ptime>(P_BEGIN_TIME);
-      pt::ptime end = params.get_single<pt::ptime>(P_END_TIME);
-      pt::ptime now = pt::second_clock().universal_time();
+      auto begin = params.get_single<pt::ptime>(P_BEGIN_TIME);
+      auto end = params.get_single<pt::ptime>(P_END_TIME);
+      pt::ptime now = pt::second_clock::universal_time();
       pt::ptime last = now - pt::seconds(time_block_size);
 
       query_params.starttime = round_time(begin, time_block_size, 0);
@@ -191,7 +191,7 @@ void bw::StoredFlashQueryHandler::query(const StoredQuery& query,
       std::vector<std::string> param_names;
       params.get<std::string>(P_PARAM, std::back_inserter(param_names));
       int first_param = 0, last_param = 0;
-      for (std::string name : param_names)
+      for (const std::string& name : param_names)
       {
         SmartMet::Spine::Parameter param = SmartMet::TimeSeries::makeParameter(name);
         query_params.parameters.push_back(param);
@@ -535,7 +535,7 @@ boost::shared_ptr<SmartMet::Plugin::WFS::StoredQueryHandlerBase> wfs_flash_handl
 {
   try
   {
-    StoredFlashQueryHandler* qh =
+    auto* qh =
         new StoredFlashQueryHandler(reactor, config, plugin_data, template_file_name);
     boost::shared_ptr<SmartMet::Plugin::WFS::StoredQueryHandlerBase> result(qh);
     return result;

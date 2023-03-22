@@ -44,9 +44,9 @@ class StoredGridQueryHandler : public StoredQueryHandlerBase,
 {
   struct Result
   {
-    typedef std::vector<std::string> Grid;
-    typedef std::vector<Grid> ParamTimeSeries;
-    typedef std::vector<ParamTimeSeries> LevelData;
+    using Grid = std::vector<std::string>;
+    using ParamTimeSeries = std::vector<Grid>;
+    using LevelData = std::vector<ParamTimeSeries>;
     std::list<LevelData> dataLevels;  // The order is data[level][parameter][time][grid]
 
     std::vector<boost::posix_time::ptime> timesteps;
@@ -66,9 +66,9 @@ class StoredGridQueryHandler : public StoredQueryHandlerBase,
     float ur_lat;
   };
 
-  typedef boost::geometry::model::point<float, 2, boost::geometry::cs::cartesian> point_t;
-  typedef boost::geometry::model::box<point_t> box_t;
-  typedef boost::geometry::model::ring<point_t> ring_t;
+  using point_t = boost::geometry::model::point<float, 2, boost::geometry::cs::cartesian>;
+  using box_t = boost::geometry::model::box<point_t>;
+  using ring_t = boost::geometry::model::ring<point_t>;
 
  public:
   struct Query
@@ -98,7 +98,7 @@ class StoredGridQueryHandler : public StoredQueryHandlerBase,
     NFmiPoint bottom_right;
 
     mutable NFmiPoint lastpoint;
-    bool find_nearest_valid_point;
+    bool find_nearest_valid_point{false};
 
     std::string producer_name;
     std::string model_path;
@@ -119,12 +119,12 @@ class StoredGridQueryHandler : public StoredQueryHandlerBase,
                          StoredQueryConfig::Ptr config,
                          PluginImpl& plugin_impl,
                          boost::optional<std::string> template_file_name);
-  virtual ~StoredGridQueryHandler();
+  ~StoredGridQueryHandler() override;
 
-  virtual void query(const StoredQuery& query,
+  void query(const StoredQuery& query,
                      const std::string& language,
                      const boost::optional<std::string>& hostname,
-                     std::ostream& output) const;
+                     std::ostream& output) const override;
 
  private:
   void parse_times(const RequestParameterMap& param, Query& dest) const;

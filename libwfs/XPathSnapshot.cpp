@@ -16,15 +16,15 @@ namespace
 {
 struct ParserFilter : public DOMLSParserFilter
 {
-  ParserFilter() {}
-  virtual ~ParserFilter() {}
-  FilterAction acceptNode(DOMNode* node)
+  ParserFilter() = default;
+  ~ParserFilter() override = default;
+  FilterAction acceptNode(DOMNode* node) override
   {
     try
     {
       if (node->getNodeType() == DOMNode::TEXT_NODE)
       {
-        DOMText* text_node = dynamic_cast<DOMText*>(node);
+        auto* text_node = dynamic_cast<DOMText*>(node);
         if (text_node)
         {
           const XMLCh* x_text = text_node->getNodeValue();
@@ -49,8 +49,8 @@ struct ParserFilter : public DOMLSParserFilter
     }
   }
 
-  virtual FilterAction startElement(DOMElement*) { return FILTER_ACCEPT; }
-  virtual xercesc::DOMNodeFilter::ShowType getWhatToShow() const
+  FilterAction startElement(DOMElement*) override { return FILTER_ACCEPT; }
+  xercesc::DOMNodeFilter::ShowType getWhatToShow() const override
   {
     return xercesc::DOMNodeFilter::SHOW_ALL;
   }
@@ -61,8 +61,8 @@ ParserFilter filter;
 
 XPathSnapshot::XPathSnapshot()
     : xqillaImplementation(DOMImplementationRegistry::getDOMImplementation(X("XPath2 3.0"))),
-      parser(xqillaImplementation->createLSParser(DOMImplementationLS::MODE_SYNCHRONOUS, 0)),
-      document(nullptr),
+      parser(xqillaImplementation->createLSParser(DOMImplementationLS::MODE_SYNCHRONOUS, nullptr)),
+      
       resolver(nullptr),
       expression(nullptr),
       xpath_result(nullptr)
@@ -85,8 +85,7 @@ XPathSnapshot::XPathSnapshot()
 }
 
 XPathSnapshot::~XPathSnapshot()
-{
-}
+= default;
 
 void XPathSnapshot::parse_dom_document(const std::string& src, const std::string& public_id)
 {
@@ -144,7 +143,7 @@ std::size_t XPathSnapshot::xpath_query(const std::string& xpath_string)
           [] (xercesc::DOMXPathExpression* ptr) { ptr->release(); });
 
       xpath_result = std::shared_ptr<xercesc::DOMXPathResult>(
-          expression->evaluate(document, DOMXPathResult::UNORDERED_NODE_SNAPSHOT_TYPE, 0),
+          expression->evaluate(document, DOMXPathResult::UNORDERED_NODE_SNAPSHOT_TYPE, nullptr),
           [] (xercesc::DOMXPathResult* ptr) { ptr->release(); });
 
       return xpath_result->getSnapshotLength();
@@ -261,7 +260,7 @@ void XPathSnapshot::assert_have_result() const
   }
 }
 
-void XPathSnapshot::handle_exceptions(const std::string& location) const
+void XPathSnapshot::handle_exceptions(const std::string&  /*location*/) const
 {
   try
   {

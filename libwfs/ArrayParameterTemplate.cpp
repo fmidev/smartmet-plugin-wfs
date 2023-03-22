@@ -356,7 +356,7 @@ void ArrayParameterTemplate::init(bool silent)
   try
   {
     std::string base_prefix = get_base_path();
-    if (base_prefix != "")
+    if (!base_prefix.empty())
       base_prefix += ".";
 
     libconfig::Setting* setting_root = get_setting_root();

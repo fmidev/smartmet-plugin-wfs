@@ -53,21 +53,21 @@ std::vector<bw::ContourQueryResultPtr> bw::StoredIsolineQueryHandler::processQue
   {
     std::vector<ContourQueryResultPtr> query_results;
 
-    for (std::size_t i = 0; i < itsIsoValues.size(); i++)
-      (static_cast<IsolineQueryParameter&>(queryParameter)).isovalues.push_back(itsIsoValues[i]);
+    for (double itsIsoValue : itsIsoValues)
+      (static_cast<IsolineQueryParameter&>(queryParameter)).isovalues.push_back(itsIsoValue);
 
     // contains result for all isolines
     ContourQueryResultSet result_set = getContours(queryParameter);
 
     // order result set primarily by isoline value and secondarily by timestep
     unsigned int max_geoms_per_timestep = 0;
-    for (auto result_item : result_set)
+    for (const auto& result_item : result_set)
       if (max_geoms_per_timestep < result_item->area_geoms.size())
         max_geoms_per_timestep = result_item->area_geoms.size();
 
     for (std::size_t i = 0; i < max_geoms_per_timestep; i++)
     {
-      for (auto result_item : result_set)
+      for (const auto& result_item : result_set)
         if (i < result_item->area_geoms.size())
         {
           IsolineQueryResultPtr result(new IsolineQueryResult);
@@ -76,7 +76,7 @@ std::vector<bw::ContourQueryResultPtr> bw::StoredIsolineQueryHandler::processQue
           result->unit = itsUnit;
           result->isovalue = itsIsoValues[i];
           result->area_geoms.push_back(wag);
-          query_results.push_back(result);
+          query_results.emplace_back(result);
         }
     }
 
@@ -126,7 +126,7 @@ void bw::StoredIsolineQueryHandler::setResultHashValue(CTPP::CDT& resultHash,
 {
   try
   {
-    const IsolineQueryResult& isolineResultItem =
+    const auto& isolineResultItem =
         reinterpret_cast<const IsolineQueryResult&>(resultItem);
 
     resultHash["name"] = isolineResultItem.name;
@@ -152,7 +152,7 @@ boost::shared_ptr<SmartMet::Plugin::WFS::StoredQueryHandlerBase> wfs_isoline_que
 {
   try
   {
-    StoredIsolineQueryHandler* qh =
+    auto* qh =
         new StoredIsolineQueryHandler(reactor, config, plugin_data, template_file_name);
     boost::shared_ptr<SmartMet::Plugin::WFS::StoredQueryHandlerBase> result(qh);
     return result;

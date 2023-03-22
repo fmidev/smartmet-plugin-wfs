@@ -27,16 +27,16 @@ class GetPropertyValue : public RequestBase
                    PluginImpl& plugin_impl);
 
  public:
-  virtual ~GetPropertyValue();
+  ~GetPropertyValue() override;
 
-  virtual RequestType get_type() const;
+  RequestType get_type() const override;
 
   /**
    *   @brief Execute request and output result to stream
    *
    *   Throws SmartMet::Plugin::WFS::WfsException in case of an error.
    */
-  virtual void execute(std::ostream& ost) const;
+  void execute(std::ostream& ost) const override;
 
   /**
    *   @brief Create request from http GET request
@@ -69,7 +69,7 @@ class GetPropertyValue : public RequestBase
    *   @retval Smallest expiration time from queries, or default from plugin data, if no expiration
    * times found.
    */
-  virtual int get_response_expires_seconds() const;
+  int get_response_expires_seconds() const override;
 
  private:
   /**

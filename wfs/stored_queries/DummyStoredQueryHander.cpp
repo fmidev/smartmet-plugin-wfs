@@ -12,7 +12,7 @@ namespace
 bw::DummyStoredQueryHandler::DummyStoredQueryHandler(SmartMet::Spine::Reactor* reactor,
 						     StoredQueryConfig::Ptr config,
 						     PluginImpl& plugin_impl,
-						     boost::optional<std::string> template_file_name)
+						     boost::optional<std::string>  /*template_file_name*/)
   : bw::StoredQueryParamRegistry(config)
   , bw::SupportsExtraHandlerParams(config)
   , bw::StoredQueryHandlerBase(reactor, config, plugin_impl, boost::optional<std::string>())
@@ -36,8 +36,8 @@ void bw::DummyStoredQueryHandler::init_handler()
 
 void
 bw::DummyStoredQueryHandler::query(const StoredQuery& query,
-				   const std::string& language,
-				   const boost::optional<std::string>& hostname,
+				   const std::string&  /*language*/,
+				   const boost::optional<std::string>&  /*hostname*/,
 				   std::ostream& output) const
 {
   try
@@ -47,10 +47,10 @@ bw::DummyStoredQueryHandler::query(const StoredQuery& query,
       Json::Value result = Json::objectValue;
 
       std::set<std::string> keys = params.get_keys();
-      for (auto k : keys)
+      for (const auto& k : keys)
 	{
 	  std::vector<SmartMet::Spine::Value> values = params.get_values(k);
-	  if (values.size() > 0) {
+	  if (!values.empty()) {
 	    Json::Value& tmp = result[k];
 	    if (values.size() == 1) {
 	      tmp = values[0].to_string();
@@ -81,7 +81,7 @@ boost::shared_ptr<SmartMet::Plugin::WFS::StoredQueryHandlerBase> dummy_handler_c
 {
   try
   {
-    DummyStoredQueryHandler* qh =
+    auto* qh =
         new DummyStoredQueryHandler(reactor, config, plugin_data, template_file_name);
     boost::shared_ptr<SmartMet::Plugin::WFS::StoredQueryHandlerBase> result(qh);
     return result;

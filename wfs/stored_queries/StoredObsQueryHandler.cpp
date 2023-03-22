@@ -148,11 +148,11 @@ StoredObsQueryHandler::StoredObsQueryHandler(SmartMet::Spine::Reactor* reactor,
   }
 }
 
-StoredObsQueryHandler::~StoredObsQueryHandler() {}
+StoredObsQueryHandler::~StoredObsQueryHandler() = default;
 
 void StoredObsQueryHandler::query(const StoredQuery& query,
                                   const std::string& language,
-                                  const boost::optional<std::string>& hostname,
+                                  const boost::optional<std::string>&  /*hostname*/,
                                   std::ostream& output) const
 {
   std::string curr_lang = language;
@@ -173,14 +173,14 @@ void StoredObsQueryHandler::query(const StoredQuery& query,
     auto params = query.get_param_map();
 
     std::set<std::string> keys = params.get_keys();
-    for (auto k : keys)
+    for (const auto& k : keys)
     {
       if (k == "meteoParameters")
       {
         std::vector<SmartMet::Spine::Value> values = params.get_values(k);
         std::vector<std::string> mparams;
         bool dataSourceFound = false;
-        for (auto v : values)
+        for (const auto& v : values)
         {
           std::string val = v.to_string();
           if (val == "data_source")
@@ -192,10 +192,10 @@ void StoredObsQueryHandler::query(const StoredQuery& query,
             mparams.push_back(val);
           }
         }
-        if (dataSourceFound && mparams.size() > 0)
+        if (dataSourceFound && !mparams.empty())
         {
           params.remove("meteoParameters");
-          for (auto p : mparams)
+          for (const auto& p : mparams)
           {
             std::string fieldname = p + "_data_source";
             params.add("meteoParameters", p);
@@ -244,7 +244,7 @@ void StoredObsQueryHandler::query(const StoredQuery& query,
         throw exception;
       }
 
-      const std::string crs = params.get_single<std::string>(P_CRS);
+      const auto crs = params.get_single<std::string>(P_CRS);
       auto transformation = crs_registry.create_transformation(DATA_CRS_NAME, crs);
       bool show_height = false;
       std::string proj_uri = "UNKNOWN";
@@ -255,7 +255,7 @@ void StoredObsQueryHandler::query(const StoredQuery& query,
 
       curr_lang = params.get_optional<std::string>(P_LANGUAGE, curr_lang);
 
-      uint64_t timestep = params.get_single<uint64_t>(P_TIME_STEP);
+      auto timestep = params.get_single<uint64_t>(P_TIME_STEP);
       // query_params.timestep = (timestep > 0 ? timestep : 1);
       query_params.timestep = (timestep > 0 ? timestep : 0);
 
@@ -310,7 +310,7 @@ void StoredObsQueryHandler::query(const StoredQuery& query,
 		}
 
       params.get<int64_t>(P_GEOIDS, std::back_inserter(stationSettings.geoid_settings.geoids));
-      if (stationSettings.geoid_settings.geoids.size() > 0)
+      if (!stationSettings.geoid_settings.geoids.empty())
       {
         stationSettings.geoid_settings.maxdistance = query_params.maxdistance;
         stationSettings.geoid_settings.numberofstations = query_params.numberofstations;
@@ -394,7 +394,7 @@ void StoredObsQueryHandler::query(const StoredQuery& query,
 
       TS::TimeSeriesVectorPtr obsengine_result(obs_engine->values(query_params));
 
-      const bool emptyResult = (!obsengine_result || obsengine_result->size() == 0);
+      const bool emptyResult = (!obsengine_result || obsengine_result->empty());
 
       CTPP::CDT hash;
 
@@ -425,7 +425,7 @@ void StoredObsQueryHandler::query(const StoredQuery& query,
       // Get the sequence number of query in the request
       int sq_id = query.get_query_id();
 
-      const int num_groups = separate_groups ? site_map.size() : ((site_map.size() != 0) ? 1 : 0);
+      const int num_groups = separate_groups ? site_map.size() : ((!site_map.empty()) ? 1 : 0);
 
       FeatureID feature_id(get_config()->get_query_id(), params.get_map(true), sq_id);
 
@@ -442,9 +442,9 @@ void StoredObsQueryHandler::query(const StoredQuery& query,
 
           const char* place_params[] = {
               P_WMOS, P_LPNNS, P_FMISIDS, P_PLACES, P_LATLONS, P_GEOIDS, P_KEYWORD, P_BOUNDING_BOX};
-          for (unsigned i = 0; i < sizeof(place_params) / sizeof(*place_params); i++)
+          for (auto & place_param : place_params)
           {
-            feature_id.erase_param(place_params[i]);
+            feature_id.erase_param(place_param);
           }
           feature_id.add_param(P_FMISIDS, fmisid);
           group_map[group_id].feature_id = feature_id.get_id();
@@ -960,7 +960,7 @@ boost::shared_ptr<SmartMet::Plugin::WFS::StoredQueryHandlerBase> wfs_obs_handler
 {
   try
   {
-    StoredObsQueryHandler* qh =
+    auto* qh =
         new StoredObsQueryHandler(reactor, config, plugin_data, template_file_name);
     boost::shared_ptr<SmartMet::Plugin::WFS::StoredQueryHandlerBase> result(qh);
     return result;

@@ -40,10 +40,10 @@ bw::GetDataSetByIdHandler::GetDataSetByIdHandler(SmartMet::Spine::Reactor* react
     {
       libconfig::Setting& item = ds_list[i];
       config->assert_is_group(item);
-      const std::string ds_id = config->get_mandatory_config_param<std::string>(item, "data_set");
-      const std::string sq_id =
+      const auto ds_id = config->get_mandatory_config_param<std::string>(item, "data_set");
+      const auto sq_id =
           config->get_mandatory_config_param<std::string>(item, "stored_query");
-      const std::string ns =
+      const auto ns =
           config->get_optional_config_param<std::string>(item, "namespace", "FI");
       if (not data_set_map.insert(std::make_pair(ds_id, sq_id)).second)
       {
@@ -59,13 +59,13 @@ bw::GetDataSetByIdHandler::GetDataSetByIdHandler(SmartMet::Spine::Reactor* react
   }
 }
 
-bw::GetDataSetByIdHandler::~GetDataSetByIdHandler() {}
+bw::GetDataSetByIdHandler::~GetDataSetByIdHandler() = default;
 
 void bw::GetDataSetByIdHandler::init_handler() {}
 
 void bw::GetDataSetByIdHandler::query(const StoredQuery& query,
                                       const std::string& language,
-				      const boost::optional<std::string>& hostname,
+				      const boost::optional<std::string>&  /*hostname*/,
                                       std::ostream& output) const
 {
   try
@@ -90,7 +90,7 @@ bool bw::GetDataSetByIdHandler::redirect(const StoredQuery& query,
 {
   try
   {
-    const std::string data_set_id = query.get_param_map().get_single<std::string>(P_DATA_SET_ID);
+    const auto data_set_id = query.get_param_map().get_single<std::string>(P_DATA_SET_ID);
     auto it2 = data_set_map.find(Fmi::ascii_tolower_copy(data_set_id));
     if (it2 == data_set_map.end())
     {

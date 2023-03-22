@@ -38,7 +38,7 @@ bw::GetFeatureByIdHandler::GetFeatureByIdHandler(SmartMet::Spine::Reactor* react
   }
 }
 
-bw::GetFeatureByIdHandler::~GetFeatureByIdHandler() {}
+bw::GetFeatureByIdHandler::~GetFeatureByIdHandler() = default;
 
 void bw::GetFeatureByIdHandler::query(const StoredQuery& query,
                                       const std::string& language,
@@ -48,7 +48,7 @@ void bw::GetFeatureByIdHandler::query(const StoredQuery& query,
   try
   {
     const auto& params = query.get_param_map();
-    const std::string id = params.get_single<std::string>(P_ID);
+    const auto id = params.get_single<std::string>(P_ID);
     auto query_p = bw::StoredQuery::create_from_feature_id(
         id, get_plugin_impl().get_stored_query_map(), query);
     query_p->execute(output, language, hostname);

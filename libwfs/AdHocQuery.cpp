@@ -30,8 +30,8 @@ static void check_param_max_occurs(int actual_count,
                                    const std::string& location,
                                    const std::string& param_name);
 
-bw::AdHocQuery::AdHocQuery() {}
-bw::AdHocQuery::~AdHocQuery() {}
+bw::AdHocQuery::AdHocQuery() = default;
+bw::AdHocQuery::~AdHocQuery() = default;
 bw::QueryBase::QueryType bw::AdHocQuery::get_type() const
 {
   return QUERY;
@@ -493,7 +493,7 @@ void bw::AdHocQuery::create_query(boost::shared_ptr<const bw::StoredQueryHandler
     query->skipped_params.clear();
     query->handler = handler;
 
-    queries.push_back(query);
+    queries.emplace_back(query);
   }
   catch (...)
   {
@@ -552,7 +552,7 @@ void bw::AdHocQuery::add_projection_clause(const std::vector<std::string>& prope
       projection += ")";
 
       // Loop through the queries and add projection clause to each of them.
-      for (boost::shared_ptr<bw::QueryBase> base_query : queries)
+      for (const boost::shared_ptr<bw::QueryBase>& base_query : queries)
       {
         AdHocQuery* query = &dynamic_cast<AdHocQuery&>(*base_query);
 
@@ -620,7 +620,7 @@ void bw::AdHocQuery::replace_aliases(const std::vector<std::string>& aliases,
       }
 
       // Loop through the queries and replace aliases in each of the filtering expressions.
-      for (boost::shared_ptr<bw::QueryBase> base_query : queries)
+      for (const boost::shared_ptr<bw::QueryBase>& base_query : queries)
       {
         AdHocQuery* query = &dynamic_cast<AdHocQuery&>(*base_query);
 
@@ -656,7 +656,7 @@ void bw::AdHocQuery::process_parms(const std::string& language,
   try
   {
     // Loop through the created queries and process parameters etc.
-    for (boost::shared_ptr<bw::QueryBase> base_query : queries)
+    for (const boost::shared_ptr<bw::QueryBase>& base_query : queries)
     {
       AdHocQuery* query = &dynamic_cast<AdHocQuery&>(*base_query);
 
@@ -971,10 +971,10 @@ void bw::AdHocQuery::read_comparison_operation(const xercesc::DOMElement& elemen
   try
   {
     unsigned char nb_of_value_references = 0;
-    std::string reference = "";
-    std::string limit_value = "";
-    std::string operation = "";
-    std::string new_filter = "";
+    std::string reference;
+    std::string limit_value;
+    std::string operation;
+    std::string new_filter;
     bool is_value_string = false;
     bool is_reference_attribute = false;
     bool is_2nd_reference_attribute = false;
@@ -1159,7 +1159,7 @@ void bw::AdHocQuery::read_query_parameter(const xercesc::DOMElement& element,
     std::string param_name = Fmi::ascii_tolower_copy(local_name);
 
     // Decide parameter names/types from XML element names.
-    std::string xml_type = "";
+    std::string xml_type;
     if (element_name == "fes:bbox")
     {
       xml_type = "xsi:Envelope";
@@ -1205,10 +1205,9 @@ void bw::AdHocQuery::read_query_parameter(const xercesc::DOMElement& element,
         std::ostringstream msg;
         msg << method << ": stored query parameter '" << param_name << "' conflicts with";
 
-        for (auto it = param_desc->conflicts_with.begin(); it != param_desc->conflicts_with.end();
-             ++it)
+        for (const auto & it : param_desc->conflicts_with)
         {
-          msg << sep << "'" << *it << "'";
+          msg << sep << "'" << it << "'";
           sep = ", ";
         }
         Fmi::Exception exception(BCP, msg.str());
@@ -1216,9 +1215,9 @@ void bw::AdHocQuery::read_query_parameter(const xercesc::DOMElement& element,
         throw exception.disableStackTrace();
       }
 
-      for (auto it = param_desc->conflicts_with.begin(); it != param_desc->conflicts_with.end(); ++it)
+      for (const auto & it : param_desc->conflicts_with)
       {
-        forbidden.insert(Fmi::ascii_tolower_copy(*it));
+        forbidden.insert(Fmi::ascii_tolower_copy(it));
       }
 
       check_param_max_occurs(param_name_set.count(param_name) + 1,
@@ -1227,7 +1226,7 @@ void bw::AdHocQuery::read_query_parameter(const xercesc::DOMElement& element,
                              param_name);
 
       // If the xml type is yet undefined, use the type in the parameter description.
-      if (xml_type == "")
+      if (xml_type.empty())
       {
         xml_type = param_desc->xml_type;
       }
@@ -1282,7 +1281,7 @@ void bw::AdHocQuery::copy_params(const AdHocQuery* src_query, AdHocQuery* target
         target_query->filter_expression += " and ";
 
         // Find the start of src_query filter expression which is the "[".
-        std::size_t start_of_src = src_query->filter_expression.find_first_of("[") + 1;
+        std::size_t start_of_src = src_query->filter_expression.find_first_of('[') + 1;
         std::size_t end_of_src = src_query->filter_expression.size();
         if (start_of_src != std::string::npos)
         {

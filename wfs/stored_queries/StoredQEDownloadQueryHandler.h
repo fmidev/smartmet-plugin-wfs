@@ -35,9 +35,9 @@ class StoredQEDownloadQueryHandler : public StoredAtomQueryHandlerBase,
                                      protected virtual RequiresQEngine
 
 {
-  typedef boost::geometry::model::point<float, 2, boost::geometry::cs::cartesian> point_t;
-  typedef boost::geometry::model::box<point_t> box_t;
-  typedef boost::geometry::model::ring<point_t> ring_t;
+  using point_t = boost::geometry::model::point<float, 2, boost::geometry::cs::cartesian>;
+  using box_t = boost::geometry::model::box<point_t>;
+  using ring_t = boost::geometry::model::ring<point_t>;
 
  public:
   StoredQEDownloadQueryHandler(SmartMet::Spine::Reactor* reactor,
@@ -45,13 +45,13 @@ class StoredQEDownloadQueryHandler : public StoredAtomQueryHandlerBase,
                                PluginImpl& plugin_impl,
                                boost::optional<std::string> template_file_name);
 
-  virtual ~StoredQEDownloadQueryHandler();
+  ~StoredQEDownloadQueryHandler() override;
 
  protected:
-  virtual void update_parameters(
+  void update_parameters(
       const RequestParameterMap& request_params,
       int seq_id,
-      std::vector<boost::shared_ptr<RequestParameterMap> >& result) const;
+      std::vector<boost::shared_ptr<RequestParameterMap> >& result) const override;
 
  private:
   boost::shared_ptr<OGRPolygon> get_model_boundary(

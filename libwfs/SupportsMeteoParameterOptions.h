@@ -15,17 +15,17 @@ namespace WFS
 {
 struct MeteoParameterOptionItem
 {
-  size_t precision;  // The precision defines the number of digits to the right of the decimal
+  size_t precision{1};  // The precision defines the number of digits to the right of the decimal
                      // point.
-  double missing_value;
+  double missing_value{32700.0};
   std::string missing_text;
-  unsigned short sensor_first;
-  unsigned short sensor_last;
-  unsigned short sensor_step;
-  MeteoParameterOptionItem() : precision(1), missing_value(32700.0), missing_text("NaN"), sensor_first(1), sensor_last(1), sensor_step(1) {}
+  unsigned short sensor_first{1};
+  unsigned short sensor_last{1};
+  unsigned short sensor_step{1};
+  MeteoParameterOptionItem() :  missing_text("NaN") {}
 };
 
-typedef std::map<std::string, MeteoParameterOptionItem> MeteoParameterOptions;
+using MeteoParameterOptions = std::map<std::string, MeteoParameterOptionItem>;
 
 /**
  *   @brief The class implementing options for meteo parameters.

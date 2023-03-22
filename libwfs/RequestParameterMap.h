@@ -31,7 +31,7 @@ class RequestParameterMap
     }
   };
 
-  typedef std::multimap<std::string, ParamInfo> ParamMapType;
+  using ParamMapType = std::multimap<std::string, ParamInfo>;
 
   ParamMapType params;
 
@@ -130,7 +130,7 @@ void RequestParameterMap::add(const std::string& name,
 {
   try
   {
-    typedef typename std::iterator_traits<IteratorType>::value_type SourceType;
+    using SourceType = typename std::iterator_traits<IteratorType>::value_type;
 
     if (replace)
       remove_key(name);
@@ -152,7 +152,7 @@ void RequestParameterMap::extract_to(
 {
   try
   {
-    typedef typename std::iterator_traits<IteratorType>::value_type SourceType;
+    using SourceType = typename std::iterator_traits<IteratorType>::value_type;
 
     if (replace)
       remove_key(name);

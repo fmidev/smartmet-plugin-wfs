@@ -237,7 +237,7 @@ void CapabilitiesConf::apply(CTPP::CDT& hash, const std::string& language) const
   put(hash, "contactInstructions", contactInstructions, language);
 
   CTPP::CDT& oFmt = hash["supportedFormats"];
-  for (auto item : supportedFormats) {
+  for (const auto& item : supportedFormats) {
     oFmt[oFmt.Size()] = item;
   }
 }

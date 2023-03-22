@@ -11,7 +11,7 @@ bwx::XmlErrorHandler::XmlErrorHandler(bool throw_on_error) : throw_on_error(thro
 {
 }
 
-bwx::XmlErrorHandler::~XmlErrorHandler() {}
+bwx::XmlErrorHandler::~XmlErrorHandler() = default;
 
 void bwx::XmlErrorHandler::warning(const xercesc::SAXParseException& exc)
 {

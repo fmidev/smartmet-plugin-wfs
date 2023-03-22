@@ -87,11 +87,11 @@ bw::StoredEnvMonitoringNetworkQueryHandler::StoredEnvMonitoringNetworkQueryHandl
   }
 }
 
-bw::StoredEnvMonitoringNetworkQueryHandler::~StoredEnvMonitoringNetworkQueryHandler() {}
+bw::StoredEnvMonitoringNetworkQueryHandler::~StoredEnvMonitoringNetworkQueryHandler() = default;
 
 void bw::StoredEnvMonitoringNetworkQueryHandler::query(const StoredQuery& query,
                                                        const std::string& language,
-						       const boost::optional<std::string> &hostname,
+						       const boost::optional<std::string> & /*hostname*/,
                                                        std::ostream& output) const
 {
   try
@@ -107,9 +107,9 @@ void bw::StoredEnvMonitoringNetworkQueryHandler::query(const StoredQuery& query,
     // Removing some feature id parameters
     const char* removeParams[] = {
         P_NETWORK_ID, P_CLASS_ID, P_CLASS_NAME, P_GROUP_ID, P_STATION_ID, P_STATION_NAME};
-    for (unsigned i = 0; i < sizeof(removeParams) / sizeof(*removeParams); i++)
+    for (auto & removeParam : removeParams)
     {
-      featureId.erase_param(removeParams[i]);
+      featureId.erase_param(removeParam);
     }
 
     if (m_debugLevel > 0)
@@ -158,33 +158,25 @@ void bw::StoredEnvMonitoringNetworkQueryHandler::query(const StoredQuery& query,
     emnQueryParams.addOrderBy("GROUP_ID", "ASC");
     emnQueryParams.useDistinct();
 
-    for (std::vector<int64_t>::const_iterator it = networkIdVector.begin();
-         it != networkIdVector.end();
-         ++it)
-      emnQueryParams.addOperation("OR_GROUP_network_id", "NETWORK_ID", "PropertyIsEqualTo", *it);
+    for (long it : networkIdVector)
+      emnQueryParams.addOperation("OR_GROUP_network_id", "NETWORK_ID", "PropertyIsEqualTo", it);
 
     for (auto& classId : classIdVector)
       emnQueryParams.addOperation("OR_GROUP_class_id", "CLASS_ID", "PropertyIsEqualTo", classId);
 
-    for (std::vector<std::string>::const_iterator it = classNameVector.begin();
-         it != classNameVector.end();
-         ++it)
-      emnQueryParams.addOperation("OR_GROUP_class_name", "CLASS_NAME", "PropertyIsLike", *it);
+    for (const auto & it : classNameVector)
+      emnQueryParams.addOperation("OR_GROUP_class_name", "CLASS_NAME", "PropertyIsLike", it);
 
     for (auto& groupId : groupIdVector)
       emnQueryParams.addOperation("OR_GROUP_group_id", "GROUP_ID", "PropertyIsEqualTo", groupId);
 
-    for (std::vector<int64_t>::const_iterator it = stationIdVector.begin();
-         it != stationIdVector.end();
-         ++it)
-      emnQueryParams.addOperation("OR_GROUP_station_id", "STATION_ID", "PropertyIsEqualTo", *it);
+    for (long it : stationIdVector)
+      emnQueryParams.addOperation("OR_GROUP_station_id", "STATION_ID", "PropertyIsEqualTo", it);
 
     if (not stationNameVector.empty())
     {
-      for (std::vector<std::string>::const_iterator it = stationNameVector.begin();
-           it != stationNameVector.end();
-           ++it)
-        emnQueryParams.addOperation("OR_GROUP_station_name", "STATION_NAME", "PropertyIsLike", *it);
+      for (const auto & it : stationNameVector)
+        emnQueryParams.addOperation("OR_GROUP_station_name", "STATION_NAME", "PropertyIsLike", it);
     }
 
     /*
@@ -212,15 +204,15 @@ void bw::StoredEnvMonitoringNetworkQueryHandler::query(const StoredQuery& query,
 
     if (resultContainer)
     {
-      bo::QueryResult::ValueVectorType::const_iterator groupIdIt =
+      auto groupIdIt =
           resultContainer->begin("GROUP_ID");
-      bo::QueryResult::ValueVectorType::const_iterator groupIdItEnd =
+      auto groupIdItEnd =
           resultContainer->end("GROUP_ID");
-      bo::QueryResult::ValueVectorType::const_iterator groupCodeIt =
+      auto groupCodeIt =
           resultContainer->begin("GROUP_CODE");
-      bo::QueryResult::ValueVectorType::const_iterator groupNameIt =
+      auto groupNameIt =
           resultContainer->begin("GROUP_NAME");
-      bo::QueryResult::ValueVectorType::const_iterator groupDescIt =
+      auto groupDescIt =
           resultContainer->begin("GROUP_DESC");
 
       size_t groupNameVectorSize = resultContainer->size("GROUP_NAME");
@@ -334,7 +326,7 @@ wfs_stored_env_monitoring_network_handler_create(SmartMet::Spine::Reactor* react
 {
   try
   {
-    bw::StoredEnvMonitoringNetworkQueryHandler* qh = new bw::StoredEnvMonitoringNetworkQueryHandler(
+    auto* qh = new bw::StoredEnvMonitoringNetworkQueryHandler(
         reactor, config, plugin_data, template_file_name);
     boost::shared_ptr<SmartMet::Plugin::WFS::StoredQueryHandlerBase> instance(qh);
     return instance;

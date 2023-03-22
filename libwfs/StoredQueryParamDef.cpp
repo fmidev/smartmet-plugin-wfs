@@ -20,7 +20,8 @@ namespace ba = boost::algorithm;
 namespace bl = boost::lambda;
 namespace pt = boost::posix_time;
 
-typedef qi::rule<std::string::const_iterator, std::string(), ns::space_type> qi_rule;
+using qi_rule = qi::rule<std::string::const_iterator, std::string
+        (), ns::space_type>;
 
 namespace SmartMet
 {
@@ -29,9 +30,8 @@ namespace Plugin
 namespace WFS
 {
 StoredQueryParamDef::StoredQueryParamDef()
-    : value_type(UNDEFINED), is_array(false), min_size(1), max_size(1)
-{
-}
+     
+= default;
 
 void StoredQueryParamDef::parse_def(const std::string& desc)
 {
@@ -97,7 +97,7 @@ void StoredQueryParamDef::parse_def(const std::string& desc)
   }
 }
 
-StoredQueryParamDef::~StoredQueryParamDef() {}
+StoredQueryParamDef::~StoredQueryParamDef() = default;
 
 SmartMet::Spine::Value StoredQueryParamDef::readValue(const std::string& value) const
 {

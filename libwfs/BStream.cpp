@@ -37,7 +37,7 @@ enum DataTypeInd
 };
 }  // namespace
 
-OBStream::OBStream() : reserved(BLOCK_SIZE), data(new uint8_t[BLOCK_SIZE]), ind(0U), num_bits(0)
+OBStream::OBStream() : reserved(BLOCK_SIZE), data(new uint8_t[BLOCK_SIZE]) 
 {
   try
   {
@@ -49,7 +49,7 @@ OBStream::OBStream() : reserved(BLOCK_SIZE), data(new uint8_t[BLOCK_SIZE]), ind(
   }
 }
 
-OBStream::~OBStream() {}
+OBStream::~OBStream() = default;
 
 std::string OBStream::raw_data() const
 {
@@ -129,7 +129,7 @@ void OBStream::put_int(int64_t value)
 {
   try
   {
-    put_bit(value < 0 ? 1 : 0);
+    put_bit(value < 0 ? true : false);
     put_unsigned(static_cast<uint64_t>(value >= 0 ? value : -value));
   }
   catch (...)
@@ -145,12 +145,12 @@ void OBStream::put_unsigned(uint64_t value)
     while (value)
     {
       unsigned part = value & 0x1F;
-      put_bit(value ? 1 : 0);
+      put_bit(value ? true : false);
       put_bits(part, 5);
       value >>= 5;
     }
 
-    put_bit(0);
+    put_bit(false);
   }
   catch (...)
   {
@@ -189,7 +189,7 @@ void OBStream::put_char(char c)
 {
   try
   {
-    uint8_t u = static_cast<uint8_t>(c);
+    auto u = static_cast<uint8_t>(c);
     if (u > 126)
     {
       put_bits(127U, 7);
@@ -229,22 +229,22 @@ void OBStream::put_ptime(const boost::posix_time::ptime& tm)
     const auto d = tm.date();
     const long sec = tm.time_of_day().total_seconds();
     if (tm.is_special()) {
-      put_bit(0);
+      put_bit(false);
       if (tm.is_not_a_date_time()) {
-	put_bit(0);
+	put_bit(false);
       } else {
-	put_bit(1);
+	put_bit(true);
 	if (tm.is_neg_infinity()) {
-	  put_bit(0);
+	  put_bit(false);
 	} else if (tm.is_pos_infinity()) {
-	  put_bit(1);
+	  put_bit(true);
 	} else {
 	  throw Fmi::Exception::Trace(BCP, "Not supported special time value '"
 						  + pt::to_simple_string(tm));
 	}
       }
     } else {
-      put_bit(1);  // For support of non-time values in the future
+      put_bit(true);  // For support of non-time values in the future
       put_int(d.year());
       put_unsigned(d.month());
       put_unsigned(d.day());
@@ -345,17 +345,17 @@ void OBStream::put_value_map(const std::multimap<std::string, SmartMet::Spine::V
 
     for (const auto& key : keys)
     {
-      put_bit(1);
+      put_bit(true);
       put_string(key);
       auto range = arg.equal_range(key);
       for (auto it = range.first; it != range.second; ++it)
       {
-        put_bit(1);
+        put_bit(true);
         put_value(it->second);
       }
-      put_bit(0);
+      put_bit(false);
     }
-    put_bit(0);
+    put_bit(false);
   }
   catch (...)
   {
@@ -364,7 +364,7 @@ void OBStream::put_value_map(const std::multimap<std::string, SmartMet::Spine::V
 }
 
 IBStream::IBStream(const uint8_t* data, std::size_t length)
-    : length(length), pos(0), data(new uint8_t[length > 0 ? length : 1]), bit_pos(0)
+    : length(length),  data(new uint8_t[length > 0 ? length : 1]) 
 {
   try
   {
@@ -376,7 +376,7 @@ IBStream::IBStream(const uint8_t* data, std::size_t length)
   }
 }
 
-IBStream::~IBStream() {}
+IBStream::~IBStream() = default;
 
 unsigned IBStream::get_bit()
 {
@@ -453,7 +453,7 @@ int64_t IBStream::get_int()
   try
   {
     unsigned s = get_bit();
-    int64_t tmp = static_cast<int64_t>(get_unsigned());
+    auto tmp = static_cast<int64_t>(get_unsigned());
     return s ? -tmp : tmp;
   }
   catch (...)

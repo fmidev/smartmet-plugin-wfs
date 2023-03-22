@@ -43,7 +43,7 @@ std::vector<bw::ContourQueryResultPtr> bw::StoredWWCoverageQueryHandler::process
 
     std::vector<SmartMet::Engine::Contour::Range>& query_limits =
         (reinterpret_cast<CoverageQueryParameter&>(queryParameter)).limits;
-    if (query_limits.size() > 0)
+    if (!query_limits.empty())
     {
       for (auto l : query_limits)
       {
@@ -66,7 +66,7 @@ std::vector<bw::ContourQueryResultPtr> bw::StoredWWCoverageQueryHandler::process
         std::size_t limitsIndex(i * 2);
         double lolimit = limits[limitsIndex];
         double hilimit = limits[limitsIndex + 1];
-        query_limits.push_back(SmartMet::Engine::Contour::Range(lolimit, hilimit));
+        query_limits.emplace_back(lolimit, hilimit);
       }
     }
 
@@ -84,13 +84,13 @@ std::vector<bw::ContourQueryResultPtr> bw::StoredWWCoverageQueryHandler::process
 
     // order result set primarily by isoline value and secondarily by timestep
     unsigned int max_geoms_per_timestep = 0;
-    for (auto result_item : result_set)
+    for (const auto& result_item : result_set)
       if (max_geoms_per_timestep < result_item->area_geoms.size())
         max_geoms_per_timestep = result_item->area_geoms.size();
 
     for (std::size_t i = 0; i < max_geoms_per_timestep; i++)
     {
-      for (auto result_item : result_set)
+      for (const auto& result_item : result_set)
         if (i < result_item->area_geoms.size())
         {
           CoverageQueryResultPtr result(new CoverageQueryResult);
@@ -100,7 +100,7 @@ std::vector<bw::ContourQueryResultPtr> bw::StoredWWCoverageQueryHandler::process
           result->hilimit = limits[limitsIndex + 1];
           result->name = itsLimitNames[i];
           result->area_geoms.push_back(wag);
-          query_results.push_back(result);
+          query_results.emplace_back(result);
         }
     }
 
@@ -117,7 +117,7 @@ void bw::StoredWWCoverageQueryHandler::setResultHashValue(
 {
   try
   {
-    const CoverageQueryResult& coverageResultItem =
+    const auto& coverageResultItem =
         reinterpret_cast<const CoverageQueryResult&>(resultItem);
 
     resultHash["winter_weather_type"] = coverageResultItem.name;
@@ -142,7 +142,7 @@ wfs_winterweather_coverage_query_handler_create(SmartMet::Spine::Reactor* reacto
 {
   try
   {
-    StoredWWCoverageQueryHandler* qh =
+    auto* qh =
         new StoredWWCoverageQueryHandler(reactor, config, plugin_data, template_file_name);
     boost::shared_ptr<SmartMet::Plugin::WFS::StoredQueryHandlerBase> result(qh);
     return result;

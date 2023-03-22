@@ -166,7 +166,7 @@ StoredQEDownloadQueryHandler::StoredQEDownloadQueryHandler(
   }
 }
 
-StoredQEDownloadQueryHandler::~StoredQEDownloadQueryHandler() {}
+StoredQEDownloadQueryHandler::~StoredQEDownloadQueryHandler() = default;
 
 namespace
 {
@@ -180,7 +180,7 @@ void handle_opt_param(const bw::RequestParameterMap& params,
   {
     if (params.count(name))
     {
-      ValueType value = params.get_single<ValueType>(name);
+      auto value = params.get_single<ValueType>(name);
       (dest.*setter)(value);
     }
   }
@@ -247,7 +247,7 @@ void dump_meta_query_options(const qe::MetaQueryOptions& opt)
 
     if (opt.hasLevelTypes())
     {
-      std::string sep = "";
+      std::string sep;
       const auto level_types = opt.getLevelTypes();
       std::cout << " levelTypes=[";
       for (const auto& item : level_types)
@@ -260,7 +260,7 @@ void dump_meta_query_options(const qe::MetaQueryOptions& opt)
 
     if (opt.hasLevelValues())
     {
-      std::string sep = "";
+      std::string sep;
       const auto level_values = opt.getLevelValues();
       std::cout << " levelValues=[";
       for (const auto& item : level_values)
@@ -355,10 +355,8 @@ void StoredQEDownloadQueryHandler::update_parameters(
     bw::FeatureID feature_id(get_config()->get_query_id(), params.get_map(true), seq_id);
 
     const auto md_list = q_engine->getEngineMetadata(opt);
-    for (auto md_iter = md_list.begin(); md_iter != md_list.end(); ++md_iter)
+    for (const auto & meta_info : md_list)
     {
-      const auto& meta_info = *md_iter;
-
       if (not producers.empty() and producers.count(meta_info.producer) == 0)
       {
         if (debug_level > 1)
@@ -546,10 +544,10 @@ void StoredQEDownloadQueryHandler::update_parameters(
 
       // Parameters specified in request
       int num_empty_param_names = 0;
-      for (auto it = meta_info.parameters.begin(); it != meta_info.parameters.end(); ++it)
+      for (const auto & parameter : meta_info.parameters)
       {
-        const std::string& name = it->name;
-        if (ba::trim_copy(name) == "")
+        const std::string& name = parameter.name;
+        if (ba::trim_copy(name).empty())
         {
           num_empty_param_names++;
         }
@@ -576,17 +574,17 @@ void StoredQEDownloadQueryHandler::update_parameters(
         std::cout << msg.str() << std::flush;
       }
 
-      for (auto it = meta_info.levels.begin(); it != meta_info.levels.end(); ++it)
+      for (const auto & level : meta_info.levels)
       {
-        if ((req_level_types.empty() or req_level_types.count(it->type)) and
-            (req_level_values.empty() or (req_level_values.count(it->value))))
+        if ((req_level_types.empty() or req_level_types.count(level.type)) and
+            (req_level_values.empty() or (req_level_values.count(level.value))))
         {
-          pm->add("level", it->value);
+          pm->add("level", level.value);
         }
       }
 
       // Test requested format support.
-      std::string req_format = params.get_optional<std::string>(P_FORMAT, default_format);
+      auto req_format = params.get_optional<std::string>(P_FORMAT, default_format);
       if (req_format.empty())
         req_format = default_format;
       Fmi::ascii_tolower(req_format);
@@ -616,7 +614,7 @@ void StoredQEDownloadQueryHandler::update_parameters(
         pm->add("units", req_format);
 
       int epsg = -1;
-      const std::string crs = params.get_single<std::string>(P_PROJECTION);
+      const auto crs = params.get_single<std::string>(P_PROJECTION);
       if (not crs_registry.get_attribute(crs, "epsg", &epsg))
       {
         Fmi::Exception exception(BCP, "Failed to get EPSG code for CRS '" + crs + "'!");
@@ -767,7 +765,7 @@ void StoredQEDownloadQueryHandler::add_boundary(RequestParameterMap* param_map,
     const auto geom_type = geom.getGeometryType();
     if (geom_type == wkbPolygon)
     {
-      OGRPolygon& polygon = dynamic_cast<OGRPolygon&>(geom);
+      auto& polygon = dynamic_cast<OGRPolygon&>(geom);
       OGRLinearRing* exterior = polygon.getExteriorRing();
       const int numPoints = exterior->getNumPoints();
       for (int i = 0; i < numPoints; i++)

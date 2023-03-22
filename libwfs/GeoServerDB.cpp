@@ -3,7 +3,7 @@
 
 namespace bw = SmartMet::Plugin::WFS;
 
-bw::GeoServerDB::GeoServerDB(const std::string& conn_str, std::size_t keep_conn)
+bw::GeoServerDB::GeoServerDB(const std::string& conn_str, std::size_t  /*keep_conn*/)
     : conn_opt(conn_str)
     , conn_pool( [this]() -> ConnectionPtr { return create_new_conn(); },
 		 10, 50, 5)
@@ -19,7 +19,7 @@ bw::GeoServerDB::GeoServerDB(const std::string& conn_str, std::size_t keep_conn)
   }
 }
 
-bw::GeoServerDB::~GeoServerDB() {}
+bw::GeoServerDB::~GeoServerDB() = default;
 
 bw::GeoServerDB::ConnectionPtr bw::GeoServerDB::get_conn()
 {

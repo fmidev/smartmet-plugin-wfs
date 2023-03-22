@@ -204,7 +204,7 @@ void SmartMet::Plugin::WFS::StoredQueryConfig::parse_config()
           item.min_occurs = get_optional_config_param<int>(c_item, "minOccurs", 0);
           item.max_occurs = get_optional_config_param<int>(c_item, "maxOccurs", 1);
 
-          std::string type_def = get_mandatory_config_param<std::string>(c_item, "type");
+          auto type_def = get_mandatory_config_param<std::string>(c_item, "type");
           item.param_def.parse_def(type_def);
 
           if (c_item.exists("lowerLimit"))
@@ -321,7 +321,7 @@ void SmartMet::Plugin::WFS::StoredQueryConfig::parse_config()
       try {
 	handle_libconfig_exceptions(METHOD_NAME);
       } catch (Fmi::Exception& e) {
-	Fmi::Exception *e1 = dynamic_cast<Fmi::Exception*>(&e);
+	auto *e1 = dynamic_cast<Fmi::Exception*>(&e);
 	if (e1) {
 	  std::cout << e1->disableStackTraceRecursive() << std::endl;
 	}

@@ -35,7 +35,7 @@ bw::Request::GetFeature::GetFeature(const std::string& language,
 {
 }
 
-bw::Request::GetFeature::~GetFeature() {}
+bw::Request::GetFeature::~GetFeature() = default;
 bw::RequestBase::RequestType bw::Request::GetFeature::get_type() const
 {
   return GET_FEATURE;
@@ -68,9 +68,8 @@ bool bw::Request::GetFeature::get_cached_responses()
   try
   {
     bool found = true;
-    for (auto it = queries.begin(); it != queries.end(); ++it)
+    for (const auto& query : queries)
     {
-      auto query = *it;
       boost::optional<std::string> cached_response = query_cache.find(query->get_cache_key());
       if (cached_response)
       {
@@ -97,9 +96,8 @@ int bw::Request::GetFeature::get_response_expires_seconds() const
     int smallest_value = -1;
 
     // When multiple queries present, select the smallest stale value.
-    for (auto it = queries.begin(); it != queries.end(); ++it)
+    for (const auto& query : queries)
     {
-      auto query = *it;
       int seconds = query->get_stale_seconds();
       if (smallest_value < 0)
         smallest_value = seconds;
@@ -152,7 +150,7 @@ void bw::Request::GetFeature::execute_single_query(std::ostream& ost) const
       bwx::XPathSnapshot xps;
       xps.parse_dom_document(response, "wfs:GetFeature:TMP");
       std::string prefix = xps.lookup_prefix(WFS_NAMESPACE_URI);
-      if (prefix != "")
+      if (!prefix.empty())
         prefix += ":";
 
       // We do not need the old response any more as it is going to be replaced.
@@ -362,7 +360,7 @@ void bw::Request::GetFeature::execute_multiple_queries(std::ostream& ost) const
       }
     }
 
-    if (not some_succeeded and queries.size() > 0)
+    if (not some_succeeded and !queries.empty())
     {
       // There is some queries and they all failed. Return HTTP error in that case
       set_http_status(SmartMet::Spine::HTTP::bad_request);
@@ -415,7 +413,7 @@ boost::shared_ptr<xercesc::DOMDocument> bw::Request::GetFeature::create_hits_onl
     bwx::XPathSnapshot xps;
     xps.parse_dom_document(src, "wfs:GetFeature:TMP");
     std::string prefix = xps.lookup_prefix(WFS_NAMESPACE_URI);
-    if (prefix != "")
+    if (!prefix.empty())
       prefix += ":";
 
     const auto* root = xps.get_document()->getDocumentElement();
@@ -466,7 +464,7 @@ bool bw::Request::GetFeature::collect_query_responses(std::vector<std::string>& 
   {
     bool some_succeeded = false;
 
-    for (auto query_ptr : queries)
+    for (const auto& query_ptr : queries)
     {
       boost::optional<std::string> cached_response = query_ptr->get_cached_response();
       if (cached_response)
@@ -496,7 +494,7 @@ bool bw::Request::GetFeature::collect_query_responses(std::vector<std::string>& 
         {
           if (handle_errors)
           {
-            StoredQuery* p_sq = dynamic_cast<StoredQuery*>(query_ptr.get());
+            auto* p_sq = dynamic_cast<StoredQuery*>(query_ptr.get());
 
             if (p_sq)
             {
@@ -596,7 +594,7 @@ boost::shared_ptr<bw::Request::GetFeature> bw::Request::GetFeature::create_from_
     {
       boost::shared_ptr<bw::StoredQuery> query =
           bw::StoredQuery::create_from_kvp(language, result->spp, http_request, stored_query_map);
-      result->queries.push_back(query);
+      result->queries.emplace_back(query);
     }
     else
     {
@@ -663,7 +661,7 @@ boost::shared_ptr<bw::Request::GetFeature> bw::Request::GetFeature::create_from_
       {
         boost::shared_ptr<bw::StoredQuery> query =
             bw::StoredQuery::create_from_xml(language, result->spp, *child, stored_query_map);
-        result->queries.push_back(query);
+        result->queries.emplace_back(query);
       }
       else
       {

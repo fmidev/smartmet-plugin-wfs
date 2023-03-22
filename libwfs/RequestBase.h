@@ -77,7 +77,7 @@ class RequestBase
   template <typename RequestTypeName>
   RequestTypeName* cast()
   {
-    RequestTypeName& result = dynamic_cast<RequestTypeName&>(*this);
+    auto& result = dynamic_cast<RequestTypeName&>(*this);
     return &result;
   }
 
@@ -166,17 +166,17 @@ class RequestBase
   /**
    *   Specifies whether the request is generated from SOAP request
    */
-  bool soap_request;
+  bool soap_request{false};
 
   boost::optional<std::string> fmi_apikey;
   boost::optional<std::string> fmi_apikey_prefix;
   boost::optional<std::string> hostname;
   boost::optional<std::string> protocol;
 
-  mutable SmartMet::Spine::HTTP::Status status;
+  mutable SmartMet::Spine::HTTP::Status status{SmartMet::Spine::HTTP::not_a_status};
 };
 
-typedef boost::shared_ptr<RequestBase> RequestBaseP;
+using RequestBaseP = boost::shared_ptr<RequestBase>;
 
 }  // namespace WFS
 }  // namespace Plugin

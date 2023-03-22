@@ -28,7 +28,7 @@ FeatureID::FeatureID(std::string stored_query_id,
 {
 }
 
-FeatureID::~FeatureID() {}
+FeatureID::~FeatureID() = default;
 
 boost::shared_ptr<FeatureID> FeatureID::create_from_id(const std::string& id)
 {

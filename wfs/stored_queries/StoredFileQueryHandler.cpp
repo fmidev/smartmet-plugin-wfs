@@ -68,7 +68,7 @@ bw::StoredFileQueryHandler::StoredFileQueryHandler(SmartMet::Spine::Reactor* rea
   }
 }
 
-bw::StoredFileQueryHandler::~StoredFileQueryHandler() {}
+bw::StoredFileQueryHandler::~StoredFileQueryHandler() = default;
 
 namespace
 {
@@ -99,31 +99,31 @@ void bw::StoredFileQueryHandler::update_parameters(
 {
   try
   {
-    typedef DataSetDefinition::point_t point_t;
-    typedef DataSetDefinition::box_t box_t;
+    using point_t = DataSetDefinition::point_t;
+    using box_t = DataSetDefinition::box_t;
 
     std::set<int> level_set, common_levels;
     std::set<std::string> param_set, common_params;
     std::vector<double> bbox;
 
-    const std::string name = params.get_optional<std::string>(P_NAME, std::string(""));
+    const auto name = params.get_optional<std::string>(P_NAME, std::string(""));
     params.get<int64_t>(P_LEVEL, std::inserter(level_set, level_set.begin()));
     params.get<std::string>(P_PARAM, std::inserter(param_set, param_set.begin()));
     params.get<double>(P_BBOX, std::back_inserter(bbox));
-    const pt::ptime begin = params.get_single<pt::ptime>(P_BEGIN);
-    const pt::ptime end = params.get_single<pt::ptime>(P_END);
-    const std::string file = params.get_optional<std::string>("file", "");
+    const auto begin = params.get_single<pt::ptime>(P_BEGIN);
+    const auto end = params.get_single<pt::ptime>(P_END);
+    const auto file = params.get_optional<std::string>("file", "");
 
     result.clear();
 
     bw::FeatureID feature_id(get_config()->get_query_id(), params.get_map(true), seq_id);
 
-    for (auto it1 = ds_list.begin(); it1 != ds_list.end(); ++it1)
+    for (const auto & it1 : ds_list)
     {
-      const auto& ds_def = **it1;
+      const auto& ds_def = *it1;
 
       // Skip if name provided in query and is not the expected one
-      if ((name != "") and (name != ds_def.get_name()))
+      if ((!name.empty()) and (name != ds_def.get_name()))
         continue;
 
       // Skip if no common levels found
@@ -170,23 +170,23 @@ void bw::StoredFileQueryHandler::update_parameters(
       // FIXME: check also BBOX
 
       const std::vector<boost::filesystem::path> files = ds_def.query_files(begin, end);
-      for (auto it2 = files.begin(); it2 != files.end(); ++it2)
+      for (const auto & it2 : files)
       {
-        if ((file == "") or (file == it2->string()))
+        if ((file.empty()) or (file == it2.string()))
         {
-          pt::ptime origin_time = ds_def.extract_origintime(*it2);
+          pt::ptime origin_time = ds_def.extract_origintime(it2);
           boost::shared_ptr<RequestParameterMap> pm1(
 	      new RequestParameterMap(true));
           pm1->add("name", ds_def.get_name());
-          pm1->add("basename", it2->filename().string());
+          pm1->add("basename", it2.filename().string());
           pm1->add("levels", common_levels.begin(), common_levels.end());
           pm1->add("params", common_params.begin(), common_params.end());
-          pm1->add("file", it2->string());
+          pm1->add("file", it2.string());
           pm1->add("originTime", Fmi::to_iso_extended_string(origin_time));
           pm1->add("serverDir", ds_def.get_server_dir());
 
           feature_id.erase_param("file");
-          feature_id.add_param("file", it2->string());
+          feature_id.add_param("file", it2.string());
           pm1->add("featureId", feature_id.get_id());
 
           result.push_back(pm1);
@@ -212,7 +212,7 @@ boost::shared_ptr<SmartMet::Plugin::WFS::StoredQueryHandlerBase> wfs_stored_file
 {
   try
   {
-    bw::StoredFileQueryHandler* qh =
+    auto* qh =
         new StoredFileQueryHandler(reactor, config, plugin_data, template_file_name);
     boost::shared_ptr<SmartMet::Plugin::WFS::StoredQueryHandlerBase> result(qh);
     return result;

@@ -26,15 +26,13 @@ std::vector<std::string> SUPPORTED_FORMATS = {
     bw::StandardPresentationParameters::DEFAULT_OUTPUT_FORMAT};
 
 bw::StandardPresentationParameters::StandardPresentationParameters()
-    : have_counts(false),
-      start_index(1),
-      count(0x00FFFFFFU),
-      output_format(DEFAULT_OUTPUT_FORMAT),
-      result_type(SPP_RESULTS)
+    : 
+      output_format(DEFAULT_OUTPUT_FORMAT)
+      
 {
 }
 
-bw::StandardPresentationParameters::~StandardPresentationParameters() {}
+bw::StandardPresentationParameters::~StandardPresentationParameters() = default;
 
 void bw::StandardPresentationParameters::read_from_kvp(
     const SmartMet::Spine::HTTP::Request& request)

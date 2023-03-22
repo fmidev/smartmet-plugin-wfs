@@ -77,12 +77,12 @@ class StoredSoundingQueryHandler : public StoredQueryHandlerBase,
                              PluginImpl& pluginData,
                              boost::optional<std::string> templateFileName);
 
-  virtual ~StoredSoundingQueryHandler();
+  ~StoredSoundingQueryHandler() override;
 
-  virtual void query(const StoredQuery& query,
+  void query(const StoredQuery& query,
                      const std::string& language,
                      const boost::optional<std::string>& hostname,
-                     std::ostream& output) const;
+                     std::ostream& output) const override;
 
  private:
   virtual void update_parameters(

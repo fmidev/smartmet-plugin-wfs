@@ -73,7 +73,7 @@ FmiParameterName get_parameter(boost::shared_ptr<SmartMet::Plugin::WFS::StoredQu
 {
   try
   {
-    uint64_t cpid = config->get_mandatory_config_param<uint64_t>(param_name);
+    auto cpid = config->get_mandatory_config_param<uint64_t>(param_name);
     return static_cast<FmiParameterName>(cpid);
   }
   catch (...)
@@ -93,7 +93,7 @@ SmartMet::Engine::Querydata::ParameterOptions get_qengine_parameter(
 
     NFmiPoint nearestpoint(kFloatMissing, kFloatMissing);
     bool nearestFlag(false);
-    std::string emptystring("");
+    std::string emptystring;
 
     SmartMet::Engine::Querydata::ParameterOptions qengine_param(smartmetParam,
                                                                 queryParam.producer,
@@ -218,14 +218,14 @@ StoredWWProbabilityQueryHandler::StoredWWProbabilityQueryHandler(
   }
 }
 
-StoredWWProbabilityQueryHandler::~StoredWWProbabilityQueryHandler() {}
+StoredWWProbabilityQueryHandler::~StoredWWProbabilityQueryHandler() = default;
 
 void StoredWWProbabilityQueryHandler::parseQueryResults(
     const ProbabilityQueryResultSet& query_results,
     const SmartMet::Spine::BoundingBox& bbox,
     const AirportLocationList& airp_llist,
     const std::string& language,
-    SmartMet::Spine::CRSRegistry& crsRegistry,
+    SmartMet::Spine::CRSRegistry&  /*crsRegistry*/,
     const std::string& requestedCRS,
     const boost::posix_time::ptime& origintime,
     const boost::posix_time::ptime& modificationtime,
@@ -417,7 +417,7 @@ WinterWeatherIntensityProbabilities StoredWWProbabilityQueryHandler::getProbabil
 
 void StoredWWProbabilityQueryHandler::query(const StoredQuery& query,
                                             const std::string& language,
-					    const boost::optional<std::string>& hostname,
+					    const boost::optional<std::string>&  /*hostname*/,
                                             std::ostream& output) const
 {
   try
@@ -427,7 +427,7 @@ void StoredWWProbabilityQueryHandler::query(const StoredQuery& query,
 
     const auto& sq_params = query.get_param_map();
 
-    std::string requestedCRS = sq_params.get_single<std::string>(P_CRS);
+    auto requestedCRS = sq_params.get_single<std::string>(P_CRS);
 
     std::string targetURN("urn:ogc:def:crs:" + requestedCRS);
     OGRSpatialReference sr;
@@ -439,11 +439,11 @@ void StoredWWProbabilityQueryHandler::query(const StoredQuery& query,
       throw exception;
     }
 
-    std::string localeName(sq_params.get_single<std::string>(P_LOCALE));
+    auto localeName(sq_params.get_single<std::string>(P_LOCALE));
     std::locale outputLocale(localeName.c_str());
     std::string tz_name(get_tz_name(sq_params));
 
-    typedef std::pair<std::string, SmartMet::Spine::LocationPtr> LocationListItem;
+    using LocationListItem = std::pair<std::string, SmartMet::Spine::LocationPtr>;
     std::list<LocationListItem> llist;
 
     get_location_options(sq_params, language, &llist);
@@ -481,19 +481,19 @@ void StoredWWProbabilityQueryHandler::query(const StoredQuery& query,
     std::set<std::string> icaoCodeSet(icaoCodeVector.begin(), icaoCodeVector.end());
 
     AirportLocationList airp_llist;
-    for (LocationListItem item : llist)
+    for (const LocationListItem& item : llist)
     {
       // if location not inside bounding box, ignore it
       OGRPoint point(item.second->longitude, item.second->latitude);
       if (!point.Within(geom.get()))
         continue;
 
-      for (LocationListItem icao_item : llist_icao)
+      for (const LocationListItem& icao_item : llist_icao)
       {
         if (item.second->geoid == icao_item.second->geoid)
         {
           // if icao code not amongst requested, ignore location
-          if (icaoCodeSet.size() > 0 &&
+          if (!icaoCodeSet.empty() &&
               icaoCodeSet.find(icao_item.second->name) == icaoCodeSet.end())
             break;
 
@@ -503,8 +503,8 @@ void StoredWWProbabilityQueryHandler::query(const StoredQuery& query,
       }
     }
 
-    SmartMet::Engine::Querydata::Producer producer = sq_params.get_single<std::string>(P_PRODUCER);
-    std::string missingText = sq_params.get_single<std::string>(P_MISSING_TEXT);
+    auto producer = sq_params.get_single<std::string>(P_PRODUCER);
+    auto missingText = sq_params.get_single<std::string>(P_MISSING_TEXT);
     boost::optional<boost::posix_time::ptime> requested_origintime =
         sq_params.get_optional<boost::posix_time::ptime>(P_ORIGIN_TIME);
 
@@ -527,7 +527,7 @@ void StoredWWProbabilityQueryHandler::query(const StoredQuery& query,
 
     ProbabilityQueryResultSet query_results;
     // iterate locations
-    for (AirportLocation airp_loc : airp_llist)
+    for (const AirportLocation& airp_loc : airp_llist)
     {
       WinterWeatherTypeProbabilities wwprobs;
 
@@ -599,7 +599,7 @@ wfs_winterweather_probabilities_query_handler_create(SmartMet::Spine::Reactor* r
 {
   try
   {
-    StoredWWProbabilityQueryHandler* qh =
+    auto* qh =
         new StoredWWProbabilityQueryHandler(reactor, config, pluginData, templateFileName);
     boost::shared_ptr<SmartMet::Plugin::WFS::StoredQueryHandlerBase> result(qh);
     return result;

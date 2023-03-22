@@ -40,10 +40,10 @@ class StoredQueryParamDef
   };
 
  private:
-  ValueType value_type;
-  bool is_array;
-  unsigned min_size;
-  unsigned max_size;
+  ValueType value_type{UNDEFINED};
+  bool is_array{false};
+  unsigned min_size{1};
+  unsigned max_size{1};
 
  public:
   StoredQueryParamDef();

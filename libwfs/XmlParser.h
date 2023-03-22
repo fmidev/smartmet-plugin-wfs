@@ -26,7 +26,7 @@ class EntityResolver;
  */
 class Parser : public xercesc::XercesDOMParser
 {
-  typedef xercesc::XercesDOMParser inherited;
+  using inherited = xercesc::XercesDOMParser;
 
  public:
   struct RootElemInfo
@@ -37,7 +37,7 @@ class Parser : public xercesc::XercesDOMParser
     std::map<std::string, std::string> attr_map;
   };
 
-  typedef boost::function1<void, RootElemInfo> root_element_cb_t;
+  using root_element_cb_t = boost::function1<void, RootElemInfo>;
 
  public:
   /**
@@ -50,7 +50,7 @@ class Parser : public xercesc::XercesDOMParser
    */
   Parser(bool stop_on_error = true, xercesc::XMLGrammarPool* grammar_pool = nullptr);
 
-  virtual ~Parser();
+  ~Parser() override;
 
   /**
    *   @brief Parse XML document from provided file
@@ -72,13 +72,13 @@ class Parser : public xercesc::XercesDOMParser
   std::list<std::string> get_messages() const;
 
  protected:
-  virtual void startElement(const xercesc::XMLElementDecl& elemDecl,
+  void startElement(const xercesc::XMLElementDecl& elemDecl,
                             const unsigned int uriId,
                             const XMLCh* const prefixName,
                             const xercesc::RefVectorOf<xercesc::XMLAttr>& attrList,
                             const XMLSize_t attrCount,
                             const bool isEmpty,
-                            const bool isRoot);
+                            const bool isRoot) override;
 
  private:
   std::unique_ptr<XmlErrorHandler> error_handler;

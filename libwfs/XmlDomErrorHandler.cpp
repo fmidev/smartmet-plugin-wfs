@@ -9,9 +9,9 @@
 
 using SmartMet::Plugin::WFS::Xml::XmlDomErrorHandler;
 
-XmlDomErrorHandler::XmlDomErrorHandler() {}
+XmlDomErrorHandler::XmlDomErrorHandler() = default;
 
-XmlDomErrorHandler::~XmlDomErrorHandler() {}
+XmlDomErrorHandler::~XmlDomErrorHandler() = default;
 
 bool XmlDomErrorHandler::handleError(const xercesc::DOMError &dom_error)
 {

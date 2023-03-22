@@ -19,7 +19,7 @@ ErrorResponseGenerator::ErrorResponseGenerator(const SmartMet::Plugin::WFS::Plug
 {
 }
 
-ErrorResponseGenerator::~ErrorResponseGenerator() {}
+ErrorResponseGenerator::~ErrorResponseGenerator() = default;
 
 ErrorResponseGenerator::ErrorResponse ErrorResponseGenerator::create_error_response(
     processing_phase_t phase,
@@ -226,7 +226,7 @@ void ErrorResponseGenerator::add_http_request_info(CTPP::CDT& hash,
             str(format("Content-Type: %1%") % *content_type));
       }
 
-      if (content != "")
+      if (!content.empty())
       {
         hash["exceptionList"][0]["textList"].PushBack(
             str(format("Content: %1%)") % request.getContent()));
@@ -259,7 +259,7 @@ void ErrorResponseGenerator::add_stored_query_info(CTPP::CDT& hash, const Stored
 
     if (query.get_type() == QueryBase::QUERY)
     {
-      const AdHocQuery* adhoc_query = dynamic_cast<const AdHocQuery*>(&query);
+      const auto* adhoc_query = dynamic_cast<const AdHocQuery*>(&query);
 
       if (adhoc_query)
       {

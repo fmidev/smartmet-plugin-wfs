@@ -27,9 +27,9 @@ static void check_param_min_occurs(int actual_count,
 
 bwx::ParameterExtractor bw::StoredQuery::param_extractor;
 
-bw::StoredQuery::StoredQuery() : handler(), debug_format(false) {}
+bw::StoredQuery::StoredQuery() : handler() {}
 
-bw::StoredQuery::~StoredQuery() {}
+bw::StoredQuery::~StoredQuery() = default;
 
 bw::QueryBase::QueryType bw::StoredQuery::get_type() const
 {
@@ -81,7 +81,7 @@ boost::shared_ptr<bw::StoredQuery> bw::StoredQuery::create_from_kvp(
       redirect = query->handler->redirect(*query, redirected_query_id);
       if (redirect)
       {
-        if (redirect_id_set.insert(redirected_query_id).second and (redirected_query_id != ""))
+        if (redirect_id_set.insert(redirected_query_id).second and (!redirected_query_id.empty()))
         {
           query_id = redirected_query_id;
         }
@@ -155,7 +155,7 @@ boost::shared_ptr<bw::StoredQuery> bw::StoredQuery::create_from_xml(
       redirect = query->handler->redirect(*query, redirected_query_id);
       if (redirect)
       {
-        if (redirect_id_set.insert(redirected_query_id).second and (redirected_query_id != ""))
+        if (redirect_id_set.insert(redirected_query_id).second and (!redirected_query_id.empty()))
         {
           query_id = redirected_query_id;
         }
@@ -377,10 +377,9 @@ void bw::StoredQuery::extract_kvp_parameters(const SmartMet::Spine::HTTP::Reques
         std::string sep = " ";
         std::ostringstream msg;
         msg << method << ": stored query parameter '" << item.first << "' conflicts with";
-        for (auto it = param_desc->conflicts_with.begin(); it != param_desc->conflicts_with.end();
-             ++it)
+        for (const auto & it : param_desc->conflicts_with)
         {
-          msg << sep << "'" << *it << "'";
+          msg << sep << "'" << it << "'";
           sep = ", ";
         }
         Fmi::Exception exception(BCP, msg.str());
@@ -433,10 +432,9 @@ void bw::StoredQuery::extract_kvp_parameters(const SmartMet::Spine::HTTP::Reques
             query.params->insert_value(param_name, value);
           }
 
-          for (auto it = param_desc->conflicts_with.begin(); it != param_desc->conflicts_with.end();
-               ++it)
+          for (const auto & it : param_desc->conflicts_with)
           {
-            forbidden.insert(Fmi::ascii_tolower_copy(*it));
+            forbidden.insert(Fmi::ascii_tolower_copy(it));
           }
 
           param_name_set.insert(param_name);
@@ -506,20 +504,18 @@ void bw::StoredQuery::extract_xml_parameters(const xercesc::DOMElement& query_ro
           std::string sep = " ";
           std::ostringstream msg;
           msg << method << ": stored query parameter '" << param_name << "' conflicts with";
-          for (auto it = param_desc->conflicts_with.begin(); it != param_desc->conflicts_with.end();
-               ++it)
+          for (const auto & it : param_desc->conflicts_with)
           {
-            msg << sep << "'" << *it << "'";
+            msg << sep << "'" << it << "'";
             sep = ", ";
           }
           Fmi::Exception exception(BCP, msg.str());
           throw exception;
         }
 
-        for (auto it = param_desc->conflicts_with.begin(); it != param_desc->conflicts_with.end();
-             ++it)
+        for (const auto & it : param_desc->conflicts_with)
         {
-          forbidden.insert(Fmi::ascii_tolower_copy(*it));
+          forbidden.insert(Fmi::ascii_tolower_copy(it));
         }
 
         check_param_max_occurs(param_name_set.count(param_name) + 1,
@@ -567,7 +563,7 @@ void bw::StoredQuery::dump_query_info(std::ostream& output) const
   try
   {
     std::ostringstream msg;
-    std::string sep = "";
+    std::string sep;
     msg << "STORED QUERY: name='" << handler->get_query_name() << "', ";
     msg << "params={";
 

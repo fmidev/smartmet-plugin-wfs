@@ -18,11 +18,11 @@ class XmlErrorHandler : public xercesc::ErrorHandler
 {
  public:
   XmlErrorHandler(bool throw_on_error);
-  virtual ~XmlErrorHandler();
-  virtual void warning(const xercesc::SAXParseException& exc);
-  virtual void error(const xercesc::SAXParseException& exc);
-  virtual void fatalError(const xercesc::SAXParseException& exc);
-  virtual void resetErrors();
+  ~XmlErrorHandler() override;
+  void warning(const xercesc::SAXParseException& exc) override;
+  void error(const xercesc::SAXParseException& exc) override;
+  void fatalError(const xercesc::SAXParseException& exc) override;
+  void resetErrors() override;
 
   inline bool isOk() const { return (num_errors == 0) and (num_fatal_errors == 0); }
   inline bool haveFatalErrors() const { return num_fatal_errors > 0; }

@@ -31,13 +31,13 @@ namespace ph = boost::placeholders;
 
 struct PluginImpl::RequestResult
 {
-  SmartMet::Spine::HTTP::Status status;
-  bool may_validate_xml;
+  SmartMet::Spine::HTTP::Status status{SmartMet::Spine::HTTP::not_a_status};
+  bool may_validate_xml{true};
   std::ostringstream output;
   boost::optional<int> expires_seconds;
 
  public:
-  RequestResult() : status(SmartMet::Spine::HTTP::not_a_status), may_validate_xml(true), output() {}
+  RequestResult() :  output() {}
 };
 
 PluginImpl::PluginImpl(SmartMet::Spine::Reactor* theReactor,
@@ -159,7 +159,7 @@ void PluginImpl::shutdown()
   stored_query_map->shutdown();
 }
 
-PluginImpl::~PluginImpl() {}
+PluginImpl::~PluginImpl() = default;
 
 boost::posix_time::ptime PluginImpl::get_time_stamp() const
 {
@@ -217,21 +217,21 @@ void PluginImpl::create_template_formatters()
 {
   try
   {
-    const std::string gctn =
+    const auto gctn =
         itsConfig.get_mandatory_config_param<std::string>("getCapabilitiesTemplate");
 
-    const std::string lsqtn =
+    const auto lsqtn =
         itsConfig.get_mandatory_config_param<std::string>("listStoredQueriesTemplate");
 
-    const std::string dsqtn =
+    const auto dsqtn =
         itsConfig.get_mandatory_config_param<std::string>("describeStoredQueriesTemplate");
 
-    const std::string fttn =
+    const auto fttn =
         itsConfig.get_mandatory_config_param<std::string>("featureTypeTemplate");
 
-    const std::string etn = itsConfig.get_mandatory_config_param<std::string>("exceptionTemplate");
+    const auto etn = itsConfig.get_mandatory_config_param<std::string>("exceptionTemplate");
 
-    const std::string dfn = itsConfig.get_mandatory_config_param<std::string>("ctppDumpTemplate");
+    const auto dfn = itsConfig.get_mandatory_config_param<std::string>("ctppDumpTemplate");
 
     const auto template_dir = itsConfig.get_template_directory();
 
@@ -262,7 +262,7 @@ void PluginImpl::create_xml_parser()
     xml_parser.reset(new Xml::ParserMT(xml_grammar_pool_fn, false));
 
     std::string serialized_xml_schemas = itsConfig.get_optional_path("serializedXmlSchemas", "");
-    if (serialized_xml_schemas != "")
+    if (!serialized_xml_schemas.empty())
     {
       xml_parser->load_schema_cache(serialized_xml_schemas);
     }
@@ -270,11 +270,11 @@ void PluginImpl::create_xml_parser()
     if (itsConfig.getValidateXmlOutput())
     {
       std::cout << "\t\t+ [Enabling XML schema download (";
-      if (itsConfig.getProxy() != "")
+      if (!itsConfig.getProxy().empty())
       {
         std::cout << "proxy='" << itsConfig.getProxy() << '\'';
       }
-      if (itsConfig.getNoProxy() != "")
+      if (!itsConfig.getNoProxy().empty())
       {
         std::cout << "no_proxy='" << itsConfig.getNoProxy() << '\'';
       }
@@ -296,7 +296,7 @@ void PluginImpl::init_geo_server_access()
     try
     {
       const std::string geoserver_conn_str = itsConfig.get_geoserver_conn_string();
-      if (geoserver_conn_str != "")
+      if (!geoserver_conn_str.empty())
       {
         geo_server_db.reset(new GeoServerDB(itsConfig.get_geoserver_conn_string(), 5));
       }
@@ -554,7 +554,7 @@ void PluginImpl::query(const std::string& req_language,
     const std::string fmi_apikey_prefix = "/fmi-apikey/";
 
     std::string language =
-        req_language == "" ? *get_config().get_languages().begin() : req_language;
+        req_language.empty() ? *get_config().get_languages().begin() : req_language;
 
     if (method == SmartMet::Spine::HTTP::RequestMethod::GET)
     {
@@ -599,7 +599,7 @@ void PluginImpl::query(const std::string& req_language,
       else if (content_type == "text/xml")
       {
         const std::string& content = req.getContent();
-        if (content == "")
+        if (content.empty())
         {
           Fmi::Exception exception(BCP, "No request content available!");
           exception.addParameter(WFS_EXCEPTION_CODE, WFS_OPERATION_PARSING_FAILED);
@@ -618,7 +618,7 @@ void PluginImpl::query(const std::string& req_language,
           const std::list<std::string>& messages = orig_err.get_messages();
 
           if ((orig_err.get_error_level() != Xml::XmlError::FATAL_ERROR) and
-              (root_info.nqname != "") and (root_info.ns_uri == WFS_NAMESPACE_URI) and
+              (!root_info.nqname.empty()) and (root_info.ns_uri == WFS_NAMESPACE_URI) and
               request_factory->check_request_name(root_info.nqname))
           {
             if (root_info.attr_map.count("service") == 0)
@@ -768,7 +768,7 @@ void PluginImpl::realRequestHandler(SmartMet::Spine::Reactor& /* theReactor */,
       // std::string mime = "text/xml; charset=UTF-8";
       const std::string mime =
           content.substr(0, 6) == "<html>" ? "text/html; charset=UTF-8" : "text/xml; charset=UTF-8";
-      theResponse.setHeader("Content-Type", mime.c_str());
+      theResponse.setHeader("Content-Type", mime);
 
       if (theResponse.getContentLength() == 0)
       {
@@ -786,9 +786,9 @@ void PluginImpl::realRequestHandler(SmartMet::Spine::Reactor& /* theReactor */,
         std::string expiration = tformat->format(t_expires);
         std::string modification = tformat->format(t_now);
 
-        theResponse.setHeader("Cache-Control", cachecontrol.c_str());
-        theResponse.setHeader("Expires", expiration.c_str());
-        theResponse.setHeader("Last-Modified", modification.c_str());
+        theResponse.setHeader("Cache-Control", cachecontrol);
+        theResponse.setHeader("Expires", expiration);
+        theResponse.setHeader("Last-Modified", modification);
         theResponse.setHeader("Access-Control-Allow-Origin", "*");
       }
 
@@ -960,7 +960,7 @@ void PluginImpl::dump_constructor_map_html(std::ostream& os, const std::string& 
     const auto constructor_list = value["constructors"];
     const auto constructor_names = constructor_list.getMemberNames();
 
-    if (handler == "")
+    if (handler.empty())
     {
       os << "<h1>Stored query handler constructors</h1>\n";
       os << "<br>\n";

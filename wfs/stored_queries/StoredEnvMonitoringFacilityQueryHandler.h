@@ -26,12 +26,12 @@ class StoredEnvMonitoringFacilityQueryHandler : public StoredQueryHandlerBase,
                                           StoredQueryConfig::Ptr config,
                                           PluginImpl& plugin_impl,
                                           boost::optional<std::string> template_file_name);
-  virtual ~StoredEnvMonitoringFacilityQueryHandler();
+  ~StoredEnvMonitoringFacilityQueryHandler() override;
 
-  virtual void query(const StoredQuery& query,
+  void query(const StoredQuery& query,
                      const std::string& language,
 		     const boost::optional<std::string> &hostname,
-                     std::ostream& output) const;
+                     std::ostream& output) const override;
 
  private:
   const std::shared_ptr<SmartMet::Engine::Observation::DBRegistryConfig> dbRegistryConfig(
@@ -49,8 +49,8 @@ class StoredEnvMonitoringFacilityQueryHandler : public StoredQueryHandlerBase,
     SmartMet::Engine::Observation::QueryResult::ValueVectorType::const_iterator earliest_data;
     SmartMet::Engine::Observation::QueryResult::ValueVectorType::const_iterator latest_data;
   };
-  typedef std::vector<CapabilityData> StationCapabilityData;
-  typedef std::map<std::string, StationCapabilityData> StationCapabilityMap;
+  using StationCapabilityData = std::vector<CapabilityData>;
+  using StationCapabilityMap = std::map<std::string, StationCapabilityData>;
 
   struct StationData
   {
@@ -64,7 +64,7 @@ class StoredEnvMonitoringFacilityQueryHandler : public StoredQueryHandlerBase,
     SmartMet::Engine::Observation::QueryResult::ValueVectorType::const_iterator country_id;
     SmartMet::Engine::Observation::QueryResult::ValueVectorType::const_iterator stationary;
   };
-  typedef std::map<std::string, StationData> StationDataMap;
+  using StationDataMap = std::map<std::string, StationData>;
 
   struct StationGroup
   {
@@ -72,8 +72,8 @@ class StoredEnvMonitoringFacilityQueryHandler : public StoredQueryHandlerBase,
     SmartMet::Engine::Observation::QueryResult::ValueVectorType::const_iterator group_id;
     SmartMet::Engine::Observation::QueryResult::ValueVectorType::const_iterator group_name;
   };
-  typedef std::vector<StationGroup> StationGroupVector;
-  typedef std::map<std::string, StationGroupVector> StationGroupMap;
+  using StationGroupVector = std::vector<StationGroup>;
+  using StationGroupMap = std::map<std::string, StationGroupVector>;
 
   struct NetworkMembership
   {
@@ -81,8 +81,8 @@ class StoredEnvMonitoringFacilityQueryHandler : public StoredQueryHandlerBase,
     SmartMet::Engine::Observation::QueryResult::ValueVectorType::const_iterator network_id;
     SmartMet::Engine::Observation::QueryResult::ValueVectorType::const_iterator member_code;
   };
-  typedef std::vector<NetworkMembership> NetworkMembershipVector;
-  typedef std::map<std::string, NetworkMembershipVector> NetworkMembershipMap;
+  using NetworkMembershipVector = std::vector<NetworkMembership>;
+  using NetworkMembershipMap = std::map<std::string, NetworkMembershipVector>;
 
   void getValidStations(SmartMet::Engine::Observation::MastQuery& stationQuery,
                         StationDataMap& validStations,

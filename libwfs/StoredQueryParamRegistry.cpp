@@ -33,7 +33,7 @@ enum TypeInd
 
 StoredQueryParamRegistry::StoredQueryParamRegistry(StoredQueryConfig::Ptr config)
     : bw::StoredQueryConfig::Wrapper(config)
-    , silence_param_init_warnings_(false)
+     
 {
   try
   {
@@ -344,7 +344,7 @@ void StoredQueryParamRegistry::add_param_rec(boost::shared_ptr<ParamRecBase> rec
     const std::string& type_name = rec->type_name;
     if (supported_type_names.count(type_name) == 0)
     {
-      std::string sep = "";
+      std::string sep;
       std::ostringstream msg;
       std::ostringstream msg2;
       msg << "Not supported type '" << demangle_cpp_type_name(type_name) << "' "

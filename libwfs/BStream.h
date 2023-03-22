@@ -31,8 +31,8 @@ class OBStream
  private:
   std::size_t reserved;
   boost::shared_array<uint8_t> data;
-  std::size_t ind;
-  int num_bits;
+  std::size_t ind{0U};
+  int num_bits{0};
 };
 
 class IBStream
@@ -53,9 +53,9 @@ class IBStream
 
  private:
   std::size_t length;
-  std::size_t pos;
+  std::size_t pos{0};
   boost::shared_array<uint8_t> data;
-  int bit_pos;
+  int bit_pos{0};
 };
 
 }  // namespace WFS

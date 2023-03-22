@@ -84,13 +84,13 @@ bw::StoredGeoserverQueryHandler::StoredGeoserverQueryHandler(
         auto& cfg_item = cfg_layer_map[i];
         config->assert_is_group(cfg_item);
         std::vector<std::string> aliases;
-        const std::string name = config->get_mandatory_config_param<std::string>(cfg_item, "name");
+        const auto name = config->get_mandatory_config_param<std::string>(cfg_item, "name");
         std::string db_table = cfg_item.exists("db_table")
             ? config->get_mandatory_config_param<std::string>(cfg_item, "db_table")
             : "mosaic." + name;
 
         // Enclose scheme and table name within quotes. Scheme is assumed not to contain dot(s)
-        auto pos = db_table.find(".");
+        auto pos = db_table.find('.');
         if ((pos != std::string::npos) && (pos > 0) && ((pos + 1) < db_table.length()))
           db_table = "\"" + db_table.substr(0, pos) + "\".\"" + db_table.substr(pos + 1) + "\"";
 
@@ -120,9 +120,8 @@ bw::StoredGeoserverQueryHandler::StoredGeoserverQueryHandler(
     std::vector<std::string> tmp;
     if (config->get_config_array(DB_SELECT_PARAMS, tmp))
     {
-      for (auto it = tmp.begin(); it != tmp.end(); ++it)
+      for (auto & name : tmp)
       {
-        const auto& name = *it;
         if (not db_filter_param_names.insert(name).second)
         {
           std::ostringstream msg;
@@ -142,8 +141,8 @@ bw::StoredGeoserverQueryHandler::StoredGeoserverQueryHandler(
     {
       auto& item = layer_and_param_name_map[i];
       config->assert_is_group(item);
-      const std::string layer_name = config->get_mandatory_config_param<std::string>(item, "layer");
-      const std::string parameter_name =
+      const auto layer_name = config->get_mandatory_config_param<std::string>(item, "layer");
+      const auto parameter_name =
           config->get_mandatory_config_param<std::string>(item, "param");
       if (layer_param_name_map.find(layer_name) != layer_param_name_map.end())
       {
@@ -156,7 +155,7 @@ bw::StoredGeoserverQueryHandler::StoredGeoserverQueryHandler(
       if (!layer_db_table_name_format)
       {
         std::string db_table("mosaic." + layer_name);
-        auto pos = db_table.find(".");
+        auto pos = db_table.find('.');
         if ((pos != std::string::npos) && (pos > 0) && ((pos + 1) < db_table.length()))
           db_table = "\"" + db_table.substr(0, pos) + "\".\"" + db_table.substr(pos + 1) + "\"";
         layer_map->insert(std::make_pair(layer_name, db_table));
@@ -169,7 +168,7 @@ bw::StoredGeoserverQueryHandler::StoredGeoserverQueryHandler(
   }
 }
 
-bw::StoredGeoserverQueryHandler::~StoredGeoserverQueryHandler() {}
+bw::StoredGeoserverQueryHandler::~StoredGeoserverQueryHandler() = default;
 
 void bw::StoredGeoserverQueryHandler::update_parameters(
     const RequestParameterMap& params,
@@ -184,17 +183,17 @@ void bw::StoredGeoserverQueryHandler::update_parameters(
     const char* P_SELECTED_NAME = "selectedName";
 
     std::vector<std::string> layers;  //  = t_layers.get_string_array(params, this);
-    const std::string crs_name = params.get_single<std::string>(P_CRS);
+    const auto crs_name = params.get_single<std::string>(P_CRS);
     std::string s_crs = Fmi::ascii_tolower_copy(crs_name);
     std::size_t pos = s_crs.rfind("epsg::");
     if (pos != std::string::npos)
       s_crs = s_crs.substr(6);
     int crs = Fmi::stoi(s_crs);
-    pt::ptime start_time = params.get_single<pt::ptime>(P_BEGIN_TIME);
-    pt::ptime end_time = params.get_single<pt::ptime>(P_END_TIME);
+    auto start_time = params.get_single<pt::ptime>(P_BEGIN_TIME);
+    auto end_time = params.get_single<pt::ptime>(P_END_TIME);
     unsigned width = params.get_single<uint64_t>(P_WIDTH);
     unsigned height = params.get_single<uint64_t>(P_HEIGHT);
-    const std::string selected_name = params.get_optional<std::string>(P_SELECTED_NAME, "");
+    const auto selected_name = params.get_optional<std::string>(P_SELECTED_NAME, "");
     params.get<std::string>(P_LAYERS, std::back_inserter(layers));
     for (std::string& layer : layers)
     {
@@ -206,7 +205,7 @@ void bw::StoredGeoserverQueryHandler::update_parameters(
       }
 
       // Handling the case when not found
-      std::map<std::string, std::string>::const_iterator layerIt = layer_param_name_map.find(layer);
+      auto layerIt = layer_param_name_map.find(layer);
       if (layerIt == layer_param_name_map.end() and pos == layer_alias_map.end())
       {
         Fmi::Exception exception(
@@ -225,10 +224,10 @@ void bw::StoredGeoserverQueryHandler::update_parameters(
     }
 
     std::map<std::string, std::string> db_select_map;
-    for (auto it = db_filter_param_names.begin(); it != db_filter_param_names.end(); ++it)
+    for (const auto & db_filter_param_name : db_filter_param_names)
     {
       std::vector<SmartMet::Spine::Value> sel_param;
-      params.get<SmartMet::Spine::Value>(*it, std::back_inserter(sel_param), 1, 2);
+      params.get<SmartMet::Spine::Value>(db_filter_param_name, std::back_inserter(sel_param), 1, 2);
       if (sel_param.size() == 2)
       {
         const std::string& name = sel_param.at(0).get<std::string>();
@@ -288,11 +287,11 @@ void bw::StoredGeoserverQueryHandler::update_parameters(
 
     bw::FeatureID feature_id(get_config()->get_query_id(), params.get_map(true), seq_id);
 
-    for (auto it1 = gs_index->begin(); it1 != gs_index->end(); ++it1)
+    for (const auto & it1 : *gs_index)
     {
-      for (auto it2 = it1->second.layers.begin(); it2 != it1->second.layers.end(); ++it2)
+      for (auto it2 = it1.second.layers.begin(); it2 != it1.second.layers.end(); ++it2)
       {
-        if ((selected_name == "") or (selected_name == it2->name))
+        if ((selected_name.empty()) or (selected_name == it2->name))
         {
           if (not eval_db_select_params(db_select_map, *it2))
           {
@@ -304,7 +303,7 @@ void bw::StoredGeoserverQueryHandler::update_parameters(
 
           boost::shared_ptr<RequestParameterMap> pm1(
 	       new RequestParameterMap(true));
-          pm1->add("epoch", Fmi::to_iso_extended_string(it1->second.epoch) + "Z");
+          pm1->add("epoch", Fmi::to_iso_extended_string(it1.second.epoch) + "Z");
           pm1->add("name", it2->name);
           pm1->add("layer", it2->layer);
           pm1->add("origSrs", it2->orig_srs);
@@ -358,7 +357,7 @@ void bw::StoredGeoserverQueryHandler::update_parameters(
           pm1->add("height", height);
 
           const std::string param_name;
-          std::map<std::string, std::string>::const_iterator layerParamNameIt =
+          auto layerParamNameIt =
               layer_param_name_map.find(it2->layer);
           if (layerParamNameIt != layer_param_name_map.end())
             pm1->add("layerParam", layerParamNameIt->second);

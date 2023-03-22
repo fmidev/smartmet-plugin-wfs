@@ -63,7 +63,7 @@ bw::WfsFeatureDef::WfsFeatureDef(SmartMet::Spine::CRSRegistry& crs_registry,
   }
 }
 
-bw::WfsFeatureDef::~WfsFeatureDef() {}
+bw::WfsFeatureDef::~WfsFeatureDef() = default;
 
 std::string bw::WfsFeatureDef::resolve_crs_url(const std::string& name,
                                                SmartMet::Spine::CRSRegistry& crs_registry)

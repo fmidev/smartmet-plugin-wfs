@@ -21,7 +21,7 @@ class SupportsQualityParameters : protected virtual SupportsExtraHandlerParams,
 {
  public:
   SupportsQualityParameters(StoredQueryConfig::Ptr config);
-  virtual ~SupportsQualityParameters();
+  ~SupportsQualityParameters() override;
 
   /** \brief Test if the input string contains "qc_" prefix (case insensitive).
    *  \param[in] name Test string.

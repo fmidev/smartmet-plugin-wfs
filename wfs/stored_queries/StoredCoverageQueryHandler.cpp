@@ -67,7 +67,7 @@ std::vector<bw::ContourQueryResultPtr> bw::StoredCoverageQueryHandler::processQu
 
     std::vector<SmartMet::Engine::Contour::Range>& query_limits =
         (reinterpret_cast<CoverageQueryParameter&>(queryParameter)).limits;
-    if (query_limits.size() > 0)
+    if (!query_limits.empty())
     {
       for (auto l : query_limits)
       {
@@ -90,7 +90,7 @@ std::vector<bw::ContourQueryResultPtr> bw::StoredCoverageQueryHandler::processQu
         std::size_t limitsIndex(i * 2);
         double lolimit = limits[limitsIndex];
         double hilimit = limits[limitsIndex + 1];
-        query_limits.push_back(SmartMet::Engine::Contour::Range(lolimit, hilimit));
+        query_limits.emplace_back(lolimit, hilimit);
       }
     }
 
@@ -99,13 +99,13 @@ std::vector<bw::ContourQueryResultPtr> bw::StoredCoverageQueryHandler::processQu
 
     // order result set primarily by isoline value and secondarily by timestep
     unsigned int max_geoms_per_timestep = 0;
-    for (auto result_item : result_set)
+    for (const auto& result_item : result_set)
       if (max_geoms_per_timestep < result_item->area_geoms.size())
         max_geoms_per_timestep = result_item->area_geoms.size();
 
     for (std::size_t i = 0; i < max_geoms_per_timestep; i++)
     {
-      for (auto result_item : result_set)
+      for (const auto& result_item : result_set)
         if (i < result_item->area_geoms.size())
         {
           CoverageQueryResultPtr result(new CoverageQueryResult);
@@ -116,7 +116,7 @@ std::vector<bw::ContourQueryResultPtr> bw::StoredCoverageQueryHandler::processQu
           result->name = queryParameter.parameter.name();
           result->unit = itsUnit;
           result->area_geoms.push_back(wag);
-          query_results.push_back(result);
+          query_results.emplace_back(result);
         }
     }
 
@@ -159,7 +159,7 @@ void bw::StoredCoverageQueryHandler::setResultHashValue(CTPP::CDT& resultHash,
 {
   try
   {
-    const CoverageQueryResult& coverageResultItem =
+    const auto& coverageResultItem =
         reinterpret_cast<const CoverageQueryResult&>(resultItem);
 
     resultHash["name"] = coverageResultItem.name;
@@ -184,7 +184,7 @@ boost::shared_ptr<SmartMet::Plugin::WFS::StoredQueryHandlerBase> wfs_coverage_qu
     PluginImpl& plugin_data,
     boost::optional<std::string> template_file_name)
 {
-  StoredCoverageQueryHandler* qh =
+  auto* qh =
       new StoredCoverageQueryHandler(reactor, config, plugin_data, template_file_name);
   boost::shared_ptr<SmartMet::Plugin::WFS::StoredQueryHandlerBase> result(qh);
   return result;

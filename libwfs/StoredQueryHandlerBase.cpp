@@ -26,7 +26,7 @@ StoredQueryHandlerBase::StoredQueryHandlerBase(SmartMet::Spine::Reactor* reactor
       SupportsExtraHandlerParams(config),
       reactor(reactor),
       config(config),
-      hidden(false),
+      
       plugin_impl(plugin_impl),
       template_file(template_file_name)
 {
@@ -53,7 +53,7 @@ StoredQueryHandlerBase::StoredQueryHandlerBase(SmartMet::Spine::Reactor* reactor
   }
 }
 
-StoredQueryHandlerBase::~StoredQueryHandlerBase() {}
+StoredQueryHandlerBase::~StoredQueryHandlerBase() = default;
 
 void StoredQueryHandlerBase::perform_init()
 {

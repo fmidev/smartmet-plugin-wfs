@@ -27,7 +27,7 @@ class SupportsTimeParameters : protected virtual SupportsExtraHandlerParams,
  public:
   SupportsTimeParameters(boost::shared_ptr<SmartMet::Plugin::WFS::StoredQueryConfig> config);
 
-  virtual ~SupportsTimeParameters();
+  ~SupportsTimeParameters() override;
 
   boost::shared_ptr<TS::TimeSeriesGeneratorOptions> get_time_generator_options(
       const RequestParameterMap &param_values) const;

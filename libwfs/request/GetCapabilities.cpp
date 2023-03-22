@@ -25,7 +25,7 @@ GetCapabilities::GetCapabilities(const std::string& language, const PluginImpl& 
   }
 }
 
-GetCapabilities::~GetCapabilities() {}
+GetCapabilities::~GetCapabilities() = default;
 
 bw::RequestBase::RequestType GetCapabilities::get_type() const
 {
@@ -72,7 +72,7 @@ void GetCapabilities::execute(std::ostream& output) const
 	CTPP::CDT& f = hash["features"][ind++];
 
 	std::string ns_alias = "wfsns001";
-	std::size_t pos = feature->get_name().find_first_of(":");
+	std::size_t pos = feature->get_name().find_first_of(':');
 	if (pos != std::string::npos)
 	  ns_alias = feature->get_name().substr(0, pos);
 	f["nsAlias"] = ns_alias;

@@ -16,7 +16,7 @@ namespace {
 
   size_t append_data(char *ptr, size_t size, size_t nmemb, void *userdata)
   {
-    std::ostream *ost = reinterpret_cast<std::ostream *>(userdata);
+    auto *ost = reinterpret_cast<std::ostream *>(userdata);
     ost->write(ptr, size * nmemb);
     return size * nmemb;
   }
@@ -24,13 +24,11 @@ namespace {
 } // anonymous namespace
 
 EntityResolver::EntityResolver()
-  : enable_download(false)
-{
-}
+   
+= default;
 
 EntityResolver::~EntityResolver()
-{
-}
+= default;
 
 void
 EntityResolver::init_schema_download(const std::string& proxy, const std::string& no_proxy)
@@ -80,7 +78,7 @@ try
       {
 	remote_uri = system_id;
       }
-    else if (system_id == "")
+    else if (system_id.empty())
       {
 	return nullptr;
       }
@@ -90,7 +88,7 @@ try
       }
     else
       {
-	std::size_t pos = base_uri.find_last_of("/");
+	std::size_t pos = base_uri.find_last_of('/');
 	if (pos == std::string::npos)
 	  return nullptr;
 	remote_uri = base_uri.substr(0, pos + 1) + system_id;
@@ -150,7 +148,7 @@ try
 	it_d = x.first;
       } else if (it_d->second.num_failed and it_d->second.num_failed < 100) {
 	unsigned inc = it_d->second.num_failed < 10 ? 10 : 600;
-	if (std::time(0) > it_d->second.last_failed + inc) {
+	if (std::time(nullptr) > it_d->second.last_failed + inc) {
 	  downloading = true;
 	}
       }
@@ -169,7 +167,7 @@ try
       } catch (...) {
 	if (downloading) {
 	  it_d->second.num_failed++;
-	  it_d->second.last_failed = std::time(0);
+	  it_d->second.last_failed = std::time(nullptr);
 	}
 	throw;
       }
@@ -215,11 +213,11 @@ std::string EntityResolver::download(const std::string& uri) const
   curl_easy_setopt(curl, CURLOPT_HTTP_TRANSFER_DECODING, &transfer_decoding);
   curl_easy_setopt(curl, CURLOPT_FOLLOWLOCATION, &follow_location);
 
-  if (proxy != "") {
+  if (!proxy.empty()) {
     curl_easy_setopt(curl, CURLOPT_PROXY, proxy.c_str());
   }
 
-  if (no_proxy != "") {
+  if (!no_proxy.empty()) {
     curl_easy_setopt(curl, CURLOPT_NOPROXY, no_proxy.c_str());
   }
 

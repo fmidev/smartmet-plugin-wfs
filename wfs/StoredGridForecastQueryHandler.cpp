@@ -158,11 +158,11 @@ StoredGridForecastQueryHandler::StoredGridForecastQueryHandler(
   }
   catch (...)
   {
-    throw Fmi::Exception(BCP, "Operation failed!", NULL);
+    throw Fmi::Exception(BCP, "Operation failed!", nullptr);
   }
 }
 
-StoredGridForecastQueryHandler::~StoredGridForecastQueryHandler() {}
+StoredGridForecastQueryHandler::~StoredGridForecastQueryHandler() = default;
 
 void StoredGridForecastQueryHandler::init_handler()
 {
@@ -170,27 +170,27 @@ void StoredGridForecastQueryHandler::init_handler()
   {
     auto* reactor = get_reactor();
     void* engine;
-    engine = reactor->getSingleton("Geonames", NULL);
-    if (engine == NULL)
+    engine = reactor->getSingleton("Geonames", nullptr);
+    if (engine == nullptr)
       throw Fmi::Exception(BCP, "No Geonames engine available");
 
     geo_engine = reinterpret_cast<Engine::Geonames::Engine*>(engine);
 
-    engine = reactor->getSingleton("grid", NULL);
-    if (engine == NULL)
+    engine = reactor->getSingleton("grid", nullptr);
+    if (engine == nullptr)
       throw Fmi::Exception(BCP, "No Grid engine available");
 
     grid_engine = reinterpret_cast<Engine::Grid::Engine*>(engine);
   }
   catch (...)
   {
-    throw Fmi::Exception(BCP, "Operation failed!", NULL);
+    throw Fmi::Exception(BCP, "Operation failed!", nullptr);
   }
 }
 
 void StoredGridForecastQueryHandler::query(const StoredQuery& stored_query,
                                            const std::string& language,
-                                           const boost::optional<std::string>& hostname,
+                                           const boost::optional<std::string>&  /*hostname*/,
                                            std::ostream& output) const
 {
   try
@@ -234,7 +234,7 @@ void StoredGridForecastQueryHandler::query(const StoredQuery& stored_query,
         query.time_formatter.reset(Fmi::TimeFormatter::create("iso"));
         parse_times(params, query);
 
-        const std::string crs = params.get_single<std::string>(P_CRS);
+        const auto crs = params.get_single<std::string>(P_CRS);
         auto transformation =
             plugin_impl.get_crs_registry().create_transformation("urn:ogc:def:crs:EPSG::4326", crs);
         bool show_height = false;
@@ -258,14 +258,14 @@ void StoredGridForecastQueryHandler::query(const StoredQuery& stored_query,
         }
 
         std::size_t num_groups = 0;
-        for (auto geo_id = geo_id_set.begin(); geo_id != geo_id_set.end(); ++geo_id)
+        for (const auto & geo_id : geo_id_set)
         {
-          group_map.insert(std::make_pair(num_groups, *geo_id));
+          group_map.insert(std::make_pair(num_groups, geo_id));
           if (separate_groups)
             num_groups++;
         }
 
-        if (not separate_groups and (geo_id_set.size() > 0))
+        if (not separate_groups and (!geo_id_set.empty()))
           num_groups++;
 
         CTPP::CDT hash;
@@ -297,9 +297,9 @@ void StoredGridForecastQueryHandler::query(const StoredQuery& stored_query,
           CTPP::CDT& group = hash["groups"][group_id];
 
           FeatureID feature_id(get_config()->get_query_id(), params.get_map(true), sq_id);
-          for (std::size_t i = 0; i < sizeof(location_params) / sizeof(*location_params); i++)
+          for (auto & location_param : location_params)
           {
-            feature_id.erase_param(location_params[i]);
+            feature_id.erase_param(location_param);
           }
           auto geoid_range = group_map.equal_range(group_id);
           for (auto it = geoid_range.first; it != geoid_range.second; ++it)
@@ -429,15 +429,15 @@ void StoredGridForecastQueryHandler::query(const StoredQuery& stored_query,
       }
       catch (...)
       {
-        Fmi::Exception exception(BCP, "Operation parsing failed!", NULL);
+        Fmi::Exception exception(BCP, "Operation parsing failed!", nullptr);
         exception.addParameter(WFS_EXCEPTION_CODE, WFS_OPERATION_PARSING_FAILED);
         throw exception;
       }
     }
     catch (...)
     {
-      Fmi::Exception exception(BCP, "Operation parsing failed!", NULL);
-      if (exception.getExceptionByParameterName(WFS_EXCEPTION_CODE) == NULL)
+      Fmi::Exception exception(BCP, "Operation parsing failed!", nullptr);
+      if (exception.getExceptionByParameterName(WFS_EXCEPTION_CODE) == nullptr)
         exception.addParameter(WFS_EXCEPTION_CODE, WFS_OPERATION_PARSING_FAILED);
       exception.addParameter(WFS_LANGUAGE, query.language);
       throw exception;
@@ -445,7 +445,7 @@ void StoredGridForecastQueryHandler::query(const StoredQuery& stored_query,
   }
   catch (...)
   {
-    throw Fmi::Exception(BCP, "Operation failed!", NULL);
+    throw Fmi::Exception(BCP, "Operation failed!", nullptr);
   }
 }
 
@@ -509,7 +509,7 @@ uint StoredGridForecastQueryHandler::processGridQuery(Query& wfsQuery,
 
       uint vLen = 0;
       if ((int)gridQuery.mQueryParameterList.size() > p &&
-          gridQuery.mQueryParameterList[p].mValueList.size() > 0)
+          !gridQuery.mQueryParameterList[p].mValueList.empty())
       {
         // ### Going through all timesteps.
 
@@ -690,7 +690,7 @@ uint StoredGridForecastQueryHandler::processGridQuery(Query& wfsQuery,
               {
                 std::vector<std::string> pnameList;
                 grid_engine->getProducerNameList(gridQuery.mProducerNameList[0], pnameList);
-                if (pnameList.size() > 0)
+                if (!pnameList.empty())
                   producer = pnameList[0];
               }
 
@@ -757,12 +757,12 @@ uint StoredGridForecastQueryHandler::processGridQuery(Query& wfsQuery,
             }
             char* pp = tmp;
             pp += sprintf(pp, "### MULTI-MATCH ### ");
-            for (auto p = pList.begin(); p != pList.end(); ++p)
-              pp += sprintf(pp, "%s ", p->c_str());
+            for (const auto & p : pList)
+              pp += sprintf(pp, "%s ", p.c_str());
 
             output->set(col, row, std::string(tmp));
           }
-          else if (!additionalParameters.isAdditionalParameter(
+          else if (!SmartMet::AdditionalParameters::isAdditionalParameter(
                        gridQuery.mQueryParameterList[p].mParam.c_str()))
           {
             // This is a normal data parameter, but the query has not return any values for it.
@@ -807,7 +807,7 @@ uint StoredGridForecastQueryHandler::processGridQuery(Query& wfsQuery,
   }
   catch (...)
   {
-    throw Fmi::Exception(BCP, "Operation failed!", NULL);
+    throw Fmi::Exception(BCP, "Operation failed!", nullptr);
   }
 }
 
@@ -845,7 +845,7 @@ Table_sptr StoredGridForecastQueryHandler::extract_forecast(Query& wfsQuery) con
 
       std::vector<std::vector<T::Coordinate>> areaCoordinates;
       std::vector<T::Coordinate> coordinates;
-      coordinates.push_back(T::Coordinate(loc->longitude, loc->latitude));
+      coordinates.emplace_back(loc->longitude, loc->latitude);
       areaCoordinates.push_back(coordinates);
       std::string coordinateStr = toString(areaCoordinates, ',', ';');
       attributeList.addAttribute("coordinates", coordinateStr);
@@ -859,24 +859,24 @@ Table_sptr StoredGridForecastQueryHandler::extract_forecast(Query& wfsQuery) con
         char tmp[1000];
         char* p = tmp;
         *p = '\0';
-        for (auto prod = wfsQuery.models.begin(); prod != wfsQuery.models.end(); ++prod)
+        for (auto & model : wfsQuery.models)
         {
-          std::string mappingName = grid_engine->getProducerName(*prod);
+          std::string mappingName = grid_engine->getProducerName(model);
 
           std::vector<std::string> nameList;
           grid_engine->getProducerNameList(mappingName, nameList);
-          for (auto n = nameList.begin(); n != nameList.end(); ++n)
+          for (auto & n : nameList)
           {
             if (p > tmp)
-              p += sprintf(p, ",%s", n->c_str());
+              p += sprintf(p, ",%s", n.c_str());
             else
-              p += sprintf(p, "%s", n->c_str());
+              p += sprintf(p, "%s", n.c_str());
           }
         }
         attributeList.addAttribute("producer", tmp);
       }
 
-      if (wfsQuery.levels.size() > 0)
+      if (!wfsQuery.levels.empty())
       {
         std::string levels = toString(wfsQuery.levels, ',');
         attributeList.addAttribute("levels", levels);
@@ -892,7 +892,7 @@ Table_sptr StoredGridForecastQueryHandler::extract_forecast(Query& wfsQuery) con
         attributeList.addAttribute("levelId", "3");
       }
 
-      if (wfsQuery.level_heights.size() > 0)
+      if (!wfsQuery.level_heights.empty())
       {
         std::string heights = toString(wfsQuery.level_heights, ',');
         attributeList.addAttribute("heights", heights);
@@ -927,7 +927,7 @@ Table_sptr StoredGridForecastQueryHandler::extract_forecast(Query& wfsQuery) con
           p += sprintf(p, ",");
 
         std::string paramName = param->name();
-        std::string interpolationMethod = "";
+        std::string interpolationMethod;
         auto pos = paramName.find(".raw");
         if (pos != std::string::npos)
         {
@@ -937,9 +937,8 @@ Table_sptr StoredGridForecastQueryHandler::extract_forecast(Query& wfsQuery) con
 
         std::string name = paramName;
 
-        for (auto it = wfsQuery.models.begin(); it != wfsQuery.models.end(); ++it)
+        for (auto producerName : wfsQuery.models)
         {
-          std::string producerName = *it;
           producerName = grid_engine->getProducerName(producerName);
           Engine::Grid::ParameterDetails_vec parameters;
 
@@ -989,7 +988,7 @@ Table_sptr StoredGridForecastQueryHandler::extract_forecast(Query& wfsQuery) con
   }
   catch (...)
   {
-    throw Fmi::Exception(BCP, "Operation failed!", NULL);
+    throw Fmi::Exception(BCP, "Operation failed!", nullptr);
   }
 }
 
@@ -1003,7 +1002,7 @@ void StoredGridForecastQueryHandler::parse_models(const RequestParameterMap& par
   }
   catch (...)
   {
-    throw Fmi::Exception(BCP, "Operation failed!", NULL);
+    throw Fmi::Exception(BCP, "Operation failed!", nullptr);
   }
 }
 
@@ -1017,7 +1016,7 @@ void StoredGridForecastQueryHandler::parse_level_heights(const RequestParameterM
     params.get<double>(P_LEVEL_HEIGHTS, std::back_inserter(heights));
     for (const auto& item : heights)
     {
-      float tmp = static_cast<float>(item);
+      auto tmp = static_cast<float>(item);
       if (!dest.level_heights.insert(tmp).second)
       {
         Fmi::Exception exception(BCP, "Duplicate geometric height!");
@@ -1029,7 +1028,7 @@ void StoredGridForecastQueryHandler::parse_level_heights(const RequestParameterM
   }
   catch (...)
   {
-    throw Fmi::Exception(BCP, "Geometric height parsing failed!", NULL);
+    throw Fmi::Exception(BCP, "Geometric height parsing failed!", nullptr);
   }
 }
 
@@ -1044,9 +1043,9 @@ void StoredGridForecastQueryHandler::parse_levels(const RequestParameterMap& par
 
     std::vector<int64_t> levels;
     params.get<int64_t>(P_LEVEL, std::back_inserter(levels));
-    for (auto level = levels.begin(); level != levels.end(); ++level)
+    for (long & level : levels)
     {
-      int tmp = cast_int_type<int>(*level);
+      int tmp = cast_int_type<int>(level);
       if (!dest.levels.insert(tmp).second)
       {
         Fmi::Exception exception(BCP, "Duplicate level!");
@@ -1058,7 +1057,7 @@ void StoredGridForecastQueryHandler::parse_levels(const RequestParameterMap& par
   }
   catch (...)
   {
-    throw Fmi::Exception(BCP, "Operation failed!", NULL);
+    throw Fmi::Exception(BCP, "Operation failed!", nullptr);
   }
 }
 
@@ -1074,7 +1073,7 @@ void StoredGridForecastQueryHandler::parse_times(const RequestParameterMap& para
   }
   catch (...)
   {
-    throw Fmi::Exception(BCP, "Operation failed!", NULL);
+    throw Fmi::Exception(BCP, "Operation failed!", nullptr);
   }
 }
 
@@ -1090,11 +1089,11 @@ void StoredGridForecastQueryHandler::parse_params(const RequestParameterMap& par
 
     std::vector<std::string> names;
     param.get<std::string>(P_PARAM, std::back_inserter(names));
-    for (auto name = names.begin(); name != names.end(); ++name)
+    for (auto & name : names)
     {
       std::size_t ind = dest.data_params.size();
       FmiParameterName number = kFmiBadParameter;
-      dest.data_params.push_back(Parameter(*name, Parameter::Type::Data, number));
+      dest.data_params.emplace_back(name, Parameter::Type::Data, number);
 
       if (dest.first_data_ind == 0)
         dest.first_data_ind = ind;
@@ -1104,7 +1103,7 @@ void StoredGridForecastQueryHandler::parse_params(const RequestParameterMap& par
   }
   catch (...)
   {
-    throw Fmi::Exception(BCP, "Operation failed!", NULL);
+    throw Fmi::Exception(BCP, "Operation failed!", nullptr);
   }
 }
 
@@ -1124,14 +1123,14 @@ boost::shared_ptr<SmartMet::Plugin::WFS::StoredQueryHandlerBase> wfs_grid_foreca
 {
   try
   {
-    StoredGridForecastQueryHandler* qh =
+    auto* qh =
         new StoredGridForecastQueryHandler(reactor, config, plugin_impl, template_file_name);
     boost::shared_ptr<SmartMet::Plugin::WFS::StoredQueryHandlerBase> result(qh);
     return result;
   }
   catch (...)
   {
-    throw Fmi::Exception(BCP, "Operation failed!", NULL);
+    throw Fmi::Exception(BCP, "Operation failed!", nullptr);
   }
 }
 }  // namespace

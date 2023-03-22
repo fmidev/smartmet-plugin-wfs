@@ -16,7 +16,7 @@ namespace WFS
 class StandardPresentationParameters
 {
  public:
-  typedef unsigned spp_index_t;
+  using spp_index_t = unsigned int;
 
   enum SPPResultType
   {
@@ -46,11 +46,11 @@ class StandardPresentationParameters
   void set_result_type(const std::string& str);
 
  private:
-  bool have_counts;
-  spp_index_t start_index;
-  spp_index_t count;
+  bool have_counts{false};
+  spp_index_t start_index{1};
+  spp_index_t count{0x00FFFFFFU};
   std::string output_format;
-  SPPResultType result_type;
+  SPPResultType result_type{SPP_RESULTS};
 };
 
 }  // namespace WFS

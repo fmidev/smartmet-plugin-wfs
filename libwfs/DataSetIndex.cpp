@@ -44,7 +44,7 @@ bw::DataSetQuery::DataSetQuery()
 {
 }
 
-bw::DataSetQuery::~DataSetQuery() {}
+bw::DataSetQuery::~DataSetQuery() = default;
 
 void bw::DataSetQuery::add_name(const std::string& name)
 {
@@ -126,11 +126,11 @@ bw::DataSetDefinition::DataSetDefinition(SmartMet::Spine::ConfigBase& config,
       origin_time_extract.assign(
           config.get_mandatory_config_param<std::string>(setting, "origin_time_extract"));
 
-      if ((server_dir != "") and (*server_dir.rbegin() != '/'))
+      if ((!server_dir.empty()) and (*server_dir.rbegin() != '/'))
         server_dir += "/";
 
-      std::string s_time_extract("^(\\d{4})(\\d{2})(\\d{2})(\\d{2})(\\d{2})(\\d{2})");
-      std::string s_time_subst("\\1\\2\\3T\\4\\5\\6Z");
+      std::string s_time_extract(R"(^(\d{4})(\d{2})(\d{2})(\d{2})(\d{2})(\d{2}))");
+      std::string s_time_subst(R"(\1\2\3T\4\5\6Z)");
       std::vector<std::string> v_translate;
       if (config.get_config_array(setting, "origin_time_translate", v_translate, 2, 2))
       {
@@ -171,7 +171,7 @@ bw::DataSetDefinition::DataSetDefinition(SmartMet::Spine::ConfigBase& config,
 
       std::ostringstream msg;
       msg << exception.getStackTrace();
-      config.dump_setting(msg, setting, 8);
+      SmartMet::Spine::ConfigBase::dump_setting(msg, setting, 8);
 
       throw exception;
     }
@@ -195,7 +195,7 @@ boost::shared_ptr<bw::DataSetDefinition> bw::DataSetDefinition::create(
   }
 }
 
-bw::DataSetDefinition::~DataSetDefinition() {}
+bw::DataSetDefinition::~DataSetDefinition() = default;
 
 bool bw::DataSetDefinition::intersects(const bw::DataSetDefinition::box_t& bbox) const
 {

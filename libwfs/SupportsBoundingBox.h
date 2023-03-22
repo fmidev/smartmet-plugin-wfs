@@ -23,7 +23,7 @@ class SupportsBoundingBox : protected virtual SupportsExtraHandlerParams,
                       SmartMet::Spine::CRSRegistry& crs_registry,
                       bool mandatory = false);
 
-  virtual ~SupportsBoundingBox();
+  ~SupportsBoundingBox() override;
 
   bool get_bounding_box(const RequestParameterMap& param_values,
                         const std::string& default_crs,

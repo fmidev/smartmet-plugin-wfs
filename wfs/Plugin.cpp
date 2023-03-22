@@ -236,7 +236,7 @@ void Plugin::realRequestHandler(SmartMet::Spine::Reactor& theReactor,
   }
 }
 
-void Plugin::adminHandler(SmartMet::Spine::Reactor& theReactor,
+void Plugin::adminHandler(SmartMet::Spine::Reactor&  /*theReactor*/,
                           const SmartMet::Spine::HTTP::Request& theRequest,
                           SmartMet::Spine::HTTP::Response& theResponse)
 {

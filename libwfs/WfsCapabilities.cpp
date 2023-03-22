@@ -11,9 +11,9 @@ using namespace SmartMet::Spine;
 
 using SmartMet::Spine::log_time_str;
 
-bw::WfsCapabilities::WfsCapabilities() {}
+bw::WfsCapabilities::WfsCapabilities() = default;
 
-bw::WfsCapabilities::~WfsCapabilities() {}
+bw::WfsCapabilities::~WfsCapabilities() = default;
 
 bool bw::WfsCapabilities::register_operation(const std::string& operation)
 {
@@ -104,7 +104,7 @@ void bw::WfsCapabilities::register_feature_use(const std::string& name)
     }
     else
     {
-      std::string sep = "";
+      std::string sep;
       std::ostringstream msg;
       msg << "Available features are:";
       for (const auto& item : features)
@@ -112,7 +112,7 @@ void bw::WfsCapabilities::register_feature_use(const std::string& name)
         msg << sep << " '" << item.first << "'";
         sep = ",";
       }
-      if (sep == "")
+      if (sep.empty())
         msg << " <none>";
 
       Fmi::Exception exception(BCP, "Feature '" + name + "' not found!");

@@ -154,7 +154,7 @@ std::string check_name_info(const xercesc::DOMNode* node,
 
     if ((allowed_names.count(name_info.first) == 0) or (name_info.second != ns))
     {
-      std::string d = "";
+      std::string d;
       std::ostringstream msg;
       msg << location << ": invalid element name {" << name_info.second << "}" << name_info.first
           << " ({" << ns << "}(";
@@ -368,7 +368,7 @@ std::vector<xercesc::DOMElement*> get_child_elements(const xercesc::DOMElement& 
     {
       if (child->getNodeType() == xercesc::DOMNode::ELEMENT_NODE)
       {
-        xercesc::DOMElement& child_element = dynamic_cast<xercesc::DOMElement&>(*child);
+        auto& child_element = dynamic_cast<xercesc::DOMElement&>(*child);
         if ((ns == "*") or xercesc::XMLString::equals(x_ns.get(), child_element.getNamespaceURI()))
         {
           if ((name == "*") or

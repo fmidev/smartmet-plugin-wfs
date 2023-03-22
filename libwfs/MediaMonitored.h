@@ -13,17 +13,17 @@ namespace WFS
 class MediaMonitored
 {
  public:
-  typedef std::string MediaValueType;
-  typedef std::string KeywordType;
-  typedef std::set<MediaValueType> MediaValueSetType;
-  typedef std::map<KeywordType, MediaValueType> KeywordToMediaValueMapType;
+  using MediaValueType = std::string;
+  using KeywordType = std::string;
+  using MediaValueSetType = std::set<MediaValueType>;
+  using KeywordToMediaValueMapType = std::map<KeywordType, MediaValueType>;
 
-  MediaMonitored() {}
-  virtual ~MediaMonitored() {}
+  MediaMonitored() = default;
+  virtual ~MediaMonitored() = default;
   void add(const KeywordType& keyword)
   {
     // Validate the keyword and insert the MediaValue.
-    KeywordToMediaValueMapType::const_iterator ktmvmIt =
+    auto ktmvmIt =
         m_keywordToMediaValueMap.find(Fmi::ascii_tolower_copy(keyword));
     if (ktmvmIt != m_keywordToMediaValueMap.end())
       m_mediaValueSet.insert(ktmvmIt->second);
@@ -33,8 +33,8 @@ class MediaMonitored
   MediaValueSetType::const_iterator end() const { return m_mediaValueSet.end(); }
 
  private:
-  MediaMonitored& operator=(const MediaMonitored& other);
-  MediaMonitored(const MediaMonitored& other);
+  MediaMonitored& operator=(const MediaMonitored& other) = delete;
+  MediaMonitored(const MediaMonitored& other) = delete;
 
   MediaValueSetType m_mediaValueSet;
 

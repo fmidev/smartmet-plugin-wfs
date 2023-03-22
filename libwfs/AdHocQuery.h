@@ -30,9 +30,9 @@ class AdHocQuery : public StoredQuery
   AdHocQuery();
 
  public:
-  virtual ~AdHocQuery();
+  ~AdHocQuery() override;
 
-  virtual QueryType get_type() const;
+  QueryType get_type() const override;
 
   /**
    *   @brief Static method for reading stored query from KVP format request

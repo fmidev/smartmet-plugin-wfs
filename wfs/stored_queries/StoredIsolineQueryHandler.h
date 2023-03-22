@@ -20,15 +20,15 @@ class StoredIsolineQueryHandler : public StoredContourQueryHandler
                             boost::optional<std::string> template_file_name);
 
  protected:
-  void clipGeometry(OGRGeometryPtr& pGeom, Fmi::Box& bbox) const;
-  std::vector<ContourQueryResultPtr> processQuery(ContourQueryParameter& queryParameter) const;
+  void clipGeometry(OGRGeometryPtr& pGeom, Fmi::Box& bbox) const override;
+  std::vector<ContourQueryResultPtr> processQuery(ContourQueryParameter& queryParameter) const override;
   SmartMet::Engine::Contour::Options getContourEngineOptions(
-      const boost::posix_time::ptime& time, const ContourQueryParameter& queryParameter) const;
+      const boost::posix_time::ptime& time, const ContourQueryParameter& queryParameter) const override;
   boost::shared_ptr<ContourQueryParameter> getQueryParameter(
       const SmartMet::Spine::Parameter& parameter,
       const SmartMet::Engine::Querydata::Q& q,
-      OGRSpatialReference& sr) const;
-  void setResultHashValue(CTPP::CDT& resultHash, const ContourQueryResult& resultItem) const;
+      OGRSpatialReference& sr) const override;
+  void setResultHashValue(CTPP::CDT& resultHash, const ContourQueryResult& resultItem) const override;
 
  private:
   std::string itsName;

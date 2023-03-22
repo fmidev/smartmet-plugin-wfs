@@ -111,7 +111,7 @@ bw::SupportsLocationParameters::SupportsLocationParameters(
   }
 }
 
-bw::SupportsLocationParameters::~SupportsLocationParameters() {}
+bw::SupportsLocationParameters::~SupportsLocationParameters() = default;
 
 void bw::SupportsLocationParameters::get_location_options(
     const RequestParameterMap &param,
@@ -129,7 +129,7 @@ void bw::SupportsLocationParameters::get_location_options(
     std::string language = Fmi::ascii_tolower_copy(language_requested);
     engOrFinToEnOrFi(language);
 
-    double max_distance = param.get_single<double>(P_MAX_DISTANCE);
+    auto max_distance = param.get_single<double>(P_MAX_DISTANCE);
 
     // Handle latitude-logitude pairs
     std::vector<double> values;
@@ -196,8 +196,8 @@ void bw::SupportsLocationParameters::get_location_options(
     const bool overwrite_keyword_by_locations = (keyword_overwritable and locations_given);
     if (support_keywords and not overwrite_keyword_by_locations)
     {
-      std::string keyword = param.get_optional<std::string>(P_KEYWORD, "");
-      if (ba::trim_copy(keyword) != "")
+      auto keyword = param.get_optional<std::string>(P_KEYWORD, "");
+      if (!ba::trim_copy(keyword).empty())
       {
         Locus::QueryOptions opts;
         opts.SetLanguage(language);

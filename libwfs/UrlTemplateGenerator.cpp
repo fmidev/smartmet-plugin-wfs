@@ -68,20 +68,20 @@ bw::UrlTemplateGenerator::UrlTemplateGenerator(const std::string& url,
   }
 }
 
-bw::UrlTemplateGenerator::~UrlTemplateGenerator() {}
+bw::UrlTemplateGenerator::~UrlTemplateGenerator() = default;
 
 std::string bw::UrlTemplateGenerator::generate(
     boost::function1<std::vector<std::string>, std::string> param_getter_cb) const
 {
   try
   {
-    std::string sep = "";
+    std::string sep;
     std::ostringstream result;
     result << eval_string_param(url, param_getter_cb, false);
 
-    if (params.size() > 0)
+    if (!params.empty())
     {
-      if ((url != "") and (*url.rbegin() != '?'))
+      if ((!url.empty()) and (*url.rbegin() != '?'))
       {
         if (strchr(url.c_str(), '?') != nullptr)
         {
@@ -122,7 +122,7 @@ std::string bw::UrlTemplateGenerator::generate(
               {
                 Fmi::Exception exception(
                     BCP, "List items are not permitted to contain ',' characters!");
-                exception.addParameter("Item", item.c_str());
+                exception.addParameter("Item", item);
                 throw exception;
               }
               result << sep2;
@@ -168,7 +168,8 @@ void bw::UrlTemplateGenerator::parse_param_def(const std::string& str)
     bool have_ref = false;
     std::string name, ref_name, value;
 
-    typedef qi::rule<std::string::const_iterator, std::string()> qi_rule;
+    using qi_rule = qi::rule<std::string::const_iterator, std::string
+        ()>;
 
     qi_rule name_p = qi::lexeme[+(ns::alnum | qi::char_('_'))];
 
@@ -191,7 +192,7 @@ void bw::UrlTemplateGenerator::parse_param_def(const std::string& str)
         StringParam param;
         param.name = name;
         param.value = value;
-        params.push_back(param);
+        params.emplace_back(param);
       }
       else if (have_ref)
       {
@@ -199,7 +200,7 @@ void bw::UrlTemplateGenerator::parse_param_def(const std::string& str)
         ref.name = ref_name;
         ref.omit_empty = may_skip;
         ref.separate_param = separate_param;
-        params.push_back(ref);
+        params.emplace_back(ref);
       }
       else
       {

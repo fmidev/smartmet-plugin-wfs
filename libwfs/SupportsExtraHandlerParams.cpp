@@ -40,7 +40,7 @@ bw::SupportsExtraHandlerParams::SupportsExtraHandlerParams(
     for (int i = 0; i < N; i++)
     {
       auto& param_desc = c_handler_params[i];
-      const std::string name = config->get_mandatory_config_param<std::string>(param_desc, "name");
+      const auto name = config->get_mandatory_config_param<std::string>(param_desc, "name");
       libconfig::Setting& def =
           config->get_mandatory_config_param<libconfig::Setting&>(param_desc, "def");
       bool reg = config->get_optional_config_param<bool>(param_desc, "register", false);
@@ -92,7 +92,7 @@ bw::SupportsExtraHandlerParams::SupportsExtraHandlerParams(
   }
 }
 
-bw::SupportsExtraHandlerParams::~SupportsExtraHandlerParams() {}
+bw::SupportsExtraHandlerParams::~SupportsExtraHandlerParams() = default;
 
 const bw::ParameterTemplateBase& bw::SupportsExtraHandlerParams::get_param(
     const std::string& name) const

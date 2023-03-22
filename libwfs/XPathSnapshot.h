@@ -19,7 +19,7 @@ class XPathSnapshot : private XmlDomErrorHandler
  public:
   XPathSnapshot();
 
-  virtual ~XPathSnapshot();
+  ~XPathSnapshot() override;
 
   void parse_dom_document(const std::string& source, const std::string& public_id);
 
@@ -45,7 +45,7 @@ class XPathSnapshot : private XmlDomErrorHandler
  private:
   xercesc::DOMImplementation* xqillaImplementation;
   AutoRelease<xercesc::DOMLSParser> parser;
-  xercesc::DOMDocument* document;
+  xercesc::DOMDocument* document{nullptr};
   std::shared_ptr<xercesc::DOMXPathNSResolver> resolver;
   std::shared_ptr<xercesc::DOMXPathExpression> expression;
   std::shared_ptr<xercesc::DOMXPathResult> xpath_result;

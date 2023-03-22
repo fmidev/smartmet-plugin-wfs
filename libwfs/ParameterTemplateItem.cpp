@@ -63,7 +63,8 @@ void ParameterTemplateItem::parse(const std::string& item_def, bool allow_absent
     namespace ba = boost::algorithm;
     namespace bl = boost::lambda;
 
-    typedef qi::rule<std::string::const_iterator, std::string(), ns::space_type> qi_rule;
+    using qi_rule = qi::rule<std::string::const_iterator, std::string
+        (), ns::space_type>;
 
     this->plain_text.reset();
     this->param_ref = this->default_value = boost::optional<std::string>();

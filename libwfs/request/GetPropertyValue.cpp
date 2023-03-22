@@ -44,7 +44,7 @@ GetPropertyValue::GetPropertyValue(const std::string& language,
 {
 }
 
-GetPropertyValue::~GetPropertyValue() {}
+GetPropertyValue::~GetPropertyValue() = default;
 bw::RequestBase::RequestType GetPropertyValue::get_type() const
 {
   return bw::RequestBase::GET_PROPERTY_VALUE;
@@ -71,7 +71,7 @@ void GetPropertyValue::execute(std::ostream& output) const
     bool is_schemalocation_set = false;
     ;
 
-    if (queries.size() > 0)
+    if (!queries.empty())
     {
       std::vector<std::string> query_responses;
       bool some_succeeded = collect_query_responses(query_responses);
@@ -498,7 +498,7 @@ boost::shared_ptr<GetPropertyValue> GetPropertyValue::create_from_kvp(
     {
       boost::shared_ptr<bw::StoredQuery> query =
           bw::StoredQuery::create_from_kvp(language, result->spp, http_request, stored_query_map);
-      result->queries.push_back(query);
+      result->queries.emplace_back(query);
     }
     else
     {
@@ -570,7 +570,7 @@ boost::shared_ptr<GetPropertyValue> GetPropertyValue::create_from_xml(
         // There should be no more than one according to the XML schema.
         boost::shared_ptr<bw::StoredQuery> query =
             bw::StoredQuery::create_from_xml(language, result->spp, *child, stored_query_map);
-        result->queries.push_back(query);
+        result->queries.emplace_back(query);
       }
       else
       {
@@ -594,7 +594,7 @@ bool GetPropertyValue::collect_query_responses(std::vector<std::string>& query_r
   {
     bool some_succeeded = false;
 
-    for (auto query_ptr : queries)
+    for (const auto& query_ptr : queries)
     {
       boost::optional<std::string> cached_response = query_ptr->get_cached_response();
 
@@ -645,9 +645,8 @@ bool GetPropertyValue::get_cached_responses()
   try
   {
     bool found = true;
-    for (auto it = queries.begin(); it != queries.end(); ++it)
+    for (const auto& query : queries)
     {
-      auto query = *it;
       boost::optional<std::string> cached_response = query_cache.find(query->get_cache_key());
       if (cached_response)
       {
@@ -674,9 +673,8 @@ int GetPropertyValue::get_response_expires_seconds() const
     int smallest_value = -1;
 
     // When multiple queries present, select the smallest stale value.
-    for (auto it = queries.begin(); it != queries.end(); ++it)
+    for (const auto& query : queries)
     {
-      auto query = *it;
       int seconds = query->get_stale_seconds();
       if (smallest_value < 0)
         smallest_value = seconds;

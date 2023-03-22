@@ -24,13 +24,13 @@ class GetFeature : public RequestBase
   GetFeature(const std::string& language, PluginImpl& plugin_impl);
 
  public:
-  virtual ~GetFeature();
+  ~GetFeature() override;
 
-  virtual RequestType get_type() const;
+  RequestType get_type() const override;
 
-  virtual void execute(std::ostream& ost) const;
+  void execute(std::ostream& ost) const override;
 
-  virtual int get_response_expires_seconds() const;
+  int get_response_expires_seconds() const override;
 
   static boost::shared_ptr<GetFeature> create_from_kvp(
       const std::string& language,

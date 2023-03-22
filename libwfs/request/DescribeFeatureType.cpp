@@ -21,7 +21,7 @@ bw::Request::DescribeFeatureType::DescribeFeatureType(
 {
 }
 
-bw::Request::DescribeFeatureType::~DescribeFeatureType() {}
+bw::Request::DescribeFeatureType::~DescribeFeatureType() = default;
 
 bw::RequestBase::RequestType bw::Request::DescribeFeatureType::get_type() const
 {
@@ -92,10 +92,10 @@ void bw::Request::DescribeFeatureType::execute(std::ostream& output) const
     hash["protocol"] = (protocol ? *protocol : plugin_impl.get_fallback_protocol()) + "://";
 
     int ind = 0;
-    for (auto it = namespaces.begin(); it != namespaces.end(); ++it)
+    for (auto & it : namespaces)
     {
-      const std::string& name = it->first;
-      const boost::optional<std::string>& loc = it->second;
+      const std::string& name = it.first;
+      const boost::optional<std::string>& loc = it.second;
       if (ind == 0)
       {
         hash["target_namespace"] = name;
@@ -174,13 +174,13 @@ bw::Request::DescribeFeatureType::create_from_kvp(
       // Currently simply ignore namespace prefix as we have no means how to map it
       // to the namespace here
       std::string name = item;
-      std::size_t pos = name.find_last_of(":");
+      std::size_t pos = name.find_last_of(':');
       if (pos != std::string::npos)
       {
         name = name.substr(pos + 1);
       }
 
-      type_names.push_back(std::make_pair(std::string("*"), name));
+      type_names.emplace_back(std::string("*"), name);
     }
 
     boost::shared_ptr<bw::Request::DescribeFeatureType> result;
@@ -214,7 +214,7 @@ bw::Request::DescribeFeatureType::create_from_xml(const std::string& language,
     for (const xercesc::DOMElement* elem : elems)
     {
       const std::string item = ba::trim_copy(bwx::extract_text(*elem));
-      const std::size_t pos = item.find_last_of(":");
+      const std::size_t pos = item.find_last_of(':');
       const XMLCh* x_uri = nullptr;
       std::string name;
       if (pos == std::string::npos)
@@ -240,7 +240,7 @@ bw::Request::DescribeFeatureType::create_from_xml(const std::string& language,
         throw exception;
       }
 
-      type_names.push_back(std::make_pair(Xml::to_string(x_uri), name));
+      type_names.emplace_back(Xml::to_string(x_uri), name);
     }
 
     result.reset(new bw::Request::DescribeFeatureType(language, type_names, plugin_impl));

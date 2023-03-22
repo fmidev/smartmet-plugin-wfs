@@ -20,13 +20,13 @@ class StoredGeoserverQueryHandler : public StoredAtomQueryHandlerBase, protected
                               PluginImpl &plugin_impl,
                               boost::optional<std::string> template_file_name);
 
-  virtual ~StoredGeoserverQueryHandler();
+  ~StoredGeoserverQueryHandler() override;
 
  protected:
-  virtual void update_parameters(
+  void update_parameters(
       const RequestParameterMap &request_params,
       int seq_id,
-      std::vector<boost::shared_ptr<RequestParameterMap> > &result) const;
+      std::vector<boost::shared_ptr<RequestParameterMap> > &result) const override;
 
  private:
   /* FIXME: optimize to avoid need to read query paremeters again and again (if needed) */

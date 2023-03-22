@@ -28,12 +28,12 @@ class GeoServerDataIndex
   {
     std::string name;
     std::string layer;
-    OGRLineString* orig_geom;
-    OGRLineString* dest_geom;
-    int orig_srs;
-    int dest_srs;
-    bool orig_srs_swapped;
-    bool dest_srs_swapped;
+    OGRLineString* orig_geom{nullptr};
+    OGRLineString* dest_geom{nullptr};
+    int orig_srs{-1};
+    int dest_srs{-1};
+    bool orig_srs_swapped{false};
+    bool dest_srs_swapped{false};
     std::map<std::string, SmartMet::Spine::Value> data_map;
 
    public:

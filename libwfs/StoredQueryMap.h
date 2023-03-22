@@ -37,7 +37,7 @@ class StoredQueryMap final
  public:
   StoredQueryMap(SmartMet::Spine::Reactor* theReactor, PluginImpl& plugin_impl);
 
-  virtual ~StoredQueryMap();
+  ~StoredQueryMap() override;
 
   void shutdown();
 
@@ -111,7 +111,7 @@ class StoredQueryMap final
   void notify_failed();
 
  private:
-  bool background_init;
+  bool background_init{false};
   std::atomic<bool> reload_required;
   std::atomic<bool> loading_started;
   std::atomic<bool> load_failed;

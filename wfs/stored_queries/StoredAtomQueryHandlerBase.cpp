@@ -28,7 +28,7 @@ bw::StoredAtomQueryHandlerBase::StoredAtomQueryHandlerBase(
 {
   try
   {
-    const std::string url = config->get_mandatory_config_param<std::string>("url_template.url");
+    const auto url = config->get_mandatory_config_param<std::string>("url_template.url");
 
     const std::vector<std::string> url_params =
         config->get_mandatory_config_array<std::string>("url_template.params");
@@ -41,7 +41,7 @@ bw::StoredAtomQueryHandlerBase::StoredAtomQueryHandlerBase(
   }
 }
 
-bw::StoredAtomQueryHandlerBase::~StoredAtomQueryHandlerBase() {}
+bw::StoredAtomQueryHandlerBase::~StoredAtomQueryHandlerBase() = default;
 
 void bw::StoredAtomQueryHandlerBase::init_handler() {}
 
@@ -118,7 +118,7 @@ void bw::StoredAtomQueryHandlerBase::query(const bw::StoredQuery& query,
       {
         int cnt = 0;
 	const std::vector<SmartMet::Spine::Value> values = param_set.get_values(param_name);
-	for (auto v : values)
+	for (const auto& v : values)
 	{
 	  hash_item["params"][param_name][cnt++] = v.to_string();
 	}
@@ -176,9 +176,9 @@ std::vector<std::string> bw::StoredAtomQueryHandlerBase::get_param_callback(
       else /* std::vector<SmartMet::Spine::Value> */
       {
         const auto& vect = boost::get<std::vector<SmartMet::Spine::Value> >(param_value);
-        for (std::size_t i = 0; i < vect.size(); i++)
+        for (const auto & i : vect)
         {
-          std::string tmp = vect.at(i).to_string();
+          std::string tmp = i.to_string();
           result.push_back(tmp);
         }
       }
@@ -204,7 +204,7 @@ boost::shared_ptr<SmartMet::Plugin::WFS::StoredQueryHandlerBase> wfs_stored_atom
 {
   try
   {
-    StoredAtomQueryHandlerBase* qh =
+    auto* qh =
         new StoredAtomQueryHandlerBase(reactor, config, plugin_data, template_file_name);
     boost::shared_ptr<SmartMet::Plugin::WFS::StoredQueryHandlerBase> result(qh);
     return result;

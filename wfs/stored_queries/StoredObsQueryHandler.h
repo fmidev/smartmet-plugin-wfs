@@ -39,12 +39,12 @@ class StoredObsQueryHandler : public StoredQueryHandlerBase,
                         PluginImpl& plugin_impl,
                         boost::optional<std::string> template_file_name);
 
-  virtual ~StoredObsQueryHandler();
+  ~StoredObsQueryHandler() override;
 
-  virtual void query(const StoredQuery& query,
+  void query(const StoredQuery& query,
                      const std::string& language,
 		     const boost::optional<std::string> &hostname,
-                     std::ostream& output) const;
+                     std::ostream& output) const override;
 
  private:
 

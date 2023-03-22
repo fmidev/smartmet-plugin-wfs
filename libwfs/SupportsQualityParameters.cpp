@@ -24,7 +24,7 @@ bw::SupportsQualityParameters::SupportsQualityParameters(
   }
 }
 
-bw::SupportsQualityParameters::~SupportsQualityParameters() {}
+bw::SupportsQualityParameters::~SupportsQualityParameters() = default;
 
 bool bw::SupportsQualityParameters::isQCParameter(const std::string& name) const
 {

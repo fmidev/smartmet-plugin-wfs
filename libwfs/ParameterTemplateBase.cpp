@@ -22,13 +22,13 @@ ParameterTemplateBase::ParameterTemplateBase(StoredQueryConfig& config,
 {
 }
 
-ParameterTemplateBase::~ParameterTemplateBase() {}
+ParameterTemplateBase::~ParameterTemplateBase() = default;
 
 libconfig::Setting* ParameterTemplateBase::get_setting_root()
 {
   try
   {
-    auto& root = base_path == ""
+    auto& root = base_path.empty()
         ? config.get_config().getRoot()
         : config.get_mandatory_config_param<libconfig::Setting&>(base_path);
     return config.find_setting(root, config_path, false);

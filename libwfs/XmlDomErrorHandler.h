@@ -15,9 +15,9 @@ class XmlDomErrorHandler : public xercesc::DOMErrorHandler
  public:
   XmlDomErrorHandler();
 
-  virtual ~XmlDomErrorHandler();
+  ~XmlDomErrorHandler() override;
 
-  virtual bool handleError(const xercesc::DOMError &dom_error);
+  bool handleError(const xercesc::DOMError &dom_error) override;
 };
 
 }  // namespace Xml

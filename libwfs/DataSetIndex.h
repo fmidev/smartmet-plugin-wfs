@@ -48,8 +48,8 @@ class DataSetQuery
 class DataSetDefinition : public boost::enable_shared_from_this<DataSetDefinition>
 {
  public:
-  typedef boost::geometry::model::d2::point_xy<double> point_t;
-  typedef boost::geometry::model::box<point_t> box_t;
+  using point_t = boost::geometry::model::d2::point_xy<double>;
+  using box_t = boost::geometry::model::box<point_t>;
 
  private:
   DataSetDefinition(SmartMet::Spine::ConfigBase& config, libconfig::Setting& setting);

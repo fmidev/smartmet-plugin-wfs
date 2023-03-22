@@ -6,12 +6,12 @@
 #include <boost/algorithm/string.hpp>
 #include <boost/bind/bind.hpp>
 #include <boost/date_time/posix_time/posix_time.hpp>
+#include <cstdint>
+#include <macgyver/Exception.h>
 #include <macgyver/TimeParser.h>
 #include <macgyver/TypeName.h>
-#include <macgyver/Exception.h>
 #include <sstream>
 #include <stdexcept>
-#include <stdint.h>
 
 namespace ph = boost::placeholders;
 
@@ -71,7 +71,7 @@ ParameterExtractor::ParameterExtractor()
   }
 }
 
-ParameterExtractor::~ParameterExtractor() {}
+ParameterExtractor::~ParameterExtractor() = default;
 
 void ParameterExtractor::add_type(const std::string& name,
                                   ParameterExtractor::xml_param_extract_t extractor)
@@ -100,7 +100,7 @@ std::vector<SmartMet::Spine::Value> ParameterExtractor::extract_param(
     // Currently namespace specification is ignored and only the name is matched
     // Otherwise we should use full namespace URI in the configuration file
     // and detect needed namespace prefix.
-    std::size_t pos = xml_type.find_first_of(":");
+    std::size_t pos = xml_type.find_first_of(':');
     if (pos != std::string::npos)
       type_name = type_name.substr(pos + 1);
 
@@ -157,7 +157,7 @@ std::vector<SmartMet::Spine::Value> ParameterExtractor::extract_boolean(
     std::vector<SmartMet::Spine::Value> result;
     const std::string content = extract_text(elem);
     bool tmp = SmartMet::Spine::string2bool(content);
-    result.push_back(SmartMet::Spine::Value(tmp));
+    result.emplace_back(tmp);
     return result;
   } catch (...) {
     throw Fmi::Exception::Trace(BCP, "Operation failed!");
@@ -348,8 +348,8 @@ std::vector<SmartMet::Spine::Value> ParameterExtractor::extract_gml_pos(
       if (pos.data.size() == 2)
       {
         std::vector<SmartMet::Spine::Value> result;
-        result.push_back(SmartMet::Spine::Value(pos.data[0]));
-        result.push_back(SmartMet::Spine::Value(pos.data[1]));
+        result.emplace_back(pos.data[0]);
+        result.emplace_back(pos.data[1]);
         return result;
       }
       else
@@ -402,7 +402,7 @@ std::vector<SmartMet::Spine::Value> ParameterExtractor::extract_gml_envelope(
         }
 
         std::vector<SmartMet::Spine::Value> result;
-        result.push_back(SmartMet::Spine::Value(bbox));
+        result.emplace_back(bbox);
         return result;
       }
       else

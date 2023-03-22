@@ -30,7 +30,8 @@ namespace WFS
 {
 class StoredQueryMap;
 
-typedef Fmi::TimedCache::Cache<std::string, std::string> QueryResponseCache;
+using QueryResponseCache = Fmi::TimedCache::Cache<std::string,
+        std::string>;
 
 class PluginImpl
 {
@@ -239,8 +240,8 @@ class PluginImpl
   int debug_level;
   std::string fallback_hostname;
   std::string fallback_protocol;
-  std::string data_source{""};
-  std::string primary_data_source{""};
+  std::string data_source;
+  std::string primary_data_source;
   bool gridengine_disabled{false};
 
   /**

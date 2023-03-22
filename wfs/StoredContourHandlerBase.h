@@ -39,11 +39,11 @@ class StoredContourQueryHandler : public StoredQueryHandlerBase,
                             boost::shared_ptr<StoredQueryConfig> config,
                             PluginImpl& plugin_impl,
                             boost::optional<std::string> template_file_name);
-  virtual ~StoredContourQueryHandler();
-  virtual void query(const StoredQuery& query,
+  ~StoredContourQueryHandler() override;
+  void query(const StoredQuery& query,
                      const std::string& language,
 		     const boost::optional<std::string>& hostname,
-                     std::ostream& output) const;
+                     std::ostream& output) const override;
 
  protected:
 

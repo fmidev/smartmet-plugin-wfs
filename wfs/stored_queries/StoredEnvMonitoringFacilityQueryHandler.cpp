@@ -74,11 +74,11 @@ bw::StoredEnvMonitoringFacilityQueryHandler::StoredEnvMonitoringFacilityQueryHan
   }
 }
 
-bw::StoredEnvMonitoringFacilityQueryHandler::~StoredEnvMonitoringFacilityQueryHandler() {}
+bw::StoredEnvMonitoringFacilityQueryHandler::~StoredEnvMonitoringFacilityQueryHandler() = default;
 
 void bw::StoredEnvMonitoringFacilityQueryHandler::query(const StoredQuery &query,
                                                         const std::string &language,
-							const boost::optional<std::string> &hostname,
+							const boost::optional<std::string> & /*hostname*/,
                                                         std::ostream &output) const
 {
   try
@@ -94,9 +94,9 @@ void bw::StoredEnvMonitoringFacilityQueryHandler::query(const StoredQuery &query
 
     // Removing some feature id parameters
     const char *removeParams[] = {P_STATION_ID, P_STATION_NAME, P_GROUP_ID};
-    for (unsigned i = 0; i < sizeof(removeParams) / sizeof(*removeParams); i++)
+    for (auto & removeParam : removeParams)
     {
-      featureId.erase_param(removeParams[i]);
+      featureId.erase_param(removeParam);
     }
 
     if (m_debugLevel > 0)
@@ -196,44 +196,41 @@ void bw::StoredEnvMonitoringFacilityQueryHandler::query(const StoredQuery &query
       opts.SetFeatures("SYNOP,STUK");
       opts.SetResultLimit(1);
 
-      for (bw::StoredEnvMonitoringFacilityQueryHandler::StationDataMap::iterator vsIt =
-               validStations.begin();
-           vsIt != validStations.end();
-           ++vsIt)
+      for (auto & validStation : validStations)
       {
-        StationCapabilityMap::const_iterator scmIt = stationCapabilityMap.find((*vsIt).first);
-        StationGroupMap::const_iterator stationGroupMapIt = stationGroupMap.find((*vsIt).first);
+        auto scmIt = stationCapabilityMap.find(validStation.first);
+        auto stationGroupMapIt = stationGroupMap.find(validStation.first);
 
         // A station must be part of a station group
         if (stationGroupMapIt == stationGroupMap.end())
           continue;
 
-        featureId.add_param(P_STATION_ID, (*vsIt).first);
+        featureId.add_param(P_STATION_ID, validStation.first);
         hash["stations"][stationCounter]["featureId"] = featureId.get_id();
         featureId.erase_param(P_STATION_ID);
 
         // Station data
-        hash["stations"][stationCounter]["fmisid"] = (*vsIt).first;
+        hash["stations"][stationCounter]["fmisid"] = validStation.first;
         hash["stations"][stationCounter]["mobile"] =
-            (bo::QueryResult::toString((*vsIt).second.stationary) == "N" ? "true" : "false");
+            (bo::QueryResult::toString(validStation.second.stationary) == "N" ? "true" : "false");
         hash["stations"][stationCounter]["beginPosition"] =
-            bo::QueryResult::toString((*vsIt).second.station_start);
+            bo::QueryResult::toString(validStation.second.station_start);
         hash["stations"][stationCounter]["endPosition"] =
-            bo::QueryResult::toString((*vsIt).second.station_end);
+            bo::QueryResult::toString(validStation.second.station_end);
         hash["stations"][stationCounter]["name"] =
-            bo::QueryResult::toString((*vsIt).second.station_name);
+            bo::QueryResult::toString(validStation.second.station_name);
         hash["stations"][stationCounter]["opActivityPeriods"][0]["beginPosition"] =
-            bo::QueryResult::toString((*vsIt).second.station_start);
+            bo::QueryResult::toString(validStation.second.station_start);
         hash["stations"][stationCounter]["opActivityPeriods"][0]["endPosition"] =
-            bo::QueryResult::toString((*vsIt).second.station_end);
+            bo::QueryResult::toString(validStation.second.station_end);
         hash["stations"][stationCounter]["inspireNamespace"] = inspireNamespace;
         hash["stations"][stationCounter]["country-ISO-3166-Numeric"] =
-            bo::QueryResult::toString((*vsIt).second.country_id, 0);
+            bo::QueryResult::toString(validStation.second.country_id, 0);
 
         std::string countryName;
 
         // Data from Geonames
-        SmartMet::Spine::LocationList locList = geo_engine->nameSearch(opts, (*vsIt).first);
+        SmartMet::Spine::LocationList locList = geo_engine->nameSearch(opts, validStation.first);
         if (not locList.empty())
         {
           SmartMet::Spine::LocationPtr stationLocPtr = locList.front();
@@ -248,7 +245,7 @@ void bw::StoredEnvMonitoringFacilityQueryHandler::query(const StoredQuery &query
         // Geonames does not support country name search by using ISO-3166 Numeric value.
         // So here we do special handling for the stations in Finland and Sweden.
         std::string tmpCountryName;
-        const std::string countryId = bo::QueryResult::toString((*vsIt).second.country_id);
+        const std::string countryId = bo::QueryResult::toString(validStation.second.country_id);
         if (countryId == "246")
           tmpCountryName = geo_engine->countryName("FI", lang);
         else if (countryId == "752")
@@ -257,18 +254,18 @@ void bw::StoredEnvMonitoringFacilityQueryHandler::query(const StoredQuery &query
         if (not tmpCountryName.empty())
           hash["stations"][stationCounter]["country"] = tmpCountryName;
 
-        std::string pos = bo::QueryResult::toString((*vsIt).second.latitude, 6) + " " +
-                          bo::QueryResult::toString((*vsIt).second.longitude, 6);
+        std::string pos = bo::QueryResult::toString(validStation.second.latitude, 6) + " " +
+                          bo::QueryResult::toString(validStation.second.longitude, 6);
         hash["stations"][stationCounter]["position"] = pos;
         if (bbShowHeight)
           hash["stations"][stationCounter]["elevation"] =
-              bo::QueryResult::toString((*vsIt).second.elevation, 0);
+              bo::QueryResult::toString(validStation.second.elevation, 0);
 
         // Capability data from Observation
         if (scmIt != stationCapabilityMap.end())
         {
           CTPP::CDT &capabilityCDT = hash["stations"][stationCounter]["observingCapabilities"];
-          StationCapabilityData::const_iterator scmDataIt = scmIt->second.begin();
+          auto scmDataIt = scmIt->second.begin();
           int ocId = 0;
           MediaMonitored mediaMonitored;
 
@@ -295,24 +292,19 @@ void bw::StoredEnvMonitoringFacilityQueryHandler::query(const StoredQuery &query
           }
 
           int mediaValueIndex = 0;
-          for (MediaMonitored::MediaValueSetType::const_iterator it = mediaMonitored.begin();
-               it != mediaMonitored.end();
-               ++it)
-            hash["stations"][stationCounter]["mediaMonitored"][mediaValueIndex++] = *it;
+          for (const auto & it : mediaMonitored)
+            hash["stations"][stationCounter]["mediaMonitored"][mediaValueIndex++] = it;
         }
 
         // Some of the stations are in member groups.
-        NetworkMembershipMap::const_iterator networkMemberShipMapIt =
-            networkMemberShipMap.find((*vsIt).first);
+        auto networkMemberShipMapIt =
+            networkMemberShipMap.find(validStation.first);
         if (networkMemberShipMapIt != networkMemberShipMap.end())
         {
-          for (NetworkMembershipVector::const_iterator it =
-                   (*networkMemberShipMapIt).second.begin();
-               it != (*networkMemberShipMapIt).second.end();
-               ++it)
+          for (const auto & it : (*networkMemberShipMapIt).second)
           {
-            const std::string networkMemberCodeStr = bo::QueryResult::toString((*it).member_code);
-            const std::string networkIdStr = bo::QueryResult::toString((*it).network_id, 0);
+            const std::string networkMemberCodeStr = bo::QueryResult::toString(it.member_code);
+            const std::string networkIdStr = bo::QueryResult::toString(it.network_id, 0);
             if (LPNN_active and networkIdStr == "10")
               hash["stations"][stationCounter]["lpnn"] = networkMemberCodeStr;
             else if (WMO_active and networkIdStr == "20")
@@ -340,14 +332,12 @@ void bw::StoredEnvMonitoringFacilityQueryHandler::query(const StoredQuery &query
         if (stationGroupMapIt != stationGroupMap.end())
         {
           int64_t groupCounter = 0;
-          for (StationGroupVector::const_iterator it = (*stationGroupMapIt).second.begin();
-               it != (*stationGroupMapIt).second.end();
-               ++it)
+          for (const auto & it : (*stationGroupMapIt).second)
           {
             hash["stations"][stationCounter]["networks"][groupCounter]["id"] =
-                bo::QueryResult::toString((*it).group_id, 0);
+                bo::QueryResult::toString(it.group_id, 0);
             hash["stations"][stationCounter]["networks"][groupCounter]["name"] =
-                bo::QueryResult::toString((*it).group_name);
+                bo::QueryResult::toString(it.group_name);
             groupCounter++;
           }
         }
@@ -448,8 +438,8 @@ void bw::StoredEnvMonitoringFacilityQueryHandler::getValidStations(
     std::vector<std::string> measurandCodeVector;
     params.get<std::string>(P_MEASURAND_CODE, std::back_inserter(measurandCodeVector));
 
-    pt::ptime startTime = params.get_single<pt::ptime>(P_BEGIN_TIME);
-    pt::ptime endTime = params.get_single<pt::ptime>(P_END_TIME);
+    auto startTime = params.get_single<pt::ptime>(P_BEGIN_TIME);
+    auto endTime = params.get_single<pt::ptime>(P_END_TIME);
 
     bo::MastQueryParams stationQueryParams(dbRegistryConfig("OBSERVATIONS_V2"));
     stationQueryParams.addJoinOnConfig(dbRegistryConfig("STATIONS_V1"), "STATION_ID");
@@ -461,50 +451,37 @@ void bw::StoredEnvMonitoringFacilityQueryHandler::getValidStations(
         not aggregatePeriods.empty() or not measurandCodeVector.empty())
       stationQueryParams.addJoinOnConfig(dbRegistryConfig("MEASURANDS_V1"), "MEASURAND_ID");
 
-    for (std::vector<std::string>::const_iterator it = basePhenomenonVector.begin();
-         it != basePhenomenonVector.end();
-         ++it)
+    for (const auto & it : basePhenomenonVector)
       stationQueryParams.addOperation(
-          "OR_GROUP_measurand_id", "BASE_PHENOMENON", "PropertyIsEqualTo", *it);
+          "OR_GROUP_measurand_id", "BASE_PHENOMENON", "PropertyIsEqualTo", it);
 
-    for (std::vector<std::string>::const_iterator it = aggregateFunctions.begin();
-         it != aggregateFunctions.end();
-         ++it)
+    for (const auto & aggregateFunction : aggregateFunctions)
       stationQueryParams.addOperation("OR_GROUP_aggregate_function",
                                       "AGGREGATE_FUNCTION",
                                       "PropertyIsEqualTo",
-                                      Fmi::ascii_tolower_copy(*it));
+                                      Fmi::ascii_tolower_copy(aggregateFunction));
 
-    for (std::vector<std::string>::const_iterator it = aggregatePeriods.begin();
-         it != aggregatePeriods.end();
-         ++it)
+    for (const auto & aggregatePeriod : aggregatePeriods)
       stationQueryParams.addOperation("OR_GROUP_aggregate_period",
                                       "AGGREGATE_PERIOD",
                                       "PropertyIsEqualTo",
-                                      Fmi::ascii_toupper_copy(*it));
+                                      Fmi::ascii_toupper_copy(aggregatePeriod));
 
-    for (std::vector<std::string>::const_iterator it = measurandCodeVector.begin();
-         it != measurandCodeVector.end();
-         ++it)
+    for (const auto & it : measurandCodeVector)
       stationQueryParams.addOperation("OR_GROUP_measurand_code",
                                       "MEASURAND_CODE",
                                       "PropertyIsEqualTo",
-                                      Fmi::ascii_toupper_copy(*it));
+                                      Fmi::ascii_toupper_copy(it));
 
-    for (std::vector<int64_t>::const_iterator it = groupIdVector.begin(); it != groupIdVector.end();
-         ++it)
-      stationQueryParams.addOperation("OR_GROUP_group_id", "GROUP_ID", "PropertyIsEqualTo", *it);
+    for (long it : groupIdVector)
+      stationQueryParams.addOperation("OR_GROUP_group_id", "GROUP_ID", "PropertyIsEqualTo", it);
 
     // Station name and id will be put into the same group.
-    for (std::vector<int64_t>::const_iterator it = stationIdVector.begin();
-         it != stationIdVector.end();
-         ++it)
+    for (long it : stationIdVector)
       stationQueryParams.addOperation(
-          "OR_GROUP_station_id", "STATION_ID", "PropertyIsEqualTo", *it);
-    for (std::vector<std::string>::const_iterator it = stationNameVector.begin();
-         it != stationNameVector.end();
-         ++it)
-      stationQueryParams.addOperation("OR_GROUP_station_id", "STATION_NAME", "PropertyIsLike", *it);
+          "OR_GROUP_station_id", "STATION_ID", "PropertyIsEqualTo", it);
+    for (const auto & it : stationNameVector)
+      stationQueryParams.addOperation("OR_GROUP_station_id", "STATION_NAME", "PropertyIsLike", it);
 
     stationQueryParams.addOperation(
         "OR_GROUP_station_end", "STATION_END", "PropertyIsGreaterThanOrEqualTo", startTime);
@@ -536,25 +513,25 @@ void bw::StoredEnvMonitoringFacilityQueryHandler::getValidStations(
 
     try
     {
-      bo::QueryResult::ValueVectorType::const_iterator stationIdIt =
+      auto stationIdIt =
           stationQueryResultContainer->begin("STATION_ID");
-      bo::QueryResult::ValueVectorType::const_iterator stationIdItEnd =
+      auto stationIdItEnd =
           stationQueryResultContainer->end("STATION_ID");
-      bo::QueryResult::ValueVectorType::const_iterator stationNameIt =
+      auto stationNameIt =
           stationQueryResultContainer->begin("STATION_NAME");
-      bo::QueryResult::ValueVectorType::const_iterator stationStartIt =
+      auto stationStartIt =
           stationQueryResultContainer->begin("STATION_START");
-      bo::QueryResult::ValueVectorType::const_iterator stationEndIt =
+      auto stationEndIt =
           stationQueryResultContainer->begin("STATION_END");
-      bo::QueryResult::ValueVectorType::const_iterator longitudeIt =
+      auto longitudeIt =
           stationQueryResultContainer->begin("LONGITUDE");
-      bo::QueryResult::ValueVectorType::const_iterator latitudeIt =
+      auto latitudeIt =
           stationQueryResultContainer->begin("LATITUDE");
-      bo::QueryResult::ValueVectorType::const_iterator elevationIt =
+      auto elevationIt =
           stationQueryResultContainer->begin("STATION_ELEVATION");
-      bo::QueryResult::ValueVectorType::const_iterator countryIdIt =
+      auto countryIdIt =
           stationQueryResultContainer->begin("COUNTRY_ID");
-      bo::QueryResult::ValueVectorType::const_iterator stationaryIt =
+      auto stationaryIt =
           stationQueryResultContainer->begin("STATIONARY");
 
       for (; stationIdIt != stationIdItEnd; ++stationIdIt,
@@ -609,8 +586,8 @@ void bw::StoredEnvMonitoringFacilityQueryHandler::getStationCapabilities(
     std::vector<int64_t> storageIdVector;
     params.get<int64_t>(P_STORAGE_ID, std::back_inserter(storageIdVector));
 
-    pt::ptime startTime = params.get_single<pt::ptime>(P_BEGIN_TIME);
-    pt::ptime endTime = params.get_single<pt::ptime>(P_END_TIME);
+    auto startTime = params.get_single<pt::ptime>(P_BEGIN_TIME);
+    auto endTime = params.get_single<pt::ptime>(P_END_TIME);
 
     // Station capability query
     bo::MastQueryParams scQueryParams(dbRegistryConfig("OBSERVATIONS_V2"));
@@ -627,17 +604,12 @@ void bw::StoredEnvMonitoringFacilityQueryHandler::getStationCapabilities(
     scQueryParams.addField("LATEST_DATA");
     scQueryParams.useDistinct();
 
-    for (std::vector<int64_t>::const_iterator it = storageIdVector.begin();
-         it != storageIdVector.end();
-         ++it)
-      scQueryParams.addOperation("OR_GROUP_storage_id", "STORAGE_ID", "PropertyIsEqualTo", *it);
+    for (long it : storageIdVector)
+      scQueryParams.addOperation("OR_GROUP_storage_id", "STORAGE_ID", "PropertyIsEqualTo", it);
 
-    for (bw::StoredEnvMonitoringFacilityQueryHandler::StationDataMap::const_iterator it =
-             validStations.begin();
-         it != validStations.end();
-         ++it)
+    for (const auto & validStation : validStations)
       scQueryParams.addOperation(
-          "OR_GROUP_station_id", "STATION_ID", "PropertyIsEqualTo", (*it).second.station_id);
+          "OR_GROUP_station_id", "STATION_ID", "PropertyIsEqualTo", validStation.second.station_id);
 
     // Station operational activity period
     scQueryParams.addOperation(
@@ -657,28 +629,28 @@ void bw::StoredEnvMonitoringFacilityQueryHandler::getStationCapabilities(
 
     // Mapping the query result
     std::shared_ptr<bo::QueryResult> scResultContainer = scQuery.getQueryResultContainer();
-    bo::QueryResult::ValueVectorType::const_iterator scStationIdBeginIt =
+    auto scStationIdBeginIt =
         scResultContainer->begin("STATION_ID");
-    bo::QueryResult::ValueVectorType::const_iterator scStationIdEndIt =
+    auto scStationIdEndIt =
         scResultContainer->end("STATION_ID");
-    bo::QueryResult::ValueVectorType::const_iterator scMeasurandIdIt =
+    auto scMeasurandIdIt =
         scResultContainer->begin("MEASURAND_ID");
-    bo::QueryResult::ValueVectorType::const_iterator scMeasurandCodeIt =
+    auto scMeasurandCodeIt =
         scResultContainer->begin("MEASURAND_CODE");
-    bo::QueryResult::ValueVectorType::const_iterator scMeasurandNameIt =
+    auto scMeasurandNameIt =
         scResultContainer->begin("MEASURAND_NAME");
-    bo::QueryResult::ValueVectorType::const_iterator scMeasurandLayerIt =
+    auto scMeasurandLayerIt =
         scResultContainer->begin("MEASURAND_LAYER");
-    bo::QueryResult::ValueVectorType::const_iterator scMeasurandAggregatePeriodIt =
+    auto scMeasurandAggregatePeriodIt =
         scResultContainer->begin("AGGREGATE_PERIOD");
-    bo::QueryResult::ValueVectorType::const_iterator scMeasurandAggregateFunctionIt =
+    auto scMeasurandAggregateFunctionIt =
         scResultContainer->begin("AGGREGATE_FUNCTION");
-    bo::QueryResult::ValueVectorType::const_iterator scEarliestDataIt =
+    auto scEarliestDataIt =
         scResultContainer->begin("EARLIEST_DATA");
-    bo::QueryResult::ValueVectorType::const_iterator scLatestDataIt =
+    auto scLatestDataIt =
         scResultContainer->begin("LATEST_DATA");
 
-    for (bo::QueryResult::ValueVectorType::const_iterator scStationIdIt = scStationIdBeginIt;
+    for (auto scStationIdIt = scStationIdBeginIt;
          scStationIdIt != scStationIdEndIt;
          ++scStationIdIt,
                                                           ++scMeasurandIdIt,
@@ -705,7 +677,7 @@ void bw::StoredEnvMonitoringFacilityQueryHandler::getStationCapabilities(
       capabilityData.earliest_data = scEarliestDataIt;
       capabilityData.latest_data = scLatestDataIt;
 
-      StationCapabilityMap::iterator mapIt = stationCapabilityMap.find(station_id);
+      auto mapIt = stationCapabilityMap.find(station_id);
       if (mapIt == stationCapabilityMap.end())
       {
         stationCapabilityMap.insert(std::make_pair(station_id, StationCapabilityData()));
@@ -721,7 +693,7 @@ void bw::StoredEnvMonitoringFacilityQueryHandler::getStationCapabilities(
 }
 
 void bw::StoredEnvMonitoringFacilityQueryHandler::getStationGroupData(
-    const std::string &language,
+    const std::string & /*language*/,
     SmartMet::Engine::Observation::MastQuery &sgQuery,
     bw::StoredEnvMonitoringFacilityQueryHandler::StationGroupMap &stationGroupMap,
     const RequestParameterMap &params,
@@ -732,8 +704,8 @@ void bw::StoredEnvMonitoringFacilityQueryHandler::getStationGroupData(
     if (validStations.empty())
       return;
 
-    pt::ptime startTime = params.get_single<pt::ptime>(P_BEGIN_TIME);
-    pt::ptime endTime = params.get_single<pt::ptime>(P_END_TIME);
+    auto startTime = params.get_single<pt::ptime>(P_BEGIN_TIME);
+    auto endTime = params.get_single<pt::ptime>(P_END_TIME);
 
     std::vector<int64_t> classIdVector;
     params.get<int64_t>(P_CLASS_ID, std::back_inserter(classIdVector));
@@ -749,12 +721,9 @@ void bw::StoredEnvMonitoringFacilityQueryHandler::getStationGroupData(
     sgQueryParams.addOrderBy("STATION_ID", "ASC");
     sgQueryParams.addOrderBy("GROUP_ID", "ASC");
 
-    for (bw::StoredEnvMonitoringFacilityQueryHandler::StationDataMap::const_iterator it =
-             validStations.begin();
-         it != validStations.end();
-         ++it)
+    for (const auto & validStation : validStations)
       sgQueryParams.addOperation(
-          "OR_GROUP_station", "STATION_ID", "PropertyIsEqualTo", (*it).second.station_id);
+          "OR_GROUP_station", "STATION_ID", "PropertyIsEqualTo", validStation.second.station_id);
 
     for (auto &classId : classIdVector)
       sgQueryParams.addOperation("OR_GROUP_class_id", "CLASS_ID", "PropertyIsEqualTo", classId);
@@ -775,15 +744,15 @@ void bw::StoredEnvMonitoringFacilityQueryHandler::getStationGroupData(
     obs_engine->makeQuery(&sgQuery);
 
     std::shared_ptr<bo::QueryResult> resultContainer = sgQuery.getQueryResultContainer();
-    bo::QueryResult::ValueVectorType::const_iterator stationIdBeginIt =
+    auto stationIdBeginIt =
         resultContainer->begin("STATION_ID");
-    bo::QueryResult::ValueVectorType::const_iterator stationIdEndIt =
+    auto stationIdEndIt =
         resultContainer->end("STATION_ID");
-    bo::QueryResult::ValueVectorType::const_iterator groupIdIt = resultContainer->begin("GROUP_ID");
-    bo::QueryResult::ValueVectorType::const_iterator groupNameIt =
+    auto groupIdIt = resultContainer->begin("GROUP_ID");
+    auto groupNameIt =
         resultContainer->begin("GROUP_NAME");
 
-    for (bo::QueryResult::ValueVectorType::const_iterator stationIdIt = stationIdBeginIt;
+    for (auto stationIdIt = stationIdBeginIt;
          stationIdIt != stationIdEndIt;
          ++stationIdIt, ++groupIdIt, ++groupNameIt)
     {
@@ -796,7 +765,7 @@ void bw::StoredEnvMonitoringFacilityQueryHandler::getStationGroupData(
       stationGroup.group_id = groupIdIt;
       stationGroup.group_name = groupNameIt;
 
-      StationGroupMap::iterator mapIt = stationGroupMap.find(station_id);
+      auto mapIt = stationGroupMap.find(station_id);
       if (mapIt == stationGroupMap.end())
       {
         stationGroupMap.insert(std::make_pair(station_id, StationGroupVector()));
@@ -812,7 +781,7 @@ void bw::StoredEnvMonitoringFacilityQueryHandler::getStationGroupData(
 }
 
 void bw::StoredEnvMonitoringFacilityQueryHandler::getStationNetworkMembershipData(
-    const std::string &language,
+    const std::string & /*language*/,
     SmartMet::Engine::Observation::MastQuery &emfQuery,
     NetworkMembershipMap &networkMemberShipMap,
     const RequestParameterMap &params,
@@ -823,8 +792,8 @@ void bw::StoredEnvMonitoringFacilityQueryHandler::getStationNetworkMembershipDat
     if (validStations.empty())
       return;
 
-    pt::ptime startTime = params.get_single<pt::ptime>(P_BEGIN_TIME);
-    pt::ptime endTime = params.get_single<pt::ptime>(P_END_TIME);
+    auto startTime = params.get_single<pt::ptime>(P_BEGIN_TIME);
+    auto endTime = params.get_single<pt::ptime>(P_END_TIME);
 
     bo::MastQueryParams emfQueryParams(dbRegistryConfig("NETWORK_MEMBERS_V1"));
 
@@ -836,12 +805,9 @@ void bw::StoredEnvMonitoringFacilityQueryHandler::getStationNetworkMembershipDat
     emfQueryParams.addOrderBy("STATION_ID", "ASC");
     emfQueryParams.addOrderBy("NETWORK_ID", "ASC");
 
-    for (bw::StoredEnvMonitoringFacilityQueryHandler::StationDataMap::const_iterator it =
-             validStations.begin();
-         it != validStations.end();
-         ++it)
+    for (const auto & validStation : validStations)
       emfQueryParams.addOperation(
-          "OR_GROUP_station", "STATION_ID", "PropertyIsEqualTo", (*it).second.station_id);
+          "OR_GROUP_station", "STATION_ID", "PropertyIsEqualTo", validStation.second.station_id);
 
     // Select stations that match with the given time interval.
     emfQueryParams.addOperation(
@@ -853,16 +819,16 @@ void bw::StoredEnvMonitoringFacilityQueryHandler::getStationNetworkMembershipDat
     obs_engine->makeQuery(&emfQuery);
 
     std::shared_ptr<bo::QueryResult> resultContainer = emfQuery.getQueryResultContainer();
-    bo::QueryResult::ValueVectorType::const_iterator stationIdBeginIt =
+    auto stationIdBeginIt =
         resultContainer->begin("STATION_ID");
-    bo::QueryResult::ValueVectorType::const_iterator stationIdEndIt =
+    auto stationIdEndIt =
         resultContainer->end("STATION_ID");
-    bo::QueryResult::ValueVectorType::const_iterator networkIdIt =
+    auto networkIdIt =
         resultContainer->begin("NETWORK_ID");
-    bo::QueryResult::ValueVectorType::const_iterator memberCodeIt =
+    auto memberCodeIt =
         resultContainer->begin("MEMBER_CODE");
 
-    for (bo::QueryResult::ValueVectorType::const_iterator stationIdIt = stationIdBeginIt;
+    for (auto stationIdIt = stationIdBeginIt;
          stationIdIt != stationIdEndIt;
          ++stationIdIt, ++networkIdIt, ++memberCodeIt)
     {
@@ -875,7 +841,7 @@ void bw::StoredEnvMonitoringFacilityQueryHandler::getStationNetworkMembershipDat
       networkMemberShip.network_id = networkIdIt;
       networkMemberShip.member_code = memberCodeIt;
 
-      NetworkMembershipMap::iterator mapIt = networkMemberShipMap.find(station_id);
+      auto mapIt = networkMemberShipMap.find(station_id);
       if (mapIt == networkMemberShipMap.end())
       {
         networkMemberShipMap.insert(std::make_pair(station_id, NetworkMembershipVector()));
@@ -902,7 +868,7 @@ wfs_stored_env_monitoring_facility_handler_create(SmartMet::Spine::Reactor *reac
 {
   try
   {
-    bw::StoredEnvMonitoringFacilityQueryHandler *qh =
+    auto *qh =
         new bw::StoredEnvMonitoringFacilityQueryHandler(
             reactor, config, plugin_data, template_file_name);
     boost::shared_ptr<SmartMet::Plugin::WFS::StoredQueryHandlerBase> instance(qh);

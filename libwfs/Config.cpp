@@ -94,7 +94,7 @@ Config::Config(const string& configfile)
       throw Fmi::Exception(BCP, "No usable XML grammar pool file found!");
     }
 
-    if (xml_grammar_pool_dump == "" or not fs::exists(xml_grammar_pool_dump))
+    if (xml_grammar_pool_dump.empty() or not fs::exists(xml_grammar_pool_dump))
     {
       throw Fmi::Exception(
           BCP, "XML grammar pool file '" + xml_grammar_pool_dump + "' not found!");
@@ -278,8 +278,8 @@ void Config::read_admin_cred()
     if (get_config().exists(setting_name))
     {
       libconfig::Setting& s1 = assert_is_group(get_config().lookup(setting_name));
-      const std::string user = get_optional_config_param<std::string>(s1, "admin", "admin");
-      const std::string password = get_mandatory_config_param<std::string>(s1, "password");
+      const auto user = get_optional_config_param<std::string>(s1, "admin", "admin");
+      const auto password = get_mandatory_config_param<std::string>(s1, "password");
       adminCred = std::make_pair(user, password);
     }
   }

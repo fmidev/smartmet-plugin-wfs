@@ -50,11 +50,11 @@ bw::StoredMastQueryHandler::StoredMastQueryHandler(SmartMet::Spine::Reactor* rea
   }
 }
 
-bw::StoredMastQueryHandler::~StoredMastQueryHandler() {}
+bw::StoredMastQueryHandler::~StoredMastQueryHandler() = default;
 
 void bw::StoredMastQueryHandler::query(const StoredQuery& query,
                                        const std::string& language,
-                                       const boost::optional<std::string>& hostname,
+                                       const boost::optional<std::string>&  /*hostname*/,
                                        std::ostream& output) const
 {
   try
@@ -68,11 +68,11 @@ void bw::StoredMastQueryHandler::query(const StoredQuery& query,
 
     try
     {
-      const std::string stationType = params.get_single<std::string>(P_STATION_TYPE);
-      const double maxDistance = params.get_single<double>(P_MAX_DISTANCE);
-      const uint64_t numberOfStations = params.get_single<uint64_t>(P_NUM_OF_STATIONS);
-      const std::string missingText = params.get_single<std::string>(P_MISSING_TEXT);
-      const std::string requestedCrs = params.get_single<std::string>(P_CRS);
+      const auto stationType = params.get_single<std::string>(P_STATION_TYPE);
+      const auto maxDistance = params.get_single<double>(P_MAX_DISTANCE);
+      const auto numberOfStations = params.get_single<uint64_t>(P_NUM_OF_STATIONS);
+      const auto missingText = params.get_single<std::string>(P_MISSING_TEXT);
+      const auto requestedCrs = params.get_single<std::string>(P_CRS);
 
       const char* DATA_CRS_NAME = "urn:ogc:def:crs:EPSG::4326";
       auto& crs_registry = plugin_impl.get_crs_registry();
@@ -84,22 +84,22 @@ void bw::StoredMastQueryHandler::query(const StoredQuery& query,
       bool show_height = false;
       std::string proj_uri = "UNKNOWN";
       std::string proj_epoch_uri = "UNKNOWN";
-      std::string axis_labels = "";
+      std::string axis_labels;
       crs_registry.get_attribute(crs, "showHeight", &show_height);
       crs_registry.get_attribute(crs, "projUri", &proj_uri);
       crs_registry.get_attribute(crs, "projEpochUri", &proj_epoch_uri);
       crs_registry.get_attribute(crs, "axisLabels", &axis_labels);
 
       // Search and validate the locations.
-      typedef std::pair<std::string, SmartMet::Spine::LocationPtr> LocationListItem;
-      typedef std::list<LocationListItem> LocationList;
+      using LocationListItem = std::pair<std::string, SmartMet::Spine::LocationPtr>;
+      using LocationList = std::list<LocationListItem>;
       LocationList locations_list;
       get_location_options(params, language, &locations_list);
 
       const int debug_level = get_config()->get_debug_level();
       if (debug_level > 2)
       {
-          for (auto id : locations_list)
+          for (const auto& id : locations_list)
           std::cerr << "Found location: name: " << id.first << " geoid: " << id.second->geoid
                     << "\n";
       }
@@ -156,13 +156,11 @@ void bw::StoredMastQueryHandler::query(const StoredQuery& query,
 
       // Get information from GeoEngien. Elevation is required.
       SmartMet::Spine::Stations stations;
-      for (SmartMet::Spine::Stations::const_iterator it = stationCandidates.begin();
-           it != stationCandidates.end();
-           ++it)
+      for (const auto & stationCandidate : stationCandidates)
       {
-        stations.push_back(*it);
+        stations.push_back(stationCandidate);
 
-        SmartMet::Spine::LocationPtr geoLoc = geo_engine->idSearch(it->geoid, langCode);
+        SmartMet::Spine::LocationPtr geoLoc = geo_engine->idSearch(stationCandidate.geoid, langCode);
         if (geoLoc)
         {
           stations.back().country = geoLoc->country;
@@ -220,10 +218,10 @@ void bw::StoredMastQueryHandler::query(const StoredQuery& query,
       // Gluing requested parameter name and parameter identities together.
       // Parameter names are needed in the result document.
       // map: id, (id, paramName, paramQCName, showValue, showQualityCode)
-      typedef std::map<std::string, std::tuple<uint64_t, std::string, std::string, bool, bool> >
-          MeteoParameterMap;
+      using MeteoParameterMap = std::map<std::string, std::tuple<uint64_t,
+        std::string, std::string, bool, bool>>;
       MeteoParameterMap meteoParameterMap;
-      for (std::string name : meteoParametersVector)
+      for (const std::string& name : meteoParametersVector)
       {
         const uint64_t paramId = obs_engine->getParameterId(name, stationType);
         if (paramId == 0)
@@ -238,7 +236,7 @@ void bw::StoredMastQueryHandler::query(const StoredQuery& query,
 
         // Is the parameter a duplicate.
         const std::string paramIdStr = Fmi::to_string(paramId);
-        MeteoParameterMap::iterator paramIdIt = meteoParameterMap.find(paramIdStr);
+        auto paramIdIt = meteoParameterMap.find(paramIdStr);
         if (paramIdIt != meteoParameterMap.end())
         {
           // Check if the parameter is already inserted.
@@ -286,10 +284,10 @@ void bw::StoredMastQueryHandler::query(const StoredQuery& query,
       }
 
       // Time range restriction to get data.
-      pt::ptime startTime = params.get_single<pt::ptime>(P_BEGIN_TIME);
-      pt::ptime endTime = params.get_single<pt::ptime>(P_END_TIME);
-      const uint64_t timestep = params.get_single<uint64_t>(P_TIME_STEP);
-      const uint64_t maxEpochs = params.get_single<uint64_t>(P_MAX_EPOCHS);
+      auto startTime = params.get_single<pt::ptime>(P_BEGIN_TIME);
+      auto endTime = params.get_single<pt::ptime>(P_END_TIME);
+      const auto timestep = params.get_single<uint64_t>(P_TIME_STEP);
+      const auto maxEpochs = params.get_single<uint64_t>(P_MAX_EPOCHS);
       if (m_sqRestrictions)
         check_time_interval(startTime, endTime, m_maxHours);
 
@@ -335,21 +333,21 @@ void bw::StoredMastQueryHandler::query(const StoredQuery& query,
       stationQueryParams.addJoinOnConfig(dbRegistryConfig("MEASURANDS_V1"), "MEASURAND_ID");
 
       // Producer identities
-      for (std::vector<uint64_t>::const_iterator it = producerIdVector.begin();
+      for (auto it = producerIdVector.begin();
            queryInitializationOK && it != producerIdVector.end();
            ++it)
         stationQueryParams.addOperation(
             "OR_GROUP_producer_id", "PRODUCER_ID", "PropertyIsEqualTo", *it);
 
       // Station identities
-      for (SmartMet::Spine::Stations::const_iterator it = stations.begin();
+      for (auto it = stations.begin();
            queryInitializationOK && it != stations.end();
            ++it)
         stationQueryParams.addOperation(
             "OR_GROUP_station_id", "STATION_ID", "PropertyIsEqualTo", (*it).fmisid);
 
       // Measurand identities
-      for (MeteoParameterMap::const_iterator it = meteoParameterMap.begin();
+      for (auto it = meteoParameterMap.begin();
            queryInitializationOK && it != meteoParameterMap.end();
            ++it)
         stationQueryParams.addOperation("OR_GROUP_measurand_code",
@@ -398,9 +396,9 @@ void bw::StoredMastQueryHandler::query(const StoredQuery& query,
         dataQueryParams.addOrderBy("MEASURAND_ID", "ASC");
         dataQueryParams.addOrderBy("DATA_LEVEL", "ASC");
 
-        bo::QueryResult::ValueVectorType::const_iterator observationIdIt =
+        auto observationIdIt =
             profileContainer->begin("OBSERVATION_ID");
-        bo::QueryResult::ValueVectorType::const_iterator observationIdItEnd =
+        auto observationIdItEnd =
             profileContainer->end("OBSERVATION_ID");
 
         for (; queryInitializationOK && observationIdIt != observationIdItEnd; ++observationIdIt)
@@ -458,19 +456,19 @@ void bw::StoredMastQueryHandler::query(const StoredQuery& query,
       int numberMatched = 0;
       if (queryInitializationOK and profileContainer and dataContainer)
       {
-        bo::QueryResult::ValueVectorType::const_iterator dataFmisidIt =
+        auto dataFmisidIt =
             dataContainer->begin("STATION_ID");
-        bo::QueryResult::ValueVectorType::const_iterator dataFmisidItEnd =
+        auto dataFmisidItEnd =
             dataContainer->end("STATION_ID");
-        bo::QueryResult::ValueVectorType::const_iterator dataMeasurandIdIt =
+        auto dataMeasurandIdIt =
             dataContainer->begin("MEASURAND_ID");
-        bo::QueryResult::ValueVectorType::const_iterator dataTimeIt =
+        auto dataTimeIt =
             dataContainer->begin("DATA_TIME");
-        bo::QueryResult::ValueVectorType::const_iterator dataLevelIt =
+        auto dataLevelIt =
             dataContainer->begin("DATA_LEVEL");
-        bo::QueryResult::ValueVectorType::const_iterator dataValueIt =
+        auto dataValueIt =
             dataContainer->begin("DATA_VALUE");
-        bo::QueryResult::ValueVectorType::const_iterator dataQualityIt =
+        auto dataQualityIt =
             dataContainer->begin("DATA_QUALITY");
 
         std::string currentFmisid = "FooBarFmisid";
@@ -515,21 +513,19 @@ void bw::StoredMastQueryHandler::query(const StoredQuery& query,
             std::string station_longitude;
             std::string station_elevation;
 
-            for (SmartMet::Spine::Stations::const_iterator sit = stations.begin();
-                 sit != stations.end();
-                 ++sit)
+            for (const auto & station : stations)
             {
-              if (Fmi::to_string(sit->fmisid) == fmisidStr)
+              if (Fmi::to_string(station.fmisid) == fmisidStr)
               {
-                station_geoid = std::to_string(static_cast<long long int>(sit->geoid));
-                station_wmo = std::to_string(static_cast<long long int>(sit->wmo));
-				station_name = sit->station_formal_name(language);
-                station_region = sit->region;
-                station_latitude = std::to_string(static_cast<long double>(sit->latitude_out));
-                station_longitude = std::to_string(static_cast<long double>(sit->longitude_out));
+                station_geoid = std::to_string(static_cast<long long int>(station.geoid));
+                station_wmo = std::to_string(static_cast<long long int>(station.wmo));
+				station_name = station.station_formal_name(language);
+                station_region = station.region;
+                station_latitude = std::to_string(static_cast<long double>(station.latitude_out));
+                station_longitude = std::to_string(static_cast<long double>(station.longitude_out));
                 station_elevation =
-                    std::to_string(static_cast<long long int>(sit->station_elevation));
-                bottomHeight = sit->station_elevation;
+                    std::to_string(static_cast<long long int>(station.station_elevation));
+                bottomHeight = station.station_elevation;
               }
             }
 
@@ -575,7 +571,7 @@ void bw::StoredMastQueryHandler::query(const StoredQuery& query,
             // Deleting the requested meteoparameters from feature id
             // so we can add the parameters used in the member group.
             feature_id.erase_param(P_METEO_PARAMETERS);
-            MeteoParameterMap::const_iterator it = meteoParameterMap.find(measurandIdStr);
+            auto it = meteoParameterMap.find(measurandIdStr);
             if (it != meteoParameterMap.end())
             {
               showValue = std::get<3>(it->second);
@@ -654,9 +650,9 @@ void bw::StoredMastQueryHandler::query(const StoredQuery& query,
 }
 
 void bw::StoredMastQueryHandler::update_parameters(
-    const RequestParameterMap& params,
-    int seq_id,
-    std::vector<boost::shared_ptr<RequestParameterMap> >& result) const
+    const RequestParameterMap&  /*params*/,
+    int  /*seq_id*/,
+    std::vector<boost::shared_ptr<RequestParameterMap> >&  /*result*/) const
 {
   try
   {
@@ -716,7 +712,7 @@ boost::shared_ptr<SmartMet::Plugin::WFS::StoredQueryHandlerBase> wfs_stored_mast
 {
   try
   {
-    bw::StoredMastQueryHandler* qh =
+    auto* qh =
         new bw::StoredMastQueryHandler(reactor, config, plugin_data, template_file_name);
     boost::shared_ptr<SmartMet::Plugin::WFS::StoredQueryHandlerBase> instance(qh);
     return instance;

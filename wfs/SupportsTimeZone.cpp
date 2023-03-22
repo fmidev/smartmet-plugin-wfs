@@ -35,7 +35,7 @@ bw::SupportsTimeZone::SupportsTimeZone(SmartMet::Spine::Reactor* reactor, Stored
   }
 }
 
-bw::SupportsTimeZone::~SupportsTimeZone() {}
+bw::SupportsTimeZone::~SupportsTimeZone() = default;
 
 std::string bw::SupportsTimeZone::get_tz_name(const RequestParameterMap& param_values) const
 {

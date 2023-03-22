@@ -30,7 +30,7 @@ bw::SupportsBoundingBox::SupportsBoundingBox(StoredQueryConfig::Ptr config,
   }
 }
 
-bw::SupportsBoundingBox::~SupportsBoundingBox() {}
+bw::SupportsBoundingBox::~SupportsBoundingBox() = default;
 
 bool bw::SupportsBoundingBox::get_bounding_box(const RequestParameterMap& param_values,
                                                const std::string& default_crs,
@@ -46,7 +46,7 @@ bool bw::SupportsBoundingBox::get_bounding_box(const RequestParameterMap& param_
 
       // Bounding box without crs use always XY notation.
       // Swap the coords to XY order if order is YX.
-      if (ba::trim_copy(bbox->crs) == "")
+      if (ba::trim_copy(bbox->crs).empty())
       {
         bbox->crs = default_crs;
       }

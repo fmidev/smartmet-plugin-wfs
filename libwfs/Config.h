@@ -45,7 +45,7 @@ class Config : public SmartMet::Spine::ConfigBase
   Config(const std::string& configfile);
   Config(const Config&) = delete;
   Config& operator = (const Config&) = delete;
-  virtual ~Config();
+  ~Config() override;
 
   const std::string& defaultUrl() const { return itsDefaultUrl; }
   const std::vector<std::string>& getStoredQueriesConfigDirs() const { return sq_config_dirs; }

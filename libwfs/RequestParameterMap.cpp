@@ -23,7 +23,7 @@ bw::RequestParameterMap::RequestParameterMap(
   }
 }
 
-bw::RequestParameterMap::~RequestParameterMap() {}
+bw::RequestParameterMap::~RequestParameterMap() = default;
 
 std::multimap<std::string, SmartMet::Spine::Value>
 bw::RequestParameterMap::get_map(bool case_sensitive) const
@@ -268,10 +268,10 @@ std::string bw::RequestParameterMap::subst(const std::string& input) const
 
         if (is_array)
         {
-          std::string sep = "";
-          for (auto it = data.begin(); it != data.end(); ++it)
+          std::string sep;
+          for (auto & it : data)
           {
-            result << sep << it->to_string();
+            result << sep << it.to_string();
             sep = ",";
           }
         }

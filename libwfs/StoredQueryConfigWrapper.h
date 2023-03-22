@@ -11,7 +11,7 @@ namespace SmartMet
 
       class StoredQueryConfig;
 
-      typedef boost::shared_ptr<StoredQueryConfig> StoredQueryConfigPtr;
+      using StoredQueryConfigPtr = boost::shared_ptr<StoredQueryConfig>;
 
       class StoredQueryConfigWrapper
       {

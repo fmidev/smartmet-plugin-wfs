@@ -22,7 +22,7 @@ class SupportsTimeZone : protected virtual SupportsExtraHandlerParams,
  public:
     SupportsTimeZone(SmartMet::Spine::Reactor* reactor, boost::shared_ptr<StoredQueryConfig> config);
 
-  virtual ~SupportsTimeZone();
+  ~SupportsTimeZone() override;
 
   std::string get_tz_name(const RequestParameterMap& param_values) const;
 

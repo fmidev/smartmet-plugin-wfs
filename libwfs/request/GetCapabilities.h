@@ -20,11 +20,11 @@ class GetCapabilities : public RequestBase
  public:
   GetCapabilities(const std::string& language, const PluginImpl& plugin_impl);
 
-  virtual ~GetCapabilities();
+  ~GetCapabilities() override;
 
-  virtual RequestType get_type() const;
+  RequestType get_type() const override;
 
-  virtual void execute(std::ostream& ost) const;
+  void execute(std::ostream& ost) const override;
 
   static boost::shared_ptr<GetCapabilities> create_from_kvp(
       const std::string& language,
@@ -35,7 +35,7 @@ class GetCapabilities : public RequestBase
                                                             const xercesc::DOMDocument& document,
                                                             const PluginImpl& plugin_impl);
 
-  virtual int get_response_expires_seconds() const;
+  int get_response_expires_seconds() const override;
 
  private:
   std::set<std::string> languages;

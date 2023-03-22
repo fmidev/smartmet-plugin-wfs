@@ -25,16 +25,12 @@ namespace WFS
 class RequestFactory
 {
  public:
-  typedef boost::function2<boost::shared_ptr<RequestBase>,
-                           const std::string&,
-                           const SmartMet::Spine::HTTP::Request&>
-      parse_kvp_t;
+  using parse_kvp_t = boost::function2<boost::shared_ptr<RequestBase>,
+        const std::string &, const SmartMet::Spine::HTTP::Request &>;
 
-  typedef boost::function3<boost::shared_ptr<RequestBase>,
-                           const std::string&,
-                           const xercesc::DOMDocument&,
-                           const xercesc::DOMElement&>
-      parse_xml_t;
+  using parse_xml_t = boost::function3<boost::shared_ptr<RequestBase>,
+        const std::string &, const xercesc::DOMDocument &, const xercesc::DOMElement
+        &>;
 
  public:
   RequestFactory(PluginImpl& plugin_impl);

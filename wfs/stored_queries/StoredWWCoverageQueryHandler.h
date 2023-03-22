@@ -20,8 +20,8 @@ class StoredWWCoverageQueryHandler : public StoredCoverageQueryHandler
                                boost::optional<std::string> template_file_name);
 
  protected:
-  std::vector<ContourQueryResultPtr> processQuery(ContourQueryParameter& queryParameter) const;
-  void setResultHashValue(CTPP::CDT& resultHash, const ContourQueryResult& resultItem) const;
+  std::vector<ContourQueryResultPtr> processQuery(ContourQueryParameter& queryParameter) const override;
+  void setResultHashValue(CTPP::CDT& resultHash, const ContourQueryResult& resultItem) const override;
 
  private:
   std::vector<std::string> itsLimitNames;

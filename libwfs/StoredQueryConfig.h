@@ -76,8 +76,8 @@ class StoredQueryHandlerBase;
 class StoredQueryConfig : public SmartMet::Spine::ConfigBase
 {
  public:
-  typedef StoredQueryConfigPtr Ptr;
-  typedef StoredQueryConfigWrapper Wrapper;
+  using Ptr = StoredQueryConfigPtr;
+  using Wrapper = StoredQueryConfigWrapper;
 
   struct ParamDesc
   {
@@ -92,7 +92,7 @@ class StoredQueryConfig : public SmartMet::Spine::ConfigBase
     boost::optional<SmartMet::Spine::Value> upper_limit;
     std::set<std::string> conflicts_with;
 
-    inline ParamDesc() : used(false) {}
+    inline ParamDesc()  = default;
     inline bool isArray() const { return max_occurs > 1 or param_def.isArray(); }
     inline unsigned getMinSize() const { return min_occurs * param_def.getMinSize(); }
     inline unsigned getMaxSize() const { return max_occurs * param_def.getMaxSize(); }
@@ -102,13 +102,13 @@ class StoredQueryConfig : public SmartMet::Spine::ConfigBase
     inline bool get_used() const { return used; }
 
    private:
-    mutable bool used;
+    mutable bool used{false};
   };
 
  public:
   StoredQueryConfig(const std::string& fn, const Config* plugin_config);
   StoredQueryConfig(boost::shared_ptr<libconfig::Config> config, const Config* plugin_config);
-  virtual ~StoredQueryConfig();
+  ~StoredQueryConfig() override;
 
   inline bool is_disabled() const { return disabled; }
   inline bool is_demo() const { return demo; }

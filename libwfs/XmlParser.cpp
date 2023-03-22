@@ -67,7 +67,7 @@ Parser::Parser(bool stop_on_error, xercesc::XMLGrammarPool *grammar_pool)
   }
 }
 
-Parser::~Parser() {}
+Parser::~Parser() = default;
 
 boost::shared_ptr<xercesc::DOMDocument> Parser::parse_file(
     const std::string &file_name, Parser::root_element_cb_t root_element_cb)
@@ -158,7 +158,7 @@ void Parser::startElement(const xercesc::XMLElementDecl &elemDecl,
       root_info.prefix = to_string(prefixName);  // qname->getPrefix());
       root_info.nqname = to_string(qname->getLocalPart());
       const std::string name =
-          (root_info.prefix == "" ? std::string("") : root_info.prefix + ":") + root_info.nqname;
+          (root_info.prefix.empty() ? std::string("") : root_info.prefix + ":") + root_info.nqname;
       for (int i = 0; i < (int)attrCount; i++)
       {
         const xercesc::XMLAttr *attr = attrList.elementAt(i);
@@ -168,7 +168,7 @@ void Parser::startElement(const xercesc::XMLElementDecl &elemDecl,
       }
 
       std::string xmlns_name = std::string("xmlns");
-      if (root_info.prefix != "")
+      if (!root_info.prefix.empty())
         xmlns_name = xmlns_name + ":" + root_info.prefix;
 
       // std::cout << "@@@ name='" << name << "'\n"
@@ -221,7 +221,7 @@ ParserMT::ParserMT(const std::string &grammar_pool_file_name, bool stop_on_error
   }
 }
 
-ParserMT::~ParserMT() {}
+ParserMT::~ParserMT() = default;
 
 Parser *ParserMT::get()
 {

@@ -28,9 +28,9 @@ struct ContourQueryParameter
   OGRSpatialReference& sr;
   SmartMet::Spine::BoundingBox bbox;
   std::string tz_name;
-  bool smoothing;
-  unsigned short smoothing_degree;
-  unsigned short smoothing_size;
+  bool smoothing{false};
+  unsigned short smoothing_degree{2};
+  unsigned short smoothing_size{2};
   TS::TimeSeriesGenerator::LocalTimeList tlist;
   mutable QueryServer::Query gridQuery;
 
@@ -41,13 +41,11 @@ struct ContourQueryParameter
         q(qe),
         sr(spref),
         bbox(-180.0, -90.0, 180.0, 90.0),
-        tz_name("UTC"),
-        smoothing(false),
-        smoothing_degree(2),
-        smoothing_size(2)
+        tz_name("UTC")
+        
   {
   }
-  virtual ~ContourQueryParameter() {}
+  virtual ~ContourQueryParameter() = default;
 };
 
 struct CoverageQueryParameter : ContourQueryParameter
@@ -108,11 +106,11 @@ struct IsolineQueryResult : ContourQueryResult
   double isovalue;
 };
 
-typedef boost::shared_ptr<ContourQueryResult> ContourQueryResultPtr;
-typedef boost::shared_ptr<CoverageQueryResult> CoverageQueryResultPtr;
-typedef boost::shared_ptr<IsolineQueryResult> IsolineQueryResultPtr;
+using ContourQueryResultPtr = boost::shared_ptr<ContourQueryResult>;
+using CoverageQueryResultPtr = boost::shared_ptr<CoverageQueryResult>;
+using IsolineQueryResultPtr = boost::shared_ptr<IsolineQueryResult>;
 
-typedef std::vector<ContourQueryResultPtr> ContourQueryResultSet;
+using ContourQueryResultSet = std::vector<ContourQueryResultPtr>;
 
 }  // namespace WFS
 }  // namespace Plugin
