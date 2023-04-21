@@ -2,6 +2,7 @@
 #include "FeatureID.h"
 #include "StoredQueryHandlerFactoryDef.h"
 #include "WfsConst.h"
+#include "ParamDesc.h"
 #include <fmt/format.h>
 #include <macgyver/StringConversion.h>
 #include <macgyver/Exception.h>
@@ -51,23 +52,23 @@ bw::StoredFlashQueryHandler::StoredFlashQueryHandler(
   {
     register_scalar_param<pt::ptime>(
         P_BEGIN_TIME,
-        "Parameter begin specifies the begin of time interval in ISO-format (for example 2012-02-27T00:00:00Z)."
+        bw::ParamDesc::begin_time
         );
 
     register_scalar_param<pt::ptime>(
         P_END_TIME,
-        "End of time interval in ISO-format (for example 2012-02-27T00:00:00Z)."
+        bw::ParamDesc::end_time
         );
 
     register_array_param<std::string>(
         P_PARAM,
-        "",
+        bw::ParamDesc::param,
         1,
         999);
 
     register_scalar_param<std::string>(
         P_CRS,
-        ""
+        bw::ParamDesc::crs
         );
 
     station_type = config->get_optional_config_param<std::string>("stationType", "flash");

@@ -3,6 +3,7 @@
 #include "stored_queries/StoredSoundingQueryHandler.h"
 #include "FeatureID.h"
 #include "StoredQueryHandlerFactoryDef.h"
+#include "ParamDesc.h"
 #include <boost/date_time/posix_time/ptime.hpp>
 #include <engines/gis/Engine.h>
 #include <engines/observation/MastQuery.h>
@@ -40,13 +41,13 @@ StoredSoundingQueryHandler::StoredSoundingQueryHandler(
       SupportsBoundingBox(config, pluginData.get_crs_registry()),
       SupportsQualityParameters(config)
 {
-  register_scalar_param<pt::ptime>(P_BEGIN_TIME, "");
-  register_scalar_param<pt::ptime>(P_END_TIME, "");
+  register_scalar_param<pt::ptime>(P_BEGIN_TIME, ParamDesc::begin_time);
+  register_scalar_param<pt::ptime>(P_END_TIME, ParamDesc::end_time);
   register_array_param<std::string>(P_METEO_PARAMETERS, "", 1);
   register_scalar_param<std::string>(P_STATION_TYPE, "");
   register_scalar_param<uint64_t>(P_NUM_OF_STATIONS, "");
-  register_scalar_param<std::string>(P_MISSING_TEXT, "");
-  register_scalar_param<std::string>(P_CRS, "");
+  register_scalar_param<std::string>(P_MISSING_TEXT, ParamDesc::missing_text);
+  register_scalar_param<std::string>(P_CRS, ParamDesc::crs);
   register_scalar_param<bool>(P_LATEST, "");
   register_array_param<uint64_t>(P_SOUNDING_TYPE, "");
   register_array_param<uint64_t>(P_PUBLICITY, "", 1);

@@ -2,6 +2,7 @@
 #include "FeatureID.h"
 #include "StoredQueryHandlerFactoryDef.h"
 #include "WfsConvenience.h"
+#include "ParamDesc.h"
 #include "stored_queries/StoredQEDownloadQueryHandler.h"
 #include <boost/algorithm/string.hpp>
 #include <boost/bind/bind.hpp>
@@ -106,11 +107,11 @@ StoredQEDownloadQueryHandler::StoredQEDownloadQueryHandler(
   try
   {
     register_array_param<std::string>(P_PRODUCER, "", 0, 1);
-    register_array_param<pt::ptime>(P_ORIGIN_TIME, "", 0, 1);
-    register_array_param<pt::ptime>(P_BEGIN, "", 0, 1);
-    register_array_param<pt::ptime>(P_END, "", 0, 1);
+    register_array_param<pt::ptime>(P_ORIGIN_TIME, ParamDesc::origin_time, 0, 1);
+    register_array_param<pt::ptime>(P_BEGIN, ParamDesc::begin_time, 0, 1);
+    register_array_param<pt::ptime>(P_END, ParamDesc::end_time, 0, 1);
     register_scalar_param<int64_t>(P_FULL_INTERVAL, "", false);
-    register_array_param<std::string>(P_PARAM, "");
+    register_array_param<std::string>(P_PARAM, ParamDesc::param);
     register_array_param<std::string>(P_LEVEL_TYPE, "", 0);
     register_array_param<double>(P_LEVEL_VALUE, "", 0);
     register_array_param<std::string>(P_FORMAT, "", 0, 1);

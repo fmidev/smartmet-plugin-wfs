@@ -7,7 +7,7 @@
 			{
 				"beginTime" : 
 				{
-					"description" : "Parameter begin specifies the begin of time interval in ISO-format (for example 2012-02-27T00:00:00Z).",
+					"description" : "Time values for which to return data. (0 or more values).",
 					"is_array" : false,
 					"mandatory" : false,
 					"type" : "posix_time"
@@ -21,7 +21,7 @@
 				},
 				"crs" : 
 				{
-					"description" : "",
+					"description" : "Coordinate system to use in response (for example crs:EPSG::4326",
 					"is_array" : false,
 					"mandatory" : true,
 					"type" : "string"
@@ -44,7 +44,7 @@
 				},
 				"originTime" : 
 				{
-					"description" : "",
+					"description" : "Override of origin time (for use in tests only, leave empty for production use)",
 					"is_array" : false,
 					"mandatory" : false,
 					"type" : "posix_time"
@@ -79,7 +79,7 @@
 				},
 				"timeZone" : 
 				{
-					"description" : "Time zone of the time instant of the data point in the form Area/Location (for example America/Costa_Rica).The default value is UTC.",
+					"description" : "Time zone of the time instant of the data point in the form Area/Location (for example America/Costa_Rica). The default value is UTC. Special values (case insensitive): utc, local",
 					"is_array" : false,
 					"mandatory" : true,
 					"type" : "string"

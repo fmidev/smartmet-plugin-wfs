@@ -1,4 +1,5 @@
 #include "SupportsTimeZone.h"
+#include "ParamDesc.h"
 #include <boost/algorithm/string.hpp>
 #include <macgyver/StringConversion.h>
 #include <macgyver/TimeZones.h>
@@ -24,10 +25,9 @@ bw::SupportsTimeZone::SupportsTimeZone(SmartMet::Spine::Reactor* reactor, Stored
 {
   try
   {
-    register_scalar_param<std::string>(
-        P_TZ,
-        "Time zone of the time instant of the data point in the form Area/Location (for example America/Costa_Rica)."
-        "The default value is UTC.");
+      register_scalar_param<std::string>(
+          P_TZ,
+          bw::ParamDesc::tz);
   }
   catch (...)
   {

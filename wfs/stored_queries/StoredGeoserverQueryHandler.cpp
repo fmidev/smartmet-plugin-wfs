@@ -3,6 +3,7 @@
 #include "StoredQueryHandlerFactoryDef.h"
 #include "WfsConvenience.h"
 #include "WfsException.h"
+#include "ParamDesc.h"
 #include "stored_queries/StoredGeoserverQueryHandler.h"
 #include <boost/algorithm/string.hpp>
 #include <boost/date_time/posix_time/posix_time.hpp>
@@ -39,12 +40,12 @@ bw::StoredGeoserverQueryHandler::StoredGeoserverQueryHandler(
   {
     register_scalar_param<pt::ptime>(
         P_BEGIN_TIME,
-        "Parameter begin specifies the begin of time interval in ISO-format (for example 2012-02-27T00:00:00Z)."
+        bw::ParamDesc::begin_time
         );
 
     register_scalar_param<pt::ptime>(
         P_END_TIME,
-        "End of time interval in ISO-format (for example 2012-02-27T00:00:00Z)."
+        bw::ParamDesc::end_time
         );
 
     register_array_param<std::string>(
@@ -65,7 +66,7 @@ bw::StoredGeoserverQueryHandler::StoredGeoserverQueryHandler(
 
     register_scalar_param<std::string>(
         P_CRS,
-        ""
+        bw::ParamDesc::crs
         );
 
     std::string table_name_format;

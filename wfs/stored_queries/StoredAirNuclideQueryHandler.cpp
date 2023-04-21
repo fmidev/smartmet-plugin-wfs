@@ -3,6 +3,7 @@
 #include "stored_queries/StoredAirNuclideQueryHandler.h"
 #include "FeatureID.h"
 #include "StoredQueryHandlerFactoryDef.h"
+#include "ParamDesc.h"
 #include <boost/format.hpp>
 #include <engines/observation/DBRegistry.h>
 #include <engines/observation/MastQuery.h>
@@ -30,12 +31,12 @@ bw::StoredAirNuclideQueryHandler::StoredAirNuclideQueryHandler(
 {
   try
   {
-    register_scalar_param<pt::ptime>(P_BEGIN_TIME, "");
-    register_scalar_param<pt::ptime>(P_END_TIME, "");
+    register_scalar_param<pt::ptime>(P_BEGIN_TIME, bw::ParamDesc::begin_time);
+    register_scalar_param<pt::ptime>(P_END_TIME, bw::ParamDesc::end_time);
     register_scalar_param<std::string>(P_STATION_TYPE, "");
-    register_scalar_param<uint64_t>(P_TIME_STEP, "");
+    register_scalar_param<uint64_t>(P_TIME_STEP, bw::ParamDesc::time_step);
     register_scalar_param<uint64_t>(P_NUM_OF_STATIONS, "");
-    register_scalar_param<std::string>(P_CRS, "");
+    register_scalar_param<std::string>(P_CRS, bw::ParamDesc::crs);
     register_scalar_param<bool>(P_LATEST, "");
     register_array_param<std::string>(P_NUCLIDE_CODES, "");
 

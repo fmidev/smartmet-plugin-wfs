@@ -1,4 +1,5 @@
 #include "SupportsLocationParameters.h"
+#include "ParamDesc.h"
 #include <boost/algorithm/string.hpp>
 #include <boost/format.hpp>
 #include <boost/locale.hpp>
@@ -60,49 +61,49 @@ bw::SupportsLocationParameters::SupportsLocationParameters(
   {
     register_array_param<std::string>(
         P_PLACES,
-        "The location for which to provide data (0 or more values)" );
+        bw::ParamDesc::places);
 
     register_array_param<double>(
         P_LATLONS,
-        "Location coordinates for which to return data (0 or more latitude/longitude pairs).",
+        bw::ParamDesc::latlons,
         0, 999, 2
         );
 
     if (include_fmisids)
       register_array_param<int64_t>(
           P_FMISIDS,
-          "FMI observation station identifiers (0 or more values)."
+          bw::ParamDesc::fmisids
           );
 
     register_array_param<int64_t>(
         P_GEOIDS,
-        "GEOIDs of the locations for which to return data (0 or more values)."
+        bw::ParamDesc::geoids
         );
 
     if (include_wmos)
       register_array_param<int64_t>(
           P_WMOS,
-          "WMO code of the location for which to return data (0 or more values)"
+          bw::ParamDesc::wmos
           );
 
     if (include_lpnns)
         register_array_param<int64_t>(
             P_LPNNS,
-            "LPNN code of the location for which to return data (0 or more values)"
+            bw::ParamDesc::lpnns
             );
 
     register_scalar_param<double>(
         P_MAX_DISTANCE,
-        "Maximal distance of sites from specified place for which to provide data (mandatory real value)"
+        bw::ParamDesc::max_distance
         );
 
     if (support_keywords)
     {
         register_scalar_param<std::string>(P_KEYWORD,
-            "");
+            bw::ParamDesc::keyword);
 
         register_scalar_param<bool>(P_KEYWORD_OVERWRITABLE,
-            "");
+            bw::ParamDesc::keyword_overwritable);
     }
   }
   catch (...)

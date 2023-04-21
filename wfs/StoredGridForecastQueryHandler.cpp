@@ -2,6 +2,7 @@
 #include "FeatureID.h"
 #include "StoredQueryHandlerFactoryDef.h"
 #include "WfsConvenience.h"
+#include "ParamDesc.h"
 #include <boost/algorithm/string.hpp>
 #include <boost/format.hpp>
 #include <boost/math/constants/constants.hpp>
@@ -104,7 +105,7 @@ StoredGridForecastQueryHandler::StoredGridForecastQueryHandler(
 
     register_scalar_param<pt::ptime>(
         P_ORIGIN_TIME,
-        "",
+        ParamDesc::origin_time,
         false
         );
 
@@ -128,7 +129,7 @@ StoredGridForecastQueryHandler::StoredGridForecastQueryHandler(
 
     register_array_param<std::string>(
         P_PARAM,
-        "",
+        ParamDesc::param,
         1,
         99
         );
@@ -140,17 +141,17 @@ StoredGridForecastQueryHandler::StoredGridForecastQueryHandler(
 
     register_scalar_param<std::string>(
         P_LOCALE,
-        ""
+        ParamDesc::locale
         );
 
     register_scalar_param<std::string>(
         P_MISSING_TEXT,
-        ""
+        ParamDesc::missing_text
         );
 
     register_scalar_param<std::string>(
         P_CRS,
-        ""
+        ParamDesc::crs
         );
 
     max_np_distance = config->get_optional_config_param<double>("maxNpDistance", -1.0);

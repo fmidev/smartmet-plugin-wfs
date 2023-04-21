@@ -32,6 +32,7 @@
 #include "StoredQueryHandlerFactoryDef.h"
 #include "WfsConvenience.h"
 #include "stored_queries/StoredGridQueryHandler.h"
+#include "ParamDesc.h"
 
 namespace bw = SmartMet::Plugin::WFS;
 namespace ba = boost::algorithm;
@@ -81,11 +82,11 @@ StoredGridQueryHandler::StoredGridQueryHandler(SmartMet::Spine::Reactor* reactor
   try
   {
     register_scalar_param<std::string>(P_PRODUCER, "");
-    register_scalar_param<pt::ptime>(P_ORIGIN_TIME, "", false);
-    register_array_param<std::string>(P_PARAM, "");
+    register_scalar_param<pt::ptime>(P_ORIGIN_TIME, ParamDesc::origin_time, false);
+    register_array_param<std::string>(P_PARAM, ParamDesc::param);
     register_scalar_param<std::string>(P_LEVEL_TYPE, "", false);
     register_array_param<double>(P_LEVEL_VALUE, "", 0);
-    register_scalar_param<std::string>(P_MISSING_TEXT, "");
+    register_scalar_param<std::string>(P_MISSING_TEXT, ParamDesc::missing_text);
     register_scalar_param<std::string>(P_DATA_CRS, "", true);
     register_scalar_param<unsigned long>(P_SCALE_FACTOR, "", false);
     register_scalar_param<unsigned long>(P_PRECISION, "", false);

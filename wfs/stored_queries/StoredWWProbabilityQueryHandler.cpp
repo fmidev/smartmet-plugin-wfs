@@ -1,4 +1,5 @@
 #include "stored_queries/StoredWWProbabilityQueryHandler.h"
+#include "ParamDesc.h"
 #include <gis/Box.h>
 #include <gis/OGR.h>
 #include <macgyver/TimeFormatter.h>
@@ -180,12 +181,12 @@ StoredWWProbabilityQueryHandler::StoredWWProbabilityQueryHandler(
   try
   {
     register_scalar_param<int64_t>(P_FIND_NEAREST_VALID, "");
-    register_scalar_param<std::string>(P_LOCALE, "");
-    register_scalar_param<std::string>(P_MISSING_TEXT, "");
+    register_scalar_param<std::string>(P_LOCALE, ParamDesc::locale);
+    register_scalar_param<std::string>(P_MISSING_TEXT, ParamDesc::missing_text);
     register_scalar_param<std::string>(P_PRODUCER, "");
-    register_scalar_param<boost::posix_time::ptime>(P_ORIGIN_TIME, "", false);
-    register_scalar_param<std::string>(P_CRS, "");
-    register_array_param<std::string>(P_ICAO_CODE, "");
+    register_scalar_param<boost::posix_time::ptime>(P_ORIGIN_TIME, ParamDesc::origin_time, false);
+    register_scalar_param<std::string>(P_CRS, ParamDesc::crs);
+    register_array_param<std::string>(P_ICAO_CODE, ParamDesc::icao_code);
 
     itsProbabilityConfigParams.probabilityUnit =
         config->get_mandatory_config_param<std::string>("probability_params.probabilityUnit");

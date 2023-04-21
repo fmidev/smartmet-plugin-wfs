@@ -1,4 +1,5 @@
 #include "SupportsQualityParameters.h"
+#include "ParamDesc.h"
 #include <macgyver/StringConversion.h>
 #include <macgyver/Exception.h>
 
@@ -16,7 +17,7 @@ bw::SupportsQualityParameters::SupportsQualityParameters(
   {
       register_scalar_param<bool>(
           P_QUALITY_INFO,
-          "Specifies whether to requst quality info");
+          bw::ParamDesc::quality_info);
   }
   catch (...)
   {

@@ -3,6 +3,7 @@
 #include "StoredQueryHandlerFactoryDef.h"
 #include "WfsConst.h"
 #include "WfsConvenience.h"
+#include "ParamDesc.h"
 #include <boost/algorithm/string.hpp>
 #include <boost/format.hpp>
 #include <boost/lambda/lambda.hpp>
@@ -111,12 +112,12 @@ StoredObsQueryHandler::StoredObsQueryHandler(SmartMet::Spine::Reactor* reactor,
 
     register_scalar_param<std::string>(
         P_LOCALE,
-        "Specifies what locale to use for output"
+        ParamDesc::locale
         );
 
     register_scalar_param<std::string>(
         P_MISSING_TEXT,
-        "Specifies what text to display for missing values"
+        ParamDesc::missing_text
         );
 
     register_scalar_param<uint64_t>(
@@ -126,7 +127,7 @@ StoredObsQueryHandler::StoredObsQueryHandler(SmartMet::Spine::Reactor* reactor,
 
     register_scalar_param<std::string>(
         P_CRS,
-        "Coordinate projection to use in results. For example EPSG::3067"
+        ParamDesc::crs
         );
 
     register_scalar_param<std::string>(

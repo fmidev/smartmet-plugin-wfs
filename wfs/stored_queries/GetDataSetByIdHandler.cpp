@@ -3,6 +3,7 @@
 #include "StoredQueryHandlerFactoryDef.h"
 #include "StoredQueryMap.h"
 #include "WfsConvenience.h"
+#include "ParamDesc.h"
 #include <boost/algorithm/string.hpp>
 #include <macgyver/StringConversion.h>
 #include <macgyver/TypeName.h>
@@ -30,7 +31,7 @@ bw::GetDataSetByIdHandler::GetDataSetByIdHandler(SmartMet::Spine::Reactor* react
   {
     register_scalar_param<std::string>(
         P_DATA_SET_ID,
-        "Specifies ID of INSPIRE data set to return."
+        bw::ParamDesc::data_set_id
         );
 
     auto& ds_list = config->get_mandatory_config_param<libconfig::Setting&>("datasetids");

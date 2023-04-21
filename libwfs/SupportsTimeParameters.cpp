@@ -1,6 +1,7 @@
 #include "SupportsTimeParameters.h"
 #include "WfsConvenience.h"
 #include "WfsException.h"
+#include "ParamDesc.h"
 #include <boost/date_time/posix_time/posix_time.hpp>
 #include <boost/optional/optional_io.hpp>
 #include <cstdint>
@@ -26,18 +27,18 @@ bw::SupportsTimeParameters::SupportsTimeParameters(bw::StoredQueryConfig::Ptr co
   {
     register_array_param<uint64_t>(
         P_HOURS,
-        "Hour values for which to report data (0 or more integer values)."
+        bw::ParamDesc::hours
         );
 
     register_array_param<uint64_t>(
         P_TIMES,
-        "Time values for which to return data. (0 or more values).",
+        bw::ParamDesc::times,
         0, 999, 1, true
         );
 
     register_scalar_param<pt::ptime>(
         P_BEGIN_TIME,
-        "Parameter begin specifies the begin of time interval in ISO-format (for example 2012-02-27T00:00:00Z).",
+        bw::ParamDesc::times,
         false
         );
 
@@ -50,19 +51,19 @@ bw::SupportsTimeParameters::SupportsTimeParameters(bw::StoredQueryConfig::Ptr co
 
     register_scalar_param<pt::ptime>(
         P_END_TIME,
-        "End of time interval in ISO-format (for example 2012-02-27T00:00:00Z).",
+        bw::ParamDesc::end_time,
         false
         );
 
     register_scalar_param<uint64_t>(
         P_TIME_STEP,
-        "The time step of data in minutes. Notice that timestep is calculated from start of the ongoing hour or day.",
+        bw::ParamDesc::time_step,
         false
         );
 
     register_scalar_param<uint64_t>(
         P_NUM_STEPS,
-        "Number of timesteps in result set.",
+        bw::ParamDesc::num_steps,
         false, true);
   }
   catch (...)

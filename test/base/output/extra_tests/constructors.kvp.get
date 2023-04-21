@@ -7,7 +7,7 @@
 			{
 				"beginTime" : 
 				{
-					"description" : "Parameter begin specifies the begin of time interval in ISO-format (for example 2012-02-27T00:00:00Z).",
+					"description" : "Time values for which to return data. (0 or more values).",
 					"is_array" : false,
 					"mandatory" : false,
 					"type" : "posix_time"
@@ -21,7 +21,7 @@
 				},
 				"crs" : 
 				{
-					"description" : "",
+					"description" : "Coordinate system to use in response (for example crs:EPSG::4326",
 					"is_array" : false,
 					"mandatory" : true,
 					"type" : "string"
@@ -44,7 +44,7 @@
 				},
 				"originTime" : 
 				{
-					"description" : "",
+					"description" : "Override of origin time (for use in tests only, leave empty for production use)",
 					"is_array" : false,
 					"mandatory" : false,
 					"type" : "posix_time"
@@ -79,7 +79,7 @@
 				},
 				"timeZone" : 
 				{
-					"description" : "Time zone of the time instant of the data point in the form Area/Location (for example America/Costa_Rica).The default value is UTC.",
+					"description" : "Time zone of the time instant of the data point in the form Area/Location (for example America/Costa_Rica). The default value is UTC. Special values (case insensitive): utc, local",
 					"is_array" : false,
 					"mandatory" : true,
 					"type" : "string"
@@ -116,14 +116,14 @@
 			{
 				"beginTime" : 
 				{
-					"description" : "Parameter begin specifies the begin of time interval in ISO-format (for example 2012-02-27T00:00:00Z).",
+					"description" : "Time values for which to return data. (0 or more values).",
 					"is_array" : false,
 					"mandatory" : false,
 					"type" : "posix_time"
 				},
 				"crs" : 
 				{
-					"description" : "",
+					"description" : "Coordinate system to use in response (for example crs:EPSG::4326",
 					"is_array" : false,
 					"mandatory" : true,
 					"type" : "string"
@@ -219,7 +219,7 @@
 				},
 				"locale" : 
 				{
-					"description" : "",
+					"description" : "Locale to use (for example fi_FI.UTF8)",
 					"is_array" : false,
 					"mandatory" : true,
 					"type" : "string"
@@ -242,7 +242,7 @@
 				},
 				"missingText" : 
 				{
-					"description" : "",
+					"description" : "Text to output when the value is missing",
 					"is_array" : false,
 					"mandatory" : true,
 					"type" : "string"
@@ -258,14 +258,14 @@
 				},
 				"originTime" : 
 				{
-					"description" : "",
+					"description" : "Override of origin time (for use in tests only, leave empty for production use)",
 					"is_array" : false,
 					"mandatory" : false,
 					"type" : "posix_time"
 				},
 				"param" : 
 				{
-					"description" : "",
+					"description" : "List of parameters to return",
 					"is_array" : true,
 					"max_size" : 99,
 					"min_size" : 1,
@@ -304,7 +304,7 @@
 				},
 				"timeZone" : 
 				{
-					"description" : "Time zone of the time instant of the data point in the form Area/Location (for example America/Costa_Rica).The default value is UTC.",
+					"description" : "Time zone of the time instant of the data point in the form Area/Location (for example America/Costa_Rica). The default value is UTC. Special values (case insensitive): utc, local",
 					"is_array" : false,
 					"mandatory" : true,
 					"type" : "string"
@@ -350,14 +350,14 @@
 			{
 				"beginTime" : 
 				{
-					"description" : "Parameter begin specifies the begin of time interval in ISO-format (for example 2012-02-27T00:00:00Z).",
+					"description" : "Time values for which to return data. (0 or more values).",
 					"is_array" : false,
 					"mandatory" : false,
 					"type" : "posix_time"
 				},
 				"crs" : 
 				{
-					"description" : "",
+					"description" : "Coordinate system to use in response (for example crs:EPSG::4326",
 					"is_array" : false,
 					"mandatory" : true,
 					"type" : "string"
@@ -444,7 +444,7 @@
 				},
 				"locale" : 
 				{
-					"description" : "",
+					"description" : "Locale to use (for example fi_FI.UTF8)",
 					"is_array" : false,
 					"mandatory" : true,
 					"type" : "string"
@@ -458,7 +458,7 @@
 				},
 				"missingText" : 
 				{
-					"description" : "",
+					"description" : "Text to output when the value is missing",
 					"is_array" : false,
 					"mandatory" : true,
 					"type" : "string"
@@ -474,14 +474,14 @@
 				},
 				"originTime" : 
 				{
-					"description" : "",
+					"description" : "Override of origin time (for use in tests only, leave empty for production use)",
 					"is_array" : false,
 					"mandatory" : false,
 					"type" : "posix_time"
 				},
 				"param" : 
 				{
-					"description" : "",
+					"description" : "List of parameters to return",
 					"is_array" : true,
 					"max_size" : 99,
 					"min_size" : 1,
@@ -520,7 +520,7 @@
 				},
 				"timeZone" : 
 				{
-					"description" : "Time zone of the time instant of the data point in the form Area/Location (for example America/Costa_Rica).The default value is UTC.",
+					"description" : "Time zone of the time instant of the data point in the form Area/Location (for example America/Costa_Rica). The default value is UTC. Special values (case insensitive): utc, local",
 					"is_array" : false,
 					"mandatory" : true,
 					"type" : "string"
@@ -557,7 +557,7 @@
 			{
 				"beginTime" : 
 				{
-					"description" : "Parameter begin specifies the begin of time interval in ISO-format (for example 2012-02-27T00:00:00Z).",
+					"description" : "Time values for which to return data. (0 or more values).",
 					"is_array" : false,
 					"mandatory" : false,
 					"type" : "posix_time"
@@ -571,7 +571,7 @@
 				},
 				"crs" : 
 				{
-					"description" : "",
+					"description" : "Coordinate system to use in response (for example crs:EPSG::4326",
 					"is_array" : false,
 					"mandatory" : true,
 					"type" : "string"
@@ -601,7 +601,7 @@
 				},
 				"originTime" : 
 				{
-					"description" : "",
+					"description" : "Override of origin time (for use in tests only, leave empty for production use)",
 					"is_array" : false,
 					"mandatory" : false,
 					"type" : "posix_time"
@@ -657,7 +657,7 @@
 				},
 				"timeZone" : 
 				{
-					"description" : "Time zone of the time instant of the data point in the form Area/Location (for example America/Costa_Rica).The default value is UTC.",
+					"description" : "Time zone of the time instant of the data point in the form Area/Location (for example America/Costa_Rica). The default value is UTC. Special values (case insensitive): utc, local",
 					"is_array" : false,
 					"mandatory" : true,
 					"type" : "string"
@@ -694,7 +694,7 @@
 			{
 				"beginTime" : 
 				{
-					"description" : "Parameter begin specifies the begin of time interval in ISO-format (for example 2012-02-27T00:00:00Z).",
+					"description" : "Time values for which to return data. (0 or more values).",
 					"is_array" : false,
 					"mandatory" : false,
 					"type" : "posix_time"
@@ -708,7 +708,7 @@
 				},
 				"crs" : 
 				{
-					"description" : "Coordinate projection to use in results. For example EPSG::3067",
+					"description" : "Coordinate system to use in response (for example crs:EPSG::4326",
 					"is_array" : false,
 					"mandatory" : true,
 					"type" : "string"
@@ -786,7 +786,7 @@
 				},
 				"locale" : 
 				{
-					"description" : "Specifies what locale to use for output",
+					"description" : "Locale to use (for example fi_FI.UTF8)",
 					"is_array" : false,
 					"mandatory" : true,
 					"type" : "string"
@@ -825,7 +825,7 @@
 				},
 				"missingText" : 
 				{
-					"description" : "Specifies what text to display for missing values",
+					"description" : "Text to output when the value is missing",
 					"is_array" : false,
 					"mandatory" : true,
 					"type" : "string"
@@ -883,7 +883,7 @@
 				},
 				"timeZone" : 
 				{
-					"description" : "Time zone of the time instant of the data point in the form Area/Location (for example America/Costa_Rica).The default value is UTC.",
+					"description" : "Time zone of the time instant of the data point in the form Area/Location (for example America/Costa_Rica). The default value is UTC. Special values (case insensitive): utc, local",
 					"is_array" : false,
 					"mandatory" : true,
 					"type" : "string"
@@ -968,7 +968,7 @@
 				},
 				"crs" : 
 				{
-					"description" : "",
+					"description" : "Coordinate system to use in response (for example crs:EPSG::4326",
 					"is_array" : false,
 					"mandatory" : true,
 					"type" : "string"
@@ -1043,7 +1043,7 @@
 				},
 				"beginTime" : 
 				{
-					"description" : "",
+					"description" : "Parameter begin specifies the begin of time interval in ISO-format (for example 2012-02-27T00:00:00Z).",
 					"is_array" : false,
 					"mandatory" : true,
 					"type" : "posix_time"
@@ -1057,14 +1057,14 @@
 				},
 				"crs" : 
 				{
-					"description" : "",
+					"description" : "Coordinate system to use in response (for example crs:EPSG::4326",
 					"is_array" : false,
 					"mandatory" : true,
 					"type" : "string"
 				},
 				"endTime" : 
 				{
-					"description" : "",
+					"description" : "End of time interval in ISO-format (for example 2012-02-27T00:00:00Z).",
 					"is_array" : false,
 					"mandatory" : true,
 					"type" : "posix_time"
@@ -1135,7 +1135,7 @@
 				},
 				"missingText" : 
 				{
-					"description" : "",
+					"description" : "Text to output when the value is missing",
 					"is_array" : false,
 					"mandatory" : true,
 					"type" : "string"

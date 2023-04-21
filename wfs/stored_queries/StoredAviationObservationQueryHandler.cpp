@@ -2,6 +2,7 @@
 
 #include "stored_queries/StoredAviationObservationQueryHandler.h"
 #include "StoredQueryHandlerFactoryDef.h"
+#include "ParamDesc.h"
 #include <boost/date_time/posix_time/ptime.hpp>
 #include <engines/observation/DBRegistry.h>
 #include <engines/observation/VerifiableMessageQuery.h>
@@ -44,17 +45,17 @@ bw::StoredAviationObservationQueryHandler::StoredAviationObservationQueryHandler
   {
     register_array_param<std::string>(
         P_ICAO_CODE,
-        "Four-character alphanumeric code designating each airport around the world. (for example EFHK)."
+        bw::ParamDesc::icao_code
         );
 
     register_scalar_param<pt::ptime>(
         P_BEGIN_TIME,
-        "Parameter begin specifies the begin of time interval in ISO-format (for example 2012-02-27T00:00:00Z)."
+        bw::ParamDesc::begin_time
         );
 
     register_scalar_param<pt::ptime>(
         P_END_TIME,
-         "End of time interval in ISO-format (for example 2012-02-27T00:00:00Z)."
+        bw::ParamDesc::end_time
         );
 
     register_scalar_param<std::string>(

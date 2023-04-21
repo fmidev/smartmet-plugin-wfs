@@ -1,4 +1,5 @@
 #include "StoredContourHandlerBase.h"
+#include "ParamDesc.h"
 #include <boost/algorithm/string/replace.hpp>
 #include <boost/format.hpp>
 #include <gis/Box.h>
@@ -54,12 +55,12 @@ bw::StoredContourQueryHandler::StoredContourQueryHandler(
 
     register_scalar_param<boost::posix_time::ptime>(
         P_ORIGIN_TIME,
-        "",
+        bw::ParamDesc::origin_time,
         false);
 
     register_scalar_param<std::string>(
         P_CRS,
-        ""
+        bw::ParamDesc::crs
         );
 
     if (config->find_setting(config->get_root(), "handler_params.imageDir", false))
