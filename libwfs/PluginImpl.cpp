@@ -1015,6 +1015,40 @@ void PluginImpl::dump_constructor_map_html(std::ostream& os, const std::string& 
         }
 
         os << "</table>\n";
+        os << "<br/>\n";
+        os << "<h1>Stored queries</h1>\n";
+        os << "<br/>\n";
+        os << "<table border=\"1px solid black\", padding: 5px; >\n";
+
+        os << "<tr>";
+        os << "<th>Stored query</th>";
+        os << "<th>Template</th>";
+        os << "<th>Return types</th>";
+        os << "</tr>\n";
+
+        const auto& sq_list = constructor_list[name]["stored_queries"];
+        for (int i = 0; i < int(sq_list.size()); i++) {
+            const auto& item = sq_list[i];
+            const std::string name = item["name"].asString();
+            os << "<tr>";
+            os << "<td><a href=\"/wfs?SERVICE=WFS&VERSION=2.0.0&DescribeStoredQueries&"
+               << "storedquery_id=" << name << "\">" << name << "</a>"<< "</td>\n";
+            os << "<td>" << item["template"].asString() << "</td>\n";
+            os << "<td>";
+            const auto& rt_list = item["return_types"];
+            if (rt_list.size() == 1) {
+                os << rt_list[0].asString();
+            } else {
+                os << "<ul>";
+                for (int k = 0; k < int(rt_list.size()); k++) {
+                    os << "<li>" << rt_list[k].asString() << "</li>";
+                }
+                os << "</ul>";
+            }
+            os << "</td>\n";
+            os << "</tr>\n";
+        }
+        os << "</table>\n";
         os << "</html>\n";
       }
     }

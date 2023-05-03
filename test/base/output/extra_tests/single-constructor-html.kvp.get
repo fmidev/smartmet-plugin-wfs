@@ -15,4 +15,14 @@
 <tr><td> Scalar</td><td> timeZone</td><td> yes</td><td> string</td><td>  </td><td>  </td><td>  </td><td> Time zone of the time instant of the data point in the form Area/Location (for example America/Costa_Rica). The default value is UTC. Special values (case insensitive): utc, local</td></tr>
 <tr><td> Array</td><td> times</td><td> no</td><td> unsigned long</td><td> 0</td><td> 999</td><td> 1</td><td> Time values for which to return data. (0 or more values).</td></tr>
 </table>
+<br/>
+<h1>Stored queries</h1>
+<br/>
+<table border="1px solid black", padding: 5px; >
+<tr><th>Stored query</th><th>Template</th><th>Return types</th></tr>
+<tr><td><a href="/wfs?SERVICE=WFS&VERSION=2.0.0&DescribeStoredQueries&storedquery_id=CoverageTest">CoverageTest</a></td>
+<td>coverage_countours.c2t</td>
+<td>omso:GridSeriesObservation</td>
+</tr>
+</table>
 </html>

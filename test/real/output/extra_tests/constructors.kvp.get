@@ -1,0 +1,2499 @@
+{
+	"constructors" : 
+	{
+		"wfs_coverage_query_handler_factory" : 
+		{
+			"parameters" : 
+			{
+				"beginTime" : 
+				{
+					"description" : "Time values for which to return data. (0 or more values).",
+					"is_array" : false,
+					"mandatory" : false,
+					"type" : "posix_time"
+				},
+				"boundingBox" : 
+				{
+					"description" : "Bounding box of area for which to return data.",
+					"is_array" : false,
+					"mandatory" : false,
+					"type" : "bounding_box"
+				},
+				"crs" : 
+				{
+					"description" : "Coordinate system to use in response (for example crs:EPSG::4326",
+					"is_array" : false,
+					"mandatory" : true,
+					"type" : "string"
+				},
+				"endTime" : 
+				{
+					"description" : "End of time interval in ISO-format (for example 2012-02-27T00:00:00Z).",
+					"is_array" : false,
+					"mandatory" : false,
+					"type" : "posix_time"
+				},
+				"hours" : 
+				{
+					"description" : "Hour values for which to report data (0 or more integer values).",
+					"is_array" : true,
+					"max_size" : 65535,
+					"min_size" : 0,
+					"step" : 0,
+					"type" : "unsigned long"
+				},
+				"limits" : 
+				{
+					"description" : "",
+					"is_array" : true,
+					"max_size" : 999,
+					"min_size" : 0,
+					"step" : 2,
+					"type" : "double"
+				},
+				"originTime" : 
+				{
+					"description" : "Override of origin time (for use in tests only, leave empty for production use)",
+					"is_array" : false,
+					"mandatory" : false,
+					"type" : "posix_time"
+				},
+				"producer" : 
+				{
+					"description" : "",
+					"is_array" : false,
+					"mandatory" : true,
+					"type" : "string"
+				},
+				"startStep" : 
+				{
+					"description" : "",
+					"is_array" : false,
+					"mandatory" : false,
+					"type" : "unsigned long"
+				},
+				"timeStep" : 
+				{
+					"description" : "The time step of data in minutes. Notice that timestep is calculated from start of the ongoing hour or day.",
+					"is_array" : false,
+					"mandatory" : false,
+					"type" : "unsigned long"
+				},
+				"timeSteps" : 
+				{
+					"description" : "Number of timesteps in result set.",
+					"is_array" : false,
+					"mandatory" : false,
+					"type" : "unsigned long"
+				},
+				"timeZone" : 
+				{
+					"description" : "Time zone of the time instant of the data point in the form Area/Location (for example America/Costa_Rica). The default value is UTC. Special values (case insensitive): utc, local",
+					"is_array" : false,
+					"mandatory" : true,
+					"type" : "string"
+				},
+				"times" : 
+				{
+					"description" : "Time values for which to return data. (0 or more values).",
+					"is_array" : true,
+					"max_size" : 999,
+					"min_size" : 0,
+					"step" : 1,
+					"type" : "unsigned long"
+				}
+			},
+			"stored_queries" : 
+			[
+				{
+					"name" : "fmi::forecast::ecmwf::surface::coverage::wind",
+					"return_types" : 
+					[
+						"omso:GridSeriesObservation"
+					],
+					"template" : "coverage_countours.c2t"
+				}
+			],
+			"templates" : 
+			[
+				"coverage_countours.c2t"
+			]
+		},
+		"wfs_flash_handler_factory" : 
+		{
+			"parameters" : 
+			{
+				"beginTime" : 
+				{
+					"description" : "Parameter begin specifies the begin of time interval in ISO-format (for example 2012-02-27T00:00:00Z).",
+					"is_array" : false,
+					"mandatory" : true,
+					"type" : "posix_time"
+				},
+				"boundingBox" : 
+				{
+					"description" : "Bounding box of area for which to return data.",
+					"is_array" : false,
+					"mandatory" : false,
+					"type" : "bounding_box"
+				},
+				"crs" : 
+				{
+					"description" : "Coordinate system to use in response (for example crs:EPSG::4326",
+					"is_array" : false,
+					"mandatory" : true,
+					"type" : "string"
+				},
+				"endTime" : 
+				{
+					"description" : "End of time interval in ISO-format (for example 2012-02-27T00:00:00Z).",
+					"is_array" : false,
+					"mandatory" : true,
+					"type" : "posix_time"
+				},
+				"meteoParameters" : 
+				{
+					"description" : "List of parameters to return",
+					"is_array" : true,
+					"max_size" : 999,
+					"min_size" : 1,
+					"step" : 0,
+					"type" : "string"
+				},
+				"timeZone" : 
+				{
+					"description" : "Time zone of the time instant of the data point in the form Area/Location (for example America/Costa_Rica). The default value is UTC. Special values (case insensitive): utc, local",
+					"is_array" : false,
+					"mandatory" : true,
+					"type" : "string"
+				}
+			},
+			"stored_queries" : 
+			[
+				{
+					"name" : "fmi::observations::lightning::multipointcoverage",
+					"return_types" : 
+					[
+						"omso:GridSeriesObservation"
+					],
+					"template" : "lightning_multipointcoverage.c2t"
+				},
+				{
+					"name" : "fmi::observations::lightning::simple",
+					"return_types" : 
+					[
+						"BsWfs:BsWfsElement"
+					],
+					"template" : "lightning_simple.c2t"
+				}
+			],
+			"templates" : 
+			[
+				"lightning_multipointcoverage.c2t",
+				"lightning_simple.c2t"
+			]
+		},
+		"wfs_forecast_handler_factory" : 
+		{
+			"parameters" : 
+			{
+				"beginTime" : 
+				{
+					"description" : "Time values for which to return data. (0 or more values).",
+					"is_array" : false,
+					"mandatory" : false,
+					"type" : "posix_time"
+				},
+				"crs" : 
+				{
+					"description" : "Coordinate system to use in response (for example crs:EPSG::4326",
+					"is_array" : false,
+					"mandatory" : true,
+					"type" : "string"
+				},
+				"endTime" : 
+				{
+					"description" : "End of time interval in ISO-format (for example 2012-02-27T00:00:00Z).",
+					"is_array" : false,
+					"mandatory" : false,
+					"type" : "posix_time"
+				},
+				"findNearestValid" : 
+				{
+					"description" : "",
+					"is_array" : false,
+					"mandatory" : true,
+					"type" : "long"
+				},
+				"fmisids" : 
+				{
+					"description" : "FMI observation station identifiers (0 or more values).",
+					"is_array" : true,
+					"max_size" : 65535,
+					"min_size" : 0,
+					"step" : 0,
+					"type" : "long"
+				},
+				"geoids" : 
+				{
+					"description" : "GEOIDs of the locations for which to return data (0 or more values).",
+					"is_array" : true,
+					"max_size" : 65535,
+					"min_size" : 0,
+					"step" : 0,
+					"type" : "long"
+				},
+				"hours" : 
+				{
+					"description" : "Hour values for which to report data (0 or more integer values).",
+					"is_array" : true,
+					"max_size" : 65535,
+					"min_size" : 0,
+					"step" : 0,
+					"type" : "unsigned long"
+				},
+				"keyword" : 
+				{
+					"description" : "",
+					"is_array" : false,
+					"mandatory" : true,
+					"type" : "string"
+				},
+				"keyword_overwritable" : 
+				{
+					"description" : "",
+					"is_array" : false,
+					"mandatory" : true,
+					"type" : "bool"
+				},
+				"latlons" : 
+				{
+					"description" : "Location coordinates for which to return data (0 or more latitude/longitude pairs).",
+					"is_array" : true,
+					"max_size" : 999,
+					"min_size" : 0,
+					"step" : 2,
+					"type" : "double"
+				},
+				"level" : 
+				{
+					"description" : "",
+					"is_array" : true,
+					"max_size" : 99,
+					"min_size" : 0,
+					"step" : 0,
+					"type" : "long"
+				},
+				"levelHeights" : 
+				{
+					"description" : "",
+					"is_array" : true,
+					"max_size" : 99,
+					"min_size" : 0,
+					"step" : 0,
+					"type" : "double"
+				},
+				"levelType" : 
+				{
+					"description" : "",
+					"is_array" : false,
+					"mandatory" : true,
+					"type" : "string"
+				},
+				"locale" : 
+				{
+					"description" : "Locale to use (for example fi_FI.UTF8)",
+					"is_array" : false,
+					"mandatory" : true,
+					"type" : "string"
+				},
+				"lpnns" : 
+				{
+					"description" : "LPNN code of the location for which to return data (0 or more values)",
+					"is_array" : true,
+					"max_size" : 65535,
+					"min_size" : 0,
+					"step" : 0,
+					"type" : "long"
+				},
+				"maxDistance" : 
+				{
+					"description" : "Maximal distance of sites from specified place for which to provide data (mandatory real value)",
+					"is_array" : false,
+					"mandatory" : true,
+					"type" : "double"
+				},
+				"missingText" : 
+				{
+					"description" : "Text to output when the value is missing",
+					"is_array" : false,
+					"mandatory" : true,
+					"type" : "string"
+				},
+				"model" : 
+				{
+					"description" : "",
+					"is_array" : true,
+					"max_size" : 65535,
+					"min_size" : 0,
+					"step" : 0,
+					"type" : "string"
+				},
+				"originTime" : 
+				{
+					"description" : "Override of origin time (for use in tests only, leave empty for production use)",
+					"is_array" : false,
+					"mandatory" : false,
+					"type" : "posix_time"
+				},
+				"param" : 
+				{
+					"description" : "List of parameters to return",
+					"is_array" : true,
+					"max_size" : 99,
+					"min_size" : 1,
+					"step" : 0,
+					"type" : "string"
+				},
+				"places" : 
+				{
+					"description" : "The location for which to provide data (0 or more values)",
+					"is_array" : true,
+					"max_size" : 65535,
+					"min_size" : 0,
+					"step" : 0,
+					"type" : "string"
+				},
+				"startStep" : 
+				{
+					"description" : "",
+					"is_array" : false,
+					"mandatory" : false,
+					"type" : "unsigned long"
+				},
+				"timeStep" : 
+				{
+					"description" : "The time step of data in minutes. Notice that timestep is calculated from start of the ongoing hour or day.",
+					"is_array" : false,
+					"mandatory" : false,
+					"type" : "unsigned long"
+				},
+				"timeSteps" : 
+				{
+					"description" : "Number of timesteps in result set.",
+					"is_array" : false,
+					"mandatory" : false,
+					"type" : "unsigned long"
+				},
+				"timeZone" : 
+				{
+					"description" : "Time zone of the time instant of the data point in the form Area/Location (for example America/Costa_Rica). The default value is UTC. Special values (case insensitive): utc, local",
+					"is_array" : false,
+					"mandatory" : true,
+					"type" : "string"
+				},
+				"times" : 
+				{
+					"description" : "Time values for which to return data. (0 or more values).",
+					"is_array" : true,
+					"max_size" : 999,
+					"min_size" : 0,
+					"step" : 1,
+					"type" : "unsigned long"
+				},
+				"wmos" : 
+				{
+					"description" : "WMO code of the location for which to return data (0 or more values)",
+					"is_array" : true,
+					"max_size" : 65535,
+					"min_size" : 0,
+					"step" : 0,
+					"type" : "long"
+				}
+			},
+			"stored_queries" : 
+			[
+				{
+					"name" : "fmi::forecast::hbm::point::multipointcoverage",
+					"return_types" : 
+					[
+						"omso:GridSeriesObservation"
+					],
+					"template" : "weather_forecast_grid.c2t"
+				},
+				{
+					"name" : "fmi::forecast::hbm::point::simple",
+					"return_types" : 
+					[
+						"BsWfs:BsWfsElement"
+					],
+					"template" : "weather_forecast_simple.c2t"
+				},
+				{
+					"name" : "fmi::forecast::hbm::point::timevaluepair",
+					"return_types" : 
+					[
+						"omso:PointTimeSeriesObservation"
+					],
+					"template" : "weather_forecast_timevaluepair.c2t"
+				},
+				{
+					"name" : "fmi::forecast::hirlam::surface::cities::multipointcoverage",
+					"return_types" : 
+					[
+						"omso:GridSeriesObservation"
+					],
+					"template" : "weather_forecast_grid.c2t"
+				},
+				{
+					"name" : "fmi::forecast::hirlam::surface::cities::simple",
+					"return_types" : 
+					[
+						"BsWfs:BsWfsElement"
+					],
+					"template" : "weather_forecast_simple.c2t"
+				},
+				{
+					"name" : "fmi::forecast::hirlam::surface::cities::timevaluepair",
+					"return_types" : 
+					[
+						"omso:PointTimeSeriesObservation"
+					],
+					"template" : "weather_forecast_timevaluepair.c2t"
+				},
+				{
+					"name" : "fmi::forecast::hirlam::surface::obsstations::multipointcoverage",
+					"return_types" : 
+					[
+						"omso:GridSeriesObservation"
+					],
+					"template" : "weather_forecast_grid.c2t"
+				},
+				{
+					"name" : "fmi::forecast::hirlam::surface::obsstations::simple",
+					"return_types" : 
+					[
+						"BsWfs:BsWfsElement"
+					],
+					"template" : "weather_forecast_simple.c2t"
+				},
+				{
+					"name" : "fmi::forecast::hirlam::surface::obsstations::timevaluepair",
+					"return_types" : 
+					[
+						"omso:PointTimeSeriesObservation"
+					],
+					"template" : "weather_forecast_timevaluepair.c2t"
+				},
+				{
+					"name" : "fmi::forecast::hirlam::surface::point::multipointcoverage",
+					"return_types" : 
+					[
+						"omso:GridSeriesObservation"
+					],
+					"template" : "weather_forecast_grid.c2t"
+				},
+				{
+					"name" : "fmi::forecast::hirlam::surface::point::simple",
+					"return_types" : 
+					[
+						"BsWfs:BsWfsElement"
+					],
+					"template" : "weather_forecast_simple.c2t"
+				},
+				{
+					"name" : "fmi::forecast::hirlam::surface::point::timevaluepair",
+					"return_types" : 
+					[
+						"omso:PointTimeSeriesObservation"
+					],
+					"template" : "weather_forecast_timevaluepair.c2t"
+				},
+				{
+					"name" : "fmi::forecast::oaas::sealevel::point::multipointcoverage",
+					"return_types" : 
+					[
+						"omso:GridSeriesObservation"
+					],
+					"template" : "weather_forecast_grid.c2t"
+				},
+				{
+					"name" : "fmi::forecast::oaas::sealevel::point::simple",
+					"return_types" : 
+					[
+						"BsWfs:BsWfsElement"
+					],
+					"template" : "weather_forecast_simple.c2t"
+				},
+				{
+					"name" : "fmi::forecast::oaas::sealevel::point::timevaluepair",
+					"return_types" : 
+					[
+						"omso:PointTimeSeriesObservation"
+					],
+					"template" : "weather_forecast_timevaluepair.c2t"
+				},
+				{
+					"name" : "fmi::forecast::wam::point::multipointcoverage",
+					"return_types" : 
+					[
+						"omso:GridSeriesObservation"
+					],
+					"template" : "weather_forecast_grid.c2t"
+				},
+				{
+					"name" : "fmi::forecast::wam::point::simple",
+					"return_types" : 
+					[
+						"BsWfs:BsWfsElement"
+					],
+					"template" : "weather_forecast_simple.c2t"
+				},
+				{
+					"name" : "fmi::forecast::wam::point::timevaluepair",
+					"return_types" : 
+					[
+						"omso:PointTimeSeriesObservation"
+					],
+					"template" : "weather_forecast_timevaluepair.c2t"
+				}
+			],
+			"templates" : 
+			[
+				"weather_forecast_grid.c2t",
+				"weather_forecast_simple.c2t",
+				"weather_forecast_timevaluepair.c2t"
+			]
+		},
+		"wfs_obs_handler_factory" : 
+		{
+			"parameters" : 
+			{
+				"beginTime" : 
+				{
+					"description" : "Time values for which to return data. (0 or more values).",
+					"is_array" : false,
+					"mandatory" : false,
+					"type" : "posix_time"
+				},
+				"boundingBox" : 
+				{
+					"description" : "Bounding box of area for which to return data.",
+					"is_array" : false,
+					"mandatory" : false,
+					"type" : "bounding_box"
+				},
+				"crs" : 
+				{
+					"description" : "Coordinate system to use in response (for example crs:EPSG::4326",
+					"is_array" : false,
+					"mandatory" : true,
+					"type" : "string"
+				},
+				"endTime" : 
+				{
+					"description" : "End of time interval in ISO-format (for example 2012-02-27T00:00:00Z).",
+					"is_array" : false,
+					"mandatory" : false,
+					"type" : "posix_time"
+				},
+				"fmisids" : 
+				{
+					"description" : "FMI observation station identifiers (0 or more values).",
+					"is_array" : true,
+					"max_size" : 65535,
+					"min_size" : 0,
+					"step" : 0,
+					"type" : "long"
+				},
+				"geoids" : 
+				{
+					"description" : "GEOIDs of the locations for which to return data (0 or more values).",
+					"is_array" : true,
+					"max_size" : 65535,
+					"min_size" : 0,
+					"step" : 0,
+					"type" : "long"
+				},
+				"hours" : 
+				{
+					"description" : "Hour values for which to report data (0 or more integer values).",
+					"is_array" : true,
+					"max_size" : 65535,
+					"min_size" : 0,
+					"step" : 0,
+					"type" : "unsigned long"
+				},
+				"keyword" : 
+				{
+					"description" : "",
+					"is_array" : false,
+					"mandatory" : true,
+					"type" : "string"
+				},
+				"keyword_overwritable" : 
+				{
+					"description" : "",
+					"is_array" : false,
+					"mandatory" : true,
+					"type" : "bool"
+				},
+				"language" : 
+				{
+					"description" : "",
+					"is_array" : false,
+					"mandatory" : false,
+					"type" : "string"
+				},
+				"latest" : 
+				{
+					"description" : "",
+					"is_array" : false,
+					"mandatory" : true,
+					"type" : "bool"
+				},
+				"latlons" : 
+				{
+					"description" : "Location coordinates for which to return data (0 or more latitude/longitude pairs).",
+					"is_array" : true,
+					"max_size" : 999,
+					"min_size" : 0,
+					"step" : 2,
+					"type" : "double"
+				},
+				"locale" : 
+				{
+					"description" : "Locale to use (for example fi_FI.UTF8)",
+					"is_array" : false,
+					"mandatory" : true,
+					"type" : "string"
+				},
+				"lpnns" : 
+				{
+					"description" : "LPNN code of the location for which to return data (0 or more values)",
+					"is_array" : true,
+					"max_size" : 65535,
+					"min_size" : 0,
+					"step" : 0,
+					"type" : "long"
+				},
+				"maxDistance" : 
+				{
+					"description" : "Maximal distance of sites from specified place for which to provide data (mandatory real value)",
+					"is_array" : false,
+					"mandatory" : true,
+					"type" : "double"
+				},
+				"maxEpochs" : 
+				{
+					"description" : "",
+					"is_array" : false,
+					"mandatory" : true,
+					"type" : "unsigned long"
+				},
+				"meteoParameters" : 
+				{
+					"description" : "Comma separated list of meteorological parameters to return.",
+					"is_array" : true,
+					"max_size" : 65535,
+					"min_size" : 1,
+					"step" : 0,
+					"type" : "string"
+				},
+				"missingText" : 
+				{
+					"description" : "Text to output when the value is missing",
+					"is_array" : false,
+					"mandatory" : true,
+					"type" : "string"
+				},
+				"numOfStations" : 
+				{
+					"description" : "How many observation stations are fetched around queried locations. Note that stations that are nly searched with ",
+					"is_array" : false,
+					"mandatory" : true,
+					"type" : "unsigned long"
+				},
+				"places" : 
+				{
+					"description" : "The location for which to provide data (0 or more values)",
+					"is_array" : true,
+					"max_size" : 65535,
+					"min_size" : 0,
+					"step" : 0,
+					"type" : "string"
+				},
+				"qualityInfo" : 
+				{
+					"description" : "Specifies whether to requst quality info",
+					"is_array" : false,
+					"mandatory" : true,
+					"type" : "bool"
+				},
+				"startStep" : 
+				{
+					"description" : "",
+					"is_array" : false,
+					"mandatory" : false,
+					"type" : "unsigned long"
+				},
+				"stationType" : 
+				{
+					"description" : "",
+					"is_array" : false,
+					"mandatory" : true,
+					"type" : "string"
+				},
+				"timeStep" : 
+				{
+					"description" : "The time step of data in minutes. Notice that timestep is calculated from start of the ongoing hour or day.",
+					"is_array" : false,
+					"mandatory" : false,
+					"type" : "unsigned long"
+				},
+				"timeSteps" : 
+				{
+					"description" : "Number of timesteps in result set.",
+					"is_array" : false,
+					"mandatory" : false,
+					"type" : "unsigned long"
+				},
+				"timeZone" : 
+				{
+					"description" : "Time zone of the time instant of the data point in the form Area/Location (for example America/Costa_Rica). The default value is UTC. Special values (case insensitive): utc, local",
+					"is_array" : false,
+					"mandatory" : true,
+					"type" : "string"
+				},
+				"times" : 
+				{
+					"description" : "Time values for which to return data. (0 or more values).",
+					"is_array" : true,
+					"max_size" : 999,
+					"min_size" : 0,
+					"step" : 1,
+					"type" : "unsigned long"
+				},
+				"weekDays" : 
+				{
+					"description" : "",
+					"is_array" : true,
+					"max_size" : 65535,
+					"min_size" : 0,
+					"step" : 0,
+					"type" : "long"
+				},
+				"wmos" : 
+				{
+					"description" : "WMO code of the location for which to return data (0 or more values)",
+					"is_array" : true,
+					"max_size" : 65535,
+					"min_size" : 0,
+					"step" : 0,
+					"type" : "long"
+				}
+			},
+			"stored_queries" : 
+			[
+				{
+					"name" : "fmi::datasets::observations::weather::daily::timevaluepair",
+					"return_types" : 
+					[
+						"omso:PointTimeSeriesObservation"
+					],
+					"template" : "weather_observations_timevaluepair.c2t"
+				},
+				{
+					"name" : "fmi::datasets::observations::weather::monthly::timevaluepair",
+					"return_types" : 
+					[
+						"omso:PointTimeSeriesObservation"
+					],
+					"template" : "weather_observations_timevaluepair.c2t"
+				},
+				{
+					"name" : "fmi::datasets::observations::weather::timevaluepair",
+					"return_types" : 
+					[
+						"omso:PointTimeSeriesObservation"
+					],
+					"template" : "weather_observations_timevaluepair.c2t"
+				},
+				{
+					"name" : "fmi::datasets::observations::weather::yearly::30year::timevaluepair",
+					"return_types" : 
+					[
+						"omso:PointTimeSeriesObservation"
+					],
+					"template" : "weather_observations_timevaluepair.c2t"
+				},
+				{
+					"name" : "fmi::observations::airquality::hourly::multipointcoverage",
+					"return_types" : 
+					[
+						"omso:GridSeriesObservation"
+					],
+					"template" : "weather_observations_grid.c2t"
+				},
+				{
+					"name" : "fmi::observations::airquality::hourly::simple",
+					"return_types" : 
+					[
+						"BsWfs:BsWfsElement"
+					],
+					"template" : "weather_observations_simple.c2t"
+				},
+				{
+					"name" : "fmi::observations::airquality::hourly::timevaluepair",
+					"return_types" : 
+					[
+						"omso:PointTimeSeriesObservation"
+					],
+					"template" : "weather_observations_timevaluepair.c2t"
+				},
+				{
+					"name" : "fmi::observations::magnetometer::simple",
+					"return_types" : 
+					[
+						"BsWfs:BsWfsElement"
+					],
+					"template" : "weather_observations_simple.c2t"
+				},
+				{
+					"name" : "fmi::observations::mareograph::daily::multipointcoverage",
+					"return_types" : 
+					[
+						"omso:GridSeriesObservation"
+					],
+					"template" : "weather_observations2_grid.c2t"
+				},
+				{
+					"name" : "fmi::observations::mareograph::daily::simple",
+					"return_types" : 
+					[
+						"BsWfs:BsWfsElement"
+					],
+					"template" : "weather_observations_simple.c2t"
+				},
+				{
+					"name" : "fmi::observations::mareograph::daily::timevaluepair",
+					"return_types" : 
+					[
+						"omso:PointTimeSeriesObservation"
+					],
+					"template" : "weather_observations_timevaluepair2.c2t"
+				},
+				{
+					"name" : "fmi::observations::mareograph::instant::multipointcoverage",
+					"return_types" : 
+					[
+						"omso:GridSeriesObservation"
+					],
+					"template" : "weather_observations2_grid.c2t"
+				},
+				{
+					"name" : "fmi::observations::mareograph::instant::simple",
+					"return_types" : 
+					[
+						"BsWfs:BsWfsElement"
+					],
+					"template" : "weather_observations_simple.c2t"
+				},
+				{
+					"name" : "fmi::observations::mareograph::instant::timevaluepair",
+					"return_types" : 
+					[
+						"omso:PointTimeSeriesObservation"
+					],
+					"template" : "weather_observations_timevaluepair2.c2t"
+				},
+				{
+					"name" : "fmi::observations::mareograph::monthly::multipointcoverage",
+					"return_types" : 
+					[
+						"omso:GridSeriesObservation"
+					],
+					"template" : "weather_observations2_grid.c2t"
+				},
+				{
+					"name" : "fmi::observations::mareograph::monthly::simple",
+					"return_types" : 
+					[
+						"BsWfs:BsWfsElement"
+					],
+					"template" : "weather_observations_simple.c2t"
+				},
+				{
+					"name" : "fmi::observations::mareograph::monthly::timevaluepair",
+					"return_types" : 
+					[
+						"omso:PointTimeSeriesObservation"
+					],
+					"template" : "weather_observations_timevaluepair2.c2t"
+				},
+				{
+					"name" : "fmi::observations::mareograph::multipointcoverage",
+					"return_types" : 
+					[
+						"omso:GridSeriesObservation"
+					],
+					"template" : "weather_observations2_grid.c2t"
+				},
+				{
+					"name" : "fmi::observations::mareograph::simple",
+					"return_types" : 
+					[
+						"BsWfs:BsWfsElement"
+					],
+					"template" : "weather_observations_simple.c2t"
+				},
+				{
+					"name" : "fmi::observations::mareograph::timevaluepair",
+					"return_types" : 
+					[
+						"omso:PointTimeSeriesObservation"
+					],
+					"template" : "weather_observations_timevaluepair2.c2t"
+				},
+				{
+					"name" : "fmi::observations::radiation::multipointcoverage",
+					"return_types" : 
+					[
+						"omso:GridSeriesObservation"
+					],
+					"template" : "weather_observations_grid.c2t"
+				},
+				{
+					"name" : "fmi::observations::radiation::simple",
+					"return_types" : 
+					[
+						"BsWfs:BsWfsElement"
+					],
+					"template" : "weather_observations_simple.c2t"
+				},
+				{
+					"name" : "fmi::observations::radiation::timevaluepair",
+					"return_types" : 
+					[
+						"omso:PointTimeSeriesObservation"
+					],
+					"template" : "weather_observations_timevaluepair.c2t"
+				},
+				{
+					"name" : "fmi::observations::soil::hourly::multipointcoverage",
+					"return_types" : 
+					[
+						"omso:GridSeriesObservation"
+					],
+					"template" : "weather_observations_grid.c2t"
+				},
+				{
+					"name" : "fmi::observations::soil::hourly::simple",
+					"return_types" : 
+					[
+						"BsWfs:BsWfsElement"
+					],
+					"template" : "weather_observations_simple.c2t"
+				},
+				{
+					"name" : "fmi::observations::soil::hourly::timevaluepair",
+					"return_types" : 
+					[
+						"omso:PointTimeSeriesObservation"
+					],
+					"template" : "weather_observations_timevaluepair.c2t"
+				},
+				{
+					"name" : "fmi::observations::wave::multipointcoverage",
+					"return_types" : 
+					[
+						"omso:GridSeriesObservation"
+					],
+					"template" : "weather_observations_grid.c2t"
+				},
+				{
+					"name" : "fmi::observations::wave::simple",
+					"return_types" : 
+					[
+						"BsWfs:BsWfsElement"
+					],
+					"template" : "weather_observations_simple.c2t"
+				},
+				{
+					"name" : "fmi::observations::wave::timevaluepair",
+					"return_types" : 
+					[
+						"omso:PointTimeSeriesObservation"
+					],
+					"template" : "weather_observations_timevaluepair.c2t"
+				},
+				{
+					"name" : "fmi::observations::weather::cities::multipointcoverage",
+					"return_types" : 
+					[
+						"omso:GridSeriesObservation"
+					],
+					"template" : "weather_observations_grid.c2t"
+				},
+				{
+					"name" : "fmi::observations::weather::cities::simple",
+					"return_types" : 
+					[
+						"BsWfs:BsWfsElement"
+					],
+					"template" : "weather_observations_simple.c2t"
+				},
+				{
+					"name" : "fmi::observations::weather::cities::timevaluepair",
+					"return_types" : 
+					[
+						"omso:PointTimeSeriesObservation"
+					],
+					"template" : "weather_observations_timevaluepair.c2t"
+				},
+				{
+					"name" : "fmi::observations::weather::daily::multipointcoverage",
+					"return_types" : 
+					[
+						"omso:GridSeriesObservation"
+					],
+					"template" : "weather_observations_grid.c2t"
+				},
+				{
+					"name" : "fmi::observations::weather::daily::simple",
+					"return_types" : 
+					[
+						"BsWfs:BsWfsElement"
+					],
+					"template" : "weather_observations_simple.c2t"
+				},
+				{
+					"name" : "fmi::observations::weather::daily::timevaluepair",
+					"return_types" : 
+					[
+						"omso:PointTimeSeriesObservation"
+					],
+					"template" : "weather_observations_timevaluepair.c2t"
+				},
+				{
+					"name" : "fmi::observations::weather::monthly::30year::multipointcoverage",
+					"return_types" : 
+					[
+						"omso:GridSeriesObservation"
+					],
+					"template" : "weather_observations_grid.c2t"
+				},
+				{
+					"name" : "fmi::observations::weather::monthly::30year::simple",
+					"return_types" : 
+					[
+						"BsWfs:BsWfsElement"
+					],
+					"template" : "weather_observations_simple.c2t"
+				},
+				{
+					"name" : "fmi::observations::weather::monthly::30year::timevaluepair",
+					"return_types" : 
+					[
+						"omso:PointTimeSeriesObservation"
+					],
+					"template" : "weather_observations_timevaluepair.c2t"
+				},
+				{
+					"name" : "fmi::observations::weather::monthly::multipointcoverage",
+					"return_types" : 
+					[
+						"omso:GridSeriesObservation"
+					],
+					"template" : "weather_observations_grid.c2t"
+				},
+				{
+					"name" : "fmi::observations::weather::monthly::simple",
+					"return_types" : 
+					[
+						"BsWfs:BsWfsElement"
+					],
+					"template" : "weather_observations_simple.c2t"
+				},
+				{
+					"name" : "fmi::observations::weather::monthly::timevaluepair",
+					"return_types" : 
+					[
+						"omso:PointTimeSeriesObservation"
+					],
+					"template" : "weather_observations_timevaluepair.c2t"
+				},
+				{
+					"name" : "fmi::observations::weather::multipointcoverage",
+					"return_types" : 
+					[
+						"omso:GridSeriesObservation"
+					],
+					"template" : "weather_observations_grid.c2t"
+				},
+				{
+					"name" : "fmi::observations::weather::simple",
+					"return_types" : 
+					[
+						"BsWfs:BsWfsElement"
+					],
+					"template" : "weather_observations_simple.c2t"
+				},
+				{
+					"name" : "fmi::observations::weather::timevaluepair",
+					"return_types" : 
+					[
+						"omso:PointTimeSeriesObservation"
+					],
+					"template" : "weather_observations_timevaluepair.c2t"
+				},
+				{
+					"name" : "fmi::observations::weather::yearly::30year::multipointcoverage",
+					"return_types" : 
+					[
+						"omso:GridSeriesObservation"
+					],
+					"template" : "weather_observations_grid.c2t"
+				},
+				{
+					"name" : "fmi::observations::weather::yearly::30year::simple",
+					"return_types" : 
+					[
+						"BsWfs:BsWfsElement"
+					],
+					"template" : "weather_observations_simple.c2t"
+				},
+				{
+					"name" : "fmi::observations::weather::yearly::30year::timevaluepair",
+					"return_types" : 
+					[
+						"omso:PointTimeSeriesObservation"
+					],
+					"template" : "weather_observations_timevaluepair.c2t"
+				},
+				{
+					"name" : "livi::observations::road::default::multipointcoverage",
+					"return_types" : 
+					[
+						"omso:GridSeriesObservation"
+					],
+					"template" : "weather_observations_grid.c2t"
+				},
+				{
+					"name" : "livi::observations::road::default::simple",
+					"return_types" : 
+					[
+						"BsWfs:BsWfsElement"
+					],
+					"template" : "weather_observations_simple.c2t"
+				},
+				{
+					"name" : "livi::observations::road::default::timevaluepair",
+					"return_types" : 
+					[
+						"omso:PointTimeSeriesObservation"
+					],
+					"template" : "weather_observations_timevaluepair.c2t"
+				},
+				{
+					"name" : "livi::observations::road::finland::multipointcoverage",
+					"return_types" : 
+					[
+						"omso:GridSeriesObservation"
+					],
+					"template" : "weather_observations_grid.c2t"
+				},
+				{
+					"name" : "livi::observations::road::finland::simple",
+					"return_types" : 
+					[
+						"BsWfs:BsWfsElement"
+					],
+					"template" : "weather_observations_simple.c2t"
+				},
+				{
+					"name" : "livi::observations::road::finland::timevaluepair",
+					"return_types" : 
+					[
+						"omso:PointTimeSeriesObservation"
+					],
+					"template" : "weather_observations_timevaluepair.c2t"
+				},
+				{
+					"name" : "livi::observations::road::multipointcoverage",
+					"return_types" : 
+					[
+						"omso:GridSeriesObservation"
+					],
+					"template" : "weather_observations_grid.c2t"
+				},
+				{
+					"name" : "livi::observations::road::simple",
+					"return_types" : 
+					[
+						"BsWfs:BsWfsElement"
+					],
+					"template" : "weather_observations_simple.c2t"
+				},
+				{
+					"name" : "livi::observations::road::timevaluepair",
+					"return_types" : 
+					[
+						"omso:PointTimeSeriesObservation"
+					],
+					"template" : "weather_observations_timevaluepair.c2t"
+				},
+				{
+					"name" : "stuk::observations::external-radiation::latest::multipointcoverage",
+					"return_types" : 
+					[
+						"omso:GridSeriesObservation"
+					],
+					"template" : "stuk_weather_observations_grid.c2t"
+				},
+				{
+					"name" : "stuk::observations::external-radiation::latest::simple",
+					"return_types" : 
+					[
+						"BsWfs:BsWfsElement"
+					],
+					"template" : "weather_observations_simple.c2t"
+				},
+				{
+					"name" : "stuk::observations::external-radiation::multipointcoverage",
+					"return_types" : 
+					[
+						"omso:GridSeriesObservation"
+					],
+					"template" : "stuk_weather_observations_grid.c2t"
+				},
+				{
+					"name" : "urban::observations::airquality::hourly::multipointcoverage",
+					"return_types" : 
+					[
+						"omso:GridSeriesObservation"
+					],
+					"template" : "weather_observations_grid.c2t"
+				},
+				{
+					"name" : "urban::observations::airquality::hourly::simple",
+					"return_types" : 
+					[
+						"BsWfs:BsWfsElement"
+					],
+					"template" : "weather_observations_simple.c2t"
+				},
+				{
+					"name" : "urban::observations::airquality::hourly::timevaluepair",
+					"return_types" : 
+					[
+						"omso:PointTimeSeriesObservation"
+					],
+					"template" : "weather_observations_timevaluepair.c2t"
+				}
+			],
+			"templates" : 
+			[
+				"weather_observations_timevaluepair.c2t",
+				"weather_observations_grid.c2t",
+				"weather_observations_simple.c2t",
+				"weather_observations2_grid.c2t",
+				"weather_observations_timevaluepair2.c2t",
+				"stuk_weather_observations_grid.c2t"
+			]
+		},
+		"wfs_stored_air_nuclide_handler_factory" : 
+		{
+			"parameters" : 
+			{
+				"beginTime" : 
+				{
+					"description" : "Parameter begin specifies the begin of time interval in ISO-format (for example 2012-02-27T00:00:00Z).",
+					"is_array" : false,
+					"mandatory" : true,
+					"type" : "posix_time"
+				},
+				"boundingBox" : 
+				{
+					"description" : "Bounding box of area for which to return data.",
+					"is_array" : false,
+					"mandatory" : false,
+					"type" : "bounding_box"
+				},
+				"crs" : 
+				{
+					"description" : "Coordinate system to use in response (for example crs:EPSG::4326",
+					"is_array" : false,
+					"mandatory" : true,
+					"type" : "string"
+				},
+				"endTime" : 
+				{
+					"description" : "End of time interval in ISO-format (for example 2012-02-27T00:00:00Z).",
+					"is_array" : false,
+					"mandatory" : true,
+					"type" : "posix_time"
+				},
+				"fmisids" : 
+				{
+					"description" : "FMI observation station identifiers (0 or more values).",
+					"is_array" : true,
+					"max_size" : 65535,
+					"min_size" : 0,
+					"step" : 0,
+					"type" : "long"
+				},
+				"geoids" : 
+				{
+					"description" : "GEOIDs of the locations for which to return data (0 or more values).",
+					"is_array" : true,
+					"max_size" : 65535,
+					"min_size" : 0,
+					"step" : 0,
+					"type" : "long"
+				},
+				"keyword" : 
+				{
+					"description" : "",
+					"is_array" : false,
+					"mandatory" : true,
+					"type" : "string"
+				},
+				"keyword_overwritable" : 
+				{
+					"description" : "",
+					"is_array" : false,
+					"mandatory" : true,
+					"type" : "bool"
+				},
+				"latest" : 
+				{
+					"description" : "",
+					"is_array" : false,
+					"mandatory" : true,
+					"type" : "bool"
+				},
+				"latlons" : 
+				{
+					"description" : "Location coordinates for which to return data (0 or more latitude/longitude pairs).",
+					"is_array" : true,
+					"max_size" : 999,
+					"min_size" : 0,
+					"step" : 2,
+					"type" : "double"
+				},
+				"maxDistance" : 
+				{
+					"description" : "Maximal distance of sites from specified place for which to provide data (mandatory real value)",
+					"is_array" : false,
+					"mandatory" : true,
+					"type" : "double"
+				},
+				"nuclideCodes" : 
+				{
+					"description" : "",
+					"is_array" : true,
+					"max_size" : 65535,
+					"min_size" : 0,
+					"step" : 0,
+					"type" : "string"
+				},
+				"numOfStations" : 
+				{
+					"description" : "",
+					"is_array" : false,
+					"mandatory" : true,
+					"type" : "unsigned long"
+				},
+				"places" : 
+				{
+					"description" : "The location for which to provide data (0 or more values)",
+					"is_array" : true,
+					"max_size" : 65535,
+					"min_size" : 0,
+					"step" : 0,
+					"type" : "string"
+				},
+				"qualityInfo" : 
+				{
+					"description" : "Specifies whether to requst quality info",
+					"is_array" : false,
+					"mandatory" : true,
+					"type" : "bool"
+				},
+				"stationType" : 
+				{
+					"description" : "",
+					"is_array" : false,
+					"mandatory" : true,
+					"type" : "string"
+				},
+				"timeStep" : 
+				{
+					"description" : "The time step of data in minutes. Notice that timestep is calculated from start of the ongoing hour or day.",
+					"is_array" : false,
+					"mandatory" : true,
+					"type" : "unsigned long"
+				},
+				"wmos" : 
+				{
+					"description" : "WMO code of the location for which to return data (0 or more values)",
+					"is_array" : true,
+					"max_size" : 65535,
+					"min_size" : 0,
+					"step" : 0,
+					"type" : "long"
+				}
+			},
+			"stored_queries" : 
+			[
+				{
+					"name" : "stuk::observations::air::radionuclide-activity-concentration::latest::multipointcoverage",
+					"return_types" : 
+					[
+						"omso:PointObservation"
+					],
+					"template" : "air_radionuclide_concentration_multipointcoverage.c2t"
+				},
+				{
+					"name" : "stuk::observations::air::radionuclide-activity-concentration::latest::simple",
+					"return_types" : 
+					[
+						"BsWfs:BsWfsElement"
+					],
+					"template" : "air_radionuclide_concentration_simple.c2t"
+				},
+				{
+					"name" : "stuk::observations::air::radionuclide-activity-concentration::multipointcoverage",
+					"return_types" : 
+					[
+						"omso:PointObservation"
+					],
+					"template" : "air_radionuclide_concentration_multipointcoverage.c2t"
+				}
+			],
+			"templates" : 
+			[
+				"air_radionuclide_concentration_multipointcoverage.c2t",
+				"air_radionuclide_concentration_simple.c2t"
+			]
+		},
+		"wfs_stored_atom_handler_base_factory" : 
+		{
+			"parameters" : {},
+			"stored_queries" : 
+			[
+				{
+					"name" : "DownloadQueryDemo",
+					"return_types" : 
+					[
+						"testType"
+					],
+					"template" : "_download_query_demo.c2t"
+				}
+			],
+			"templates" : 
+			[
+				"_download_query_demo.c2t"
+			]
+		},
+		"wfs_stored_aviation_observation_handler_factory" : 
+		{
+			"parameters" : 
+			{
+				"beginTime" : 
+				{
+					"description" : "Parameter begin specifies the begin of time interval in ISO-format (for example 2012-02-27T00:00:00Z).",
+					"is_array" : false,
+					"mandatory" : true,
+					"type" : "posix_time"
+				},
+				"boundingBox" : 
+				{
+					"description" : "Bounding box of area for which to return data.",
+					"is_array" : false,
+					"mandatory" : false,
+					"type" : "bounding_box"
+				},
+				"endTime" : 
+				{
+					"description" : "End of time interval in ISO-format (for example 2012-02-27T00:00:00Z).",
+					"is_array" : false,
+					"mandatory" : true,
+					"type" : "posix_time"
+				},
+				"geoids" : 
+				{
+					"description" : "GEOIDs of the locations for which to return data (0 or more values).",
+					"is_array" : true,
+					"max_size" : 65535,
+					"min_size" : 0,
+					"step" : 0,
+					"type" : "long"
+				},
+				"icaoCode" : 
+				{
+					"description" : "Four-character alphanumeric code designating each airport around the world. (for example EFHK).",
+					"is_array" : true,
+					"max_size" : 65535,
+					"min_size" : 0,
+					"step" : 0,
+					"type" : "string"
+				},
+				"keyword" : 
+				{
+					"description" : "",
+					"is_array" : false,
+					"mandatory" : true,
+					"type" : "string"
+				},
+				"keyword_overwritable" : 
+				{
+					"description" : "",
+					"is_array" : false,
+					"mandatory" : true,
+					"type" : "bool"
+				},
+				"latlons" : 
+				{
+					"description" : "Location coordinates for which to return data (0 or more latitude/longitude pairs).",
+					"is_array" : true,
+					"max_size" : 999,
+					"min_size" : 0,
+					"step" : 2,
+					"type" : "double"
+				},
+				"maxDistance" : 
+				{
+					"description" : "Maximal distance of sites from specified place for which to provide data (mandatory real value)",
+					"is_array" : false,
+					"mandatory" : true,
+					"type" : "double"
+				},
+				"places" : 
+				{
+					"description" : "The location for which to provide data (0 or more values)",
+					"is_array" : true,
+					"max_size" : 65535,
+					"min_size" : 0,
+					"step" : 0,
+					"type" : "string"
+				},
+				"returnOnlyLatest" : 
+				{
+					"description" : "",
+					"is_array" : false,
+					"mandatory" : false,
+					"type" : "string"
+				},
+				"stationType" : 
+				{
+					"description" : "",
+					"is_array" : false,
+					"mandatory" : true,
+					"type" : "string"
+				}
+			},
+			"stored_queries" : 
+			[
+				{
+					"name" : "fmi::avi::observations::finland::iwxxm",
+					"return_types" : 
+					[
+						"avi:VerifiableMessage"
+					],
+					"template" : "aviation_observations.c2t"
+				},
+				{
+					"name" : "fmi::avi::observations::finland::latest::iwxxm",
+					"return_types" : 
+					[
+						"avi:VerifiableMessage"
+					],
+					"template" : "aviation_observations.c2t"
+				},
+				{
+					"name" : "fmi::avi::observations::iwxxm",
+					"return_types" : 
+					[
+						"avi:VerifiableMessage"
+					],
+					"template" : "aviation_observations.c2t"
+				},
+				{
+					"name" : "fmi::avi::observations::latest::iwxxm",
+					"return_types" : 
+					[
+						"avi:VerifiableMessage"
+					],
+					"template" : "aviation_observations.c2t"
+				}
+			],
+			"templates" : 
+			[
+				"aviation_observations.c2t"
+			]
+		},
+		"wfs_stored_file_handler_factory" : 
+		{
+			"parameters" : 
+			{
+				"bbox" : 
+				{
+					"description" : "Bounding box of area for which to return data.",
+					"is_array" : true,
+					"max_size" : 4,
+					"min_size" : 0,
+					"step" : 4,
+					"type" : "double"
+				},
+				"beginTime" : 
+				{
+					"description" : "Parameter begin specifies the begin of time interval in ISO-format (for example 2012-02-27T00:00:00Z).",
+					"is_array" : true,
+					"max_size" : 65535,
+					"min_size" : 0,
+					"step" : 0,
+					"type" : "posix_time"
+				},
+				"endTime" : 
+				{
+					"description" : "End of time interval in ISO-format (for example 2012-02-27T00:00:00Z).",
+					"is_array" : true,
+					"max_size" : 65535,
+					"min_size" : 0,
+					"step" : 0,
+					"type" : "posix_time"
+				},
+				"levels" : 
+				{
+					"description" : "",
+					"is_array" : true,
+					"max_size" : 65535,
+					"min_size" : 0,
+					"step" : 0,
+					"type" : "long"
+				},
+				"name" : 
+				{
+					"description" : "",
+					"is_array" : false,
+					"mandatory" : false,
+					"type" : "string"
+				},
+				"params" : 
+				{
+					"description" : "List of parameters to return",
+					"is_array" : true,
+					"max_size" : 65535,
+					"min_size" : 0,
+					"step" : 0,
+					"type" : "string"
+				}
+			},
+			"stored_queries" : 
+			[
+				{
+					"name" : "FileDownloadDemo",
+					"return_types" : 
+					[
+						"testType"
+					],
+					"template" : "FileDownloadDemo.c2t"
+				}
+			],
+			"templates" : 
+			[
+				"FileDownloadDemo.c2t"
+			]
+		},
+		"wfs_stored_geoserver_handler_factory" : 
+		{
+			"parameters" : 
+			{
+				"begin" : 
+				{
+					"description" : "Parameter begin specifies the begin of time interval in ISO-format (for example 2012-02-27T00:00:00Z).",
+					"is_array" : false,
+					"mandatory" : true,
+					"type" : "posix_time"
+				},
+				"boundingBox" : 
+				{
+					"description" : "Bounding box of area for which to return data.",
+					"is_array" : false,
+					"mandatory" : false,
+					"type" : "bounding_box"
+				},
+				"crs" : 
+				{
+					"description" : "Coordinate system to use in response (for example crs:EPSG::4326",
+					"is_array" : false,
+					"mandatory" : true,
+					"type" : "string"
+				},
+				"end" : 
+				{
+					"description" : "End of time interval in ISO-format (for example 2012-02-27T00:00:00Z).",
+					"is_array" : false,
+					"mandatory" : true,
+					"type" : "posix_time"
+				},
+				"height" : 
+				{
+					"description" : "",
+					"is_array" : false,
+					"mandatory" : true,
+					"type" : "unsigned long"
+				},
+				"layers" : 
+				{
+					"description" : "",
+					"is_array" : true,
+					"max_size" : 999,
+					"min_size" : 1,
+					"step" : 0,
+					"type" : "string"
+				},
+				"width" : 
+				{
+					"description" : "",
+					"is_array" : false,
+					"mandatory" : true,
+					"type" : "unsigned long"
+				}
+			},
+			"stored_queries" : 
+			[
+				{
+					"name" : "fmi::obs::radar::hclass::1",
+					"return_types" : 
+					[
+						"omso:GridSeriesObservation"
+					],
+					"template" : "radar.c2t"
+				},
+				{
+					"name" : "fmi::radar",
+					"return_types" : 
+					[
+						"omso:GridSeriesObservation"
+					],
+					"template" : "radar.c2t"
+				},
+				{
+					"name" : "fmi::radar::composite::dbz",
+					"return_types" : 
+					[
+						"omso:GridSeriesObservation"
+					],
+					"template" : "radar.c2t"
+				},
+				{
+					"name" : "fmi::radar::composite::rr",
+					"return_types" : 
+					[
+						"omso:GridSeriesObservation"
+					],
+					"template" : "radar.c2t"
+				},
+				{
+					"name" : "fmi::radar::composite::rr12h",
+					"return_types" : 
+					[
+						"omso:GridSeriesObservation"
+					],
+					"template" : "radar.c2t"
+				},
+				{
+					"name" : "fmi::radar::composite::rr1h",
+					"return_types" : 
+					[
+						"omso:GridSeriesObservation"
+					],
+					"template" : "radar.c2t"
+				},
+				{
+					"name" : "fmi::radar::composite::rr24h",
+					"return_types" : 
+					[
+						"omso:GridSeriesObservation"
+					],
+					"template" : "radar.c2t"
+				},
+				{
+					"name" : "fmi::radar::single::dbz",
+					"return_types" : 
+					[
+						"omso:GridSeriesObservation"
+					],
+					"template" : "radar.c2t"
+				},
+				{
+					"name" : "fmi::radar::single::etop_20",
+					"return_types" : 
+					[
+						"omso:GridSeriesObservation"
+					],
+					"template" : "radar.c2t"
+				},
+				{
+					"name" : "fmi::radar::single::hclass",
+					"return_types" : 
+					[
+						"omso:GridSeriesObservation"
+					],
+					"template" : "radar.c2t"
+				},
+				{
+					"name" : "fmi::radar::single::vrad",
+					"return_types" : 
+					[
+						"omso:GridSeriesObservation"
+					],
+					"template" : "radar.c2t"
+				},
+				{
+					"name" : "GeoserverQueryDemo",
+					"return_types" : 
+					[
+						"testType"
+					],
+					"template" : "_geoserver_query_demo.c2t"
+				}
+			],
+			"templates" : 
+			[
+				"radar.c2t",
+				"_geoserver_query_demo.c2t"
+			]
+		},
+		"wfs_stored_mast_handler_factory" : 
+		{
+			"parameters" : 
+			{
+				"beginTime" : 
+				{
+					"description" : "Parameter begin specifies the begin of time interval in ISO-format (for example 2012-02-27T00:00:00Z).",
+					"is_array" : false,
+					"mandatory" : true,
+					"type" : "posix_time"
+				},
+				"boundingBox" : 
+				{
+					"description" : "Bounding box of area for which to return data.",
+					"is_array" : false,
+					"mandatory" : false,
+					"type" : "bounding_box"
+				},
+				"crs" : 
+				{
+					"description" : "Coordinate system to use in response (for example crs:EPSG::4326",
+					"is_array" : false,
+					"mandatory" : true,
+					"type" : "string"
+				},
+				"endTime" : 
+				{
+					"description" : "End of time interval in ISO-format (for example 2012-02-27T00:00:00Z).",
+					"is_array" : false,
+					"mandatory" : true,
+					"type" : "posix_time"
+				},
+				"fmisids" : 
+				{
+					"description" : "FMI observation station identifiers (0 or more values).",
+					"is_array" : true,
+					"max_size" : 65535,
+					"min_size" : 0,
+					"step" : 0,
+					"type" : "long"
+				},
+				"geoids" : 
+				{
+					"description" : "GEOIDs of the locations for which to return data (0 or more values).",
+					"is_array" : true,
+					"max_size" : 65535,
+					"min_size" : 0,
+					"step" : 0,
+					"type" : "long"
+				},
+				"latlons" : 
+				{
+					"description" : "Location coordinates for which to return data (0 or more latitude/longitude pairs).",
+					"is_array" : true,
+					"max_size" : 999,
+					"min_size" : 0,
+					"step" : 2,
+					"type" : "double"
+				},
+				"maxDistance" : 
+				{
+					"description" : "Maximal distance of sites from specified place for which to provide data (mandatory real value)",
+					"is_array" : false,
+					"mandatory" : true,
+					"type" : "double"
+				},
+				"maxEpochs" : 
+				{
+					"description" : "",
+					"is_array" : false,
+					"mandatory" : true,
+					"type" : "unsigned long"
+				},
+				"meteoParameters" : 
+				{
+					"description" : "",
+					"is_array" : true,
+					"max_size" : 65535,
+					"min_size" : 1,
+					"step" : 0,
+					"type" : "string"
+				},
+				"missingText" : 
+				{
+					"description" : "Text to output when the value is missing",
+					"is_array" : false,
+					"mandatory" : true,
+					"type" : "string"
+				},
+				"numOfStations" : 
+				{
+					"description" : "",
+					"is_array" : false,
+					"mandatory" : true,
+					"type" : "unsigned long"
+				},
+				"places" : 
+				{
+					"description" : "The location for which to provide data (0 or more values)",
+					"is_array" : true,
+					"max_size" : 65535,
+					"min_size" : 0,
+					"step" : 0,
+					"type" : "string"
+				},
+				"producerId" : 
+				{
+					"description" : "",
+					"is_array" : true,
+					"max_size" : 65535,
+					"min_size" : 0,
+					"step" : 0,
+					"type" : "unsigned long"
+				},
+				"qualityInfo" : 
+				{
+					"description" : "Specifies whether to requst quality info",
+					"is_array" : false,
+					"mandatory" : true,
+					"type" : "bool"
+				},
+				"stationType" : 
+				{
+					"description" : "",
+					"is_array" : false,
+					"mandatory" : true,
+					"type" : "string"
+				},
+				"timeStep" : 
+				{
+					"description" : "The time step of data in minutes. Notice that timestep is calculated from start of the ongoing hour or day.",
+					"is_array" : false,
+					"mandatory" : true,
+					"type" : "unsigned long"
+				},
+				"wmos" : 
+				{
+					"description" : "WMO code of the location for which to return data (0 or more values)",
+					"is_array" : true,
+					"max_size" : 65535,
+					"min_size" : 0,
+					"step" : 0,
+					"type" : "long"
+				}
+			},
+			"stored_queries" : 
+			[
+				{
+					"name" : "fmi::observations::weather::mast::multipointcoverage",
+					"return_types" : 
+					[
+						"omso:ProfileObservation"
+					],
+					"template" : "weather_observations_mast_multipointcoverage.c2t"
+				}
+			],
+			"templates" : 
+			[
+				"weather_observations_mast_multipointcoverage.c2t"
+			]
+		},
+		"wfs_stored_qe_download_handler_factory" : 
+		{
+			"parameters" : 
+			{
+				"beginTime" : 
+				{
+					"description" : "Parameter begin specifies the begin of time interval in ISO-format (for example 2012-02-27T00:00:00Z).",
+					"is_array" : true,
+					"max_size" : 1,
+					"min_size" : 0,
+					"step" : 0,
+					"type" : "posix_time"
+				},
+				"boundingBox" : 
+				{
+					"description" : "Bounding box of area for which to return data.",
+					"is_array" : false,
+					"mandatory" : false,
+					"type" : "bounding_box"
+				},
+				"endTime" : 
+				{
+					"description" : "End of time interval in ISO-format (for example 2012-02-27T00:00:00Z).",
+					"is_array" : true,
+					"max_size" : 1,
+					"min_size" : 0,
+					"step" : 0,
+					"type" : "posix_time"
+				},
+				"format" : 
+				{
+					"description" : "",
+					"is_array" : true,
+					"max_size" : 1,
+					"min_size" : 0,
+					"step" : 0,
+					"type" : "string"
+				},
+				"fullInterval" : 
+				{
+					"description" : "",
+					"is_array" : false,
+					"mandatory" : false,
+					"type" : "long"
+				},
+				"levelType" : 
+				{
+					"description" : "",
+					"is_array" : true,
+					"max_size" : 65535,
+					"min_size" : 0,
+					"step" : 0,
+					"type" : "string"
+				},
+				"levelValue" : 
+				{
+					"description" : "",
+					"is_array" : true,
+					"max_size" : 65535,
+					"min_size" : 0,
+					"step" : 0,
+					"type" : "double"
+				},
+				"meteoParam" : 
+				{
+					"description" : "List of parameters to return",
+					"is_array" : true,
+					"max_size" : 65535,
+					"min_size" : 0,
+					"step" : 0,
+					"type" : "string"
+				},
+				"originTime" : 
+				{
+					"description" : "Override of origin time (for use in tests only, leave empty for production use)",
+					"is_array" : true,
+					"max_size" : 1,
+					"min_size" : 0,
+					"step" : 0,
+					"type" : "posix_time"
+				},
+				"producer" : 
+				{
+					"description" : "",
+					"is_array" : true,
+					"max_size" : 1,
+					"min_size" : 0,
+					"step" : 0,
+					"type" : "string"
+				},
+				"projection" : 
+				{
+					"description" : "",
+					"is_array" : true,
+					"max_size" : 1,
+					"min_size" : 0,
+					"step" : 0,
+					"type" : "string"
+				}
+			},
+			"stored_queries" : 
+			[
+				{
+					"name" : "fmi::forecast::climatology::scenario::grid",
+					"return_types" : 
+					[
+						"omso:GridSeriesObservation"
+					],
+					"template" : "for_grid_ground.c2t"
+				},
+				{
+					"name" : "fmi::forecast::hbm::grid",
+					"return_types" : 
+					[
+						"omso:GridSeriesObservation"
+					],
+					"template" : "for_grid_ground.c2t"
+				},
+				{
+					"name" : "fmi::forecast::helmi::grid",
+					"return_types" : 
+					[
+						"omso:GridSeriesObservation"
+					],
+					"template" : "for_grid_ground.c2t"
+				},
+				{
+					"name" : "fmi::forecast::hirlam::pressure::grid",
+					"return_types" : 
+					[
+						"omso:GridSeriesObservation"
+					],
+					"template" : "for_grid_ground.c2t"
+				},
+				{
+					"name" : "fmi::forecast::hirlam::surface::finland::grid",
+					"return_types" : 
+					[
+						"omso:GridSeriesObservation"
+					],
+					"template" : "for_grid_ground.c2t"
+				},
+				{
+					"name" : "fmi::forecast::hirlam::surface::grid",
+					"return_types" : 
+					[
+						"omso:GridSeriesObservation"
+					],
+					"template" : "for_grid_ground.c2t"
+				},
+				{
+					"name" : "fmi::forecast::wam::grid",
+					"return_types" : 
+					[
+						"omso:GridSeriesObservation"
+					],
+					"template" : "for_grid_ground.c2t"
+				},
+				{
+					"name" : "fmi::observations::weather::monthly::grid",
+					"return_types" : 
+					[
+						"omso:GridSeriesObservation"
+					],
+					"template" : "for_grid_ground.c2t"
+				},
+				{
+					"name" : "fmi::transportmodel::hilatar::surface::scandinavia::grid",
+					"return_types" : 
+					[
+						"omso:GridSeriesObservation"
+					],
+					"template" : "for_grid_ground.c2t"
+				}
+			],
+			"templates" : 
+			[
+				"for_grid_ground.c2t"
+			]
+		},
+		"wfs_stored_sounding_handler_factory" : 
+		{
+			"parameters" : 
+			{
+				"altitudeRanges" : 
+				{
+					"description" : "",
+					"is_array" : true,
+					"max_size" : 2,
+					"min_size" : 0,
+					"step" : 2,
+					"type" : "double"
+				},
+				"beginTime" : 
+				{
+					"description" : "Parameter begin specifies the begin of time interval in ISO-format (for example 2012-02-27T00:00:00Z).",
+					"is_array" : false,
+					"mandatory" : true,
+					"type" : "posix_time"
+				},
+				"boundingBox" : 
+				{
+					"description" : "Bounding box of area for which to return data.",
+					"is_array" : false,
+					"mandatory" : false,
+					"type" : "bounding_box"
+				},
+				"crs" : 
+				{
+					"description" : "Coordinate system to use in response (for example crs:EPSG::4326",
+					"is_array" : false,
+					"mandatory" : true,
+					"type" : "string"
+				},
+				"endTime" : 
+				{
+					"description" : "End of time interval in ISO-format (for example 2012-02-27T00:00:00Z).",
+					"is_array" : false,
+					"mandatory" : true,
+					"type" : "posix_time"
+				},
+				"fmisids" : 
+				{
+					"description" : "FMI observation station identifiers (0 or more values).",
+					"is_array" : true,
+					"max_size" : 65535,
+					"min_size" : 0,
+					"step" : 0,
+					"type" : "long"
+				},
+				"geoids" : 
+				{
+					"description" : "GEOIDs of the locations for which to return data (0 or more values).",
+					"is_array" : true,
+					"max_size" : 65535,
+					"min_size" : 0,
+					"step" : 0,
+					"type" : "long"
+				},
+				"keyword" : 
+				{
+					"description" : "",
+					"is_array" : false,
+					"mandatory" : true,
+					"type" : "string"
+				},
+				"keyword_overwritable" : 
+				{
+					"description" : "",
+					"is_array" : false,
+					"mandatory" : true,
+					"type" : "bool"
+				},
+				"latest" : 
+				{
+					"description" : "",
+					"is_array" : false,
+					"mandatory" : true,
+					"type" : "bool"
+				},
+				"latlons" : 
+				{
+					"description" : "Location coordinates for which to return data (0 or more latitude/longitude pairs).",
+					"is_array" : true,
+					"max_size" : 999,
+					"min_size" : 0,
+					"step" : 2,
+					"type" : "double"
+				},
+				"maxDistance" : 
+				{
+					"description" : "Maximal distance of sites from specified place for which to provide data (mandatory real value)",
+					"is_array" : false,
+					"mandatory" : true,
+					"type" : "double"
+				},
+				"meteoParameters" : 
+				{
+					"description" : "",
+					"is_array" : true,
+					"max_size" : 65535,
+					"min_size" : 1,
+					"step" : 0,
+					"type" : "string"
+				},
+				"missingText" : 
+				{
+					"description" : "Text to output when the value is missing",
+					"is_array" : false,
+					"mandatory" : true,
+					"type" : "string"
+				},
+				"numOfStations" : 
+				{
+					"description" : "",
+					"is_array" : false,
+					"mandatory" : true,
+					"type" : "unsigned long"
+				},
+				"places" : 
+				{
+					"description" : "The location for which to provide data (0 or more values)",
+					"is_array" : true,
+					"max_size" : 65535,
+					"min_size" : 0,
+					"step" : 0,
+					"type" : "string"
+				},
+				"pressureRages" : 
+				{
+					"description" : "",
+					"is_array" : true,
+					"max_size" : 2,
+					"min_size" : 0,
+					"step" : 2,
+					"type" : "double"
+				},
+				"publicity" : 
+				{
+					"description" : "",
+					"is_array" : true,
+					"max_size" : 65535,
+					"min_size" : 1,
+					"step" : 0,
+					"type" : "unsigned long"
+				},
+				"qualityInfo" : 
+				{
+					"description" : "Specifies whether to requst quality info",
+					"is_array" : false,
+					"mandatory" : true,
+					"type" : "bool"
+				},
+				"soundingType" : 
+				{
+					"description" : "",
+					"is_array" : true,
+					"max_size" : 65535,
+					"min_size" : 0,
+					"step" : 0,
+					"type" : "unsigned long"
+				},
+				"stationType" : 
+				{
+					"description" : "",
+					"is_array" : false,
+					"mandatory" : true,
+					"type" : "string"
+				},
+				"wmos" : 
+				{
+					"description" : "WMO code of the location for which to return data (0 or more values)",
+					"is_array" : true,
+					"max_size" : 65535,
+					"min_size" : 0,
+					"step" : 0,
+					"type" : "long"
+				}
+			},
+			"stored_queries" : 
+			[
+				{
+					"name" : "fmi::observations::weather::sounding::multipointcoverage",
+					"return_types" : 
+					[
+						"omso:TrajectoryObservation"
+					],
+					"template" : "weather_observations_soundings_multipointcoverage.c2t"
+				}
+			],
+			"templates" : 
+			[
+				"weather_observations_soundings_multipointcoverage.c2t"
+			]
+		}
+	},
+	"templates" : 
+	{
+		"FileDownloadDemo.c2t" : 
+		[
+			"testType"
+		],
+		"_download_query_demo.c2t" : 
+		[
+			"testType"
+		],
+		"_geoserver_query_demo.c2t" : 
+		[
+			"testType"
+		],
+		"air_radionuclide_concentration_multipointcoverage.c2t" : 
+		[
+			"omso:PointObservation"
+		],
+		"air_radionuclide_concentration_simple.c2t" : 
+		[
+			"BsWfs:BsWfsElement"
+		],
+		"aviation_observations.c2t" : 
+		[
+			"avi:VerifiableMessage"
+		],
+		"coverage_countours.c2t" : 
+		[
+			"omso:GridSeriesObservation"
+		],
+		"for_grid_ground.c2t" : 
+		[
+			"omso:GridSeriesObservation"
+		],
+		"lightning_multipointcoverage.c2t" : 
+		[
+			"omso:GridSeriesObservation"
+		],
+		"lightning_simple.c2t" : 
+		[
+			"BsWfs:BsWfsElement"
+		],
+		"radar.c2t" : 
+		[
+			"omso:GridSeriesObservation"
+		],
+		"stuk_weather_observations_grid.c2t" : 
+		[
+			"omso:GridSeriesObservation"
+		],
+		"weather_forecast_grid.c2t" : 
+		[
+			"omso:GridSeriesObservation"
+		],
+		"weather_forecast_simple.c2t" : 
+		[
+			"BsWfs:BsWfsElement"
+		],
+		"weather_forecast_timevaluepair.c2t" : 
+		[
+			"omso:PointTimeSeriesObservation"
+		],
+		"weather_observations2_grid.c2t" : 
+		[
+			"omso:GridSeriesObservation"
+		],
+		"weather_observations_grid.c2t" : 
+		[
+			"omso:GridSeriesObservation"
+		],
+		"weather_observations_mast_multipointcoverage.c2t" : 
+		[
+			"omso:ProfileObservation"
+		],
+		"weather_observations_simple.c2t" : 
+		[
+			"BsWfs:BsWfsElement"
+		],
+		"weather_observations_soundings_multipointcoverage.c2t" : 
+		[
+			"omso:TrajectoryObservation"
+		],
+		"weather_observations_timevaluepair.c2t" : 
+		[
+			"omso:PointTimeSeriesObservation"
+		],
+		"weather_observations_timevaluepair2.c2t" : 
+		[
+			"omso:PointTimeSeriesObservation"
+		]
+	}
+}
