@@ -1031,7 +1031,7 @@ void PluginImpl::dump_constructor_map_html(std::ostream& os, const std::string& 
             const auto& item = sq_list[i];
             const std::string name = item["name"].asString();
             os << "<tr>";
-            os << "<td><a href=\"/wfs?SERVICE=WFS&VERSION=2.0.0&DescribeStoredQueries&"
+            os << "<td><a href=\"/wfs?SERVICE=WFS&VERSION=2.0.0&request=DescribeStoredQueries&"
                << "storedquery_id=" << name << "\">" << name << "</a>"<< "</td>\n";
             os << "<td>" << item["template"].asString() << "</td>\n";
             os << "<td>";
