@@ -25,15 +25,18 @@ namespace SmartMet
         extern const char* locale;
         extern const char* lpnns;
         extern const char* max_distance;
+        extern const char* meteo_parameters;
         extern const char* missing_text;
+        extern const char* num_of_stations;
         extern const char* num_steps;
         extern const char* origin_time;
-        extern const char* param;
         extern const char* places;
         extern const char* quality_info;
+        extern const char* station_type;
         extern const char* time_step;
         extern const char* times;
         extern const char* tz;
+        extern const char* week_days;
         extern const char* wmos;
       }
     }

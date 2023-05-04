@@ -6,30 +6,30 @@
 <tr><td> Scalar</td><td> boundingBox</td><td> no</td><td> bounding_box</td><td>  </td><td>  </td><td>  </td><td> Bounding box of area for which to return data.</td></tr>
 <tr><td> Scalar</td><td> crs</td><td> yes</td><td> string</td><td>  </td><td>  </td><td>  </td><td> Coordinate system to use in response (for example crs:EPSG::4326</td></tr>
 <tr><td> Scalar</td><td> endTime</td><td> no</td><td> posix_time</td><td>  </td><td>  </td><td>  </td><td> End of time interval in ISO-format (for example 2012-02-27T00:00:00Z).</td></tr>
-<tr><td> Array</td><td> fmisids</td><td> no</td><td> long</td><td> 0</td><td> 65535</td><td> 0</td><td> FMI observation station identifiers (0 or more values).</td></tr>
+<tr><td> Array</td><td> fmisids</td><td> no</td><td> long</td><td> 0</td><td> 65535</td><td> 0</td><td> FMI observation station identifiers (0 or more values). For example 12,13,18,19)</td></tr>
 <tr><td> Array</td><td> geoids</td><td> no</td><td> long</td><td> 0</td><td> 65535</td><td> 0</td><td> GEOIDs of the locations for which to return data (0 or more values).</td></tr>
 <tr><td> Array</td><td> hours</td><td> no</td><td> unsigned long</td><td> 0</td><td> 65535</td><td> 0</td><td> Hour values for which to report data (0 or more integer values).</td></tr>
-<tr><td> Scalar</td><td> keyword</td><td> yes</td><td> string</td><td>  </td><td>  </td><td>  </td><td> </td></tr>
-<tr><td> Scalar</td><td> keyword_overwritable</td><td> yes</td><td> bool</td><td>  </td><td>  </td><td>  </td><td> </td></tr>
+<tr><td> Scalar</td><td> keyword</td><td> yes</td><td> string</td><td>  </td><td>  </td><td>  </td><td> The geographical location(s) expressed by an array of keywords</td></tr>
+<tr><td> Scalar</td><td> keyword_overwritable</td><td> yes</td><td> bool</td><td>  </td><td>  </td><td>  </td><td> The default values listed in the "keyword" parameter can be overwritten by using the location related input parameters only if the value of this parameter is true</td></tr>
 <tr><td> Scalar</td><td> language</td><td> no</td><td> string</td><td>  </td><td>  </td><td>  </td><td> </td></tr>
 <tr><td> Scalar</td><td> latest</td><td> yes</td><td> bool</td><td>  </td><td>  </td><td>  </td><td> </td></tr>
 <tr><td> Array</td><td> latlons</td><td> no</td><td> double</td><td> 0</td><td> 999</td><td> 2</td><td> Location coordinates for which to return data (0 or more latitude/longitude pairs).</td></tr>
 <tr><td> Scalar</td><td> locale</td><td> yes</td><td> string</td><td>  </td><td>  </td><td>  </td><td> Locale to use (for example fi_FI.UTF8)</td></tr>
 <tr><td> Array</td><td> lpnns</td><td> no</td><td> long</td><td> 0</td><td> 65535</td><td> 0</td><td> LPNN code of the location for which to return data (0 or more values)</td></tr>
-<tr><td> Scalar</td><td> maxDistance</td><td> yes</td><td> double</td><td>  </td><td>  </td><td>  </td><td> Maximal distance of sites from specified place for which to provide data (mandatory real value)</td></tr>
+<tr><td> Scalar</td><td> maxDistance</td><td> yes</td><td> double</td><td>  </td><td>  </td><td>  </td><td> The maximum search distance of the observation stations from the given geographical location(s)</td></tr>
 <tr><td> Scalar</td><td> maxEpochs</td><td> yes</td><td> unsigned long</td><td>  </td><td>  </td><td>  </td><td> </td></tr>
 <tr><td> Array</td><td> meteoParameters</td><td> no</td><td> string</td><td> 1</td><td> 65535</td><td> 0</td><td> Comma separated list of meteorological parameters to return.</td></tr>
 <tr><td> Scalar</td><td> missingText</td><td> yes</td><td> string</td><td>  </td><td>  </td><td>  </td><td> Text to output when the value is missing</td></tr>
-<tr><td> Scalar</td><td> numOfStations</td><td> yes</td><td> unsigned long</td><td>  </td><td>  </td><td>  </td><td> How many observation stations are fetched around queried locations. Note that stations that are nly searched with </td></tr>
+<tr><td> Scalar</td><td> numOfStations</td><td> yes</td><td> unsigned long</td><td>  </td><td>  </td><td>  </td><td> The maximum number of the observation stations returned around the given geographical location (inside the radius of "maxDistance")</td></tr>
 <tr><td> Array</td><td> places</td><td> no</td><td> string</td><td> 0</td><td> 65535</td><td> 0</td><td> The location for which to provide data (0 or more values)</td></tr>
 <tr><td> Scalar</td><td> qualityInfo</td><td> yes</td><td> bool</td><td>  </td><td>  </td><td>  </td><td> Specifies whether to requst quality info</td></tr>
 <tr><td> Scalar</td><td> startStep</td><td> no</td><td> unsigned long</td><td>  </td><td>  </td><td>  </td><td> </td></tr>
-<tr><td> Scalar</td><td> stationType</td><td> yes</td><td> string</td><td>  </td><td>  </td><td>  </td><td> </td></tr>
+<tr><td> Scalar</td><td> stationType</td><td> yes</td><td> string</td><td>  </td><td>  </td><td>  </td><td> The type of the observation station (defined in the ObsEngine configuration)</td></tr>
 <tr><td> Scalar</td><td> timeStep</td><td> no</td><td> unsigned long</td><td>  </td><td>  </td><td>  </td><td> The time step of data in minutes. Notice that timestep is calculated from start of the ongoing hour or day.</td></tr>
 <tr><td> Scalar</td><td> timeSteps</td><td> no</td><td> unsigned long</td><td>  </td><td>  </td><td>  </td><td> Number of timesteps in result set.</td></tr>
 <tr><td> Scalar</td><td> timeZone</td><td> yes</td><td> string</td><td>  </td><td>  </td><td>  </td><td> Time zone of the time instant of the data point in the form Area/Location (for example America/Costa_Rica). The default value is UTC. Special values (case insensitive): utc, local</td></tr>
 <tr><td> Array</td><td> times</td><td> no</td><td> unsigned long</td><td> 0</td><td> 999</td><td> 1</td><td> Time values for which to return data. (0 or more values).</td></tr>
-<tr><td> Array</td><td> weekDays</td><td> no</td><td> long</td><td> 0</td><td> 65535</td><td> 0</td><td> </td></tr>
+<tr><td> Array</td><td> weekDays</td><td> no</td><td> long</td><td> 0</td><td> 65535</td><td> 0</td><td> requested times expressed in the list of weekdays</td></tr>
 <tr><td> Array</td><td> wmos</td><td> no</td><td> long</td><td> 0</td><td> 65535</td><td> 0</td><td> WMO code of the location for which to return data (0 or more values)</td></tr>
 </table>
 <br/>

@@ -1,5 +1,4 @@
 #include "ParamDesc.h"
-
 namespace SmartMet
 {
     namespace Plugin
@@ -26,7 +25,8 @@ namespace SmartMet
                     "End of time interval in ISO-format (for example 2012-02-27T00:00:00Z).";
 
                 const char* fmisids =
-                    "FMI observation station identifiers (0 or more values).";
+                    "FMI observation station identifiers (0 or more values). For example"
+                    " 12,13,18,19)";
 
                 const char* geoids =
                     "GEOIDs of the locations for which to return data (0 or more values).";
@@ -46,10 +46,12 @@ namespace SmartMet
                     "identifiers for those features";
 
                 const char* keyword =
-                    "";
+                    "The geographical location(s) expressed by an array of keywords";
 
                 const char* keyword_overwritable =
-                    "";
+                    "The default values listed in the \"keyword\" parameter can be overwritten"
+                    " by using the location related input parameters only if the value of"
+                    " this parameter is true";
 
                 const char* latlons =
                     "Location coordinates for which to return data"
@@ -62,11 +64,18 @@ namespace SmartMet
                     "LPNN code of the location for which to return data (0 or more values)";
 
                 const char* max_distance =
-                    "Maximal distance of sites from specified place for which to"
-                    " provide data (mandatory real value)";
+                    "The maximum search distance of the observation stations from the given"
+                    " geographical location(s)";
+
+                const char* meteo_parameters =
+                    "array of fields whose values should be returned in the response";
 
                 const char* missing_text =
                     "Text to output when the value is missing";
+
+                const char* num_of_stations =
+                    "The maximum number of the observation stations returned around the"
+                    " given geographical location (inside the radius of \"maxDistance\")";
 
                 const char* num_steps =
                     "Number of timesteps in result set.";
@@ -75,14 +84,14 @@ namespace SmartMet
                     "Override of origin time (for use in tests only,"
                     " leave empty for production use)";
 
-                const char* param =
-                    "List of parameters to return";
-
                 const char* places =
                     "The location for which to provide data (0 or more values)";
 
                 const char* quality_info =
                     "Specifies whether to requst quality info";
+
+                const char* station_type =
+                    "The type of the observation station (defined in the ObsEngine configuration)";
 
                 const char* time_step =
                     "The time step of data in minutes. Notice that timestep is"
@@ -96,6 +105,8 @@ namespace SmartMet
                     " (for example America/Costa_Rica). The default value is UTC."
                     " Special values (case insensitive): utc, local";
 
+                const char* week_days =
+                    "requested times expressed in the list of weekdays";
                 const char* wmos =
                     "WMO code of the location for which to return data (0 or more values)";
 

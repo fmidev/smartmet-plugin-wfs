@@ -37,7 +37,7 @@ bw::StoredFileQueryHandler::StoredFileQueryHandler(SmartMet::Spine::Reactor* rea
   {
     register_scalar_param<std::string>(P_NAME, "", false);
     register_array_param<int64_t>(P_LEVEL, "");
-    register_array_param<std::string>(P_PARAM, bw::ParamDesc::param);
+    register_array_param<std::string>(P_PARAM, bw::ParamDesc::meteo_parameters);
     register_array_param<double>(P_BBOX, bw::ParamDesc::bbox, 0, 4, 4);
     register_array_param<pt::ptime>(P_BEGIN, bw::ParamDesc::begin_time);
     register_array_param<pt::ptime>(P_END, bw::ParamDesc::end_time);

@@ -97,17 +97,17 @@ StoredObsQueryHandler::StoredObsQueryHandler(SmartMet::Spine::Reactor* reactor,
 
     register_scalar_param<std::string>(
         P_STATION_TYPE,
-        ""
+        ParamDesc::station_type
         );
 
     register_scalar_param<uint64_t>(
         P_NUM_OF_STATIONS,
-        "How many observation stations are fetched around queried locations. Note that stations that are nly searched with "
+        ParamDesc::num_of_stations
         );
 
     register_array_param<int64_t>(
         P_WEEK_DAYS,
-        ""
+        ParamDesc::week_days
         );
 
     register_scalar_param<std::string>(

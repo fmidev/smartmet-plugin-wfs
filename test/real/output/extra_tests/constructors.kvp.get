@@ -153,7 +153,7 @@
 				},
 				"meteoParameters" : 
 				{
-					"description" : "List of parameters to return",
+					"description" : "array of fields whose values should be returned in the response",
 					"is_array" : true,
 					"max_size" : 999,
 					"min_size" : 1,
@@ -227,7 +227,7 @@
 				},
 				"fmisids" : 
 				{
-					"description" : "FMI observation station identifiers (0 or more values).",
+					"description" : "FMI observation station identifiers (0 or more values). For example 12,13,18,19)",
 					"is_array" : true,
 					"max_size" : 65535,
 					"min_size" : 0,
@@ -254,14 +254,14 @@
 				},
 				"keyword" : 
 				{
-					"description" : "",
+					"description" : "The geographical location(s) expressed by an array of keywords",
 					"is_array" : false,
 					"mandatory" : true,
 					"type" : "string"
 				},
 				"keyword_overwritable" : 
 				{
-					"description" : "",
+					"description" : "The default values listed in the \"keyword\" parameter can be overwritten by using the location related input parameters only if the value of this parameter is true",
 					"is_array" : false,
 					"mandatory" : true,
 					"type" : "bool"
@@ -318,7 +318,7 @@
 				},
 				"maxDistance" : 
 				{
-					"description" : "Maximal distance of sites from specified place for which to provide data (mandatory real value)",
+					"description" : "The maximum search distance of the observation stations from the given geographical location(s)",
 					"is_array" : false,
 					"mandatory" : true,
 					"type" : "double"
@@ -348,7 +348,7 @@
 				},
 				"param" : 
 				{
-					"description" : "List of parameters to return",
+					"description" : "array of fields whose values should be returned in the response",
 					"is_array" : true,
 					"max_size" : 99,
 					"min_size" : 1,
@@ -599,7 +599,7 @@
 				},
 				"fmisids" : 
 				{
-					"description" : "FMI observation station identifiers (0 or more values).",
+					"description" : "FMI observation station identifiers (0 or more values). For example 12,13,18,19)",
 					"is_array" : true,
 					"max_size" : 65535,
 					"min_size" : 0,
@@ -626,14 +626,14 @@
 				},
 				"keyword" : 
 				{
-					"description" : "",
+					"description" : "The geographical location(s) expressed by an array of keywords",
 					"is_array" : false,
 					"mandatory" : true,
 					"type" : "string"
 				},
 				"keyword_overwritable" : 
 				{
-					"description" : "",
+					"description" : "The default values listed in the \"keyword\" parameter can be overwritten by using the location related input parameters only if the value of this parameter is true",
 					"is_array" : false,
 					"mandatory" : true,
 					"type" : "bool"
@@ -679,7 +679,7 @@
 				},
 				"maxDistance" : 
 				{
-					"description" : "Maximal distance of sites from specified place for which to provide data (mandatory real value)",
+					"description" : "The maximum search distance of the observation stations from the given geographical location(s)",
 					"is_array" : false,
 					"mandatory" : true,
 					"type" : "double"
@@ -709,7 +709,7 @@
 				},
 				"numOfStations" : 
 				{
-					"description" : "How many observation stations are fetched around queried locations. Note that stations that are nly searched with ",
+					"description" : "The maximum number of the observation stations returned around the given geographical location (inside the radius of \"maxDistance\")",
 					"is_array" : false,
 					"mandatory" : true,
 					"type" : "unsigned long"
@@ -739,7 +739,7 @@
 				},
 				"stationType" : 
 				{
-					"description" : "",
+					"description" : "The type of the observation station (defined in the ObsEngine configuration)",
 					"is_array" : false,
 					"mandatory" : true,
 					"type" : "string"
@@ -776,7 +776,7 @@
 				},
 				"weekDays" : 
 				{
-					"description" : "",
+					"description" : "requested times expressed in the list of weekdays",
 					"is_array" : true,
 					"max_size" : 65535,
 					"min_size" : 0,
@@ -1336,7 +1336,7 @@
 				},
 				"fmisids" : 
 				{
-					"description" : "FMI observation station identifiers (0 or more values).",
+					"description" : "FMI observation station identifiers (0 or more values). For example 12,13,18,19)",
 					"is_array" : true,
 					"max_size" : 65535,
 					"min_size" : 0,
@@ -1354,14 +1354,14 @@
 				},
 				"keyword" : 
 				{
-					"description" : "",
+					"description" : "The geographical location(s) expressed by an array of keywords",
 					"is_array" : false,
 					"mandatory" : true,
 					"type" : "string"
 				},
 				"keyword_overwritable" : 
 				{
-					"description" : "",
+					"description" : "The default values listed in the \"keyword\" parameter can be overwritten by using the location related input parameters only if the value of this parameter is true",
 					"is_array" : false,
 					"mandatory" : true,
 					"type" : "bool"
@@ -1384,7 +1384,7 @@
 				},
 				"maxDistance" : 
 				{
-					"description" : "Maximal distance of sites from specified place for which to provide data (mandatory real value)",
+					"description" : "The maximum search distance of the observation stations from the given geographical location(s)",
 					"is_array" : false,
 					"mandatory" : true,
 					"type" : "double"
@@ -1400,7 +1400,7 @@
 				},
 				"numOfStations" : 
 				{
-					"description" : "",
+					"description" : "The maximum number of the observation stations returned around the given geographical location (inside the radius of \"maxDistance\")",
 					"is_array" : false,
 					"mandatory" : true,
 					"type" : "unsigned long"
@@ -1423,7 +1423,7 @@
 				},
 				"stationType" : 
 				{
-					"description" : "",
+					"description" : "The type of the observation station (defined in the ObsEngine configuration)",
 					"is_array" : false,
 					"mandatory" : true,
 					"type" : "string"
@@ -1542,14 +1542,14 @@
 				},
 				"keyword" : 
 				{
-					"description" : "",
+					"description" : "The geographical location(s) expressed by an array of keywords",
 					"is_array" : false,
 					"mandatory" : true,
 					"type" : "string"
 				},
 				"keyword_overwritable" : 
 				{
-					"description" : "",
+					"description" : "The default values listed in the \"keyword\" parameter can be overwritten by using the location related input parameters only if the value of this parameter is true",
 					"is_array" : false,
 					"mandatory" : true,
 					"type" : "bool"
@@ -1565,7 +1565,7 @@
 				},
 				"maxDistance" : 
 				{
-					"description" : "Maximal distance of sites from specified place for which to provide data (mandatory real value)",
+					"description" : "The maximum search distance of the observation stations from the given geographical location(s)",
 					"is_array" : false,
 					"mandatory" : true,
 					"type" : "double"
@@ -1683,7 +1683,7 @@
 				},
 				"params" : 
 				{
-					"description" : "List of parameters to return",
+					"description" : "array of fields whose values should be returned in the response",
 					"is_array" : true,
 					"max_size" : 65535,
 					"min_size" : 0,
@@ -1902,7 +1902,7 @@
 				},
 				"fmisids" : 
 				{
-					"description" : "FMI observation station identifiers (0 or more values).",
+					"description" : "FMI observation station identifiers (0 or more values). For example 12,13,18,19)",
 					"is_array" : true,
 					"max_size" : 65535,
 					"min_size" : 0,
@@ -1929,7 +1929,7 @@
 				},
 				"maxDistance" : 
 				{
-					"description" : "Maximal distance of sites from specified place for which to provide data (mandatory real value)",
+					"description" : "The maximum search distance of the observation stations from the given geographical location(s)",
 					"is_array" : false,
 					"mandatory" : true,
 					"type" : "double"
@@ -1943,7 +1943,7 @@
 				},
 				"meteoParameters" : 
 				{
-					"description" : "",
+					"description" : "array of fields whose values should be returned in the response",
 					"is_array" : true,
 					"max_size" : 65535,
 					"min_size" : 1,
@@ -1991,7 +1991,7 @@
 				},
 				"stationType" : 
 				{
-					"description" : "",
+					"description" : "The type of the observation station (defined in the ObsEngine configuration)",
 					"is_array" : false,
 					"mandatory" : true,
 					"type" : "string"
@@ -2094,7 +2094,7 @@
 				},
 				"meteoParam" : 
 				{
-					"description" : "List of parameters to return",
+					"description" : "array of fields whose values should be returned in the response",
 					"is_array" : true,
 					"max_size" : 65535,
 					"min_size" : 0,
@@ -2112,7 +2112,7 @@
 				},
 				"producer" : 
 				{
-					"description" : "",
+					"description" : "An array of supported formats. The default value is \"grib2,grib1,netcdf\"). The \"grib2\" format is supported even if it is not defined at the array.",
 					"is_array" : true,
 					"max_size" : 1,
 					"min_size" : 0,
@@ -2252,7 +2252,7 @@
 				},
 				"fmisids" : 
 				{
-					"description" : "FMI observation station identifiers (0 or more values).",
+					"description" : "FMI observation station identifiers (0 or more values). For example 12,13,18,19)",
 					"is_array" : true,
 					"max_size" : 65535,
 					"min_size" : 0,
@@ -2270,14 +2270,14 @@
 				},
 				"keyword" : 
 				{
-					"description" : "",
+					"description" : "The geographical location(s) expressed by an array of keywords",
 					"is_array" : false,
 					"mandatory" : true,
 					"type" : "string"
 				},
 				"keyword_overwritable" : 
 				{
-					"description" : "",
+					"description" : "The default values listed in the \"keyword\" parameter can be overwritten by using the location related input parameters only if the value of this parameter is true",
 					"is_array" : false,
 					"mandatory" : true,
 					"type" : "bool"
@@ -2300,14 +2300,14 @@
 				},
 				"maxDistance" : 
 				{
-					"description" : "Maximal distance of sites from specified place for which to provide data (mandatory real value)",
+					"description" : "The maximum search distance of the observation stations from the given geographical location(s)",
 					"is_array" : false,
 					"mandatory" : true,
 					"type" : "double"
 				},
 				"meteoParameters" : 
 				{
-					"description" : "",
+					"description" : "array of fields whose values should be returned in the response",
 					"is_array" : true,
 					"max_size" : 65535,
 					"min_size" : 1,
@@ -2373,7 +2373,7 @@
 				},
 				"stationType" : 
 				{
-					"description" : "",
+					"description" : "The type of the observation station (defined in the ObsEngine configuration)",
 					"is_array" : false,
 					"mandatory" : true,
 					"type" : "string"

@@ -129,7 +129,7 @@ StoredGridForecastQueryHandler::StoredGridForecastQueryHandler(
 
     register_array_param<std::string>(
         P_PARAM,
-        ParamDesc::param,
+        ParamDesc::meteo_parameters,
         1,
         99
         );

@@ -115,7 +115,7 @@ bw::StoredForecastQueryHandler::StoredForecastQueryHandler(
 
     register_array_param<std::string>(
         P_PARAM,
-        bw::ParamDesc::param,
+        bw::ParamDesc::meteo_parameters,
         1,
         99);
 

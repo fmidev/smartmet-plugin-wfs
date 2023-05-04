@@ -35,7 +35,7 @@
 				},
 				"fmisids" : 
 				{
-					"description" : "FMI observation station identifiers (0 or more values).",
+					"description" : "FMI observation station identifiers (0 or more values). For example 12,13,18,19)",
 					"is_array" : true,
 					"max_size" : 65535,
 					"min_size" : 0,
@@ -62,14 +62,14 @@
 				},
 				"keyword" : 
 				{
-					"description" : "",
+					"description" : "The geographical location(s) expressed by an array of keywords",
 					"is_array" : false,
 					"mandatory" : true,
 					"type" : "string"
 				},
 				"keyword_overwritable" : 
 				{
-					"description" : "",
+					"description" : "The default values listed in the \"keyword\" parameter can be overwritten by using the location related input parameters only if the value of this parameter is true",
 					"is_array" : false,
 					"mandatory" : true,
 					"type" : "bool"
@@ -115,7 +115,7 @@
 				},
 				"maxDistance" : 
 				{
-					"description" : "Maximal distance of sites from specified place for which to provide data (mandatory real value)",
+					"description" : "The maximum search distance of the observation stations from the given geographical location(s)",
 					"is_array" : false,
 					"mandatory" : true,
 					"type" : "double"
@@ -145,7 +145,7 @@
 				},
 				"numOfStations" : 
 				{
-					"description" : "How many observation stations are fetched around queried locations. Note that stations that are nly searched with ",
+					"description" : "The maximum number of the observation stations returned around the given geographical location (inside the radius of \"maxDistance\")",
 					"is_array" : false,
 					"mandatory" : true,
 					"type" : "unsigned long"
@@ -175,7 +175,7 @@
 				},
 				"stationType" : 
 				{
-					"description" : "",
+					"description" : "The type of the observation station (defined in the ObsEngine configuration)",
 					"is_array" : false,
 					"mandatory" : true,
 					"type" : "string"
@@ -212,7 +212,7 @@
 				},
 				"weekDays" : 
 				{
-					"description" : "",
+					"description" : "requested times expressed in the list of weekdays",
 					"is_array" : true,
 					"max_size" : 65535,
 					"min_size" : 0,

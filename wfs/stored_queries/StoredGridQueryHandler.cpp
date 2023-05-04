@@ -83,7 +83,7 @@ StoredGridQueryHandler::StoredGridQueryHandler(SmartMet::Spine::Reactor* reactor
   {
     register_scalar_param<std::string>(P_PRODUCER, "");
     register_scalar_param<pt::ptime>(P_ORIGIN_TIME, ParamDesc::origin_time, false);
-    register_array_param<std::string>(P_PARAM, ParamDesc::param);
+    register_array_param<std::string>(P_PARAM, ParamDesc::meteo_parameters);
     register_scalar_param<std::string>(P_LEVEL_TYPE, "", false);
     register_array_param<double>(P_LEVEL_VALUE, "", 0);
     register_scalar_param<std::string>(P_MISSING_TEXT, ParamDesc::missing_text);
