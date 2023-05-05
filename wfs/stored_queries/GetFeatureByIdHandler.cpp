@@ -3,7 +3,6 @@
 #include "StoredQueryHandlerFactoryDef.h"
 #include "StoredQueryMap.h"
 #include "WfsConvenience.h"
-#include "ParamDesc.h"
 #include <smartmet/macgyver/Exception.h>
 #include <smartmet/spine/Value.h>
 #include <sstream>
@@ -26,7 +25,7 @@ bw::GetFeatureByIdHandler::GetFeatureByIdHandler(SmartMet::Spine::Reactor* react
   {
     register_scalar_param<std::string>(
         P_ID,
-        bw::ParamDesc::id
+        "The feature identifier of the requested feature."
         );
   }
   catch (...)

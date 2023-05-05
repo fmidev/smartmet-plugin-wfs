@@ -1,5 +1,4 @@
 #include "SupportsQualityParameters.h"
-#include "ParamDesc.h"
 #include <macgyver/StringConversion.h>
 #include <macgyver/Exception.h>
 
@@ -17,7 +16,9 @@ bw::SupportsQualityParameters::SupportsQualityParameters(
   {
       register_scalar_param<bool>(
           P_QUALITY_INFO,
-          bw::ParamDesc::quality_info);
+          "quality code information of the measured values will be included in the response"
+          " if the parameter value is \"on\"."
+          );
   }
   catch (...)
   {

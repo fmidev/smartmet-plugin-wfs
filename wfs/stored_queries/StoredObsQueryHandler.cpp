@@ -3,7 +3,6 @@
 #include "StoredQueryHandlerFactoryDef.h"
 #include "WfsConst.h"
 #include "WfsConvenience.h"
-#include "ParamDesc.h"
 #include <boost/algorithm/string.hpp>
 #include <boost/format.hpp>
 #include <boost/lambda/lambda.hpp>
@@ -91,48 +90,52 @@ StoredObsQueryHandler::StoredObsQueryHandler(SmartMet::Spine::Reactor* reactor,
 
     register_array_param<std::string>(
         P_METEO_PARAMETERS,
-        "Comma separated list of meteorological parameters to return.",
+        "array of fields whose values should be returned in the response.",
         true
         );
 
     register_scalar_param<std::string>(
         P_STATION_TYPE,
-        ParamDesc::station_type
+        "The type of the observation station (defined in the ObsEngine configuration)"
         );
 
     register_scalar_param<uint64_t>(
         P_NUM_OF_STATIONS,
-        ParamDesc::num_of_stations
+        "The maximum number of the observation stations returned around the given"
+        " geographical location (inside the radius of \"maxDistance\")"
         );
 
     register_array_param<int64_t>(
         P_WEEK_DAYS,
-        ParamDesc::week_days
+        "requested times expressed in the list of weekdays"
         );
 
     register_scalar_param<std::string>(
         P_LOCALE,
-        ParamDesc::locale
+        "value of the 'Locale' (for example fi_FI.utf8)."
         );
 
     register_scalar_param<std::string>(
         P_MISSING_TEXT,
-        ParamDesc::missing_text
+        "value that is returned when the value of the requested field is missing."
         );
 
     register_scalar_param<uint64_t>(
         P_MAX_EPOCHS,
-        ""
+        "maximum number of time epochs that can be returned. If the estimated number before"
+        " query is larger than the specified one then the query is aborted. This parameter"
+        " is not alid if the \"storedQueryRestrictions\" parameter is set to \"false\" in"
+        " the WFS Plugin configuration file."
         );
 
     register_scalar_param<std::string>(
         P_CRS,
-        ParamDesc::crs
+        "coordinate projection used in the response."
         );
 
     register_scalar_param<std::string>(
         P_LANGUAGE,
-        "",
+        "The language to use",
         false,
         true
         );

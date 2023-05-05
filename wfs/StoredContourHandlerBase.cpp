@@ -1,5 +1,4 @@
 #include "StoredContourHandlerBase.h"
-#include "ParamDesc.h"
 #include <boost/algorithm/string/replace.hpp>
 #include <boost/format.hpp>
 #include <gis/Box.h>
@@ -27,6 +26,7 @@ const char* P_SMOOTHING_DEGREE = "smoothing_degree";
 const char* P_SMOOTHING_SIZE = "smoothing_size";
 const char* P_IMAGE_DIR = "imageDir";
 const char* P_IMAGE_FILE = "imageFile";
+
 }  // anonymous namespace
 
 bw::StoredContourQueryHandler::StoredContourQueryHandler(
@@ -50,17 +50,17 @@ bw::StoredContourQueryHandler::StoredContourQueryHandler(
   {
     register_scalar_param<std::string>(
         P_PRODUCER,
-        ""
+        "An array of the data producer names"
         );
 
     register_scalar_param<boost::posix_time::ptime>(
         P_ORIGIN_TIME,
-        bw::ParamDesc::origin_time,
+        "The origin time of the weather models that should be used. This might be omitted in the query",
         false);
 
     register_scalar_param<std::string>(
         P_CRS,
-        bw::ParamDesc::crs
+        "The coordinate projection used in the response"
         );
 
     if (config->find_setting(config->get_root(), "handler_params.imageDir", false))
@@ -78,7 +78,9 @@ bw::StoredContourQueryHandler::StoredContourQueryHandler(
     if (config->find_setting(config->get_root(), "handler_params.limits", false))
       register_array_param<double>(
           P_LIMITS,
-          "",
+          "An array of comma separated value ranges which are used in the contours. The value ranges"
+          " are expressed as comma separated value pairs. For example, two ranges: from 1.05 to 3"
+          " and from 4 to 7.85 would be expressed with an array [1.05,3,4,7.85].",
           0,
           999,
           2);

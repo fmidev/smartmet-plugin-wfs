@@ -3,7 +3,6 @@
 #include "stored_queries/StoredAirNuclideQueryHandler.h"
 #include "FeatureID.h"
 #include "StoredQueryHandlerFactoryDef.h"
-#include "ParamDesc.h"
 #include <boost/format.hpp>
 #include <engines/observation/DBRegistry.h>
 #include <engines/observation/MastQuery.h>
@@ -31,14 +30,31 @@ bw::StoredAirNuclideQueryHandler::StoredAirNuclideQueryHandler(
 {
   try
   {
-    register_scalar_param<pt::ptime>(P_BEGIN_TIME, bw::ParamDesc::begin_time);
-    register_scalar_param<pt::ptime>(P_END_TIME, bw::ParamDesc::end_time);
-    register_scalar_param<std::string>(P_STATION_TYPE, bw::ParamDesc::station_type);
-    register_scalar_param<uint64_t>(P_TIME_STEP, bw::ParamDesc::time_step);
-    register_scalar_param<uint64_t>(P_NUM_OF_STATIONS, bw::ParamDesc::num_of_stations);
-    register_scalar_param<std::string>(P_CRS, bw::ParamDesc::crs);
-    register_scalar_param<bool>(P_LATEST, "");
-    register_array_param<std::string>(P_NUCLIDE_CODES, "");
+    register_scalar_param<pt::ptime>(P_BEGIN_TIME,
+        "The start time of the requested time period (YYYY-MM-DDTHHMIZ).");
+
+    register_scalar_param<pt::ptime>(P_END_TIME,
+        "The end time of the requested time period (YYYY-MM-DDTHHMIZ).");
+
+    register_scalar_param<std::string>(P_STATION_TYPE,
+        "The observation station type.");
+
+    register_scalar_param<uint64_t>(P_TIME_STEP,
+        "The time interval between the requested records expressed in minutes.");
+
+    register_scalar_param<uint64_t>(P_NUM_OF_STATIONS,
+        "The maximum number of the observation stations returned around the"
+        "given geographical location (inside the radius of \"maxDistance\").");
+
+    register_scalar_param<std::string>(P_CRS,
+        "The coordinate projection used in the response.");
+
+    register_scalar_param<bool>(P_LATEST,
+        "The attribute indicates whether to return only the latest values from the stations or all.");
+
+    register_array_param<std::string>(P_NUCLIDE_CODES,
+        "An array of nuclide codes. If at least one listed nuclide code match the"
+        " nuclide code in the analysis, the analysis will be included into the result.");
 
     m_maxHours = config->get_optional_config_param<double>("maxHours", 365 * 24.0);
     m_sqRestrictions = plugin_data.get_config().getSQRestrictions();

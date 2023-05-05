@@ -3,7 +3,6 @@
 #include "StoredQueryHandlerFactoryDef.h"
 #include "StoredQueryMap.h"
 #include "WfsConvenience.h"
-#include "ParamDesc.h"
 #include <boost/algorithm/string.hpp>
 #include <macgyver/StringConversion.h>
 #include <macgyver/TypeName.h>
@@ -31,7 +30,8 @@ bw::GetDataSetByIdHandler::GetDataSetByIdHandler(SmartMet::Spine::Reactor* react
   {
     register_scalar_param<std::string>(
         P_DATA_SET_ID,
-        bw::ParamDesc::data_set_id
+        "An array of DataSetDef structures. These structures are needed for mapping"
+        " the data set identifiers to the stored queries."
         );
 
     auto& ds_list = config->get_mandatory_config_param<libconfig::Setting&>("datasetids");

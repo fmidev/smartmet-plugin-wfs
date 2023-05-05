@@ -5,7 +5,6 @@
 #include "MediaMonitored.h"
 #include "StoredQueryHandlerFactoryDef.h"
 #include "SupportsLocationParameters.h"
-#include "ParamDesc.h"
 #include <smartmet/engines/observation/DBRegistry.h>
 #include <smartmet/macgyver/Exception.h>
 
@@ -52,8 +51,8 @@ bw::StoredEnvMonitoringFacilityQueryHandler::StoredEnvMonitoringFacilityQueryHan
 {
   try
   {
-    register_scalar_param<pt::ptime>(P_BEGIN_TIME, bw::ParamDesc::begin_time);
-    register_scalar_param<pt::ptime>(P_END_TIME, bw::ParamDesc::end_time);
+    register_scalar_param<pt::ptime>(P_BEGIN_TIME, "");
+    register_scalar_param<pt::ptime>(P_END_TIME, "");
     register_array_param<int64_t>(P_CLASS_ID, "");
     register_array_param<int64_t>(P_GROUP_ID, "");
     register_array_param<int64_t>(P_STATION_ID, "");

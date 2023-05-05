@@ -3,7 +3,6 @@
 #include "stored_queries/StoredMastQueryHandler.h"
 #include "FeatureID.h"
 #include "StoredQueryHandlerFactoryDef.h"
-#include "ParamDesc.h"
 #include <engines/observation/DBRegistry.h>
 #include <macgyver/StringConversion.h>
 #include <smartmet/engines/observation/MastQuery.h>
@@ -30,16 +29,58 @@ bw::StoredMastQueryHandler::StoredMastQueryHandler(SmartMet::Spine::Reactor* rea
 {
   try
   {
-    register_scalar_param<pt::ptime>(P_BEGIN_TIME, bw::ParamDesc::begin_time);
-    register_scalar_param<pt::ptime>(P_END_TIME, bw::ParamDesc::end_time);
-    register_array_param<std::string>(P_METEO_PARAMETERS, bw::ParamDesc::meteo_parameters, 1);
-    register_scalar_param<std::string>(P_STATION_TYPE, bw::ParamDesc::station_type);
-    register_scalar_param<uint64_t>(P_TIME_STEP, bw::ParamDesc::time_step);
-    register_scalar_param<uint64_t>(P_NUM_OF_STATIONS, "");
-    register_scalar_param<uint64_t>(P_MAX_EPOCHS, "");
-    register_scalar_param<std::string>(P_MISSING_TEXT, bw::ParamDesc::missing_text);
-    register_scalar_param<std::string>(P_CRS, bw::ParamDesc::crs);
-    register_array_param<uint64_t>(P_PRODUCER_ID, "");
+    register_scalar_param<pt::ptime>(
+        P_BEGIN_TIME,
+        "The start time of the requested time period."
+        );
+
+    register_scalar_param<pt::ptime>(
+        P_END_TIME,
+        "The end time of the requested time period."
+        );
+
+    register_array_param<std::string>(
+        P_METEO_PARAMETERS,
+        "An array of fields whose values should be returned in the response."
+        " Available data fields depend on the value of the \"stationType\" attribute.",
+        1
+        );
+
+    register_scalar_param<std::string>(
+        P_STATION_TYPE,
+        "The type of the observation station (defined in the ObsEngine configuration)."
+        );
+
+    register_scalar_param<uint64_t>(
+        P_TIME_STEP,
+        "The time interval between the requested data (observations)."
+        );
+
+    register_scalar_param<uint64_t>(
+        P_NUM_OF_STATIONS,
+        "The maximum number of the observation stations returned around the given geographical"
+        " location (inside the radius of \"maxDistance\")."
+        );
+
+    register_scalar_param<uint64_t>(
+        P_MAX_EPOCHS,
+        "The maximum number of time epochs to return."
+        );
+
+    register_scalar_param<std::string>(
+        P_MISSING_TEXT,
+        "The value that is returned when the value of the requested field is missing."
+        );
+
+    register_scalar_param<std::string>(
+        P_CRS,
+        "The coordinate projection used in the response."
+        );
+
+    register_array_param<uint64_t>(
+        P_PRODUCER_ID,
+        "Producer id values are found for example from PRODUCERS_V1 Oracle database view."
+        );
 
     m_maxHours = config->get_optional_config_param<double>("maxHours", 7.0 * 24.0);
     m_sqRestrictions = plugin_data.get_config().getSQRestrictions();

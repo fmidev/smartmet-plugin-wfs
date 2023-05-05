@@ -1,7 +1,6 @@
 #include "SupportsTimeParameters.h"
 #include "WfsConvenience.h"
 #include "WfsException.h"
-#include "ParamDesc.h"
 #include <boost/date_time/posix_time/posix_time.hpp>
 #include <boost/optional/optional_io.hpp>
 #include <cstdint>
@@ -27,44 +26,49 @@ bw::SupportsTimeParameters::SupportsTimeParameters(bw::StoredQueryConfig::Ptr co
   {
     register_array_param<uint64_t>(
         P_HOURS,
-        bw::ParamDesc::hours
+        "requested times expressed in the list of hours"
+        " (for example “12,13,18,19”)"
         );
 
     register_array_param<uint64_t>(
         P_TIMES,
-        bw::ParamDesc::times,
-        0, 999, 1, true
-        );
+        "The requested times expressed in the list of hours and minutes HHMM"
+        " (for example “1200,1230,1300,1330”).",
+        0,
+        999,
+        1,
+        true);
 
     register_scalar_param<pt::ptime>(
         P_BEGIN_TIME,
-        bw::ParamDesc::times,
+        "The start time of the requested time period (YYYY-MM-DDTHHMIZ).",
         false
         );
 
     register_scalar_param<uint64_t>(
         P_START_STEP,
-        "",
+         "The index number of the first selected time step since the start time.",
         false,
-        true
-        );
+        true);
 
     register_scalar_param<pt::ptime>(
         P_END_TIME,
-        bw::ParamDesc::end_time,
+        "The end time of the requested time period (YYYY-MM-DDTHHMIZ).",
         false
         );
 
     register_scalar_param<uint64_t>(
         P_TIME_STEP,
-        bw::ParamDesc::time_step,
+        "The time interval between the requested records expressed in minutes.",
         false
         );
 
     register_scalar_param<uint64_t>(
         P_NUM_STEPS,
-        bw::ParamDesc::num_steps,
-        false, true);
+        "The number of the requested time steps (= number of data records).",
+        false,
+        true
+        );
   }
   catch (...)
   {

@@ -1,5 +1,4 @@
 #include "SupportsLocationParameters.h"
-#include "ParamDesc.h"
 #include <boost/algorithm/string.hpp>
 #include <boost/format.hpp>
 #include <boost/locale.hpp>
@@ -61,49 +60,59 @@ bw::SupportsLocationParameters::SupportsLocationParameters(
   {
     register_array_param<std::string>(
         P_PLACES,
-        bw::ParamDesc::places);
+        "The geographical location(s) expressed by an array of location names."
+        );
 
     register_array_param<double>(
         P_LATLONS,
-        bw::ParamDesc::latlons,
-        0, 999, 2
-        );
+        "The geographical location(s) expressed by an array of latitude-longitude pairs.",
+        0,
+        999,
+        2);
 
     if (include_fmisids)
       register_array_param<int64_t>(
           P_FMISIDS,
-          bw::ParamDesc::fmisids
+          "The geographical location(s) expressed by an array of fmisids"
           );
 
+    // FIXME: there is option to disable this parameter. Using it could
+    //        however break some existing stored query
     register_array_param<int64_t>(
         P_GEOIDS,
-        bw::ParamDesc::geoids
+        "The geographical location(s) expressed by an array of geoids"
         );
 
     if (include_wmos)
       register_array_param<int64_t>(
           P_WMOS,
-          bw::ParamDesc::wmos
+          "The geographical location(s) expressed by an array of WMOs"
           );
 
     if (include_lpnns)
         register_array_param<int64_t>(
             P_LPNNS,
-            bw::ParamDesc::lpnns
+            "The geographical location(s) expressed by an array of LPNNs"
             );
 
     register_scalar_param<double>(
         P_MAX_DISTANCE,
-        bw::ParamDesc::max_distance
+        "The maximum data search distance from the given geographical location(s)."
         );
 
     if (support_keywords)
     {
-        register_scalar_param<std::string>(P_KEYWORD,
-            bw::ParamDesc::keyword);
+        register_scalar_param<std::string>(
+            P_KEYWORD,
+            "The geographical location(s) expressed by an array of keywords"
+            );
 
-        register_scalar_param<bool>(P_KEYWORD_OVERWRITABLE,
-            bw::ParamDesc::keyword_overwritable);
+        register_scalar_param<bool>(
+            P_KEYWORD_OVERWRITABLE,
+            "The default values listed in the \"keyword\" parameter can be overwritten by using"
+            " the location related input parameters only if the value of this parameter is"
+            " \"true\"."
+            );
     }
   }
   catch (...)

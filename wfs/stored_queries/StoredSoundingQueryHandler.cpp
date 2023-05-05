@@ -3,7 +3,6 @@
 #include "stored_queries/StoredSoundingQueryHandler.h"
 #include "FeatureID.h"
 #include "StoredQueryHandlerFactoryDef.h"
-#include "ParamDesc.h"
 #include <boost/date_time/posix_time/ptime.hpp>
 #include <engines/gis/Engine.h>
 #include <engines/observation/MastQuery.h>
@@ -41,18 +40,69 @@ StoredSoundingQueryHandler::StoredSoundingQueryHandler(
       SupportsBoundingBox(config, pluginData.get_crs_registry()),
       SupportsQualityParameters(config)
 {
-  register_scalar_param<pt::ptime>(P_BEGIN_TIME, ParamDesc::begin_time);
-  register_scalar_param<pt::ptime>(P_END_TIME, ParamDesc::end_time);
-  register_array_param<std::string>(P_METEO_PARAMETERS, ParamDesc::meteo_parameters, 1);
-  register_scalar_param<std::string>(P_STATION_TYPE, ParamDesc::station_type);
-  register_scalar_param<uint64_t>(P_NUM_OF_STATIONS, "");
-  register_scalar_param<std::string>(P_MISSING_TEXT, ParamDesc::missing_text);
-  register_scalar_param<std::string>(P_CRS, ParamDesc::crs);
-  register_scalar_param<bool>(P_LATEST, "");
-  register_array_param<uint64_t>(P_SOUNDING_TYPE, "");
-  register_array_param<uint64_t>(P_PUBLICITY, "", 1);
-  register_array_param<double>(P_ALTITUDE_RANGES, "", 0, 2, 2);
-  register_array_param<double>(P_PRESSURE_RANGES, "", 0, 2, 2);
+  register_scalar_param<pt::ptime>(
+      P_BEGIN_TIME,
+      "start time of the requested time period"
+      );
+
+  register_scalar_param<pt::ptime>(
+      P_END_TIME,
+      "end time of the requested time period"
+      );
+
+  register_array_param<std::string>(
+      P_METEO_PARAMETERS,
+      "array of fields whose values should be returned in the response.",
+      1);
+
+  register_scalar_param<std::string>(
+      P_STATION_TYPE,
+      "The type of the observation station (defined in the ObsEngine configuration)"
+      );
+
+  register_scalar_param<uint64_t>(
+      P_NUM_OF_STATIONS,
+      "The maximum number of the observation stations returned around the given"
+      " geographical location (inside the radius of \"maxDistance\")"
+      );
+
+  register_scalar_param<std::string>(
+      P_MISSING_TEXT,
+      "value that is returned when the value of the requested numeric field is missing."
+      );
+
+  register_scalar_param<std::string>(
+      P_CRS,
+      "coordinate projection used in the response."
+      );
+
+  register_scalar_param<bool>(
+      P_LATEST,
+      ""
+      );
+
+  register_array_param<uint64_t>(
+      P_SOUNDING_TYPE,
+      "Sounding type. Types 1, 2, 3 are supported. Type 1 is no more in use"
+      );
+
+  register_array_param<uint64_t>(P_PUBLICITY,
+      "",
+      1);
+
+  register_array_param<double>(
+      P_ALTITUDE_RANGES,
+      "",
+      0,
+      2,
+      2);
+
+  register_array_param<double>(
+      P_PRESSURE_RANGES,
+      "",
+      0,
+      2,
+      2);
 
   mMaxHours = config->get_optional_config_param<double>("maxHours", 7.0 * 24.0);
   mSqRestrictions = pluginData.get_config().getSQRestrictions();

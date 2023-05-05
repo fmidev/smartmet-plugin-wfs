@@ -7,35 +7,35 @@
 			{
 				"beginTime" : 
 				{
-					"description" : "Time values for which to return data. (0 or more values).",
+					"description" : "The start time of the requested time period (YYYY-MM-DDTHHMIZ).",
 					"is_array" : false,
 					"mandatory" : false,
 					"type" : "posix_time"
 				},
 				"boundingBox" : 
 				{
-					"description" : "Bounding box of area for which to return data.",
+					"description" : "The geographical location / area expressed by the bounding box coordinates",
 					"is_array" : false,
 					"mandatory" : false,
 					"type" : "bounding_box"
 				},
 				"crs" : 
 				{
-					"description" : "Coordinate system to use in response (for example crs:EPSG::4326",
+					"description" : "coordinate projection used in the response.",
 					"is_array" : false,
 					"mandatory" : true,
 					"type" : "string"
 				},
 				"endTime" : 
 				{
-					"description" : "End of time interval in ISO-format (for example 2012-02-27T00:00:00Z).",
+					"description" : "The end time of the requested time period (YYYY-MM-DDTHHMIZ).",
 					"is_array" : false,
 					"mandatory" : false,
 					"type" : "posix_time"
 				},
 				"fmisids" : 
 				{
-					"description" : "FMI observation station identifiers (0 or more values). For example 12,13,18,19)",
+					"description" : "The geographical location(s) expressed by an array of fmisids",
 					"is_array" : true,
 					"max_size" : 65535,
 					"min_size" : 0,
@@ -44,7 +44,7 @@
 				},
 				"geoids" : 
 				{
-					"description" : "GEOIDs of the locations for which to return data (0 or more values).",
+					"description" : "The geographical location(s) expressed by an array of geoids",
 					"is_array" : true,
 					"max_size" : 65535,
 					"min_size" : 0,
@@ -53,7 +53,7 @@
 				},
 				"hours" : 
 				{
-					"description" : "Hour values for which to report data (0 or more integer values).",
+					"description" : "requested times expressed in the list of hours (for example \u201c12,13,18,19\u201d)",
 					"is_array" : true,
 					"max_size" : 65535,
 					"min_size" : 0,
@@ -69,14 +69,14 @@
 				},
 				"keyword_overwritable" : 
 				{
-					"description" : "The default values listed in the \"keyword\" parameter can be overwritten by using the location related input parameters only if the value of this parameter is true",
+					"description" : "The default values listed in the \"keyword\" parameter can be overwritten by using the location related input parameters only if the value of this parameter is \"true\".",
 					"is_array" : false,
 					"mandatory" : true,
 					"type" : "bool"
 				},
 				"language" : 
 				{
-					"description" : "",
+					"description" : "The language to use",
 					"is_array" : false,
 					"mandatory" : false,
 					"type" : "string"
@@ -90,7 +90,7 @@
 				},
 				"latlons" : 
 				{
-					"description" : "Location coordinates for which to return data (0 or more latitude/longitude pairs).",
+					"description" : "The geographical location(s) expressed by an array of latitude-longitude pairs.",
 					"is_array" : true,
 					"max_size" : 999,
 					"min_size" : 0,
@@ -99,14 +99,14 @@
 				},
 				"locale" : 
 				{
-					"description" : "Locale to use (for example fi_FI.UTF8)",
+					"description" : "value of the 'Locale' (for example fi_FI.utf8).",
 					"is_array" : false,
 					"mandatory" : true,
 					"type" : "string"
 				},
 				"lpnns" : 
 				{
-					"description" : "LPNN code of the location for which to return data (0 or more values)",
+					"description" : "The geographical location(s) expressed by an array of LPNNs",
 					"is_array" : true,
 					"max_size" : 65535,
 					"min_size" : 0,
@@ -115,21 +115,21 @@
 				},
 				"maxDistance" : 
 				{
-					"description" : "The maximum search distance of the observation stations from the given geographical location(s)",
+					"description" : "The maximum data search distance from the given geographical location(s).",
 					"is_array" : false,
 					"mandatory" : true,
 					"type" : "double"
 				},
 				"maxEpochs" : 
 				{
-					"description" : "",
+					"description" : "maximum number of time epochs that can be returned. If the estimated number before query is larger than the specified one then the query is aborted. This parameter is not alid if the \"storedQueryRestrictions\" parameter is set to \"false\" in the WFS Plugin configuration file.",
 					"is_array" : false,
 					"mandatory" : true,
 					"type" : "unsigned long"
 				},
 				"meteoParameters" : 
 				{
-					"description" : "Comma separated list of meteorological parameters to return.",
+					"description" : "array of fields whose values should be returned in the response.",
 					"is_array" : true,
 					"max_size" : 65535,
 					"min_size" : 1,
@@ -138,7 +138,7 @@
 				},
 				"missingText" : 
 				{
-					"description" : "Text to output when the value is missing",
+					"description" : "value that is returned when the value of the requested field is missing.",
 					"is_array" : false,
 					"mandatory" : true,
 					"type" : "string"
@@ -152,7 +152,7 @@
 				},
 				"places" : 
 				{
-					"description" : "The location for which to provide data (0 or more values)",
+					"description" : "The geographical location(s) expressed by an array of location names.",
 					"is_array" : true,
 					"max_size" : 65535,
 					"min_size" : 0,
@@ -161,14 +161,14 @@
 				},
 				"qualityInfo" : 
 				{
-					"description" : "Specifies whether to requst quality info",
+					"description" : "quality code information of the measured values will be included in the response if the parameter value is \"on\".",
 					"is_array" : false,
 					"mandatory" : true,
 					"type" : "bool"
 				},
 				"startStep" : 
 				{
-					"description" : "",
+					"description" : "The index number of the first selected time step since the start time.",
 					"is_array" : false,
 					"mandatory" : false,
 					"type" : "unsigned long"
@@ -182,28 +182,28 @@
 				},
 				"timeStep" : 
 				{
-					"description" : "The time step of data in minutes. Notice that timestep is calculated from start of the ongoing hour or day.",
+					"description" : "The time interval between the requested records expressed in minutes.",
 					"is_array" : false,
 					"mandatory" : false,
 					"type" : "unsigned long"
 				},
 				"timeSteps" : 
 				{
-					"description" : "Number of timesteps in result set.",
+					"description" : "The number of the requested time steps (= number of data records).",
 					"is_array" : false,
 					"mandatory" : false,
 					"type" : "unsigned long"
 				},
 				"timeZone" : 
 				{
-					"description" : "Time zone of the time instant of the data point in the form Area/Location (for example America/Costa_Rica). The default value is UTC. Special values (case insensitive): utc, local",
+					"description" : "The time zone used in the response.",
 					"is_array" : false,
 					"mandatory" : true,
 					"type" : "string"
 				},
 				"times" : 
 				{
-					"description" : "Time values for which to return data. (0 or more values).",
+					"description" : "The requested times expressed in the list of hours and minutes HHMM (for example \u201c1200,1230,1300,1330\u201d).",
 					"is_array" : true,
 					"max_size" : 999,
 					"min_size" : 0,
@@ -221,7 +221,7 @@
 				},
 				"wmos" : 
 				{
-					"description" : "WMO code of the location for which to return data (0 or more values)",
+					"description" : "The geographical location(s) expressed by an array of WMOs",
 					"is_array" : true,
 					"max_size" : 65535,
 					"min_size" : 0,

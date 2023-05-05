@@ -21,7 +21,7 @@ bw::SupportsBoundingBox::SupportsBoundingBox(StoredQueryConfig::Ptr config,
   {
     register_scalar_param<BoundingBox>(
         P_BOUNDING_BOX,
-        std::string("Bounding box of area for which to return data."),
+        "The geographical location / area expressed by the bounding box coordinates",
         mandatory);
   }
   catch (...)

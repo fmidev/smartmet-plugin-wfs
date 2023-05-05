@@ -1,5 +1,4 @@
 #include "SupportsTimeZone.h"
-#include "ParamDesc.h"
 #include <boost/algorithm/string.hpp>
 #include <macgyver/StringConversion.h>
 #include <macgyver/TimeZones.h>
@@ -27,7 +26,7 @@ bw::SupportsTimeZone::SupportsTimeZone(SmartMet::Spine::Reactor* reactor, Stored
   {
       register_scalar_param<std::string>(
           P_TZ,
-          bw::ParamDesc::tz);
+          "The time zone used in the response.");
   }
   catch (...)
   {

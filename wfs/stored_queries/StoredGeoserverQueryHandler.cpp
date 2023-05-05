@@ -3,7 +3,6 @@
 #include "StoredQueryHandlerFactoryDef.h"
 #include "WfsConvenience.h"
 #include "WfsException.h"
-#include "ParamDesc.h"
 #include "stored_queries/StoredGeoserverQueryHandler.h"
 #include <boost/algorithm/string.hpp>
 #include <boost/date_time/posix_time/posix_time.hpp>
@@ -40,33 +39,33 @@ bw::StoredGeoserverQueryHandler::StoredGeoserverQueryHandler(
   {
     register_scalar_param<pt::ptime>(
         P_BEGIN_TIME,
-        bw::ParamDesc::begin_time
+        "The start time of the requested time period (YYYY-MM-DDTHHMIZ)."
         );
 
     register_scalar_param<pt::ptime>(
         P_END_TIME,
-        bw::ParamDesc::end_time
+        "The end time of the requested time period (YYYY-MM-DDTHHMIZ)."
         );
 
     register_array_param<std::string>(
         P_LAYERS,
-        "",
+        "An array of layer names used for the image.",
         1,
         999);
 
     register_scalar_param<uint64_t>(
         P_WIDTH,
-        ""
+        "The width of the returned image."
         );
 
     register_scalar_param<uint64_t>(
         P_HEIGHT,
-        ""
+        "The height of the returned image."
         );
 
     register_scalar_param<std::string>(
         P_CRS,
-        bw::ParamDesc::crs
+        "The coordinate projection used in the response."
         );
 
     std::string table_name_format;

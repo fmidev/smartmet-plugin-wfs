@@ -2,7 +2,6 @@
 #include "FeatureID.h"
 #include "StoredQueryHandlerFactoryDef.h"
 #include "WfsConst.h"
-#include "ParamDesc.h"
 #include <fmt/format.h>
 #include <macgyver/StringConversion.h>
 #include <macgyver/Exception.h>
@@ -52,23 +51,24 @@ bw::StoredFlashQueryHandler::StoredFlashQueryHandler(
   {
     register_scalar_param<pt::ptime>(
         P_BEGIN_TIME,
-        bw::ParamDesc::begin_time
+        "The start time of the requested time period."
         );
 
     register_scalar_param<pt::ptime>(
         P_END_TIME,
-        bw::ParamDesc::end_time
+        "The end time of the requested time period."
         );
 
     register_array_param<std::string>(
         P_PARAM,
-        bw::ParamDesc::meteo_parameters,
+        "An array of fields whose values should be returned in the response.",
         1,
         999);
 
     register_scalar_param<std::string>(
         P_CRS,
-        bw::ParamDesc::crs
+        "Specifies the coordinate projection. For example crs = \"${crs:EPSG::4326}\" maps"
+        " to request parameter crs with the default value EPSG::4326."
         );
 
     station_type = config->get_optional_config_param<std::string>("stationType", "flash");
