@@ -215,7 +215,7 @@ The unique identifier (id) of the stored query
 
 This attribute defines what data source the SmartMet Server should use, how the data is accessed, how it is processed and how is it formatted in the response.
 Also what for each consturctor_name there can be additional top level attributes and unique 'handler_params' attributes.
-See details for each `constructor_name` on page [Configuring Query Handler for a Stored Query](Configuring-Query-Handler-for-a-Stored-Query).
+See details for each `constructor_name` on page [Configuring Query Handler for a Stored Query](Configuring-Query-Handler-for-a-Stored-Query.md).
 
 _Setting's name refers to things in the program's source code.
 It may have a meaning for C++ developers, but it is lacking when viewed as the end user creating new stored queries._
