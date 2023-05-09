@@ -3,7 +3,7 @@
 %define SPECNAME smartmet-plugin-%{DIRNAME}
 Summary: SmartMet WFS plugin
 Name: %{SPECNAME}
-Version: 23.4.27
+Version: 23.5.9
 Release: 1%{?dist}.fmi
 License: MIT
 Group: SmartMet/Plugins
@@ -163,6 +163,9 @@ rm -rf $RPM_BUILD_ROOT
 %{_includedir}/smartmet/plugin/wfs/request/*.h
 
 %changelog
+* Tue May  9 2023 Andris Pavēnis <andris.pavenis@fmi.fi> 23.5.9-1.fmi
+- Improve /wfs/admin?request=constructors output
+
 * Thu Apr 27 2023 Andris Pavēnis <andris.pavenis@fmi.fi> 23.4.27-1.fmi
 - Repackage due to macgyver ABI changes (AsyncTask, AsyncTaskGroup)
 
