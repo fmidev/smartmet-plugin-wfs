@@ -37,6 +37,7 @@
 				{
 					"description" : "requested times expressed in the list of hours (for example \u201c12,13,18,19\u201d)",
 					"is_array" : true,
+					"mandatory" : false,
 					"max_size" : 65535,
 					"min_size" : 0,
 					"step" : 0,
@@ -88,6 +89,7 @@
 				{
 					"description" : "The requested times expressed in the list of hours and minutes HHMM (for example \u201c1200,1230,1300,1330\u201d).",
 					"is_array" : true,
+					"mandatory" : false,
 					"max_size" : 999,
 					"min_size" : 0,
 					"step" : 1,
@@ -104,10 +106,6 @@
 					],
 					"template" : "coverage_countours.c2t"
 				}
-			],
-			"templates" : 
-			[
-				"coverage_countours.c2t"
 			]
 		}
 	},

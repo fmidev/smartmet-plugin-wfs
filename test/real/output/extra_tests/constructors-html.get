@@ -1,19 +1,20 @@
-<html>
 <h1>Stored query handler constructors</h1>
 <br>
-<b>Only those stored query handler constructors, that are used for at least one stored query are listed</b>
+<b>Only those stored query handler constructors, that are used for at least one stored query are browsable</b>
 <br>
 <ul>
-<li> <a href="/wfs/admin?request=constructors&handler=wfs_coverage_query_handler_factory&format=html">wfs_coverage_query_handler_factory</li>
-<li> <a href="/wfs/admin?request=constructors&handler=wfs_flash_handler_factory&format=html">wfs_flash_handler_factory</li>
-<li> <a href="/wfs/admin?request=constructors&handler=wfs_forecast_handler_factory&format=html">wfs_forecast_handler_factory</li>
-<li> <a href="/wfs/admin?request=constructors&handler=wfs_obs_handler_factory&format=html">wfs_obs_handler_factory</li>
-<li> <a href="/wfs/admin?request=constructors&handler=wfs_stored_air_nuclide_handler_factory&format=html">wfs_stored_air_nuclide_handler_factory</li>
-<li> <a href="/wfs/admin?request=constructors&handler=wfs_stored_atom_handler_base_factory&format=html">wfs_stored_atom_handler_base_factory</li>
-<li> <a href="/wfs/admin?request=constructors&handler=wfs_stored_aviation_observation_handler_factory&format=html">wfs_stored_aviation_observation_handler_factory</li>
-<li> <a href="/wfs/admin?request=constructors&handler=wfs_stored_file_handler_factory&format=html">wfs_stored_file_handler_factory</li>
-<li> <a href="/wfs/admin?request=constructors&handler=wfs_stored_geoserver_handler_factory&format=html">wfs_stored_geoserver_handler_factory</li>
-<li> <a href="/wfs/admin?request=constructors&handler=wfs_stored_mast_handler_factory&format=html">wfs_stored_mast_handler_factory</li>
-<li> <a href="/wfs/admin?request=constructors&handler=wfs_stored_qe_download_handler_factory&format=html">wfs_stored_qe_download_handler_factory</li>
-<li> <a href="/wfs/admin?request=constructors&handler=wfs_stored_sounding_handler_factory&format=html">wfs_stored_sounding_handler_factory</li>
+<li> <a href="/wfs/admin?request=constructors&handler=wfs_coverage_query_handler_factory&format=html">wfs_coverage_query_handler_factory</a></li>
+<li> <a href="/wfs/admin?request=constructors&handler=wfs_flash_handler_factory&format=html">wfs_flash_handler_factory</a></li>
+<li> <a href="/wfs/admin?request=constructors&handler=wfs_forecast_handler_factory&format=html">wfs_forecast_handler_factory</a></li>
+<li> <a href="/wfs/admin?request=constructors&handler=wfs_get_data_set_by_id_handler_factory&format=html">wfs_get_data_set_by_id_handler_factory</a></li>
+<li> <a href="/wfs/admin?request=constructors&handler=wfs_get_feature_by_id_handler_factory&format=html">wfs_get_feature_by_id_handler_factory</a></li>
+<li> <a href="/wfs/admin?request=constructors&handler=wfs_obs_handler_factory&format=html">wfs_obs_handler_factory</a></li>
+<li> <a href="/wfs/admin?request=constructors&handler=wfs_stored_air_nuclide_handler_factory&format=html">wfs_stored_air_nuclide_handler_factory</a></li>
+<li> <a href="/wfs/admin?request=constructors&handler=wfs_stored_atom_handler_base_factory&format=html">wfs_stored_atom_handler_base_factory</a></li>
+<li> <a href="/wfs/admin?request=constructors&handler=wfs_stored_aviation_observation_handler_factory&format=html">wfs_stored_aviation_observation_handler_factory</a></li>
+<li> <a href="/wfs/admin?request=constructors&handler=wfs_stored_file_handler_factory&format=html">wfs_stored_file_handler_factory</a></li>
+<li> <a href="/wfs/admin?request=constructors&handler=wfs_stored_geoserver_handler_factory&format=html">wfs_stored_geoserver_handler_factory</a></li>
+<li> <a href="/wfs/admin?request=constructors&handler=wfs_stored_mast_handler_factory&format=html">wfs_stored_mast_handler_factory</a></li>
+<li> <a href="/wfs/admin?request=constructors&handler=wfs_stored_qe_download_handler_factory&format=html">wfs_stored_qe_download_handler_factory</a></li>
+<li> <a href="/wfs/admin?request=constructors&handler=wfs_stored_sounding_handler_factory&format=html">wfs_stored_sounding_handler_factory</a></li>
 </ul>

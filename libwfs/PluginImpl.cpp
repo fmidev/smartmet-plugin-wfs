@@ -1,5 +1,6 @@
 #include "PluginImpl.h"
 #include "ErrorResponseGenerator.h"
+#include "HandlerFactorySummary.h"
 #include "WfsConst.h"
 #include "XmlParser.h"
 #include "request/DescribeFeatureType.h"
@@ -943,115 +944,24 @@ void PluginImpl::dump_xml_schema_cache(std::ostream& os)
   xml_parser->dump_schema_cache(os);
 }
 
-void PluginImpl::dump_constructor_map(std::ostream& os, const std::string& handler)
+void PluginImpl::dump_constructor_map(std::ostream& os, const boost::optional<std::string>& handler)
 {
-  const auto value = get_stored_query_map().get_constructor_map(handler);
-  os << value;
+    const std::string result =
+        get_stored_query_map()
+        .get_handler_factory_summary()
+        ->as_json(handler)
+        .toStyledString();
+    os << result;
 }
 
-void PluginImpl::dump_constructor_map_html(std::ostream& os, const std::string& handler)
+void PluginImpl::dump_constructor_map_html(std::ostream& os, const boost::optional<std::string>& handler)
 {
-  const auto value = get_stored_query_map().get_constructor_map(handler);
-
   try
   {
-    os << "<html>\n";
-
-    const auto constructor_list = value["constructors"];
-    const auto constructor_names = constructor_list.getMemberNames();
-
-    if (handler.empty())
-    {
-      os << "<h1>Stored query handler constructors</h1>\n";
-      os << "<br>\n";
-      os << "<b>Only those stored query handler constructors, that are used for at least"
-         << " one stored query are listed</b>\n";
-      os << "<br>\n";
-      os << "<ul>\n";
-      for (const auto& name : constructor_names)
-      {
-        os << "<li> ";
-        os << "<a href=\"/wfs/admin?request=constructors&handler=" << name << "&format=html\">";
-        os << name << "</li>\n";
-      }
-      os << "</ul>\n";
-    }
-    else
-    {
-      os << "<h1>Stored query handler constructor: " << handler << "</h1>\n";
-      os << "<table border=\"1px solid black\", padding: 5px; >\n";
-      for (const auto& name : constructor_names)
-      {
-        const auto& item = constructor_list[name]["parameters"];
-        os << "<br>";
-        os << "<table border=\"1px solid black\">";
-        os << "<tr>";
-        os << "<th> </th>";
-        os << "<th>Parameter</th>";
-        os << "<th>Mandatory</th>";
-        os << "<th>Type</th>";
-        os << "<th>Min size</th>";
-        os << "<th>Max size</th>";
-        os << "<th>Step</th>";
-        os << "<th>Description</th>";
-        os << "</tr>\n";
-
-        const auto param_names = item.getMemberNames();
-        for (const auto& pn : param_names)
-        {
-          const auto& param = item[pn];
-          const bool mandatory = param["mandatory"].asBool();
-          const bool is_array = param["is_array"].asBool();
-          os << "<tr>";
-          os << "<td> " << (is_array ? "Array" : "Scalar") << "</td>";
-          os << "<td> " << pn << "</td>";
-          os << "<td> " << (mandatory ? "yes" : "no") << "</td>";
-          os << "<td> " << param["type"].asString() << "</td>";
-          os << "<td> " << (is_array ? param["min_size"].asString() : " ") << "</td>";
-          os << "<td> " << (is_array ? param["max_size"].asString() : " ") << "</td>";
-          os << "<td> " << (is_array ? param["step"].asString() : " ") << "</td>";
-          os << "<td> " << param["description"].asString() << "</td>";
-          os << "</tr>\n";
-        }
-
-        os << "</table>\n";
-        os << "<br/>\n";
-        os << "<h1>Stored queries</h1>\n";
-        os << "<br/>\n";
-        os << "<table border=\"1px solid black\", padding: 5px; >\n";
-
-        os << "<tr>";
-        os << "<th>Stored query</th>";
-        os << "<th>Template</th>";
-        os << "<th>Return types</th>";
-        os << "</tr>\n";
-
-        const auto& sq_list = constructor_list[name]["stored_queries"];
-        for (int i = 0; i < int(sq_list.size()); i++) {
-            const auto& item = sq_list[i];
-            const std::string name = item["name"].asString();
-            os << "<tr>";
-            os << "<td><a href=\"/wfs?SERVICE=WFS&VERSION=2.0.0&request=DescribeStoredQueries&"
-               << "storedquery_id=" << name << "\">" << name << "</a>"<< "</td>\n";
-            os << "<td>" << item["template"].asString() << "</td>\n";
-            os << "<td>";
-            const auto& rt_list = item["return_types"];
-            if (rt_list.size() == 1) {
-                os << rt_list[0].asString();
-            } else {
-                os << "<ul>";
-                for (int k = 0; k < int(rt_list.size()); k++) {
-                    os << "<li>" << rt_list[k].asString() << "</li>";
-                }
-                os << "</ul>";
-            }
-            os << "</td>\n";
-            os << "</tr>\n";
-        }
-        os << "</table>\n";
-        os << "</html>\n";
-      }
-    }
+      const std::string url_base = get_config().defaultUrl();
+      const auto& sqm = get_stored_query_map();
+      auto summary_ptr = sqm.get_handler_factory_summary();
+      summary_ptr->write_html(os, url_base, handler);
   }
   catch (...)
   {

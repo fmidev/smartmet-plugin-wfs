@@ -1,6 +1,7 @@
 #pragma once
 
 #include "FileContentChecker.h"
+#include "HandlerFactorySummary.h"
 #include "PluginImpl.h"
 #include "StoredQuery.h"
 #include "StoredQueryHandlerBase.h"
@@ -23,6 +24,7 @@ namespace Plugin
 {
 namespace WFS
 {
+class HandlerFactorySummary;
 class PluginImpl;
 class StoredQueryConfig;
 class StoredQueryHandlerBase;
@@ -56,7 +58,7 @@ class StoredQueryMap final
 
   bool is_reload_required(bool reset = false);
 
-  Json::Value get_constructor_map(const std::string& handler) const;
+  std::shared_ptr<const HandlerFactorySummary> get_handler_factory_summary() const;
 
   bool use_case_sensitive_params() const;
 

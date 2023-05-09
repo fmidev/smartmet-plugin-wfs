@@ -37,6 +37,7 @@
 				{
 					"description" : "requested times expressed in the list of hours (for example \u201c12,13,18,19\u201d)",
 					"is_array" : true,
+					"mandatory" : false,
 					"max_size" : 65535,
 					"min_size" : 0,
 					"step" : 0,
@@ -88,6 +89,7 @@
 				{
 					"description" : "The requested times expressed in the list of hours and minutes HHMM (for example \u201c1200,1230,1300,1330\u201d).",
 					"is_array" : true,
+					"mandatory" : false,
 					"max_size" : 999,
 					"min_size" : 0,
 					"step" : 1,
@@ -104,10 +106,48 @@
 					],
 					"template" : "coverage_countours.c2t"
 				}
-			],
-			"templates" : 
+			]
+		},
+		"wfs_dummy_handler_factory" : 
+		{
+			"parameters" : 
+			{
+				"ArrayParam" : 
+				{
+					"description" : "Array parameter for testing only",
+					"is_array" : true,
+					"mandatory" : false,
+					"max_size" : 99,
+					"min_size" : 0,
+					"step" : 1,
+					"type" : "string"
+				},
+				"ScalarParam" : 
+				{
+					"description" : "Scalar parameter for testing only",
+					"is_array" : false,
+					"mandatory" : false,
+					"type" : "string"
+				}
+			},
+			"stored_queries" : 
 			[
-				"coverage_countours.c2t"
+				{
+					"name" : "ParamTest1",
+					"return_types" : 
+					[
+						"omso:GridSeriesObservation"
+					],
+					"template_name" : null
+				},
+				{
+					"name" : "ParamTest2",
+					"return_types" : 
+					[
+						"omso:GridSeriesObservation"
+					],
+					"template_name" : null
+				}
 			]
 		},
 		"wfs_forecast_handler_factory" : 
@@ -146,6 +186,7 @@
 				{
 					"description" : "The geographical location(s) expressed by an array of fmisids",
 					"is_array" : true,
+					"mandatory" : false,
 					"max_size" : 65535,
 					"min_size" : 0,
 					"step" : 0,
@@ -155,6 +196,7 @@
 				{
 					"description" : "The geographical location(s) expressed by an array of geoids",
 					"is_array" : true,
+					"mandatory" : false,
 					"max_size" : 65535,
 					"min_size" : 0,
 					"step" : 0,
@@ -164,6 +206,7 @@
 				{
 					"description" : "requested times expressed in the list of hours (for example \u201c12,13,18,19\u201d)",
 					"is_array" : true,
+					"mandatory" : false,
 					"max_size" : 65535,
 					"min_size" : 0,
 					"step" : 0,
@@ -187,6 +230,7 @@
 				{
 					"description" : "The geographical location(s) expressed by an array of latitude-longitude pairs.",
 					"is_array" : true,
+					"mandatory" : false,
 					"max_size" : 999,
 					"min_size" : 0,
 					"step" : 2,
@@ -196,6 +240,7 @@
 				{
 					"description" : "An array of geometric heights (GeomHeight) above the topography of model. An empty array means that all the levels can be used. The parameter is usable only with hybrid data and interpolated data values will be returned if exact match is not found. The use of parameter also require that the dataset contains e.g. GeomHeight data and it is not allowed to use with the level parameter at the same time.",
 					"is_array" : true,
+					"mandatory" : false,
 					"max_size" : 99,
 					"min_size" : 0,
 					"step" : 0,
@@ -205,6 +250,7 @@
 				{
 					"description" : "",
 					"is_array" : true,
+					"mandatory" : false,
 					"max_size" : 99,
 					"min_size" : 0,
 					"step" : 0,
@@ -228,6 +274,7 @@
 				{
 					"description" : "The geographical location(s) expressed by an array of LPNNs",
 					"is_array" : true,
+					"mandatory" : false,
 					"max_size" : 65535,
 					"min_size" : 0,
 					"step" : 0,
@@ -251,6 +298,7 @@
 				{
 					"description" : "An array of weather models (see QEngine configuration) that can be used in the query. An empty array means that all the available weather models can be used.",
 					"is_array" : true,
+					"mandatory" : false,
 					"max_size" : 65535,
 					"min_size" : 0,
 					"step" : 0,
@@ -267,6 +315,7 @@
 				{
 					"description" : "An array of fields which values should be returned in the response.",
 					"is_array" : true,
+					"mandatory" : true,
 					"max_size" : 99,
 					"min_size" : 1,
 					"step" : 0,
@@ -276,6 +325,7 @@
 				{
 					"description" : "The geographical location(s) expressed by an array of location names.",
 					"is_array" : true,
+					"mandatory" : false,
 					"max_size" : 65535,
 					"min_size" : 0,
 					"step" : 0,
@@ -313,6 +363,7 @@
 				{
 					"description" : "The requested times expressed in the list of hours and minutes HHMM (for example \u201c1200,1230,1300,1330\u201d).",
 					"is_array" : true,
+					"mandatory" : false,
 					"max_size" : 999,
 					"min_size" : 0,
 					"step" : 1,
@@ -322,6 +373,7 @@
 				{
 					"description" : "The geographical location(s) expressed by an array of WMOs",
 					"is_array" : true,
+					"mandatory" : false,
 					"max_size" : 65535,
 					"min_size" : 0,
 					"step" : 0,
@@ -338,10 +390,48 @@
 					],
 					"template" : "hash_dump.c2t"
 				}
-			],
-			"templates" : 
+			]
+		},
+		"wfs_get_data_set_by_id_handler_factory" : 
+		{
+			"parameters" : 
+			{
+				"datasetid" : 
+				{
+					"description" : "An array of DataSetDef structures. These structures are needed for mapping the data set identifiers to the stored queries.",
+					"is_array" : false,
+					"mandatory" : true,
+					"type" : "string"
+				}
+			},
+			"stored_queries" : 
 			[
-				"hash_dump.c2t"
+				{
+					"name" : "GetDataSetById",
+					"return_types" : [],
+					"template_name" : null
+				}
+			]
+		},
+		"wfs_get_feature_by_id_handler_factory" : 
+		{
+			"parameters" : 
+			{
+				"feature_id" : 
+				{
+					"description" : "The feature identifier of the requested feature.",
+					"is_array" : false,
+					"mandatory" : true,
+					"type" : "string"
+				}
+			},
+			"stored_queries" : 
+			[
+				{
+					"name" : "urn:ogc:def:query:OGC-WFS::GetFeatureById",
+					"return_types" : [],
+					"template_name" : null
+				}
 			]
 		},
 		"wfs_grid_forecast_handler_factory" : 
@@ -380,6 +470,7 @@
 				{
 					"description" : "The geographical location(s) expressed by an array of geoids",
 					"is_array" : true,
+					"mandatory" : false,
 					"max_size" : 65535,
 					"min_size" : 0,
 					"step" : 0,
@@ -389,6 +480,7 @@
 				{
 					"description" : "requested times expressed in the list of hours (for example \u201c12,13,18,19\u201d)",
 					"is_array" : true,
+					"mandatory" : false,
 					"max_size" : 65535,
 					"min_size" : 0,
 					"step" : 0,
@@ -412,6 +504,7 @@
 				{
 					"description" : "The geographical location(s) expressed by an array of latitude-longitude pairs.",
 					"is_array" : true,
+					"mandatory" : false,
 					"max_size" : 999,
 					"min_size" : 0,
 					"step" : 2,
@@ -421,6 +514,7 @@
 				{
 					"description" : "",
 					"is_array" : true,
+					"mandatory" : false,
 					"max_size" : 99,
 					"min_size" : 0,
 					"step" : 0,
@@ -430,6 +524,7 @@
 				{
 					"description" : "",
 					"is_array" : true,
+					"mandatory" : false,
 					"max_size" : 99,
 					"min_size" : 0,
 					"step" : 0,
@@ -467,6 +562,7 @@
 				{
 					"description" : "",
 					"is_array" : true,
+					"mandatory" : false,
 					"max_size" : 65535,
 					"min_size" : 0,
 					"step" : 0,
@@ -483,6 +579,7 @@
 				{
 					"description" : "An array of fields whose values should be returned in the response.",
 					"is_array" : true,
+					"mandatory" : true,
 					"max_size" : 99,
 					"min_size" : 1,
 					"step" : 0,
@@ -492,6 +589,7 @@
 				{
 					"description" : "The geographical location(s) expressed by an array of location names.",
 					"is_array" : true,
+					"mandatory" : false,
 					"max_size" : 65535,
 					"min_size" : 0,
 					"step" : 0,
@@ -529,6 +627,7 @@
 				{
 					"description" : "The requested times expressed in the list of hours and minutes HHMM (for example \u201c1200,1230,1300,1330\u201d).",
 					"is_array" : true,
+					"mandatory" : false,
 					"max_size" : 999,
 					"min_size" : 0,
 					"step" : 1,
@@ -545,10 +644,6 @@
 					],
 					"template" : "hash_dump.c2t"
 				}
-			],
-			"templates" : 
-			[
-				"hash_dump.c2t"
 			]
 		},
 		"wfs_isoline_query_handler_factory" : 
@@ -587,6 +682,7 @@
 				{
 					"description" : "requested times expressed in the list of hours (for example \u201c12,13,18,19\u201d)",
 					"is_array" : true,
+					"mandatory" : false,
 					"max_size" : 65535,
 					"min_size" : 0,
 					"step" : 0,
@@ -666,6 +762,7 @@
 				{
 					"description" : "The requested times expressed in the list of hours and minutes HHMM (for example \u201c1200,1230,1300,1330\u201d).",
 					"is_array" : true,
+					"mandatory" : false,
 					"max_size" : 999,
 					"min_size" : 0,
 					"step" : 1,
@@ -682,10 +779,6 @@
 					],
 					"template" : "isoline_countours.c2t"
 				}
-			],
-			"templates" : 
-			[
-				"isoline_countours.c2t"
 			]
 		},
 		"wfs_obs_handler_factory" : 
@@ -724,6 +817,7 @@
 				{
 					"description" : "The geographical location(s) expressed by an array of fmisids",
 					"is_array" : true,
+					"mandatory" : false,
 					"max_size" : 65535,
 					"min_size" : 0,
 					"step" : 0,
@@ -733,6 +827,7 @@
 				{
 					"description" : "The geographical location(s) expressed by an array of geoids",
 					"is_array" : true,
+					"mandatory" : false,
 					"max_size" : 65535,
 					"min_size" : 0,
 					"step" : 0,
@@ -742,6 +837,7 @@
 				{
 					"description" : "requested times expressed in the list of hours (for example \u201c12,13,18,19\u201d)",
 					"is_array" : true,
+					"mandatory" : false,
 					"max_size" : 65535,
 					"min_size" : 0,
 					"step" : 0,
@@ -779,6 +875,7 @@
 				{
 					"description" : "The geographical location(s) expressed by an array of latitude-longitude pairs.",
 					"is_array" : true,
+					"mandatory" : false,
 					"max_size" : 999,
 					"min_size" : 0,
 					"step" : 2,
@@ -795,6 +892,7 @@
 				{
 					"description" : "The geographical location(s) expressed by an array of LPNNs",
 					"is_array" : true,
+					"mandatory" : false,
 					"max_size" : 65535,
 					"min_size" : 0,
 					"step" : 0,
@@ -818,6 +916,7 @@
 				{
 					"description" : "array of fields whose values should be returned in the response.",
 					"is_array" : true,
+					"mandatory" : true,
 					"max_size" : 65535,
 					"min_size" : 1,
 					"step" : 0,
@@ -841,6 +940,7 @@
 				{
 					"description" : "The geographical location(s) expressed by an array of location names.",
 					"is_array" : true,
+					"mandatory" : false,
 					"max_size" : 65535,
 					"min_size" : 0,
 					"step" : 0,
@@ -892,6 +992,7 @@
 				{
 					"description" : "The requested times expressed in the list of hours and minutes HHMM (for example \u201c1200,1230,1300,1330\u201d).",
 					"is_array" : true,
+					"mandatory" : false,
 					"max_size" : 999,
 					"min_size" : 0,
 					"step" : 1,
@@ -901,6 +1002,7 @@
 				{
 					"description" : "requested times expressed in the list of weekdays",
 					"is_array" : true,
+					"mandatory" : false,
 					"max_size" : 65535,
 					"min_size" : 0,
 					"step" : 0,
@@ -910,6 +1012,7 @@
 				{
 					"description" : "The geographical location(s) expressed by an array of WMOs",
 					"is_array" : true,
+					"mandatory" : false,
 					"max_size" : 65535,
 					"min_size" : 0,
 					"step" : 0,
@@ -942,10 +1045,6 @@
 					],
 					"template" : "hash_dump.c2t"
 				}
-			],
-			"templates" : 
-			[
-				"hash_dump.c2t"
 			]
 		},
 		"wfs_stored_geoserver_handler_factory" : 
@@ -991,6 +1090,7 @@
 				{
 					"description" : "An array of layer names used for the image.",
 					"is_array" : true,
+					"mandatory" : true,
 					"max_size" : 999,
 					"min_size" : 1,
 					"step" : 0,
@@ -1022,10 +1122,6 @@
 					],
 					"template" : "hash_dump.c2t"
 				}
-			],
-			"templates" : 
-			[
-				"hash_dump.c2t"
 			]
 		},
 		"wfs_stored_sounding_handler_factory" : 
@@ -1036,6 +1132,7 @@
 				{
 					"description" : "",
 					"is_array" : true,
+					"mandatory" : false,
 					"max_size" : 2,
 					"min_size" : 0,
 					"step" : 2,
@@ -1073,6 +1170,7 @@
 				{
 					"description" : "The geographical location(s) expressed by an array of fmisids",
 					"is_array" : true,
+					"mandatory" : false,
 					"max_size" : 65535,
 					"min_size" : 0,
 					"step" : 0,
@@ -1082,6 +1180,7 @@
 				{
 					"description" : "The geographical location(s) expressed by an array of geoids",
 					"is_array" : true,
+					"mandatory" : false,
 					"max_size" : 65535,
 					"min_size" : 0,
 					"step" : 0,
@@ -1112,6 +1211,7 @@
 				{
 					"description" : "The geographical location(s) expressed by an array of latitude-longitude pairs.",
 					"is_array" : true,
+					"mandatory" : false,
 					"max_size" : 999,
 					"min_size" : 0,
 					"step" : 2,
@@ -1128,6 +1228,7 @@
 				{
 					"description" : "array of fields whose values should be returned in the response.",
 					"is_array" : true,
+					"mandatory" : true,
 					"max_size" : 65535,
 					"min_size" : 1,
 					"step" : 0,
@@ -1151,6 +1252,7 @@
 				{
 					"description" : "The geographical location(s) expressed by an array of location names.",
 					"is_array" : true,
+					"mandatory" : false,
 					"max_size" : 65535,
 					"min_size" : 0,
 					"step" : 0,
@@ -1160,6 +1262,7 @@
 				{
 					"description" : "",
 					"is_array" : true,
+					"mandatory" : false,
 					"max_size" : 2,
 					"min_size" : 0,
 					"step" : 2,
@@ -1169,6 +1272,7 @@
 				{
 					"description" : "",
 					"is_array" : true,
+					"mandatory" : true,
 					"max_size" : 65535,
 					"min_size" : 1,
 					"step" : 0,
@@ -1185,6 +1289,7 @@
 				{
 					"description" : "Sounding type. Types 1, 2, 3 are supported. Type 1 is no more in use",
 					"is_array" : true,
+					"mandatory" : false,
 					"max_size" : 65535,
 					"min_size" : 0,
 					"step" : 0,
@@ -1201,6 +1306,7 @@
 				{
 					"description" : "The geographical location(s) expressed by an array of WMOs",
 					"is_array" : true,
+					"mandatory" : false,
 					"max_size" : 65535,
 					"min_size" : 0,
 					"step" : 0,
@@ -1217,10 +1323,6 @@
 					],
 					"template" : "hash_dump.c2t"
 				}
-			],
-			"templates" : 
-			[
-				"hash_dump.c2t"
 			]
 		}
 	},
@@ -1232,8 +1334,8 @@
 		],
 		"hash_dump.c2t" : 
 		[
-			"omso:PointTimeSeriesObservation",
 			"omso:GridSeriesObservation",
+			"omso:PointTimeSeriesObservation",
 			"omso:TrajectoryObservation"
 		],
 		"isoline_countours.c2t" : 

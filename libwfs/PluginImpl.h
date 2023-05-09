@@ -141,9 +141,9 @@ class PluginImpl
    *  @param handler stored query handler for which to output information or
    *         all handlers when empty string is specified
    */
-  void dump_constructor_map(std::ostream& os, const std::string& handler = "");
+  void dump_constructor_map(std::ostream& os, const boost::optional<std::string>& handler = {});
 
-  void dump_constructor_map_html(std::ostream& os, const std::string& handler = "");
+  void dump_constructor_map_html(std::ostream& os, const boost::optional<std::string>& handler = {});
 
   bool is_reload_required(bool reset = false);
 

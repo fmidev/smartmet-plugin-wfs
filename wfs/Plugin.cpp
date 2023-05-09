@@ -294,11 +294,11 @@ void Plugin::adminHandler(SmartMet::Spine::Reactor&  /*theReactor*/,
         const auto format = theRequest.getParameter("format");
         std::ostringstream content;
         if (not format or *format == "json") {
-            impl->dump_constructor_map(content, handler ? *handler : "");
+            impl->dump_constructor_map(content, handler);
             theResponse.setStatus(200);
             theResponse.setHeader("Content-type", "application/json");
         } else if (*format == "HTML" or *format == "html") {
-            impl->dump_constructor_map_html(content, handler ? *handler : "");
+            impl->dump_constructor_map_html(content, handler);
             theResponse.setStatus(200);
             theResponse.setHeader("Content-type", "text/html; charset=UTF-8");
         } else {
