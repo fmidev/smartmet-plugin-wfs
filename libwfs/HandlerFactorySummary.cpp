@@ -76,7 +76,7 @@ namespace
         const HandlerFactorySummary::StoredQueryInfo& s_info)
     {
         os << "<tr>";
-        os << "<td><a href=\"" << prefix << "??SERVICE=WFS&VERSION=2.0.0"
+        os << "<td><a href=\"" << prefix << "?SERVICE=WFS&VERSION=2.0.0"
            << "&request=DescribeStoredQueries"
            << "&storedquery_id=" << s_info.name
            << "\">" << s_info.name << "</a></td>";

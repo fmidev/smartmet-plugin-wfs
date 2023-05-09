@@ -20,4 +20,4 @@
 <h3>Stored queries</h3>
 <table border="1px solid black"; padding: "5px" >
 <tr><th>Stored query</th><th>Template</th><th>Return types</th></tr>
-<tr><td><a href="/wfs??SERVICE=WFS&VERSION=2.0.0&request=DescribeStoredQueries&storedquery_id=CoverageTest">CoverageTest</a></td><td>coverage_countours.c2t</td><td>omso:GridSeriesObservation</td></table>
+<tr><td><a href="/wfs?SERVICE=WFS&VERSION=2.0.0&request=DescribeStoredQueries&storedquery_id=CoverageTest">CoverageTest</a></td><td>coverage_countours.c2t</td><td>omso:GridSeriesObservation</td></table>
