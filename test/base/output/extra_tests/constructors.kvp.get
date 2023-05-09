@@ -3,6 +3,7 @@
 	{
 		"wfs_coverage_query_handler_factory" : 
 		{
+			"description" : "Forecast data: areas as GML isobars",
 			"parameters" : 
 			{
 				"beginTime" : 
@@ -110,6 +111,7 @@
 		},
 		"wfs_dummy_handler_factory" : 
 		{
+			"description" : "Simple stored query handler for testing purposes only",
 			"parameters" : 
 			{
 				"ArrayParam" : 
@@ -152,6 +154,7 @@
 		},
 		"wfs_forecast_handler_factory" : 
 		{
+			"description" : "Forecast data (general)",
 			"parameters" : 
 			{
 				"beginTime" : 
@@ -394,6 +397,7 @@
 		},
 		"wfs_get_data_set_by_id_handler_factory" : 
 		{
+			"description" : "Predefined data sets",
 			"parameters" : 
 			{
 				"datasetid" : 
@@ -415,6 +419,7 @@
 		},
 		"wfs_get_feature_by_id_handler_factory" : 
 		{
+			"description" : "The mandatory implementation of the \"GetFeatureById\" stored query defined in the WFS 2.0 standard",
 			"parameters" : 
 			{
 				"feature_id" : 
@@ -436,6 +441,7 @@
 		},
 		"wfs_grid_forecast_handler_factory" : 
 		{
+			"description" : "Forecast data: download in grid format (grib1, grib2, NetCDF)",
 			"parameters" : 
 			{
 				"beginTime" : 
@@ -648,6 +654,7 @@
 		},
 		"wfs_isoline_query_handler_factory" : 
 		{
+			"description" : "Forecast data: areas as GML isolines",
 			"parameters" : 
 			{
 				"beginTime" : 
@@ -783,6 +790,7 @@
 		},
 		"wfs_obs_handler_factory" : 
 		{
+			"description" : "Observation data (general, no lightning, aviation or multi-sensor)",
 			"parameters" : 
 			{
 				"beginTime" : 
@@ -1049,6 +1057,7 @@
 		},
 		"wfs_stored_geoserver_handler_factory" : 
 		{
+			"description" : "Geographical data downloading",
 			"parameters" : 
 			{
 				"begin" : 
@@ -1126,6 +1135,7 @@
 		},
 		"wfs_stored_sounding_handler_factory" : 
 		{
+			"description" : "",
 			"parameters" : 
 			{
 				"altitudeRanges" : 

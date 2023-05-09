@@ -3,6 +3,7 @@
 	{
 		"wfs_obs_handler_factory" : 
 		{
+			"description" : "Observation data (general, no lightning, aviation or multi-sensor)",
 			"parameters" : 
 			{
 				"beginTime" : 

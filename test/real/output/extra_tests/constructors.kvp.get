@@ -3,6 +3,7 @@
 	{
 		"wfs_coverage_query_handler_factory" : 
 		{
+			"description" : "Forecast data: areas as GML isobars",
 			"parameters" : 
 			{
 				"beginTime" : 
@@ -120,6 +121,7 @@
 		},
 		"wfs_flash_handler_factory" : 
 		{
+			"description" : "Observation data: Lightning",
 			"parameters" : 
 			{
 				"beginTime" : 
@@ -190,6 +192,7 @@
 		},
 		"wfs_forecast_handler_factory" : 
 		{
+			"description" : "Forecast data (general)",
 			"parameters" : 
 			{
 				"beginTime" : 
@@ -568,6 +571,7 @@
 		},
 		"wfs_get_data_set_by_id_handler_factory" : 
 		{
+			"description" : "Predefined data sets",
 			"parameters" : 
 			{
 				"datasetid" : 
@@ -589,6 +593,7 @@
 		},
 		"wfs_get_feature_by_id_handler_factory" : 
 		{
+			"description" : "The mandatory implementation of the \"GetFeatureById\" stored query defined in the WFS 2.0 standard",
 			"parameters" : 
 			{
 				"feature_id" : 
@@ -610,6 +615,7 @@
 		},
 		"wfs_obs_handler_factory" : 
 		{
+			"description" : "Observation data (general, no lightning, aviation or multi-sensor)",
 			"parameters" : 
 			{
 				"beginTime" : 
@@ -1348,6 +1354,7 @@
 		},
 		"wfs_stored_air_nuclide_handler_factory" : 
 		{
+			"description" : "",
 			"parameters" : 
 			{
 				"beginTime" : 
@@ -1525,6 +1532,7 @@
 		},
 		"wfs_stored_atom_handler_base_factory" : 
 		{
+			"description" : "StoredAtomQueryHandlerBase",
 			"parameters" : {},
 			"stored_queries" : 
 			[
@@ -1540,6 +1548,7 @@
 		},
 		"wfs_stored_aviation_observation_handler_factory" : 
 		{
+			"description" : "Observation data: Aviation",
 			"parameters" : 
 			{
 				"beginTime" : 
@@ -1677,6 +1686,7 @@
 		},
 		"wfs_stored_file_handler_factory" : 
 		{
+			"description" : "Forecast data: download in querydata format",
 			"parameters" : 
 			{
 				"bbox" : 
@@ -1751,6 +1761,7 @@
 		},
 		"wfs_stored_geoserver_handler_factory" : 
 		{
+			"description" : "Geographical data downloading",
 			"parameters" : 
 			{
 				"begin" : 
@@ -1918,6 +1929,7 @@
 		},
 		"wfs_stored_mast_handler_factory" : 
 		{
+			"description" : "Observation data: Multi-sensor",
 			"parameters" : 
 			{
 				"beginTime" : 
@@ -2082,6 +2094,7 @@
 		},
 		"wfs_stored_qe_download_handler_factory" : 
 		{
+			"description" : "Forecast data: download when data source is QEngine",
 			"parameters" : 
 			{
 				"beginTime" : 
@@ -2267,6 +2280,7 @@
 		},
 		"wfs_stored_sounding_handler_factory" : 
 		{
+			"description" : "",
 			"parameters" : 
 			{
 				"altitudeRanges" : 

@@ -60,6 +60,9 @@ class StoredQueryHandlerBase : virtual protected SupportsExtraHandlerParams,
 
   /**
    *   @brief Returns short description of stored query handler
+   *
+   *   The return value of this method is expected to be same for all
+   *   stored queries which use the same handler
    */
   virtual std::string get_handler_description() const = 0;
 

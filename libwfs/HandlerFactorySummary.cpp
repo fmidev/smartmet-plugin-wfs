@@ -155,6 +155,7 @@ void HandlerFactorySummary::add_handler(
     if (insert_result.second) {
         ci = std::make_shared<FactoryInfo>();
         ci->name = constructor_name;
+        ci->description = handler.get_handler_description();
         insert_result.first->second = ci;
     }
 
@@ -184,13 +185,12 @@ void HandlerFactorySummary::write_html(
         }
 
         const auto ci = it->second;
-        if (not ci.get()) {
-            return;
-        }
+        assert(ci.get());
 
         os << "<h1>Stored query handler constructor: " << *name << "</h1>\n";
-        os << "<table border=\"1px solid black\", padding: 5px; >\n";
+        os << "<b>Description</b>: " << ci->description << "\n";
 
+        os << "<table border=\"1px solid black\", padding: 5px; >\n";
         write_param_table(os, *ci);
 
         write_stored_query_table(os, prefix, *ci);
@@ -199,24 +199,30 @@ void HandlerFactorySummary::write_html(
         os << "<h1>Stored query handler constructors</h1>\n";
         os << "<br>\n";
         os << "<b>Only those stored query handler constructors, that are used for at least"
-           << " one stored query are browsable</b>\n";
+           << " one stored query are listed</b>\n";
         os << "<br>\n";
         os << "<ul>\n";
+
+        os << "<table border=\"1px solid black\" padding=\"10pt\">";
+        os << "<tr>";
+        os << "<th>Constructor</th>";
+        os << "<th>Description</th>";
+        os << "</tr>\n";
 
         for (const auto& item : factory_map)
         {
             const auto ci = item.second;
-            os << "<li> ";
-            if (ci.get()) {
-                os << "<a href=\"" << url_prefix << "/admin?request=constructors&handler="
-                    << ci->name << "&format=html\">"
-                   << ci->name << "</a>";
-            } else {
-                os << item.first;
-            }
-            os << "</li>\n";
+            assert(ci.get());
+            os << "<tr>";
+            os << "<td>";
+            os << "<a href=\"" << url_prefix << "/admin?request=constructors&handler="
+               << ci->name << "&format=html\">"
+               << ci->name << "</a>";
+            os << "</td>\n";
+            os << "<td>" << ci->description << "</td>";
+            os << "</tr>\n";
         }
-        os << "</ul>\n";
+        os << "</table>" << std::endl;
     }
 }
 
@@ -235,6 +241,7 @@ Json::Value HandlerFactorySummary::as_json(const boost::optional<std::string>& n
             }
 
             auto& f_out = constructors[f_info->name];
+            f_out["description"] = f_info->description;
             auto& params_out = f_out["parameters"] = Json::objectValue;
             auto& sq_out = f_out["stored_queries"] = Json::arrayValue;
             for (const auto& p_item : f_info->params) {

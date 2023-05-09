@@ -50,6 +50,7 @@ namespace WFS
         struct FactoryInfo
         {
             std::string name;
+            std::string description;
             std::map<std::string, ParamInfo> params;
             std::set<std::string> template_names;
             std::map<std::string, StoredQueryInfo> stored_queries;

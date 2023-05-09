@@ -3,6 +3,7 @@
 	{
 		"wfs_coverage_query_handler_factory" : 
 		{
+			"description" : "Forecast data: areas as GML isobars",
 			"parameters" : 
 			{
 				"beginTime" : 
