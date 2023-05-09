@@ -14,9 +14,9 @@ namespace
         os << "<br>";
         os << "<table border=\"1px solid black\" padding=\"10pt\">";
         os << "<tr>";
-        os << "<th> </th>";
         os << "<th>Parameter</th>";
         os << "<th>Mandatory</th>";
+        os << "<th> </th>";
         os << "<th>Type</th>";
         os << "<th>Min size</th>";
         os << "<th>Max size</th>";
@@ -37,9 +37,9 @@ namespace
         const bool is_array = static_cast<bool>(p.size_info);
         if (is_array) {
             os << "<tr>";
-            os << "<td>Array</td>";
             os << "<td>" << p.name << "</td>";
             os << "<td>" << (p.size_info->min_size > 0 ? "yes" : "no") << "</td>";
+            os << "<td>Array</td>";
             os << "<td>" << p.type << "</td>";
             os << "<td>" << p.size_info->min_size << "</td>";
             os << "<td>" << p.size_info->max_size << "</td>";
@@ -48,9 +48,9 @@ namespace
             os << "</tr>\n";
         } else {
             os << "<tr>";
-            os << "<td>Scalar</td>";
             os << "<td>" << p.name << "</td>";
             os << "<td>" << (p.mandatory ? "yes" : "no") << "</td>";
+            os << "<td>Scalar</td>";
             os << "<td>" << p.type << "</td>";
             os << "<td> </td>";
             os << "<td> </td>";
@@ -178,6 +178,15 @@ void HandlerFactorySummary::write_html(
     const std::string& url_prefix,
     const boost::optional<std::string>& name) const
 {
+    const char* style =
+        "<style>"
+        "table {border-collapse: collapse;}"
+        "th, td {border-bottom: 1px solid black; padding: 3px 0.5em 3px 0.5em; "
+        "text-align: center;}"
+        "tr:nth-child(even) {background-color: #f2f2f2;}"
+        "tr:hover {background-color: #e2e2e2;}"
+        "</style>\n";
+
     if (name) {
         auto it = factory_map.find(*name);
         if (it == factory_map.end()) {
@@ -186,6 +195,10 @@ void HandlerFactorySummary::write_html(
 
         const auto ci = it->second;
         assert(ci.get());
+
+        os << "<!DOCTYPE html><html><head><title>WFS plugin: " << *name << "</title>"
+           << style
+           << "</head><body>\n";
 
         os << "<h1>Stored query handler constructor: " << *name << "</h1>\n";
         os << "<b>Description</b>: " << ci->description << "\n";
@@ -196,6 +209,9 @@ void HandlerFactorySummary::write_html(
         write_stored_query_table(os, prefix, *ci);
 
     } else {
+        os << "<!DOCTYPE html><html><head><title>WFS plugin: Stored query handler constructors</title>"
+           << style
+           << "</head><body>\n";
         os << "<h1>Stored query handler constructors</h1>\n";
         os << "<br>\n";
         os << "<b>Only those stored query handler constructors, that are used for at least"
