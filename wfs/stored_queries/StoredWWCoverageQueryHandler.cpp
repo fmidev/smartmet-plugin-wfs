@@ -32,6 +32,12 @@ bw::StoredWWCoverageQueryHandler::StoredWWCoverageQueryHandler(
   }
 }
 
+std::string bw::StoredWWCoverageQueryHandler::get_handler_description() const
+{
+    return "Forecast data: winter weather conditions of the given"
+        " geographical area returned as GML isobars";
+}
+
 std::vector<bw::ContourQueryResultPtr> bw::StoredWWCoverageQueryHandler::processQuery(
     ContourQueryParameter& queryParameter) const
 {

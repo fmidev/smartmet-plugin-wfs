@@ -98,6 +98,11 @@ bw::StoredFlashQueryHandler::StoredFlashQueryHandler(
 
 bw::StoredFlashQueryHandler::~StoredFlashQueryHandler() = default;
 
+std::string bw::StoredFlashQueryHandler::get_handler_description() const
+{
+    return "Observation data: Lightning";
+}
+
 namespace
 {
 pt::ptime round_time(const pt::ptime& t0, unsigned step, int offset = 0)

@@ -249,6 +249,11 @@ StoredWWProbabilityQueryHandler::StoredWWProbabilityQueryHandler(
 
 StoredWWProbabilityQueryHandler::~StoredWWProbabilityQueryHandler() = default;
 
+std::string StoredWWProbabilityQueryHandler::get_handler_description() const
+{
+    return "Forecast data: for different winter weather conditions";
+}
+
 void StoredWWProbabilityQueryHandler::parseQueryResults(
     const ProbabilityQueryResultSet& query_results,
     const SmartMet::Spine::BoundingBox& bbox,

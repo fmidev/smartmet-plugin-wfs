@@ -43,6 +43,11 @@ bw::StoredCoverageQueryHandler::StoredCoverageQueryHandler(
   }
 }
 
+std::string bw::StoredCoverageQueryHandler::get_handler_description() const
+{
+    return "Forecast data: areas as GML isobars";
+}
+
 void bw::StoredCoverageQueryHandler::clipGeometry(OGRGeometryPtr& pGeom, Fmi::Box& bbox) const
 {
   try

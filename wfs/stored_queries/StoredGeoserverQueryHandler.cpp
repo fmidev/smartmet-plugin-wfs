@@ -170,6 +170,11 @@ bw::StoredGeoserverQueryHandler::StoredGeoserverQueryHandler(
 
 bw::StoredGeoserverQueryHandler::~StoredGeoserverQueryHandler() = default;
 
+std::string bw::StoredGeoserverQueryHandler::get_handler_description() const
+{
+    return "Geographical data downloading";
+}
+
 void bw::StoredGeoserverQueryHandler::update_parameters(
     const RequestParameterMap& params,
     int seq_id,

@@ -45,6 +45,11 @@ bw::StoredAtomQueryHandlerBase::~StoredAtomQueryHandlerBase() = default;
 
 void bw::StoredAtomQueryHandlerBase::init_handler() {}
 
+std::string bw::StoredAtomQueryHandlerBase::get_handler_description() const
+{
+    return "StoredAtomQueryHandlerBase";
+}
+
 void bw::StoredAtomQueryHandlerBase::query(const bw::StoredQuery& query,
                                            const std::string& language,
 					   const boost::optional<std::string> &hostname,

@@ -33,6 +33,8 @@ class StoredFlashQueryHandler : public StoredQueryHandlerBase,
 
   ~StoredFlashQueryHandler() override;
 
+  std::string get_handler_description() const override;
+
   void query(const StoredQuery &query,
                      const std::string &language,
 		     const boost::optional<std::string> &hostname,

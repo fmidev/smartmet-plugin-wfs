@@ -76,6 +76,11 @@ bw::StoredEnvMonitoringFacilityQueryHandler::StoredEnvMonitoringFacilityQueryHan
 
 bw::StoredEnvMonitoringFacilityQueryHandler::~StoredEnvMonitoringFacilityQueryHandler() = default;
 
+std::string bw::StoredEnvMonitoringFacilityQueryHandler::get_handler_description() const
+{
+    return "";
+}
+
 void bw::StoredEnvMonitoringFacilityQueryHandler::query(const StoredQuery &query,
                                                         const std::string &language,
 							const boost::optional<std::string> & /*hostname*/,

@@ -1,5 +1,4 @@
 #ifndef WITHOUT_OBSERVATION
-
 #include "stored_queries/StoredMastQueryHandler.h"
 #include "FeatureID.h"
 #include "StoredQueryHandlerFactoryDef.h"
@@ -93,6 +92,11 @@ bw::StoredMastQueryHandler::StoredMastQueryHandler(SmartMet::Spine::Reactor* rea
 }
 
 bw::StoredMastQueryHandler::~StoredMastQueryHandler() = default;
+
+std::string bw::StoredMastQueryHandler::get_handler_description() const
+{
+    return "Observation data: Multi-sensor";
+}
 
 void bw::StoredMastQueryHandler::query(const StoredQuery& query,
                                        const std::string& language,

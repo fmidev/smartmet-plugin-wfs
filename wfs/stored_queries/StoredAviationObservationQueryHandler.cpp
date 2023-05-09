@@ -81,6 +81,11 @@ bw::StoredAviationObservationQueryHandler::StoredAviationObservationQueryHandler
 
 bw::StoredAviationObservationQueryHandler::~StoredAviationObservationQueryHandler() = default;
 
+std::string bw::StoredAviationObservationQueryHandler::get_handler_description() const
+{
+    return "Observation data: Aviation";
+}
+
 void bw::StoredAviationObservationQueryHandler::query(const StoredQuery& query,
                                                       const std::string& language,
 						      const boost::optional<std::string>&  /*hostname*/,

@@ -215,6 +215,11 @@ StoredQEDownloadQueryHandler::StoredQEDownloadQueryHandler(
 
 StoredQEDownloadQueryHandler::~StoredQEDownloadQueryHandler() = default;
 
+std::string StoredQEDownloadQueryHandler::get_handler_description() const
+{
+    return "Forecast data: download when data source is QEngine";
+}
+
 namespace
 {
 template <typename ValueType, typename DestType>

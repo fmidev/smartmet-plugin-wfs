@@ -70,6 +70,11 @@ bw::StoredFileQueryHandler::StoredFileQueryHandler(SmartMet::Spine::Reactor* rea
 
 bw::StoredFileQueryHandler::~StoredFileQueryHandler() = default;
 
+std::string bw::StoredFileQueryHandler::get_handler_description() const
+{
+    return "Forecast data: download in querydata format";
+}
+
 namespace
 {
 template <typename ValueType>

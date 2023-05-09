@@ -67,6 +67,13 @@ std::vector<std::string> bw::GetFeatureByIdHandler::get_return_types() const
   }
 }
 
+std::string bw::GetFeatureByIdHandler::get_handler_description() const
+{
+    return "The mandatory implementation of the \"GetFeatureById\" stored"
+        " query defined in the WFS 2.0 standardPredefined data sets";
+}
+
+
 namespace
 {
 boost::shared_ptr<bw::StoredQueryHandlerBase> wfs_get_feature_by_id_handler_create(

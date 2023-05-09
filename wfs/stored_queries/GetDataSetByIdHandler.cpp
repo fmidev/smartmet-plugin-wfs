@@ -122,6 +122,11 @@ bool bw::GetDataSetByIdHandler::redirect(const StoredQuery& query,
   }
 }
 
+std::string bw::GetDataSetByIdHandler::get_handler_description() const
+{
+    return "Predefined data sets";
+}
+
 std::vector<std::string> bw::GetDataSetByIdHandler::get_return_types() const
 {
   try

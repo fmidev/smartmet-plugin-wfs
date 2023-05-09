@@ -68,6 +68,11 @@ bw::StoredAirNuclideQueryHandler::StoredAirNuclideQueryHandler(
 
 bw::StoredAirNuclideQueryHandler::~StoredAirNuclideQueryHandler() = default;
 
+std::string bw::StoredAirNuclideQueryHandler::get_handler_description() const
+{
+    return "";
+}
+
 void bw::StoredAirNuclideQueryHandler::query(const StoredQuery& query,
                                              const std::string& language,
                                              const boost::optional<std::string>&  /*hostname*/,

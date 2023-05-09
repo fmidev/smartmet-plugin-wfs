@@ -1,5 +1,4 @@
 #ifndef WITHOUT_OBSERVATION
-
 #include "stored_queries/StoredSoundingQueryHandler.h"
 #include "FeatureID.h"
 #include "StoredQueryHandlerFactoryDef.h"
@@ -111,6 +110,11 @@ StoredSoundingQueryHandler::StoredSoundingQueryHandler(
 }
 
 StoredSoundingQueryHandler::~StoredSoundingQueryHandler() = default;
+
+std::string StoredSoundingQueryHandler::get_handler_description() const
+{
+    return "";
+}
 
 void StoredSoundingQueryHandler::query(const StoredQuery& query,
                                        const std::string& language,

@@ -58,6 +58,11 @@ class StoredQueryHandlerBase : virtual protected SupportsExtraHandlerParams,
 
   virtual std::string get_query_name() const;
 
+  /**
+   *   @brief Returns short description of stored query handler
+   */
+  virtual std::string get_handler_description() const = 0;
+
   virtual std::string get_title(const std::string& language) const;
 
   virtual std::vector<std::string> get_return_types() const;

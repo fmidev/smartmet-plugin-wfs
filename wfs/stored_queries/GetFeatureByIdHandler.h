@@ -30,6 +30,8 @@ class GetFeatureByIdHandler : public StoredQueryHandlerBase
                      std::ostream& output) const override;
 
   std::vector<std::string> get_return_types() const override;
+
+  std::string get_handler_description() const override;
 };
 
 }  // namespace WFS

@@ -143,6 +143,11 @@ StoredGridQueryHandler::StoredGridQueryHandler(SmartMet::Spine::Reactor* reactor
 
 StoredGridQueryHandler::~StoredGridQueryHandler() = default;
 
+std::string bw::StoredGridQueryHandler::get_handler_description() const
+{
+    return "Forecast data: download in grid format (grib1, grib2, NetCDF)";
+}
+
 StoredGridQueryHandler::Query::Query(boost::shared_ptr<const StoredQueryConfig> config)
     : missing_text("nan"),
       language("lan"),

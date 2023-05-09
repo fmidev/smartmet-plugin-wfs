@@ -33,6 +33,11 @@ bw::StoredIsolineQueryHandler::StoredIsolineQueryHandler(
   }
 }
 
+std::string bw::StoredIsolineQueryHandler::get_handler_description() const
+{
+    return "Forecast data: areas as GML isolines";
+}
+
 void bw::StoredIsolineQueryHandler::clipGeometry(OGRGeometryPtr& pGeom, Fmi::Box& bbox) const
 {
   try

@@ -154,6 +154,11 @@ StoredObsQueryHandler::StoredObsQueryHandler(SmartMet::Spine::Reactor* reactor,
 
 StoredObsQueryHandler::~StoredObsQueryHandler() = default;
 
+std::string StoredObsQueryHandler::get_handler_description() const
+{
+    return "Observation data (general, no lightning, aviation or multi-sensor)";
+}
+
 void StoredObsQueryHandler::query(const StoredQuery& query,
                                   const std::string& language,
                                   const boost::optional<std::string>&  /*hostname*/,

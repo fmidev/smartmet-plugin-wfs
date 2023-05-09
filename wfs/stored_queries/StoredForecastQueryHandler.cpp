@@ -155,6 +155,11 @@ bw::StoredForecastQueryHandler::StoredForecastQueryHandler(
 
 bw::StoredForecastQueryHandler::~StoredForecastQueryHandler() = default;
 
+std::string bw::StoredForecastQueryHandler::get_handler_description() const
+{
+    return "Forecast data (general)";
+}
+
 void bw::StoredForecastQueryHandler::query(const StoredQuery& stored_query,
                                            const std::string& language,
                                            const boost::optional<std::string>&  /*hostname*/,
