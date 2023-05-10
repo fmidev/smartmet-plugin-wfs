@@ -10,8 +10,8 @@
 #include <macgyver/StringConversion.h>
 #include <spine/Convenience.h>
 #include <spine/Value.h>
-#include <timeseries/TimeSeriesInclude.h>
 #include <timeseries/ParameterTools.h>
+#include <timeseries/TimeSeriesInclude.h>
 #include <algorithm>
 #include <functional>
 
@@ -55,7 +55,10 @@ StoredObsQueryHandler::StoredObsQueryHandler(SmartMet::Spine::Reactor* reactor,
       RequiresGeoEngine(reactor),
       RequiresObsEngine(reactor),
       StoredQueryHandlerBase(reactor, config, plugin_data, template_file_name),
-      SupportsLocationParameters(reactor, config, SUPPORT_KEYWORDS | INCLUDE_GEOIDS | INCLUDE_FMISIDS | INCLUDE_WMOS | INCLUDE_LPNNS),
+      SupportsLocationParameters(
+          reactor,
+          config,
+          SUPPORT_KEYWORDS | INCLUDE_GEOIDS | INCLUDE_FMISIDS | INCLUDE_WMOS | INCLUDE_LPNNS),
       SupportsBoundingBox(config, plugin_data.get_crs_registry()),
       SupportsTimeZone(reactor, config),
       SupportsQualityParameters(config),
@@ -83,62 +86,39 @@ StoredObsQueryHandler::StoredObsQueryHandler(SmartMet::Spine::Reactor* reactor,
 {
   try
   {
-    register_scalar_param<bool>(
-        P_LATEST,
-        ""
-        );
+    register_scalar_param<bool>(P_LATEST, "");
 
     register_array_param<std::string>(
         P_METEO_PARAMETERS,
         "array of fields whose values should be returned in the response.",
-        true
-        );
+        true);
 
     register_scalar_param<std::string>(
         P_STATION_TYPE,
-        "The type of the observation station (defined in the ObsEngine configuration)"
-        );
+        "The type of the observation station (defined in the ObsEngine configuration)");
 
     register_scalar_param<uint64_t>(
         P_NUM_OF_STATIONS,
         "The maximum number of the observation stations returned around the given"
-        " geographical location (inside the radius of \"maxDistance\")"
-        );
+        " geographical location (inside the radius of \"maxDistance\")");
 
-    register_array_param<int64_t>(
-        P_WEEK_DAYS,
-        "requested times expressed in the list of weekdays"
-        );
+    register_array_param<int64_t>(P_WEEK_DAYS, "requested times expressed in the list of weekdays");
+
+    register_scalar_param<std::string>(P_LOCALE, "value of the 'Locale' (for example fi_FI.utf8).");
 
     register_scalar_param<std::string>(
-        P_LOCALE,
-        "value of the 'Locale' (for example fi_FI.utf8)."
-        );
-
-    register_scalar_param<std::string>(
-        P_MISSING_TEXT,
-        "value that is returned when the value of the requested field is missing."
-        );
+        P_MISSING_TEXT, "value that is returned when the value of the requested field is missing.");
 
     register_scalar_param<uint64_t>(
         P_MAX_EPOCHS,
         "maximum number of time epochs that can be returned. If the estimated number before"
         " query is larger than the specified one then the query is aborted. This parameter"
         " is not alid if the \"storedQueryRestrictions\" parameter is set to \"false\" in"
-        " the WFS Plugin configuration file."
-        );
+        " the WFS Plugin configuration file.");
 
-    register_scalar_param<std::string>(
-        P_CRS,
-        "coordinate projection used in the response."
-        );
+    register_scalar_param<std::string>(P_CRS, "coordinate projection used in the response.");
 
-    register_scalar_param<std::string>(
-        P_LANGUAGE,
-        "The language to use",
-        false,
-        true
-        );
+    register_scalar_param<std::string>(P_LANGUAGE, "The language to use", false, true);
 
     max_hours = config->get_optional_config_param<double>("maxHours", 7.0 * 24.0);
     max_station_count = config->get_optional_config_param<unsigned>("maxStationCount", 0);
@@ -156,12 +136,12 @@ StoredObsQueryHandler::~StoredObsQueryHandler() = default;
 
 std::string StoredObsQueryHandler::get_handler_description() const
 {
-    return "Observation data (general, no lightning, aviation or multi-sensor)";
+  return "Observation data (general, no lightning, aviation or multi-sensor)";
 }
 
 void StoredObsQueryHandler::query(const StoredQuery& query,
                                   const std::string& language,
-                                  const boost::optional<std::string>&  /*hostname*/,
+                                  const boost::optional<std::string>& /*hostname*/,
                                   std::ostream& output) const
 {
   std::string curr_lang = language;
@@ -224,10 +204,12 @@ void StoredObsQueryHandler::query(const StoredQuery& query,
 
       const char* DATA_CRS_NAME = "urn:ogc:def:crs:EPSG::4326";
 
-      query_params.latest = params.get_optional<bool>(P_LATEST, false);
       query_params.starttime = params.get_single<pt::ptime>(P_BEGIN_TIME);
-
       query_params.endtime = params.get_single<pt::ptime>(P_END_TIME);
+
+      if (params.get_optional<bool>(P_LATEST, false))
+        query_params.wantedtime = query_params.endtime;
+
       if (sq_restrictions)
         check_time_interval(query_params.starttime, query_params.endtime, max_hours);
 
@@ -302,21 +284,22 @@ void StoredObsQueryHandler::query(const StoredQuery& query,
 
       params.get<int64_t>(P_FMISIDS, std::back_inserter(stationSettings.fmisids));
 
-	  if(query_params.stationtype != ICEBUOY_PRODUCER && query_params.stationtype != COPERNICUS_PRODUCER)
-		{
-		  std::list<std::pair<std::string, SmartMet::Spine::LocationPtr> > locations_list;
-		  get_location_options(params, curr_lang, &locations_list);
-		  
-		  for (const auto& item : locations_list)
-			{
-			  stationSettings.nearest_station_settings.emplace_back(item.second->longitude,
-																	item.second->latitude,
-																	query_params.maxdistance,
-																	query_params.numberofstations,
-																	item.first,
-																	item.second->fmisid);
-			}
-		}
+      if (query_params.stationtype != ICEBUOY_PRODUCER &&
+          query_params.stationtype != COPERNICUS_PRODUCER)
+      {
+        std::list<std::pair<std::string, SmartMet::Spine::LocationPtr> > locations_list;
+        get_location_options(params, curr_lang, &locations_list);
+
+        for (const auto& item : locations_list)
+        {
+          stationSettings.nearest_station_settings.emplace_back(item.second->longitude,
+                                                                item.second->latitude,
+                                                                query_params.maxdistance,
+                                                                query_params.numberofstations,
+                                                                item.first,
+                                                                item.second->fmisid);
+        }
+      }
 
       params.get<int64_t>(P_GEOIDS, std::back_inserter(stationSettings.geoid_settings.geoids));
       if (!stationSettings.geoid_settings.geoids.empty())
@@ -451,7 +434,7 @@ void StoredObsQueryHandler::query(const StoredQuery& query,
 
           const char* place_params[] = {
               P_WMOS, P_LPNNS, P_FMISIDS, P_PLACES, P_LATLONS, P_GEOIDS, P_KEYWORD, P_BOUNDING_BOX};
-          for (auto & place_param : place_params)
+          for (auto& place_param : place_params)
           {
             feature_id.erase_param(place_param);
           }
@@ -721,15 +704,16 @@ void StoredObsQueryHandler::query(const StoredQuery& query,
                         {
                           curr_locale.reset(new std::locale(query_params.localename.c_str()));
                         }
-                        const auto val = SmartMet::TimeSeries::time_parameter(name,
-                                                                         ldt,
-                                                                         now,
-                                                                         *geoLoc,
-                                                                         tz_name,
-                                                                         geo_engine->getTimeZones(),
-                                                                         *curr_locale,
-                                                                         *tfmt,
-                                                                         timestring);
+                        const auto val =
+                            SmartMet::TimeSeries::time_parameter(name,
+                                                                 ldt,
+                                                                 now,
+                                                                 *geoLoc,
+                                                                 tz_name,
+                                                                 geo_engine->getTimeZones(),
+                                                                 *curr_locale,
+                                                                 *tfmt,
+                                                                 timestring);
                         std::ostringstream val_str;
                         val_str << val;
                         obs_rec["data"][k]["value"] = val_str.str();
@@ -969,8 +953,7 @@ boost::shared_ptr<SmartMet::Plugin::WFS::StoredQueryHandlerBase> wfs_obs_handler
 {
   try
   {
-    auto* qh =
-        new StoredObsQueryHandler(reactor, config, plugin_data, template_file_name);
+    auto* qh = new StoredObsQueryHandler(reactor, config, plugin_data, template_file_name);
     boost::shared_ptr<SmartMet::Plugin::WFS::StoredQueryHandlerBase> result(qh);
     return result;
   }

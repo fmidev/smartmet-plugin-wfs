@@ -3,8 +3,8 @@
 #include "StoredQueryHandlerFactoryDef.h"
 #include "WfsConst.h"
 #include <fmt/format.h>
-#include <macgyver/StringConversion.h>
 #include <macgyver/Exception.h>
+#include <macgyver/StringConversion.h>
 #include <spine/Convenience.h>
 #include <spine/Value.h>
 #include <timeseries/ParameterTools.h>
@@ -49,27 +49,17 @@ bw::StoredFlashQueryHandler::StoredFlashQueryHandler(
 {
   try
   {
-    register_scalar_param<pt::ptime>(
-        P_BEGIN_TIME,
-        "The start time of the requested time period."
-        );
+    register_scalar_param<pt::ptime>(P_BEGIN_TIME, "The start time of the requested time period.");
 
-    register_scalar_param<pt::ptime>(
-        P_END_TIME,
-        "The end time of the requested time period."
-        );
+    register_scalar_param<pt::ptime>(P_END_TIME, "The end time of the requested time period.");
 
     register_array_param<std::string>(
-        P_PARAM,
-        "An array of fields whose values should be returned in the response.",
-        1,
-        999);
+        P_PARAM, "An array of fields whose values should be returned in the response.", 1, 999);
 
     register_scalar_param<std::string>(
         P_CRS,
         "Specifies the coordinate projection. For example crs = \"${crs:EPSG::4326}\" maps"
-        " to request parameter crs with the default value EPSG::4326."
-        );
+        " to request parameter crs with the default value EPSG::4326.");
 
     station_type = config->get_optional_config_param<std::string>("stationType", "flash");
     max_hours = config->get_optional_config_param<double>("maxHours", 7.0 * 24.0);
@@ -100,7 +90,7 @@ bw::StoredFlashQueryHandler::~StoredFlashQueryHandler() = default;
 
 std::string bw::StoredFlashQueryHandler::get_handler_description() const
 {
-    return "Observation data: Lightning";
+  return "Observation data: Lightning";
 }
 
 namespace
@@ -123,7 +113,7 @@ pt::ptime round_time(const pt::ptime& t0, unsigned step, int offset = 0)
 
 void bw::StoredFlashQueryHandler::query(const StoredQuery& query,
                                         const std::string& language,
-                                        const boost::optional<std::string>&  /*hostname*/,
+                                        const boost::optional<std::string>& /*hostname*/,
                                         std::ostream& output) const
 {
   try
@@ -212,7 +202,6 @@ void bw::StoredFlashQueryHandler::query(const StoredQuery& query,
       query_params.allplaces = false;
       query_params.stationtype = station_type;
       query_params.maxdistance = 20000.0;
-      query_params.latest = false;
       query_params.timeformat = "iso";
       query_params.timezone = "UTC";
       query_params.numberofstations = 1;
@@ -541,8 +530,7 @@ boost::shared_ptr<SmartMet::Plugin::WFS::StoredQueryHandlerBase> wfs_flash_handl
 {
   try
   {
-    auto* qh =
-        new StoredFlashQueryHandler(reactor, config, plugin_data, template_file_name);
+    auto* qh = new StoredFlashQueryHandler(reactor, config, plugin_data, template_file_name);
     boost::shared_ptr<SmartMet::Plugin::WFS::StoredQueryHandlerBase> result(qh);
     return result;
   }
