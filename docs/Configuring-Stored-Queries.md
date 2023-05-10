@@ -283,49 +283,49 @@ Possible values are filenames with extension `.c2t` present in directory
 Available values and their description (templates provided by WFS plugin):
 
 Value                            | Return type | Description
----------------------------------|-------------------------------------------------
-air_radionuclide_concentration_multipointcoverage.c2t | |
-air_radionuclide_concentration_simple.c2t | |
-aviation_observations.c2t | |
-capabilities.c2t | none | Template for GetCapabilities request only
-capabilities_open.c2t | none | Template for GetCapabilities request only
-coverage_countours.c2t | |
-describe_stored_queries.c2t | | Template for DescribeStoredQueries request only
-env_monitoring_facility.c2t | |
-env_monitoring_network.c2t | |
-exception.c2t | | Used for error responses only
-feature_type.c2t | |
-for_grid_ground.c2t | |
-ibplott_ice_array.c2t | |
-isoline_countours.c2t | |
-lightning_multipointcoverage.c2t | |
-lightning_simple.c2t | |
-list_stored_queries.c2t | |
-radar.c2t | |
-satellite.c2t | |
-stuk_weather_observations_grid.c2t | |
-weather_forecast_grid.c2t | |
-weather_forecast_multipointcoverage.c2t | |
-weather_forecast_simple.c2t | |
-weather_forecast_timevaluepair.c2t | |
-weather_observations2_grid.c2t | |
-weather_observations_grid.c2t | |
-weather_observations_mast_multipointcoverage.c2t | |
-weather_observationsqd_grid.c2t | |
-weather_observationsqd_timevaluepair.c2t | |
-weather_observations_simple.c2t | |
-weather_observations_soundings_multipointcoverage.c2t | |
-weather_observations_timevaluepair2.c2t | |
-weather_observations_timevaluepair.c2t | |
-winter_weather_countours.c2t | |
-winter_weather_general_countours.c2t | |
-winter_weather_probabilities.c2t | |
-_download_query_demo.c2t | | For testing only
-FileDownloadDemo.c2t | | For testing only
-_geoserver_query_demo.c2t |  | For testing only
-hash_dump.c2t |  | For testing only (raw dump of CTPP2 hash for debugging purposes - internal format)
-hash_dump_html.c2t | | For testing only (raw dump of CTPP2 hash for debugging purposes - HTMLl format)
-QEDownloadDemo.c2t | | For testing only
+---------------------------------|-------------|-----------------------------------
+air_radionuclide_concentration_multipointcoverage.c2t    | |
+air_radionuclide_concentration_simple.c2t                | |
+aviation_observations.c2t                                | |
+capabilities.c2t                                         | none | Template for GetCapabilities request only
+capabilities_open.c2t                                    | none | Template for GetCapabilities request only
+coverage_countours.c2t                                   | |
+describe_stored_queries.c2t                              | | Template for DescribeStoredQueries request only
+env_monitoring_facility.c2t                              | |
+env_monitoring_network.c2t                               | |
+exception.c2t                                            | none | Used for error responses only
+feature_type.c2t                                         | |
+for_grid_ground.c2t                                      | |
+ibplott_ice_array.c2t                                    | |
+isoline_countours.c2t                                    | |
+lightning_multipointcoverage.c2t                         | |
+lightning_simple.c2t                                     | |
+list_stored_queries.c2t                                  | |
+radar.c2t                                                | |
+satellite.c2t                                            | |
+stuk_weather_observations_grid.c2t                       | |
+weather_forecast_grid.c2t                                | |
+weather_forecast_multipointcoverage.c2t                  | |
+weather_forecast_simple.c2t                              | |
+weather_forecast_timevaluepair.c2t                       | |
+weather_observations2_grid.c2t                           | |
+weather_observations_grid.c2t                            | |
+weather_observations_mast_multipointcoverage.c2t         | |
+weather_observationsqd_grid.c2t                          | |
+weather_observationsqd_timevaluepair.c2t                 | |
+weather_observations_simple.c2t                          | |
+weather_observations_soundings_multipointcoverage.c2t    | |
+weather_observations_timevaluepair2.c2t                  | |
+weather_observations_timevaluepair.c2t                   | |
+winter_weather_countours.c2t                             | |
+winter_weather_general_countours.c2t                     | |
+winter_weather_probabilities.c2t                         | |
+_download_query_demo.c2t                                 | | For testing only
+FileDownloadDemo.c2t                                     | | For testing only
+_geoserver_query_demo.c2t                                | | For testing only
+hash_dump.c2t                                            | | For testing only (raw dump of CTPP2 hash for debugging purposes - internal format)
+hash_dump_html.c2t                                       | | For testing only (raw dump of CTPP2 hash for debugging purposes - HTML format)
+QEDownloadDemo.c2t                                       | | For testing only
 
 One can get actual information about actually used templates and corresponding return types using WFS internal admin request
 
