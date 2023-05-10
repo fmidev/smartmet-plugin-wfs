@@ -269,13 +269,13 @@ A more detailed description of the stored query. The description can be written 
 
 A [CTPP](http://ctpp.havoc.ru/en/) template used by the stored query handler. Required for most constructors which uses CTPP2 library for generating output of WFS requests
 
-Specifying different tamplate changes resoponse output format. For example:
+Specifying different tamplate changes response output format. For example:
 
 * `fmi::observations::weather::simple` uses `weather_observations_simple.c2t`
 * `fmi::observations::weather::multipointcoverage` uses `weather_observations_grid.c2t`
 * `fmi::observations::weather::timevaluepair` uses `weather_observations_timevaluepair.c2t`
 
-As result different response format is provided. Additionallty value of parameter `response_type` must correspond to used template
+As result different response format is provided. Additionallty value of parameter `returnTypeNames` must correspond to used template
 
 Possible values are filenames with extension `.c2t` present in directory
 `/etc/smartmet/plugins/wfs/templates`.
