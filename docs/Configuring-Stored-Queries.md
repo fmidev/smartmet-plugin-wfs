@@ -450,6 +450,16 @@ Usually the query handlers (defined in [constructor_name](#constructor_name)) do
 
 The main idea of the _HandlerParam_ structure is that it  can contain information that was received in the WFS request as well as some additional information. This additional information can be delivered to the query handler in the same way as the other query parameters. The parameters defined in the _HandlerParam_ structure depends on the query handler used  as  different query handlers use different parameters.
 
+Actual information about parameters used by different constructors can be found using WFS admin request:
+
+* /wfs/admin?request=constructors[&format=(json|html)]
+
+Some notes about this feature:
+
+* Default format is HTML.
+* Only information about constructors, that are used in at least one stored query is available
+* /wfs/admin requests are not advertised to frontend and as result are available only directly from backend
+
 The _HandlerParam_ structure supports two basic parameter types: 1) scalar and 2) array. If the parameter type is "scalar" then the parameter has only one value. If the parameter type is "array" then the parameter value is actually an array of values. Notice that the length of this array might be zero i.e. in this case there are no values in the array. The array index starts from 0. So, the second value has index 1, the third value has index 2, and so on.
 
 The value of a query parameter can be defined as 1) a constant value 2) a value mapped from a WFS request parameter or 3) a value mapped from a named parameter
