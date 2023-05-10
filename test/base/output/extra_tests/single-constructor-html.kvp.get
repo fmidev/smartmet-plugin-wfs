@@ -9,7 +9,7 @@
 <tr><td>boundingBox</td><td>no</td><td>Scalar</td><td>bounding_box</td><td> </td><td> </td><td> </td><td>The geographical location / area expressed by the bounding box coordinates</td></tr>
 <tr><td>crs</td><td>yes</td><td>Scalar</td><td>string</td><td> </td><td> </td><td> </td><td>The coordinate projection used in the response</td></tr>
 <tr><td>endTime</td><td>no</td><td>Scalar</td><td>posix_time</td><td> </td><td> </td><td> </td><td>The end time of the requested time period (YYYY-MM-DDTHHMIZ).</td></tr>
-<tr><td>hours</td><td>no</td><td>Array</td><td>unsigned long</td><td>0</td><td>65535</td><td>0</td><td>requested times expressed in the list of hours (for example “12,13,18,19”)</td></tr>
+<tr><td>hours</td><td>no</td><td>Array</td><td>unsigned long</td><td>0</td><td>65535</td><td>1</td><td>requested times expressed in the list of hours (for example “12,13,18,19”)</td></tr>
 <tr><td>originTime</td><td>no</td><td>Scalar</td><td>posix_time</td><td> </td><td> </td><td> </td><td>The origin time of the weather models that should be used. This might be omitted in the query</td></tr>
 <tr><td>producer</td><td>yes</td><td>Scalar</td><td>string</td><td> </td><td> </td><td> </td><td>An array of the data producer names</td></tr>
 <tr><td>startStep</td><td>no</td><td>Scalar</td><td>unsigned long</td><td> </td><td> </td><td> </td><td>The index number of the first selected time step since the start time.</td></tr>

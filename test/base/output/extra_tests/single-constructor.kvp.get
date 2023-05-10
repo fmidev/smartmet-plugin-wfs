@@ -41,7 +41,7 @@
 					"mandatory" : false,
 					"max_size" : 65535,
 					"min_size" : 0,
-					"step" : 0,
+					"step" : 1,
 					"type" : "unsigned long"
 				},
 				"originTime" : 

@@ -41,7 +41,7 @@
 					"mandatory" : false,
 					"max_size" : 65535,
 					"min_size" : 0,
-					"step" : 0,
+					"step" : 1,
 					"type" : "long"
 				},
 				"geoids" : 
@@ -51,7 +51,7 @@
 					"mandatory" : false,
 					"max_size" : 65535,
 					"min_size" : 0,
-					"step" : 0,
+					"step" : 1,
 					"type" : "long"
 				},
 				"hours" : 
@@ -61,7 +61,7 @@
 					"mandatory" : false,
 					"max_size" : 65535,
 					"min_size" : 0,
-					"step" : 0,
+					"step" : 1,
 					"type" : "unsigned long"
 				},
 				"keyword" : 
@@ -116,7 +116,7 @@
 					"mandatory" : false,
 					"max_size" : 65535,
 					"min_size" : 0,
-					"step" : 0,
+					"step" : 1,
 					"type" : "long"
 				},
 				"maxDistance" : 
@@ -140,7 +140,7 @@
 					"mandatory" : true,
 					"max_size" : 65535,
 					"min_size" : 1,
-					"step" : 0,
+					"step" : 1,
 					"type" : "string"
 				},
 				"missingText" : 
@@ -164,7 +164,7 @@
 					"mandatory" : false,
 					"max_size" : 65535,
 					"min_size" : 0,
-					"step" : 0,
+					"step" : 1,
 					"type" : "string"
 				},
 				"qualityInfo" : 
@@ -226,7 +226,7 @@
 					"mandatory" : false,
 					"max_size" : 65535,
 					"min_size" : 0,
-					"step" : 0,
+					"step" : 1,
 					"type" : "long"
 				},
 				"wmos" : 
@@ -236,7 +236,7 @@
 					"mandatory" : false,
 					"max_size" : 65535,
 					"min_size" : 0,
-					"step" : 0,
+					"step" : 1,
 					"type" : "long"
 				}
 			},

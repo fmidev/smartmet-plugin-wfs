@@ -41,7 +41,7 @@
 					"mandatory" : false,
 					"max_size" : 65535,
 					"min_size" : 0,
-					"step" : 0,
+					"step" : 1,
 					"type" : "unsigned long"
 				},
 				"limits" : 
@@ -159,7 +159,7 @@
 					"mandatory" : true,
 					"max_size" : 999,
 					"min_size" : 1,
-					"step" : 0,
+					"step" : 1,
 					"type" : "string"
 				},
 				"timeZone" : 
@@ -230,7 +230,7 @@
 					"mandatory" : false,
 					"max_size" : 65535,
 					"min_size" : 0,
-					"step" : 0,
+					"step" : 1,
 					"type" : "long"
 				},
 				"geoids" : 
@@ -240,7 +240,7 @@
 					"mandatory" : false,
 					"max_size" : 65535,
 					"min_size" : 0,
-					"step" : 0,
+					"step" : 1,
 					"type" : "long"
 				},
 				"hours" : 
@@ -250,7 +250,7 @@
 					"mandatory" : false,
 					"max_size" : 65535,
 					"min_size" : 0,
-					"step" : 0,
+					"step" : 1,
 					"type" : "unsigned long"
 				},
 				"keyword" : 
@@ -284,7 +284,7 @@
 					"mandatory" : false,
 					"max_size" : 99,
 					"min_size" : 0,
-					"step" : 0,
+					"step" : 1,
 					"type" : "long"
 				},
 				"levelHeights" : 
@@ -294,7 +294,7 @@
 					"mandatory" : false,
 					"max_size" : 99,
 					"min_size" : 0,
-					"step" : 0,
+					"step" : 1,
 					"type" : "double"
 				},
 				"levelType" : 
@@ -318,7 +318,7 @@
 					"mandatory" : false,
 					"max_size" : 65535,
 					"min_size" : 0,
-					"step" : 0,
+					"step" : 1,
 					"type" : "long"
 				},
 				"maxDistance" : 
@@ -342,7 +342,7 @@
 					"mandatory" : false,
 					"max_size" : 65535,
 					"min_size" : 0,
-					"step" : 0,
+					"step" : 1,
 					"type" : "string"
 				},
 				"originTime" : 
@@ -359,7 +359,7 @@
 					"mandatory" : true,
 					"max_size" : 99,
 					"min_size" : 1,
-					"step" : 0,
+					"step" : 1,
 					"type" : "string"
 				},
 				"places" : 
@@ -369,7 +369,7 @@
 					"mandatory" : false,
 					"max_size" : 65535,
 					"min_size" : 0,
-					"step" : 0,
+					"step" : 1,
 					"type" : "string"
 				},
 				"startStep" : 
@@ -417,7 +417,7 @@
 					"mandatory" : false,
 					"max_size" : 65535,
 					"min_size" : 0,
-					"step" : 0,
+					"step" : 1,
 					"type" : "long"
 				}
 			},
@@ -653,7 +653,7 @@
 					"mandatory" : false,
 					"max_size" : 65535,
 					"min_size" : 0,
-					"step" : 0,
+					"step" : 1,
 					"type" : "long"
 				},
 				"geoids" : 
@@ -663,7 +663,7 @@
 					"mandatory" : false,
 					"max_size" : 65535,
 					"min_size" : 0,
-					"step" : 0,
+					"step" : 1,
 					"type" : "long"
 				},
 				"hours" : 
@@ -673,7 +673,7 @@
 					"mandatory" : false,
 					"max_size" : 65535,
 					"min_size" : 0,
-					"step" : 0,
+					"step" : 1,
 					"type" : "unsigned long"
 				},
 				"keyword" : 
@@ -728,7 +728,7 @@
 					"mandatory" : false,
 					"max_size" : 65535,
 					"min_size" : 0,
-					"step" : 0,
+					"step" : 1,
 					"type" : "long"
 				},
 				"maxDistance" : 
@@ -752,7 +752,7 @@
 					"mandatory" : true,
 					"max_size" : 65535,
 					"min_size" : 1,
-					"step" : 0,
+					"step" : 1,
 					"type" : "string"
 				},
 				"missingText" : 
@@ -776,7 +776,7 @@
 					"mandatory" : false,
 					"max_size" : 65535,
 					"min_size" : 0,
-					"step" : 0,
+					"step" : 1,
 					"type" : "string"
 				},
 				"qualityInfo" : 
@@ -838,7 +838,7 @@
 					"mandatory" : false,
 					"max_size" : 65535,
 					"min_size" : 0,
-					"step" : 0,
+					"step" : 1,
 					"type" : "long"
 				},
 				"wmos" : 
@@ -848,7 +848,7 @@
 					"mandatory" : false,
 					"max_size" : 65535,
 					"min_size" : 0,
-					"step" : 0,
+					"step" : 1,
 					"type" : "long"
 				}
 			},
@@ -1392,7 +1392,7 @@
 					"mandatory" : false,
 					"max_size" : 65535,
 					"min_size" : 0,
-					"step" : 0,
+					"step" : 1,
 					"type" : "long"
 				},
 				"geoids" : 
@@ -1402,7 +1402,7 @@
 					"mandatory" : false,
 					"max_size" : 65535,
 					"min_size" : 0,
-					"step" : 0,
+					"step" : 1,
 					"type" : "long"
 				},
 				"keyword" : 
@@ -1450,7 +1450,7 @@
 					"mandatory" : false,
 					"max_size" : 65535,
 					"min_size" : 0,
-					"step" : 0,
+					"step" : 1,
 					"type" : "string"
 				},
 				"numOfStations" : 
@@ -1467,7 +1467,7 @@
 					"mandatory" : false,
 					"max_size" : 65535,
 					"min_size" : 0,
-					"step" : 0,
+					"step" : 1,
 					"type" : "string"
 				},
 				"qualityInfo" : 
@@ -1498,7 +1498,7 @@
 					"mandatory" : false,
 					"max_size" : 65535,
 					"min_size" : 0,
-					"step" : 0,
+					"step" : 1,
 					"type" : "long"
 				}
 			},
@@ -1579,7 +1579,7 @@
 					"mandatory" : false,
 					"max_size" : 65535,
 					"min_size" : 0,
-					"step" : 0,
+					"step" : 1,
 					"type" : "long"
 				},
 				"icaoCode" : 
@@ -1589,7 +1589,7 @@
 					"mandatory" : false,
 					"max_size" : 65535,
 					"min_size" : 0,
-					"step" : 0,
+					"step" : 1,
 					"type" : "string"
 				},
 				"keyword" : 
@@ -1630,7 +1630,7 @@
 					"mandatory" : false,
 					"max_size" : 65535,
 					"min_size" : 0,
-					"step" : 0,
+					"step" : 1,
 					"type" : "string"
 				},
 				"returnOnlyLatest" : 
@@ -1706,7 +1706,7 @@
 					"mandatory" : false,
 					"max_size" : 65535,
 					"min_size" : 0,
-					"step" : 0,
+					"step" : 1,
 					"type" : "posix_time"
 				},
 				"endTime" : 
@@ -1716,7 +1716,7 @@
 					"mandatory" : false,
 					"max_size" : 65535,
 					"min_size" : 0,
-					"step" : 0,
+					"step" : 1,
 					"type" : "posix_time"
 				},
 				"levels" : 
@@ -1726,7 +1726,7 @@
 					"mandatory" : false,
 					"max_size" : 65535,
 					"min_size" : 0,
-					"step" : 0,
+					"step" : 1,
 					"type" : "long"
 				},
 				"name" : 
@@ -1743,7 +1743,7 @@
 					"mandatory" : false,
 					"max_size" : 65535,
 					"min_size" : 0,
-					"step" : 0,
+					"step" : 1,
 					"type" : "string"
 				}
 			},
@@ -1816,7 +1816,7 @@
 					"mandatory" : true,
 					"max_size" : 999,
 					"min_size" : 1,
-					"step" : 0,
+					"step" : 1,
 					"type" : "string"
 				},
 				"width" : 
@@ -1967,7 +1967,7 @@
 					"mandatory" : false,
 					"max_size" : 65535,
 					"min_size" : 0,
-					"step" : 0,
+					"step" : 1,
 					"type" : "long"
 				},
 				"geoids" : 
@@ -1977,7 +1977,7 @@
 					"mandatory" : false,
 					"max_size" : 65535,
 					"min_size" : 0,
-					"step" : 0,
+					"step" : 1,
 					"type" : "long"
 				},
 				"latlons" : 
@@ -2011,7 +2011,7 @@
 					"mandatory" : true,
 					"max_size" : 65535,
 					"min_size" : 1,
-					"step" : 0,
+					"step" : 1,
 					"type" : "string"
 				},
 				"missingText" : 
@@ -2035,7 +2035,7 @@
 					"mandatory" : false,
 					"max_size" : 65535,
 					"min_size" : 0,
-					"step" : 0,
+					"step" : 1,
 					"type" : "string"
 				},
 				"producerId" : 
@@ -2045,7 +2045,7 @@
 					"mandatory" : false,
 					"max_size" : 65535,
 					"min_size" : 0,
-					"step" : 0,
+					"step" : 1,
 					"type" : "unsigned long"
 				},
 				"qualityInfo" : 
@@ -2076,7 +2076,7 @@
 					"mandatory" : false,
 					"max_size" : 65535,
 					"min_size" : 0,
-					"step" : 0,
+					"step" : 1,
 					"type" : "long"
 				}
 			},
@@ -2104,7 +2104,7 @@
 					"mandatory" : false,
 					"max_size" : 1,
 					"min_size" : 0,
-					"step" : 0,
+					"step" : 1,
 					"type" : "posix_time"
 				},
 				"boundingBox" : 
@@ -2121,7 +2121,7 @@
 					"mandatory" : false,
 					"max_size" : 1,
 					"min_size" : 0,
-					"step" : 0,
+					"step" : 1,
 					"type" : "posix_time"
 				},
 				"format" : 
@@ -2131,7 +2131,7 @@
 					"mandatory" : false,
 					"max_size" : 1,
 					"min_size" : 0,
-					"step" : 0,
+					"step" : 1,
 					"type" : "string"
 				},
 				"fullInterval" : 
@@ -2148,7 +2148,7 @@
 					"mandatory" : false,
 					"max_size" : 65535,
 					"min_size" : 0,
-					"step" : 0,
+					"step" : 1,
 					"type" : "string"
 				},
 				"levelValue" : 
@@ -2158,7 +2158,7 @@
 					"mandatory" : false,
 					"max_size" : 65535,
 					"min_size" : 0,
-					"step" : 0,
+					"step" : 1,
 					"type" : "double"
 				},
 				"meteoParam" : 
@@ -2168,7 +2168,7 @@
 					"mandatory" : false,
 					"max_size" : 65535,
 					"min_size" : 0,
-					"step" : 0,
+					"step" : 1,
 					"type" : "string"
 				},
 				"originTime" : 
@@ -2178,7 +2178,7 @@
 					"mandatory" : false,
 					"max_size" : 1,
 					"min_size" : 0,
-					"step" : 0,
+					"step" : 1,
 					"type" : "posix_time"
 				},
 				"producer" : 
@@ -2188,7 +2188,7 @@
 					"mandatory" : false,
 					"max_size" : 1,
 					"min_size" : 0,
-					"step" : 0,
+					"step" : 1,
 					"type" : "string"
 				},
 				"projection" : 
@@ -2198,7 +2198,7 @@
 					"mandatory" : false,
 					"max_size" : 1,
 					"min_size" : 0,
-					"step" : 0,
+					"step" : 1,
 					"type" : "string"
 				}
 			},
@@ -2328,7 +2328,7 @@
 					"mandatory" : false,
 					"max_size" : 65535,
 					"min_size" : 0,
-					"step" : 0,
+					"step" : 1,
 					"type" : "long"
 				},
 				"geoids" : 
@@ -2338,7 +2338,7 @@
 					"mandatory" : false,
 					"max_size" : 65535,
 					"min_size" : 0,
-					"step" : 0,
+					"step" : 1,
 					"type" : "long"
 				},
 				"keyword" : 
@@ -2386,7 +2386,7 @@
 					"mandatory" : true,
 					"max_size" : 65535,
 					"min_size" : 1,
-					"step" : 0,
+					"step" : 1,
 					"type" : "string"
 				},
 				"missingText" : 
@@ -2410,7 +2410,7 @@
 					"mandatory" : false,
 					"max_size" : 65535,
 					"min_size" : 0,
-					"step" : 0,
+					"step" : 1,
 					"type" : "string"
 				},
 				"pressureRages" : 
@@ -2430,7 +2430,7 @@
 					"mandatory" : true,
 					"max_size" : 65535,
 					"min_size" : 1,
-					"step" : 0,
+					"step" : 1,
 					"type" : "unsigned long"
 				},
 				"qualityInfo" : 
@@ -2447,7 +2447,7 @@
 					"mandatory" : false,
 					"max_size" : 65535,
 					"min_size" : 0,
-					"step" : 0,
+					"step" : 1,
 					"type" : "unsigned long"
 				},
 				"stationType" : 
@@ -2464,7 +2464,7 @@
 					"mandatory" : false,
 					"max_size" : 65535,
 					"min_size" : 0,
-					"step" : 0,
+					"step" : 1,
 					"type" : "long"
 				}
 			},

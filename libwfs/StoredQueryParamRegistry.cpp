@@ -323,7 +323,8 @@ void SmartMet::Plugin::WFS::StoredQueryParamRegistry::register_array_param(
     const std::string& description,
     boost::shared_ptr<ArrayParameterTemplate> param_def,
     std::size_t min_size,
-    std::size_t max_size)
+    std::size_t max_size,
+    std::size_t step)
 {
   try
   {
@@ -333,7 +334,8 @@ void SmartMet::Plugin::WFS::StoredQueryParamRegistry::register_array_param(
     rec->param_def = param_def;
     rec->type_name = typeid(std::string).name();
     rec->min_size = min_size;
-    rec->max_size = max_size, rec->step = 1;
+    rec->max_size = max_size;
+    rec->step = step;
     add_param_rec(rec);
   }
   catch (...)
