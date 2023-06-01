@@ -5,10 +5,10 @@
 #include <boost/date_time/posix_time/ptime.hpp>
 #include <engines/gis/Engine.h>
 #include <engines/observation/MastQuery.h>
+#include <macgyver/Exception.h>
 #include <macgyver/TimeParser.h>
 #include <spine/CRSRegistry.h>
 #include <spine/Convenience.h>
-#include <macgyver/Exception.h>
 
 #include <tuple>
 
@@ -39,69 +39,38 @@ StoredSoundingQueryHandler::StoredSoundingQueryHandler(
       SupportsBoundingBox(config, pluginData.get_crs_registry()),
       SupportsQualityParameters(config)
 {
-  register_scalar_param<pt::ptime>(
-      P_BEGIN_TIME,
-      "start time of the requested time period"
-      );
+  register_scalar_param<pt::ptime>(P_BEGIN_TIME, "start time of the requested time period");
 
-  register_scalar_param<pt::ptime>(
-      P_END_TIME,
-      "end time of the requested time period"
-      );
+  register_scalar_param<pt::ptime>(P_END_TIME, "end time of the requested time period");
 
   register_array_param<std::string>(
-      P_METEO_PARAMETERS,
-      "array of fields whose values should be returned in the response.",
-      1);
+      P_METEO_PARAMETERS, "array of fields whose values should be returned in the response.", 1);
 
   register_scalar_param<std::string>(
       P_STATION_TYPE,
-      "The type of the observation station (defined in the ObsEngine configuration)"
-      );
+      "The type of the observation station (defined in the ObsEngine configuration)");
 
   register_scalar_param<uint64_t>(
       P_NUM_OF_STATIONS,
       "The maximum number of the observation stations returned around the given"
-      " geographical location (inside the radius of \"maxDistance\")"
-      );
+      " geographical location (inside the radius of \"maxDistance\")");
 
   register_scalar_param<std::string>(
       P_MISSING_TEXT,
-      "value that is returned when the value of the requested numeric field is missing."
-      );
+      "value that is returned when the value of the requested numeric field is missing.");
 
-  register_scalar_param<std::string>(
-      P_CRS,
-      "coordinate projection used in the response."
-      );
+  register_scalar_param<std::string>(P_CRS, "coordinate projection used in the response.");
 
-  register_scalar_param<bool>(
-      P_LATEST,
-      ""
-      );
+  register_scalar_param<bool>(P_LATEST, "");
 
   register_array_param<uint64_t>(
-      P_SOUNDING_TYPE,
-      "Sounding type. Types 1, 2, 3 are supported. Type 1 is no more in use"
-      );
+      P_SOUNDING_TYPE, "Sounding type. Types 1, 2, 3 are supported. Type 1 is no more in use");
 
-  register_array_param<uint64_t>(P_PUBLICITY,
-      "",
-      1);
+  register_array_param<uint64_t>(P_PUBLICITY, "", 1);
 
-  register_array_param<double>(
-      P_ALTITUDE_RANGES,
-      "",
-      0,
-      2,
-      2);
+  register_array_param<double>(P_ALTITUDE_RANGES, "", 0, 2, 2);
 
-  register_array_param<double>(
-      P_PRESSURE_RANGES,
-      "",
-      0,
-      2,
-      2);
+  register_array_param<double>(P_PRESSURE_RANGES, "", 0, 2, 2);
 
   mMaxHours = config->get_optional_config_param<double>("maxHours", 7.0 * 24.0);
   mSqRestrictions = pluginData.get_config().getSQRestrictions();
@@ -113,12 +82,12 @@ StoredSoundingQueryHandler::~StoredSoundingQueryHandler() = default;
 
 std::string StoredSoundingQueryHandler::get_handler_description() const
 {
-    return "";
+  return "";
 }
 
 void StoredSoundingQueryHandler::query(const StoredQuery& query,
                                        const std::string& language,
-                                       const boost::optional<std::string>&  /*hostname*/,
+                                       const boost::optional<std::string>& /*hostname*/,
                                        std::ostream& output) const
 {
   const auto& params = query.get_param_map();
@@ -210,7 +179,7 @@ void StoredSoundingQueryHandler::query(const StoredQuery& query,
       FeatureID featureId(get_config()->get_query_id(), params.get_map(true), sq_id);
       const char* placeParams[] = {
           P_WMOS, P_FMISIDS, P_PLACES, P_LATLONS, P_GEOIDS, P_KEYWORD, P_BOUNDING_BOX};
-      for (auto & placeParam : placeParams)
+      for (auto& placeParam : placeParams)
       {
         featureId.erase_param(placeParam);
       }
@@ -263,8 +232,7 @@ void StoredSoundingQueryHandler::query(const StoredQuery& query,
                                                         ++dataLatitudeIt,
                                                         ++dataValueIt,
                                                         ++dataQualityIt,
-                                                        ++dataSignificanceIt
-            )
+                                                        ++dataSignificanceIt)
 
         {
           std::string measurandIdStr =
@@ -293,11 +261,10 @@ void StoredSoundingQueryHandler::query(const StoredQuery& query,
             }
 
             const auto ptime2str = [&missingValue](const boost::posix_time::ptime& t) -> std::string
-                                   {
-                                       return t.is_special()
-                                           ? missingValue
-                                           : boost::posix_time::to_iso_extended_string(t) + "Z";
-                                   };
+            {
+              return t.is_special() ? missingValue
+                                    : boost::posix_time::to_iso_extended_string(t) + "Z";
+            };
 
             currentStationId = rsIt->second.stationId;
 
@@ -308,14 +275,11 @@ void StoredSoundingQueryHandler::query(const StoredQuery& query,
             long seconds = epoch.time_of_day().total_seconds();
             sEpoch = 86400LL * (jd - ref_jd) + seconds;
 
-
             CTPP::CDT& group = hash["groups"][groupId];
             const auto& launchTime = rsIt->second.launchTime;
-            group["phenomenonBeginTime"] =
-                ptime2str(launchTime.is_special() ? epoch : launchTime);
+            group["phenomenonBeginTime"] = ptime2str(launchTime.is_special() ? epoch : launchTime);
             const auto& soundingEnd = rsIt->second.soundingEnd;
-            group["phenomenonEndTime"] =
-                ptime2str(soundingEnd.is_special() ? epoch : soundingEnd);
+            group["phenomenonEndTime"] = ptime2str(soundingEnd.is_special() ? epoch : soundingEnd);
             group["phenomenonTime"] = dataMessageTimeStr;
             group["resultTime"] = dataMessageTimeStr;
             group["soundingId"] = soundingId;
@@ -332,9 +296,7 @@ void StoredSoundingQueryHandler::query(const StoredQuery& query,
 
             group["featureId"] = featureId.get_id();
 
-            for (auto sit = stations.begin();
-                 sit != stations.end();
-                 ++sit)
+            for (auto sit = stations.begin(); sit != stations.end(); ++sit)
             {
               if (Fmi::to_string(sit->fmisid) == currentStationId)
               {
@@ -346,7 +308,7 @@ void StoredSoundingQueryHandler::query(const StoredQuery& query,
                 std::string wmo = std::to_string(static_cast<long long int>(sit->wmo));
                 if (not wmo.empty() && sit->wmo > 0)
                   station["wmo"] = wmo;
-				auto station_formal_name = sit->station_formal_name(language);
+                auto station_formal_name = sit->station_formal_name(language);
                 if (not station_formal_name.empty())
                   station["name"] = station_formal_name;
                 if (not sit->region.empty())
@@ -722,8 +684,12 @@ void StoredSoundingQueryHandler::parseSoundingQuery(const RequestParameterMap& p
   std::string stationId, prevStationId;
 
   const bool latest = params.get_single<bool>(P_LATEST);
-  for (; soundingIdIt != soundingIdItEnd;
-       ++soundingIdIt, ++stationIdIt, ++messageTimeIt, ++launchTimeIt, ++soundingEndIt, ++soundingTypeIt)
+  for (; soundingIdIt != soundingIdItEnd; ++soundingIdIt,
+                                          ++stationIdIt,
+                                          ++messageTimeIt,
+                                          ++launchTimeIt,
+                                          ++soundingEndIt,
+                                          ++soundingTypeIt)
   {
     const int32_t tmpstationId = soundingQueryResult->castTo<int32_t>(stationIdIt);
 
@@ -746,27 +712,26 @@ void StoredSoundingQueryHandler::parseSoundingQuery(const RequestParameterMap& p
   RadioSoundingMap::iterator curr, next, it;
   for (curr = radioSoundingMap.begin(); curr != radioSoundingMap.end(); curr = next)
   {
-      next = curr;
-      next++;
-      if (curr->second.soundingType == 1) {
-          bool should_hide = false;
-          for (it = radioSoundingMap.begin(); !should_hide && it != radioSoundingMap.end(); ++it)
-          {
-              should_hide |=
-                  (it->second.stationId == curr->second.stationId)
-                  && (it->second.messageTime == curr->second.messageTime)
-                  && (it->second.soundingType == 2);
-          }
-
-          if (should_hide)
-          {
-              //std::cout << "### Removing sounding ID " << curr->first
-              //          << ": of type 1 when type 2 sounding data are present"
-              //          << std::endl;
-              radioSoundingMap.erase(curr);
-          }
+    next = curr;
+    next++;
+    if (curr->second.soundingType == 1)
+    {
+      bool should_hide = false;
+      for (it = radioSoundingMap.begin(); !should_hide && it != radioSoundingMap.end(); ++it)
+      {
+        should_hide |= (it->second.stationId == curr->second.stationId) &&
+                       (it->second.messageTime == curr->second.messageTime) &&
+                       (it->second.soundingType == 2);
       }
 
+      if (should_hide)
+      {
+        // std::cout << "### Removing sounding ID " << curr->first
+        //          << ": of type 1 when type 2 sounding data are present"
+        //          << std::endl;
+        radioSoundingMap.erase(curr);
+      }
+    }
   }
 }
 
@@ -792,8 +757,9 @@ void StoredSoundingQueryHandler::makeSoundingQuery(const RequestParameterMap& pa
 
   std::vector<uint64_t> soundingTypes;
   params.get<uint64_t>(P_SOUNDING_TYPE, std::back_inserter(soundingTypes));
-  if (soundingTypes.empty()) {
-      soundingTypes.push_back(2);
+  if (soundingTypes.empty())
+  {
+    soundingTypes.push_back(2);
   }
   profileQueryParams.addOperation(
       "OR_GROUP_sounding_type", "SOUNDING_TYPE", "PropertyIsOneOf", soundingTypes);
@@ -957,8 +923,7 @@ void StoredSoundingQueryHandler::getStationSearchSettings(
                                                           item.first,
                                                           item.second->fmisid);
   }
-  settings.taggedFMISIDs = obs_engine->translateToFMISID(
-      settings.starttime, settings.endtime, settings.stationtype, stationSettings);
+  settings.taggedFMISIDs = obs_engine->translateToFMISID(settings, stationSettings);
 }
 
 void StoredSoundingQueryHandler::checkMaxSoundings(const pt::ptime startTime,
@@ -967,8 +932,7 @@ void StoredSoundingQueryHandler::checkMaxSoundings(const pt::ptime startTime,
 {
   if (radioSoundingMap.size() > mMaxSoundings)
   {
-    Fmi::Exception exception(BCP,
-                                         "Too many sounding observations in the time interval!");
+    Fmi::Exception exception(BCP, "Too many sounding observations in the time interval!");
     std::ostringstream msg;
     msg << "The time interval '" << Fmi::to_iso_extended_string(startTime).append("Z") << " - "
         << Fmi::to_iso_extended_string(endTime).append("Z") << "' contains '"
@@ -995,8 +959,7 @@ boost::shared_ptr<SmartMet::Plugin::WFS::StoredQueryHandlerBase> wfsStoredSoundi
 {
   try
   {
-    auto* qh =
-        new StoredSoundingQueryHandler(reactor, config, pluginData, templateFileName);
+    auto* qh = new StoredSoundingQueryHandler(reactor, config, pluginData, templateFileName);
     boost::shared_ptr<SmartMet::Plugin::WFS::StoredQueryHandlerBase> instance(qh);
     return instance;
   }

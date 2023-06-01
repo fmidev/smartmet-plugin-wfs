@@ -381,8 +381,7 @@ void StoredObsQueryHandler::query(const StoredQuery& query,
       /*******************************************
        *  Finally perform the query              *
        *******************************************/
-      query_params.taggedFMISIDs = obs_engine->translateToFMISID(
-          query_params.starttime, query_params.endtime, query_params.stationtype, stationSettings);
+      query_params.taggedFMISIDs = obs_engine->translateToFMISID(query_params, stationSettings);
 
       TS::TimeSeriesVectorPtr obsengine_result(obs_engine->values(query_params));
 
