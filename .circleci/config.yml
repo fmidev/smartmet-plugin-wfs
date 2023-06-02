@@ -59,7 +59,7 @@ jobs:
           name: Installation test
           command:
              ci-build dummy ;
-             sudo yum install -y /dist/*.rpm
+             sudo yum install -y /dist/*.rpm ;
              sudo yum upgrade -y 'smartmet-library-*'
       - run:
           name: Unit tests
