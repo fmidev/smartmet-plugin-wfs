@@ -14,7 +14,7 @@ jobs:
           command:
              ci-build dummy ;
              sudo yum install -y 'smartmet-plugin-wfs*' ;
-             sudo yum -y upgrade 'smartmet-*' ;
+             sudo yum -y upgrade -y 'smartmet-*' ;
       - run:
           name: Test prepare
           command: ci-build testprep

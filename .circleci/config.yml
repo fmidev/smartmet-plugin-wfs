@@ -32,7 +32,7 @@ jobs:
           command:
              ci-build dummy ;
              sudo yum install -y /dist/*.rpm ;
-             sudo yum upgrade 'smartmet-library-*'
+             sudo yum upgrade -y 'smartmet-library-*'
       - run:
           name: Test prepare
           command: ci-build testprep
