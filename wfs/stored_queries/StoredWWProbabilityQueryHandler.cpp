@@ -1,5 +1,4 @@
 #include "stored_queries/StoredWWProbabilityQueryHandler.h"
-#include "ParamDesc.h"
 #include <gis/Box.h>
 #include <gis/OGR.h>
 #include <macgyver/TimeFormatter.h>
@@ -180,13 +179,42 @@ StoredWWProbabilityQueryHandler::StoredWWProbabilityQueryHandler(
 {
   try
   {
-    register_scalar_param<int64_t>(P_FIND_NEAREST_VALID, "");
-    register_scalar_param<std::string>(P_LOCALE, ParamDesc::locale);
-    register_scalar_param<std::string>(P_MISSING_TEXT, ParamDesc::missing_text);
-    register_scalar_param<std::string>(P_PRODUCER, "");
-    register_scalar_param<boost::posix_time::ptime>(P_ORIGIN_TIME, ParamDesc::origin_time, false);
-    register_scalar_param<std::string>(P_CRS, ParamDesc::crs);
-    register_array_param<std::string>(P_ICAO_CODE, ParamDesc::icao_code);
+    register_scalar_param<int64_t>(
+        P_FIND_NEAREST_VALID,
+        "A non zero value of this parameters causes look-up of the nearest point from the model."
+        );
+
+    register_scalar_param<std::string>(
+        P_LOCALE,
+        "value of the locale (for example fi_FI.utf8)."
+        );
+
+    register_scalar_param<std::string>(
+        P_MISSING_TEXT,
+        "value that is returned when the value of the requested numeric field is missing."
+        );
+
+    register_scalar_param<std::string>(
+        P_PRODUCER,
+        "An array of the data producer names."
+        );
+
+    register_scalar_param<boost::posix_time::ptime>(
+        P_ORIGIN_TIME,
+        "The origin time of the weather models that should be used. This might be omitted in the query.",
+        false
+        );
+
+    register_scalar_param<std::string>(
+        P_CRS,
+        "The coordinate projection used in the response."
+        );
+
+    register_array_param<std::string>(
+        P_ICAO_CODE,
+        "An array of ICAO identifiers. The ICAO identifier is a four-character alphanumeric code"
+        " designating each airport around the world."
+        );
 
     itsProbabilityConfigParams.probabilityUnit =
         config->get_mandatory_config_param<std::string>("probability_params.probabilityUnit");
@@ -220,6 +248,11 @@ StoredWWProbabilityQueryHandler::StoredWWProbabilityQueryHandler(
 }
 
 StoredWWProbabilityQueryHandler::~StoredWWProbabilityQueryHandler() = default;
+
+std::string StoredWWProbabilityQueryHandler::get_handler_description() const
+{
+    return "Forecast data: for different winter weather conditions";
+}
 
 void StoredWWProbabilityQueryHandler::parseQueryResults(
     const ProbabilityQueryResultSet& query_results,

@@ -2,7 +2,6 @@
 
 #include "stored_queries/StoredAviationObservationQueryHandler.h"
 #include "StoredQueryHandlerFactoryDef.h"
-#include "ParamDesc.h"
 #include <boost/date_time/posix_time/ptime.hpp>
 #include <engines/observation/DBRegistry.h>
 #include <engines/observation/VerifiableMessageQuery.h>
@@ -45,17 +44,18 @@ bw::StoredAviationObservationQueryHandler::StoredAviationObservationQueryHandler
   {
     register_array_param<std::string>(
         P_ICAO_CODE,
-        bw::ParamDesc::icao_code
+        "An array of ICAO identifiers. The ICAO identifier is a four-character alphanumeric"
+        " code designating each airport around the world."
         );
 
     register_scalar_param<pt::ptime>(
         P_BEGIN_TIME,
-        bw::ParamDesc::begin_time
+        "The start time of the requested time period."
         );
 
     register_scalar_param<pt::ptime>(
         P_END_TIME,
-        bw::ParamDesc::end_time
+        "The end time of the requested time period."
         );
 
     register_scalar_param<std::string>(
@@ -65,7 +65,7 @@ bw::StoredAviationObservationQueryHandler::StoredAviationObservationQueryHandler
 
     register_scalar_param<std::string>(
         P_RETURN_ONLY_LATEST,
-        "",
+        "The attribute indicates whether to return only the latest values from the stations or all.",
         false
         );
 
@@ -80,6 +80,11 @@ bw::StoredAviationObservationQueryHandler::StoredAviationObservationQueryHandler
 }
 
 bw::StoredAviationObservationQueryHandler::~StoredAviationObservationQueryHandler() = default;
+
+std::string bw::StoredAviationObservationQueryHandler::get_handler_description() const
+{
+    return "Observation data: Aviation";
+}
 
 void bw::StoredAviationObservationQueryHandler::query(const StoredQuery& query,
                                                       const std::string& language,

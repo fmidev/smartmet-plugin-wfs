@@ -121,6 +121,8 @@ class StoredGridQueryHandler : public StoredQueryHandlerBase,
                          boost::optional<std::string> template_file_name);
   ~StoredGridQueryHandler() override;
 
+  std::string get_handler_description() const override;
+
   void query(const StoredQuery& query,
                      const std::string& language,
                      const boost::optional<std::string>& hostname,

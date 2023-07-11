@@ -46,6 +46,8 @@ class StoredObsQueryHandler : public StoredQueryHandlerBase,
 		     const boost::optional<std::string> &hostname,
                      std::ostream& output) const override;
 
+  std::string get_handler_description() const override;
+
  private:
 
   struct ParamIndexEntry

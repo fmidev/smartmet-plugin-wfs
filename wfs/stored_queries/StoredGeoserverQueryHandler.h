@@ -22,6 +22,8 @@ class StoredGeoserverQueryHandler : public StoredAtomQueryHandlerBase, protected
 
   ~StoredGeoserverQueryHandler() override;
 
+  std::string get_handler_description() const override;
+
  protected:
   void update_parameters(
       const RequestParameterMap &request_params,

@@ -3,7 +3,6 @@
 #include "stored_queries/StoredAirNuclideQueryHandler.h"
 #include "FeatureID.h"
 #include "StoredQueryHandlerFactoryDef.h"
-#include "ParamDesc.h"
 #include <boost/format.hpp>
 #include <engines/observation/DBRegistry.h>
 #include <engines/observation/MastQuery.h>
@@ -31,14 +30,32 @@ bw::StoredAirNuclideQueryHandler::StoredAirNuclideQueryHandler(
 {
   try
   {
-    register_scalar_param<pt::ptime>(P_BEGIN_TIME, bw::ParamDesc::begin_time);
-    register_scalar_param<pt::ptime>(P_END_TIME, bw::ParamDesc::end_time);
-    register_scalar_param<std::string>(P_STATION_TYPE, bw::ParamDesc::station_type);
-    register_scalar_param<uint64_t>(P_TIME_STEP, bw::ParamDesc::time_step);
-    register_scalar_param<uint64_t>(P_NUM_OF_STATIONS, bw::ParamDesc::num_of_stations);
-    register_scalar_param<std::string>(P_CRS, bw::ParamDesc::crs);
-    register_scalar_param<bool>(P_LATEST, "");
-    register_array_param<std::string>(P_NUCLIDE_CODES, "");
+    register_scalar_param<pt::ptime>(
+        P_BEGIN_TIME, "The start time of the requested time period (YYYY-MM-DDTHHMIZ).");
+
+    register_scalar_param<pt::ptime>(
+        P_END_TIME, "The end time of the requested time period (YYYY-MM-DDTHHMIZ).");
+
+    register_scalar_param<std::string>(P_STATION_TYPE, "The observation station type.");
+
+    register_scalar_param<uint64_t>(
+        P_TIME_STEP, "The time interval between the requested records expressed in minutes.");
+
+    register_scalar_param<uint64_t>(
+        P_NUM_OF_STATIONS,
+        "The maximum number of the observation stations returned around the"
+        "given geographical location (inside the radius of \"maxDistance\").");
+
+    register_scalar_param<std::string>(P_CRS, "The coordinate projection used in the response.");
+
+    register_scalar_param<bool>(P_LATEST,
+                                "The attribute indicates whether to return only the latest values "
+                                "from the stations or all.");
+
+    register_array_param<std::string>(
+        P_NUCLIDE_CODES,
+        "An array of nuclide codes. If at least one listed nuclide code match the"
+        " nuclide code in the analysis, the analysis will be included into the result.");
 
     m_maxHours = config->get_optional_config_param<double>("maxHours", 365 * 24.0);
     m_sqRestrictions = plugin_data.get_config().getSQRestrictions();
@@ -52,9 +69,14 @@ bw::StoredAirNuclideQueryHandler::StoredAirNuclideQueryHandler(
 
 bw::StoredAirNuclideQueryHandler::~StoredAirNuclideQueryHandler() = default;
 
+std::string bw::StoredAirNuclideQueryHandler::get_handler_description() const
+{
+  return "";
+}
+
 void bw::StoredAirNuclideQueryHandler::query(const StoredQuery& query,
                                              const std::string& language,
-                                             const boost::optional<std::string>&  /*hostname*/,
+                                             const boost::optional<std::string>& /*hostname*/,
                                              std::ostream& output) const
 {
   try
@@ -105,7 +127,7 @@ void bw::StoredAirNuclideQueryHandler::query(const StoredQuery& query,
       const int debug_level = get_config()->get_debug_level();
       if (debug_level > 2)
       {
-          for (const auto& id : locations_list)
+        for (const auto& id : locations_list)
           std::cerr << "Found location: name: " << id.first << " geoid: " << id.second->geoid
                     << "\n";
       }
@@ -167,10 +189,7 @@ void bw::StoredAirNuclideQueryHandler::query(const StoredQuery& query,
       }
 
       stationSearchSettings.taggedFMISIDs =
-          obs_engine->translateToFMISID(stationSearchSettings.starttime,
-                                        stationSearchSettings.endtime,
-                                        stationSearchSettings.stationtype,
-                                        stationSettings);
+          obs_engine->translateToFMISID(stationSearchSettings, stationSettings);
 
       // Search stations based on location settings.
       // The result does not contain duplicates.
@@ -184,12 +203,13 @@ void bw::StoredAirNuclideQueryHandler::query(const StoredQuery& query,
       using StationMap = std::map<std::string, SmartMet::Spine::Station>;
       StationMap stations;
       // SmartMet::Spine::Stations stations;
-      for (const auto & stationCandidate : stationCandidates)
+      for (const auto& stationCandidate : stationCandidates)
       {
         std::string fmisidStr = std::to_string(stationCandidate.fmisid);
         stations.emplace(fmisidStr, stationCandidate);
 
-        SmartMet::Spine::LocationPtr geoLoc = geo_engine->idSearch(stationCandidate.geoid, langCode);
+        SmartMet::Spine::LocationPtr geoLoc =
+            geo_engine->idSearch(stationCandidate.geoid, langCode);
         if (geoLoc)
         {
           stations[fmisidStr].country = geoLoc->country;
@@ -218,9 +238,7 @@ void bw::StoredAirNuclideQueryHandler::query(const StoredQuery& query,
                                          "STATION_ID");
 
       // Station identities
-      for (auto it = stations.begin();
-           queryInitializationOK && it != stations.end();
-           ++it)
+      for (auto it = stations.begin(); queryInitializationOK && it != stations.end(); ++it)
       {
         stationQueryParams.addOperation(
             "OR_GROUP_station_id", "STATION_ID", "PropertyIsEqualTo", it->second.fmisid);
@@ -288,12 +306,9 @@ void bw::StoredAirNuclideQueryHandler::query(const StoredQuery& query,
         dataQueryParams.addJoinOnConfig(dbRegistryConfig("STUK_RADIONUCLIDE_DATA_V1"),
                                         "ANALYSIS_ID");
 
-        auto analysisIdIt =
-            profileContainer->begin("ANALYSIS_ID");
-        auto analysisIdItEnd =
-            profileContainer->end("ANALYSIS_ID");
-        auto stationIdIt =
-            profileContainer->begin("STATION_ID");
+        auto analysisIdIt = profileContainer->begin("ANALYSIS_ID");
+        auto analysisIdItEnd = profileContainer->end("ANALYSIS_ID");
+        auto stationIdIt = profileContainer->begin("STATION_ID");
 
         // Getting nuclide names in finnish or english
         bo::MastQueryParams radioNuclidesQueryParams(dbRegistryConfig("STUK_RADIONUCLIDES_VL1"));
@@ -321,12 +336,9 @@ void bw::StoredAirNuclideQueryHandler::query(const StoredQuery& query,
 
         if (radioNuclidesContainer->size())
         {
-          auto nCodeIt =
-              radioNuclidesContainer->begin("NUCLIDE_CODE");
-          auto nCodeItEnd =
-              radioNuclidesContainer->end("NUCLIDE_CODE");
-          auto nNameIt =
-              radioNuclidesContainer->begin("NUCLIDE_NAME");
+          auto nCodeIt = radioNuclidesContainer->begin("NUCLIDE_CODE");
+          auto nCodeItEnd = radioNuclidesContainer->end("NUCLIDE_CODE");
+          auto nNameIt = radioNuclidesContainer->begin("NUCLIDE_NAME");
 
           for (; nCodeIt != nCodeItEnd; ++nCodeIt, ++nNameIt)
           {
@@ -400,7 +412,7 @@ void bw::StoredAirNuclideQueryHandler::query(const StoredQuery& query,
       // Removing some feature id parameters
       const char* place_params[] = {
           P_WMOS, P_FMISIDS, P_PLACES, P_LATLONS, P_GEOIDS, P_KEYWORD, P_BOUNDING_BOX};
-      for (auto & place_param : place_params)
+      for (auto& place_param : place_params)
       {
         feature_id.erase_param(place_param);
       }
@@ -436,32 +448,19 @@ void bw::StoredAirNuclideQueryHandler::query(const StoredQuery& query,
       int numberMatched = 0;
       if (queryInitializationOK and profileContainer and dataContainer)
       {
-        auto analysisIdIt =
-            dataContainer->begin("ANALYSIS_ID");
-        auto stationIdIt =
-            dataContainer->begin("STATION_ID");
-        auto stationIdItEnd =
-            dataContainer->end("STATION_ID");
-        auto observationIdIt =
-            dataContainer->begin("OBSERVATION_ID");
-        auto periodStartIt =
-            dataContainer->begin("PERIOD_START");
-        auto periodEndIt =
-            dataContainer->begin("PERIOD_END");
-        auto analysisTimeIt =
-            dataContainer->begin("ANALYSIS_TIME");
-        auto analysisVersionIt =
-            dataContainer->begin("ANALYSIS_VERSION");
-        auto airVolumeIt =
-            dataContainer->begin("AIR_VOLUME");
-        auto nuclideCodeIt =
-            dataContainer->begin("NUCLIDE_CODE");
-        auto concentrationIt =
-            dataContainer->begin("CONCENTRATION");
-        auto dataQualityIt =
-            dataContainer->begin("DATA_QUALITY");
-        auto uncertaintyIt =
-            dataContainer->begin("UNCERTAINTY");
+        auto analysisIdIt = dataContainer->begin("ANALYSIS_ID");
+        auto stationIdIt = dataContainer->begin("STATION_ID");
+        auto stationIdItEnd = dataContainer->end("STATION_ID");
+        auto observationIdIt = dataContainer->begin("OBSERVATION_ID");
+        auto periodStartIt = dataContainer->begin("PERIOD_START");
+        auto periodEndIt = dataContainer->begin("PERIOD_END");
+        auto analysisTimeIt = dataContainer->begin("ANALYSIS_TIME");
+        auto analysisVersionIt = dataContainer->begin("ANALYSIS_VERSION");
+        auto airVolumeIt = dataContainer->begin("AIR_VOLUME");
+        auto nuclideCodeIt = dataContainer->begin("NUCLIDE_CODE");
+        auto concentrationIt = dataContainer->begin("CONCENTRATION");
+        auto dataQualityIt = dataContainer->begin("DATA_QUALITY");
+        auto uncertaintyIt = dataContainer->begin("UNCERTAINTY");
 
         std::string currentAnalysisIdStr = "dummyAnalysisId";
         int groupId = 0;
@@ -490,9 +489,9 @@ void bw::StoredAirNuclideQueryHandler::query(const StoredQuery& query,
           group["groupNum"] = groupId + 1;
           group["obsParamList"][0]["name"] = paramName;
 
-		  auto station_formal_name = sit->second.station_formal_name(language);
-		  if (not station_formal_name.empty())
-			group["stationFormalName"] = station_formal_name;
+          auto station_formal_name = sit->second.station_formal_name(language);
+          if (not station_formal_name.empty())
+            group["stationFormalName"] = station_formal_name;
 
           if (not sit->second.region.empty())
             group["region"] = sit->second.region;
@@ -670,8 +669,7 @@ bw::StoredAirNuclideQueryHandler::dbRegistryConfig(const std::string& configName
         dbRegistry->dbRegistryConfig(configName);
     if (not dbrConfig)
     {
-      Fmi::Exception exception(BCP,
-                                           "Database registry configuration is not available!");
+      Fmi::Exception exception(BCP, "Database registry configuration is not available!");
       exception.addParameter(WFS_EXCEPTION_CODE, WFS_OPERATION_PROCESSING_FAILED);
       exception.addParameter("Configration name", configName);
       throw exception;

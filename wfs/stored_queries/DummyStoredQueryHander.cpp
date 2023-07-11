@@ -34,6 +34,11 @@ void bw::DummyStoredQueryHandler::init_handler()
 {
 }
 
+std::string bw::DummyStoredQueryHandler::get_handler_description() const
+{
+    return "Simple stored query handler for testing purposes only";
+}
+
 void
 bw::DummyStoredQueryHandler::query(const StoredQuery& query,
 				   const std::string&  /*language*/,

@@ -3,7 +3,7 @@
 %define SPECNAME smartmet-plugin-%{DIRNAME}
 Summary: SmartMet WFS plugin
 Name: %{SPECNAME}
-Version: 23.4.27
+Version: 23.6.6
 Release: 1%{?dist}.fmi
 License: MIT
 Group: SmartMet/Plugins
@@ -34,6 +34,7 @@ BuildRequires: xqilla-devel
 BuildRequires: openssl-devel
 BuildRequires: bzip2-devel
 BuildRequires: zlib-devel
+<<<<<<< HEAD
 BuildRequires: smartmet-library-timeseries-devel >= 23.7.10
 BuildRequires: smartmet-library-spine-devel >= 23.7.10
 BuildRequires: smartmet-library-gis-devel >= 23.7.10
@@ -49,12 +50,30 @@ BuildRequires: smartmet-library-grid-content-devel >= 23.7.10
 BuildRequires: smartmet-library-grid-files-devel >= 23.7.10
 %if %{with observation}
 BuildRequires: smartmet-engine-observation-devel >= 23.7.10
+=======
+BuildRequires: smartmet-library-timeseries-devel >= 23.3.15
+BuildRequires: smartmet-library-spine-devel >= 23.4.27
+BuildRequires: smartmet-library-gis-devel >= 23.3.14
+BuildRequires: smartmet-library-trax-devel >= 22.12.22
+BuildRequires: smartmet-library-locus-devel >= 23.3.7
+BuildRequires: smartmet-library-macgyver-devel >= 23.6.2
+BuildRequires: smartmet-engine-contour-devel >= 23.3.9
+BuildRequires: smartmet-engine-geonames-devel >= 23.4.27
+BuildRequires: smartmet-engine-gis-devel >= 22.12.21
+BuildRequires: smartmet-engine-grid-devel >= 23.5.26
+BuildRequires: smartmet-engine-querydata-devel >= 23.4.27
+BuildRequires: smartmet-library-grid-content-devel >= 23.5.26
+BuildRequires: smartmet-library-grid-files-devel >= 23.6.6
+%if %{with observation}
+BuildRequires: smartmet-engine-observation-devel >= 23.6.1
+>>>>>>> master
 %endif
 Requires: ctpp2
 Requires: fmt >= %{smartmet_fmt_min}, fmt < %{smartmet_fmt_max}
 Requires: libcurl
 Requires: jsoncpp
 Requires: zlib
+<<<<<<< HEAD
 Requires: smartmet-library-locus >= 23.7.10
 Requires: smartmet-library-macgyver >= 23.3.3
 Requires: smartmet-library-spine >= 23.7.10
@@ -72,6 +91,25 @@ Requires: smartmet-engine-observation >= 23.7.10
 %endif
 Requires: smartmet-engine-querydata >= 23.7.10
 Requires: smartmet-server >= 23.3.21
+=======
+Requires: smartmet-library-locus >= 23.3.7
+Requires: smartmet-library-macgyver >= 23.6.2
+Requires: smartmet-library-spine >= 23.4.27
+Requires: smartmet-library-timeseries >= 23.3.15
+Requires: smartmet-library-gis >= 23.3.14
+Requires: smartmet-library-trax >= 22.12.22
+Requires: smartmet-engine-contour >= 23.3.9
+Requires: smartmet-engine-geonames >= 23.4.27
+Requires: smartmet-engine-gis >= 22.12.21
+Requires: smartmet-engine-grid >= 23.5.26
+Requires: smartmet-library-grid-content >= 23.5.26
+Requires: smartmet-library-grid-files >= 23.6.6
+%if %{with observation}
+Requires: smartmet-engine-observation >= 23.6.1
+%endif
+Requires: smartmet-engine-querydata >= 23.4.27
+Requires: smartmet-server >= 23.5.19
+>>>>>>> master
 Requires: xerces-c
 Requires: xqilla
 Requires: zlib
@@ -163,6 +201,21 @@ rm -rf $RPM_BUILD_ROOT
 %{_includedir}/smartmet/plugin/wfs/request/*.h
 
 %changelog
+* Tue Jun  6 2023 Mika Heiskanen <mika.heiskanen@fmi.fi> - 23.6.6-1.fmi
+- Repackaged due to GRID ABI changes
+
+* Thu Jun  1 2023 Mika Heiskanen <mika.heiskanen@fmi.fi> - 23.6.1-1.fmi
+- Changed to use the new ObsEngine API
+
+* Wed May 10 2023 Mika Heiskanen <mika.heiskanen@fmi.fi> - 23.5.10-2.fmi
+- Use the new obsengine API for getting the latest observation only
+
+* Wed May 10 2023 Andris Pavēnis <andris.pavenis@fmi.fi> 23.5.10-1.fmi
+- /wfs/admin?request=constructor: update response and default format
+
+* Tue May  9 2023 Andris Pavēnis <andris.pavenis@fmi.fi> 23.5.9-1.fmi
+- Improve /wfs/admin?request=constructors output
+
 * Thu Apr 27 2023 Andris Pavēnis <andris.pavenis@fmi.fi> 23.4.27-1.fmi
 - Repackage due to macgyver ABI changes (AsyncTask, AsyncTaskGroup)
 

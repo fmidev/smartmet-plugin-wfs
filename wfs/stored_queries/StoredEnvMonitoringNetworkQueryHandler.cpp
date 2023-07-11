@@ -89,6 +89,11 @@ bw::StoredEnvMonitoringNetworkQueryHandler::StoredEnvMonitoringNetworkQueryHandl
 
 bw::StoredEnvMonitoringNetworkQueryHandler::~StoredEnvMonitoringNetworkQueryHandler() = default;
 
+std::string bw::StoredEnvMonitoringNetworkQueryHandler::get_handler_description() const
+{
+    return "";
+}
+
 void bw::StoredEnvMonitoringNetworkQueryHandler::query(const StoredQuery& query,
                                                        const std::string& language,
 						       const boost::optional<std::string> & /*hostname*/,

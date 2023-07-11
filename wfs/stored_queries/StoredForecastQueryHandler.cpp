@@ -2,7 +2,6 @@
 #include "FeatureID.h"
 #include "StoredQueryHandlerFactoryDef.h"
 #include "WfsConvenience.h"
-#include "ParamDesc.h"
 #include <boost/algorithm/string.hpp>
 #include <boost/format.hpp>
 #include <macgyver/StringConversion.h>
@@ -87,12 +86,14 @@ bw::StoredForecastQueryHandler::StoredForecastQueryHandler(
   {
     register_array_param<std::string>(
         P_MODEL,
-        ""
+        "An array of weather models (see QEngine configuration) that can be used in the query."
+        " An empty array means that all the available weather models can be used."
         );
 
     register_scalar_param<pt::ptime>(
         P_ORIGIN_TIME,
-        bw::ParamDesc::origin_time,
+        "The origin time of the weather models that should be used. This might"
+        " be omitted in the query.",
         false
         );
 
@@ -104,39 +105,43 @@ bw::StoredForecastQueryHandler::StoredForecastQueryHandler(
 
     register_array_param<int64_t>(
         P_LEVEL,
-        "",
+        "An array of geometric heights (GeomHeight) above the topography of model. An empty array"
+        " means that all the levels can be used. The parameter is usable only with hybrid data and"
+        " interpolated data values will be returned if exact match is not found. The use of parameter"
+        " also require that the dataset contains e.g. GeomHeight data and it is not allowed to use"
+        " with the level parameter at the same time.",
         0,
         99);
 
     register_scalar_param<std::string>(
         P_LEVEL_TYPE,
-        ""
+        "The level type that can be used in the query."
         );
 
     register_array_param<std::string>(
         P_PARAM,
-        bw::ParamDesc::meteo_parameters,
+        "An array of fields which values should be returned in the response.",
         1,
         99);
 
     register_scalar_param<int64_t>(
         P_FIND_NEAREST_VALID,
-        ""
+        "A non zero value of this parameters causes look-up of the nearest point from the model."
         );
 
     register_scalar_param<std::string>(
         P_LOCALE,
-        bw::ParamDesc::locale
+        "Locale to use in response"
         );
 
     register_scalar_param<std::string>(
         P_MISSING_TEXT,
-        bw::ParamDesc::missing_text
+        "The value that is returned when the value of the requested field is missing."
         );
 
     register_scalar_param<std::string>(
         P_CRS,
-        bw::ParamDesc::crs
+        "The coordinate projection used in the response."
         );
 
     max_np_distance = config->get_optional_config_param<double>("maxNpDistance", -1.0);
@@ -149,6 +154,11 @@ bw::StoredForecastQueryHandler::StoredForecastQueryHandler(
 }
 
 bw::StoredForecastQueryHandler::~StoredForecastQueryHandler() = default;
+
+std::string bw::StoredForecastQueryHandler::get_handler_description() const
+{
+    return "Forecast data (general)";
+}
 
 void bw::StoredForecastQueryHandler::query(const StoredQuery& stored_query,
                                            const std::string& language,

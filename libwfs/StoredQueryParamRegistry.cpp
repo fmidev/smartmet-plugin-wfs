@@ -1,5 +1,6 @@
 #include "StoredQueryParamRegistry.h"
 #include "ArrayParameterTemplate.h"
+#include "HandlerFactorySummary.h"
 #include "ScalarParameterTemplate.h"
 #include "SupportsExtraHandlerParams.h"
 #include <macgyver/DistanceParser.h>
@@ -250,7 +251,8 @@ std::set<std::string> StoredQueryParamRegistry::get_param_names() const
   }
 }
 
-Json::Value StoredQueryParamRegistry::get_param_info() const
+std::map<std::string, bw::HandlerFactorySummary::ParamInfo>
+StoredQueryParamRegistry::get_param_info() const
 {
     // Explicit specifications of readable type names. For others C++ type name demangling is being used
     static std::map<std::string, std::string> name_remap =
@@ -260,28 +262,35 @@ Json::Value StoredQueryParamRegistry::get_param_info() const
             , { typeid(SmartMet::Spine::BoundingBox).name(), "bounding_box" }
         };
 
-    Json::Value result(Json::objectValue);
+    std::map<std::string, HandlerFactorySummary::ParamInfo> result;
     for (const auto& map_item : param_map) {
         const ParamRecBase* p1 = map_item.second.get();
         auto iter = name_remap.find(p1->type_name);
-        Json::Value& param_info = result[p1->name];
-        param_info["type"] = iter == name_remap.end()
+        HandlerFactorySummary::ParamInfo p_info;
+        p_info.name = map_item.first;
+        p_info.type = iter == name_remap.end()
             ? Fmi::demangle_cpp_type_name(p1->type_name)
             : iter->second;
-        param_info["description"] = p1->description;
+        p_info.description = p1->description;
+
         const auto* p_scalar = dynamic_cast<const ScalarParameterRec*>(p1);
         if (p_scalar) {
-            param_info["is_array"] = false;
-            param_info["mandatory"] = p_scalar->required;
+            p_info.mandatory = p_scalar->required;
         } else {
             const auto* p_array = dynamic_cast<const ArrayParameterRec*>(p1);
             if (p_array) {
-                param_info["is_array"] = true;
-                param_info["min_size"] = p_array->min_size;
-                param_info["max_size"] = p_array->max_size;
-                param_info["step"] = p_array->step;
+                HandlerFactorySummary::SizeInfo size_info;
+                size_info.min_size = p_array->min_size;
+                size_info.max_size = p_array->max_size;
+                size_info.step = p_array->step;
+                p_info.size_info = size_info;
+            } else {
+                // Should never happen: simply skip it
+                continue;
             }
         }
+
+        result[p1->name] = p_info;
     }
     return result;
 }
@@ -314,7 +323,8 @@ void SmartMet::Plugin::WFS::StoredQueryParamRegistry::register_array_param(
     const std::string& description,
     boost::shared_ptr<ArrayParameterTemplate> param_def,
     std::size_t min_size,
-    std::size_t max_size)
+    std::size_t max_size,
+    std::size_t step)
 {
   try
   {
@@ -324,7 +334,8 @@ void SmartMet::Plugin::WFS::StoredQueryParamRegistry::register_array_param(
     rec->param_def = param_def;
     rec->type_name = typeid(std::string).name();
     rec->min_size = min_size;
-    rec->max_size = max_size, rec->step = 1;
+    rec->max_size = max_size;
+    rec->step = step;
     add_param_rec(rec);
   }
   catch (...)

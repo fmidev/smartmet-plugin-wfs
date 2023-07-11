@@ -1,9 +1,7 @@
 #ifndef WITHOUT_OBSERVATION
-
 #include "stored_queries/StoredMastQueryHandler.h"
 #include "FeatureID.h"
 #include "StoredQueryHandlerFactoryDef.h"
-#include "ParamDesc.h"
 #include <engines/observation/DBRegistry.h>
 #include <macgyver/StringConversion.h>
 #include <smartmet/engines/observation/MastQuery.h>
@@ -30,16 +28,39 @@ bw::StoredMastQueryHandler::StoredMastQueryHandler(SmartMet::Spine::Reactor* rea
 {
   try
   {
-    register_scalar_param<pt::ptime>(P_BEGIN_TIME, bw::ParamDesc::begin_time);
-    register_scalar_param<pt::ptime>(P_END_TIME, bw::ParamDesc::end_time);
-    register_array_param<std::string>(P_METEO_PARAMETERS, bw::ParamDesc::meteo_parameters, 1);
-    register_scalar_param<std::string>(P_STATION_TYPE, bw::ParamDesc::station_type);
-    register_scalar_param<uint64_t>(P_TIME_STEP, bw::ParamDesc::time_step);
-    register_scalar_param<uint64_t>(P_NUM_OF_STATIONS, "");
-    register_scalar_param<uint64_t>(P_MAX_EPOCHS, "");
-    register_scalar_param<std::string>(P_MISSING_TEXT, bw::ParamDesc::missing_text);
-    register_scalar_param<std::string>(P_CRS, bw::ParamDesc::crs);
-    register_array_param<uint64_t>(P_PRODUCER_ID, "");
+    register_scalar_param<pt::ptime>(P_BEGIN_TIME, "The start time of the requested time period.");
+
+    register_scalar_param<pt::ptime>(P_END_TIME, "The end time of the requested time period.");
+
+    register_array_param<std::string>(
+        P_METEO_PARAMETERS,
+        "An array of fields whose values should be returned in the response."
+        " Available data fields depend on the value of the \"stationType\" attribute.",
+        1);
+
+    register_scalar_param<std::string>(
+        P_STATION_TYPE,
+        "The type of the observation station (defined in the ObsEngine configuration).");
+
+    register_scalar_param<uint64_t>(P_TIME_STEP,
+                                    "The time interval between the requested data (observations).");
+
+    register_scalar_param<uint64_t>(
+        P_NUM_OF_STATIONS,
+        "The maximum number of the observation stations returned around the given geographical"
+        " location (inside the radius of \"maxDistance\").");
+
+    register_scalar_param<uint64_t>(P_MAX_EPOCHS, "The maximum number of time epochs to return.");
+
+    register_scalar_param<std::string>(
+        P_MISSING_TEXT,
+        "The value that is returned when the value of the requested field is missing.");
+
+    register_scalar_param<std::string>(P_CRS, "The coordinate projection used in the response.");
+
+    register_array_param<uint64_t>(
+        P_PRODUCER_ID,
+        "Producer id values are found for example from PRODUCERS_V1 Oracle database view.");
 
     m_maxHours = config->get_optional_config_param<double>("maxHours", 7.0 * 24.0);
     m_sqRestrictions = plugin_data.get_config().getSQRestrictions();
@@ -53,9 +74,14 @@ bw::StoredMastQueryHandler::StoredMastQueryHandler(SmartMet::Spine::Reactor* rea
 
 bw::StoredMastQueryHandler::~StoredMastQueryHandler() = default;
 
+std::string bw::StoredMastQueryHandler::get_handler_description() const
+{
+  return "Observation data: Multi-sensor";
+}
+
 void bw::StoredMastQueryHandler::query(const StoredQuery& query,
                                        const std::string& language,
-                                       const boost::optional<std::string>&  /*hostname*/,
+                                       const boost::optional<std::string>& /*hostname*/,
                                        std::ostream& output) const
 {
   try
@@ -100,7 +126,7 @@ void bw::StoredMastQueryHandler::query(const StoredQuery& query,
       const int debug_level = get_config()->get_debug_level();
       if (debug_level > 2)
       {
-          for (const auto& id : locations_list)
+        for (const auto& id : locations_list)
           std::cerr << "Found location: name: " << id.first << " geoid: " << id.second->geoid
                     << "\n";
       }
@@ -142,10 +168,7 @@ void bw::StoredMastQueryHandler::query(const StoredQuery& query,
       }
 
       stationSearchSettings.taggedFMISIDs =
-          obs_engine->translateToFMISID(stationSearchSettings.starttime,
-                                        stationSearchSettings.endtime,
-                                        stationSearchSettings.stationtype,
-                                        stationSettings);
+          obs_engine->translateToFMISID(stationSearchSettings, stationSettings);
 
       // Search stations based on location settings.
       // The result does not contain duplicates.
@@ -157,11 +180,12 @@ void bw::StoredMastQueryHandler::query(const StoredQuery& query,
 
       // Get information from GeoEngien. Elevation is required.
       SmartMet::Spine::Stations stations;
-      for (const auto & stationCandidate : stationCandidates)
+      for (const auto& stationCandidate : stationCandidates)
       {
         stations.push_back(stationCandidate);
 
-        SmartMet::Spine::LocationPtr geoLoc = geo_engine->idSearch(stationCandidate.geoid, langCode);
+        SmartMet::Spine::LocationPtr geoLoc =
+            geo_engine->idSearch(stationCandidate.geoid, langCode);
         if (geoLoc)
         {
           stations.back().country = geoLoc->country;
@@ -219,8 +243,8 @@ void bw::StoredMastQueryHandler::query(const StoredQuery& query,
       // Gluing requested parameter name and parameter identities together.
       // Parameter names are needed in the result document.
       // map: id, (id, paramName, paramQCName, showValue, showQualityCode)
-      using MeteoParameterMap = std::map<std::string, std::tuple<uint64_t,
-        std::string, std::string, bool, bool>>;
+      using MeteoParameterMap =
+          std::map<std::string, std::tuple<uint64_t, std::string, std::string, bool, bool>>;
       MeteoParameterMap meteoParameterMap;
       for (const std::string& name : meteoParametersVector)
       {
@@ -341,9 +365,7 @@ void bw::StoredMastQueryHandler::query(const StoredQuery& query,
             "OR_GROUP_producer_id", "PRODUCER_ID", "PropertyIsEqualTo", *it);
 
       // Station identities
-      for (auto it = stations.begin();
-           queryInitializationOK && it != stations.end();
-           ++it)
+      for (auto it = stations.begin(); queryInitializationOK && it != stations.end(); ++it)
         stationQueryParams.addOperation(
             "OR_GROUP_station_id", "STATION_ID", "PropertyIsEqualTo", (*it).fmisid);
 
@@ -397,10 +419,8 @@ void bw::StoredMastQueryHandler::query(const StoredQuery& query,
         dataQueryParams.addOrderBy("MEASURAND_ID", "ASC");
         dataQueryParams.addOrderBy("DATA_LEVEL", "ASC");
 
-        auto observationIdIt =
-            profileContainer->begin("OBSERVATION_ID");
-        auto observationIdItEnd =
-            profileContainer->end("OBSERVATION_ID");
+        auto observationIdIt = profileContainer->begin("OBSERVATION_ID");
+        auto observationIdItEnd = profileContainer->end("OBSERVATION_ID");
 
         for (; queryInitializationOK && observationIdIt != observationIdItEnd; ++observationIdIt)
           dataQueryParams.addOperation(
@@ -457,20 +477,13 @@ void bw::StoredMastQueryHandler::query(const StoredQuery& query,
       int numberMatched = 0;
       if (queryInitializationOK and profileContainer and dataContainer)
       {
-        auto dataFmisidIt =
-            dataContainer->begin("STATION_ID");
-        auto dataFmisidItEnd =
-            dataContainer->end("STATION_ID");
-        auto dataMeasurandIdIt =
-            dataContainer->begin("MEASURAND_ID");
-        auto dataTimeIt =
-            dataContainer->begin("DATA_TIME");
-        auto dataLevelIt =
-            dataContainer->begin("DATA_LEVEL");
-        auto dataValueIt =
-            dataContainer->begin("DATA_VALUE");
-        auto dataQualityIt =
-            dataContainer->begin("DATA_QUALITY");
+        auto dataFmisidIt = dataContainer->begin("STATION_ID");
+        auto dataFmisidItEnd = dataContainer->end("STATION_ID");
+        auto dataMeasurandIdIt = dataContainer->begin("MEASURAND_ID");
+        auto dataTimeIt = dataContainer->begin("DATA_TIME");
+        auto dataLevelIt = dataContainer->begin("DATA_LEVEL");
+        auto dataValueIt = dataContainer->begin("DATA_VALUE");
+        auto dataQualityIt = dataContainer->begin("DATA_QUALITY");
 
         std::string currentFmisid = "FooBarFmisid";
         std::string currentMeasurandId = "FooBarMeasurandId";
@@ -514,13 +527,13 @@ void bw::StoredMastQueryHandler::query(const StoredQuery& query,
             std::string station_longitude;
             std::string station_elevation;
 
-            for (const auto & station : stations)
+            for (const auto& station : stations)
             {
               if (Fmi::to_string(station.fmisid) == fmisidStr)
               {
                 station_geoid = std::to_string(static_cast<long long int>(station.geoid));
                 station_wmo = std::to_string(static_cast<long long int>(station.wmo));
-				station_name = station.station_formal_name(language);
+                station_name = station.station_formal_name(language);
                 station_region = station.region;
                 station_latitude = std::to_string(static_cast<long double>(station.latitude_out));
                 station_longitude = std::to_string(static_cast<long double>(station.longitude_out));
@@ -651,9 +664,9 @@ void bw::StoredMastQueryHandler::query(const StoredQuery& query,
 }
 
 void bw::StoredMastQueryHandler::update_parameters(
-    const RequestParameterMap&  /*params*/,
-    int  /*seq_id*/,
-    std::vector<boost::shared_ptr<RequestParameterMap> >&  /*result*/) const
+    const RequestParameterMap& /*params*/,
+    int /*seq_id*/,
+    std::vector<boost::shared_ptr<RequestParameterMap>>& /*result*/) const
 {
   try
   {
@@ -713,8 +726,7 @@ boost::shared_ptr<SmartMet::Plugin::WFS::StoredQueryHandlerBase> wfs_stored_mast
 {
   try
   {
-    auto* qh =
-        new bw::StoredMastQueryHandler(reactor, config, plugin_data, template_file_name);
+    auto* qh = new bw::StoredMastQueryHandler(reactor, config, plugin_data, template_file_name);
     boost::shared_ptr<SmartMet::Plugin::WFS::StoredQueryHandlerBase> instance(qh);
     return instance;
   }

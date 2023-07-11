@@ -58,6 +58,14 @@ class StoredQueryHandlerBase : virtual protected SupportsExtraHandlerParams,
 
   virtual std::string get_query_name() const;
 
+  /**
+   *   @brief Returns short description of stored query handler
+   *
+   *   The return value of this method is expected to be same for all
+   *   stored queries which use the same handler
+   */
+  virtual std::string get_handler_description() const = 0;
+
   virtual std::string get_title(const std::string& language) const;
 
   virtual std::vector<std::string> get_return_types() const;
@@ -104,9 +112,9 @@ class StoredQueryHandlerBase : virtual protected SupportsExtraHandlerParams,
   const std::string& get_data_source() const;
   bool is_gridengine_disabled() const;
 
-  Json::Value get_param_info() const { return StoredQueryParamRegistry::get_param_info(); }
+  std::map<std::string, HandlerFactorySummary::ParamInfo> get_param_info() const;
 
- protected:
+protected:
   virtual void init_handler();
 
   boost::shared_ptr<Fmi::TemplateFormatter> get_formatter(bool debug_format) const;

@@ -26,7 +26,6 @@ StoredQueryHandlerBase::StoredQueryHandlerBase(SmartMet::Spine::Reactor* reactor
       SupportsExtraHandlerParams(config),
       reactor(reactor),
       config(config),
-      
       plugin_impl(plugin_impl),
       template_file(template_file_name)
 {
@@ -274,6 +273,12 @@ const std::string& StoredQueryHandlerBase::get_data_source() const
 bool StoredQueryHandlerBase::is_gridengine_disabled() const
 {
   return get_plugin_impl().is_gridengine_disabled();
+}
+
+std::map<std::string, HandlerFactorySummary::ParamInfo>
+StoredQueryHandlerBase::get_param_info() const
+{
+    return StoredQueryParamRegistry::get_param_info();
 }
 
 }  // namespace WFS

@@ -33,6 +33,8 @@ class GetDataSetByIdHandler : public StoredQueryHandlerBase
 
   std::vector<std::string> get_return_types() const override;
 
+  std::string get_handler_description() const override;
+
   void init_handler() override;
 
  private:

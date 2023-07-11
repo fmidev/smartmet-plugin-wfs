@@ -2,7 +2,6 @@
 #include "FeatureID.h"
 #include "StoredQueryHandlerFactoryDef.h"
 #include "WfsConvenience.h"
-#include "ParamDesc.h"
 #include "stored_queries/StoredQEDownloadQueryHandler.h"
 #include <boost/algorithm/string.hpp>
 #include <boost/bind/bind.hpp>
@@ -110,15 +109,59 @@ StoredQEDownloadQueryHandler::StoredQEDownloadQueryHandler(
         "An array of supported formats. The default value is \"grib2,grib1,netcdf\")."
         " The \"grib2\" format is supported even if it is not defined at the array.",
         0, 1);
-    register_array_param<pt::ptime>(P_ORIGIN_TIME, ParamDesc::origin_time, 0, 1);
-    register_array_param<pt::ptime>(P_BEGIN, ParamDesc::begin_time, 0, 1);
-    register_array_param<pt::ptime>(P_END, ParamDesc::end_time, 0, 1);
-    register_scalar_param<int64_t>(P_FULL_INTERVAL, "", false);
-    register_array_param<std::string>(P_PARAM, ParamDesc::meteo_parameters);
-    register_array_param<std::string>(P_LEVEL_TYPE, "", 0);
-    register_array_param<double>(P_LEVEL_VALUE, "", 0);
-    register_array_param<std::string>(P_FORMAT, "", 0, 1);
-    register_array_param<std::string>(P_PROJECTION, "", 0, 1);
+
+    register_array_param<pt::ptime>(
+        P_ORIGIN_TIME,
+        "",
+        0,
+        1);
+
+    register_array_param<pt::ptime>(
+        P_BEGIN,
+        "The start time of the requested time period (YYYY-MM-DDTHHMIZ).",
+        0,
+        1);
+
+    register_array_param<pt::ptime>(
+        P_END,
+        "The end time of the requested time period (YYYY-MM-DDTHHMIZ).",
+        0,
+        1);
+
+    register_scalar_param<int64_t>(
+        P_FULL_INTERVAL,
+        "If non zero then the full specified time interval must be present in"
+        " the model data for the model to be used. Otherwise the overlapping"
+        " is sufficient.",
+        false);
+
+    register_array_param<std::string>(
+        P_PARAM,
+        "An array of fields whose values should be returned in the response."
+        );
+
+    register_array_param<std::string>(
+        P_LEVEL_TYPE,
+        "An array of level types used in the query.",
+        0);
+
+    register_array_param<double>(
+        P_LEVEL_VALUE,
+        "An array of the model levels that can be used in the query. An empty array"
+        " means that all the levels can be used.",
+        0);
+
+    register_array_param<std::string>(
+        P_FORMAT,
+        "The format used in the response. The default value is \"grib2\".",
+        0,
+        1);
+
+    register_array_param<std::string>(
+        P_PROJECTION,
+        "The coordinate projection used in the response.",
+        0,
+        1);
 
     std::vector<std::string> tmp1;
     if (config->get_config_array<std::string>("producers", tmp1))
@@ -171,6 +214,11 @@ StoredQEDownloadQueryHandler::StoredQEDownloadQueryHandler(
 }
 
 StoredQEDownloadQueryHandler::~StoredQEDownloadQueryHandler() = default;
+
+std::string StoredQEDownloadQueryHandler::get_handler_description() const
+{
+    return "Forecast data: download when data source is QEngine";
+}
 
 namespace
 {

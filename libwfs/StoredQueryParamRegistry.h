@@ -1,6 +1,7 @@
 #pragma once
 
 #include "ArrayParameterTemplate.h"
+#include "HandlerFactorySummary.h"
 #include "RequestParameterMap.h"
 #include "ScalarParameterTemplate.h"
 #include "StoredQueryConfig.h"
@@ -68,7 +69,7 @@ class StoredQueryParamRegistry : public StoredQueryConfig::Wrapper
 
   std::set<std::string> get_param_names() const;
 
-  Json::Value get_param_info() const;
+  std::map<std::string, HandlerFactorySummary::ParamInfo> get_param_info() const;
 
   template <typename ParamType>
   void register_scalar_param(const std::string& name,
@@ -81,7 +82,7 @@ class StoredQueryParamRegistry : public StoredQueryConfig::Wrapper
                             const std::string& description,
                             std::size_t min_size = 0,
                             std::size_t max_size = std::numeric_limits<uint16_t>::max(),
-                            std::size_t step = 0,
+                            std::size_t step = 1,
 			    bool silent = false);
 
   void register_scalar_param(const std::string& name,
@@ -93,7 +94,8 @@ class StoredQueryParamRegistry : public StoredQueryConfig::Wrapper
                             const std::string& description,
                             boost::shared_ptr<ArrayParameterTemplate> param_def,
                             std::size_t min_size = 0,
-                            std::size_t max_size = std::numeric_limits<uint16_t>::max());
+                            std::size_t max_size = std::numeric_limits<uint16_t>::max(),
+                            std::size_t step = 1);
 
   void silence_param_init_warnings(bool enable) { silence_param_init_warnings_ = enable; }
 

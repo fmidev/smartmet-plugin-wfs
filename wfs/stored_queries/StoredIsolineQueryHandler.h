@@ -19,6 +19,8 @@ class StoredIsolineQueryHandler : public StoredContourQueryHandler
                             PluginImpl& plugin_impl,
                             boost::optional<std::string> template_file_name);
 
+  std::string get_handler_description() const override;
+
  protected:
   void clipGeometry(OGRGeometryPtr& pGeom, Fmi::Box& bbox) const override;
   std::vector<ContourQueryResultPtr> processQuery(ContourQueryParameter& queryParameter) const override;

@@ -44,6 +44,8 @@ class StoredGridForecastQueryHandler: public StoredQueryHandlerBase,
     void        init_handler() override;
     void        query(const StoredQuery& query, const std::string& language, const boost::optional<std::string>& hostname, std::ostream& output) const override;
 
+  std::string get_handler_description() const override;
+
   protected:
 
 

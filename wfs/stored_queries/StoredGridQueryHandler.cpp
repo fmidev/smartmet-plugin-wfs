@@ -32,7 +32,6 @@
 #include "StoredQueryHandlerFactoryDef.h"
 #include "WfsConvenience.h"
 #include "stored_queries/StoredGridQueryHandler.h"
-#include "ParamDesc.h"
 
 namespace bw = SmartMet::Plugin::WFS;
 namespace ba = boost::algorithm;
@@ -81,16 +80,60 @@ StoredGridQueryHandler::StoredGridQueryHandler(SmartMet::Spine::Reactor* reactor
 {
   try
   {
-    register_scalar_param<std::string>(P_PRODUCER, "");
-    register_scalar_param<pt::ptime>(P_ORIGIN_TIME, ParamDesc::origin_time, false);
-    register_array_param<std::string>(P_PARAM, ParamDesc::meteo_parameters);
-    register_scalar_param<std::string>(P_LEVEL_TYPE, "", false);
-    register_array_param<double>(P_LEVEL_VALUE, "", 0);
-    register_scalar_param<std::string>(P_MISSING_TEXT, ParamDesc::missing_text);
-    register_scalar_param<std::string>(P_DATA_CRS, "", true);
-    register_scalar_param<unsigned long>(P_SCALE_FACTOR, "", false);
-    register_scalar_param<unsigned long>(P_PRECISION, "", false);
-    register_scalar_param<unsigned long>(P_DATASTEP, "", false);
+    register_scalar_param<std::string>(
+        P_PRODUCER,
+        "An array of the data producer names."
+        );
+
+    register_scalar_param<pt::ptime>(
+        P_ORIGIN_TIME,
+        "The origin time of the weather models that should be used. This might be omitted in the query.",
+        false
+        );
+
+    register_array_param<std::string>(
+        P_PARAM,
+        "An array of fields whose values should be returned in the response."
+        );
+
+    register_scalar_param<std::string>(
+        P_LEVEL_TYPE,
+        "The level type that can be used in the query.",
+        false);
+
+    register_array_param<double>(
+        P_LEVEL_VALUE,
+        "",
+        0);
+
+    register_scalar_param<std::string>(
+        P_MISSING_TEXT,
+        "The value that is returned when the value of the requested field is missing."
+        );
+
+    register_scalar_param<std::string>(
+        P_DATA_CRS,
+        "The coordinate projection used in the response.",
+        true
+        );
+
+    register_scalar_param<unsigned long>(
+        P_SCALE_FACTOR,
+        "The scale factor for the returned data.",
+        false
+        );
+
+    register_scalar_param<unsigned long>(
+        P_PRECISION,
+        "This attribute specifies the precision (= number of decimals) of the response data.",
+        false
+        );
+
+    register_scalar_param<unsigned long>(
+        P_DATASTEP,
+        "The spatial data interval for output.",
+        false
+        );
   }
   catch (...)
   {
@@ -100,6 +143,11 @@ StoredGridQueryHandler::StoredGridQueryHandler(SmartMet::Spine::Reactor* reactor
 
 StoredGridQueryHandler::~StoredGridQueryHandler() = default;
 
+std::string bw::StoredGridQueryHandler::get_handler_description() const
+{
+    return "Forecast data: download in grid format (grib1, grib2, NetCDF)";
+}
+
 StoredGridQueryHandler::Query::Query(boost::shared_ptr<const StoredQueryConfig> config)
     : missing_text("nan"),
       language("lan"),
@@ -108,8 +156,6 @@ StoredGridQueryHandler::Query::Query(boost::shared_ptr<const StoredQueryConfig> 
       top_right(NFmiPoint::gMissingLatlon),
       bottom_left(NFmiPoint::gMissingLatlon),
       bottom_right(NFmiPoint::gMissingLatlon)
-      
-
 {
   try
   {

@@ -213,9 +213,19 @@ The unique identifier (id) of the stored query
 
 ### constructor_name
 
-This attribute defines what data source the SmartMet Server should use, how the data is accessed, how it is processed and how is it formatted in the response.
-Also what for each consturctor_name there can be additional top level attributes and unique 'handler_params' attributes.
+This attribute defines what data source the SmartMet Server should use, how the data is accessed, how it is processed and how is it formatted in the response. The provided value must be external symbol name in WFS plugin, which defines entry point for stored query handlers factory. There is a protection against specifying incorrect values
+Also what for each constructor_name there can be additional top level attributes and unique 'handler_params' attributes.
 See details for each `constructor_name` on page [Configuring Query Handler for a Stored Query](Configuring-Query-Handler-for-a-Stored-Query.md).
+
+Actual information about parameters supported in handler_params section used by different constructors can be found using WFS admin request:
+
+* /wfs/admin?request=constructors[&format=(json|html)]
+
+Some notes about this feature:
+
+* Default format is HTML.
+* Only information about constructors, that are used in at least one stored query is available through this service
+* /wfs/admin requests are not advertised to frontend and as result are available only directly from backend
 
 _Setting's name refers to things in the program's source code.
 It may have a meaning for C++ developers, but it is lacking when viewed as the end user creating new stored queries._
@@ -257,19 +267,71 @@ A more detailed description of the stored query. The description can be written 
 
 ### template
 
-TODO: Explain _why_ is this required and _how_ does it affect when using the stored query.
+A [CTPP](http://ctpp.havoc.ru/en/) template used by the stored query handler. Required for most constructors which uses CTPP2 library for generating output of WFS requests
 
-A [CTPP](http://ctpp.havoc.ru/en/)  template used by the stored query handler.
+Specifying different tamplate changes response output format. For example:
 
-Possible values are filenames in `/etc/smartmet/plugins/wfs/templates`
+* `fmi::observations::weather::simple` uses `weather_observations_simple.c2t`
+* `fmi::observations::weather::multipointcoverage` uses `weather_observations_grid.c2t`
+* `fmi::observations::weather::timevaluepair` uses `weather_observations_timevaluepair.c2t`
 
-Available values and their description:
+As result different response format is provided. Additionallty value of parameter `returnTypeNames` must correspond to used template
 
-Value                            | Description
----------------------------------|-------------------------------------------------
-`something`                      | TODO: How does this affect the stored query's behavior? Why would somebody use it?
-`something_else`                 | TODO: How does this affect the stored query's behavior? Why would somebody use it?
-`etc`                            | ...
+Possible values are filenames with extension `.c2t` present in directory
+`/etc/smartmet/plugins/wfs/templates`.
+
+Available values and their description (templates provided by WFS plugin):
+
+Value                            | Return type | Description
+---------------------------------|-------------|-----------------------------------
+air_radionuclide_concentration_multipointcoverage.c2t    | |
+air_radionuclide_concentration_simple.c2t                | |
+aviation_observations.c2t                                | |
+capabilities.c2t                                         | none | Template for GetCapabilities request only
+capabilities_open.c2t                                    | none | Template for GetCapabilities request only
+coverage_countours.c2t                                   | |
+describe_stored_queries.c2t                              | | Template for DescribeStoredQueries request only
+env_monitoring_facility.c2t                              | |
+env_monitoring_network.c2t                               | |
+exception.c2t                                            | none | Used for error responses only
+feature_type.c2t                                         | |
+for_grid_ground.c2t                                      | |
+ibplott_ice_array.c2t                                    | |
+isoline_countours.c2t                                    | |
+lightning_multipointcoverage.c2t                         | |
+lightning_simple.c2t                                     | |
+list_stored_queries.c2t                                  | |
+radar.c2t                                                | |
+satellite.c2t                                            | |
+stuk_weather_observations_grid.c2t                       | |
+weather_forecast_grid.c2t                                | |
+weather_forecast_multipointcoverage.c2t                  | |
+weather_forecast_simple.c2t                              | |
+weather_forecast_timevaluepair.c2t                       | |
+weather_observations2_grid.c2t                           | |
+weather_observations_grid.c2t                            | |
+weather_observations_mast_multipointcoverage.c2t         | |
+weather_observationsqd_grid.c2t                          | |
+weather_observationsqd_timevaluepair.c2t                 | |
+weather_observations_simple.c2t                          | |
+weather_observations_soundings_multipointcoverage.c2t    | |
+weather_observations_timevaluepair2.c2t                  | |
+weather_observations_timevaluepair.c2t                   | |
+winter_weather_countours.c2t                             | |
+winter_weather_general_countours.c2t                     | |
+winter_weather_probabilities.c2t                         | |
+_download_query_demo.c2t                                 | | For testing only
+FileDownloadDemo.c2t                                     | | For testing only
+_geoserver_query_demo.c2t                                | | For testing only
+hash_dump.c2t                                            | | For testing only (raw dump of CTPP2 hash for debugging purposes - internal format)
+hash_dump_html.c2t                                       | | For testing only (raw dump of CTPP2 hash for debugging purposes - HTML format)
+QEDownloadDemo.c2t                                       | | For testing only
+
+One can get actual information about actually used templates and corresponding return types using WFS internal admin request
+
+* /wfs/admin?request=constructor
+
+Response provides links to actually used constructors, corresponding stored queries and templates etc.
 
 ### defaultLanguage
 
@@ -283,7 +345,7 @@ The query should return a response within this time. If there are multiple store
 
 ### parameters
 
-The WFS request's _query string fields_ are defined with the `parameters` attribute. It contains an array of the _Param_ structure definitions. 
+The WFS request's _query string fields_ are defined with the `parameters` attribute. It contains an array of the _Param_ structure definitions.
 
 Include a _Param_ structure for every parameter (query string field) that can be given in the WFS request for a stored query. Notice that the query handlers do not usually use the WFS request parameters directly when executing  a query. The WFS request parameters must be first mapped to the stored query parameters defined in [handler_params](#handler_params).
 
@@ -319,7 +381,7 @@ Parameter XML data type must be specified in mandatory configuration entry
 xmlType.
 
 Fully qualified name must be specified (namespace prefix must be provided according to ones used
-DescribeStoredQueries CTTP2 tempalte
+DescribeStoredQueries CTTP2 template
 
 Following XML namespaces correspond to namespace prefixes
 
@@ -442,7 +504,7 @@ Name             | Type             | Description
 
 ### returnTypeNames
 
-TODO: Description here...
+Provides request return type for ListStoredQueries and DescribeStoredQueries requests. It is not used in any other way. Must correpond to used template
 
 ### handler_params
 

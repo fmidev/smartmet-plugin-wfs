@@ -1,289 +1,42 @@
-<html>
+<!DOCTYPE html><html><head><title>WFS plugin: wfs_obs_handler_factory</title><style>table {border-collapse: collapse;}th, td {border-bottom: 1px solid black; padding: 3px 0.5em 3px 0.5em; text-align: center;}tr:nth-child(even) {background-color: #f2f2f2;}tr:hover {background-color: #e2e2e2;}</style>
+</head><body>
 <h1>Stored query handler constructor: wfs_obs_handler_factory</h1>
+<b>Description</b>: Observation data (general, no lightning, aviation or multi-sensor)
 <table border="1px solid black", padding: 5px; >
-<br><table border="1px solid black"><tr><th> </th><th>Parameter</th><th>Mandatory</th><th>Type</th><th>Min size</th><th>Max size</th><th>Step</th><th>Description</th></tr>
-<tr><td> Scalar</td><td> beginTime</td><td> no</td><td> posix_time</td><td>  </td><td>  </td><td>  </td><td> Time values for which to return data. (0 or more values).</td></tr>
-<tr><td> Scalar</td><td> boundingBox</td><td> no</td><td> bounding_box</td><td>  </td><td>  </td><td>  </td><td> Bounding box of area for which to return data.</td></tr>
-<tr><td> Scalar</td><td> crs</td><td> yes</td><td> string</td><td>  </td><td>  </td><td>  </td><td> Coordinate system to use in response (for example crs:EPSG::4326</td></tr>
-<tr><td> Scalar</td><td> endTime</td><td> no</td><td> posix_time</td><td>  </td><td>  </td><td>  </td><td> End of time interval in ISO-format (for example 2012-02-27T00:00:00Z).</td></tr>
-<tr><td> Array</td><td> fmisids</td><td> no</td><td> long</td><td> 0</td><td> 65535</td><td> 0</td><td> FMI observation station identifiers (0 or more values). For example 12,13,18,19)</td></tr>
-<tr><td> Array</td><td> geoids</td><td> no</td><td> long</td><td> 0</td><td> 65535</td><td> 0</td><td> GEOIDs of the locations for which to return data (0 or more values).</td></tr>
-<tr><td> Array</td><td> hours</td><td> no</td><td> unsigned long</td><td> 0</td><td> 65535</td><td> 0</td><td> Hour values for which to report data (0 or more integer values).</td></tr>
-<tr><td> Scalar</td><td> keyword</td><td> yes</td><td> string</td><td>  </td><td>  </td><td>  </td><td> The geographical location(s) expressed by an array of keywords</td></tr>
-<tr><td> Scalar</td><td> keyword_overwritable</td><td> yes</td><td> bool</td><td>  </td><td>  </td><td>  </td><td> The default values listed in the "keyword" parameter can be overwritten by using the location related input parameters only if the value of this parameter is true</td></tr>
-<tr><td> Scalar</td><td> language</td><td> no</td><td> string</td><td>  </td><td>  </td><td>  </td><td> </td></tr>
-<tr><td> Scalar</td><td> latest</td><td> yes</td><td> bool</td><td>  </td><td>  </td><td>  </td><td> </td></tr>
-<tr><td> Array</td><td> latlons</td><td> no</td><td> double</td><td> 0</td><td> 999</td><td> 2</td><td> Location coordinates for which to return data (0 or more latitude/longitude pairs).</td></tr>
-<tr><td> Scalar</td><td> locale</td><td> yes</td><td> string</td><td>  </td><td>  </td><td>  </td><td> Locale to use (for example fi_FI.UTF8)</td></tr>
-<tr><td> Array</td><td> lpnns</td><td> no</td><td> long</td><td> 0</td><td> 65535</td><td> 0</td><td> LPNN code of the location for which to return data (0 or more values)</td></tr>
-<tr><td> Scalar</td><td> maxDistance</td><td> yes</td><td> double</td><td>  </td><td>  </td><td>  </td><td> The maximum search distance of the observation stations from the given geographical location(s)</td></tr>
-<tr><td> Scalar</td><td> maxEpochs</td><td> yes</td><td> unsigned long</td><td>  </td><td>  </td><td>  </td><td> </td></tr>
-<tr><td> Array</td><td> meteoParameters</td><td> no</td><td> string</td><td> 1</td><td> 65535</td><td> 0</td><td> Comma separated list of meteorological parameters to return.</td></tr>
-<tr><td> Scalar</td><td> missingText</td><td> yes</td><td> string</td><td>  </td><td>  </td><td>  </td><td> Text to output when the value is missing</td></tr>
-<tr><td> Scalar</td><td> numOfStations</td><td> yes</td><td> unsigned long</td><td>  </td><td>  </td><td>  </td><td> The maximum number of the observation stations returned around the given geographical location (inside the radius of "maxDistance")</td></tr>
-<tr><td> Array</td><td> places</td><td> no</td><td> string</td><td> 0</td><td> 65535</td><td> 0</td><td> The location for which to provide data (0 or more values)</td></tr>
-<tr><td> Scalar</td><td> qualityInfo</td><td> yes</td><td> bool</td><td>  </td><td>  </td><td>  </td><td> Specifies whether to requst quality info</td></tr>
-<tr><td> Scalar</td><td> startStep</td><td> no</td><td> unsigned long</td><td>  </td><td>  </td><td>  </td><td> </td></tr>
-<tr><td> Scalar</td><td> stationType</td><td> yes</td><td> string</td><td>  </td><td>  </td><td>  </td><td> The type of the observation station (defined in the ObsEngine configuration)</td></tr>
-<tr><td> Scalar</td><td> timeStep</td><td> no</td><td> unsigned long</td><td>  </td><td>  </td><td>  </td><td> The time step of data in minutes. Notice that timestep is calculated from start of the ongoing hour or day.</td></tr>
-<tr><td> Scalar</td><td> timeSteps</td><td> no</td><td> unsigned long</td><td>  </td><td>  </td><td>  </td><td> Number of timesteps in result set.</td></tr>
-<tr><td> Scalar</td><td> timeZone</td><td> yes</td><td> string</td><td>  </td><td>  </td><td>  </td><td> Time zone of the time instant of the data point in the form Area/Location (for example America/Costa_Rica). The default value is UTC. Special values (case insensitive): utc, local</td></tr>
-<tr><td> Array</td><td> times</td><td> no</td><td> unsigned long</td><td> 0</td><td> 999</td><td> 1</td><td> Time values for which to return data. (0 or more values).</td></tr>
-<tr><td> Array</td><td> weekDays</td><td> no</td><td> long</td><td> 0</td><td> 65535</td><td> 0</td><td> requested times expressed in the list of weekdays</td></tr>
-<tr><td> Array</td><td> wmos</td><td> no</td><td> long</td><td> 0</td><td> 65535</td><td> 0</td><td> WMO code of the location for which to return data (0 or more values)</td></tr>
+<h3>Section handler_params</h3>
+<br><table border="1px solid black" padding="10pt"><tr><th>Parameter</th><th>Mandatory</th><th> </th><th>Type</th><th>Min size</th><th>Max size</th><th>Step</th><th>Description</th></tr>
+<tr><td>beginTime</td><td>no</td><td>Scalar</td><td>posix_time</td><td> </td><td> </td><td> </td><td>The start time of the requested time period (YYYY-MM-DDTHHMIZ).</td></tr>
+<tr><td>boundingBox</td><td>no</td><td>Scalar</td><td>bounding_box</td><td> </td><td> </td><td> </td><td>The geographical location / area expressed by the bounding box coordinates</td></tr>
+<tr><td>crs</td><td>yes</td><td>Scalar</td><td>string</td><td> </td><td> </td><td> </td><td>coordinate projection used in the response.</td></tr>
+<tr><td>endTime</td><td>no</td><td>Scalar</td><td>posix_time</td><td> </td><td> </td><td> </td><td>The end time of the requested time period (YYYY-MM-DDTHHMIZ).</td></tr>
+<tr><td>fmisids</td><td>no</td><td>Array</td><td>long</td><td>0</td><td>65535</td><td>1</td><td>The geographical location(s) expressed by an array of fmisids</td></tr>
+<tr><td>geoids</td><td>no</td><td>Array</td><td>long</td><td>0</td><td>65535</td><td>1</td><td>The geographical location(s) expressed by an array of geoids</td></tr>
+<tr><td>hours</td><td>no</td><td>Array</td><td>unsigned long</td><td>0</td><td>65535</td><td>1</td><td>requested times expressed in the list of hours (for example “12,13,18,19”)</td></tr>
+<tr><td>keyword</td><td>yes</td><td>Scalar</td><td>string</td><td> </td><td> </td><td> </td><td>The geographical location(s) expressed by an array of keywords</td></tr>
+<tr><td>keyword_overwritable</td><td>yes</td><td>Scalar</td><td>bool</td><td> </td><td> </td><td> </td><td>The default values listed in the "keyword" parameter can be overwritten by using the location related input parameters only if the value of this parameter is "true".</td></tr>
+<tr><td>language</td><td>no</td><td>Scalar</td><td>string</td><td> </td><td> </td><td> </td><td>The language to use</td></tr>
+<tr><td>latest</td><td>yes</td><td>Scalar</td><td>bool</td><td> </td><td> </td><td> </td><td></td></tr>
+<tr><td>latlons</td><td>no</td><td>Array</td><td>double</td><td>0</td><td>999</td><td>2</td><td>The geographical location(s) expressed by an array of latitude-longitude pairs.</td></tr>
+<tr><td>locale</td><td>yes</td><td>Scalar</td><td>string</td><td> </td><td> </td><td> </td><td>value of the 'Locale' (for example fi_FI.utf8).</td></tr>
+<tr><td>lpnns</td><td>no</td><td>Array</td><td>long</td><td>0</td><td>65535</td><td>1</td><td>The geographical location(s) expressed by an array of LPNNs</td></tr>
+<tr><td>maxDistance</td><td>yes</td><td>Scalar</td><td>double</td><td> </td><td> </td><td> </td><td>The maximum data search distance from the given geographical location(s).</td></tr>
+<tr><td>maxEpochs</td><td>yes</td><td>Scalar</td><td>unsigned long</td><td> </td><td> </td><td> </td><td>maximum number of time epochs that can be returned. If the estimated number before query is larger than the specified one then the query is aborted. This parameter is not alid if the "storedQueryRestrictions" parameter is set to "false" in the WFS Plugin configuration file.</td></tr>
+<tr><td>meteoParameters</td><td>yes</td><td>Array</td><td>string</td><td>1</td><td>65535</td><td>1</td><td>array of fields whose values should be returned in the response.</td></tr>
+<tr><td>missingText</td><td>yes</td><td>Scalar</td><td>string</td><td> </td><td> </td><td> </td><td>value that is returned when the value of the requested field is missing.</td></tr>
+<tr><td>numOfStations</td><td>yes</td><td>Scalar</td><td>unsigned long</td><td> </td><td> </td><td> </td><td>The maximum number of the observation stations returned around the given geographical location (inside the radius of "maxDistance")</td></tr>
+<tr><td>places</td><td>no</td><td>Array</td><td>string</td><td>0</td><td>65535</td><td>1</td><td>The geographical location(s) expressed by an array of location names.</td></tr>
+<tr><td>qualityInfo</td><td>yes</td><td>Scalar</td><td>bool</td><td> </td><td> </td><td> </td><td>quality code information of the measured values will be included in the response if the parameter value is "on".</td></tr>
+<tr><td>startStep</td><td>no</td><td>Scalar</td><td>unsigned long</td><td> </td><td> </td><td> </td><td>The index number of the first selected time step since the start time.</td></tr>
+<tr><td>stationType</td><td>yes</td><td>Scalar</td><td>string</td><td> </td><td> </td><td> </td><td>The type of the observation station (defined in the ObsEngine configuration)</td></tr>
+<tr><td>timeStep</td><td>no</td><td>Scalar</td><td>unsigned long</td><td> </td><td> </td><td> </td><td>The time interval between the requested records expressed in minutes.</td></tr>
+<tr><td>timeSteps</td><td>no</td><td>Scalar</td><td>unsigned long</td><td> </td><td> </td><td> </td><td>The number of the requested time steps (= number of data records).</td></tr>
+<tr><td>timeZone</td><td>yes</td><td>Scalar</td><td>string</td><td> </td><td> </td><td> </td><td>The time zone used in the response.</td></tr>
+<tr><td>times</td><td>no</td><td>Array</td><td>unsigned long</td><td>0</td><td>999</td><td>1</td><td>The requested times expressed in the list of hours and minutes HHMM (for example “1200,1230,1300,1330”).</td></tr>
+<tr><td>weekDays</td><td>no</td><td>Array</td><td>long</td><td>0</td><td>65535</td><td>1</td><td>requested times expressed in the list of weekdays</td></tr>
+<tr><td>wmos</td><td>no</td><td>Array</td><td>long</td><td>0</td><td>65535</td><td>1</td><td>The geographical location(s) expressed by an array of WMOs</td></tr>
 </table>
-<br/>
-<h1>Stored queries</h1>
-<br/>
-<table border="1px solid black", padding: 5px; >
+
+<h3>Stored queries</h3>
+<table border="1px solid black"; padding: "5px" >
 <tr><th>Stored query</th><th>Template</th><th>Return types</th></tr>
-<tr><td><a href="/wfs?SERVICE=WFS&VERSION=2.0.0&request=DescribeStoredQueries&storedquery_id=fmi::datasets::observations::weather::daily::timevaluepair">fmi::datasets::observations::weather::daily::timevaluepair</a></td>
-<td>weather_observations_timevaluepair.c2t</td>
-<td>omso:PointTimeSeriesObservation</td>
-</tr>
-<tr><td><a href="/wfs?SERVICE=WFS&VERSION=2.0.0&request=DescribeStoredQueries&storedquery_id=fmi::datasets::observations::weather::monthly::timevaluepair">fmi::datasets::observations::weather::monthly::timevaluepair</a></td>
-<td>weather_observations_timevaluepair.c2t</td>
-<td>omso:PointTimeSeriesObservation</td>
-</tr>
-<tr><td><a href="/wfs?SERVICE=WFS&VERSION=2.0.0&request=DescribeStoredQueries&storedquery_id=fmi::datasets::observations::weather::timevaluepair">fmi::datasets::observations::weather::timevaluepair</a></td>
-<td>weather_observations_timevaluepair.c2t</td>
-<td>omso:PointTimeSeriesObservation</td>
-</tr>
-<tr><td><a href="/wfs?SERVICE=WFS&VERSION=2.0.0&request=DescribeStoredQueries&storedquery_id=fmi::datasets::observations::weather::yearly::30year::timevaluepair">fmi::datasets::observations::weather::yearly::30year::timevaluepair</a></td>
-<td>weather_observations_timevaluepair.c2t</td>
-<td>omso:PointTimeSeriesObservation</td>
-</tr>
-<tr><td><a href="/wfs?SERVICE=WFS&VERSION=2.0.0&request=DescribeStoredQueries&storedquery_id=fmi::observations::airquality::hourly::multipointcoverage">fmi::observations::airquality::hourly::multipointcoverage</a></td>
-<td>weather_observations_grid.c2t</td>
-<td>omso:GridSeriesObservation</td>
-</tr>
-<tr><td><a href="/wfs?SERVICE=WFS&VERSION=2.0.0&request=DescribeStoredQueries&storedquery_id=fmi::observations::airquality::hourly::simple">fmi::observations::airquality::hourly::simple</a></td>
-<td>weather_observations_simple.c2t</td>
-<td>BsWfs:BsWfsElement</td>
-</tr>
-<tr><td><a href="/wfs?SERVICE=WFS&VERSION=2.0.0&request=DescribeStoredQueries&storedquery_id=fmi::observations::airquality::hourly::timevaluepair">fmi::observations::airquality::hourly::timevaluepair</a></td>
-<td>weather_observations_timevaluepair.c2t</td>
-<td>omso:PointTimeSeriesObservation</td>
-</tr>
-<tr><td><a href="/wfs?SERVICE=WFS&VERSION=2.0.0&request=DescribeStoredQueries&storedquery_id=fmi::observations::magnetometer::simple">fmi::observations::magnetometer::simple</a></td>
-<td>weather_observations_simple.c2t</td>
-<td>BsWfs:BsWfsElement</td>
-</tr>
-<tr><td><a href="/wfs?SERVICE=WFS&VERSION=2.0.0&request=DescribeStoredQueries&storedquery_id=fmi::observations::mareograph::daily::multipointcoverage">fmi::observations::mareograph::daily::multipointcoverage</a></td>
-<td>weather_observations2_grid.c2t</td>
-<td>omso:GridSeriesObservation</td>
-</tr>
-<tr><td><a href="/wfs?SERVICE=WFS&VERSION=2.0.0&request=DescribeStoredQueries&storedquery_id=fmi::observations::mareograph::daily::simple">fmi::observations::mareograph::daily::simple</a></td>
-<td>weather_observations_simple.c2t</td>
-<td>BsWfs:BsWfsElement</td>
-</tr>
-<tr><td><a href="/wfs?SERVICE=WFS&VERSION=2.0.0&request=DescribeStoredQueries&storedquery_id=fmi::observations::mareograph::daily::timevaluepair">fmi::observations::mareograph::daily::timevaluepair</a></td>
-<td>weather_observations_timevaluepair2.c2t</td>
-<td>omso:PointTimeSeriesObservation</td>
-</tr>
-<tr><td><a href="/wfs?SERVICE=WFS&VERSION=2.0.0&request=DescribeStoredQueries&storedquery_id=fmi::observations::mareograph::instant::multipointcoverage">fmi::observations::mareograph::instant::multipointcoverage</a></td>
-<td>weather_observations2_grid.c2t</td>
-<td>omso:GridSeriesObservation</td>
-</tr>
-<tr><td><a href="/wfs?SERVICE=WFS&VERSION=2.0.0&request=DescribeStoredQueries&storedquery_id=fmi::observations::mareograph::instant::simple">fmi::observations::mareograph::instant::simple</a></td>
-<td>weather_observations_simple.c2t</td>
-<td>BsWfs:BsWfsElement</td>
-</tr>
-<tr><td><a href="/wfs?SERVICE=WFS&VERSION=2.0.0&request=DescribeStoredQueries&storedquery_id=fmi::observations::mareograph::instant::timevaluepair">fmi::observations::mareograph::instant::timevaluepair</a></td>
-<td>weather_observations_timevaluepair2.c2t</td>
-<td>omso:PointTimeSeriesObservation</td>
-</tr>
-<tr><td><a href="/wfs?SERVICE=WFS&VERSION=2.0.0&request=DescribeStoredQueries&storedquery_id=fmi::observations::mareograph::monthly::multipointcoverage">fmi::observations::mareograph::monthly::multipointcoverage</a></td>
-<td>weather_observations2_grid.c2t</td>
-<td>omso:GridSeriesObservation</td>
-</tr>
-<tr><td><a href="/wfs?SERVICE=WFS&VERSION=2.0.0&request=DescribeStoredQueries&storedquery_id=fmi::observations::mareograph::monthly::simple">fmi::observations::mareograph::monthly::simple</a></td>
-<td>weather_observations_simple.c2t</td>
-<td>BsWfs:BsWfsElement</td>
-</tr>
-<tr><td><a href="/wfs?SERVICE=WFS&VERSION=2.0.0&request=DescribeStoredQueries&storedquery_id=fmi::observations::mareograph::monthly::timevaluepair">fmi::observations::mareograph::monthly::timevaluepair</a></td>
-<td>weather_observations_timevaluepair2.c2t</td>
-<td>omso:PointTimeSeriesObservation</td>
-</tr>
-<tr><td><a href="/wfs?SERVICE=WFS&VERSION=2.0.0&request=DescribeStoredQueries&storedquery_id=fmi::observations::mareograph::multipointcoverage">fmi::observations::mareograph::multipointcoverage</a></td>
-<td>weather_observations2_grid.c2t</td>
-<td>omso:GridSeriesObservation</td>
-</tr>
-<tr><td><a href="/wfs?SERVICE=WFS&VERSION=2.0.0&request=DescribeStoredQueries&storedquery_id=fmi::observations::mareograph::simple">fmi::observations::mareograph::simple</a></td>
-<td>weather_observations_simple.c2t</td>
-<td>BsWfs:BsWfsElement</td>
-</tr>
-<tr><td><a href="/wfs?SERVICE=WFS&VERSION=2.0.0&request=DescribeStoredQueries&storedquery_id=fmi::observations::mareograph::timevaluepair">fmi::observations::mareograph::timevaluepair</a></td>
-<td>weather_observations_timevaluepair2.c2t</td>
-<td>omso:PointTimeSeriesObservation</td>
-</tr>
-<tr><td><a href="/wfs?SERVICE=WFS&VERSION=2.0.0&request=DescribeStoredQueries&storedquery_id=fmi::observations::radiation::multipointcoverage">fmi::observations::radiation::multipointcoverage</a></td>
-<td>weather_observations_grid.c2t</td>
-<td>omso:GridSeriesObservation</td>
-</tr>
-<tr><td><a href="/wfs?SERVICE=WFS&VERSION=2.0.0&request=DescribeStoredQueries&storedquery_id=fmi::observations::radiation::simple">fmi::observations::radiation::simple</a></td>
-<td>weather_observations_simple.c2t</td>
-<td>BsWfs:BsWfsElement</td>
-</tr>
-<tr><td><a href="/wfs?SERVICE=WFS&VERSION=2.0.0&request=DescribeStoredQueries&storedquery_id=fmi::observations::radiation::timevaluepair">fmi::observations::radiation::timevaluepair</a></td>
-<td>weather_observations_timevaluepair.c2t</td>
-<td>omso:PointTimeSeriesObservation</td>
-</tr>
-<tr><td><a href="/wfs?SERVICE=WFS&VERSION=2.0.0&request=DescribeStoredQueries&storedquery_id=fmi::observations::soil::hourly::multipointcoverage">fmi::observations::soil::hourly::multipointcoverage</a></td>
-<td>weather_observations_grid.c2t</td>
-<td>omso:GridSeriesObservation</td>
-</tr>
-<tr><td><a href="/wfs?SERVICE=WFS&VERSION=2.0.0&request=DescribeStoredQueries&storedquery_id=fmi::observations::soil::hourly::simple">fmi::observations::soil::hourly::simple</a></td>
-<td>weather_observations_simple.c2t</td>
-<td>BsWfs:BsWfsElement</td>
-</tr>
-<tr><td><a href="/wfs?SERVICE=WFS&VERSION=2.0.0&request=DescribeStoredQueries&storedquery_id=fmi::observations::soil::hourly::timevaluepair">fmi::observations::soil::hourly::timevaluepair</a></td>
-<td>weather_observations_timevaluepair.c2t</td>
-<td>omso:PointTimeSeriesObservation</td>
-</tr>
-<tr><td><a href="/wfs?SERVICE=WFS&VERSION=2.0.0&request=DescribeStoredQueries&storedquery_id=fmi::observations::wave::multipointcoverage">fmi::observations::wave::multipointcoverage</a></td>
-<td>weather_observations_grid.c2t</td>
-<td>omso:GridSeriesObservation</td>
-</tr>
-<tr><td><a href="/wfs?SERVICE=WFS&VERSION=2.0.0&request=DescribeStoredQueries&storedquery_id=fmi::observations::wave::simple">fmi::observations::wave::simple</a></td>
-<td>weather_observations_simple.c2t</td>
-<td>BsWfs:BsWfsElement</td>
-</tr>
-<tr><td><a href="/wfs?SERVICE=WFS&VERSION=2.0.0&request=DescribeStoredQueries&storedquery_id=fmi::observations::wave::timevaluepair">fmi::observations::wave::timevaluepair</a></td>
-<td>weather_observations_timevaluepair.c2t</td>
-<td>omso:PointTimeSeriesObservation</td>
-</tr>
-<tr><td><a href="/wfs?SERVICE=WFS&VERSION=2.0.0&request=DescribeStoredQueries&storedquery_id=fmi::observations::weather::cities::multipointcoverage">fmi::observations::weather::cities::multipointcoverage</a></td>
-<td>weather_observations_grid.c2t</td>
-<td>omso:GridSeriesObservation</td>
-</tr>
-<tr><td><a href="/wfs?SERVICE=WFS&VERSION=2.0.0&request=DescribeStoredQueries&storedquery_id=fmi::observations::weather::cities::simple">fmi::observations::weather::cities::simple</a></td>
-<td>weather_observations_simple.c2t</td>
-<td>BsWfs:BsWfsElement</td>
-</tr>
-<tr><td><a href="/wfs?SERVICE=WFS&VERSION=2.0.0&request=DescribeStoredQueries&storedquery_id=fmi::observations::weather::cities::timevaluepair">fmi::observations::weather::cities::timevaluepair</a></td>
-<td>weather_observations_timevaluepair.c2t</td>
-<td>omso:PointTimeSeriesObservation</td>
-</tr>
-<tr><td><a href="/wfs?SERVICE=WFS&VERSION=2.0.0&request=DescribeStoredQueries&storedquery_id=fmi::observations::weather::daily::multipointcoverage">fmi::observations::weather::daily::multipointcoverage</a></td>
-<td>weather_observations_grid.c2t</td>
-<td>omso:GridSeriesObservation</td>
-</tr>
-<tr><td><a href="/wfs?SERVICE=WFS&VERSION=2.0.0&request=DescribeStoredQueries&storedquery_id=fmi::observations::weather::daily::simple">fmi::observations::weather::daily::simple</a></td>
-<td>weather_observations_simple.c2t</td>
-<td>BsWfs:BsWfsElement</td>
-</tr>
-<tr><td><a href="/wfs?SERVICE=WFS&VERSION=2.0.0&request=DescribeStoredQueries&storedquery_id=fmi::observations::weather::daily::timevaluepair">fmi::observations::weather::daily::timevaluepair</a></td>
-<td>weather_observations_timevaluepair.c2t</td>
-<td>omso:PointTimeSeriesObservation</td>
-</tr>
-<tr><td><a href="/wfs?SERVICE=WFS&VERSION=2.0.0&request=DescribeStoredQueries&storedquery_id=fmi::observations::weather::monthly::30year::multipointcoverage">fmi::observations::weather::monthly::30year::multipointcoverage</a></td>
-<td>weather_observations_grid.c2t</td>
-<td>omso:GridSeriesObservation</td>
-</tr>
-<tr><td><a href="/wfs?SERVICE=WFS&VERSION=2.0.0&request=DescribeStoredQueries&storedquery_id=fmi::observations::weather::monthly::30year::simple">fmi::observations::weather::monthly::30year::simple</a></td>
-<td>weather_observations_simple.c2t</td>
-<td>BsWfs:BsWfsElement</td>
-</tr>
-<tr><td><a href="/wfs?SERVICE=WFS&VERSION=2.0.0&request=DescribeStoredQueries&storedquery_id=fmi::observations::weather::monthly::30year::timevaluepair">fmi::observations::weather::monthly::30year::timevaluepair</a></td>
-<td>weather_observations_timevaluepair.c2t</td>
-<td>omso:PointTimeSeriesObservation</td>
-</tr>
-<tr><td><a href="/wfs?SERVICE=WFS&VERSION=2.0.0&request=DescribeStoredQueries&storedquery_id=fmi::observations::weather::monthly::multipointcoverage">fmi::observations::weather::monthly::multipointcoverage</a></td>
-<td>weather_observations_grid.c2t</td>
-<td>omso:GridSeriesObservation</td>
-</tr>
-<tr><td><a href="/wfs?SERVICE=WFS&VERSION=2.0.0&request=DescribeStoredQueries&storedquery_id=fmi::observations::weather::monthly::simple">fmi::observations::weather::monthly::simple</a></td>
-<td>weather_observations_simple.c2t</td>
-<td>BsWfs:BsWfsElement</td>
-</tr>
-<tr><td><a href="/wfs?SERVICE=WFS&VERSION=2.0.0&request=DescribeStoredQueries&storedquery_id=fmi::observations::weather::monthly::timevaluepair">fmi::observations::weather::monthly::timevaluepair</a></td>
-<td>weather_observations_timevaluepair.c2t</td>
-<td>omso:PointTimeSeriesObservation</td>
-</tr>
-<tr><td><a href="/wfs?SERVICE=WFS&VERSION=2.0.0&request=DescribeStoredQueries&storedquery_id=fmi::observations::weather::multipointcoverage">fmi::observations::weather::multipointcoverage</a></td>
-<td>weather_observations_grid.c2t</td>
-<td>omso:GridSeriesObservation</td>
-</tr>
-<tr><td><a href="/wfs?SERVICE=WFS&VERSION=2.0.0&request=DescribeStoredQueries&storedquery_id=fmi::observations::weather::simple">fmi::observations::weather::simple</a></td>
-<td>weather_observations_simple.c2t</td>
-<td>BsWfs:BsWfsElement</td>
-</tr>
-<tr><td><a href="/wfs?SERVICE=WFS&VERSION=2.0.0&request=DescribeStoredQueries&storedquery_id=fmi::observations::weather::timevaluepair">fmi::observations::weather::timevaluepair</a></td>
-<td>weather_observations_timevaluepair.c2t</td>
-<td>omso:PointTimeSeriesObservation</td>
-</tr>
-<tr><td><a href="/wfs?SERVICE=WFS&VERSION=2.0.0&request=DescribeStoredQueries&storedquery_id=fmi::observations::weather::yearly::30year::multipointcoverage">fmi::observations::weather::yearly::30year::multipointcoverage</a></td>
-<td>weather_observations_grid.c2t</td>
-<td>omso:GridSeriesObservation</td>
-</tr>
-<tr><td><a href="/wfs?SERVICE=WFS&VERSION=2.0.0&request=DescribeStoredQueries&storedquery_id=fmi::observations::weather::yearly::30year::simple">fmi::observations::weather::yearly::30year::simple</a></td>
-<td>weather_observations_simple.c2t</td>
-<td>BsWfs:BsWfsElement</td>
-</tr>
-<tr><td><a href="/wfs?SERVICE=WFS&VERSION=2.0.0&request=DescribeStoredQueries&storedquery_id=fmi::observations::weather::yearly::30year::timevaluepair">fmi::observations::weather::yearly::30year::timevaluepair</a></td>
-<td>weather_observations_timevaluepair.c2t</td>
-<td>omso:PointTimeSeriesObservation</td>
-</tr>
-<tr><td><a href="/wfs?SERVICE=WFS&VERSION=2.0.0&request=DescribeStoredQueries&storedquery_id=livi::observations::road::default::multipointcoverage">livi::observations::road::default::multipointcoverage</a></td>
-<td>weather_observations_grid.c2t</td>
-<td>omso:GridSeriesObservation</td>
-</tr>
-<tr><td><a href="/wfs?SERVICE=WFS&VERSION=2.0.0&request=DescribeStoredQueries&storedquery_id=livi::observations::road::default::simple">livi::observations::road::default::simple</a></td>
-<td>weather_observations_simple.c2t</td>
-<td>BsWfs:BsWfsElement</td>
-</tr>
-<tr><td><a href="/wfs?SERVICE=WFS&VERSION=2.0.0&request=DescribeStoredQueries&storedquery_id=livi::observations::road::default::timevaluepair">livi::observations::road::default::timevaluepair</a></td>
-<td>weather_observations_timevaluepair.c2t</td>
-<td>omso:PointTimeSeriesObservation</td>
-</tr>
-<tr><td><a href="/wfs?SERVICE=WFS&VERSION=2.0.0&request=DescribeStoredQueries&storedquery_id=livi::observations::road::finland::multipointcoverage">livi::observations::road::finland::multipointcoverage</a></td>
-<td>weather_observations_grid.c2t</td>
-<td>omso:GridSeriesObservation</td>
-</tr>
-<tr><td><a href="/wfs?SERVICE=WFS&VERSION=2.0.0&request=DescribeStoredQueries&storedquery_id=livi::observations::road::finland::simple">livi::observations::road::finland::simple</a></td>
-<td>weather_observations_simple.c2t</td>
-<td>BsWfs:BsWfsElement</td>
-</tr>
-<tr><td><a href="/wfs?SERVICE=WFS&VERSION=2.0.0&request=DescribeStoredQueries&storedquery_id=livi::observations::road::finland::timevaluepair">livi::observations::road::finland::timevaluepair</a></td>
-<td>weather_observations_timevaluepair.c2t</td>
-<td>omso:PointTimeSeriesObservation</td>
-</tr>
-<tr><td><a href="/wfs?SERVICE=WFS&VERSION=2.0.0&request=DescribeStoredQueries&storedquery_id=livi::observations::road::multipointcoverage">livi::observations::road::multipointcoverage</a></td>
-<td>weather_observations_grid.c2t</td>
-<td>omso:GridSeriesObservation</td>
-</tr>
-<tr><td><a href="/wfs?SERVICE=WFS&VERSION=2.0.0&request=DescribeStoredQueries&storedquery_id=livi::observations::road::simple">livi::observations::road::simple</a></td>
-<td>weather_observations_simple.c2t</td>
-<td>BsWfs:BsWfsElement</td>
-</tr>
-<tr><td><a href="/wfs?SERVICE=WFS&VERSION=2.0.0&request=DescribeStoredQueries&storedquery_id=livi::observations::road::timevaluepair">livi::observations::road::timevaluepair</a></td>
-<td>weather_observations_timevaluepair.c2t</td>
-<td>omso:PointTimeSeriesObservation</td>
-</tr>
-<tr><td><a href="/wfs?SERVICE=WFS&VERSION=2.0.0&request=DescribeStoredQueries&storedquery_id=stuk::observations::external-radiation::latest::multipointcoverage">stuk::observations::external-radiation::latest::multipointcoverage</a></td>
-<td>stuk_weather_observations_grid.c2t</td>
-<td>omso:GridSeriesObservation</td>
-</tr>
-<tr><td><a href="/wfs?SERVICE=WFS&VERSION=2.0.0&request=DescribeStoredQueries&storedquery_id=stuk::observations::external-radiation::latest::simple">stuk::observations::external-radiation::latest::simple</a></td>
-<td>weather_observations_simple.c2t</td>
-<td>BsWfs:BsWfsElement</td>
-</tr>
-<tr><td><a href="/wfs?SERVICE=WFS&VERSION=2.0.0&request=DescribeStoredQueries&storedquery_id=stuk::observations::external-radiation::multipointcoverage">stuk::observations::external-radiation::multipointcoverage</a></td>
-<td>stuk_weather_observations_grid.c2t</td>
-<td>omso:GridSeriesObservation</td>
-</tr>
-<tr><td><a href="/wfs?SERVICE=WFS&VERSION=2.0.0&request=DescribeStoredQueries&storedquery_id=urban::observations::airquality::hourly::multipointcoverage">urban::observations::airquality::hourly::multipointcoverage</a></td>
-<td>weather_observations_grid.c2t</td>
-<td>omso:GridSeriesObservation</td>
-</tr>
-<tr><td><a href="/wfs?SERVICE=WFS&VERSION=2.0.0&request=DescribeStoredQueries&storedquery_id=urban::observations::airquality::hourly::simple">urban::observations::airquality::hourly::simple</a></td>
-<td>weather_observations_simple.c2t</td>
-<td>BsWfs:BsWfsElement</td>
-</tr>
-<tr><td><a href="/wfs?SERVICE=WFS&VERSION=2.0.0&request=DescribeStoredQueries&storedquery_id=urban::observations::airquality::hourly::timevaluepair">urban::observations::airquality::hourly::timevaluepair</a></td>
-<td>weather_observations_timevaluepair.c2t</td>
-<td>omso:PointTimeSeriesObservation</td>
-</tr>
-</table>
-</html>
+<tr><td><a href="/wfs?SERVICE=WFS&VERSION=2.0.0&request=DescribeStoredQueries&storedquery_id=fmi::datasets::observations::weather::daily::timevaluepair">fmi::datasets::observations::weather::daily::timevaluepair</a></td><td>weather_observations_timevaluepair.c2t</td><td>omso:PointTimeSeriesObservation</td><tr><td><a href="/wfs?SERVICE=WFS&VERSION=2.0.0&request=DescribeStoredQueries&storedquery_id=fmi::datasets::observations::weather::monthly::timevaluepair">fmi::datasets::observations::weather::monthly::timevaluepair</a></td><td>weather_observations_timevaluepair.c2t</td><td>omso:PointTimeSeriesObservation</td><tr><td><a href="/wfs?SERVICE=WFS&VERSION=2.0.0&request=DescribeStoredQueries&storedquery_id=fmi::datasets::observations::weather::timevaluepair">fmi::datasets::observations::weather::timevaluepair</a></td><td>weather_observations_timevaluepair.c2t</td><td>omso:PointTimeSeriesObservation</td><tr><td><a href="/wfs?SERVICE=WFS&VERSION=2.0.0&request=DescribeStoredQueries&storedquery_id=fmi::datasets::observations::weather::yearly::30year::timevaluepair">fmi::datasets::observations::weather::yearly::30year::timevaluepair</a></td><td>weather_observations_timevaluepair.c2t</td><td>omso:PointTimeSeriesObservation</td><tr><td><a href="/wfs?SERVICE=WFS&VERSION=2.0.0&request=DescribeStoredQueries&storedquery_id=fmi::observations::airquality::hourly::multipointcoverage">fmi::observations::airquality::hourly::multipointcoverage</a></td><td>weather_observations_grid.c2t</td><td>omso:GridSeriesObservation</td><tr><td><a href="/wfs?SERVICE=WFS&VERSION=2.0.0&request=DescribeStoredQueries&storedquery_id=fmi::observations::airquality::hourly::simple">fmi::observations::airquality::hourly::simple</a></td><td>weather_observations_simple.c2t</td><td>BsWfs:BsWfsElement</td><tr><td><a href="/wfs?SERVICE=WFS&VERSION=2.0.0&request=DescribeStoredQueries&storedquery_id=fmi::observations::airquality::hourly::timevaluepair">fmi::observations::airquality::hourly::timevaluepair</a></td><td>weather_observations_timevaluepair.c2t</td><td>omso:PointTimeSeriesObservation</td><tr><td><a href="/wfs?SERVICE=WFS&VERSION=2.0.0&request=DescribeStoredQueries&storedquery_id=fmi::observations::magnetometer::simple">fmi::observations::magnetometer::simple</a></td><td>weather_observations_simple.c2t</td><td>BsWfs:BsWfsElement</td><tr><td><a href="/wfs?SERVICE=WFS&VERSION=2.0.0&request=DescribeStoredQueries&storedquery_id=fmi::observations::mareograph::daily::multipointcoverage">fmi::observations::mareograph::daily::multipointcoverage</a></td><td>weather_observations2_grid.c2t</td><td>omso:GridSeriesObservation</td><tr><td><a href="/wfs?SERVICE=WFS&VERSION=2.0.0&request=DescribeStoredQueries&storedquery_id=fmi::observations::mareograph::daily::simple">fmi::observations::mareograph::daily::simple</a></td><td>weather_observations_simple.c2t</td><td>BsWfs:BsWfsElement</td><tr><td><a href="/wfs?SERVICE=WFS&VERSION=2.0.0&request=DescribeStoredQueries&storedquery_id=fmi::observations::mareograph::daily::timevaluepair">fmi::observations::mareograph::daily::timevaluepair</a></td><td>weather_observations_timevaluepair2.c2t</td><td>omso:PointTimeSeriesObservation</td><tr><td><a href="/wfs?SERVICE=WFS&VERSION=2.0.0&request=DescribeStoredQueries&storedquery_id=fmi::observations::mareograph::instant::multipointcoverage">fmi::observations::mareograph::instant::multipointcoverage</a></td><td>weather_observations2_grid.c2t</td><td>omso:GridSeriesObservation</td><tr><td><a href="/wfs?SERVICE=WFS&VERSION=2.0.0&request=DescribeStoredQueries&storedquery_id=fmi::observations::mareograph::instant::simple">fmi::observations::mareograph::instant::simple</a></td><td>weather_observations_simple.c2t</td><td>BsWfs:BsWfsElement</td><tr><td><a href="/wfs?SERVICE=WFS&VERSION=2.0.0&request=DescribeStoredQueries&storedquery_id=fmi::observations::mareograph::instant::timevaluepair">fmi::observations::mareograph::instant::timevaluepair</a></td><td>weather_observations_timevaluepair2.c2t</td><td>omso:PointTimeSeriesObservation</td><tr><td><a href="/wfs?SERVICE=WFS&VERSION=2.0.0&request=DescribeStoredQueries&storedquery_id=fmi::observations::mareograph::monthly::multipointcoverage">fmi::observations::mareograph::monthly::multipointcoverage</a></td><td>weather_observations2_grid.c2t</td><td>omso:GridSeriesObservation</td><tr><td><a href="/wfs?SERVICE=WFS&VERSION=2.0.0&request=DescribeStoredQueries&storedquery_id=fmi::observations::mareograph::monthly::simple">fmi::observations::mareograph::monthly::simple</a></td><td>weather_observations_simple.c2t</td><td>BsWfs:BsWfsElement</td><tr><td><a href="/wfs?SERVICE=WFS&VERSION=2.0.0&request=DescribeStoredQueries&storedquery_id=fmi::observations::mareograph::monthly::timevaluepair">fmi::observations::mareograph::monthly::timevaluepair</a></td><td>weather_observations_timevaluepair2.c2t</td><td>omso:PointTimeSeriesObservation</td><tr><td><a href="/wfs?SERVICE=WFS&VERSION=2.0.0&request=DescribeStoredQueries&storedquery_id=fmi::observations::mareograph::multipointcoverage">fmi::observations::mareograph::multipointcoverage</a></td><td>weather_observations2_grid.c2t</td><td>omso:GridSeriesObservation</td><tr><td><a href="/wfs?SERVICE=WFS&VERSION=2.0.0&request=DescribeStoredQueries&storedquery_id=fmi::observations::mareograph::simple">fmi::observations::mareograph::simple</a></td><td>weather_observations_simple.c2t</td><td>BsWfs:BsWfsElement</td><tr><td><a href="/wfs?SERVICE=WFS&VERSION=2.0.0&request=DescribeStoredQueries&storedquery_id=fmi::observations::mareograph::timevaluepair">fmi::observations::mareograph::timevaluepair</a></td><td>weather_observations_timevaluepair2.c2t</td><td>omso:PointTimeSeriesObservation</td><tr><td><a href="/wfs?SERVICE=WFS&VERSION=2.0.0&request=DescribeStoredQueries&storedquery_id=fmi::observations::radiation::multipointcoverage">fmi::observations::radiation::multipointcoverage</a></td><td>weather_observations_grid.c2t</td><td>omso:GridSeriesObservation</td><tr><td><a href="/wfs?SERVICE=WFS&VERSION=2.0.0&request=DescribeStoredQueries&storedquery_id=fmi::observations::radiation::simple">fmi::observations::radiation::simple</a></td><td>weather_observations_simple.c2t</td><td>BsWfs:BsWfsElement</td><tr><td><a href="/wfs?SERVICE=WFS&VERSION=2.0.0&request=DescribeStoredQueries&storedquery_id=fmi::observations::radiation::timevaluepair">fmi::observations::radiation::timevaluepair</a></td><td>weather_observations_timevaluepair.c2t</td><td>omso:PointTimeSeriesObservation</td><tr><td><a href="/wfs?SERVICE=WFS&VERSION=2.0.0&request=DescribeStoredQueries&storedquery_id=fmi::observations::soil::hourly::multipointcoverage">fmi::observations::soil::hourly::multipointcoverage</a></td><td>weather_observations_grid.c2t</td><td>omso:GridSeriesObservation</td><tr><td><a href="/wfs?SERVICE=WFS&VERSION=2.0.0&request=DescribeStoredQueries&storedquery_id=fmi::observations::soil::hourly::simple">fmi::observations::soil::hourly::simple</a></td><td>weather_observations_simple.c2t</td><td>BsWfs:BsWfsElement</td><tr><td><a href="/wfs?SERVICE=WFS&VERSION=2.0.0&request=DescribeStoredQueries&storedquery_id=fmi::observations::soil::hourly::timevaluepair">fmi::observations::soil::hourly::timevaluepair</a></td><td>weather_observations_timevaluepair.c2t</td><td>omso:PointTimeSeriesObservation</td><tr><td><a href="/wfs?SERVICE=WFS&VERSION=2.0.0&request=DescribeStoredQueries&storedquery_id=fmi::observations::wave::multipointcoverage">fmi::observations::wave::multipointcoverage</a></td><td>weather_observations_grid.c2t</td><td>omso:GridSeriesObservation</td><tr><td><a href="/wfs?SERVICE=WFS&VERSION=2.0.0&request=DescribeStoredQueries&storedquery_id=fmi::observations::wave::simple">fmi::observations::wave::simple</a></td><td>weather_observations_simple.c2t</td><td>BsWfs:BsWfsElement</td><tr><td><a href="/wfs?SERVICE=WFS&VERSION=2.0.0&request=DescribeStoredQueries&storedquery_id=fmi::observations::wave::timevaluepair">fmi::observations::wave::timevaluepair</a></td><td>weather_observations_timevaluepair.c2t</td><td>omso:PointTimeSeriesObservation</td><tr><td><a href="/wfs?SERVICE=WFS&VERSION=2.0.0&request=DescribeStoredQueries&storedquery_id=fmi::observations::weather::cities::multipointcoverage">fmi::observations::weather::cities::multipointcoverage</a></td><td>weather_observations_grid.c2t</td><td>omso:GridSeriesObservation</td><tr><td><a href="/wfs?SERVICE=WFS&VERSION=2.0.0&request=DescribeStoredQueries&storedquery_id=fmi::observations::weather::cities::simple">fmi::observations::weather::cities::simple</a></td><td>weather_observations_simple.c2t</td><td>BsWfs:BsWfsElement</td><tr><td><a href="/wfs?SERVICE=WFS&VERSION=2.0.0&request=DescribeStoredQueries&storedquery_id=fmi::observations::weather::cities::timevaluepair">fmi::observations::weather::cities::timevaluepair</a></td><td>weather_observations_timevaluepair.c2t</td><td>omso:PointTimeSeriesObservation</td><tr><td><a href="/wfs?SERVICE=WFS&VERSION=2.0.0&request=DescribeStoredQueries&storedquery_id=fmi::observations::weather::daily::multipointcoverage">fmi::observations::weather::daily::multipointcoverage</a></td><td>weather_observations_grid.c2t</td><td>omso:GridSeriesObservation</td><tr><td><a href="/wfs?SERVICE=WFS&VERSION=2.0.0&request=DescribeStoredQueries&storedquery_id=fmi::observations::weather::daily::simple">fmi::observations::weather::daily::simple</a></td><td>weather_observations_simple.c2t</td><td>BsWfs:BsWfsElement</td><tr><td><a href="/wfs?SERVICE=WFS&VERSION=2.0.0&request=DescribeStoredQueries&storedquery_id=fmi::observations::weather::daily::timevaluepair">fmi::observations::weather::daily::timevaluepair</a></td><td>weather_observations_timevaluepair.c2t</td><td>omso:PointTimeSeriesObservation</td><tr><td><a href="/wfs?SERVICE=WFS&VERSION=2.0.0&request=DescribeStoredQueries&storedquery_id=fmi::observations::weather::monthly::30year::multipointcoverage">fmi::observations::weather::monthly::30year::multipointcoverage</a></td><td>weather_observations_grid.c2t</td><td>omso:GridSeriesObservation</td><tr><td><a href="/wfs?SERVICE=WFS&VERSION=2.0.0&request=DescribeStoredQueries&storedquery_id=fmi::observations::weather::monthly::30year::simple">fmi::observations::weather::monthly::30year::simple</a></td><td>weather_observations_simple.c2t</td><td>BsWfs:BsWfsElement</td><tr><td><a href="/wfs?SERVICE=WFS&VERSION=2.0.0&request=DescribeStoredQueries&storedquery_id=fmi::observations::weather::monthly::30year::timevaluepair">fmi::observations::weather::monthly::30year::timevaluepair</a></td><td>weather_observations_timevaluepair.c2t</td><td>omso:PointTimeSeriesObservation</td><tr><td><a href="/wfs?SERVICE=WFS&VERSION=2.0.0&request=DescribeStoredQueries&storedquery_id=fmi::observations::weather::monthly::multipointcoverage">fmi::observations::weather::monthly::multipointcoverage</a></td><td>weather_observations_grid.c2t</td><td>omso:GridSeriesObservation</td><tr><td><a href="/wfs?SERVICE=WFS&VERSION=2.0.0&request=DescribeStoredQueries&storedquery_id=fmi::observations::weather::monthly::simple">fmi::observations::weather::monthly::simple</a></td><td>weather_observations_simple.c2t</td><td>BsWfs:BsWfsElement</td><tr><td><a href="/wfs?SERVICE=WFS&VERSION=2.0.0&request=DescribeStoredQueries&storedquery_id=fmi::observations::weather::monthly::timevaluepair">fmi::observations::weather::monthly::timevaluepair</a></td><td>weather_observations_timevaluepair.c2t</td><td>omso:PointTimeSeriesObservation</td><tr><td><a href="/wfs?SERVICE=WFS&VERSION=2.0.0&request=DescribeStoredQueries&storedquery_id=fmi::observations::weather::multipointcoverage">fmi::observations::weather::multipointcoverage</a></td><td>weather_observations_grid.c2t</td><td>omso:GridSeriesObservation</td><tr><td><a href="/wfs?SERVICE=WFS&VERSION=2.0.0&request=DescribeStoredQueries&storedquery_id=fmi::observations::weather::simple">fmi::observations::weather::simple</a></td><td>weather_observations_simple.c2t</td><td>BsWfs:BsWfsElement</td><tr><td><a href="/wfs?SERVICE=WFS&VERSION=2.0.0&request=DescribeStoredQueries&storedquery_id=fmi::observations::weather::timevaluepair">fmi::observations::weather::timevaluepair</a></td><td>weather_observations_timevaluepair.c2t</td><td>omso:PointTimeSeriesObservation</td><tr><td><a href="/wfs?SERVICE=WFS&VERSION=2.0.0&request=DescribeStoredQueries&storedquery_id=fmi::observations::weather::yearly::30year::multipointcoverage">fmi::observations::weather::yearly::30year::multipointcoverage</a></td><td>weather_observations_grid.c2t</td><td>omso:GridSeriesObservation</td><tr><td><a href="/wfs?SERVICE=WFS&VERSION=2.0.0&request=DescribeStoredQueries&storedquery_id=fmi::observations::weather::yearly::30year::simple">fmi::observations::weather::yearly::30year::simple</a></td><td>weather_observations_simple.c2t</td><td>BsWfs:BsWfsElement</td><tr><td><a href="/wfs?SERVICE=WFS&VERSION=2.0.0&request=DescribeStoredQueries&storedquery_id=fmi::observations::weather::yearly::30year::timevaluepair">fmi::observations::weather::yearly::30year::timevaluepair</a></td><td>weather_observations_timevaluepair.c2t</td><td>omso:PointTimeSeriesObservation</td><tr><td><a href="/wfs?SERVICE=WFS&VERSION=2.0.0&request=DescribeStoredQueries&storedquery_id=livi::observations::road::default::multipointcoverage">livi::observations::road::default::multipointcoverage</a></td><td>weather_observations_grid.c2t</td><td>omso:GridSeriesObservation</td><tr><td><a href="/wfs?SERVICE=WFS&VERSION=2.0.0&request=DescribeStoredQueries&storedquery_id=livi::observations::road::default::simple">livi::observations::road::default::simple</a></td><td>weather_observations_simple.c2t</td><td>BsWfs:BsWfsElement</td><tr><td><a href="/wfs?SERVICE=WFS&VERSION=2.0.0&request=DescribeStoredQueries&storedquery_id=livi::observations::road::default::timevaluepair">livi::observations::road::default::timevaluepair</a></td><td>weather_observations_timevaluepair.c2t</td><td>omso:PointTimeSeriesObservation</td><tr><td><a href="/wfs?SERVICE=WFS&VERSION=2.0.0&request=DescribeStoredQueries&storedquery_id=livi::observations::road::finland::multipointcoverage">livi::observations::road::finland::multipointcoverage</a></td><td>weather_observations_grid.c2t</td><td>omso:GridSeriesObservation</td><tr><td><a href="/wfs?SERVICE=WFS&VERSION=2.0.0&request=DescribeStoredQueries&storedquery_id=livi::observations::road::finland::simple">livi::observations::road::finland::simple</a></td><td>weather_observations_simple.c2t</td><td>BsWfs:BsWfsElement</td><tr><td><a href="/wfs?SERVICE=WFS&VERSION=2.0.0&request=DescribeStoredQueries&storedquery_id=livi::observations::road::finland::timevaluepair">livi::observations::road::finland::timevaluepair</a></td><td>weather_observations_timevaluepair.c2t</td><td>omso:PointTimeSeriesObservation</td><tr><td><a href="/wfs?SERVICE=WFS&VERSION=2.0.0&request=DescribeStoredQueries&storedquery_id=livi::observations::road::multipointcoverage">livi::observations::road::multipointcoverage</a></td><td>weather_observations_grid.c2t</td><td>omso:GridSeriesObservation</td><tr><td><a href="/wfs?SERVICE=WFS&VERSION=2.0.0&request=DescribeStoredQueries&storedquery_id=livi::observations::road::simple">livi::observations::road::simple</a></td><td>weather_observations_simple.c2t</td><td>BsWfs:BsWfsElement</td><tr><td><a href="/wfs?SERVICE=WFS&VERSION=2.0.0&request=DescribeStoredQueries&storedquery_id=livi::observations::road::timevaluepair">livi::observations::road::timevaluepair</a></td><td>weather_observations_timevaluepair.c2t</td><td>omso:PointTimeSeriesObservation</td><tr><td><a href="/wfs?SERVICE=WFS&VERSION=2.0.0&request=DescribeStoredQueries&storedquery_id=stuk::observations::external-radiation::latest::multipointcoverage">stuk::observations::external-radiation::latest::multipointcoverage</a></td><td>stuk_weather_observations_grid.c2t</td><td>omso:GridSeriesObservation</td><tr><td><a href="/wfs?SERVICE=WFS&VERSION=2.0.0&request=DescribeStoredQueries&storedquery_id=stuk::observations::external-radiation::latest::simple">stuk::observations::external-radiation::latest::simple</a></td><td>weather_observations_simple.c2t</td><td>BsWfs:BsWfsElement</td><tr><td><a href="/wfs?SERVICE=WFS&VERSION=2.0.0&request=DescribeStoredQueries&storedquery_id=stuk::observations::external-radiation::multipointcoverage">stuk::observations::external-radiation::multipointcoverage</a></td><td>stuk_weather_observations_grid.c2t</td><td>omso:GridSeriesObservation</td><tr><td><a href="/wfs?SERVICE=WFS&VERSION=2.0.0&request=DescribeStoredQueries&storedquery_id=urban::observations::airquality::hourly::multipointcoverage">urban::observations::airquality::hourly::multipointcoverage</a></td><td>weather_observations_grid.c2t</td><td>omso:GridSeriesObservation</td><tr><td><a href="/wfs?SERVICE=WFS&VERSION=2.0.0&request=DescribeStoredQueries&storedquery_id=urban::observations::airquality::hourly::simple">urban::observations::airquality::hourly::simple</a></td><td>weather_observations_simple.c2t</td><td>BsWfs:BsWfsElement</td><tr><td><a href="/wfs?SERVICE=WFS&VERSION=2.0.0&request=DescribeStoredQueries&storedquery_id=urban::observations::airquality::hourly::timevaluepair">urban::observations::airquality::hourly::timevaluepair</a></td><td>weather_observations_timevaluepair.c2t</td><td>omso:PointTimeSeriesObservation</td></table>

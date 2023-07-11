@@ -20,6 +20,8 @@ class StoredFileQueryHandler : public StoredAtomQueryHandlerBase
 
   ~StoredFileQueryHandler() override;
 
+  std::string get_handler_description() const override;
+
  private:
   void update_parameters(
       const RequestParameterMap& request_params,

@@ -3,91 +3,94 @@
 	{
 		"wfs_coverage_query_handler_factory" : 
 		{
+			"description" : "Forecast data: areas as GML isobars",
 			"parameters" : 
 			{
 				"beginTime" : 
 				{
-					"description" : "Time values for which to return data. (0 or more values).",
+					"description" : "The start time of the requested time period (YYYY-MM-DDTHHMIZ).",
 					"is_array" : false,
 					"mandatory" : false,
 					"type" : "posix_time"
 				},
 				"boundingBox" : 
 				{
-					"description" : "Bounding box of area for which to return data.",
+					"description" : "The geographical location / area expressed by the bounding box coordinates",
 					"is_array" : false,
 					"mandatory" : false,
 					"type" : "bounding_box"
 				},
 				"crs" : 
 				{
-					"description" : "Coordinate system to use in response (for example crs:EPSG::4326",
+					"description" : "The coordinate projection used in the response",
 					"is_array" : false,
 					"mandatory" : true,
 					"type" : "string"
 				},
 				"endTime" : 
 				{
-					"description" : "End of time interval in ISO-format (for example 2012-02-27T00:00:00Z).",
+					"description" : "The end time of the requested time period (YYYY-MM-DDTHHMIZ).",
 					"is_array" : false,
 					"mandatory" : false,
 					"type" : "posix_time"
 				},
 				"hours" : 
 				{
-					"description" : "Hour values for which to report data (0 or more integer values).",
+					"description" : "requested times expressed in the list of hours (for example \u201c12,13,18,19\u201d)",
 					"is_array" : true,
+					"mandatory" : false,
 					"max_size" : 65535,
 					"min_size" : 0,
-					"step" : 0,
+					"step" : 1,
 					"type" : "unsigned long"
 				},
 				"originTime" : 
 				{
-					"description" : "Override of origin time (for use in tests only, leave empty for production use)",
+					"description" : "The origin time of the weather models that should be used. This might be omitted in the query",
 					"is_array" : false,
 					"mandatory" : false,
 					"type" : "posix_time"
 				},
 				"producer" : 
 				{
-					"description" : "",
+					"description" : "An array of the data producer names",
 					"is_array" : false,
 					"mandatory" : true,
 					"type" : "string"
 				},
 				"startStep" : 
 				{
-					"description" : "",
+					"description" : "The index number of the first selected time step since the start time.",
 					"is_array" : false,
 					"mandatory" : false,
 					"type" : "unsigned long"
 				},
 				"timeStep" : 
 				{
-					"description" : "The time step of data in minutes. Notice that timestep is calculated from start of the ongoing hour or day.",
+					"description" : "The time interval between the requested records expressed in minutes.",
 					"is_array" : false,
 					"mandatory" : false,
 					"type" : "unsigned long"
 				},
 				"timeSteps" : 
 				{
-					"description" : "Number of timesteps in result set.",
+					"description" : "The number of the requested time steps (= number of data records).",
 					"is_array" : false,
 					"mandatory" : false,
 					"type" : "unsigned long"
 				},
 				"timeZone" : 
 				{
-					"description" : "Time zone of the time instant of the data point in the form Area/Location (for example America/Costa_Rica). The default value is UTC. Special values (case insensitive): utc, local",
+					"description" : "The time zone used in the response.",
 					"is_array" : false,
 					"mandatory" : true,
 					"type" : "string"
 				},
 				"times" : 
 				{
-					"description" : "Time values for which to return data. (0 or more values).",
+					"description" : "The requested times expressed in the list of hours and minutes HHMM (for example \u201c1200,1230,1300,1330\u201d).",
 					"is_array" : true,
+					"mandatory" : false,
 					"max_size" : 999,
 					"min_size" : 0,
 					"step" : 1,
@@ -104,10 +107,6 @@
 					],
 					"template" : "coverage_countours.c2t"
 				}
-			],
-			"templates" : 
-			[
-				"coverage_countours.c2t"
 			]
 		}
 	},
