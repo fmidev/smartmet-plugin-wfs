@@ -4,7 +4,7 @@
 Summary: SmartMet WFS plugin
 Name: %{SPECNAME}
 Version: 23.7.12
-Release: 1%{?dist}.fmi
+Release: 2%{?dist}.fmi
 License: MIT
 Group: SmartMet/Plugins
 URL: https://github.com/fmidev/smartmet-plugin-wfs
@@ -163,6 +163,9 @@ rm -rf $RPM_BUILD_ROOT
 %{_includedir}/smartmet/plugin/wfs/request/*.h
 
 %changelog
+* Wed Jul 12 2023 Andris Pavēnis <andris.pavenis@fmi.fi> 23.7.12-2.fmi
+- Use postgresql 15, gdal 3.5, geos 3.11 and proj-9.0
+
 * Wed Jul 12 2023 Mika Heiskanen <mika.heiskanen@fmi.fi> - 23.7.12-1.fmi
 - Repackaged due to ObsEngine API changes
 
