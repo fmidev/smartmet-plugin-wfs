@@ -3,7 +3,7 @@
 %define SPECNAME smartmet-plugin-%{DIRNAME}
 Summary: SmartMet WFS plugin
 Name: %{SPECNAME}
-Version: 23.7.11
+Version: 23.7.12
 Release: 1%{?dist}.fmi
 License: MIT
 Group: SmartMet/Plugins
@@ -48,7 +48,7 @@ BuildRequires: smartmet-engine-querydata-devel >= 23.7.10
 BuildRequires: smartmet-library-grid-content-devel >= 23.7.10
 BuildRequires: smartmet-library-grid-files-devel >= 23.7.10
 %if %{with observation}
-BuildRequires: smartmet-engine-observation-devel >= 23.7.10
+BuildRequires: smartmet-engine-observation-devel >= 23.7.12
 %endif
 Requires: ctpp2
 Requires: fmt >= %{smartmet_fmt_min}, fmt < %{smartmet_fmt_max}
@@ -68,7 +68,7 @@ Requires: smartmet-engine-grid >= 23.7.11
 Requires: smartmet-library-grid-content >= 23.7.10
 Requires: smartmet-library-grid-files >= 23.7.10
 %if %{with observation}
-Requires: smartmet-engine-observation >= 23.7.10
+Requires: smartmet-engine-observation >= 23.7.12
 %endif
 Requires: smartmet-engine-querydata >= 23.7.10
 Requires: smartmet-server >= 23.3.21
@@ -112,7 +112,7 @@ Obsoletes: smartmet-brainstorm-wfs-debuginfo < 16.11.1
 #TestRequires: smartmet-engine-gis >= 23.7.10
 #TestRequires: smartmet-engine-querydata >= 23.7.10
 %if %{with observation}
-#TestRequires: smartmet-engine-observation >= 23.7.11
+#TestRequires: smartmet-engine-observation >= 23.7.12
 %endif
 #TestRequires: smartmet-engine-grid >= 23.7.11
 #TestRequires: redis
@@ -163,6 +163,9 @@ rm -rf $RPM_BUILD_ROOT
 %{_includedir}/smartmet/plugin/wfs/request/*.h
 
 %changelog
+* Wed Jul 12 2023 Mika Heiskanen <mika.heiskanen@fmi.fi> - 23.7.12-1.fmi
+- Repackaged due to ObsEngine API changes
+
 * Tue Jul 11 2023 Mika Heiskanen <mika.heiskanen@fmi.fi> - 23.7.11-1.fmi
 - Repackaged due to QEngine API changes
 
