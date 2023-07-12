@@ -3,7 +3,7 @@
 %define SPECNAME smartmet-plugin-%{DIRNAME}
 Summary: SmartMet WFS plugin
 Name: %{SPECNAME}
-Version: 23.6.6
+Version: 23.7.11
 Release: 1%{?dist}.fmi
 License: MIT
 Group: SmartMet/Plugins
@@ -39,7 +39,7 @@ BuildRequires: smartmet-library-spine-devel >= 23.7.10
 BuildRequires: smartmet-library-gis-devel >= 23.7.10
 BuildRequires: smartmet-library-trax-devel >= 23.7.10
 BuildRequires: smartmet-library-locus-devel >= 23.7.10
-BuildRequires: smartmet-library-macgyver-devel >= 23.3.3
+BuildRequires: smartmet-library-macgyver-devel >= 23.6.30
 BuildRequires: smartmet-engine-contour-devel >= 23.7.11
 BuildRequires: smartmet-engine-geonames-devel >= 23.7.11
 BuildRequires: smartmet-engine-gis-devel >= 23.7.10
@@ -56,7 +56,7 @@ Requires: libcurl
 Requires: jsoncpp
 Requires: zlib
 Requires: smartmet-library-locus >= 23.7.10
-Requires: smartmet-library-macgyver >= 23.3.3
+Requires: smartmet-library-macgyver >= 23.6.30
 Requires: smartmet-library-spine >= 23.7.10
 Requires: smartmet-library-timeseries >= 23.7.10
 Requires: smartmet-library-gis >= 23.7.10
@@ -104,7 +104,7 @@ Obsoletes: smartmet-brainstorm-wfs-debuginfo < 16.11.1
 #TestRequires: smartmet-test-db >= 23.7.7
 #TestRequires: smartmet-test-data >= 23.2.9
 #TestRequires: smartmet-utils-devel >= 23.7.11
-#TestRequires: smartmet-library-macgyver >= 23.3.3
+#TestRequires: smartmet-library-macgyver >= 23.6.30
 #TestRequires: smartmet-library-gis >= 23.7.10
 #TestRequires: smartmet-library-newbase >= 23.7.10
 #TestRequires: smartmet-library-spine-plugin-test >= 23.7.10
@@ -129,7 +129,7 @@ Summary: SmartMet WFS plugin development files
 Requires: smartmet-library-spine-devel >= 23.7.10
 Requires: smartmet-library-gis-devel >= 23.7.10
 Requires: smartmet-library-locus-devel >= 23.7.10
-Requires: smartmet-library-macgyver-devel >= 23.3.3
+Requires: smartmet-library-macgyver-devel >= 23.6.30
 Requires: %{SPECNAME} = %{version}-%{release}
 %description -n %{SPECNAME}-devel
 SmartMet WFS plugin development files (for building testsuite without rebuilding plugin)
@@ -163,6 +163,9 @@ rm -rf $RPM_BUILD_ROOT
 %{_includedir}/smartmet/plugin/wfs/request/*.h
 
 %changelog
+* Tue Jul 11 2023 Mika Heiskanen <mika.heiskanen@fmi.fi> - 23.7.11-1.fmi
+- Repackaged due to QEngine API changes
+
 * Tue Jun  6 2023 Mika Heiskanen <mika.heiskanen@fmi.fi> - 23.6.6-1.fmi
 - Repackaged due to GRID ABI changes
 
