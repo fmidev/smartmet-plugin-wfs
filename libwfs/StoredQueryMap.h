@@ -24,7 +24,7 @@ namespace Plugin
 {
 namespace WFS
 {
-class HandlerFactorySummary;
+struct HandlerFactorySummary;
 class PluginImpl;
 class StoredQueryConfig;
 class StoredQueryHandlerBase;
