@@ -272,6 +272,7 @@ StoredQueryParamRegistry::get_param_info() const
             ? Fmi::demangle_cpp_type_name(p1->type_name)
             : iter->second;
         p_info.description = p1->description;
+        p_info.mandatory = false;
 
         const auto* p_scalar = dynamic_cast<const ScalarParameterRec*>(p1);
         if (p_scalar) {
