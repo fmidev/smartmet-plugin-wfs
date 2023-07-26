@@ -247,7 +247,6 @@ void bw::Request::GetFeature::execute_multiple_queries(std::ostream& ost) const
 
     std::size_t member_ind = 0;
     std::size_t num_matched = 0;
-    std::size_t num_returned = 0;
     const std::size_t start_index = spp.get_start_index();
     const std::size_t count = spp.get_count();
     const std::size_t end_index = start_index + count - 1;
@@ -319,7 +318,6 @@ void bw::Request::GetFeature::execute_multiple_queries(std::ostream& ost) const
               num_matched++;
               if ((member_ind >= start_index) and (member_ind <= end_index))
               {
-                num_returned++;
                 curr_num_returned++;
                 auto* imported_member = xml_doc_p->importNode(xps.get_item(i), true);
                 fc_elem->appendChild(imported_member);
@@ -328,9 +326,6 @@ void bw::Request::GetFeature::execute_multiple_queries(std::ostream& ost) const
             }
 
             bwx::set_attr(*fc_elem, "numberReturned", str(format("%1%") % curr_num_returned));
-
-            // std::cout << "### query#" << i+1 << ": numReturned=" << curr_num_returned <<
-            // std::endl;
           }
         }
         else
