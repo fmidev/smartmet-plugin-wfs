@@ -3,7 +3,7 @@
 %define SPECNAME smartmet-plugin-%{DIRNAME}
 Summary: SmartMet WFS plugin
 Name: %{SPECNAME}
-Version: 23.8.28
+Version: 23.9.11
 Release: 1%{?dist}.fmi
 License: MIT
 Group: SmartMet/Plugins
@@ -35,16 +35,16 @@ BuildRequires: openssl-devel
 BuildRequires: bzip2-devel
 BuildRequires: zlib-devel
 BuildRequires: smartmet-library-timeseries-devel >= 23.7.28
-BuildRequires: smartmet-library-spine-devel >= 23.8.8
-BuildRequires: smartmet-library-gis-devel >= 23.8.28
+BuildRequires: smartmet-library-spine-devel >= 23.8.31
+BuildRequires: smartmet-library-gis-devel >= 23.8.30
 BuildRequires: smartmet-library-trax-devel >= 23.8.17
 BuildRequires: smartmet-library-locus-devel >= 23.7.28
-BuildRequires: smartmet-library-macgyver-devel >= 23.8.21
+BuildRequires: smartmet-library-macgyver-devel >= 23.8.31
 BuildRequires: smartmet-engine-contour-devel >= 23.8.28
-BuildRequires: smartmet-engine-geonames-devel >= 23.7.28
+BuildRequires: smartmet-engine-geonames-devel >= 23.9.6
 BuildRequires: smartmet-engine-gis-devel >= 23.8.28
 BuildRequires: smartmet-engine-grid-devel >= 23.7.28
-BuildRequires: smartmet-engine-querydata-devel >= 23.7.28
+BuildRequires: smartmet-engine-querydata-devel >= 23.8.31
 BuildRequires: smartmet-library-grid-content-devel >= 23.7.28
 BuildRequires: smartmet-library-grid-files-devel >= 23.8.21
 %if %{with observation}
@@ -56,13 +56,13 @@ Requires: libcurl
 Requires: jsoncpp
 Requires: zlib
 Requires: smartmet-library-locus >= 23.7.28
-Requires: smartmet-library-macgyver >= 23.8.21
-Requires: smartmet-library-spine >= 23.8.8
+Requires: smartmet-library-macgyver >= 23.8.31
+Requires: smartmet-library-spine >= 23.8.31
 Requires: smartmet-library-timeseries >= 23.7.28
-Requires: smartmet-library-gis >= 23.8.28
+Requires: smartmet-library-gis >= 23.8.30
 Requires: smartmet-library-trax >= 23.8.17
 Requires: smartmet-engine-contour >= 23.8.28
-Requires: smartmet-engine-geonames >= 23.7.28
+Requires: smartmet-engine-geonames >= 23.9.6
 Requires: smartmet-engine-gis >= 23.8.28
 Requires: smartmet-engine-grid >= 23.7.28
 Requires: smartmet-library-grid-content >= 23.7.28
@@ -70,8 +70,8 @@ Requires: smartmet-library-grid-files >= 23.8.21
 %if %{with observation}
 Requires: smartmet-engine-observation >= 23.8.9
 %endif
-Requires: smartmet-engine-querydata >= 23.7.28
-Requires: smartmet-server >= 23.7.28
+Requires: smartmet-engine-querydata >= 23.8.31
+Requires: smartmet-server >= 23.8.30
 Requires: xerces-c
 Requires: xqilla
 Requires: zlib
@@ -103,14 +103,14 @@ Obsoletes: smartmet-brainstorm-wfs-debuginfo < 16.11.1
 #TestRequires: ctpp2
 #TestRequires: smartmet-test-db >= 23.7.21
 #TestRequires: smartmet-test-data >= 23.7.14
-#TestRequires: smartmet-utils-devel >= 23.8.23
-#TestRequires: smartmet-library-macgyver >= 23.8.21
-#TestRequires: smartmet-library-gis >= 23.8.28
-#TestRequires: smartmet-library-newbase >= 23.8.21
-#TestRequires: smartmet-library-spine-plugin-test >= 23.8.8
-#TestRequires: smartmet-engine-geonames >= 23.7.28
+#TestRequires: smartmet-utils-devel >= 23.9.6
+#TestRequires: smartmet-library-macgyver >= 23.8.31
+#TestRequires: smartmet-library-gis >= 23.8.30
+#TestRequires: smartmet-library-newbase >= 23.8.30
+#TestRequires: smartmet-library-spine-plugin-test >= 23.8.31
+#TestRequires: smartmet-engine-geonames >= 23.9.6
 #TestRequires: smartmet-engine-gis >= 23.8.28
-#TestRequires: smartmet-engine-querydata >= 23.7.28
+#TestRequires: smartmet-engine-querydata >= 23.8.31
 %if %{with observation}
 #TestRequires: smartmet-engine-observation >= 23.8.9
 %endif
@@ -126,10 +126,10 @@ SmartMet WFS plugin
 
 %package -n %{SPECNAME}-devel
 Summary: SmartMet WFS plugin development files
-Requires: smartmet-library-spine-devel >= 23.8.8
-Requires: smartmet-library-gis-devel >= 23.8.28
+Requires: smartmet-library-spine-devel >= 23.8.31
+Requires: smartmet-library-gis-devel >= 23.8.30
 Requires: smartmet-library-locus-devel >= 23.7.28
-Requires: smartmet-library-macgyver-devel >= 23.8.21
+Requires: smartmet-library-macgyver-devel >= 23.8.31
 Requires: %{SPECNAME} = %{version}-%{release}
 %description -n %{SPECNAME}-devel
 SmartMet WFS plugin development files (for building testsuite without rebuilding plugin)
@@ -163,6 +163,9 @@ rm -rf $RPM_BUILD_ROOT
 %{_includedir}/smartmet/plugin/wfs/request/*.h
 
 %changelog
+* Mon Sep 11 2023 Mika Heiskanen <mika.heiskanen@fmi.fi> - 23.9.11-1.fmi
+- Repackaged due to ABI changes in grid-files
+
 * Mon Aug 28 2023 Mika Heiskanen <mika.heiskanen@fmi.fi> - 23.8.28-1.fmi
 - Repackaged since Contour::Options ABI changed
 
