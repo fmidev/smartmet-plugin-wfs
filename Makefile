@@ -136,15 +136,14 @@ install:
 	mkdir -p $(plugindir)
 	mkdir -p $(libdir)
 	mkdir -p $(includedir)/smartmet/plugin/wfs/request
-	mkdir -p $(sysconfdir)/smartmet/plugins/wfs/templates
+	mkdir -p $(datadir)/smartmet/wfs
 	$(INSTALL_PROG) $(LIBFILE) $(plugindir)/$(LIBFILE)
 	@for file in cnf/templates/*.c2t; do \
-	 echo $(INSTALL_DATA) $$file $(sysconfdir)/smartmet/plugins/wfs/templates/; \
-	 $(INSTALL_DATA) $$file $(sysconfdir)/smartmet/plugins/wfs/templates/; \
+	 echo $(INSTALL_DATA) $$file $(datadir)/smartmet/wfs/; \
+	 $(INSTALL_DATA) $$file $(datadir)/smartmet/wfs/; \
 	done
-	$(INSTALL_DATA) cnf/XMLGrammarPool.dump $(sysconfdir)/smartmet/plugins/wfs/
-	$(INSTALL_DATA) cnf/XMLSchemas.cache $(sysconfdir)/smartmet/plugins/wfs/
-	$(INSTALL_DATA) cnf/XMLSchemas.cache $(sysconfdir)/smartmet/plugins/wfs/
+	$(INSTALL_DATA) cnf/XMLGrammarPool.dump $(datadir)/smartmet/wfs/
+	$(INSTALL_DATA) cnf/XMLSchemas.cache $(datadir)/smartmet/wfs/
 	$(INSTALL_DATA) $(wildcard libwfs/*.h) $(includedir)/smartmet/plugin/wfs/
 	$(INSTALL_DATA) $(wildcard libwfs/request/*.h) $(includedir)/smartmet/plugin/wfs/request/
 	$(INSTALL_DATA) $(LIBWFS) $(libdir)
