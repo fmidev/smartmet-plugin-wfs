@@ -47,31 +47,31 @@ Global data object:
    numReturned = 1;
    param_sets = [
                   {
-                    &#39;URL&#39; : &quot;producer=hirlam&amp;param=GeopHeight,Temperature,Pressure,Humidity,DewPoint,WindUMS,WindVMS,TotalCloudCover,LowCloudCover,MediumCloudCover,HighCloudCover,Precipitation1h&amp;bbox=17.96450555171522,55.41144974045586,45.01192326195289,72.64493340490512&amp;origintime=2013-03-18T00:00:00Z&amp;starttime=2013-03-18T00:00:00Z&amp;endtime=2013-03-20T06:00:00Z&amp;format=grib2&amp;projection=epsg:4326&quot;,
+                    &#39;URL&#39; : &quot;producer=hirlam&amp;param=GeopHeight,Temperature,Pressure,Humidity,DewPoint,WindUMS,WindVMS,TotalCloudCover,LowCloudCover,MediumCloudCover,HighCloudCover,Precipitation1h&amp;bbox=17.964505551715,55.411449740456,45.011923261953,72.644933404905&amp;origintime=2013-03-18T00:00:00Z&amp;starttime=2013-03-18T00:00:00Z&amp;endtime=2013-03-20T06:00:00Z&amp;format=grib2&amp;projection=epsg:4326&quot;,
                     &#39;params&#39; : {
                                  &#39;_WKT&#39; : [
                                             &quot;PROJCRS[\&quot;unknown\&quot;,BASEGEOGCRS[\&quot;unknown\&quot;,DATUM[\&quot;unknown\&quot;,ELLIPSOID[\&quot;unknown\&quot;,6371220,0,LENGTHUNIT[\&quot;metre\&quot;,1,ID[\&quot;EPSG\&quot;,9001]]]],PRIMEM[\&quot;Greenwich\&quot;,0,ANGLEUNIT[\&quot;degree\&quot;,0.0174532925199433],ID[\&quot;EPSG\&quot;,8901]]],CONVERSION[\&quot;unknown\&quot;,METHOD[\&quot;PROJ ob_tran o_proj=eqc\&quot;],PARAMETER[\&quot;o_lon_p\&quot;,0,ANGLEUNIT[\&quot;degree\&quot;,0.0174532925199433,ID[\&quot;EPSG\&quot;,9122]]],PARAMETER[\&quot;o_lat_p\&quot;,30,ANGLEUNIT[\&quot;degree\&quot;,0.0174532925199433,ID[\&quot;EPSG\&quot;,9122]]],PARAMETER[\&quot;lon_0\&quot;,0,ANGLEUNIT[\&quot;degree\&quot;,0.0174532925199433,ID[\&quot;EPSG\&quot;,9122]]]],CS[Cartesian,2],AXIS[\&quot;(E)\&quot;,east,ORDER[1],LENGTHUNIT[\&quot;metre\&quot;,1,ID[\&quot;EPSG\&quot;,9001]]],AXIS[\&quot;(N)\&quot;,north,ORDER[2],LENGTHUNIT[\&quot;metre\&quot;,1,ID[\&quot;EPSG\&quot;,9001]]]]&quot;
                                           ],
                                  &#39;_areaHeight&#39; : [
-                                                   &quot;1867.6944826822107&quot;
+                                                   &quot;1867.6944826822&quot;
                                                  ],
                                  &#39;_areaWidth&#39; : [
-                                                  &quot;536.8523086183623&quot;
+                                                  &quot;536.85230861836&quot;
                                                 ],
                                  &#39;_aspectRatio&#39; : [
-                                                    &quot;0.2874411814117395&quot;
+                                                    &quot;0.28744118141174&quot;
                                                   ],
                                  &#39;_bllat&#39; : [
-                                              &quot;56.98479825069636&quot;
+                                              &quot;56.984798250696&quot;
                                             ],
                                  &#39;_bllon&#39; : [
-                                              &quot;17.96450555171522&quot;
+                                              &quot;17.964505551715&quot;
                                             ],
                                  &#39;_brlat&#39; : [
-                                              &quot;55.41144974045586&quot;
+                                              &quot;55.411449740456&quot;
                                             ],
                                  &#39;_brlon&#39; : [
-                                              &quot;26.17172058188944&quot;
+                                              &quot;26.171720581889&quot;
                                             ],
                                  &#39;_firstTime&#39; : [
                                                   &quot;20130318T000000Z&quot;
@@ -122,34 +122,34 @@ Global data object:
                                                  &quot;60&quot;
                                                ],
                                  &#39;_ullat&#39; : [
-                                              &quot;72.64493340490512&quot;
+                                              &quot;72.644933404905&quot;
                                             ],
                                  &#39;_ullon&#39; : [
-                                              &quot;32.96737690939946&quot;
+                                              &quot;32.967376909399&quot;
                                             ],
                                  &#39;_urlat&#39; : [
-                                              &quot;70.00447485376336&quot;
+                                              &quot;70.004474853763&quot;
                                             ],
                                  &#39;_urlon&#39; : [
-                                              &quot;45.01192326195289&quot;
+                                              &quot;45.011923261953&quot;
                                             ],
                                  &#39;_xNumber&#39; : [
                                                 &quot;72&quot;
                                               ],
                                  &#39;_xResolution&#39; : [
-                                                    &quot;7.561300121385384&quot;
+                                                    &quot;7.5613001213854&quot;
                                                   ],
                                  &#39;_yNumber&#39; : [
                                                 &quot;248&quot;
                                               ],
                                  &#39;_yResolution&#39; : [
-                                                    &quot;7.561516124219477&quot;
+                                                    &quot;7.5615161242195&quot;
                                                   ],
                                  &#39;calcBBox&#39; : [
-                                                &quot;17.96450555171522&quot;,
-                                                &quot;55.41144974045586&quot;,
-                                                &quot;45.01192326195289&quot;,
-                                                &quot;72.64493340490512&quot;
+                                                &quot;17.964505551715&quot;,
+                                                &quot;55.411449740456&quot;,
+                                                &quot;45.011923261953&quot;,
+                                                &quot;72.644933404905&quot;
                                               ],
                                  &#39;crs&#39; : [
                                            &quot;EPSG:4326&quot;
@@ -253,10 +253,10 @@ Global data object:
                                              &quot;0&quot;
                                            ],
                                  &#39;modelBBox&#39; : [
-                                                 &quot;17.96450555171522&quot;,
-                                                 &quot;55.41144974045586&quot;,
-                                                 &quot;45.01192326195289&quot;,
-                                                 &quot;72.64493340490512&quot;
+                                                 &quot;17.964505551715&quot;,
+                                                 &quot;55.411449740456&quot;,
+                                                 &quot;45.011923261953&quot;,
+                                                 &quot;72.644933404905&quot;
                                                ],
                                  &#39;originTime&#39; : [
                                                   &quot;2013-03-18T00:00:00Z&quot;
