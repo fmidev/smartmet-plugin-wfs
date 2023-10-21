@@ -3,7 +3,7 @@
 %define SPECNAME smartmet-plugin-%{DIRNAME}
 Summary: SmartMet WFS plugin
 Name: %{SPECNAME}
-Version: 23.10.19
+Version: 23.10.21
 Release: 1%{?dist}.fmi
 License: MIT
 Group: SmartMet/Plugins
@@ -46,7 +46,7 @@ BuildRequires: smartmet-engine-gis-devel >= 23.8.28
 BuildRequires: smartmet-engine-grid-devel >= 23.10.12
 BuildRequires: smartmet-engine-querydata-devel >= 23.10.12
 BuildRequires: smartmet-library-grid-content-devel >= 23.10.12
-BuildRequires: smartmet-library-grid-files-devel >= 23.10.12
+BuildRequires: smartmet-library-grid-files-devel >= 23.10.20
 %if %{with observation}
 BuildRequires: smartmet-engine-observation-devel >= 23.10.18
 %endif
@@ -66,7 +66,7 @@ Requires: smartmet-engine-geonames >= 23.9.6
 Requires: smartmet-engine-gis >= 23.8.28
 Requires: smartmet-engine-grid >= 23.10.12
 Requires: smartmet-library-grid-content >= 23.10.12
-Requires: smartmet-library-grid-files >= 23.10.12
+Requires: smartmet-library-grid-files >= 23.10.20
 %if %{with observation}
 Requires: smartmet-engine-observation >= 23.10.18
 %endif
@@ -163,6 +163,9 @@ rm -rf $RPM_BUILD_ROOT
 %{_includedir}/smartmet/plugin/wfs/request/*.h
 
 %changelog
+* Sat Oct 21 2023 Mika Heiskanen <mika.heiskanen@fmi.fi> - 23.10.21-1.fmi
+- Changed storedQueryTemplateDir to be an optional setting with default value /usr/share/smartmet/wfs
+
 * Thu Oct 19 2023 Mika Heiskanen <mika.heiskanen@fmi.fi> - 23.10.19-1.fmi
 - Move templates from /etc to /usr/share
 
