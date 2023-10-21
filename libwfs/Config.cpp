@@ -49,7 +49,7 @@ Config::Config(const string& configfile)
     itsDefaultUrl = get_optional_config_param<std::string>("url", itsDefaultUrl);
     sq_config_dirs = get_mandatory_path_array("storedQueryConfigDirs", 1);
     const std::string sq_template_dir =
-        get_optional_config_param<std::string>("storedQueryTemplateDir", "/usr/share/smartmet/wfs");
+        get_optional_path("storedQueryTemplateDir", "/usr/share/smartmet/wfs");
     getFeatureById = get_optional_config_param<std::string>("getFeatureById", c_get_feature_by_id);
     geoserver_conn_str = get_optional_config_param<std::string>("geoserverConnStr", "");
     default_locale = get_optional_config_param<std::string>("locale", guess_default_locale());
