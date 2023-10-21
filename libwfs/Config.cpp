@@ -8,9 +8,9 @@
 #include "WfsConvenience.h"
 #include <boost/algorithm/string.hpp>
 #include <boost/format.hpp>
+#include <macgyver/Exception.h>
 #include <spine/ConfigTools.h>
 #include <spine/Convenience.h>
-#include <macgyver/Exception.h>
 #include <locale>
 #include <sstream>
 #include <stdexcept>
@@ -48,7 +48,8 @@ Config::Config(const string& configfile)
   {
     itsDefaultUrl = get_optional_config_param<std::string>("url", itsDefaultUrl);
     sq_config_dirs = get_mandatory_path_array("storedQueryConfigDirs", 1);
-    const std::string sq_template_dir = get_mandatory_path("storedQueryTemplateDir");
+    const std::string sq_template_dir =
+        get_optional_config_param<std::string>("storedQueryTemplateDir", "/usr/share/smartmet/wfs");
     getFeatureById = get_optional_config_param<std::string>("getFeatureById", c_get_feature_by_id);
     geoserver_conn_str = get_optional_config_param<std::string>("geoserverConnStr", "");
     default_locale = get_optional_config_param<std::string>("locale", guess_default_locale());
@@ -62,8 +63,7 @@ Config::Config(const string& configfile)
     enable_configuration_polling =
         get_optional_config_param<bool>("enableConfigurationPolling", false);
     silence_init_warnings = get_optional_config_param<bool>("silence_init_warnings", false);
-    enable_case_sensitive_params = get_optional_config_param<bool>(
-        "case_sensitive_params", false);
+    enable_case_sensitive_params = get_optional_config_param<bool>("case_sensitive_params", false);
 
     sq_restrictions = get_optional_config_param<bool>("storedQueryRestrictions", true);
     httpProxy = get_optional_config_param<std::string>("httpProxy", "");
@@ -96,8 +96,7 @@ Config::Config(const string& configfile)
 
     if (xml_grammar_pool_dump.empty() or not fs::exists(xml_grammar_pool_dump))
     {
-      throw Fmi::Exception(
-          BCP, "XML grammar pool file '" + xml_grammar_pool_dump + "' not found!");
+      throw Fmi::Exception(BCP, "XML grammar pool file '" + xml_grammar_pool_dump + "' not found!");
     }
 
     languages = get_mandatory_config_array<std::string>("languages", 1);
@@ -107,8 +106,10 @@ Config::Config(const string& configfile)
     }
 
     auto* s_fallback_encoding = find_setting(get_root(), "fallbackEncoding", false);
-    if (s_fallback_encoding) {
-      fallback_encoding = SmartMet::Spine::MultiLanguageString::create(languages.at(0), *s_fallback_encoding);
+    if (s_fallback_encoding)
+    {
+      fallback_encoding =
+          SmartMet::Spine::MultiLanguageString::create(languages.at(0), *s_fallback_encoding);
     }
 
     for (std::string& sq_config_dir : sq_config_dirs)
@@ -116,9 +117,9 @@ Config::Config(const string& configfile)
       fs::path sqcd(sq_config_dir);
       if (!fs::exists(sqcd) || !fs::is_directory(sqcd))
         throw Fmi::Exception(BCP,
-                                         sq_config_dir +
-                                             " provided as stored queries"
-                                             " configuration directory is not a directory");
+                             sq_config_dir +
+                                 " provided as stored queries"
+                                 " configuration directory is not a directory");
     }
 
     read_capabilities_config();
@@ -176,8 +177,7 @@ std::vector<boost::shared_ptr<WfsFeatureDef> > Config::read_features_config(
           std::cerr << SmartMet::Spine::log_time_str() << ": error reading feature description"
                     << " file '" << entry.string() << "'" << std::endl;
 
-          Fmi::Exception exception(
-              BCP, "Error while reading feature description!", nullptr);
+          Fmi::Exception exception(BCP, "Error while reading feature description!", nullptr);
           exception.addParameter("File", entry.string());
           throw exception;
         }
@@ -259,8 +259,8 @@ void Config::read_capabilities_config()
       }
       else
       {
-        throw Fmi::Exception::Trace(
-            BCP, "Incorrect value of configuration entry capabilities_config");
+        throw Fmi::Exception::Trace(BCP,
+                                    "Incorrect value of configuration entry capabilities_config");
       }
     }
   }
@@ -317,9 +317,12 @@ void Config::read_hosts_info()
 
 std::string Config::guess_fallback_encoding(const std::string& language) const
 {
-  if (fallback_encoding) {
+  if (fallback_encoding)
+  {
     return fallback_encoding->get(language);
-  } else {
+  }
+  else
+  {
     return "ISO-8859-1";
   }
 }

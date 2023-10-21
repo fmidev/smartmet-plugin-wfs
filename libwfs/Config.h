@@ -34,7 +34,7 @@ namespace WFS
  *   url = "/wfs";
  *   storedQueryConfigDirs = ["/etc/smartmet/plugins/wfs/stored_queries",
  * "/etc/smartmet/plugins/wfs/other_stored_queries"];
- *   storedQueryTemplateDir = "/etc/smartmet/plugins/wfs/templates";
+ *   storedQueryTemplateDir = "/usr/share/smartmet/wfs";
  *   listStoredQueriesTemplate = "list_stored_queries.c2t";
  *
  *   @endverbatim
@@ -44,7 +44,7 @@ class Config : public SmartMet::Spine::ConfigBase
  public:
   Config(const std::string& configfile);
   Config(const Config&) = delete;
-  Config& operator = (const Config&) = delete;
+  Config& operator=(const Config&) = delete;
   ~Config() override;
 
   const std::string& defaultUrl() const { return itsDefaultUrl; }
