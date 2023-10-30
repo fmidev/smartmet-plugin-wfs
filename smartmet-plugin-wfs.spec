@@ -3,7 +3,7 @@
 %define SPECNAME smartmet-plugin-%{DIRNAME}
 Summary: SmartMet WFS plugin
 Name: %{SPECNAME}
-Version: 23.10.21
+Version: 23.10.30
 Release: 1%{?dist}.fmi
 License: MIT
 Group: SmartMet/Plugins
@@ -34,8 +34,8 @@ BuildRequires: xqilla-devel
 BuildRequires: openssl-devel
 BuildRequires: bzip2-devel
 BuildRequires: zlib-devel
-BuildRequires: smartmet-library-timeseries-devel >= 23.10.11
-BuildRequires: smartmet-library-spine-devel >= 23.10.10
+BuildRequires: smartmet-library-timeseries-devel >= 23.10.30
+BuildRequires: smartmet-library-spine-devel >= 23.10.20
 BuildRequires: smartmet-library-gis-devel >= 23.9.12
 BuildRequires: smartmet-library-trax-devel >= 23.8.17
 BuildRequires: smartmet-library-locus-devel >= 23.7.28
@@ -43,12 +43,12 @@ BuildRequires: smartmet-library-macgyver-devel >= 23.10.10
 BuildRequires: smartmet-engine-contour-devel >= 23.10.3
 BuildRequires: smartmet-engine-geonames-devel >= 23.9.6
 BuildRequires: smartmet-engine-gis-devel >= 23.8.28
-BuildRequires: smartmet-engine-grid-devel >= 23.10.12
+BuildRequires: smartmet-engine-grid-devel >= 23.10.30
 BuildRequires: smartmet-engine-querydata-devel >= 23.10.12
-BuildRequires: smartmet-library-grid-content-devel >= 23.10.12
-BuildRequires: smartmet-library-grid-files-devel >= 23.10.20
+BuildRequires: smartmet-library-grid-content-devel >= 23.10.30
+BuildRequires: smartmet-library-grid-files-devel >= 23.10.30
 %if %{with observation}
-BuildRequires: smartmet-engine-observation-devel >= 23.10.18
+BuildRequires: smartmet-engine-observation-devel >= 23.10.30
 %endif
 Requires: ctpp2
 Requires: fmt >= %{smartmet_fmt_min}, fmt < %{smartmet_fmt_max}
@@ -57,18 +57,18 @@ Requires: jsoncpp
 Requires: zlib
 Requires: smartmet-library-locus >= 23.7.28
 Requires: smartmet-library-macgyver >= 23.10.10
-Requires: smartmet-library-spine >= 23.10.10
-Requires: smartmet-library-timeseries >= 23.10.11
+Requires: smartmet-library-spine >= 23.10.20
+Requires: smartmet-library-timeseries >= 23.10.30
 Requires: smartmet-library-gis >= 23.9.12
 Requires: smartmet-library-trax >= 23.8.17
 Requires: smartmet-engine-contour >= 23.10.3
 Requires: smartmet-engine-geonames >= 23.9.6
 Requires: smartmet-engine-gis >= 23.8.28
-Requires: smartmet-engine-grid >= 23.10.12
-Requires: smartmet-library-grid-content >= 23.10.12
-Requires: smartmet-library-grid-files >= 23.10.20
+Requires: smartmet-engine-grid >= 23.10.30
+Requires: smartmet-library-grid-content >= 23.10.30
+Requires: smartmet-library-grid-files >= 23.10.30
 %if %{with observation}
-Requires: smartmet-engine-observation >= 23.10.18
+Requires: smartmet-engine-observation >= 23.10.30
 %endif
 Requires: smartmet-engine-querydata >= 23.10.12
 Requires: smartmet-server >= 23.8.30
@@ -107,14 +107,14 @@ Obsoletes: smartmet-brainstorm-wfs-debuginfo < 16.11.1
 #TestRequires: smartmet-library-macgyver >= 23.10.10
 #TestRequires: smartmet-library-gis >= 23.9.12
 #TestRequires: smartmet-library-newbase >= 23.10.11
-#TestRequires: smartmet-library-spine-plugin-test >= 23.10.10
+#TestRequires: smartmet-library-spine-plugin-test >= 23.10.20
 #TestRequires: smartmet-engine-geonames >= 23.9.6
 #TestRequires: smartmet-engine-gis >= 23.8.28
 #TestRequires: smartmet-engine-querydata >= 23.10.12
 %if %{with observation}
-#TestRequires: smartmet-engine-observation >= 23.10.18
+#TestRequires: smartmet-engine-observation >= 23.10.30
 %endif
-#TestRequires: smartmet-engine-grid >= 23.10.12
+#TestRequires: smartmet-engine-grid >= 23.10.30
 #TestRequires: redis
 #TestRequires: smartmet-engine-grid-test
 # Required by top level Makefile
@@ -126,7 +126,7 @@ SmartMet WFS plugin
 
 %package -n %{SPECNAME}-devel
 Summary: SmartMet WFS plugin development files
-Requires: smartmet-library-spine-devel >= 23.10.10
+Requires: smartmet-library-spine-devel >= 23.10.20
 Requires: smartmet-library-gis-devel >= 23.9.12
 Requires: smartmet-library-locus-devel >= 23.7.28
 Requires: smartmet-library-macgyver-devel >= 23.10.10
@@ -163,6 +163,9 @@ rm -rf $RPM_BUILD_ROOT
 %{_includedir}/smartmet/plugin/wfs/request/*.h
 
 %changelog
+* Mon Oct 30 2023 Mika Heiskanen <mika.heiskanen@fmi.fi> - 23.10.30-1.fmi
+- Repackaged due to ABI changes in GRID libraries
+
 * Sat Oct 21 2023 Mika Heiskanen <mika.heiskanen@fmi.fi> - 23.10.21-1.fmi
 - Changed storedQueryTemplateDir to be an optional setting with default value /usr/share/smartmet/wfs
 
