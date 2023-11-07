@@ -62,8 +62,8 @@ class TimeSeriesValue
 
         return out.str();
       }
-      else if (const boost::local_time::local_date_time* val =
-                   boost::get<boost::local_time::local_date_time>(&value))
+      else if (const Fmi::LocalDateTime* val =
+                   boost::get<Fmi::LocalDateTime>(&value))
       {
         return Fmi::to_iso_string(val->utc_time());
       }

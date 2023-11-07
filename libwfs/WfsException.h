@@ -1,6 +1,6 @@
 #pragma once
 
-#include <boost/date_time/posix_time/ptime.hpp>
+#include <macgyver/DateTime.h>
 #include <boost/optional.hpp>
 #include <ctpp2/CDT.hpp>
 #include <exception>
@@ -67,7 +67,7 @@ class WfsException : public std::exception
 
   void print_on(std::ostream& output) const;
 
-  void set_timestamp(const boost::posix_time::ptime& timestamp);
+  void set_timestamp(const Fmi::DateTime& timestamp);
 
  private:
   ExceptionCode exceptionCode;
@@ -75,7 +75,7 @@ class WfsException : public std::exception
   std::vector<std::string> textStrings;
   boost::optional<std::string> language;
   boost::optional<std::string> location;
-  boost::optional<boost::posix_time::ptime> timestamp;
+  boost::optional<Fmi::DateTime> timestamp;
 };
 
 inline std::ostream& operator<<(std::ostream& output, const WfsException& err)

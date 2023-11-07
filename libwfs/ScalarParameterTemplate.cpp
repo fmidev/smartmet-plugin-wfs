@@ -202,8 +202,8 @@ void ScalarParameterTemplate::init(bool silent)
 }
 
 template <>
-boost::posix_time::ptime
-ScalarParameterTemplate::Getter<boost::posix_time::ptime>::extract(const SmartMet::Spine::Value& src) const
+Fmi::DateTime
+ScalarParameterTemplate::Getter<Fmi::DateTime>::extract(const SmartMet::Spine::Value& src) const
 {
     return src.get_ptime(true);
 }

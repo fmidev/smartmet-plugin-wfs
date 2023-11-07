@@ -204,8 +204,8 @@ void StoredObsQueryHandler::query(const StoredQuery& query,
 
       const char* DATA_CRS_NAME = "urn:ogc:def:crs:EPSG::4326";
 
-      query_params.starttime = params.get_single<pt::ptime>(P_BEGIN_TIME);
-      query_params.endtime = params.get_single<pt::ptime>(P_END_TIME);
+      query_params.starttime = params.get_single<Fmi::DateTime>(P_BEGIN_TIME);
+      query_params.endtime = params.get_single<Fmi::DateTime>(P_END_TIME);
 
       if (params.get_optional<bool>(P_LATEST, false))
         query_params.wantedtime = query_params.endtime;
@@ -353,7 +353,7 @@ void StoredObsQueryHandler::query(const StoredQuery& query,
       unsigned maxEpochs = params.get_single<uint64_t>(P_MAX_EPOCHS);
       unsigned ts1 = (timestep ? timestep : 60);
       if (sq_restrictions and
-          query_params.starttime + pt::minutes(maxEpochs * ts1) < query_params.endtime)
+          query_params.starttime + Fmi::Minutes(maxEpochs * ts1) < query_params.endtime)
       {
         Fmi::Exception exception(BCP, "Too many time epochs in the time interval!");
         exception.addDetail("Use shorter time interval or larger time step.");
@@ -393,7 +393,7 @@ void StoredObsQueryHandler::query(const StoredQuery& query,
       std::map<std::string, SiteRec> site_map;
       std::map<int, GroupRec> group_map;
 
-      pt::ptime now = get_plugin_impl().get_time_stamp();
+      Fmi::DateTime now = get_plugin_impl().get_time_stamp();
       std::shared_ptr<Fmi::TimeFormatter> tfmt(Fmi::TimeFormatter::create("iso"));
 
       // Formatting the TS::Value values.
@@ -620,12 +620,12 @@ void StoredObsQueryHandler::query(const StoredQuery& query,
             if (it1.second.group_id == group_id)
             {
               bool first = true;
-              lt::time_zone_ptr tzp;
+              Fmi::TimeZonePtr tzp;
 
               const TS::TimeSeries& ts_epoch = obsengine_result->at(initial_bs_param.size());
               for (int row_num : it1.second.row_index_vect)
               {
-                static const long ref_jd = boost::gregorian::date(1970, 1, 1).julian_day();
+                static const long ref_jd = Fmi::Date(1970, 1, 1).julian_day();
 
                 sv.setPrecision(5);
                 // Use first row instead of row_num for static parameter values
@@ -650,7 +650,7 @@ void StoredObsQueryHandler::query(const StoredQuery& query,
                 }
 
                 const auto ldt = ts_epoch.at(row_num).time;
-                pt::ptime epoch = ldt.utc_time();
+                Fmi::DateTime epoch = ldt.utc_time();
                 // Cannot use pt::time_difference::total_seconds() directly as it returns long and
                 // could overflow.
                 long long jd = epoch.date().julian_day();

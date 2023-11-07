@@ -30,10 +30,10 @@ bw::StoredAirNuclideQueryHandler::StoredAirNuclideQueryHandler(
 {
   try
   {
-    register_scalar_param<pt::ptime>(
+    register_scalar_param<Fmi::DateTime>(
         P_BEGIN_TIME, "The start time of the requested time period (YYYY-MM-DDTHHMIZ).");
 
-    register_scalar_param<pt::ptime>(
+    register_scalar_param<Fmi::DateTime>(
         P_END_TIME, "The end time of the requested time period (YYYY-MM-DDTHHMIZ).");
 
     register_scalar_param<std::string>(P_STATION_TYPE, "The observation station type.");
@@ -132,8 +132,8 @@ void bw::StoredAirNuclideQueryHandler::query(const StoredQuery& query,
                     << "\n";
       }
 
-      auto startTime = params.get_single<pt::ptime>(P_BEGIN_TIME);
-      auto endTime = params.get_single<pt::ptime>(P_END_TIME);
+      auto startTime = params.get_single<Fmi::DateTime>(P_BEGIN_TIME);
+      auto endTime = params.get_single<Fmi::DateTime>(P_END_TIME);
       const auto timestep = params.get_single<uint64_t>(P_TIME_STEP);
 
       if (m_sqRestrictions)

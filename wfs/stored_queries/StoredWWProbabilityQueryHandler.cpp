@@ -199,7 +199,7 @@ StoredWWProbabilityQueryHandler::StoredWWProbabilityQueryHandler(
         "An array of the data producer names."
         );
 
-    register_scalar_param<boost::posix_time::ptime>(
+    register_scalar_param<Fmi::DateTime>(
         P_ORIGIN_TIME,
         "The origin time of the weather models that should be used. This might be omitted in the query.",
         false
@@ -261,8 +261,8 @@ void StoredWWProbabilityQueryHandler::parseQueryResults(
     const std::string& language,
     SmartMet::Spine::CRSRegistry&  /*crsRegistry*/,
     const std::string& requestedCRS,
-    const boost::posix_time::ptime& origintime,
-    const boost::posix_time::ptime& modificationtime,
+    const Fmi::DateTime& origintime,
+    const Fmi::DateTime& modificationtime,
     const std::string& tz_name,
     CTPP::CDT& hash) const
 {
@@ -302,7 +302,7 @@ void StoredWWProbabilityQueryHandler::parseQueryResults(
     std::string proj_uri = "UNKNOWN";
     plugin_impl.get_crs_registry().get_attribute(requestedCRS, "projUri", &proj_uri);
 
-    boost::local_time::time_zone_ptr tzp = get_time_zone(tz_name);
+    Fmi::TimeZonePtr tzp = get_time_zone(tz_name);
     std::string runtime_timestamp = format_local_time(plugin_impl.get_time_stamp(), tzp);
 
     hash["proj_uri"] = proj_uri;
@@ -539,8 +539,8 @@ void StoredWWProbabilityQueryHandler::query(const StoredQuery& query,
 
     auto producer = sq_params.get_single<std::string>(P_PRODUCER);
     auto missingText = sq_params.get_single<std::string>(P_MISSING_TEXT);
-    boost::optional<boost::posix_time::ptime> requested_origintime =
-        sq_params.get_optional<boost::posix_time::ptime>(P_ORIGIN_TIME);
+    boost::optional<Fmi::DateTime> requested_origintime =
+        sq_params.get_optional<Fmi::DateTime>(P_ORIGIN_TIME);
 
     SmartMet::Engine::Querydata::Q q;
     if (requested_origintime)
@@ -548,8 +548,8 @@ void StoredWWProbabilityQueryHandler::query(const StoredQuery& query,
     else
       q = q_engine->get(producer);
 
-    boost::posix_time::ptime origintime = q->originTime();
-    boost::posix_time::ptime modificationtime = q->modificationTime();
+    Fmi::DateTime origintime = q->originTime();
+    Fmi::DateTime modificationtime = q->modificationTime();
 
     boost::shared_ptr<TS::TimeSeriesGeneratorOptions> pTimeOptions =
         get_time_generator_options(sq_params);

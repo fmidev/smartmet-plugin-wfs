@@ -40,7 +40,7 @@ std::set<T> vect2set(const std::vector<T>& src)
 }  // namespace
 
 bw::DataSetQuery::DataSetQuery()
-    : period(pt::ptime(boost::date_time::neg_infin), pt::ptime(boost::date_time::pos_infin))
+    : period(Fmi::DateTime(boost::date_time::neg_infin), Fmi::DateTime(boost::date_time::pos_infin))
 {
 }
 
@@ -91,8 +91,8 @@ void bw::DataSetQuery::add_parameter(const std::string& parameter)
   }
 }
 
-void bw::DataSetQuery::set_interval(const boost::posix_time::ptime& begin,
-                                    const boost::posix_time::ptime& end)
+void bw::DataSetQuery::set_interval(const Fmi::DateTime& begin,
+                                    const Fmi::DateTime& end)
 {
   try
   {
@@ -210,7 +210,7 @@ bool bw::DataSetDefinition::intersects(const bw::DataSetDefinition::box_t& bbox)
 }
 
 std::vector<boost::filesystem::path> bw::DataSetDefinition::query_files(
-    const boost::posix_time::ptime& begin, const boost::posix_time::ptime& end) const
+    const Fmi::DateTime& begin, const Fmi::DateTime& end) const
 {
   try
   {
@@ -224,7 +224,7 @@ std::vector<boost::filesystem::path> bw::DataSetDefinition::query_files(
       {
         try
         {
-          pt::ptime origintime = extract_origintime(fn);
+          Fmi::DateTime origintime = extract_origintime(fn);
           if (begin <= origintime and origintime <= end)
           {
             result.push_back(entry);
@@ -248,7 +248,7 @@ std::vector<boost::filesystem::path> bw::DataSetDefinition::query_files(
   }
 }
 
-pt::ptime bw::DataSetDefinition::extract_origintime(const boost::filesystem::path& p) const
+Fmi::DateTime bw::DataSetDefinition::extract_origintime(const boost::filesystem::path& p) const
 {
   try
   {

@@ -28,9 +28,9 @@ bw::StoredMastQueryHandler::StoredMastQueryHandler(SmartMet::Spine::Reactor* rea
 {
   try
   {
-    register_scalar_param<pt::ptime>(P_BEGIN_TIME, "The start time of the requested time period.");
+    register_scalar_param<Fmi::DateTime>(P_BEGIN_TIME, "The start time of the requested time period.");
 
-    register_scalar_param<pt::ptime>(P_END_TIME, "The end time of the requested time period.");
+    register_scalar_param<Fmi::DateTime>(P_END_TIME, "The end time of the requested time period.");
 
     register_array_param<std::string>(
         P_METEO_PARAMETERS,
@@ -309,8 +309,8 @@ void bw::StoredMastQueryHandler::query(const StoredQuery& query,
       }
 
       // Time range restriction to get data.
-      auto startTime = params.get_single<pt::ptime>(P_BEGIN_TIME);
-      auto endTime = params.get_single<pt::ptime>(P_END_TIME);
+      auto startTime = params.get_single<Fmi::DateTime>(P_BEGIN_TIME);
+      auto endTime = params.get_single<Fmi::DateTime>(P_END_TIME);
       const auto timestep = params.get_single<uint64_t>(P_TIME_STEP);
       const auto maxEpochs = params.get_single<uint64_t>(P_MAX_EPOCHS);
       if (m_sqRestrictions)
@@ -328,7 +328,7 @@ void bw::StoredMastQueryHandler::query(const StoredQuery& query,
 
       // Assume timestep 1 minutes when value is 0.
       uint64_t ts1 = (timestep > 0) ? timestep : 1;
-      if (m_sqRestrictions and startTime + pt::minutes(maxEpochs * ts1) < endTime)
+      if (m_sqRestrictions and startTime + Fmi::Minutes(maxEpochs * ts1) < endTime)
       {
         Fmi::Exception exception(BCP, "Too many time epochs in the time interval!");
         exception.addDetail("Use shorter time interval or larger time step.");

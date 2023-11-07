@@ -10,7 +10,7 @@
 #include "RequiresGeoEngine.h"
 #include "RequiresObsEngine.h"
 #include <boost/algorithm/string.hpp>
-#include <boost/date_time/posix_time/ptime.hpp>
+#include <macgyver/DateTime.h>
 #include <boost/format.hpp>
 #include <boost/lambda/lambda.hpp>
 #include <engines/geonames/Engine.h>

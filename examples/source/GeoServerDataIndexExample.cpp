@@ -1,5 +1,5 @@
 #include <iostream>
-#include <boost/date_time/posix_time/posix_time.hpp>
+#include <macgyver/DateTime.h>
 #include "GeoServerDataIndex.h"
 
 namespace pt = boost::posix_time;
@@ -10,8 +10,8 @@ int main(void)
   const char* conn_str = "dbname=DATABASE user=USERNAME password=PASSWORD host=HOSTNAME";
   GeoServerDB db(conn_str);
 
-  const pt::ptime end = pt::second_clock::universal_time();
-  const pt::ptime begin = end - pt::minutes(180);
+  const Fmi::DateTime end = Fmi::SecondClock::universal_time();
+  const Fmi::DateTime begin = end - Fmi::Minutes(180);
 
   std::vector<std::string> layers;
   layers.push_back("korpo_hclass_alin_eureffin");

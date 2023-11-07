@@ -1,7 +1,7 @@
 #include "WfsConvenience.h"
 #include "WfsException.h"
 #include <boost/algorithm/string.hpp>
-#include <boost/date_time/posix_time/posix_time.hpp>
+#include <macgyver/DateTime.h>
 #include <boost/lambda/lambda.hpp>
 #include <boost/spirit/include/qi.hpp>
 #include <macgyver/TimeParser.h>
@@ -76,8 +76,8 @@ std::string get_mandatory_header(const SmartMet::Spine::HTTP::Request& request,
   }
 }
 
-void check_time_interval(const boost::posix_time::ptime& start,
-                         const boost::posix_time::ptime& end,
+void check_time_interval(const Fmi::DateTime& start,
+                         const Fmi::DateTime& end,
                          double max_hours)
 {
   try
@@ -94,10 +94,10 @@ void check_time_interval(const boost::posix_time::ptime& start,
           .disableStackTrace();
     }
 
-    pt::time_duration interval_length = end - start;
+    Fmi::TimeDuration interval_length = end - start;
     int mi_hours = static_cast<int>(std::floor(max_hours));
     int mi_sec = static_cast<int>(std::floor(3600.0 * (max_hours - mi_hours)));
-    if (interval_length > pt::hours(mi_hours) + pt::seconds(mi_sec))
+    if (interval_length > Fmi::Hours(mi_hours) + Fmi::Seconds(mi_sec))
     {
       throw Fmi::Exception(BCP, "Too long time interval requested!")
           .addDetail("No more than " + std::to_string(max_hours) + " hours allowed.")

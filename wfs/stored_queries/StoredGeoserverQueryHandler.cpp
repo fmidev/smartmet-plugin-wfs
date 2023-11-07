@@ -5,7 +5,7 @@
 #include "WfsException.h"
 #include "stored_queries/StoredGeoserverQueryHandler.h"
 #include <boost/algorithm/string.hpp>
-#include <boost/date_time/posix_time/posix_time.hpp>
+#include <macgyver/DateTime.h>
 #include <macgyver/StringConversion.h>
 #include <macgyver/TypeName.h>
 #include <smartmet/spine/Convenience.h>
@@ -37,12 +37,12 @@ bw::StoredGeoserverQueryHandler::StoredGeoserverQueryHandler(
 {
   try
   {
-    register_scalar_param<pt::ptime>(
+    register_scalar_param<Fmi::DateTime>(
         P_BEGIN_TIME,
         "The start time of the requested time period (YYYY-MM-DDTHHMIZ)."
         );
 
-    register_scalar_param<pt::ptime>(
+    register_scalar_param<Fmi::DateTime>(
         P_END_TIME,
         "The end time of the requested time period (YYYY-MM-DDTHHMIZ)."
         );
@@ -194,8 +194,8 @@ void bw::StoredGeoserverQueryHandler::update_parameters(
     if (pos != std::string::npos)
       s_crs = s_crs.substr(6);
     int crs = Fmi::stoi(s_crs);
-    auto start_time = params.get_single<pt::ptime>(P_BEGIN_TIME);
-    auto end_time = params.get_single<pt::ptime>(P_END_TIME);
+    auto start_time = params.get_single<Fmi::DateTime>(P_BEGIN_TIME);
+    auto end_time = params.get_single<Fmi::DateTime>(P_END_TIME);
     unsigned width = params.get_single<uint64_t>(P_WIDTH);
     unsigned height = params.get_single<uint64_t>(P_HEIGHT);
     const auto selected_name = params.get_optional<std::string>(P_SELECTED_NAME, "");

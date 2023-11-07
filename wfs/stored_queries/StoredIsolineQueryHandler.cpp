@@ -94,7 +94,7 @@ std::vector<bw::ContourQueryResultPtr> bw::StoredIsolineQueryHandler::processQue
 }
 
 SmartMet::Engine::Contour::Options bw::StoredIsolineQueryHandler::getContourEngineOptions(
-    const boost::posix_time::ptime& time, const ContourQueryParameter& queryParameter) const
+    const Fmi::DateTime& time, const ContourQueryParameter& queryParameter) const
 {
   try
   {

@@ -8,9 +8,6 @@
 namespace bw = SmartMet::Plugin::WFS;
 
 namespace ba = boost::algorithm;
-namespace lt = boost::local_time;
-namespace pt = boost::posix_time;
-namespace dt = boost::date_time;
 
 namespace
 {
@@ -51,7 +48,7 @@ std::string bw::SupportsTimeZone::get_tz_name(const RequestParameterMap& param_v
   }
 }
 
-lt::time_zone_ptr bw::SupportsTimeZone::get_tz_for_site(double longitude,
+Fmi::TimeZonePtr bw::SupportsTimeZone::get_tz_for_site(double longitude,
                                                         double latitude,
                                                         const std::string& tz_name) const
 {
@@ -74,7 +71,7 @@ lt::time_zone_ptr bw::SupportsTimeZone::get_tz_for_site(double longitude,
   }
 }
 
-boost::local_time::time_zone_ptr bw::SupportsTimeZone::get_time_zone(const std::string& tz_name) const
+Fmi::TimeZonePtr bw::SupportsTimeZone::get_time_zone(const std::string& tz_name) const
 {
   try
   {
@@ -91,12 +88,12 @@ boost::local_time::time_zone_ptr bw::SupportsTimeZone::get_time_zone(const std::
   }
 }
 
-std::string bw::SupportsTimeZone::format_local_time(const pt::ptime& utc_time,
-                                                    boost::local_time::time_zone_ptr tz)
+std::string bw::SupportsTimeZone::format_local_time(const Fmi::DateTime& utc_time,
+                                                    Fmi::TimeZonePtr tz)
 {
   try
   {
-    lt::local_date_time t1(utc_time, tz);
+    Fmi::LocalDateTime t1(utc_time, tz);
 
     std::string result = Fmi::to_iso_extended_string(t1.local_time()) + t1.zone_abbrev(true);
 

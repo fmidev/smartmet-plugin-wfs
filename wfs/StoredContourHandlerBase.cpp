@@ -53,7 +53,7 @@ bw::StoredContourQueryHandler::StoredContourQueryHandler(
         "An array of the data producer names"
         );
 
-    register_scalar_param<boost::posix_time::ptime>(
+    register_scalar_param<Fmi::DateTime>(
         P_ORIGIN_TIME,
         "The origin time of the weather models that should be used. This might be omitted in the query",
         false);
@@ -159,7 +159,7 @@ bw::ContourQueryResultSet bw::StoredContourQueryHandler::getContours_qEngine(
 
     for (auto& timestep : queryParameter.tlist)
     {
-      boost::posix_time::ptime utctime(timestep.utc_time());
+      Fmi::DateTime utctime(timestep.utc_time());
 
       SmartMet::Engine::Contour::Options options(getContourEngineOptions(utctime, queryParameter));
 
@@ -296,7 +296,7 @@ bw::ContourQueryResultSet bw::StoredContourQueryHandler::getContours_gridEngine(
 
     // QueryServer::Query query(queryParameter.gridQuery);
 
-    boost::posix_time::ptime utctime;
+    Fmi::DateTime utctime;
     SmartMet::Engine::Contour::Options options(getContourEngineOptions(utctime, queryParameter));
 
     for (auto & param : queryParameter.gridQuery.mQueryParameterList)
@@ -359,8 +359,8 @@ bw::ContourQueryResultSet bw::StoredContourQueryHandler::getContours_gridEngine(
       for (auto val = param->mValueList.begin(); val != param->mValueList.end(); ++val)
       {
         std::vector<OGRGeometryPtr> geoms;
-        boost::posix_time::ptime utcTime = boost::posix_time::from_time_t((*val)->mForecastTimeUTC);
-        // boost::posix_time::ptime utcTime = Fmi::TimeParser::parse_iso((*val)->mForecastTime);
+        Fmi::DateTime utcTime = boost::posix_time::from_time_t((*val)->mForecastTimeUTC);
+        // Fmi::DateTime utcTime = Fmi::TimeParser::parse_iso((*val)->mForecastTime);
 
         if (!(*val)->mValueData.empty())
         {
@@ -537,8 +537,8 @@ void bw::StoredContourQueryHandler::query_qEngine(const StoredQuery& stored_quer
     }
 
     auto producer = sq_params.get_single<std::string>(P_PRODUCER);
-    boost::optional<boost::posix_time::ptime> requested_origintime =
-        sq_params.get_optional<boost::posix_time::ptime>(P_ORIGIN_TIME);
+    boost::optional<Fmi::DateTime> requested_origintime =
+        sq_params.get_optional<Fmi::DateTime>(P_ORIGIN_TIME);
 
     SmartMet::Engine::Querydata::Q q;
     if (requested_origintime)
@@ -546,8 +546,8 @@ void bw::StoredContourQueryHandler::query_qEngine(const StoredQuery& stored_quer
     else
       q = q_engine->get(producer);
 
-    boost::posix_time::ptime origintime = q->originTime();
-    boost::posix_time::ptime modificationtime = q->modificationTime();
+    Fmi::DateTime origintime = q->originTime();
+    Fmi::DateTime modificationtime = q->modificationTime();
 
     SmartMet::Spine::Parameter parameter(name, SmartMet::Spine::Parameter::Type::Data, id);
 
@@ -643,8 +643,8 @@ void bw::StoredContourQueryHandler::query_gridEngine(const StoredQuery& stored_q
 
     auto producer = sq_params.get_single<std::string>(P_PRODUCER);
 
-    boost::optional<boost::posix_time::ptime> requested_origintime =
-        sq_params.get_optional<boost::posix_time::ptime>(P_ORIGIN_TIME);
+    boost::optional<Fmi::DateTime> requested_origintime =
+        sq_params.get_optional<Fmi::DateTime>(P_ORIGIN_TIME);
     if (requested_origintime)
     {
       std::string originTime = to_iso_string(*requested_origintime);
@@ -834,14 +834,14 @@ void bw::StoredContourQueryHandler::query_gridEngine(const StoredQuery& stored_q
     }
 
     CTPP::CDT hash;
-    boost::posix_time::ptime origintime;
-    boost::posix_time::ptime modificationtime;
+    Fmi::DateTime origintime;
+    Fmi::DateTime modificationtime;
 
     if (analysisTimeStr > " ")
-      origintime = boost::posix_time::ptime(Fmi::TimeParser::parse_iso(analysisTimeStr));
+      origintime = Fmi::DateTime(Fmi::TimeParser::parse_iso(analysisTimeStr));
 
     if (modificationTimeStr > " ")
-      modificationtime = boost::posix_time::ptime(Fmi::TimeParser::parse_iso(modificationTimeStr));
+      modificationtime = Fmi::DateTime(Fmi::TimeParser::parse_iso(modificationTimeStr));
 
     parseQueryResults(query_results,
                       query_param->bbox,
@@ -1054,8 +1054,8 @@ void bw::StoredContourQueryHandler::parseQueryResults(
     const std::string& language,
     SmartMet::Spine::CRSRegistry&  /*crsRegistry*/,
     const std::string& requestedCRS,
-    const boost::posix_time::ptime& origintime,
-    const boost::posix_time::ptime& modificationtime,
+    const Fmi::DateTime& origintime,
+    const Fmi::DateTime& modificationtime,
     const std::string& tz_name,
     CTPP::CDT& hash) const
 {
@@ -1095,7 +1095,7 @@ void bw::StoredContourQueryHandler::parseQueryResults(
     std::string proj_uri = "UNKNOWN";
     plugin_impl.get_crs_registry().get_attribute(requestedCRS, "projUri", &proj_uri);
 
-    boost::local_time::time_zone_ptr tzp = get_time_zone(tz_name);
+    Fmi::TimeZonePtr tzp = get_time_zone(tz_name);
     std::string runtime_timestamp = format_local_time(plugin_impl.get_time_stamp(), tzp);
     std::string origintime_timestamp = format_local_time(origintime, tzp);
     std::string modificationtime_timestamp = format_local_time(modificationtime, tzp);

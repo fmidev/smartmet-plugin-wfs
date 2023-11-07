@@ -5,7 +5,7 @@
 #include "XmlUtils.h"
 #include <boost/algorithm/string.hpp>
 #include <boost/bind/bind.hpp>
-#include <boost/date_time/posix_time/posix_time.hpp>
+#include <macgyver/DateTime.h>
 #include <cstdint>
 #include <macgyver/Exception.h>
 #include <macgyver/TimeParser.h>
@@ -253,7 +253,7 @@ std::vector<SmartMet::Spine::Value> ParameterExtractor::extract_date_time(
     namespace pt = boost::posix_time;
     std::vector<SmartMet::Spine::Value> result;
     const std::string content = extract_text(elem);
-    pt::ptime t = Fmi::TimeParser::parse(ba::trim_copy(content));
+    Fmi::DateTime t = Fmi::TimeParser::parse(ba::trim_copy(content));
     SmartMet::Spine::Value value(t);
     result.push_back(value);
     return result;

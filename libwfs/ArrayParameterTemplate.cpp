@@ -273,7 +273,7 @@ std::vector<std::string> ArrayParameterTemplate::get_string_array(
   }
 }
 
-std::vector<boost::posix_time::ptime> ArrayParameterTemplate::get_ptime_array(
+std::vector<Fmi::DateTime> ArrayParameterTemplate::get_ptime_array(
     const RequestParameterMap& req_param_map, const SupportsExtraHandlerParams* extra_params) const
 {
   try
@@ -281,7 +281,7 @@ std::vector<boost::posix_time::ptime> ArrayParameterTemplate::get_ptime_array(
     try
     {
       std::vector<SmartMet::Spine::Value> tmp = get_value(req_param_map, extra_params);
-      std::vector<boost::posix_time::ptime> result;
+      std::vector<Fmi::DateTime> result;
       std::transform(tmp.begin(),
                      tmp.end(),
                      std::back_inserter(result),

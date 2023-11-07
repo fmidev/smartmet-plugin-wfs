@@ -85,7 +85,7 @@ StoredGridQueryHandler::StoredGridQueryHandler(SmartMet::Spine::Reactor* reactor
         "An array of the data producer names."
         );
 
-    register_scalar_param<pt::ptime>(
+    register_scalar_param<Fmi::DateTime>(
         P_ORIGIN_TIME,
         "The origin time of the weather models that should be used. This might be omitted in the query.",
         false
@@ -673,7 +673,7 @@ StoredGridQueryHandler::Result::Grid StoredGridQueryHandler::rearrangeGrid(
 
 std::map<std::string, SmartMet::Engine::Querydata::ModelParameter>
 SmartMet::Plugin::WFS::StoredGridQueryHandler::get_model_parameters(
-    const std::string& producer, const pt::ptime& origin_time) const
+    const std::string& producer, const Fmi::DateTime& origin_time) const
 {
   try
   {
@@ -741,7 +741,7 @@ void StoredGridQueryHandler::parse_times(const RequestParameterMap& param, Query
 
     // boost::optional + gcc-4.4.X käytäytyy huonosti
     if (param.count(P_ORIGIN_TIME) > 0)
-      dest.origin_time.reset(new pt::ptime(param.get_single<pt::ptime>(P_ORIGIN_TIME)));
+      dest.origin_time.reset(new Fmi::DateTime(param.get_single<Fmi::DateTime>(P_ORIGIN_TIME)));
   }
   catch (...)
   {

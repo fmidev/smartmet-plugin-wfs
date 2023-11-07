@@ -41,7 +41,7 @@ StoredQueryParamRegistry::StoredQueryParamRegistry(StoredQueryConfig::Ptr config
     supported_type_names[typeid(uint64_t).name()] = P_UINT;
     supported_type_names[typeid(double).name()] = P_DOUBLE;
     supported_type_names[typeid(std::string).name()] = P_STRING;
-    supported_type_names[typeid(boost::posix_time::ptime).name()] = P_TIME;
+    supported_type_names[typeid(Fmi::DateTime).name()] = P_TIME;
     supported_type_names[typeid(SmartMet::Spine::Point).name()] = P_POINT;
     supported_type_names[typeid(SmartMet::Spine::BoundingBox).name()] = P_BBOX;
     supported_type_names[typeid(bool).name()] = P_BOOL;
@@ -258,7 +258,7 @@ StoredQueryParamRegistry::get_param_info() const
     static std::map<std::string, std::string> name_remap =
         {
             { typeid(std::string).name(), "string" }
-            , { typeid(boost::posix_time::ptime).name(), "posix_time" }
+            , { typeid(Fmi::DateTime).name(), "posix_time" }
             , { typeid(SmartMet::Spine::BoundingBox).name(), "bounding_box" }
         };
 

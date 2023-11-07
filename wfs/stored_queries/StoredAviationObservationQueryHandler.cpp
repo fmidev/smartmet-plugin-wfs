@@ -2,7 +2,7 @@
 
 #include "stored_queries/StoredAviationObservationQueryHandler.h"
 #include "StoredQueryHandlerFactoryDef.h"
-#include <boost/date_time/posix_time/ptime.hpp>
+#include <macgyver/DateTime.h>
 #include <engines/observation/DBRegistry.h>
 #include <engines/observation/VerifiableMessageQuery.h>
 #include <engines/observation/VerifiableMessageQueryParams.h>
@@ -48,12 +48,12 @@ bw::StoredAviationObservationQueryHandler::StoredAviationObservationQueryHandler
         " code designating each airport around the world."
         );
 
-    register_scalar_param<pt::ptime>(
+    register_scalar_param<Fmi::DateTime>(
         P_BEGIN_TIME,
         "The start time of the requested time period."
         );
 
-    register_scalar_param<pt::ptime>(
+    register_scalar_param<Fmi::DateTime>(
         P_END_TIME,
         "The end time of the requested time period."
         );
@@ -251,8 +251,8 @@ void bw::StoredAviationObservationQueryHandler::query(const StoredQuery& query,
                         << "' failed\n";
           }
 
-          const auto startTime = params.get_single<pt::ptime>(P_BEGIN_TIME);
-          const auto endTime = params.get_single<pt::ptime>(P_END_TIME);
+          const auto startTime = params.get_single<Fmi::DateTime>(P_BEGIN_TIME);
+          const auto endTime = params.get_single<Fmi::DateTime>(P_END_TIME);
 
           if (m_sqRestrictions)
             check_time_interval(startTime, endTime, m_maxHours);

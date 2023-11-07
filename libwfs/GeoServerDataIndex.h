@@ -7,7 +7,7 @@
 
 #include <ogr_geometry.h>
 
-#include <boost/date_time/posix_time/ptime.hpp>
+#include <macgyver/DateTime.h>
 #include <boost/format.hpp>
 #include <boost/function.hpp>
 #include <boost/variant.hpp>
@@ -48,7 +48,7 @@ class GeoServerDataIndex
 
   struct Item
   {
-    boost::posix_time::ptime epoch;
+    Fmi::DateTime epoch;
     std::vector<LayerRec> layers;
   };
 
@@ -61,35 +61,35 @@ class GeoServerDataIndex
 
   virtual ~GeoServerDataIndex();
 
-  void query(const boost::posix_time::ptime& begin,
-             const boost::posix_time::ptime& end,
+  void query(const Fmi::DateTime& begin,
+             const Fmi::DateTime& end,
              const std::vector<std::string>& layers,
              const double* boundingBox,
              int boundingBoxCRS = 4326,
              int destCRS = 4326);
 
-  void query_single_layer(const boost::posix_time::ptime& begin,
-                          const boost::posix_time::ptime& end,
+  void query_single_layer(const Fmi::DateTime& begin,
+                          const Fmi::DateTime& end,
                           const std::string& layers,
                           const double* boundingBox,
                           int boundingBoxCRS = 4326,
                           int destCRS = 4326);
 
-  inline std::map<boost::posix_time::ptime, Item>::const_iterator begin() const
+  inline std::map<Fmi::DateTime, Item>::const_iterator begin() const
   {
     return data.begin();
   }
 
-  inline std::map<boost::posix_time::ptime, Item>::const_iterator end() const { return data.end(); }
-  inline const std::map<boost::posix_time::ptime, Item>& get_data() const { return data; }
+  inline std::map<Fmi::DateTime, Item>::const_iterator end() const { return data.end(); }
+  inline const std::map<Fmi::DateTime, Item>& get_data() const { return data; }
   inline std::size_t size() const { return data.size(); }
   std::string get_db_table_name(const std::string& layer_name) const;
 
   inline void set_debug_level(int new_debug_level) { this->debug_level = new_debug_level; }
 
  private:
-  std::string create_sql_request(const boost::posix_time::ptime& begin,
-                                 const boost::posix_time::ptime& end,
+  std::string create_sql_request(const Fmi::DateTime& begin,
+                                 const Fmi::DateTime& end,
                                  const std::string& layer,
                                  const double* boundingBox,
                                  int boundingBoxCRS,
@@ -105,7 +105,7 @@ class GeoServerDataIndex
                  std::map<std::string, std::string>,
                  boost::function1<std::string, std::string> >
       db_table_name_def;
-  std::map<boost::posix_time::ptime, Item> data;
+  std::map<Fmi::DateTime, Item> data;
   int debug_level;
 };
 

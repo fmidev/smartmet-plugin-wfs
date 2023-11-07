@@ -1,6 +1,8 @@
 #pragma once
 
 #include <boost/shared_array.hpp>
+
+#include <macgyver/DateTime.h>
 #include <spine/Value.h>
 #include <string>
 
@@ -24,7 +26,7 @@ class OBStream
   void put_double(double value);
   void put_char(char c);
   void put_string(const std::string& text);
-  void put_ptime(const boost::posix_time::ptime& tm);
+  void put_ptime(const Fmi::DateTime& tm);
   void put_value(const SmartMet::Spine::Value& value);
   void put_value_map(const std::multimap<std::string, SmartMet::Spine::Value>& data);
 
@@ -47,7 +49,7 @@ class IBStream
   double get_double();
   char get_char();
   std::string get_string();
-  boost::posix_time::ptime get_ptime();
+  Fmi::DateTime get_ptime();
   SmartMet::Spine::Value get_value();
   std::multimap<std::string, SmartMet::Spine::Value> get_value_map();
 

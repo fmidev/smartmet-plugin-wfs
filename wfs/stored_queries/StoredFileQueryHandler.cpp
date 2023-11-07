@@ -38,8 +38,8 @@ bw::StoredFileQueryHandler::StoredFileQueryHandler(SmartMet::Spine::Reactor* rea
     register_array_param<int64_t>(P_LEVEL, "");
     register_array_param<std::string>(P_PARAM, "");
     register_array_param<double>(P_BBOX, "", 0, 4, 4);
-    register_array_param<pt::ptime>(P_BEGIN, "");
-    register_array_param<pt::ptime>(P_END, "");
+    register_array_param<Fmi::DateTime>(P_BEGIN, "");
+    register_array_param<Fmi::DateTime>(P_END, "");
 
     auto& ds_list_cfg = config->get_mandatory_config_param<libconfig::Setting&>("dataSets");
     config->assert_is_list(ds_list_cfg, 1);
@@ -115,8 +115,8 @@ void bw::StoredFileQueryHandler::update_parameters(
     params.get<int64_t>(P_LEVEL, std::inserter(level_set, level_set.begin()));
     params.get<std::string>(P_PARAM, std::inserter(param_set, param_set.begin()));
     params.get<double>(P_BBOX, std::back_inserter(bbox));
-    const auto begin = params.get_single<pt::ptime>(P_BEGIN);
-    const auto end = params.get_single<pt::ptime>(P_END);
+    const auto begin = params.get_single<Fmi::DateTime>(P_BEGIN);
+    const auto end = params.get_single<Fmi::DateTime>(P_END);
     const auto file = params.get_optional<std::string>("file", "");
 
     result.clear();
@@ -179,7 +179,7 @@ void bw::StoredFileQueryHandler::update_parameters(
       {
         if ((file.empty()) or (file == it2.string()))
         {
-          pt::ptime origin_time = ds_def.extract_origintime(it2);
+          Fmi::DateTime origin_time = ds_def.extract_origintime(it2);
           boost::shared_ptr<RequestParameterMap> pm1(
 	      new RequestParameterMap(true));
           pm1->add("name", ds_def.get_name());

@@ -49,9 +49,9 @@ bw::StoredFlashQueryHandler::StoredFlashQueryHandler(
 {
   try
   {
-    register_scalar_param<pt::ptime>(P_BEGIN_TIME, "The start time of the requested time period.");
+    register_scalar_param<Fmi::DateTime>(P_BEGIN_TIME, "The start time of the requested time period.");
 
-    register_scalar_param<pt::ptime>(P_END_TIME, "The end time of the requested time period.");
+    register_scalar_param<Fmi::DateTime>(P_END_TIME, "The end time of the requested time period.");
 
     register_array_param<std::string>(
         P_PARAM, "An array of fields whose values should be returned in the response.", 1, 999);
@@ -95,13 +95,13 @@ std::string bw::StoredFlashQueryHandler::get_handler_description() const
 
 namespace
 {
-pt::ptime round_time(const pt::ptime& t0, unsigned step, int offset = 0)
+Fmi::DateTime round_time(const Fmi::DateTime& t0, unsigned step, int offset = 0)
 {
   try
   {
-    pt::ptime t = t0 + pt::seconds(offset);
+    Fmi::DateTime t = t0 + Fmi::Seconds(offset);
     long sec = t.time_of_day().total_seconds();
-    pt::ptime result(t.date(), pt::seconds(step * (sec / step)));
+    Fmi::DateTime result(t.date(), Fmi::Seconds(step * (sec / step)));
     return result;
   }
   catch (...)
@@ -168,10 +168,10 @@ void bw::StoredFlashQueryHandler::query(const StoredQuery& query,
         throw exception.disableStackTrace();
       }
 
-      auto begin = params.get_single<pt::ptime>(P_BEGIN_TIME);
-      auto end = params.get_single<pt::ptime>(P_END_TIME);
-      pt::ptime now = pt::second_clock::universal_time();
-      pt::ptime last = now - pt::seconds(time_block_size);
+      auto begin = params.get_single<Fmi::DateTime>(P_BEGIN_TIME);
+      auto end = params.get_single<Fmi::DateTime>(P_END_TIME);
+      Fmi::DateTime now = Fmi::SecondClock::universal_time();
+      Fmi::DateTime last = now - Fmi::Seconds(time_block_size);
 
       query_params.starttime = round_time(begin, time_block_size, 0);
       query_params.endtime = round_time(std::min(end, last), time_block_size, time_block_size - 1);
@@ -210,7 +210,7 @@ void bw::StoredFlashQueryHandler::query(const StoredQuery& query,
       query_params.starttimeGiven = true;
 
       const std::string tz_name = get_tz_name(params);
-      boost::local_time::time_zone_ptr tzp = get_time_zone(tz_name);
+      Fmi::TimeZonePtr tzp = get_time_zone(tz_name);
 
       boost::shared_ptr<SmartMet::Spine::CRSRegistry::Transformation> to_bbox_transform;
 
@@ -361,7 +361,7 @@ void bw::StoredFlashQueryHandler::query(const StoredQuery& query,
 
       if (result_ptr && !result_ptr->empty())
       {
-        static const long ref_jd = boost::gregorian::date(1970, 1, 1).julian_day();
+        static const long ref_jd = Fmi::Date(1970, 1, 1).julian_day();
 
         const auto& result = *result_ptr;
         num_rows = result[1].size();
@@ -408,7 +408,7 @@ void bw::StoredFlashQueryHandler::query(const StoredQuery& query,
 
           auto str_xy = get_2D_coord(transformation, lon, lat);
 
-          const pt::ptime epoch = result[lon_ind][i].time.utc_time();
+          const Fmi::DateTime epoch = result[lon_ind][i].time.utc_time();
           long long jd = epoch.date().julian_day();
           long seconds = epoch.time_of_day().total_seconds();
           INT_64 s_epoch = 86400LL * (jd - ref_jd) + seconds;

@@ -1,5 +1,5 @@
 #include "GeoServerDataIndex.h"
-#include <boost/date_time/posix_time/posix_time.hpp>
+#include <macgyver/DateTime.h>
 #include <boost/regex.hpp>
 #include <gis/OGR.h>
 #include <macgyver/StringConversion.h>
@@ -216,8 +216,8 @@ bw::GeoServerDataIndex::GeoServerDataIndex(
 
 bw::GeoServerDataIndex::~GeoServerDataIndex() = default;
 
-void bw::GeoServerDataIndex::query(const boost::posix_time::ptime& begin,
-                                   const boost::posix_time::ptime& end,
+void bw::GeoServerDataIndex::query(const Fmi::DateTime& begin,
+                                   const Fmi::DateTime& end,
                                    const std::vector<std::string>& layers,
                                    const double* boundingBox,
                                    int boundingBoxCRS,
@@ -242,8 +242,8 @@ void bw::GeoServerDataIndex::query(const boost::posix_time::ptime& begin,
   }
 }
 
-void bw::GeoServerDataIndex::query_single_layer(const boost::posix_time::ptime& begin,
-                                                const boost::posix_time::ptime& end,
+void bw::GeoServerDataIndex::query_single_layer(const Fmi::DateTime& begin,
+                                                const Fmi::DateTime& end,
                                                 const std::string& layer,
                                                 const double* boundingBox,
                                                 int boundingBoxCRS,
@@ -316,8 +316,8 @@ std::string bw::GeoServerDataIndex::get_db_table_name(const std::string& layer_n
   }
 }
 
-std::string bw::GeoServerDataIndex::create_sql_request(const boost::posix_time::ptime& begin,
-                                                       const boost::posix_time::ptime& end,
+std::string bw::GeoServerDataIndex::create_sql_request(const Fmi::DateTime& begin,
+                                                       const Fmi::DateTime& end,
                                                        const std::string& layer,
                                                        const double* boundingBox,
                                                        int boundingBoxCRS,
@@ -394,7 +394,7 @@ void bw::GeoServerDataIndex::process_sql_result(pqxx::result& result, const std:
     for (auto row = result.begin(); row != result.end(); ++row)
     {
       const auto s_epoch = row[0].as<std::string>();
-      pt::ptime epoch = pt::time_from_string(s_epoch);
+      Fmi::DateTime epoch = pt::time_from_string(s_epoch);
 
       Item& item = data[epoch];
       item.epoch = epoch;

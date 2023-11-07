@@ -1,6 +1,6 @@
 #pragma once
 
-#include <boost/date_time/posix_time/posix_time.hpp>
+#include <macgyver/DateTime.h>
 #include <boost/enable_shared_from_this.hpp>
 #include <boost/filesystem.hpp>
 #include <boost/geometry.hpp>
@@ -31,7 +31,7 @@ class DataSetQuery
 
   void add_parameter(const std::string& parameter);
 
-  void set_interval(const boost::posix_time::ptime& begin, const boost::posix_time::ptime& end);
+  void set_interval(const Fmi::DateTime& begin, const Fmi::DateTime& end);
 
   inline const std::set<std::string>& get_names() const { return names; }
   inline const boost::posix_time::time_period& get_time_interval() const { return period; }
@@ -69,10 +69,10 @@ class DataSetDefinition : public boost::enable_shared_from_this<DataSetDefinitio
   bool intersects(const box_t& bbox) const;
 
   std::vector<boost::filesystem::path> query_files(
-      const boost::posix_time::ptime& begin = boost::date_time::neg_infin,
-      const boost::posix_time::ptime& end = boost::date_time::pos_infin) const;
+      const Fmi::DateTime& begin = boost::date_time::neg_infin,
+      const Fmi::DateTime& end = boost::date_time::pos_infin) const;
 
-  boost::posix_time::ptime extract_origintime(const boost::filesystem::path& p) const;
+  Fmi::DateTime extract_origintime(const boost::filesystem::path& p) const;
 
  private:
   std::string name;

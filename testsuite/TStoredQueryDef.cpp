@@ -145,7 +145,7 @@ BOOST_AUTO_TEST_CASE(test_scalar_time_def)
 {
   StoredQueryParamDef param_def;
   BOOST_TEST_MESSAGE(
-      "+ [StoredQueryParamDef] Testing getting scalar boost::posix_time::ptime parameter");
+      "+ [StoredQueryParamDef] Testing getting scalar Fmi::DateTime parameter");
   param_def.parse_def("time");
   BOOST_CHECK(param_def.getValueType() == StoredQueryParamDef::TIME);
   BOOST_CHECK(!param_def.isArray());

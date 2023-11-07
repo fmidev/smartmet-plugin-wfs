@@ -39,7 +39,7 @@ BuildRequires: smartmet-library-spine-devel >= 23.10.20
 BuildRequires: smartmet-library-gis-devel >= 23.9.12
 BuildRequires: smartmet-library-trax-devel >= 23.8.17
 BuildRequires: smartmet-library-locus-devel >= 23.7.28
-BuildRequires: smartmet-library-macgyver-devel >= 23.10.10
+BuildRequires: smartmet-library-macgyver-devel >= 23.11.8
 BuildRequires: smartmet-engine-contour-devel >= 23.10.3
 BuildRequires: smartmet-engine-geonames-devel >= 23.9.6
 BuildRequires: smartmet-engine-gis-devel >= 23.8.28
@@ -56,7 +56,7 @@ Requires: libcurl
 Requires: jsoncpp
 Requires: zlib
 Requires: smartmet-library-locus >= 23.7.28
-Requires: smartmet-library-macgyver >= 23.10.10
+Requires: smartmet-library-macgyver >= 23.11.8
 Requires: smartmet-library-spine >= 23.10.20
 Requires: smartmet-library-timeseries >= 23.10.30
 Requires: smartmet-library-gis >= 23.9.12
@@ -104,7 +104,7 @@ Obsoletes: smartmet-brainstorm-wfs-debuginfo < 16.11.1
 #TestRequires: smartmet-test-db >= 23.7.21
 #TestRequires: smartmet-test-data >= 23.10.16
 #TestRequires: smartmet-utils-devel >= 23.9.6
-#TestRequires: smartmet-library-macgyver >= 23.10.10
+#TestRequires: smartmet-library-macgyver >= 23.11.8
 #TestRequires: smartmet-library-gis >= 23.9.12
 #TestRequires: smartmet-library-newbase >= 23.10.11
 #TestRequires: smartmet-library-spine-plugin-test >= 23.10.20
@@ -129,7 +129,7 @@ Summary: SmartMet WFS plugin development files
 Requires: smartmet-library-spine-devel >= 23.10.20
 Requires: smartmet-library-gis-devel >= 23.9.12
 Requires: smartmet-library-locus-devel >= 23.7.28
-Requires: smartmet-library-macgyver-devel >= 23.10.10
+Requires: smartmet-library-macgyver-devel >= 23.11.8
 Requires: %{SPECNAME} = %{version}-%{release}
 %description -n %{SPECNAME}-devel
 SmartMet WFS plugin development files (for building testsuite without rebuilding plugin)

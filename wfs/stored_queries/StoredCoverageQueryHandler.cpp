@@ -134,7 +134,7 @@ std::vector<bw::ContourQueryResultPtr> bw::StoredCoverageQueryHandler::processQu
 }
 
 SmartMet::Engine::Contour::Options bw::StoredCoverageQueryHandler::getContourEngineOptions(
-    const boost::posix_time::ptime& time, const ContourQueryParameter& queryParameter) const
+    const Fmi::DateTime& time, const ContourQueryParameter& queryParameter) const
 {
   return SmartMet::Engine::Contour::Options(
       queryParameter.parameter,

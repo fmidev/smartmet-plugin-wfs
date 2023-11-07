@@ -102,7 +102,7 @@ StoredGridForecastQueryHandler::StoredGridForecastQueryHandler(
         ""
         );
 
-    register_scalar_param<pt::ptime>(
+    register_scalar_param<Fmi::DateTime>(
         P_ORIGIN_TIME,
         "",
         false
@@ -202,7 +202,7 @@ void StoredGridForecastQueryHandler::query(const StoredQuery& stored_query,
   {
     namespace pt = boost::posix_time;
 
-    static const long ref_jd = boost::gregorian::date(1970, 1, 1).julian_day();
+    static const long ref_jd = Fmi::Date(1970, 1, 1).julian_day();
 
     int debug_level = get_config()->get_debug_level();
     if (debug_level > 0)
@@ -350,14 +350,14 @@ void StoredGridForecastQueryHandler::query(const StoredQuery& stored_query,
 
           std::size_t row_counter = 0;
 
-          pt::ptime interval_begin = boost::date_time::pos_infin;
-          pt::ptime interval_end = boost::date_time::neg_infin;
+          Fmi::DateTime interval_begin = Fmi::Date_time::pos_infin;
+          Fmi::DateTime interval_end = Fmi::Date_time::neg_infin;
 
           for (auto site_iter = site_range.first; site_iter != site_range.second; ++site_iter)
           {
             const auto& geo_id = site_iter->second;
             auto row_range = result_map.equal_range(geo_id);
-            lt::time_zone_ptr tzp;
+            Fmi::TimeZonePtr tzp;
             for (auto row_iter = row_range.first; row_iter != row_range.second; ++row_iter)
             {
               std::size_t i = row_iter->second;
@@ -404,7 +404,7 @@ void StoredGridForecastQueryHandler::query(const StoredQuery& stored_query,
                 row_data["elev"] = query.result->get(ind_level, i);
               }
 
-              pt::ptime epoch = Fmi::TimeParser::parse_iso(query.result->get(ind_epoch, i));
+              Fmi::DateTime epoch = Fmi::TimeParser::parse_iso(query.result->get(ind_epoch, i));
               long long jd = epoch.date().julian_day();
               long seconds = epoch.time_of_day().total_seconds();
               INT_64 s_epoch = 86400LL * (jd - ref_jd) + seconds;
@@ -471,8 +471,8 @@ uint StoredGridForecastQueryHandler::processGridQuery(Query& wfsQuery,
         grid_engine->getContentServer_sptr();
     TS::Value missing_value = TS::None();
     std::string timezoneName = loc->timezone;
-    boost::local_time::time_zone_ptr localtz = itsTimezones.time_zone_from_string(loc->timezone);
-    boost::local_time::time_zone_ptr tz = localtz;
+    Fmi::TimeZonePtr localtz = itsTimezones.time_zone_from_string(loc->timezone);
+    Fmi::TimeZonePtr tz = localtz;
     uint lastRow = rowCount;
     uint generationId = 0;
     uint geometryId = 0;
@@ -626,9 +626,9 @@ uint StoredGridForecastQueryHandler::processGridQuery(Query& wfsQuery,
           if (row > lastRow)
             lastRow = row;
 
-          boost::posix_time::ptime utcTime = boost::posix_time::from_time_t(*ft);
-          boost::local_time::local_date_time queryTime(utcTime, tz);
-          // boost::local_time::local_date_time queryTime(Fmi::TimeParser::parse_iso(*ft), tz);
+          Fmi::DateTime utcTime = boost::posix_time::from_time_t(*ft);
+          Fmi::LocalDateTime queryTime(utcTime, tz);
+          // Fmi::LocalDateTime queryTime(Fmi::TimeParser::parse_iso(*ft), tz);
           if (additionalParameters.getParameterValueByLocation(
                   gridQuery.mQueryParameterList[p].mParam,
                   tag,
@@ -713,7 +713,7 @@ uint StoredGridForecastQueryHandler::processGridQuery(Query& wfsQuery,
                 if (grid_engine->getGenerationInfoById(
                         gridQuery.mQueryParameterList[idx].mValueList[t]->mGenerationId, info))
                 {
-                  boost::local_time::local_date_time origTime(
+                  Fmi::LocalDateTime origTime(
                       Fmi::TimeParser::parse_iso(info.mAnalysisTime), tz);
                   output->set(col, row, wfsQuery.time_formatter->format(origTime));
                   idx = pLen + 10;
@@ -784,9 +784,9 @@ uint StoredGridForecastQueryHandler::processGridQuery(Query& wfsQuery,
       T::GenerationInfo info;
       if (grid_engine->getGenerationInfoById(generationId, info))
       {
-        // boost::local_time::local_date_time
+        // Fmi::LocalDateTime
         // origTime(boost::posix_time::from_iso_string(info->mAnalysisTime), tz);
-        wfsQuery.origin_time.reset(new pt::ptime(Fmi::TimeParser::parse_iso(info.mAnalysisTime)));
+        wfsQuery.origin_time.reset(new Fmi::DateTime(Fmi::TimeParser::parse_iso(info.mAnalysisTime)));
       }
     }
 
@@ -1074,7 +1074,7 @@ void StoredGridForecastQueryHandler::parse_times(const RequestParameterMap& para
     dest.toptions = get_time_generator_options(param);
 
     if (param.count(P_ORIGIN_TIME) > 0)
-      dest.origin_time.reset(new pt::ptime(param.get_single<pt::ptime>(P_ORIGIN_TIME)));
+      dest.origin_time.reset(new Fmi::DateTime(param.get_single<Fmi::DateTime>(P_ORIGIN_TIME)));
   }
   catch (...)
   {

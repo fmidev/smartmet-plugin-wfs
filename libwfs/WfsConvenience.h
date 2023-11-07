@@ -1,6 +1,6 @@
 #pragma once
 
-#include <boost/date_time/posix_time/posix_time.hpp>
+#include <macgyver/DateTime.h>
 #include <boost/lexical_cast.hpp>
 #include <boost/optional.hpp>
 #include <newbase/NFmiParameterName.h>
@@ -111,8 +111,8 @@ ParamType get_param(const SmartMet::Spine::HTTP::Request& request,
   }
 }
 
-void check_time_interval(const boost::posix_time::ptime& start,
-                         const boost::posix_time::ptime& end,
+void check_time_interval(const Fmi::DateTime& start,
+                         const Fmi::DateTime& end,
                          double max_hours);
 
 void assert_unreachable(const char* file, int line) __attribute__((noreturn));

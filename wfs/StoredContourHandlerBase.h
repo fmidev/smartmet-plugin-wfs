@@ -61,7 +61,7 @@ class StoredContourQueryHandler : public StoredQueryHandlerBase,
   virtual std::vector<ContourQueryResultPtr> processQuery(
       ContourQueryParameter& queryParameter) const = 0;
   virtual SmartMet::Engine::Contour::Options getContourEngineOptions(
-      const boost::posix_time::ptime& time, const ContourQueryParameter& queryParameter) const = 0;
+      const Fmi::DateTime& time, const ContourQueryParameter& queryParameter) const = 0;
   virtual boost::shared_ptr<ContourQueryParameter> getQueryParameter(
       const SmartMet::Spine::Parameter& parameter,
       const SmartMet::Engine::Querydata::Q& q,
@@ -86,8 +86,8 @@ class StoredContourQueryHandler : public StoredQueryHandlerBase,
                          const std::string& language,
                          SmartMet::Spine::CRSRegistry& crsRegistry,
                          const std::string& requestedCRS,
-                         const boost::posix_time::ptime& origintime,
-                         const boost::posix_time::ptime& modificationtime,
+                         const Fmi::DateTime& origintime,
+                         const Fmi::DateTime& modificationtime,
                          const std::string& tz_name,
                          CTPP::CDT& hash) const;
   void parsePolygon(OGRPolygon* polygon,

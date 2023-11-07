@@ -57,8 +57,8 @@ using SmartMet::Plugin::WFS::DataSetDefinition;
 namespace bg = boost::gregorian;
 namespace pt = boost::posix_time;
 using namespace boost::filesystem;
-using boost::date_time::neg_infin;
-using boost::date_time::pos_infin;
+using Fmi::Date_time::neg_infin;
+using Fmi::Date_time::pos_infin;
 
 BOOST_AUTO_TEST_CASE(test_parse_config)
 {
@@ -87,7 +87,7 @@ BOOST_AUTO_TEST_CASE(test_time_extract)
   auto ds_def = DataSetDefinition::create(config, raw_config->getRoot());
   try
   {
-    pt::ptime t;
+    Fmi::DateTime t;
     t = ds_def->extract_origintime(path("foo/201209151234_pal_scandinavia_pinta_sqd"));
     BOOST_CHECK_EQUAL(std::string("2012-09-15T12:34:00"), Fmi::to_iso_extended_string(t));
   }
@@ -130,7 +130,7 @@ BOOST_AUTO_TEST_CASE(test_query_files)
 
   try
   {
-    files = ds_def->query_files(pt::ptime(bg::date(2008, 8, 5), pt::time_duration(8, 0, 0, 0)));
+    files = ds_def->query_files(Fmi::DateTime(Fmi::Date(2008, 8, 5), Fmi::TimeDuration(8, 0, 0, 0)));
     BOOST_CHECK_EQUAL(1, (int)files.size());
     BOOST_CHECK_EQUAL(std::string("200808050933_pal_skandinavia_pinta.sqd"),
                       files.at(0).filename().string());

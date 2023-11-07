@@ -10,7 +10,7 @@
 #include "WfsCapabilities.h"
 #include "XmlEnvInit.h"
 #include "XmlParser.h"
-#include <boost/date_time/posix_time/ptime.hpp>
+#include <macgyver/DateTime.h>
 #include <boost/shared_ptr.hpp>
 #include <json/json.h>
 #include <engines/geonames/Engine.h>
@@ -77,9 +77,9 @@ class PluginImpl
 
   inline const std::vector<std::string>& get_languages() const { return itsConfig.get_languages(); }
 
-  boost::posix_time::ptime get_time_stamp() const;
+  Fmi::DateTime get_time_stamp() const;
 
-  boost::posix_time::ptime get_local_time_stamp() const;
+  Fmi::DateTime get_local_time_stamp() const;
 
   inline const StoredQueryMap& get_stored_query_map() const { return *stored_query_map; }
 
@@ -247,7 +247,7 @@ class PluginImpl
   /**
    *   @brief Locked timestamp for testing only
    */
-  boost::optional<boost::posix_time::ptime> locked_time_stamp;
+  boost::optional<Fmi::DateTime> locked_time_stamp;
 };
 
 }  // namespace WFS

@@ -10,7 +10,7 @@
 #include "SupportsMeteoParameterOptions.h"
 #include "SupportsTimeParameters.h"
 #include "SupportsTimeZone.h"
-#include <boost/date_time/posix_time/ptime.hpp>
+#include <macgyver/DateTime.h>
 #include <engines/geonames/Engine.h>
 #include <engines/querydata/Engine.h>
 #include <engines/querydata/MetaData.h>
@@ -51,8 +51,8 @@ class StoredForecastQueryHandler : public StoredQueryHandlerBase,
     bool find_nearest_valid_point;
     std::string tz_name;
 
-    std::unique_ptr<boost::posix_time::ptime> origin_time;
-    boost::posix_time::ptime modification_time = boost::posix_time::not_a_date_time;
+    std::unique_ptr<Fmi::DateTime> origin_time;
+    Fmi::DateTime modification_time = boost::posix_time::not_a_date_time;
 
    public:
     boost::shared_ptr<SmartMet::Spine::Table> result;
@@ -111,7 +111,7 @@ class StoredForecastQueryHandler : public StoredQueryHandlerBase,
   void parse_params(const RequestParameterMap& param, Query& dest) const;
 
   std::map<std::string, SmartMet::Engine::Querydata::ModelParameter> get_model_parameters(
-      const std::string& producer, const boost::posix_time::ptime& origin_time) const;
+      const std::string& producer, const Fmi::DateTime& origin_time) const;
 
  private:
   std::vector<SmartMet::Spine::Parameter> common_params;

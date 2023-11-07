@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema xmlns="http://www.w3.org/2001/XMLSchema" xmlns:gml="http://www.opengis.net/gml/3.2"
+	xmlns:gmlcov="http://www.opengis.net/gmlcov/1.0"
+	xmlns:om="http://www.opengis.net/om/2.0"	
+	xmlns:tns="http://xml.fmi.fi/namespace/weather/2015/09/18/coverages"
+	targetNamespace="http://xml.fmi.fi/namespace/weather/2015/09/18/coverages"
+	elementFormDefault="qualified">
+
+	<import namespace="http://www.opengis.net/gml/3.2"
+		schemaLocation="http://schemas.opengis.net/gml/3.2.1/gml.xsd"/>
+	<import namespace="http://www.opengis.net/gmlcov/1.0"
+		schemaLocation="http://schemas.opengis.net/gmlcov/1.0/gmlcovAll.xsd"/>
+	<import namespace="http://www.opengis.net/om/2.0"
+		schemaLocation="http://schemas.opengis.net/om/2.0/observation.xsd" />
+
+	<!-- Coverage -->	
+	<element name="phenomenomArea" type="tns:MetOceanCoverageType" substitutionGroup="gml:AbstractGML"/>
+	
+	<complexType name="MetOceanCoverageType">
+		<complexContent>
+			<extension base="gml:MultiSurfaceType">
+				<sequence>
+					<element name="Surface" type="gml:MultiSurfaceType" maxOccurs="unbounded" minOccurs="0"/>
+				</sequence>
+				<attribute name="dateTime" type="dateTime" use="required"/>
+				<attribute name="paramterer" type="string" use="required"/>
+				<attribute name="unit" type="string" use="optional"/>
+				<attribute name="low" type="float" use="required"/>
+				<attribute name="high" type="float" use="required"/>
+			</extension>
+		</complexContent>
+	</complexType>
+
+
+	
+	
+</schema>

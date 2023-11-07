@@ -51,8 +51,8 @@ bw::StoredEnvMonitoringFacilityQueryHandler::StoredEnvMonitoringFacilityQueryHan
 {
   try
   {
-    register_scalar_param<pt::ptime>(P_BEGIN_TIME, "");
-    register_scalar_param<pt::ptime>(P_END_TIME, "");
+    register_scalar_param<Fmi::DateTime>(P_BEGIN_TIME, "");
+    register_scalar_param<Fmi::DateTime>(P_END_TIME, "");
     register_array_param<int64_t>(P_CLASS_ID, "");
     register_array_param<int64_t>(P_GROUP_ID, "");
     register_array_param<int64_t>(P_STATION_ID, "");
@@ -443,8 +443,8 @@ void bw::StoredEnvMonitoringFacilityQueryHandler::getValidStations(
     std::vector<std::string> measurandCodeVector;
     params.get<std::string>(P_MEASURAND_CODE, std::back_inserter(measurandCodeVector));
 
-    auto startTime = params.get_single<pt::ptime>(P_BEGIN_TIME);
-    auto endTime = params.get_single<pt::ptime>(P_END_TIME);
+    auto startTime = params.get_single<Fmi::DateTime>(P_BEGIN_TIME);
+    auto endTime = params.get_single<Fmi::DateTime>(P_END_TIME);
 
     bo::MastQueryParams stationQueryParams(dbRegistryConfig("OBSERVATIONS_V2"));
     stationQueryParams.addJoinOnConfig(dbRegistryConfig("STATIONS_V1"), "STATION_ID");
@@ -591,8 +591,8 @@ void bw::StoredEnvMonitoringFacilityQueryHandler::getStationCapabilities(
     std::vector<int64_t> storageIdVector;
     params.get<int64_t>(P_STORAGE_ID, std::back_inserter(storageIdVector));
 
-    auto startTime = params.get_single<pt::ptime>(P_BEGIN_TIME);
-    auto endTime = params.get_single<pt::ptime>(P_END_TIME);
+    auto startTime = params.get_single<Fmi::DateTime>(P_BEGIN_TIME);
+    auto endTime = params.get_single<Fmi::DateTime>(P_END_TIME);
 
     // Station capability query
     bo::MastQueryParams scQueryParams(dbRegistryConfig("OBSERVATIONS_V2"));
@@ -709,8 +709,8 @@ void bw::StoredEnvMonitoringFacilityQueryHandler::getStationGroupData(
     if (validStations.empty())
       return;
 
-    auto startTime = params.get_single<pt::ptime>(P_BEGIN_TIME);
-    auto endTime = params.get_single<pt::ptime>(P_END_TIME);
+    auto startTime = params.get_single<Fmi::DateTime>(P_BEGIN_TIME);
+    auto endTime = params.get_single<Fmi::DateTime>(P_END_TIME);
 
     std::vector<int64_t> classIdVector;
     params.get<int64_t>(P_CLASS_ID, std::back_inserter(classIdVector));
@@ -797,8 +797,8 @@ void bw::StoredEnvMonitoringFacilityQueryHandler::getStationNetworkMembershipDat
     if (validStations.empty())
       return;
 
-    auto startTime = params.get_single<pt::ptime>(P_BEGIN_TIME);
-    auto endTime = params.get_single<pt::ptime>(P_END_TIME);
+    auto startTime = params.get_single<Fmi::DateTime>(P_BEGIN_TIME);
+    auto endTime = params.get_single<Fmi::DateTime>(P_END_TIME);
 
     bo::MastQueryParams emfQueryParams(dbRegistryConfig("NETWORK_MEMBERS_V1"));
 

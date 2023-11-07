@@ -1,7 +1,7 @@
 #if 0  // ### REPLACED BY Fmi::Exception
 
 #include <boost/algorithm/string.hpp>
-#include <boost/date_time/posix_time/posix_time.hpp>
+#include <macgyver/DateTime.h>
 #include <WfsConvenience.h>
 #include <WfsException.h>
 
@@ -71,7 +71,7 @@ WfsException::operator CTPP::CDT() const
 void WfsException::print_on(std::ostream& stream) const
 {
   namespace ba = boost::algorithm;
-  const auto now = timestamp ? timestamp : boost::posix_time::second_clock::local_time();
+  const auto now = timestamp ? timestamp : Fmi::SecondClock::local_time();
   std::ostringstream msg;
   msg << now << ": " << exceptionCodeString() << ": "
       << ba::trim_right_copy_if(whatString, ba::is_any_of(" \t\r\n")) << "\n";
@@ -87,7 +87,7 @@ void WfsException::print_on(std::ostream& stream) const
   stream << msg.str() << std::flush;
 }
 
-void WfsException::set_timestamp(const boost::posix_time::ptime& timestamp)
+void WfsException::set_timestamp(const Fmi::DateTime& timestamp)
 {
   this->timestamp = timestamp;
 }

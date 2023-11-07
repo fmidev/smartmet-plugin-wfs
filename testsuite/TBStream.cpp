@@ -1,7 +1,7 @@
 #define BOOST_TEST_MODULE TBStream
 #define BOOST_TEST_DYN_LINK 1
 #include <iostream>
-#include <boost/date_time/posix_time/posix_time.hpp>
+#include <macgyver/DateTime.h>
 #include <boost/test/unit_test.hpp>
 #include <BStream.h>
 #include <boost/algorithm/hex.hpp>
@@ -211,10 +211,10 @@ BOOST_AUTO_TEST_CASE(test_writing_and_reading_ptime_values)
   namespace bg = boost::gregorian;
   namespace pt = boost::posix_time;
 
-  BOOST_TEST_MESSAGE("+[Test writting and reading boost::posix_time::ptime values]");
+  BOOST_TEST_MESSAGE("+[Test writting and reading Fmi::DateTime values]");
 
-  const pt::ptime t1 = pt::ptime(bg::date(2013, 03, 26));
-  const pt::ptime t2 = pt::time_from_string("2013-03-26 09:22:12");
+  const Fmi::DateTime t1 = Fmi::DateTime(Fmi::Date(2013, 03, 26));
+  const Fmi::DateTime t2 = pt::time_from_string("2013-03-26 09:22:12");
 
   OBStream out;
   out.put_ptime(t1);
@@ -233,11 +233,11 @@ BOOST_AUTO_TEST_CASE(test_writing_and_reading_ptime_special_values)
   namespace bg = boost::gregorian;
   namespace pt = boost::posix_time;
 
-  BOOST_TEST_MESSAGE("+[Test writting and reading boost::posix_time::ptime values]");
+  BOOST_TEST_MESSAGE("+[Test writting and reading Fmi::DateTime values]");
 
-  const pt::ptime t1 = pt::not_a_date_time;
-  const pt::ptime t2 = pt::pos_infin;
-  const pt::ptime t3 = pt::neg_infin;
+  const Fmi::DateTime t1 = pt::not_a_date_time;
+  const Fmi::DateTime t2 = pt::pos_infin;
+  const Fmi::DateTime t3 = pt::neg_infin;
 
   OBStream out;
   out.put_ptime(t1);

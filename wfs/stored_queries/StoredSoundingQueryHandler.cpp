@@ -2,7 +2,7 @@
 #include "stored_queries/StoredSoundingQueryHandler.h"
 #include "FeatureID.h"
 #include "StoredQueryHandlerFactoryDef.h"
-#include <boost/date_time/posix_time/ptime.hpp>
+#include <macgyver/DateTime.h>
 #include <engines/gis/Engine.h>
 #include <engines/observation/MastQuery.h>
 #include <macgyver/Exception.h>
@@ -39,9 +39,9 @@ StoredSoundingQueryHandler::StoredSoundingQueryHandler(
       SupportsBoundingBox(config, pluginData.get_crs_registry()),
       SupportsQualityParameters(config)
 {
-  register_scalar_param<pt::ptime>(P_BEGIN_TIME, "start time of the requested time period");
+  register_scalar_param<Fmi::DateTime>(P_BEGIN_TIME, "start time of the requested time period");
 
-  register_scalar_param<pt::ptime>(P_END_TIME, "end time of the requested time period");
+  register_scalar_param<Fmi::DateTime>(P_END_TIME, "end time of the requested time period");
 
   register_array_param<std::string>(
       P_METEO_PARAMETERS, "array of fields whose values should be returned in the response.", 1);
@@ -138,8 +138,8 @@ void StoredSoundingQueryHandler::query(const StoredQuery& query,
     validateAndPopulateMeteoParametersToMap(params, meteoParameterMap, pressureParameterName);
 
     // Time range restriction to get data.
-    auto startTime = params.get_single<pt::ptime>(P_BEGIN_TIME);
-    auto endTime = params.get_single<pt::ptime>(P_END_TIME);
+    auto startTime = params.get_single<Fmi::DateTime>(P_BEGIN_TIME);
+    auto endTime = params.get_single<Fmi::DateTime>(P_END_TIME);
     if (mSqRestrictions)
       check_time_interval(startTime, endTime, mMaxHours);
 
@@ -160,7 +160,7 @@ void StoredSoundingQueryHandler::query(const StoredQuery& query,
     CTPP::CDT hash;
     int numberMatched = 0;
 
-    boost::posix_time::ptime queryStartTime = get_plugin_impl().get_time_stamp();
+    Fmi::DateTime queryStartTime = get_plugin_impl().get_time_stamp();
 
     // Execute query
     QueryResultShared dataContainer;
@@ -170,7 +170,7 @@ void StoredSoundingQueryHandler::query(const StoredQuery& query,
 
     if (queryInitializationOK)
     {
-      boost::posix_time::ptime queryEndTime = get_plugin_impl().get_time_stamp();
+      Fmi::DateTime queryEndTime = get_plugin_impl().get_time_stamp();
       if (debugLevel > 2)
         std::cerr << "Data query time delta: " << (queryEndTime - queryStartTime).total_seconds()
                   << " seconds\n";
@@ -260,7 +260,7 @@ void StoredSoundingQueryHandler::query(const StoredQuery& query,
               throw exception.disableStackTrace();
             }
 
-            const auto ptime2str = [&missingValue](const boost::posix_time::ptime& t) -> std::string
+            const auto Fmi::DateTime2str = [&missingValue](const Fmi::DateTime& t) -> std::string
             {
               return t.is_special() ? missingValue
                                     : boost::posix_time::to_iso_extended_string(t) + "Z";
@@ -268,18 +268,18 @@ void StoredSoundingQueryHandler::query(const StoredQuery& query,
 
             currentStationId = rsIt->second.stationId;
 
-            const boost::posix_time::ptime epoch = rsIt->second.messageTime;
-            const auto dataMessageTimeStr = ptime2str(epoch);
-            static const long ref_jd = boost::gregorian::date(1970, 1, 1).julian_day();
+            const Fmi::DateTime epoch = rsIt->second.messageTime;
+            const auto dataMessageTimeStr = Fmi::DateTime2str(epoch);
+            static const long ref_jd = Fmi::Date(1970, 1, 1).julian_day();
             long long jd = epoch.date().julian_day();
             long seconds = epoch.time_of_day().total_seconds();
             sEpoch = 86400LL * (jd - ref_jd) + seconds;
 
             CTPP::CDT& group = hash["groups"][groupId];
             const auto& launchTime = rsIt->second.launchTime;
-            group["phenomenonBeginTime"] = ptime2str(launchTime.is_special() ? epoch : launchTime);
+            group["phenomenonBeginTime"] = Fmi::DateTime2str(launchTime.is_special() ? epoch : launchTime);
             const auto& soundingEnd = rsIt->second.soundingEnd;
-            group["phenomenonEndTime"] = ptime2str(soundingEnd.is_special() ? epoch : soundingEnd);
+            group["phenomenonEndTime"] = Fmi::DateTime2str(soundingEnd.is_special() ? epoch : soundingEnd);
             group["phenomenonTime"] = dataMessageTimeStr;
             group["resultTime"] = dataMessageTimeStr;
             group["soundingId"] = soundingId;
@@ -468,7 +468,7 @@ void StoredSoundingQueryHandler::query(const StoredQuery& query,
 
       if (debugLevel > 2)
       {
-        boost::posix_time::ptime xmlEndTime = get_plugin_impl().get_time_stamp();
+        Fmi::DateTime xmlEndTime = get_plugin_impl().get_time_stamp();
         std::cerr << "Hash population time delta: " << (xmlEndTime - queryEndTime).total_seconds()
                   << " seconds\n";
       }
@@ -484,12 +484,12 @@ void StoredSoundingQueryHandler::query(const StoredQuery& query,
     hash["numberMatched"] = numberMatched;
     hash["numberReturned"] = numberMatched;
 
-    boost::posix_time::ptime outputFormatTime = get_plugin_impl().get_time_stamp();
+    Fmi::DateTime outputFormatTime = get_plugin_impl().get_time_stamp();
     format_output(hash, output, query.get_use_debug_format());
 
     if (debugLevel > 2)
     {
-      boost::posix_time::ptime outputFormatTimeEnd = get_plugin_impl().get_time_stamp();
+      Fmi::DateTime outputFormatTimeEnd = get_plugin_impl().get_time_stamp();
       std::cerr << "Output XML format time delta: "
                 << (outputFormatTimeEnd - outputFormatTime).total_seconds() << " seconds\n"
                 << "Total time delta: " << (outputFormatTimeEnd - queryStartTime).total_seconds()
@@ -700,9 +700,9 @@ void StoredSoundingQueryHandler::parseSoundingQuery(const RequestParameterMap& p
       const int32_t soundingId = soundingQueryResult->castTo<int32_t>(soundingIdIt);
       RadioSounding rSounding;
       rSounding.stationId = QueryResult::toString(stationIdIt, 0);
-      rSounding.messageTime = QueryResult::castTo<pt::ptime>(messageTimeIt);
-      rSounding.launchTime = QueryResult::castTo<pt::ptime>(launchTimeIt);
-      rSounding.soundingEnd = QueryResult::castTo<pt::ptime>(soundingEndIt);
+      rSounding.messageTime = QueryResult::castTo<Fmi::DateTime>(messageTimeIt);
+      rSounding.launchTime = QueryResult::castTo<Fmi::DateTime>(launchTimeIt);
+      rSounding.soundingEnd = QueryResult::castTo<Fmi::DateTime>(soundingEndIt);
       rSounding.soundingType = QueryResult::castTo<int>(soundingTypeIt);
       latestSet.insert(tmpstationId);
       radioSoundingMap.emplace(soundingId, rSounding);
@@ -772,11 +772,11 @@ void StoredSoundingQueryHandler::makeSoundingQuery(const RequestParameterMap& pa
         "OR_GROUP_publicity", "PUBLICITY", "PropertyIsEqualTo", publicity);
   }
 
-  auto startTime = params.get_single<pt::ptime>(P_BEGIN_TIME);
+  auto startTime = params.get_single<Fmi::DateTime>(P_BEGIN_TIME);
   profileQueryParams.addOperation(
       "OR_GROUP_data_begin_time", "MESSAGE_TIME", "PropertyIsGreaterThanOrEqualTo", startTime);
 
-  auto endTime = params.get_single<pt::ptime>(P_END_TIME);
+  auto endTime = params.get_single<Fmi::DateTime>(P_END_TIME);
   profileQueryParams.addOperation(
       "OR_GROUP_data_end_time", "MESSAGE_TIME", "PropertyIsLessThanOrEqualTo", endTime);
 
@@ -926,8 +926,8 @@ void StoredSoundingQueryHandler::getStationSearchSettings(
   settings.taggedFMISIDs = obs_engine->translateToFMISID(settings, stationSettings);
 }
 
-void StoredSoundingQueryHandler::checkMaxSoundings(const pt::ptime startTime,
-                                                   const pt::ptime& endTime,
+void StoredSoundingQueryHandler::checkMaxSoundings(const Fmi::DateTime startTime,
+                                                   const Fmi::DateTime& endTime,
                                                    const RadioSoundingMap& radioSoundingMap) const
 {
   if (radioSoundingMap.size() > mMaxSoundings)

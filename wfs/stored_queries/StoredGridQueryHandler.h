@@ -1,6 +1,6 @@
 #pragma once
 
-#include <boost/date_time/posix_time/ptime.hpp>
+#include <macgyver/DateTime.h>
 #include <boost/geometry/geometry.hpp>
 #include <boost/shared_ptr.hpp>
 #include <ogr_geometry.h>
@@ -49,7 +49,7 @@ class StoredGridQueryHandler : public StoredQueryHandlerBase,
     using LevelData = std::vector<ParamTimeSeries>;
     std::list<LevelData> dataLevels;  // The order is data[level][parameter][time][grid]
 
-    std::vector<boost::posix_time::ptime> timesteps;
+    std::vector<Fmi::DateTime> timesteps;
 
     std::vector<std::pair<std::string, FmiParameterName> > paramInfos;
 
@@ -84,7 +84,7 @@ class StoredGridQueryHandler : public StoredQueryHandlerBase,
 
     Result result;
 
-    std::unique_ptr<boost::posix_time::ptime> origin_time;
+    std::unique_ptr<Fmi::DateTime> origin_time;
 
     std::unique_ptr<Fmi::ValueFormatter> value_formatter;
     std::unique_ptr<Fmi::TimeFormatter> time_formatter;
@@ -138,7 +138,7 @@ class StoredGridQueryHandler : public StoredQueryHandlerBase,
   void parse_levels(const RequestParameterMap& params, Query& dest) const;
 
   std::map<std::string, SmartMet::Engine::Querydata::ModelParameter> get_model_parameters(
-      const std::string& producer, const boost::posix_time::ptime& origin_time) const;
+      const std::string& producer, const Fmi::DateTime& origin_time) const;
 
   SmartMet::Engine::Querydata::Producer select_producer(const SmartMet::Spine::Location& location,
                                                         const Query& query) const;

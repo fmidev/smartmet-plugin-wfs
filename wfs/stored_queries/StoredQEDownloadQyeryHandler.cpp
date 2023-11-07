@@ -5,7 +5,7 @@
 #include "stored_queries/StoredQEDownloadQueryHandler.h"
 #include <boost/algorithm/string.hpp>
 #include <boost/bind/bind.hpp>
-#include <boost/date_time/posix_time/ptime.hpp>
+#include <macgyver/DateTime.h>
 #include <boost/format.hpp>
 #include <boost/lambda/lambda.hpp>
 #include <boost/shared_array.hpp>
@@ -110,19 +110,19 @@ StoredQEDownloadQueryHandler::StoredQEDownloadQueryHandler(
         " The \"grib2\" format is supported even if it is not defined at the array.",
         0, 1);
 
-    register_array_param<pt::ptime>(
+    register_array_param<Fmi::DateTime>(
         P_ORIGIN_TIME,
         "",
         0,
         1);
 
-    register_array_param<pt::ptime>(
+    register_array_param<Fmi::DateTime>(
         P_BEGIN,
         "The start time of the requested time period (YYYY-MM-DDTHHMIZ).",
         0,
         1);
 
-    register_array_param<pt::ptime>(
+    register_array_param<Fmi::DateTime>(
         P_END,
         "The end time of the requested time period (YYYY-MM-DDTHHMIZ).",
         0,
@@ -346,14 +346,14 @@ void StoredQEDownloadQueryHandler::update_parameters(
     // FIXME: provide value of strict_interval_check through parameters
     bool strict_interval_check = false;
 
-    pt::ptime start_time;
-    pt::ptime end_time;
+    Fmi::DateTime start_time;
+    Fmi::DateTime end_time;
     if (params.count(P_FULL_INTERVAL))
       strict_interval_check = params.get_single<int64_t>(P_FULL_INTERVAL) != 0;
     if (params.count(P_BEGIN))
-      start_time = params.get_single<pt::ptime>(P_BEGIN);
+      start_time = params.get_single<Fmi::DateTime>(P_BEGIN);
     if (params.count(P_END))
-      end_time = params.get_single<pt::ptime>(P_END);
+      end_time = params.get_single<Fmi::DateTime>(P_END);
 
     std::set<std::string, CaseInsensitiveLess> req_params;
     params.get<std::string>(P_PARAM, std::inserter(req_params, req_params.begin()));

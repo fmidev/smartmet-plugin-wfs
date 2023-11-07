@@ -25,7 +25,7 @@ class StoredCoverageQueryHandler : public StoredContourQueryHandler
   void clipGeometry(OGRGeometryPtr& pGeom, Fmi::Box& bbox) const override;
   std::vector<ContourQueryResultPtr> processQuery(ContourQueryParameter& queryParameter) const override;
   SmartMet::Engine::Contour::Options getContourEngineOptions(
-      const boost::posix_time::ptime& time, const ContourQueryParameter& queryParameter) const override;
+      const Fmi::DateTime& time, const ContourQueryParameter& queryParameter) const override;
   boost::shared_ptr<ContourQueryParameter> getQueryParameter(
       const SmartMet::Spine::Parameter& parameter,
       const SmartMet::Engine::Querydata::Q& q,

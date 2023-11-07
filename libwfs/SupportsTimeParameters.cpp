@@ -1,7 +1,7 @@
 #include "SupportsTimeParameters.h"
 #include "WfsConvenience.h"
 #include "WfsException.h"
-#include <boost/date_time/posix_time/posix_time.hpp>
+#include <macgyver/DateTime.h>
 #include <boost/optional/optional_io.hpp>
 #include <cstdint>
 #include <macgyver/Exception.h>
@@ -39,7 +39,7 @@ bw::SupportsTimeParameters::SupportsTimeParameters(bw::StoredQueryConfig::Ptr co
         1,
         true);
 
-    register_scalar_param<pt::ptime>(
+    register_scalar_param<Fmi::DateTime>(
         P_BEGIN_TIME,
         "The start time of the requested time period (YYYY-MM-DDTHHMIZ).",
         false
@@ -51,7 +51,7 @@ bw::SupportsTimeParameters::SupportsTimeParameters(bw::StoredQueryConfig::Ptr co
         false,
         true);
 
-    register_scalar_param<pt::ptime>(
+    register_scalar_param<Fmi::DateTime>(
         P_END_TIME,
         "The end time of the requested time period (YYYY-MM-DDTHHMIZ).",
         false
@@ -189,7 +189,7 @@ bw::SupportsTimeParameters::get_time_generator_options(const RequestParameterMap
 
     if (param.count(P_BEGIN_TIME))  // using boost::optional<> cause compiler warning on RHEL6
     {
-      options->startTime = param.get_single<pt::ptime>(P_BEGIN_TIME);
+      options->startTime = param.get_single<Fmi::DateTime>(P_BEGIN_TIME);
       if (debug_level > 2)
         std::cout << __FILE__ << "#" << __LINE__ << ": startTime=" << options->startTime
                   << std::endl;
@@ -206,7 +206,7 @@ bw::SupportsTimeParameters::get_time_generator_options(const RequestParameterMap
         throw exception;
       }
 
-      options->startTime += pt::minutes(*start_step * *options->timeStep);
+      options->startTime += Fmi::Minutes(*start_step * *options->timeStep);
       if (debug_level > 2)
         std::cout << __FILE__ << "#" << __LINE__
                   << ": startTime=" << pt::to_simple_string(options->startTime) << std::endl;
@@ -222,21 +222,21 @@ bw::SupportsTimeParameters::get_time_generator_options(const RequestParameterMap
         throw exception;
       }
 
-      options->endTime = param.get_single<pt::ptime>(P_END_TIME);
+      options->endTime = param.get_single<Fmi::DateTime>(P_END_TIME);
       if (debug_level > 2)
         std::cout << __FILE__ << "#" << __LINE__
                   << ": endTime=" << pt::to_simple_string(options->endTime) << std::endl;
     }
     else if (!!options->timeSteps)
     {
-      options->endTime = options->startTime + pt::minutes(*options->timeStep * *options->timeSteps);
+      options->endTime = options->startTime + Fmi::Minutes(*options->timeStep * *options->timeSteps);
       if (debug_level > 2)
         std::cout << __FILE__ << "#" << __LINE__
                   << ": endTime=" << pt::to_simple_string(options->endTime) << std::endl;
     }
     else
     {
-      options->endTime = options->startTime + pt::hours(24);
+      options->endTime = options->startTime + Fmi::Hours(24);
       if (debug_level > 2)
         std::cout << __FILE__ << "#" << __LINE__
                   << ": endTime=" << pt::to_simple_string(options->endTime) << std::endl;

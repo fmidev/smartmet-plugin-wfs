@@ -84,12 +84,12 @@ struct ProbabilityQueryParam
 // for example probability for light/moderate/heavy snow 12:00
 struct WinterWeatherProbability
 {
-  boost::posix_time::ptime timestamp;
+  Fmi::DateTime timestamp;
   double light_probability;
   double moderate_probability;
   double heavy_probability;
 
-  WinterWeatherProbability(const boost::posix_time::ptime& t, double lp, double mp, double hp)
+  WinterWeatherProbability(const Fmi::DateTime& t, double lp, double mp, double hp)
       : timestamp(t), light_probability(lp), moderate_probability(mp), heavy_probability(hp)
   {
   }
@@ -141,8 +141,8 @@ class StoredWWProbabilityQueryHandler : public StoredQueryHandlerBase,
                          const std::string& language,
                          SmartMet::Spine::CRSRegistry& crsRegistry,
                          const std::string& requestedCRS,
-                         const boost::posix_time::ptime& origintime,
-                         const boost::posix_time::ptime& modificationtime,
+                         const Fmi::DateTime& origintime,
+                         const Fmi::DateTime& modificationtime,
                          const std::string& tz_name,
                          CTPP::CDT& hash) const;
 

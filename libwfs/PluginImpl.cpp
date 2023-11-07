@@ -12,7 +12,7 @@
 #include <boost/algorithm/string.hpp>
 #include <boost/bind/bind.hpp>
 #include <boost/date_time/gregorian/gregorian.hpp>
-#include <boost/date_time/posix_time/posix_time.hpp>
+#include <macgyver/DateTime.h>
 #include <boost/format.hpp>
 #include <boost/lambda/lambda.hpp>
 #include <json/json.h>
@@ -162,7 +162,7 @@ void PluginImpl::shutdown()
 
 PluginImpl::~PluginImpl() = default;
 
-boost::posix_time::ptime PluginImpl::get_time_stamp() const
+Fmi::DateTime PluginImpl::get_time_stamp() const
 {
   try
   {
@@ -172,7 +172,7 @@ boost::posix_time::ptime PluginImpl::get_time_stamp() const
     }
     else
     {
-      return pt::second_clock::universal_time();
+      return Fmi::SecondClock::universal_time();
     }
   }
   catch (...)
@@ -181,7 +181,7 @@ boost::posix_time::ptime PluginImpl::get_time_stamp() const
   }
 }
 
-boost::posix_time::ptime PluginImpl::get_local_time_stamp() const
+Fmi::DateTime PluginImpl::get_local_time_stamp() const
 {
   try
   {
@@ -191,7 +191,7 @@ boost::posix_time::ptime PluginImpl::get_local_time_stamp() const
     }
     else
     {
-      return pt::second_clock::universal_time();
+      return Fmi::SecondClock::universal_time();
     }
   }
   catch (...)
@@ -741,7 +741,7 @@ void PluginImpl::realRequestHandler(SmartMet::Spine::Reactor& /* theReactor */,
   {
     // Now
 
-    pt::ptime t_now = pt::second_clock::universal_time();
+    Fmi::DateTime t_now = Fmi::SecondClock::universal_time();
 
     try
     {
@@ -760,7 +760,7 @@ void PluginImpl::realRequestHandler(SmartMet::Spine::Reactor& /* theReactor */,
 
       // Build cache expiration time info
 
-      pt::ptime t_expires = t_now + pt::seconds(expires_seconds);
+      Fmi::DateTime t_expires = t_now + Fmi::Seconds(expires_seconds);
 
       // The headers themselves
 
@@ -979,7 +979,7 @@ template <typename T>
 Fmi::Cache::CacheStats convert_stats(const T& cache)
 {
   auto stats = cache.getCacheStatistics();
-  auto time = boost::posix_time::from_time_t(std::chrono::duration_cast<std::chrono::seconds>(
+  auto time = boost::posix_time::from_time_t(std::chrono::duration_cast<Fmi::Seconds>(
                                                  stats.getConstructionTime().time_since_epoch())
                                                  .count());
   return {time,

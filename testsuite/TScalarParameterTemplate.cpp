@@ -4,7 +4,7 @@
 
 #include <cstdio>
 #include <string>
-#include <boost/date_time/posix_time/posix_time.hpp>
+#include <macgyver/DateTime.h>
 #include <macgyver/TypeName.h>
 #include "RequestParameterMap.h"
 #include "ScalarParameterTemplate.h"
@@ -373,14 +373,14 @@ BOOST_AUTO_TEST_CASE(simple_param_from_array_no_default)
   BOOST_CHECK_NO_THROW(dvalue = pt->get<double>(param_map));
   BOOST_CHECK_CLOSE(dvalue, (double)4, 1e-10);
 
-  BOOST_CHECK_THROW(pt->get<boost::posix_time::ptime>(param_map), Fmi::Exception);
+  BOOST_CHECK_THROW(pt->get<Fmi::DateTime>(param_map), Fmi::Exception);
   BOOST_CHECK_THROW(pt->get<std::string>(param_map), Fmi::Exception);
 }
 
 #if 0
 namespace
 {
-std::ostream& operator<<(std::ostream& ost, const boost::posix_time::ptime& t)
+std::ostream& operator<<(std::ostream& ost, const Fmi::DateTime& t)
 {
   ost << boost::posix_time::to_simple_string(t);
   return ost;
@@ -414,23 +414,23 @@ BOOST_AUTO_TEST_CASE(simple_param_from_array_with_default)
   BOOST_CHECK(item.default_value);
   BOOST_CHECK_EQUAL(*item.default_value, std::string("201210241526"));
 
-  const ptime t0(time_from_string("2012-10-24 15:26"));
+  const Fmi::DateTime t0(time_from_string("2012-10-24 15:26"));
 
-  const ptime t1(time_from_string("2012-10-24 12:34"));
-  const ptime t2(time_from_string("2012-10-24 13:11"));
-  const ptime t3(time_from_string("2012-10-24 14:02"));
-  const ptime t4(time_from_string("2012-10-24 15:43"));
+  const Fmi::DateTime t1(time_from_string("2012-10-24 12:34"));
+  const Fmi::DateTime t2(time_from_string("2012-10-24 13:11"));
+  const Fmi::DateTime t3(time_from_string("2012-10-24 14:02"));
+  const Fmi::DateTime t4(time_from_string("2012-10-24 15:43"));
 
   RequestParameterMap param_map(false);
-  ptime value;
-  BOOST_CHECK_NO_THROW(value = pt->get<boost::posix_time::ptime>(param_map));
+  Fmi::DateTime value;
+  BOOST_CHECK_NO_THROW(value = pt->get<Fmi::DateTime>(param_map));
   BOOST_CHECK_EQUAL(value, t0);
   add(param_map, "test", t1);
-  BOOST_REQUIRE_NO_THROW(value = pt->get<boost::posix_time::ptime>(param_map));
+  BOOST_REQUIRE_NO_THROW(value = pt->get<Fmi::DateTime>(param_map));
   add(param_map, "test", t2);
   add(param_map, "test", t3);
   add(param_map, "test", t4);
-  BOOST_CHECK_NO_THROW(value = pt->get<boost::posix_time::ptime>(param_map));
+  BOOST_CHECK_NO_THROW(value = pt->get<Fmi::DateTime>(param_map));
   BOOST_CHECK_EQUAL(value, t4);
 }
 

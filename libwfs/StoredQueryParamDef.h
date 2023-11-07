@@ -3,7 +3,7 @@
 #include "WfsException.h"
 #include <boost/algorithm/string.hpp>
 #include <boost/bind/bind.hpp>
-#include <boost/date_time/posix_time/ptime.hpp>
+#include <macgyver/DateTime.h>
 #include <boost/spirit/include/qi.hpp>
 #include <macgyver/TypeName.h>
 #include <spine/Value.h>
@@ -64,7 +64,7 @@ class StoredQueryParamDef
    *   - int64_t for type 'int'
    *   - uint64_t for type 'unsigned'
    *   - double for type 'double'
-   *   - boost::posix_time::ptime for type time
+   *   - Fmi::DateTime for type time
    */
   SmartMet::Spine::Value readValue(const std::string& value) const;
 

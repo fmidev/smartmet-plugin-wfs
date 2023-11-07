@@ -59,7 +59,7 @@ class ArrayParameterTemplate : public ParameterTemplateBase
       const RequestParameterMap& req_param_map,
       const SupportsExtraHandlerParams* extra_params = nullptr) const;
 
-  std::vector<boost::posix_time::ptime> get_ptime_array(
+  std::vector<Fmi::DateTime> get_ptime_array(
       const RequestParameterMap& req_param_map,
       const SupportsExtraHandlerParams* extra_params = nullptr) const;
 

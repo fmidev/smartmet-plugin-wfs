@@ -7,7 +7,7 @@
 #include "WfsConst.h"
 #include "XmlEnvInit.h"
 #include "XmlUtils.h"
-#include <boost/date_time/posix_time/posix_time.hpp>
+#include <macgyver/DateTime.h>
 #include <boost/test/unit_test.hpp>
 #include <macgyver/StringConversion.h>
 #include <spine/HTTP.h>
@@ -642,7 +642,7 @@ BOOST_AUTO_TEST_CASE(test_parse_sample_kvp_stored_query_id)
   BOOST_REQUIRE_EQUAL((int)P1.count("name"), 1);
   v = Q1.get_param_values("time");
   BOOST_REQUIRE_EQUAL(1, (int)v.size());
-  BOOST_REQUIRE(v.at(0).type() == typeid(boost::posix_time::ptime));
+  BOOST_REQUIRE(v.at(0).type() == typeid(Fmi::DateTime));
   BOOST_CHECK_EQUAL(Fmi::to_iso_extended_string(v.at(0).get_ptime()),
                     std::string("2012-11-15T12:36:45"));
   v = Q1.get_param_values("name");
@@ -659,10 +659,10 @@ BOOST_AUTO_TEST_CASE(test_parse_sample_kvp_stored_query_id)
   BOOST_REQUIRE_EQUAL((int)P2.count("time"), 2);
   v = Q2.get_param_values("time");
   BOOST_REQUIRE_EQUAL(2, (int)v.size());
-  BOOST_REQUIRE(v.at(0).type() == typeid(boost::posix_time::ptime));
+  BOOST_REQUIRE(v.at(0).type() == typeid(Fmi::DateTime));
   BOOST_CHECK_EQUAL(Fmi::to_iso_extended_string(v.at(0).get_ptime()),
                     std::string("2012-11-15T12:36:45"));
-  BOOST_REQUIRE(v.at(1).type() == typeid(boost::posix_time::ptime));
+  BOOST_REQUIRE(v.at(1).type() == typeid(Fmi::DateTime));
   BOOST_CHECK_EQUAL(Fmi::to_iso_extended_string(v.at(1).get_ptime()),
                     std::string("2012-11-15T13:40:16"));
   v = Q2.get_param_values("name");
@@ -683,10 +683,10 @@ BOOST_AUTO_TEST_CASE(test_parse_sample_kvp_stored_query_id)
   BOOST_CHECK_EQUAL(v.at(0).get_string(), std::string("foo:bar"));
   v = Q3.get_param_values("time");
   BOOST_REQUIRE_EQUAL(2, (int)v.size());
-  BOOST_REQUIRE(v.at(0).type() == typeid(boost::posix_time::ptime));
+  BOOST_REQUIRE(v.at(0).type() == typeid(Fmi::DateTime));
   BOOST_CHECK_EQUAL(Fmi::to_iso_extended_string(v.at(0).get_ptime()),
                     std::string("2012-11-15T12:36:45"));
-  BOOST_REQUIRE(v.at(1).type() == typeid(boost::posix_time::ptime));
+  BOOST_REQUIRE(v.at(1).type() == typeid(Fmi::DateTime));
   BOOST_CHECK_EQUAL(Fmi::to_iso_extended_string(v.at(1).get_ptime()),
                     std::string("2012-11-15T13:40:16"));
   v = Q3.get_param_values("num");
@@ -731,7 +731,7 @@ BOOST_AUTO_TEST_CASE(test_parse_sample_xml_stored_query_id)
   BOOST_REQUIRE_NO_THROW(bw::StoredQuery::extract_xml_parameters(*root, *sqc, Q1));
   BOOST_REQUIRE_EQUAL(1, (int)Q1.get_param_values("time").size());
   BOOST_REQUIRE_EQUAL(1, (int)Q1.get_param_values("name").size());
-  BOOST_REQUIRE(Q1.get_param_values("time").at(0).type() == typeid(boost::posix_time::ptime));
+  BOOST_REQUIRE(Q1.get_param_values("time").at(0).type() == typeid(Fmi::DateTime));
   BOOST_CHECK_EQUAL(Fmi::to_iso_extended_string(Q1.get_param_values("time").at(0).get_ptime()),
                     std::string("2012-11-15T12:36:45"));
   BOOST_REQUIRE(Q1.get_param_values("name").at(0).type() == typeid(std::string));
@@ -745,10 +745,10 @@ BOOST_AUTO_TEST_CASE(test_parse_sample_xml_stored_query_id)
   BOOST_REQUIRE_NO_THROW(bw::StoredQuery::extract_xml_parameters(*root, *sqc, Q2));
   BOOST_REQUIRE_EQUAL(2, (int)Q2.get_param_values("time").size());
   BOOST_REQUIRE_EQUAL(1, (int)Q2.get_param_values("name").size());
-  BOOST_REQUIRE(Q2.get_param_values("time").at(0).type() == typeid(boost::posix_time::ptime));
+  BOOST_REQUIRE(Q2.get_param_values("time").at(0).type() == typeid(Fmi::DateTime));
   BOOST_CHECK_EQUAL(Fmi::to_iso_extended_string(Q2.get_param_values("time").at(0).get_ptime()),
                     std::string("2012-11-15T12:36:45"));
-  BOOST_REQUIRE(Q2.get_param_values("time").at(1).type() == typeid(boost::posix_time::ptime));
+  BOOST_REQUIRE(Q2.get_param_values("time").at(1).type() == typeid(Fmi::DateTime));
   BOOST_CHECK_EQUAL(Fmi::to_iso_extended_string(Q2.get_param_values("time").at(1).get_ptime()),
                     std::string("2012-11-15T13:40:16"));
   BOOST_REQUIRE(Q2.get_param_values("name").at(0).type() == typeid(std::string));
@@ -769,10 +769,10 @@ BOOST_AUTO_TEST_CASE(test_parse_sample_xml_stored_query_id)
   BOOST_REQUIRE_EQUAL(2, Q3.get_param_values("time").size());
   BOOST_REQUIRE_EQUAL((int)Q3.get_param_values("name").size(), 1);
   BOOST_REQUIRE_EQUAL((int)Q3.get_param_values("num").size(), 4);
-  BOOST_REQUIRE(Q3.get_param_values("time").at(0).type() == typeid(boost::posix_time::ptime));
+  BOOST_REQUIRE(Q3.get_param_values("time").at(0).type() == typeid(Fmi::DateTime));
   BOOST_CHECK_EQUAL(Fmi::to_iso_extended_string(Q3.get_param_values("time").at(0).get_ptime()),
                     std::string("2012-11-15T12:36:45"));
-  BOOST_REQUIRE(Q3.get_param_values("time").at(1).type() == typeid(boost::posix_time::ptime));
+  BOOST_REQUIRE(Q3.get_param_values("time").at(1).type() == typeid(Fmi::DateTime));
   BOOST_CHECK_EQUAL(Fmi::to_iso_extended_string(Q3.get_param_values("time").at(1).get_ptime()),
                     std::string("2012-11-15T13:40:16"));
   BOOST_REQUIRE(Q3.get_param_values("name").at(0).type() == typeid(std::string));

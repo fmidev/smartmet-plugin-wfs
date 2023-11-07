@@ -179,7 +179,7 @@ BOOST_AUTO_TEST_CASE(test_single_scalar_parameter_with_lower_limit)
   raw_config->add_param("foo", "xxx", "time").lower_limit("2012-01-01T00:00:00Z");
   raw_config->add_scalar("p", "${foo}");
 
-  pt::ptime val;
+  Fmi::DateTime val;
   RequestParameterMap param_map(false);
   StoredQueryConfigP config;
   ScalarParameterTemplateP param;
@@ -188,18 +188,18 @@ BOOST_AUTO_TEST_CASE(test_single_scalar_parameter_with_lower_limit)
   BOOST_REQUIRE_NO_THROW(param.reset(new bw::ScalarParameterTemplate(*config, "p", false)));
 
   // No mandatory parameter provided
-  BOOST_CHECK_THROW(val = param->get<pt::ptime>(param_map), Fmi::Exception);
+  BOOST_CHECK_THROW(val = param->get<Fmi::DateTime>(param_map), Fmi::Exception);
 
   // Single parameter provided and is in allowed range (must succeed)
   std::array<std::string, 1> s001 = {{"2012-01-02T00:11:22Z"}};
   Test::add_values<std::string, 1>(param_map, "foo", s001);
-  BOOST_REQUIRE_NO_THROW(val = param->get<pt::ptime>(param_map));
+  BOOST_REQUIRE_NO_THROW(val = param->get<Fmi::DateTime>(param_map));
   BOOST_CHECK_EQUAL(std::string("2012-Jan-02 00:11:22"), pt::to_simple_string(val));
 
   // Single parameter provided and is out of allowed range (must succeed)
   std::array<std::string, 1> s002 = {{"2011-12-31T00:11:22Z"}};
   Test::add_values<std::string, 1>(param_map, "foo", s002);
-  BOOST_CHECK_THROW(val = param->get<pt::ptime>(param_map), Fmi::Exception);
+  BOOST_CHECK_THROW(val = param->get<Fmi::DateTime>(param_map), Fmi::Exception);
 
   // Too many values provided
   std::array<std::string, 1> s003 = {{"2013-06-23T00:11:22Z"}};

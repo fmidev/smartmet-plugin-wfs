@@ -77,10 +77,10 @@ struct IsolineQueryParameter : ContourQueryParameter
 // for example heavy snow areas at 12:00
 struct WeatherAreaGeometry
 {
-  boost::posix_time::ptime timestamp;
+  Fmi::DateTime timestamp;
   OGRGeometryPtr geometry;
 
-  WeatherAreaGeometry(const boost::posix_time::ptime& t, OGRGeometryPtr g)
+  WeatherAreaGeometry(const Fmi::DateTime& t, OGRGeometryPtr g)
       : timestamp(t), geometry(g)
   {
   }

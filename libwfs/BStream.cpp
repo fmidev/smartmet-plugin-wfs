@@ -222,7 +222,7 @@ void OBStream::put_string(const std::string& text)
   }
 }
 
-void OBStream::put_ptime(const boost::posix_time::ptime& tm)
+void OBStream::put_ptime(const Fmi::DateTime& tm)
 {
   try
   {
@@ -296,7 +296,7 @@ void OBStream::put_value(const SmartMet::Spine::Value& value)
       put_bits(V_STRING, 4);
       put_string(tmp);
     }
-    else if (type == typeid(boost::posix_time::ptime))
+    else if (type == typeid(Fmi::DateTime))
     {
       const auto tm = value.get_ptime();
       put_bits(V_PTIME, 4);
@@ -519,7 +519,7 @@ std::string IBStream::get_string()
   }
 }
 
-boost::posix_time::ptime IBStream::get_ptime()
+Fmi::DateTime IBStream::get_ptime()
 {
   try
   {
@@ -536,8 +536,8 @@ boost::posix_time::ptime IBStream::get_ptime()
       unsigned have_sec = get_bit();
       if (have_sec)
         sec = get_unsigned();
-      bg::date d(year, month, day);
-      return pt::ptime(d, pt::seconds(sec));
+      Fmi::Date d(year, month, day);
+      return Fmi::DateTime(d, Fmi::Seconds(sec));
     }
     else
     {

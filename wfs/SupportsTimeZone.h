@@ -4,7 +4,7 @@
 #include "StoredQueryConfig.h"
 #include "StoredQueryParamRegistry.h"
 #include "SupportsExtraHandlerParams.h"
-#include <boost/date_time/local_time/local_time.hpp>
+#include <macgyver/LocalDateTime.h>
 
 namespace SmartMet
 {
@@ -26,14 +26,14 @@ class SupportsTimeZone : protected virtual SupportsExtraHandlerParams,
 
   std::string get_tz_name(const RequestParameterMap& param_values) const;
 
-  boost::local_time::time_zone_ptr get_tz_for_site(double longitude,
+  Fmi::TimeZonePtr get_tz_for_site(double longitude,
                                                    double latitude,
                                                    const std::string& tz_name) const;
 
-  boost::local_time::time_zone_ptr get_time_zone(const std::string& tz_name) const;
+  Fmi::TimeZonePtr get_time_zone(const std::string& tz_name) const;
 
-  static std::string format_local_time(const boost::posix_time::ptime& utc_time,
-                                       boost::local_time::time_zone_ptr tz);
+  static std::string format_local_time(const Fmi::DateTime& utc_time,
+                                       Fmi::TimeZonePtr tz);
 };
 
 }  // namespace WFS

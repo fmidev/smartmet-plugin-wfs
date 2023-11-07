@@ -90,7 +90,7 @@ bw::StoredForecastQueryHandler::StoredForecastQueryHandler(
         " An empty array means that all the available weather models can be used."
         );
 
-    register_scalar_param<pt::ptime>(
+    register_scalar_param<Fmi::DateTime>(
         P_ORIGIN_TIME,
         "The origin time of the weather models that should be used. This might"
         " be omitted in the query.",
@@ -171,7 +171,7 @@ void bw::StoredForecastQueryHandler::query(const StoredQuery& stored_query,
     using namespace SmartMet;
     using namespace SmartMet::Plugin::WFS;
 
-    static const long ref_jd = boost::gregorian::date(1970, 1, 1).julian_day();
+    static const long ref_jd = Fmi::Date(1970, 1, 1).julian_day();
 
     int debug_level = get_config()->get_debug_level();
     if (debug_level > 0)
@@ -325,14 +325,14 @@ void bw::StoredForecastQueryHandler::query(const StoredQuery& stored_query,
 
           std::size_t row_counter = 0;
 
-          pt::ptime interval_begin = boost::date_time::pos_infin;
-          pt::ptime interval_end = boost::date_time::neg_infin;
+          Fmi::DateTime interval_begin = boost::date_time::pos_infin;
+          Fmi::DateTime interval_end = boost::date_time::neg_infin;
 
           for (auto site_iter = site_range.first; site_iter != site_range.second; ++site_iter)
           {
             const auto& geo_id = site_iter->second;
             auto row_range = result_map.equal_range(geo_id);
-            lt::time_zone_ptr tzp;
+            Fmi::TimeZonePtr tzp;
             for (auto row_iter = row_range.first; row_iter != row_range.second; ++row_iter)
             {
               std::size_t i = row_iter->second;
@@ -379,7 +379,7 @@ void bw::StoredForecastQueryHandler::query(const StoredQuery& stored_query,
                 row_data["elev"] = query.result->get(ind_level, i);
               }
 
-              pt::ptime epoch = Fmi::TimeParser::parse_iso(query.result->get(ind_epoch, i));
+              Fmi::DateTime epoch = Fmi::TimeParser::parse_iso(query.result->get(ind_epoch, i));
               long long jd = epoch.date().julian_day();
               long seconds = epoch.time_of_day().total_seconds();
               INT_64 s_epoch = 86400LL * (jd - ref_jd) + seconds;
@@ -457,7 +457,7 @@ boost::shared_ptr<SmartMet::Spine::Table> bw::StoredForecastQueryHandler::extrac
     decltype(query.origin_time) origin_time;
     if (query.origin_time)
     {
-      origin_time.reset(new pt::ptime(*query.origin_time));
+      origin_time.reset(new Fmi::DateTime(*query.origin_time));
     }
 
     int row = 0;
@@ -508,11 +508,11 @@ boost::shared_ptr<SmartMet::Spine::Table> bw::StoredForecastQueryHandler::extrac
       {
         // With multifile data q_engine->get() origintime must not be set/locked
 
-        query.origin_time.reset(new pt::ptime(q->originTime()));
+        query.origin_time.reset(new Fmi::DateTime(q->originTime()));
 
         if (not q_engine->getProducerConfig(producer).ismultifile)
         {
-          origin_time.reset(new pt::ptime(*query.origin_time));
+          origin_time.reset(new Fmi::DateTime(*query.origin_time));
         }
       }
 
@@ -638,7 +638,7 @@ boost::shared_ptr<SmartMet::Spine::Table> bw::StoredForecastQueryHandler::extrac
       // Fetch data from an arbitrary height.
       for (const auto& level_height : query.level_heights)
       {
-        for (const lt::local_date_time& dt : tlist)
+        for (const Fmi::LocalDateTime& dt : tlist)
         {
           using SmartMet::Spine::Parameter;
 
@@ -683,7 +683,7 @@ boost::shared_ptr<SmartMet::Spine::Table> bw::StoredForecastQueryHandler::extrac
       {
         if (query.levels.empty() || query.levels.count(static_cast<int>(q->levelValue())) > 0)
         {
-          for (const lt::local_date_time& d : tlist)
+          for (const Fmi::LocalDateTime& d : tlist)
           {
             using SmartMet::Spine::Parameter;
 
@@ -851,7 +851,7 @@ void bw::StoredForecastQueryHandler::parse_times(const RequestParameterMap& para
 
     // boost::optional + gcc-4.4.X käytäytyy huonosti
     if (param.count(P_ORIGIN_TIME) > 0)
-      dest.origin_time.reset(new pt::ptime(param.get_single<pt::ptime>(P_ORIGIN_TIME)));
+      dest.origin_time.reset(new Fmi::DateTime(param.get_single<Fmi::DateTime>(P_ORIGIN_TIME)));
   }
   catch (...)
   {
@@ -890,7 +890,7 @@ void bw::StoredForecastQueryHandler::parse_params(const RequestParameterMap& par
 
 std::map<std::string, SmartMet::Engine::Querydata::ModelParameter>
 bw::StoredForecastQueryHandler::get_model_parameters(const std::string& producer,
-                                                     const pt::ptime& origin_time) const
+                                                     const Fmi::DateTime& origin_time) const
 {
   try
   {
