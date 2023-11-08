@@ -13,6 +13,7 @@
 #include <grid-files/common/ImageFunctions.h>
 #include <grid-files/common/Typedefs.h>
 #include <grid-files/identification/GridDef.h>
+#include <macgyver/DateTime.h>
 #include <macgyver/StringConversion.h>
 #include <macgyver/TimeFormatter.h>
 #include <macgyver/TimeParser.h>
@@ -350,8 +351,8 @@ void StoredGridForecastQueryHandler::query(const StoredQuery& stored_query,
 
           std::size_t row_counter = 0;
 
-          Fmi::DateTime interval_begin = Fmi::Date_time::pos_infin;
-          Fmi::DateTime interval_end = Fmi::Date_time::neg_infin;
+          Fmi::DateTime interval_begin = boost::date_time::pos_infin;
+          Fmi::DateTime interval_end = boost::date_time::neg_infin;
 
           for (auto site_iter = site_range.first; site_iter != site_range.second; ++site_iter)
           {

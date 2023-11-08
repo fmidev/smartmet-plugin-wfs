@@ -5,6 +5,7 @@
 #include <macgyver/DateTime.h>
 #include <engines/gis/Engine.h>
 #include <engines/observation/MastQuery.h>
+#include <macgyver/DateTime.h>
 #include <macgyver/Exception.h>
 #include <macgyver/TimeParser.h>
 #include <spine/CRSRegistry.h>
@@ -260,7 +261,7 @@ void StoredSoundingQueryHandler::query(const StoredQuery& query,
               throw exception.disableStackTrace();
             }
 
-            const auto Fmi::DateTime2str = [&missingValue](const Fmi::DateTime& t) -> std::string
+            const auto ptime2str = [&missingValue](const Fmi::DateTime& t) -> std::string
             {
               return t.is_special() ? missingValue
                                     : boost::posix_time::to_iso_extended_string(t) + "Z";
@@ -269,7 +270,7 @@ void StoredSoundingQueryHandler::query(const StoredQuery& query,
             currentStationId = rsIt->second.stationId;
 
             const Fmi::DateTime epoch = rsIt->second.messageTime;
-            const auto dataMessageTimeStr = Fmi::DateTime2str(epoch);
+            const auto dataMessageTimeStr = ptime2str(epoch);
             static const long ref_jd = Fmi::Date(1970, 1, 1).julian_day();
             long long jd = epoch.date().julian_day();
             long seconds = epoch.time_of_day().total_seconds();
@@ -277,9 +278,9 @@ void StoredSoundingQueryHandler::query(const StoredQuery& query,
 
             CTPP::CDT& group = hash["groups"][groupId];
             const auto& launchTime = rsIt->second.launchTime;
-            group["phenomenonBeginTime"] = Fmi::DateTime2str(launchTime.is_special() ? epoch : launchTime);
+            group["phenomenonBeginTime"] = ptime2str(launchTime.is_special() ? epoch : launchTime);
             const auto& soundingEnd = rsIt->second.soundingEnd;
-            group["phenomenonEndTime"] = Fmi::DateTime2str(soundingEnd.is_special() ? epoch : soundingEnd);
+            group["phenomenonEndTime"] = ptime2str(soundingEnd.is_special() ? epoch : soundingEnd);
             group["phenomenonTime"] = dataMessageTimeStr;
             group["resultTime"] = dataMessageTimeStr;
             group["soundingId"] = soundingId;
