@@ -3,7 +3,7 @@
 %define SPECNAME smartmet-plugin-%{DIRNAME}
 Summary: SmartMet WFS plugin
 Name: %{SPECNAME}
-Version: 23.10.30
+Version: 23.11.10
 Release: 1%{?dist}.fmi
 License: MIT
 Group: SmartMet/Plugins
@@ -43,12 +43,12 @@ BuildRequires: smartmet-library-macgyver-devel >= 23.11.8
 BuildRequires: smartmet-engine-contour-devel >= 23.10.3
 BuildRequires: smartmet-engine-geonames-devel >= 23.9.6
 BuildRequires: smartmet-engine-gis-devel >= 23.8.28
-BuildRequires: smartmet-engine-grid-devel >= 23.10.30
+BuildRequires: smartmet-engine-grid-devel >= 23.11.10
 BuildRequires: smartmet-engine-querydata-devel >= 23.10.12
-BuildRequires: smartmet-library-grid-content-devel >= 23.10.30
-BuildRequires: smartmet-library-grid-files-devel >= 23.10.30
+BuildRequires: smartmet-library-grid-content-devel >= 23.11.10
+BuildRequires: smartmet-library-grid-files-devel >= 23.11.6
 %if %{with observation}
-BuildRequires: smartmet-engine-observation-devel >= 23.10.30
+BuildRequires: smartmet-engine-observation-devel >= 23.11.8
 %endif
 Requires: ctpp2
 Requires: fmt >= %{smartmet_fmt_min}, fmt < %{smartmet_fmt_max}
@@ -64,11 +64,11 @@ Requires: smartmet-library-trax >= 23.8.17
 Requires: smartmet-engine-contour >= 23.10.3
 Requires: smartmet-engine-geonames >= 23.9.6
 Requires: smartmet-engine-gis >= 23.8.28
-Requires: smartmet-engine-grid >= 23.10.30
-Requires: smartmet-library-grid-content >= 23.10.30
-Requires: smartmet-library-grid-files >= 23.10.30
+Requires: smartmet-engine-grid >= 23.11.10
+Requires: smartmet-library-grid-content >= 23.11.10
+Requires: smartmet-library-grid-files >= 23.11.6
 %if %{with observation}
-Requires: smartmet-engine-observation >= 23.10.30
+Requires: smartmet-engine-observation >= 23.11.8
 %endif
 Requires: smartmet-engine-querydata >= 23.10.12
 Requires: smartmet-server >= 23.8.30
@@ -102,7 +102,7 @@ Obsoletes: smartmet-brainstorm-wfs-debuginfo < 16.11.1
 
 #TestRequires: ctpp2
 #TestRequires: smartmet-test-db >= 23.7.21
-#TestRequires: smartmet-test-data >= 23.10.16
+#TestRequires: smartmet-test-data >= 23.11.8
 #TestRequires: smartmet-utils-devel >= 23.9.6
 #TestRequires: smartmet-library-macgyver >= 23.11.8
 #TestRequires: smartmet-library-gis >= 23.9.12
@@ -112,9 +112,9 @@ Obsoletes: smartmet-brainstorm-wfs-debuginfo < 16.11.1
 #TestRequires: smartmet-engine-gis >= 23.8.28
 #TestRequires: smartmet-engine-querydata >= 23.10.12
 %if %{with observation}
-#TestRequires: smartmet-engine-observation >= 23.10.30
+#TestRequires: smartmet-engine-observation >= 23.11.8
 %endif
-#TestRequires: smartmet-engine-grid >= 23.10.30
+#TestRequires: smartmet-engine-grid >= 23.11.10
 #TestRequires: redis
 #TestRequires: smartmet-engine-grid-test
 # Required by top level Makefile
@@ -163,6 +163,9 @@ rm -rf $RPM_BUILD_ROOT
 %{_includedir}/smartmet/plugin/wfs/request/*.h
 
 %changelog
+* Fri Nov 10 2023 Mika Heiskanen <mika.heiskanen@fmi.fi> - 23.11.10-1.fmi
+- Repackaged due to API changes in grid-content
+
 * Mon Oct 30 2023 Mika Heiskanen <mika.heiskanen@fmi.fi> - 23.10.30-1.fmi
 - Repackaged due to ABI changes in GRID libraries
 
