@@ -166,6 +166,9 @@ rm -rf $RPM_BUILD_ROOT
 * Mon Dec  4 2023 Mika Heiskanen <mika.heiskanen@fmi.fi> - 23.12.4-1.fmi
 - Repackaged since QEngine API changed due to removal of backend synchronization
 
+* Fri Nov 17 2023 Pertti Kinnia <pertti.kinnia@fmi.fi> - 23.11.17-1.fmi
+- Repackaged due to API changes in grid-files and grid-content
+
 * Fri Nov 10 2023 Mika Heiskanen <mika.heiskanen@fmi.fi> - 23.11.10-1.fmi
 - Repackaged due to API changes in grid-content
 
