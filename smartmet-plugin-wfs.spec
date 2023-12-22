@@ -3,7 +3,7 @@
 %define SPECNAME smartmet-plugin-%{DIRNAME}
 Summary: SmartMet WFS plugin
 Name: %{SPECNAME}
-Version: 23.12.5
+Version: 23.12.22
 Release: 1%{?dist}.fmi
 License: MIT
 Group: SmartMet/Plugins
@@ -43,10 +43,10 @@ BuildRequires: smartmet-library-macgyver-devel >= 23.11.21
 BuildRequires: smartmet-engine-contour-devel >= 23.10.3
 BuildRequires: smartmet-engine-geonames-devel >= 23.9.6
 BuildRequires: smartmet-engine-gis-devel >= 23.8.28
-BuildRequires: smartmet-engine-grid-devel >= 23.11.17
+BuildRequires: smartmet-engine-grid-devel >= 23.12.22
 BuildRequires: smartmet-engine-querydata-devel >= 23.12.4
-BuildRequires: smartmet-library-grid-content-devel >= 23.11.27
-BuildRequires: smartmet-library-grid-files-devel >= 23.12.4
+BuildRequires: smartmet-library-grid-content-devel >= 23.12.22
+BuildRequires: smartmet-library-grid-files-devel >= 23.12.22
 %if %{with observation}
 BuildRequires: smartmet-engine-observation-devel >= 23.12.4
 %endif
@@ -64,9 +64,9 @@ Requires: smartmet-library-trax >= 23.8.17
 Requires: smartmet-engine-contour >= 23.10.3
 Requires: smartmet-engine-geonames >= 23.9.6
 Requires: smartmet-engine-gis >= 23.8.28
-Requires: smartmet-engine-grid >= 23.11.17
-Requires: smartmet-library-grid-content >= 23.11.27
-Requires: smartmet-library-grid-files >= 23.12.4
+Requires: smartmet-engine-grid >= 23.12.22
+Requires: smartmet-library-grid-content >= 23.12.22
+Requires: smartmet-library-grid-files >= 23.12.22
 %if %{with observation}
 Requires: smartmet-engine-observation >= 23.12.4
 %endif
@@ -114,7 +114,7 @@ Obsoletes: smartmet-brainstorm-wfs-debuginfo < 16.11.1
 %if %{with observation}
 #TestRequires: smartmet-engine-observation >= 23.12.4
 %endif
-#TestRequires: smartmet-engine-grid >= 23.11.17
+#TestRequires: smartmet-engine-grid >= 23.12.22
 #TestRequires: redis
 #TestRequires: smartmet-engine-grid-test
 # Required by top level Makefile
@@ -163,6 +163,9 @@ rm -rf $RPM_BUILD_ROOT
 %{_includedir}/smartmet/plugin/wfs/request/*.h
 
 %changelog
+* Fri Dec 22 2023 Mika Heiskanen <mika.heiskanen@fmi.fi> - 23.12.22-1.fmi
+- Repackaged due to ThreadLock ABI changes
+
 * Tue Dec  5 2023 Mika Heiskanen <mika.heiskanen@fmi.fi> - 23.12.5-1.fmi
 - Repackaged due to an ABI change in SmartMetPlugin
 
