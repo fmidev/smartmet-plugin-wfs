@@ -3,7 +3,7 @@
 %define SPECNAME smartmet-plugin-%{DIRNAME}
 Summary: SmartMet WFS plugin
 Name: %{SPECNAME}
-Version: 23.12.22
+Version: 24.1.4
 Release: 1%{?dist}.fmi
 License: MIT
 Group: SmartMet/Plugins
@@ -34,21 +34,21 @@ BuildRequires: xqilla-devel
 BuildRequires: openssl-devel
 BuildRequires: bzip2-devel
 BuildRequires: zlib-devel
-BuildRequires: smartmet-library-timeseries-devel >= 23.11.21
+BuildRequires: smartmet-library-timeseries-devel >= 24.1.4
 BuildRequires: smartmet-library-spine-devel >= 23.12.5
-BuildRequires: smartmet-library-gis-devel >= 23.11.21
+BuildRequires: smartmet-library-gis-devel >= 24.1.3
 BuildRequires: smartmet-library-trax-devel >= 23.8.17
 BuildRequires: smartmet-library-locus-devel >= 23.7.28
 BuildRequires: smartmet-library-macgyver-devel >= 23.11.21
 BuildRequires: smartmet-engine-contour-devel >= 23.10.3
 BuildRequires: smartmet-engine-geonames-devel >= 23.9.6
 BuildRequires: smartmet-engine-gis-devel >= 23.8.28
-BuildRequires: smartmet-engine-grid-devel >= 23.12.22
+BuildRequires: smartmet-engine-grid-devel >= 24.1.4
 BuildRequires: smartmet-engine-querydata-devel >= 23.12.4
 BuildRequires: smartmet-library-grid-content-devel >= 23.12.22
-BuildRequires: smartmet-library-grid-files-devel >= 23.12.22
+BuildRequires: smartmet-library-grid-files-devel >= 24.1.4
 %if %{with observation}
-BuildRequires: smartmet-engine-observation-devel >= 23.12.4
+BuildRequires: smartmet-engine-observation-devel >= 24.1.4
 %endif
 Requires: ctpp2
 Requires: fmt >= %{smartmet_fmt_min}, fmt < %{smartmet_fmt_max}
@@ -58,17 +58,17 @@ Requires: zlib
 Requires: smartmet-library-locus >= 23.7.28
 Requires: smartmet-library-macgyver >= 23.11.21
 Requires: smartmet-library-spine >= 23.12.5
-Requires: smartmet-library-timeseries >= 23.11.21
-Requires: smartmet-library-gis >= 23.11.21
+Requires: smartmet-library-timeseries >= 24.1.4
+Requires: smartmet-library-gis >= 24.1.3
 Requires: smartmet-library-trax >= 23.8.17
 Requires: smartmet-engine-contour >= 23.10.3
 Requires: smartmet-engine-geonames >= 23.9.6
 Requires: smartmet-engine-gis >= 23.8.28
-Requires: smartmet-engine-grid >= 23.12.22
+Requires: smartmet-engine-grid >= 24.1.4
 Requires: smartmet-library-grid-content >= 23.12.22
-Requires: smartmet-library-grid-files >= 23.12.22
+Requires: smartmet-library-grid-files >= 24.1.4
 %if %{with observation}
-Requires: smartmet-engine-observation >= 23.12.4
+Requires: smartmet-engine-observation >= 24.1.4
 %endif
 Requires: smartmet-engine-querydata >= 23.12.4
 Requires: smartmet-server >= 23.12.5
@@ -105,16 +105,16 @@ Obsoletes: smartmet-brainstorm-wfs-debuginfo < 16.11.1
 #TestRequires: smartmet-test-data >= 23.11.8
 #TestRequires: smartmet-utils-devel >= 23.9.6
 #TestRequires: smartmet-library-macgyver >= 23.11.21
-#TestRequires: smartmet-library-gis >= 23.11.21
+#TestRequires: smartmet-library-gis >= 24.1.3
 #TestRequires: smartmet-library-newbase >= 23.11.21
 #TestRequires: smartmet-library-spine-plugin-test >= 23.12.5
 #TestRequires: smartmet-engine-geonames >= 23.9.6
 #TestRequires: smartmet-engine-gis >= 23.8.28
 #TestRequires: smartmet-engine-querydata >= 23.12.4
 %if %{with observation}
-#TestRequires: smartmet-engine-observation >= 23.12.4
+#TestRequires: smartmet-engine-observation >= 24.1.4
 %endif
-#TestRequires: smartmet-engine-grid >= 23.12.22
+#TestRequires: smartmet-engine-grid >= 24.1.4
 #TestRequires: redis
 #TestRequires: smartmet-engine-grid-test
 # Required by top level Makefile
@@ -127,7 +127,7 @@ SmartMet WFS plugin
 %package -n %{SPECNAME}-devel
 Summary: SmartMet WFS plugin development files
 Requires: smartmet-library-spine-devel >= 23.12.5
-Requires: smartmet-library-gis-devel >= 23.11.21
+Requires: smartmet-library-gis-devel >= 24.1.3
 Requires: smartmet-library-locus-devel >= 23.7.28
 Requires: smartmet-library-macgyver-devel >= 23.11.21
 Requires: %{SPECNAME} = %{version}-%{release}
@@ -163,6 +163,9 @@ rm -rf $RPM_BUILD_ROOT
 %{_includedir}/smartmet/plugin/wfs/request/*.h
 
 %changelog
+* Thu Jan  4 2024 Mika Heiskanen <mika.heiskanen@fmi.fi> - 24.1.4-1.fmi
+- Repackaged due to TimeSeriesGeneratorOptions ABI changes
+
 * Fri Dec 22 2023 Mika Heiskanen <mika.heiskanen@fmi.fi> - 23.12.22-1.fmi
 - Repackaged due to ThreadLock ABI changes
 
