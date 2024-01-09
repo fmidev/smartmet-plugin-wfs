@@ -461,6 +461,20 @@
       </Abstract>
     </Parameter>
     
+    <Parameter name="geoid" type="int">
+      <Title>geoid</Title>
+      <Abstract>
+      geoid
+      </Abstract>
+    </Parameter>
+    
+    <Parameter name="fmisid" type="int">
+      <Title>FMISID</Title>
+      <Abstract>
+      FMISID
+      </Abstract>
+    </Parameter>
+    
     <Parameter name="wmo" type="integerList">
       <Title>Sites for which to find observations</Title>
       <Abstract>
@@ -576,6 +590,20 @@
       <Title>Sites for which to find observations</Title>
       <Abstract>
       Sites for which to find observations
+      </Abstract>
+    </Parameter>
+    
+    <Parameter name="geoid" type="int">
+      <Title>geoid</Title>
+      <Abstract>
+      geoid
+      </Abstract>
+    </Parameter>
+    
+    <Parameter name="fmisid" type="int">
+      <Title>FMISID</Title>
+      <Abstract>
+      FMISID
       </Abstract>
     </Parameter>
     
