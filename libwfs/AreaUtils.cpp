@@ -2,6 +2,7 @@
 #include <boost/lambda/lambda.hpp>
 #include <boost/shared_ptr.hpp>
 #include <macgyver/Exception.h>
+#include <newbase/NFmiLatLonArea.h>
 #include <stdexcept>
 
 namespace SmartMet
@@ -10,6 +11,28 @@ namespace Plugin
 {
 namespace WFS
 {
+namespace
+{
+
+void make_bbox(const NFmiPoint& p1, const NFmiPoint& p2, OGRPolygon* result)
+{
+    const double x1 = std::min(p1.X(), p2.X());
+    const double y1 = std::min(p1.Y(), p2.Y());
+    const double x2 = std::max(p1.X(), p2.X());
+    const double y2 = std::max(p1.Y(), p2.Y());
+
+    OGRLinearRing r1;
+    r1.addPoint(x1, y1);
+    r1.addPoint(x1, y2);
+    r1.addPoint(x2, y2);
+    r1.addPoint(x2, y1);
+    r1.closeRings();
+    result->empty();
+    result->addRing(&r1);
+}
+
+} // Anonymous namespace
+
 std::vector<NFmiPoint> bbox_exclude_point(const NFmiPoint& p1,
                                           const NFmiPoint& p2,
                                           const NFmiPoint& xy,
@@ -90,16 +113,24 @@ std::vector<NFmiPoint> bbox_exclude_point(const NFmiPoint& p1,
   }
 }
 
-void get_latlon_boundary(const NFmiArea* area, OGRPolygon* result, int NP, double  /*w_coeff*/)
+void get_latlon_boundary(const NFmiArea* area, OGRPolygon* result, int NP, double w_coeff)
 {
   try
   {
     namespace bl = boost::lambda;
 
     const NFmiRect area_rect = area->XYArea();
+    const auto& area_type = typeid(*area);
 
     const NFmiPoint lb(area_rect.Left(), area_rect.Bottom());
     const NFmiPoint rt(area_rect.Right(), area_rect.Top());
+
+    if (area_type == typeid(NFmiLatLonArea)) {
+        make_bbox(lb, rt, result);
+        return;
+    }
+
+    // FIXME: fails in case of NFmiMercatorArea (do we need to fix that)
 
     static const NFmiPoint north_pole(0.0, 90.0);
     static const NFmiPoint south_pole(0.0, -90.0);
@@ -116,7 +147,7 @@ void get_latlon_boundary(const NFmiArea* area, OGRPolygon* result, int NP, doubl
     }
 
     NFmiPoint pp = sp_inside ? sp_xy : np_xy;
-    const std::vector<NFmiPoint> orig_points = bbox_exclude_point(lb, rt, pp);
+    const std::vector<NFmiPoint> orig_points = bbox_exclude_point(lb, rt, pp, w_coeff);
     const int num_points = orig_points.size();
     if (num_points < 2)
     {
