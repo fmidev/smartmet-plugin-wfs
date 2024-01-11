@@ -3,6 +3,7 @@
 #include <boost/shared_ptr.hpp>
 #include <macgyver/Exception.h>
 #include <newbase/NFmiLatLonArea.h>
+#include <newbase/NFmiMercatorArea.h>
 #include <stdexcept>
 
 namespace SmartMet
@@ -125,12 +126,15 @@ void get_latlon_boundary(const NFmiArea* area, OGRPolygon* result, int NP, doubl
     const NFmiPoint lb(area_rect.Left(), area_rect.Bottom());
     const NFmiPoint rt(area_rect.Right(), area_rect.Top());
 
-    if (area_type == typeid(NFmiLatLonArea)) {
+    // FIXME: This check is not foolproof. There are more classes derived from NFmiArea which may
+    //        need to be handled this way always or in some cases.
+    if (area_type == typeid(NFmiLatLonArea)
+        || area_type == typeid(NFmiMercatorArea)
+        )
+    {
         make_bbox(lb, rt, result);
         return;
     }
-
-    // FIXME: fails in case of NFmiMercatorArea (do we need to fix that)
 
     static const NFmiPoint north_pole(0.0, 90.0);
     static const NFmiPoint south_pole(0.0, -90.0);

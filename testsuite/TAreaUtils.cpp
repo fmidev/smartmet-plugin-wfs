@@ -5,6 +5,7 @@
 #include <macgyver/DateTime.h>
 #include <macgyver/Exception.h>
 #include <newbase/NFmiLatLonArea.h>
+#include <newbase/NFmiMercatorArea.h>
 #include <newbase/NFmiRotatedLatLonArea.h>
 #include <boost/test/unit_test.hpp>
 #include "AreaUtils.h"
@@ -14,7 +15,7 @@ using namespace boost::unit_test;
 
 test_suite *init_unit_test_suite(int argc, char *argv[])
 {
-  const char *name = "BStream tester";
+  const char *name = "AreaTools tester";
   unit_test_log.set_threshold_level(log_messages);
   framework::master_test_suite().p_name.value = name;
   BOOST_TEST_MESSAGE("");
@@ -29,6 +30,22 @@ BOOST_AUTO_TEST_CASE(latlon_area_1)
 {
     OGRPolygon poly;
     NFmiLatLonArea area(NFmiPoint(180.0, -90.0), NFmiPoint(-180, 90.0));
+    try {
+        wfs::get_latlon_boundary(&area, &poly);
+    } catch (const Fmi::Exception& exc) {
+        std::cout << exc << std::endl;
+        throw;
+    }
+    BOOST_CHECK(!poly.IsEmpty());
+    BOOST_CHECK(poly.IsValid());
+    //std::cout << poly.exportToWkt() << std::endl;
+}
+
+
+BOOST_AUTO_TEST_CASE(mercator_area_1)
+{
+    OGRPolygon poly;
+    NFmiMercatorArea area(NFmiPoint(180.0, -90.0), NFmiPoint(-180, 90.0));
     try {
         wfs::get_latlon_boundary(&area, &poly);
     } catch (const Fmi::Exception& exc) {
