@@ -132,7 +132,7 @@ void get_latlon_boundary(const NFmiArea* area, OGRPolygon* result, int NP, doubl
         || area_type == typeid(NFmiMercatorArea)
         )
     {
-        make_bbox(lb, rt, result);
+        make_bbox(area->BottomLeftLatLon(), area->TopRightLocation(), result);
         return;
     }
 
