@@ -17,6 +17,8 @@ namespace
 
 void make_bbox(const NFmiPoint& p1, const NFmiPoint& p2, OGRPolygon* result)
 {
+  try
+  {
     const double x1 = std::min(p1.X(), p2.X());
     const double y1 = std::min(p1.Y(), p2.Y());
     const double x2 = std::max(p1.X(), p2.X());
@@ -30,6 +32,11 @@ void make_bbox(const NFmiPoint& p1, const NFmiPoint& p2, OGRPolygon* result)
     r1.closeRings();
     result->empty();
     result->addRing(&r1);
+  }
+  catch (...)
+  {
+    throw Fmi::Exception::Trace(BCP, "Operation failed!");
+  }
 }
 
 } // Anonymous namespace
