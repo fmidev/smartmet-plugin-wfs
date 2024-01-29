@@ -3,7 +3,7 @@
 %define SPECNAME smartmet-plugin-%{DIRNAME}
 Summary: SmartMet WFS plugin
 Name: %{SPECNAME}
-Version: 24.1.11
+Version: 24.1.29
 Release: 1%{?dist}.fmi
 License: MIT
 Group: SmartMet/Plugins
@@ -163,6 +163,9 @@ rm -rf $RPM_BUILD_ROOT
 %{_includedir}/smartmet/plugin/wfs/request/*.h
 
 %changelog
+* Mon Jan 29 2024 Andris Pavēnis <andris.pavenis@fmi.fi> 24.1.29-1.fmi
+- Fix support of NFmiLatLonArea and NFmiMercatorArea (attempt 2)
+
 * Thu Jan 11 2024 Andris Pavēnis <andris.pavenis@fmi.fi> 24.1.11-1.fmi
 - Fix error quering ecmwf data
 
