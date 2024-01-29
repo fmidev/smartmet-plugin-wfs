@@ -39,16 +39,12 @@ BOOST_AUTO_TEST_CASE(latlon_area_1)
     }
     BOOST_CHECK(!poly.IsEmpty());
     BOOST_CHECK(poly.IsValid());
-    std::cout << poly.exportToWkt() << std::endl;
 }
 
-#if 0
-// Does not work currently
 BOOST_AUTO_TEST_CASE(mercator_area_1)
 {
     OGRPolygon poly;
-    NFmiMercatorArea area(NFmiPoint(180.0, -90.0), NFmiPoint(-180, 90.0));
-    area.Init();
+    NFmiMercatorArea area(NFmiPoint(-180, -90.0), NFmiPoint(180, 90.0));
     try {
         wfs::get_latlon_boundary(&area, &poly);
     } catch (const Fmi::Exception& exc) {
@@ -57,9 +53,7 @@ BOOST_AUTO_TEST_CASE(mercator_area_1)
     }
     BOOST_CHECK(!poly.IsEmpty());
     BOOST_CHECK(poly.IsValid());
-    std::cout << poly.exportToWkt() << std::endl;
 }
-#endif
 
 BOOST_AUTO_TEST_CASE(rotated_latlon_area_1)
 {
