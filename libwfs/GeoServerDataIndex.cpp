@@ -394,7 +394,7 @@ void bw::GeoServerDataIndex::process_sql_result(pqxx::result& result, const std:
     for (auto row = result.begin(); row != result.end(); ++row)
     {
       const auto s_epoch = row[0].as<std::string>();
-      Fmi::DateTime epoch = pt::time_from_string(s_epoch);
+      Fmi::DateTime epoch = Fmi::DateTime::from_string(s_epoch);
 
       Item& item = data[epoch];
       item.epoch = epoch;

@@ -209,7 +209,7 @@ bw::SupportsTimeParameters::get_time_generator_options(const RequestParameterMap
       options->startTime += Fmi::Minutes(*start_step * *options->timeStep);
       if (debug_level > 2)
         std::cout << __FILE__ << "#" << __LINE__
-                  << ": startTime=" << pt::to_simple_string(options->startTime) << std::endl;
+                  << ": startTime=" << Fmi::date_time::to_simple_string(options->startTime) << std::endl;
     }
 
     if (param.count(P_END_TIME))
@@ -225,21 +225,21 @@ bw::SupportsTimeParameters::get_time_generator_options(const RequestParameterMap
       options->endTime = param.get_single<Fmi::DateTime>(P_END_TIME);
       if (debug_level > 2)
         std::cout << __FILE__ << "#" << __LINE__
-                  << ": endTime=" << pt::to_simple_string(options->endTime) << std::endl;
+                  << ": endTime=" << Fmi::date_time::to_simple_string(options->endTime) << std::endl;
     }
     else if (!!options->timeSteps)
     {
       options->endTime = options->startTime + Fmi::Minutes(*options->timeStep * *options->timeSteps);
       if (debug_level > 2)
         std::cout << __FILE__ << "#" << __LINE__
-                  << ": endTime=" << pt::to_simple_string(options->endTime) << std::endl;
+                  << ": endTime=" << Fmi::date_time::to_simple_string(options->endTime) << std::endl;
     }
     else
     {
       options->endTime = options->startTime + Fmi::Hours(24);
       if (debug_level > 2)
         std::cout << __FILE__ << "#" << __LINE__
-                  << ": endTime=" << pt::to_simple_string(options->endTime) << std::endl;
+                  << ": endTime=" << Fmi::date_time::to_simple_string(options->endTime) << std::endl;
     }
 
     return options;

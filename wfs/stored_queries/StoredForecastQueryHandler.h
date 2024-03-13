@@ -52,7 +52,7 @@ class StoredForecastQueryHandler : public StoredQueryHandlerBase,
     std::string tz_name;
 
     std::unique_ptr<Fmi::DateTime> origin_time;
-    Fmi::DateTime modification_time = boost::posix_time::not_a_date_time;
+    Fmi::DateTime modification_time = Fmi::DateTime::NOT_A_DATE_TIME;
 
    public:
     boost::shared_ptr<SmartMet::Spine::Table> result;

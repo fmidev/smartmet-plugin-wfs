@@ -27,7 +27,7 @@ int main(void)
   for (auto it = gs_index.begin(); it != gs_index.end(); ++it)
   {
     std::cout << std::endl;
-    std::cout << pt::to_simple_string(it->second.epoch) << std::endl;
+    std::cout << Fmi::date_time::to_simple_string(it->second.epoch) << std::endl;
 
     for (std::size_t i = 0; i < it->second.layers.size(); i++)
     {

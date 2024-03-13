@@ -3,7 +3,6 @@
 #include "PluginImpl.h"
 #include "StoredQuery.h"
 #include <boost/algorithm/string.hpp>
-#include <boost/date_time/posix_time/posix_time.hpp>
 #include <boost/format.hpp>
 #include <macgyver/TypeName.h>
 #include <spine/Convenience.h>
@@ -127,7 +126,7 @@ CTPP::CDT ErrorResponseGenerator::handle_std_exception(const std::exception& err
   try
   {
     std::ostringstream msg;
-    msg << pt::to_simple_string(plugin_impl.get_local_time_stamp()) << " C++ exception '"
+    msg << Fmi::date_time::to_simple_string(plugin_impl.get_local_time_stamp()) << " C++ exception '"
         << Fmi::get_type_name(&err) << "': " << err.what();
 
     CTPP::CDT hash;
@@ -146,7 +145,7 @@ CTPP::CDT ErrorResponseGenerator::handle_unknown_exception(processing_phase_t ph
   try
   {
     std::ostringstream msg;
-    std::cerr << pt::to_simple_string(plugin_impl.get_local_time_stamp()) << " error: "
+    std::cerr << Fmi::date_time::to_simple_string(plugin_impl.get_local_time_stamp()) << " error: "
               << "Unknown exception '" << Fmi::current_exception_type() << "'";
 
     CTPP::CDT hash;

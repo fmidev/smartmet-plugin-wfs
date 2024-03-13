@@ -333,8 +333,8 @@ void bw::StoredMastQueryHandler::query(const StoredQuery& query,
         Fmi::Exception exception(BCP, "Too many time epochs in the time interval!");
         exception.addDetail("Use shorter time interval or larger time step.");
         exception.addParameter(WFS_EXCEPTION_CODE, WFS_OPERATION_PROCESSING_FAILED);
-        exception.addParameter("Start time", pt::to_simple_string(startTime));
-        exception.addParameter("End time", pt::to_simple_string(endTime));
+        exception.addParameter("Start time", Fmi::date_time::to_simple_string(startTime));
+        exception.addParameter("End time", Fmi::date_time::to_simple_string(endTime));
         throw exception.disableStackTrace();
       }
 

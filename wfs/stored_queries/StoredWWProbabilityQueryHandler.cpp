@@ -407,7 +407,7 @@ WinterWeatherIntensityProbabilities StoredWWProbabilityQueryHandler::getProbabil
   try
   {
     WinterWeatherIntensityProbabilities ret;
-	TS::LocalTimePoolPtr localTimePool =	boost::make_shared<TS::LocalTimePool>();
+	TS::LocalTimePoolPtr localTimePool = std::make_shared<TS::LocalTimePool>();
 
     SmartMet::Engine::Querydata::ParameterOptions qengine_param_light =
 	  get_qengine_parameter(queryParam, queryParam.paramLight, localTimePool);

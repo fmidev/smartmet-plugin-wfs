@@ -359,7 +359,7 @@ bw::ContourQueryResultSet bw::StoredContourQueryHandler::getContours_gridEngine(
       for (auto val = param->mValueList.begin(); val != param->mValueList.end(); ++val)
       {
         std::vector<OGRGeometryPtr> geoms;
-        Fmi::DateTime utcTime = boost::posix_time::from_time_t((*val)->mForecastTimeUTC);
+        Fmi::DateTime utcTime = Fmi::date_time::from_time_t((*val)->mForecastTimeUTC);
         // Fmi::DateTime utcTime = Fmi::TimeParser::parse_iso((*val)->mForecastTime);
 
         if (!(*val)->mValueData.empty())

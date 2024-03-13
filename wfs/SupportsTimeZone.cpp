@@ -95,7 +95,7 @@ std::string bw::SupportsTimeZone::format_local_time(const Fmi::DateTime& utc_tim
   {
     Fmi::LocalDateTime t1(utc_time, tz);
 
-    std::string result = Fmi::to_iso_extended_string(t1.local_time()) + t1.zone_abbrev(true);
+    std::string result = Fmi::to_iso_extended_string(t1.local_time()) + t1.abbrev();
 
     // Replace '+0000' at end with 'Z' if needed and otherwise insert ':'
     if (ba::ends_with(result, "+0000"))

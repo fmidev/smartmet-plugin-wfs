@@ -11,7 +11,6 @@
 namespace ba = boost::algorithm;
 namespace bw = SmartMet::Plugin::WFS;
 namespace fs = boost::filesystem;
-namespace pt = boost::posix_time;
 
 namespace
 {
@@ -40,7 +39,7 @@ std::set<T> vect2set(const std::vector<T>& src)
 }  // namespace
 
 bw::DataSetQuery::DataSetQuery()
-    : period(Fmi::DateTime(boost::date_time::neg_infin), Fmi::DateTime(boost::date_time::pos_infin))
+    : period(Fmi::DateTime(Fmi::DateTime::NEG_INFINITY), Fmi::DateTime(Fmi::DateTime::POS_INFINITY))
 {
 }
 
@@ -99,12 +98,12 @@ void bw::DataSetQuery::set_interval(const Fmi::DateTime& begin,
     if (begin.is_not_a_date_time() or end.is_not_a_date_time() or end < begin)
     {
       Fmi::Exception exception(BCP, "Invalid time interval!");
-      exception.addParameter("Start time", pt::to_simple_string(begin));
-      exception.addParameter("End time", pt::to_simple_string(end));
+      exception.addParameter("Start time", Fmi::date_time::to_simple_string(begin));
+      exception.addParameter("End time", Fmi::date_time::to_simple_string(end));
       throw exception;
     }
 
-    period = pt::time_period(begin, end);
+    period = Fmi::TimePeriod(begin, end);
   }
   catch (...)
   {

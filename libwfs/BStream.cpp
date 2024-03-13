@@ -12,7 +12,6 @@ namespace ph = boost::placeholders;
 
 using bw::IBStream;
 using bw::OBStream;
-namespace pt = boost::posix_time;
 
 namespace SmartMet
 {
@@ -240,7 +239,7 @@ void OBStream::put_ptime(const Fmi::DateTime& tm)
 	  put_bit(true);
 	} else {
 	  throw Fmi::Exception::Trace(BCP, "Not supported special time value '"
-						  + pt::to_simple_string(tm));
+						  + Fmi::date_time::to_simple_string(tm));
 	}
       }
     } else {
@@ -523,9 +522,6 @@ Fmi::DateTime IBStream::get_ptime()
 {
   try
   {
-    namespace pt = boost::posix_time;
-    namespace bg = boost::gregorian;
-
     // FIXME: support non time values
     if (get_bit() == 1)
     {
@@ -543,12 +539,12 @@ Fmi::DateTime IBStream::get_ptime()
     {
       if (get_bit()) {
 	if (get_bit()) {
-	  return pt::pos_infin;
+            return Fmi::DateTime::POS_INFINITY;
 	} else {
-	  return pt::neg_infin;
+            return Fmi::DateTime::NEG_INFINITY;
 	}
       } else {
-	return pt::not_a_date_time;
+	return Fmi::DateTime::NOT_A_DATE_TIME;
       }
       throw Fmi::Exception(BCP, "Special time values are not yet supported");
     }

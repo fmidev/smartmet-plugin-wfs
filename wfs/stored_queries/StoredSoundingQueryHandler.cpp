@@ -192,8 +192,8 @@ void StoredSoundingQueryHandler::query(const StoredQuery& query,
       hash["axisLabels"] = axisLabels;
       hash["queryNum"] = query.get_query_id();
       hash["queryName"] = StoredQueryHandlerBase::get_query_name();
-      hash["phenomenonBeginTime"] = pt::to_iso_extended_string(startTime) + "Z";
-      hash["phenomenonEndTime"] = pt::to_iso_extended_string(endTime) + "Z";
+      hash["phenomenonBeginTime"] = Fmi::date_time::to_iso_extended_string(startTime) + "Z";
+      hash["phenomenonEndTime"] = Fmi::date_time::to_iso_extended_string(endTime) + "Z";
 
       if (debugLevel > 2)
         params.dump_params(hash["query_parameters"]);
@@ -264,7 +264,7 @@ void StoredSoundingQueryHandler::query(const StoredQuery& query,
             const auto ptime2str = [&missingValue](const Fmi::DateTime& t) -> std::string
             {
               return t.is_special() ? missingValue
-                                    : boost::posix_time::to_iso_extended_string(t) + "Z";
+                                    : Fmi::date_time::to_iso_extended_string(t) + "Z";
             };
 
             currentStationId = rsIt->second.stationId;
@@ -476,7 +476,7 @@ void StoredSoundingQueryHandler::query(const StoredQuery& query,
     }
 
     hash["responseTimestamp"] =
-        pt::to_iso_extended_string(get_plugin_impl().get_time_stamp()) + "Z";
+        Fmi::date_time::to_iso_extended_string(get_plugin_impl().get_time_stamp()) + "Z";
     hash["fmi_apikey"] = QueryBase::FMI_APIKEY_SUBST;
     hash["fmi_apikey_prefix"] = QueryBase::FMI_APIKEY_PREFIX_SUBST;
     hash["hostname"] = QueryBase::HOSTNAME_SUBST;

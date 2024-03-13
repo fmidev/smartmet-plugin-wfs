@@ -89,8 +89,8 @@ void check_time_interval(const Fmi::DateTime& start,
       throw Fmi::Exception(BCP, "Invalid time interval!")
           .addDetail("The start time is later than the end time.")
           .addParameter(WFS_EXCEPTION_CODE, WFS_OPERATION_PARSING_FAILED)
-          .addParameter("Start time", pt::to_simple_string(start))
-          .addParameter("End time", pt::to_simple_string(end))
+          .addParameter("Start time", Fmi::date_time::to_simple_string(start))
+          .addParameter("End time", Fmi::date_time::to_simple_string(end))
           .disableStackTrace();
     }
 
@@ -102,8 +102,8 @@ void check_time_interval(const Fmi::DateTime& start,
       throw Fmi::Exception(BCP, "Too long time interval requested!")
           .addDetail("No more than " + std::to_string(max_hours) + " hours allowed.")
           .addParameter(WFS_EXCEPTION_CODE, WFS_OPERATION_PROCESSING_FAILED)
-          .addParameter("Start time", pt::to_simple_string(start))
-          .addParameter("End time", pt::to_simple_string(end))
+          .addParameter("Start time", Fmi::date_time::to_simple_string(start))
+          .addParameter("End time", Fmi::date_time::to_simple_string(end))
           .disableStackTrace();
     }
   }

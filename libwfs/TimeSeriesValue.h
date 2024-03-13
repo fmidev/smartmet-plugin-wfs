@@ -1,6 +1,5 @@
 #pragma ones
 
-#include <boost/date_time/posix_time/posix_time.hpp>
 #include <macgyver/StringConversion.h>
 #include <macgyver/Exception.h>
 #include <timeseries/TimeSeriesInclude.h>

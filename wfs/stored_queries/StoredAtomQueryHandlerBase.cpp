@@ -1,7 +1,6 @@
 #include "stored_queries/StoredAtomQueryHandlerBase.h"
 #include "StoredQueryHandlerFactoryDef.h"
 #include <boost/bind/bind.hpp>
-#include <boost/date_time/posix_time/posix_time.hpp>
 #include <boost/variant.hpp>
 #include <macgyver/Exception.h>
 #include <macgyver/StringConversion.h>

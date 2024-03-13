@@ -272,13 +272,13 @@ void dump_meta_query_options(const qe::MetaQueryOptions& opt)
       std::cout << " producer='" << opt.getProducer() << "'";
 
     if (opt.hasOriginTime())
-      std::cout << " originTime='" << pt::to_simple_string(opt.getOriginTime()) << "'";
+      std::cout << " originTime='" << Fmi::date_time::to_simple_string(opt.getOriginTime()) << "'";
 
     if (opt.hasFirstTime())
-      std::cout << " firstTime='" << pt::to_simple_string(opt.getFirstTime()) << "'";
+      std::cout << " firstTime='" << Fmi::date_time::to_simple_string(opt.getFirstTime()) << "'";
 
     if (opt.hasLastTime())
-      std::cout << " lastTime='" << pt::to_simple_string(opt.getLastTime()) << "'";
+      std::cout << " lastTime='" << Fmi::date_time::to_simple_string(opt.getLastTime()) << "'";
 
     if (opt.hasParameters())
     {
@@ -742,7 +742,7 @@ boost::shared_ptr<OGRGeometry> StoredQEDownloadQueryHandler::bbox_intersection(
 
 #if 0    
     std::cout << METHOD_NAME << ": " << meta_info.producer << "["
-              << pt::to_simple_string(meta_info.originTime) << "]" << std::endl;
+              << Fmi::date_time::to_simple_string(meta_info.originTime) << "]" << std::endl;
     std::cout << METHOD_NAME << ": model_area='" << Engine::Gis::WKT(*model_area) << "'"
               << std::endl;
 #endif

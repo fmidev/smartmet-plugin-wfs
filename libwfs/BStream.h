@@ -4,6 +4,7 @@
 
 #include <macgyver/DateTime.h>
 #include <spine/Value.h>
+#include <map>
 #include <string>
 
 namespace SmartMet

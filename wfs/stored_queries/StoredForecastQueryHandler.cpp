@@ -22,8 +22,6 @@
 
 namespace bw = SmartMet::Plugin::WFS;
 namespace ba = boost::algorithm;
-namespace pt = boost::posix_time;
-namespace lt = boost::local_time;
 using namespace SmartMet::Spine;
 
 using boost::format;
@@ -290,7 +288,7 @@ void bw::StoredForecastQueryHandler::query(const StoredQuery& stored_query,
             group["dataOriginTime"] = origin_time_str;
           }
 
-          if (query.modification_time != boost::posix_time::not_a_date_time)
+          if (query.modification_time != Fmi::DateTime::NOT_A_DATE_TIME)
           {
             const std::string modification_time_str =
                 Fmi::to_iso_extended_string(query.modification_time) + "Z";
@@ -325,8 +323,8 @@ void bw::StoredForecastQueryHandler::query(const StoredQuery& stored_query,
 
           std::size_t row_counter = 0;
 
-          Fmi::DateTime interval_begin = boost::date_time::pos_infin;
-          Fmi::DateTime interval_end = boost::date_time::neg_infin;
+          Fmi::DateTime interval_begin = Fmi::DateTime::POS_INFINITY;
+          Fmi::DateTime interval_end = Fmi::DateTime::NEG_INFINITY;
 
           for (auto site_iter = site_range.first; site_iter != site_range.second; ++site_iter)
           {
@@ -633,7 +631,7 @@ boost::shared_ptr<SmartMet::Spine::Table> bw::StoredForecastQueryHandler::extrac
       }
       */
 
-      TS::LocalTimePoolPtr localTimePool = boost::make_shared<TS::LocalTimePool>();
+      TS::LocalTimePoolPtr localTimePool = std::make_shared<TS::LocalTimePool>();
 
       // Fetch data from an arbitrary height.
       for (const auto& level_height : query.level_heights)

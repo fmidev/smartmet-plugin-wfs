@@ -5,7 +5,6 @@
 #include "XPathSnapshot.h"
 #include "XmlDomErrorHandler.h"
 #include "XmlUtils.h"
-#include <boost/date_time/posix_time/posix_time.hpp>
 #include <boost/format.hpp>
 #include <macgyver/StringConversion.h>
 #include <macgyver/TypeName.h>

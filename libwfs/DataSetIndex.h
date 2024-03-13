@@ -34,13 +34,13 @@ class DataSetQuery
   void set_interval(const Fmi::DateTime& begin, const Fmi::DateTime& end);
 
   inline const std::set<std::string>& get_names() const { return names; }
-  inline const boost::posix_time::time_period& get_time_interval() const { return period; }
+  inline const Fmi::TimePeriod& get_time_interval() const { return period; }
   inline const std::set<std::string>& get_parameters() const { return parameters; }
   inline const std::set<int>& get_levels() const { return levels; }
 
  private:
   std::set<std::string> names;
-  boost::posix_time::time_period period;
+  Fmi::TimePeriod period;
   std::set<std::string> parameters;
   std::set<int> levels;
 };
@@ -69,8 +69,8 @@ class DataSetDefinition : public boost::enable_shared_from_this<DataSetDefinitio
   bool intersects(const box_t& bbox) const;
 
   std::vector<boost::filesystem::path> query_files(
-      const Fmi::DateTime& begin = boost::date_time::neg_infin,
-      const Fmi::DateTime& end = boost::date_time::pos_infin) const;
+      const Fmi::DateTime& begin = Fmi::DateTime::POS_INFINITY,
+      const Fmi::DateTime& end = Fmi::DateTime::NEG_INFINITY) const;
 
   Fmi::DateTime extract_origintime(const boost::filesystem::path& p) const;
 

@@ -146,7 +146,7 @@ void bw::StoredFlashQueryHandler::query(const StoredQuery& query,
     try
     {
       SmartMet::Engine::Observation::Settings query_params;
-      query_params.localTimePool = boost::make_shared<TS::LocalTimePool>();
+      query_params.localTimePool = std::make_shared<TS::LocalTimePool>();
 
       const char* DATA_CRS_NAME = "urn:ogc:def:crs:EPSG::4326";
       const auto crs = params.get_single<std::string>(P_CRS);
@@ -256,8 +256,8 @@ void bw::StoredFlashQueryHandler::query(const StoredQuery& query,
       {
         Fmi::Exception exception(BCP, "Invalid time interval!");
         exception.addParameter(WFS_EXCEPTION_CODE, WFS_OPERATION_PARSING_FAILED);
-        exception.addParameter("Start time", pt::to_simple_string(query_params.starttime));
-        exception.addParameter("End time", pt::to_simple_string(query_params.endtime));
+        exception.addParameter("Start time", Fmi::date_time::to_simple_string(query_params.starttime));
+        exception.addParameter("End time", Fmi::date_time::to_simple_string(query_params.endtime));
         throw exception;
       }
 

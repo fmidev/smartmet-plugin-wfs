@@ -194,7 +194,7 @@ BOOST_AUTO_TEST_CASE(test_single_scalar_parameter_with_lower_limit)
   std::array<std::string, 1> s001 = {{"2012-01-02T00:11:22Z"}};
   Test::add_values<std::string, 1>(param_map, "foo", s001);
   BOOST_REQUIRE_NO_THROW(val = param->get<Fmi::DateTime>(param_map));
-  BOOST_CHECK_EQUAL(std::string("2012-Jan-02 00:11:22"), pt::to_simple_string(val));
+  BOOST_CHECK_EQUAL(std::string("2012-Jan-02 00:11:22"), Fmi::date_time::to_simple_string(val));
 
   // Single parameter provided and is out of allowed range (must succeed)
   std::array<std::string, 1> s002 = {{"2011-12-31T00:11:22Z"}};

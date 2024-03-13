@@ -31,8 +31,6 @@
 #define P_LATEST "latest"
 #define P_LANGUAGE "language"
 
-namespace pt = boost::posix_time;
-namespace lt = boost::local_time;
 namespace ba = boost::algorithm;
 namespace bl = boost::lambda;
 using namespace SmartMet::Spine;
@@ -200,7 +198,7 @@ void StoredObsQueryHandler::query(const StoredQuery& query,
       std::vector<int64_t> tmp_vect;
       SmartMet::Engine::Observation::Settings query_params;
       query_params.useDataCache = true;
-      query_params.localTimePool = boost::make_shared<TS::LocalTimePool>();
+      query_params.localTimePool = std::make_shared<TS::LocalTimePool>();
 
       const char* DATA_CRS_NAME = "urn:ogc:def:crs:EPSG::4326";
 
@@ -344,8 +342,8 @@ void StoredObsQueryHandler::query(const StoredQuery& query,
       {
         Fmi::Exception exception(BCP, "Invalid time interval!");
         exception.addParameter(WFS_EXCEPTION_CODE, WFS_OPERATION_PARSING_FAILED);
-        exception.addParameter("Start time", pt::to_simple_string(query_params.starttime));
-        exception.addParameter("End time", pt::to_simple_string(query_params.endtime));
+        exception.addParameter("Start time", Fmi::date_time::to_simple_string(query_params.starttime));
+        exception.addParameter("End time", Fmi::date_time::to_simple_string(query_params.endtime));
         throw exception.disableStackTrace();
       }
 
@@ -358,8 +356,8 @@ void StoredObsQueryHandler::query(const StoredQuery& query,
         Fmi::Exception exception(BCP, "Too many time epochs in the time interval!");
         exception.addDetail("Use shorter time interval or larger time step.");
         exception.addParameter(WFS_EXCEPTION_CODE, WFS_OPERATION_PROCESSING_FAILED);
-        exception.addParameter("Start time", pt::to_simple_string(query_params.starttime));
-        exception.addParameter("End time", pt::to_simple_string(query_params.endtime));
+        exception.addParameter("Start time", Fmi::date_time::to_simple_string(query_params.starttime));
+        exception.addParameter("End time", Fmi::date_time::to_simple_string(query_params.endtime));
         throw exception.disableStackTrace();
       }
 

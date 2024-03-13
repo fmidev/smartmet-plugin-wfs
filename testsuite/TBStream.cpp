@@ -214,7 +214,7 @@ BOOST_AUTO_TEST_CASE(test_writing_and_reading_ptime_values)
   BOOST_TEST_MESSAGE("+[Test writting and reading Fmi::DateTime values]");
 
   const Fmi::DateTime t1 = Fmi::DateTime(Fmi::Date(2013, 03, 26));
-  const Fmi::DateTime t2 = pt::time_from_string("2013-03-26 09:22:12");
+  const Fmi::DateTime t2 = Fmi::DateTime::fromd_string("2013-03-26 09:22:12");
 
   OBStream out;
   out.put_ptime(t1);
@@ -290,7 +290,7 @@ BOOST_AUTO_TEST_CASE(test_writing_and_reading_value_map)
   std::multimap<std::string, Value> data;
   data.insert(std::make_pair("A", Value(2.0)));
   data.insert(std::make_pair("A", Value(3.0)));
-  data.insert(std::make_pair("B", Value(pt::time_from_string("2013-03-25 09:55:54"))));
+  data.insert(std::make_pair("B", Value(Fmi::DateTime::fromd_string("2013-03-25 09:55:54"))));
   data.insert(std::make_pair("C", Value("foobar")));
   data.insert(std::make_pair("D", Value(1)));
   data.insert(std::make_pair("D", Value(1)));

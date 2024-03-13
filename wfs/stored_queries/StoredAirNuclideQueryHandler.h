@@ -17,8 +17,6 @@
 #include <engines/observation/Engine.h>
 #include <engines/observation/MastQueryParams.h>
 
-namespace pt = boost::posix_time;
-namespace lt = boost::local_time;
 namespace ba = boost::algorithm;
 namespace bl = boost::lambda;
 

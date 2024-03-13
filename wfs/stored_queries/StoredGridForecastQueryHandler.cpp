@@ -33,8 +33,6 @@
 #include <map>
 
 namespace ba = boost::algorithm;
-namespace pt = boost::posix_time;
-namespace lt = boost::local_time;
 
 using boost::format;
 using boost::str;
@@ -351,8 +349,8 @@ void StoredGridForecastQueryHandler::query(const StoredQuery& stored_query,
 
           std::size_t row_counter = 0;
 
-          Fmi::DateTime interval_begin = boost::date_time::pos_infin;
-          Fmi::DateTime interval_end = boost::date_time::neg_infin;
+          Fmi::DateTime interval_begin = Fmi::DateTime::POS_INFINITY;
+          Fmi::DateTime interval_end = Fmi::DateTime::NEG_INFINITY;
 
           for (auto site_iter = site_range.first; site_iter != site_range.second; ++site_iter)
           {
@@ -627,7 +625,7 @@ uint StoredGridForecastQueryHandler::processGridQuery(Query& wfsQuery,
           if (row > lastRow)
             lastRow = row;
 
-          Fmi::DateTime utcTime = boost::posix_time::from_time_t(*ft);
+          Fmi::DateTime utcTime = Fmi::date_time::from_time_t(*ft);
           Fmi::LocalDateTime queryTime(utcTime, tz);
           // Fmi::LocalDateTime queryTime(Fmi::TimeParser::parse_iso(*ft), tz);
           if (additionalParameters.getParameterValueByLocation(
