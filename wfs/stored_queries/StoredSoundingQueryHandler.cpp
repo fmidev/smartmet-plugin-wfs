@@ -2,7 +2,6 @@
 #include "stored_queries/StoredSoundingQueryHandler.h"
 #include "FeatureID.h"
 #include "StoredQueryHandlerFactoryDef.h"
-#include <macgyver/DateTime.h>
 #include <engines/gis/Engine.h>
 #include <engines/observation/MastQuery.h>
 #include <macgyver/DateTime.h>
@@ -261,8 +260,7 @@ void StoredSoundingQueryHandler::query(const StoredQuery& query,
               throw exception.disableStackTrace();
             }
 
-            const auto ptime2str = [&missingValue](const Fmi::DateTime& t) -> std::string
-            {
+            const auto ptime2str = [&missingValue](const Fmi::DateTime& t) -> std::string {
               return t.is_special() ? missingValue
                                     : boost::posix_time::to_iso_extended_string(t) + "Z";
             };
@@ -315,14 +313,13 @@ void StoredSoundingQueryHandler::query(const StoredQuery& query,
                 if (not sit->region.empty())
                   station["region"] = sit->region;
 
-                stationLatitude = static_cast<long double>(sit->latitude_out);
-                stationLongitude = static_cast<long double>(sit->longitude_out);
+                stationLatitude = static_cast<long double>(sit->latitude);
+                stationLongitude = static_cast<long double>(sit->longitude);
                 set_2D_coord(transformation,
                              std::to_string(stationLatitude),
                              std::to_string(stationLongitude),
                              station);
-                station["elevation"] =
-                    std::to_string(static_cast<long long int>(sit->station_elevation));
+                station["elevation"] = std::to_string(static_cast<long long int>(sit->elevation));
               }
               else if (std::next(sit, 0) == stations.end())
               {
