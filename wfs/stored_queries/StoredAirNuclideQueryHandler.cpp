@@ -213,7 +213,7 @@ void bw::StoredAirNuclideQueryHandler::query(const StoredQuery& query,
         if (geoLoc)
         {
           stations[fmisidStr].country = geoLoc->country;
-          stations[fmisidStr].station_elevation = geoLoc->elevation;
+          stations[fmisidStr].elevation = geoLoc->elevation;
         }
       }
 
@@ -498,12 +498,12 @@ void bw::StoredAirNuclideQueryHandler::query(const StoredQuery& query,
           if (not sit->second.country.empty())
             group["country"] = sit->second.country;
 
-          set_2D_coord(transformation, sit->second.latitude_out, sit->second.longitude_out, group);
+          set_2D_coord(transformation, sit->second.latitude, sit->second.longitude, group);
 
-          group["latitude"] = std::to_string(sit->second.latitude_out);
-          group["longitude"] = std::to_string(sit->second.longitude_out);
+          group["latitude"] = std::to_string(sit->second.latitude);
+          group["longitude"] = std::to_string(sit->second.longitude);
           if (show_height)
-            group["elevation"] = std::to_string(sit->second.station_elevation);
+            group["elevation"] = std::to_string(sit->second.elevation);
 
           group["fmisid"] = stationIdStr;
           group["observationId"] = observationIdStr;

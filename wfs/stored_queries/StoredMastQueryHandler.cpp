@@ -28,7 +28,8 @@ bw::StoredMastQueryHandler::StoredMastQueryHandler(SmartMet::Spine::Reactor* rea
 {
   try
   {
-    register_scalar_param<Fmi::DateTime>(P_BEGIN_TIME, "The start time of the requested time period.");
+    register_scalar_param<Fmi::DateTime>(P_BEGIN_TIME,
+                                         "The start time of the requested time period.");
 
     register_scalar_param<Fmi::DateTime>(P_END_TIME, "The end time of the requested time period.");
 
@@ -189,7 +190,7 @@ void bw::StoredMastQueryHandler::query(const StoredQuery& query,
         if (geoLoc)
         {
           stations.back().country = geoLoc->country;
-          stations.back().station_elevation = geoLoc->elevation;
+          stations.back().elevation = geoLoc->elevation;
         }
       }
 
@@ -535,11 +536,10 @@ void bw::StoredMastQueryHandler::query(const StoredQuery& query,
                 station_wmo = std::to_string(static_cast<long long int>(station.wmo));
                 station_name = station.station_formal_name(language);
                 station_region = station.region;
-                station_latitude = std::to_string(static_cast<long double>(station.latitude_out));
-                station_longitude = std::to_string(static_cast<long double>(station.longitude_out));
-                station_elevation =
-                    std::to_string(static_cast<long long int>(station.station_elevation));
-                bottomHeight = station.station_elevation;
+                station_latitude = std::to_string(static_cast<long double>(station.latitude));
+                station_longitude = std::to_string(static_cast<long double>(station.longitude));
+                station_elevation = std::to_string(static_cast<long long int>(station.elevation));
+                bottomHeight = station.elevation;
               }
             }
 
