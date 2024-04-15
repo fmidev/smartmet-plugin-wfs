@@ -225,8 +225,6 @@ void OBStream::put_ptime(const Fmi::DateTime& tm)
 {
   try
   {
-    const auto d = tm.date();
-    const long sec = tm.time_of_day().total_seconds();
     if (tm.is_special()) {
       put_bit(false);
       if (tm.is_not_a_date_time()) {
@@ -243,6 +241,10 @@ void OBStream::put_ptime(const Fmi::DateTime& tm)
 	}
       }
     } else {
+      // FIXME: it would be more efficient to use duration since epoch in microseconds
+      //        Not done currently to avoid change in last number of test results
+      const auto d = tm.date();
+      const long sec = tm.time_of_day().total_seconds();
       put_bit(true);  // For support of non-time values in the future
       put_int(d.year());
       put_unsigned(d.month());

@@ -414,12 +414,12 @@ BOOST_AUTO_TEST_CASE(simple_param_from_array_with_default)
   BOOST_CHECK(item.default_value);
   BOOST_CHECK_EQUAL(*item.default_value, std::string("201210241526"));
 
-  const Fmi::DateTime t0(time_from_string("2012-10-24 15:26"));
+  const Fmi::DateTime t0(Fmi::DateTime::from_string("2012-10-24 15:26"));
 
-  const Fmi::DateTime t1(time_from_string("2012-10-24 12:34"));
-  const Fmi::DateTime t2(time_from_string("2012-10-24 13:11"));
-  const Fmi::DateTime t3(time_from_string("2012-10-24 14:02"));
-  const Fmi::DateTime t4(time_from_string("2012-10-24 15:43"));
+  const Fmi::DateTime t1(Fmi::DateTime::from_string("2012-10-24 12:34"));
+  const Fmi::DateTime t2(Fmi::DateTime::from_string("2012-10-24 13:11"));
+  const Fmi::DateTime t3(Fmi::DateTime::from_string("2012-10-24 14:02"));
+  const Fmi::DateTime t4(Fmi::DateTime::from_string("2012-10-24 15:43"));
 
   RequestParameterMap param_map(false);
   Fmi::DateTime value;

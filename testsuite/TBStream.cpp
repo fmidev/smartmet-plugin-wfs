@@ -6,6 +6,7 @@
 #include <BStream.h>
 #include <boost/algorithm/hex.hpp>
 #include <macgyver/Exception.h>
+#include <macgyver/DebugTools.h>
 
 using namespace boost::unit_test;
 
@@ -208,13 +209,10 @@ BOOST_AUTO_TEST_CASE(test_writing_and_reading_strings)
 
 BOOST_AUTO_TEST_CASE(test_writing_and_reading_ptime_values)
 {
-  namespace bg = boost::gregorian;
-  namespace pt = boost::posix_time;
-
   BOOST_TEST_MESSAGE("+[Test writting and reading Fmi::DateTime values]");
 
   const Fmi::DateTime t1 = Fmi::DateTime(Fmi::Date(2013, 03, 26));
-  const Fmi::DateTime t2 = Fmi::DateTime::fromd_string("2013-03-26 09:22:12");
+  const Fmi::DateTime t2 = Fmi::DateTime::from_string("2013-03-26 09:22:12");
 
   OBStream out;
   out.put_ptime(t1);
@@ -230,14 +228,11 @@ BOOST_AUTO_TEST_CASE(test_writing_and_reading_ptime_values)
 
 BOOST_AUTO_TEST_CASE(test_writing_and_reading_ptime_special_values)
 {
-  namespace bg = boost::gregorian;
-  namespace pt = boost::posix_time;
-
   BOOST_TEST_MESSAGE("+[Test writting and reading Fmi::DateTime values]");
 
-  const Fmi::DateTime t1 = pt::not_a_date_time;
-  const Fmi::DateTime t2 = pt::pos_infin;
-  const Fmi::DateTime t3 = pt::neg_infin;
+  const Fmi::DateTime t1 = Fmi::DateTime::NOT_A_DATE_TIME;
+  const Fmi::DateTime t2 = Fmi::DateTime::POS_INFINITY;
+  const Fmi::DateTime t3 = Fmi::DateTime::NEG_INFINITY;
 
   OBStream out;
   out.put_ptime(t1);
@@ -248,9 +243,9 @@ BOOST_AUTO_TEST_CASE(test_writing_and_reading_ptime_special_values)
   const uint8_t *u01 = reinterpret_cast<const uint8_t *>(s01.data());
 
   IBStream in(u01, s01.length());
-  BOOST_REQUIRE_EQUAL(t1, in.get_ptime());
-  BOOST_REQUIRE_EQUAL(t2, in.get_ptime());
-  BOOST_REQUIRE_EQUAL(t3, in.get_ptime());
+  BOOST_REQUIRE_EQUAL(t1, SHOW_EXCEPTIONS(in.get_ptime()));
+  BOOST_REQUIRE_EQUAL(t2, SHOW_EXCEPTIONS(in.get_ptime()));
+  BOOST_REQUIRE_EQUAL(t3, SHOW_EXCEPTIONS(in.get_ptime()));
 }
 
 BOOST_AUTO_TEST_CASE(test_writing_and_reading_much_data)
@@ -283,14 +278,13 @@ BOOST_AUTO_TEST_CASE(test_writing_and_reading_much_data)
 BOOST_AUTO_TEST_CASE(test_writing_and_reading_value_map)
 {
   using SmartMet::Spine::Value;
-  namespace pt = boost::posix_time;
 
   BOOST_TEST_MESSAGE("+[Test writting and reading value map]");
 
   std::multimap<std::string, Value> data;
   data.insert(std::make_pair("A", Value(2.0)));
   data.insert(std::make_pair("A", Value(3.0)));
-  data.insert(std::make_pair("B", Value(Fmi::DateTime::fromd_string("2013-03-25 09:55:54"))));
+  data.insert(std::make_pair("B", Value(Fmi::DateTime::from_string("2013-03-25 09:55:54"))));
   data.insert(std::make_pair("C", Value("foobar")));
   data.insert(std::make_pair("D", Value(1)));
   data.insert(std::make_pair("D", Value(1)));
