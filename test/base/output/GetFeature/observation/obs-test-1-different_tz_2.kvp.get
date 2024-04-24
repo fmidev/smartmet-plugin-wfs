@@ -1,0 +1,150 @@
+Global data object:
+
+   fmi_apikey = "foobar";
+   fmi_apikey_prefix = "/fmi-apikey/";
+   groups = [
+              {
+                'crs' : "EPSG::4326",
+                'featureId' : "WFS-hIVxO.3MHXAg4OPUxDePaKvmKq6JTowp0_FzqZefSFpYsufTuqaduW179CoSsEnhjY.XOtSLQpx3TpozZNmdl3ZKmnblte_QqErBLHCZ2bbp56cnOsxiwYOW7F0a8vnvv5ZL._tl5d.WnphxbMsTM2YemXn0iZmzfjw7MtambTfjSV3XpmcNbbh8RNPPph3Y8tK1dCA0tuHxF4b8ejnOiY3tuXpl30MPLDty9MvLnWN0ZbWtt08.endnqZfHSsbdh3Nrd12z81Pph6ad.7nOE1uPXDs09PMndm3xNbn0w9NO_dU88MtaG_hl3ZMPTC3OfTfyy5OPXLy839OSs6fi51MvPo0Omnblp9MvCfkJodNO3La37stakHnpwr6m_X53gA--",
+                'groupId' : "1-1",
+                'groupNum' : 1,
+                'obsParamList' : [
+                                   {
+                                     'featureId' : "WFS-hIVxO.3MHXAg4OPUxDePaKvmKq6JTowp0_FzqZefSFpYsufTuqaduW179CoSsEnhjY.XOtSLQpx3TpozZNmdl3ZKmnblte_QqErBLHCZ2bbp56cnOsxiwYOW7F0a8vnvv5ZL._tl5d.WnphxbMsTM2YemXn0iZmzfjw7MtambTfjSV3XpmcNbbh8RNPPph3Y8tK1dCA0tuHxF4b8ejnOiY3tuXpl30MPLDty9MvLnWN0ZbWtt08.endnqZfHSsbdh3Nrd12z81Pph6ad.7nOE1uPXDs09PMndm3xNbn0w9NO_dU88MtaG_hl3ZMPTC3OfTfyy5OPXLy839OSs6fi51MvPo0Omnblp9MvCfkJodNO3La37stakHnpwr6m_X53gA--",
+                                     'name' : "t2m"
+                                   }
+                                 ],
+                'obsPhenomenonEndTime' : "2013-08-05T10:00:00Z",
+                'obsPhenomenonStartTime' : "2013-08-05T08:00:00Z",
+                'obsResultTime' : "2013-08-05T10:00:00Z",
+                'obsReturnArray' : [
+                                     {
+                                       'data' : [
+                                                  {
+                                                    'value' : "20.7"
+                                                  }
+                                                ],
+                                       'epochTime' : 1375689600,
+                                       'epochTimeStr' : "2013-08-05T17:00:00+09:00",
+                                       'x' : "60.17523",
+                                       'y' : "24.94459"
+                                     },
+                                     {
+                                       'data' : [
+                                                  {
+                                                    'value' : "21.3"
+                                                  }
+                                                ],
+                                       'epochTime' : 1375693200,
+                                       'epochTimeStr' : "2013-08-05T18:00:00+09:00",
+                                       'x' : "60.17523",
+                                       'y' : "24.94459"
+                                     },
+                                     {
+                                       'data' : [
+                                                  {
+                                                    'value' : "21.8"
+                                                  }
+                                                ],
+                                       'epochTime' : 1375696800,
+                                       'epochTimeStr' : "2013-08-05T19:00:00+09:00",
+                                       'x' : "60.17523",
+                                       'y' : "24.94459"
+                                     }
+                                   ],
+                'obsStationList' : [
+                                     {
+                                       'bearing' : "290.8",
+                                       'distance' : "0.1",
+                                       'fmisid' : "100971",
+                                       'geoid' : "-16000150",
+                                       'name' : "Helsinki Kaisaniemi",
+                                       'region' : "Helsinki",
+                                       'wmo' : "2978",
+                                       'x' : "60.17523",
+                                       'y' : "24.94459"
+                                     }
+                                   ],
+                'timestep' : 60,
+                'timezone' : "Asia/Tokyo"
+              }
+            ];
+   hostname = "opendata.fmi.fi";
+   language = "eng";
+   named_parameters = {
+                        'defaultmeteoparam' : [
+                                                "Temperature",
+                                                "pressure",
+                                                "WindSpeedMS",
+                                                "WindDirection",
+                                                "Precipitation1h"
+                                              ]
+                      };
+   numMatched = 1;
+   numParam = 1;
+   numReturned = 1;
+   projEpochSrsDim = 3;
+   projEpochSrsName = "https://xml.fmi.fi/gml/crs/compoundCRS.php?crs=4326&amp;time=unixtime";
+   projSrsDim = 2;
+   projSrsName = "http://www.opengis.net/def/crs/EPSG/0/4326";
+   protocol = "http://";
+   queryName = "ObsTest";
+   queryNum = 1;
+   query_parameters = {
+                        'beginTime' : [
+                                        "20130805T080000Z"
+                                      ],
+                        'crs' : [
+                                  "EPSG::4326"
+                                ],
+                        'endTime' : [
+                                      "20130805T100000Z"
+                                    ],
+                        'keyword' : [
+                                      ""
+                                    ],
+                        'keyword_overwritable' : [
+                                                   "false"
+                                                 ],
+                        'latest' : [
+                                     "false"
+                                   ],
+                        'locale' : [
+                                     "fi_FI.utf8"
+                                   ],
+                        'maxDistance' : [
+                                          "50000"
+                                        ],
+                        'maxEpochs' : [
+                                        "200"
+                                      ],
+                        'meteoParameters' : [
+                                              "t2m"
+                                            ],
+                        'missingText' : [
+                                          "nan"
+                                        ],
+                        'numOfStations' : [
+                                            "1"
+                                          ],
+                        'places' : [
+                                     "Kaisaniemi"
+                                   ],
+                        'qualityInfo' : [
+                                          "false"
+                                        ],
+                        'stationType' : [
+                                          "opendata"
+                                        ],
+                        'storedquery_id' : [
+                                             "ObsTest"
+                                           ],
+                        'timeStep' : [
+                                       "60"
+                                     ],
+                        'timeZone' : [
+                                       "Asia/Tokyo"
+                                     ]
+                      };
+   responseTimestamp = "2012-12-12T12:12:12Z"
+ 
