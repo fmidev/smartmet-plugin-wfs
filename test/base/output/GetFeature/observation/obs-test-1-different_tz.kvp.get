@@ -25,7 +25,7 @@ Global data object:
                                                   }
                                                 ],
                                        'epochTime' : 1375689600,
-                                       'epochTimeStr' : "2013-08-05T11:00:00+03:00",
+                                       'epochTimeStr' : "2013-08-05T12:00:00+04:00",
                                        'x' : "60.17523",
                                        'y' : "24.94459"
                                      },
@@ -36,7 +36,7 @@ Global data object:
                                                   }
                                                 ],
                                        'epochTime' : 1375693200,
-                                       'epochTimeStr' : "2013-08-05T12:00:00+03:00",
+                                       'epochTimeStr' : "2013-08-05T13:00:00+04:00",
                                        'x' : "60.17523",
                                        'y' : "24.94459"
                                      },
@@ -47,7 +47,7 @@ Global data object:
                                                   }
                                                 ],
                                        'epochTime' : 1375696800,
-                                       'epochTimeStr' : "2013-08-05T13:00:00+03:00",
+                                       'epochTimeStr' : "2013-08-05T14:00:00+04:00",
                                        'x' : "60.17523",
                                        'y' : "24.94459"
                                      }
