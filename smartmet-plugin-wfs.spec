@@ -3,7 +3,7 @@
 %define SPECNAME smartmet-plugin-%{DIRNAME}
 Summary: SmartMet WFS plugin
 Name: %{SPECNAME}
-Version: 24.4.6
+Version: 24.5.3
 Release: 1%{?dist}.fmi
 License: MIT
 Group: SmartMet/Plugins
@@ -35,20 +35,20 @@ BuildRequires: openssl-devel
 BuildRequires: bzip2-devel
 BuildRequires: zlib-devel
 BuildRequires: smartmet-library-timeseries-devel >= 24.4.5
-BuildRequires: smartmet-library-spine-devel >= 24.4.5
-BuildRequires: smartmet-library-gis-devel >= 24.3.25
+BuildRequires: smartmet-library-spine-devel >= 24.4.23
+BuildRequires: smartmet-library-gis-devel >= 24.4.24
 BuildRequires: smartmet-library-trax-devel >= 23.8.17
 BuildRequires: smartmet-library-locus-devel >= 23.7.28
 BuildRequires: smartmet-library-macgyver-devel >= 24.1.17
-BuildRequires: smartmet-engine-contour-devel >= 24.2.23
+BuildRequires: smartmet-engine-contour-devel >= 24.4.17
 BuildRequires: smartmet-engine-geonames-devel >= 24.2.23
-BuildRequires: smartmet-engine-gis-devel >= 24.2.23
-BuildRequires: smartmet-engine-grid-devel >= 24.4.4
+BuildRequires: smartmet-engine-gis-devel >= 24.4.17
+BuildRequires: smartmet-engine-grid-devel >= 24.5.3
 BuildRequires: smartmet-engine-querydata-devel >= 24.2.23
-BuildRequires: smartmet-library-grid-content-devel >= 24.4.4
-BuildRequires: smartmet-library-grid-files-devel >= 24.3.26
+BuildRequires: smartmet-library-grid-content-devel >= 24.5.3
+BuildRequires: smartmet-library-grid-files-devel >= 24.5.3
 %if %{with observation}
-BuildRequires: smartmet-engine-observation-devel >= 24.4.5
+BuildRequires: smartmet-engine-observation-devel >= 24.49
 %endif
 Requires: ctpp2
 Requires: fmt >= %{smartmet_fmt_min}, fmt < %{smartmet_fmt_max}
@@ -57,18 +57,18 @@ Requires: jsoncpp
 Requires: zlib
 Requires: smartmet-library-locus >= 23.7.28
 Requires: smartmet-library-macgyver >= 24.1.17
-Requires: smartmet-library-spine >= 24.4.5
+Requires: smartmet-library-spine >= 24.4.23
 Requires: smartmet-library-timeseries >= 24.4.5
-Requires: smartmet-library-gis >= 24.3.25
+Requires: smartmet-library-gis >= 24.4.24
 Requires: smartmet-library-trax >= 23.8.17
-Requires: smartmet-engine-contour >= 24.2.23
+Requires: smartmet-engine-contour >= 24.4.17
 Requires: smartmet-engine-geonames >= 24.2.23
-Requires: smartmet-engine-gis >= 24.2.23
-Requires: smartmet-engine-grid >= 24.4.4
-Requires: smartmet-library-grid-content >= 24.4.4
-Requires: smartmet-library-grid-files >= 24.3.26
+Requires: smartmet-engine-gis >= 24.4.17
+Requires: smartmet-engine-grid >= 24.5.3
+Requires: smartmet-library-grid-content >= 24.5.3
+Requires: smartmet-library-grid-files >= 24.5.3
 %if %{with observation}
-Requires: smartmet-engine-observation >= 24.4.5
+Requires: smartmet-engine-observation >= 24.49
 %endif
 Requires: smartmet-engine-querydata >= 24.2.23
 Requires: smartmet-server >= 24.2.22
@@ -105,16 +105,16 @@ Obsoletes: smartmet-brainstorm-wfs-debuginfo < 16.11.1
 #TestRequires: smartmet-test-data >= 24.4.5
 #TestRequires: smartmet-utils-devel >= 24.3.13
 #TestRequires: smartmet-library-macgyver >= 24.1.17
-#TestRequires: smartmet-library-gis >= 24.3.25
-#TestRequires: smartmet-library-newbase >= 24.3.11
-#TestRequires: smartmet-library-spine-plugin-test >= 24.4.5
+#TestRequires: smartmet-library-gis >= 24.4.24
+#TestRequires: smartmet-library-newbase >= 24.4.24
+#TestRequires: smartmet-library-spine-plugin-test >= 24.4.23
 #TestRequires: smartmet-engine-geonames >= 24.2.23
-#TestRequires: smartmet-engine-gis >= 24.2.23
+#TestRequires: smartmet-engine-gis >= 24.4.17
 #TestRequires: smartmet-engine-querydata >= 24.2.23
 %if %{with observation}
-#TestRequires: smartmet-engine-observation >= 24.4.5
+#TestRequires: smartmet-engine-observation >= 24.49
 %endif
-#TestRequires: smartmet-engine-grid >= 24.4.4
+#TestRequires: smartmet-engine-grid >= 24.5.3
 #TestRequires: redis
 #TestRequires: smartmet-engine-grid-test
 # Required by top level Makefile
@@ -126,8 +126,8 @@ SmartMet WFS plugin
 
 %package -n %{SPECNAME}-devel
 Summary: SmartMet WFS plugin development files
-Requires: smartmet-library-spine-devel >= 24.4.5
-Requires: smartmet-library-gis-devel >= 24.3.25
+Requires: smartmet-library-spine-devel >= 24.4.23
+Requires: smartmet-library-gis-devel >= 24.4.24
 Requires: smartmet-library-locus-devel >= 23.7.28
 Requires: smartmet-library-macgyver-devel >= 24.1.17
 Requires: %{SPECNAME} = %{version}-%{release}
@@ -163,6 +163,9 @@ rm -rf $RPM_BUILD_ROOT
 %{_includedir}/smartmet/plugin/wfs/request/*.h
 
 %changelog
+* Fri May  3 2024 Mika Heiskanen <mika.heiskanen@fmi.fi> - 24.5.3-1.fmi
+- Repackaged due to GRID library changes
+
 * Sat Apr  6 2024 Mika Heiskanen <mika.heiskanen@fmi.fi> - 24.4.6-1.fmi
 - Fixed to use new Spine::Station variables
 
