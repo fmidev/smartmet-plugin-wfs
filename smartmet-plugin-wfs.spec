@@ -76,7 +76,6 @@ Requires: xerces-c
 Requires: xqilla
 Requires: zlib
 Requires: %{smartmet_boost}-chrono
-Requires: %{smartmet_boost}-date-time
 Requires: %{smartmet_boost}-filesystem
 Requires: %{smartmet_boost}-iostreams
 Requires: %{smartmet_boost}-serialization
