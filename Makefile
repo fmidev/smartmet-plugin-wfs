@@ -29,7 +29,6 @@ LIBS += -L$(libdir) \
 	-lsmartmet-spine \
 	-lsmartmet-newbase \
 	-lsmartmet-macgyver \
-	-lboost_date_time \
         -lboost_serialization \
 	-lboost_thread \
 	-lboost_iostreams \
