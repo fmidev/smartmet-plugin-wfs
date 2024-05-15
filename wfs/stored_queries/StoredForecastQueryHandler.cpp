@@ -165,7 +165,6 @@ void bw::StoredForecastQueryHandler::query(const StoredQuery& stored_query,
 {
   try
   {
-    namespace pt = boost::posix_time;
     using namespace SmartMet;
     using namespace SmartMet::Plugin::WFS;
 

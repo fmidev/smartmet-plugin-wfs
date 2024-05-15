@@ -9,7 +9,6 @@
 
 namespace bw = SmartMet::Plugin::WFS;
 
-namespace pt = boost::posix_time;
 using namespace boost::geometry;
 using Fmi::current_exception_type;
 using SmartMet::Spine::log_time_str;

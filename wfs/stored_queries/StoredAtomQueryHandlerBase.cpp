@@ -11,7 +11,6 @@
 #include <vector>
 
 namespace bw = SmartMet::Plugin::WFS;
-namespace pt = boost::posix_time;
 namespace ph = boost::placeholders;
 using SmartMet::Spine::Value;
 

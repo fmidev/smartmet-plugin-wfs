@@ -140,7 +140,6 @@ void GetPropertyValue::finalize(boost::shared_ptr<xercesc::DOMDocument> result,
 
     if (not is_timestamp_set)
     {
-      namespace pt = boost::posix_time;
       const std::string tm = Fmi::to_iso_extended_string(plugin_impl.get_time_stamp()) + "Z";
       bwx::set_attr(*result_root, TIMESTAMP, tm);
     }

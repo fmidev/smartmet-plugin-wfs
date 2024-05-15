@@ -250,7 +250,6 @@ std::vector<SmartMet::Spine::Value> ParameterExtractor::extract_date_time(
   try
   {
     namespace ba = boost::algorithm;
-    namespace pt = boost::posix_time;
     std::vector<SmartMet::Spine::Value> result;
     const std::string content = extract_text(elem);
     Fmi::DateTime t = Fmi::TimeParser::parse(ba::trim_copy(content));

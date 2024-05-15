@@ -11,7 +11,6 @@
 #include "request/ListStoredQueries.h"
 #include <boost/algorithm/string.hpp>
 #include <boost/bind/bind.hpp>
-#include <boost/date_time/gregorian/gregorian.hpp>
 #include <macgyver/DateTime.h>
 #include <boost/format.hpp>
 #include <boost/lambda/lambda.hpp>
@@ -27,7 +26,6 @@
 using namespace SmartMet::Plugin::WFS;
 namespace ba = boost::algorithm;
 namespace bl = boost::lambda;
-namespace pt = boost::posix_time;
 namespace ph = boost::placeholders;
 
 struct PluginImpl::RequestResult

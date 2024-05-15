@@ -199,8 +199,6 @@ void StoredGridForecastQueryHandler::query(const StoredQuery& stored_query,
 {
   try
   {
-    namespace pt = boost::posix_time;
-
     static const long ref_jd = Fmi::Date(1970, 1, 1).julian_day();
 
     int debug_level = get_config()->get_debug_level();
@@ -783,8 +781,6 @@ uint StoredGridForecastQueryHandler::processGridQuery(Query& wfsQuery,
       T::GenerationInfo info;
       if (grid_engine->getGenerationInfoById(generationId, info))
       {
-        // Fmi::LocalDateTime
-        // origTime(boost::posix_time::from_iso_string(info->mAnalysisTime), tz);
         wfsQuery.origin_time.reset(new Fmi::DateTime(Fmi::TimeParser::parse_iso(info.mAnalysisTime)));
       }
     }

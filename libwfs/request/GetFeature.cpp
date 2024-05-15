@@ -365,7 +365,6 @@ void bw::Request::GetFeature::execute_multiple_queries(std::ostream& ost) const
 
     if (not time_stamp)
     {
-      namespace pt = boost::posix_time;
       const std::string tm = Fmi::to_iso_extended_string(plugin_impl.get_time_stamp()) + "Z";
       time_stamp = tm;
     }

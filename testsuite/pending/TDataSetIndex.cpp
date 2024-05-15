@@ -54,8 +54,6 @@ boost::shared_ptr<libconfig::Config> create_config()
 
 using SmartMet::Spine::ConfigBase;
 using SmartMet::Plugin::WFS::DataSetDefinition;
-namespace bg = boost::gregorian;
-namespace pt = boost::posix_time;
 using namespace boost::filesystem;
 using Fmi::Date_time::neg_infin;
 using Fmi::Date_time::pos_infin;

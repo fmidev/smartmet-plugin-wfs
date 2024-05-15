@@ -145,7 +145,6 @@ void StoredObsQueryHandler::query(const StoredQuery& query,
   std::string curr_lang = language;
   try
   {
-    namespace pt = boost::posix_time;
     using namespace SmartMet;
     using namespace SmartMet::Plugin::WFS;
 

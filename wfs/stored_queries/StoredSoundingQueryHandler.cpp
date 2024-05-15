@@ -12,9 +12,6 @@
 
 #include <tuple>
 
-namespace pt = boost::posix_time;
-
-namespace pt = boost::posix_time;
 namespace bo = SmartMet::Engine::Observation;
 
 namespace SmartMet

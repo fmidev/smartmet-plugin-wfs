@@ -11,7 +11,6 @@
 #include <sstream>
 
 namespace bw = SmartMet::Plugin::WFS;
-namespace pt = boost::posix_time;
 
 namespace
 {

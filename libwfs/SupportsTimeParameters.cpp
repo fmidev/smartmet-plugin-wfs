@@ -7,7 +7,6 @@
 #include <macgyver/Exception.h>
 
 namespace bw = SmartMet::Plugin::WFS;
-namespace pt = boost::posix_time;
 
 const char *bw::SupportsTimeParameters::P_HOURS = "hours";
 const char *bw::SupportsTimeParameters::P_TIMES = "times";

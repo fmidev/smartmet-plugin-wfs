@@ -13,8 +13,6 @@ int main() { return 0; }
 #include "SupportsTimeZone.h"
 
 using namespace boost::unit_test;
-namespace lt = boost::local_time;
-namespace pt = boost::posix_time;
 
 test_suite* init_unit_test_suite(int argc, char* argv[])
 {

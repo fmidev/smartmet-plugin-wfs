@@ -82,8 +82,6 @@ void check_time_interval(const Fmi::DateTime& start,
 {
   try
   {
-    namespace pt = boost::posix_time;
-
     if (start > end)
     {
       throw Fmi::Exception(BCP, "Invalid time interval!")

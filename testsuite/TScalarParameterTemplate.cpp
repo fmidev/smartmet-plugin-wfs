@@ -377,22 +377,10 @@ BOOST_AUTO_TEST_CASE(simple_param_from_array_no_default)
   BOOST_CHECK_THROW(pt->get<std::string>(param_map), Fmi::Exception);
 }
 
-#if 0
-namespace
-{
-std::ostream& operator<<(std::ostream& ost, const Fmi::DateTime& t)
-{
-  ost << boost::posix_time::to_simple_string(t);
-  return ost;
-}
-}
-#endif
-
 BOOST_AUTO_TEST_CASE(simple_param_from_array_with_default)
 {
   using namespace SmartMet;
   using namespace SmartMet::Plugin::WFS;
-  using namespace boost::posix_time;
 
   BOOST_TEST_MESSAGE(
       "+ [Testing reading scalar parameter from an array element with default value provided]");

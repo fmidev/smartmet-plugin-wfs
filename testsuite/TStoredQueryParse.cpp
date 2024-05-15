@@ -36,7 +36,6 @@ void dummy_proc(const char* text)
 }
 namespace bw = SmartMet::Plugin::WFS;
 namespace bwx = SmartMet::Plugin::WFS::Xml;
-namespace pt = boost::posix_time;
 using SmartMet::Spine::Value;
 using Test::add_values;
 using Test::TestConfig;

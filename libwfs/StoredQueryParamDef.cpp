@@ -18,7 +18,6 @@ namespace qi = boost::spirit::qi;
 namespace ns = boost::spirit::standard;
 namespace ba = boost::algorithm;
 namespace bl = boost::lambda;
-namespace pt = boost::posix_time;
 
 using qi_rule = qi::rule<std::string::const_iterator, std::string
         (), ns::space_type>;

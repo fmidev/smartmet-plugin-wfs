@@ -16,7 +16,6 @@
 
 namespace bw = SmartMet::Plugin::WFS;
 namespace bo = SmartMet::Engine::Observation;
-namespace pt = boost::posix_time;
 
 namespace
 {
