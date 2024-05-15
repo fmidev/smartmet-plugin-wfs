@@ -15,8 +15,7 @@ endif
 
 INCLUDES += -I../libwfs
 
-DECODE_FEATURE_ID_LIBS := -L $(libdir)/smartmet $(BOOST_LIBS) -lsmartmet-spine -lsmartmet-macgyver \
-	-lboost_date_time -lcrypto
+DECODE_FEATURE_ID_LIBS := -L $(libdir)/smartmet $(BOOST_LIBS) -lsmartmet-spine -lsmartmet-macgyver -lcrypto
 
 all: $(TARGETS)
 
