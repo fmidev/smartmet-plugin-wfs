@@ -369,7 +369,7 @@ void StoredWWProbabilityQueryHandler::parseQueryResults(
 
         unsigned int timestep_index_index(0);
 
-        for (const WinterWeatherProbability ww_iprob : ww_iprobs)
+        for (const WinterWeatherProbability& ww_iprob : ww_iprobs)
         {
           std::string timestamp(format_local_time(ww_iprob.timestamp, tzp));
 
