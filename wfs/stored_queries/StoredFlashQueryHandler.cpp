@@ -146,7 +146,6 @@ void bw::StoredFlashQueryHandler::query(const StoredQuery& query,
     try
     {
       SmartMet::Engine::Observation::Settings query_params;
-      query_params.localTimePool = std::make_shared<TS::LocalTimePool>();
 
       const char* DATA_CRS_NAME = "urn:ogc:def:crs:EPSG::4326";
       const auto crs = params.get_single<std::string>(P_CRS);

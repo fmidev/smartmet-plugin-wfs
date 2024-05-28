@@ -925,8 +925,6 @@ StoredGridQueryHandler::Result StoredGridQueryHandler::extract_forecast(
       query.data_params.push_back(lat);
     }
 
-    TS::LocalTimePoolPtr localTimePool = std::make_shared<TS::LocalTimePool>();
-
     SmartMet::Engine::Querydata::ParameterOptions qengine_lonparam(lon,
                                                                    producer,
                                                                    *loc,
@@ -939,8 +937,7 @@ StoredGridQueryHandler::Result StoredGridQueryHandler::extract_forecast(
                                                                    loc->timezone,
                                                                    query.find_nearest_valid_point,
                                                                    nearestpoint,
-                                                                   query.lastpoint,
-                                                                   localTimePool);
+                                                                   query.lastpoint);
 
     auto longitudeData = model->values(qengine_lonparam, mask, oneTimeStep);
 
@@ -956,8 +953,7 @@ StoredGridQueryHandler::Result StoredGridQueryHandler::extract_forecast(
                                                                    loc->timezone,
                                                                    query.find_nearest_valid_point,
                                                                    nearestpoint,
-                                                                   query.lastpoint,
-                                                                   localTimePool);
+                                                                   query.lastpoint);
 
     auto latitudeData = model->values(qengine_latparam, mask, oneTimeStep);
 
@@ -1032,8 +1028,7 @@ StoredGridQueryHandler::Result StoredGridQueryHandler::extract_forecast(
               loc->timezone,
               query.find_nearest_valid_point,
               nearestpoint,
-              query.lastpoint,
-              localTimePool);
+              query.lastpoint);
 
           auto val = model->values(qengine_param, mask, tlist);
 

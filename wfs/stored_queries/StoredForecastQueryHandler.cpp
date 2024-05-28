@@ -630,8 +630,6 @@ boost::shared_ptr<SmartMet::Spine::Table> bw::StoredForecastQueryHandler::extrac
       }
       */
 
-      TS::LocalTimePoolPtr localTimePool = std::make_shared<TS::LocalTimePool>();
-
       // Fetch data from an arbitrary height.
       for (const auto& level_height : query.level_heights)
       {
@@ -659,8 +657,7 @@ boost::shared_ptr<SmartMet::Spine::Table> bw::StoredForecastQueryHandler::extrac
                 zone,
                 query.find_nearest_valid_point,
                 nearestpoint,
-                query.lastpoint,
-                localTimePool);
+                query.lastpoint);
             TS::Value val = q->valueAtHeight(qengine_param, dt, level_height);
 
             std::stringstream ss;
@@ -704,8 +701,7 @@ boost::shared_ptr<SmartMet::Spine::Table> bw::StoredForecastQueryHandler::extrac
                   zone,
                   query.find_nearest_valid_point,
                   nearestpoint,
-                  query.lastpoint,
-                  localTimePool);
+                  query.lastpoint);
               TS::Value val = q->value(qengine_param, d);
 
               std::stringstream ss;

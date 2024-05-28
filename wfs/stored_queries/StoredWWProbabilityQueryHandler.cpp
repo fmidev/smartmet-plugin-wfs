@@ -84,8 +84,7 @@ FmiParameterName get_parameter(boost::shared_ptr<SmartMet::Plugin::WFS::StoredQu
 
 SmartMet::Engine::Querydata::ParameterOptions get_qengine_parameter(
     const SmartMet::Plugin::WFS::ProbabilityQueryParam& queryParam,
-    const SmartMet::Spine::Parameter& smartmetParam,
-	TS::LocalTimePoolPtr& localTimePool)
+    const SmartMet::Spine::Parameter& smartmetParam)
 {
   try
   {
@@ -107,8 +106,7 @@ SmartMet::Engine::Querydata::ParameterOptions get_qengine_parameter(
                                                                 queryParam.tz_name,
                                                                 nearestFlag,
                                                                 nearestpoint,
-                                                                nearestpoint,
-																localTimePool);
+                                                                nearestpoint);
 
     return qengine_param;
   }
@@ -407,14 +405,12 @@ WinterWeatherIntensityProbabilities StoredWWProbabilityQueryHandler::getProbabil
   try
   {
     WinterWeatherIntensityProbabilities ret;
-	TS::LocalTimePoolPtr localTimePool = std::make_shared<TS::LocalTimePool>();
-
     SmartMet::Engine::Querydata::ParameterOptions qengine_param_light =
-	  get_qengine_parameter(queryParam, queryParam.paramLight, localTimePool);
+	  get_qengine_parameter(queryParam, queryParam.paramLight);
     SmartMet::Engine::Querydata::ParameterOptions qengine_param_moderate =
-        get_qengine_parameter(queryParam, queryParam.paramModerate, localTimePool);
+        get_qengine_parameter(queryParam, queryParam.paramModerate);
     SmartMet::Engine::Querydata::ParameterOptions qengine_param_heavy =
-        get_qengine_parameter(queryParam, queryParam.paramHeavy, localTimePool);
+        get_qengine_parameter(queryParam, queryParam.paramHeavy);
 
     TS::TimeSeriesPtr qengine_result_light =
         queryParam.q->values(qengine_param_light, queryParam.tlist);
