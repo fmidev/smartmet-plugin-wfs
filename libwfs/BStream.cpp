@@ -509,10 +509,10 @@ std::string IBStream::get_string()
   try
   {
     unsigned len = get_unsigned();
-    std::ostringstream out;
+    std::string out;
     for (unsigned i = 0; i < len; i++)
-      out.put(get_char());
-    return out.str();
+      out.push_back(get_char());
+    return out;
   }
   catch (...)
   {

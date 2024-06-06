@@ -3,6 +3,7 @@
 #include <algorithm>
 #include <typeinfo>
 #include <boost/bind/bind.hpp>
+#include <fmt/format.h>
 
 namespace ph = boost::placeholders;
 
@@ -130,20 +131,18 @@ boost::tribool ArrayParameterTemplate::get_value(
 
     if (tmp_result.size() > max_size)
     {
-      std::ostringstream msg;
-      msg << "Result array size " << tmp_result.size() << " exceeds upper limit " << max_size
-          << " of array size";
-      Fmi::Exception exception(BCP, msg.str());
+      const std::string msg = fmt::format("Result array size {} exceeds upper limit {} of array size",
+                                          tmp_result.size(), max_size);
+      Fmi::Exception exception(BCP, msg);
       exception.addParameter(WFS_EXCEPTION_CODE, WFS_OPERATION_PARSING_FAILED);
       throw exception;
     }
 
     if (tmp_result.size() < min_size)
     {
-      std::ostringstream msg;
-      msg << "Result array size " << tmp_result.size() << " is smaller than lower limit "
-          << min_size << " of array size";
-      Fmi::Exception exception(BCP, msg.str());
+      const std::string msg = fmt::format("Result array size {} is smaller than lower limit {} of array size",
+                                          tmp_result.size(), min_size);
+      Fmi::Exception exception(BCP, msg);
       exception.addParameter(WFS_EXCEPTION_CODE, WFS_OPERATION_PARSING_FAILED);
       throw exception;
     }
@@ -387,11 +386,9 @@ void ArrayParameterTemplate::init(bool silent)
     if (setting_root->isArray()) {
         if ((setting_root->getLength() == 0) and (min_size > 0))
         {
-            std::ostringstream msg;
-            msg << "The length " << setting_root->getLength() << " of configuration parameter '"
-                << base_prefix << get_config_path() << "' is out of allowed range " << min_size << ".."
-                << max_size;
-            throw Fmi::Exception(BCP, msg.str());
+            const std::string msg = fmt::format("The length {} of configuration parameter '{}' is out of allowed range {}..{}",
+                                                 setting_root->getLength(), base_prefix + get_config_path(), min_size, max_size);
+            throw Fmi::Exception(BCP, msg);
         }
 
         for (int i = 0; i < setting_root->getLength(); i++)
@@ -428,10 +425,9 @@ void ArrayParameterTemplate::init(bool silent)
                 if (item.param_ind && *item.param_ind >= param.param_def.getMaxSize())
                 {
                     // The requested index is above max. possible size of parameter array
-                    std::ostringstream msg;
-                    msg << "The array index " << *item.param_ind << " is out of the range 0.."
-                        << param.param_def.getMaxSize();
-                    throw Fmi::Exception(BCP, msg.str());
+                    const std::string msg = fmt::format("The array index {} is out of the range 0..{}",
+                                                        *item.param_ind, param.param_def.getMaxSize());
+                    throw Fmi::Exception(BCP, msg);
                 }
             }
 
@@ -466,20 +462,16 @@ void ArrayParameterTemplate::init(bool silent)
     {
         if (calc_min_size > max_size)
         {
-            std::ostringstream msg;
-            msg << "CONFIGURATION ERROR: calculated minimal"
-                << " array size " << calc_min_size << " exceeds upper limit " << max_size
-                << " of array parameter for config path '" << base_prefix << get_config_path() << "'";
-            throw Fmi::Exception(BCP, msg.str());
+            const std::string msg = fmt::format("The calculated minimal array size {} exceeds the upper limit {} of array parameter",
+                                                calc_min_size, max_size);
+            throw Fmi::Exception(BCP, msg);
         }
 
         if (calc_max_size < min_size)
         {
-            std::ostringstream msg;
-            msg << "CONFIGURATION ERROR: calculated maximal"
-                << " array size " << calc_max_size << " is lower than lower limit " << min_size
-                << " of array parameter for config path '" << base_prefix << get_config_path() << "'";
-            throw Fmi::Exception(BCP, msg.str());
+            const std::string msg = fmt::format("The calculated maximal array size {} is lower than the lower limit {} of array parameter",
+                                                calc_max_size, min_size);
+            throw Fmi::Exception(BCP, msg);
         }
     }
   }
