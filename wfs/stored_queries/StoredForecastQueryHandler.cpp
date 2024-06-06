@@ -631,6 +631,7 @@ boost::shared_ptr<SmartMet::Spine::Table> bw::StoredForecastQueryHandler::extrac
       */
 
       // Fetch data from an arbitrary height.
+      std::ostringstream ss;
       for (const auto& level_height : query.level_heights)
       {
         for (const Fmi::LocalDateTime& dt : tlist)
@@ -660,7 +661,7 @@ boost::shared_ptr<SmartMet::Spine::Table> bw::StoredForecastQueryHandler::extrac
                 query.lastpoint);
             TS::Value val = q->valueAtHeight(qengine_param, dt, level_height);
 
-            std::stringstream ss;
+            ss.str("");
             TS::OStreamVisitor osv(ss, *query.value_formatter, prec);
             boost::apply_visitor(osv, val);
 
@@ -704,7 +705,7 @@ boost::shared_ptr<SmartMet::Spine::Table> bw::StoredForecastQueryHandler::extrac
                   query.lastpoint);
               TS::Value val = q->value(qengine_param, d);
 
-              std::stringstream ss;
+              ss.str("");
               TS::OStreamVisitor osv(ss, *query.value_formatter, prec);
               boost::apply_visitor(osv, val);
 
