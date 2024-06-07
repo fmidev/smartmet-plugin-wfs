@@ -10,8 +10,8 @@
 #include <xercesc/dom/DOMText.hpp>
 #include <xercesc/util/Janitor.hpp>
 #include <xercesc/util/XMLUni.hpp>
+#include <fmt/format.h>
 #include <memory>
-#include <sstream>
 #include <stdexcept>
 
 namespace ba = boost::algorithm;
@@ -120,9 +120,7 @@ void check_name_info(const xercesc::DOMNode* node,
   {
     if (node == nullptr)
     {
-      std::ostringstream msg;
-      msg << "No XML DOM node aavailble (nullptr specified)";
-      throw Fmi::Exception(BCP, msg.str());
+      throw Fmi::Exception(BCP, "No XML DOM node aavailble (nullptr specified)");
     }
 
     const auto name_info = get_name_info(node);
@@ -130,10 +128,13 @@ void check_name_info(const xercesc::DOMNode* node,
 
     if ((name_info.first != name) or (name_info.second != ns))
     {
-      std::ostringstream msg;
-      msg << location << ": invalid element name {" << name_info.second << "}" << name_info.first
-          << " ({" << ns << "}" << name << " expected)";
-      throw Fmi::Exception(BCP, msg.str());
+      const std::string msg = fmt::format("{}: invalid element name {{}}{} ({{}}{} expected)",
+                                          location,
+                                          name_info.second,
+                                          name_info.first,
+                                          ns,
+                                          name);
+      throw Fmi::Exception(BCP, msg);
     }
   }
   catch (...)
@@ -155,16 +156,18 @@ std::string check_name_info(const xercesc::DOMNode* node,
     if ((allowed_names.count(name_info.first) == 0) or (name_info.second != ns))
     {
       std::string d;
-      std::ostringstream msg;
-      msg << location << ": invalid element name {" << name_info.second << "}" << name_info.first
-          << " ({" << ns << "}(";
+      std::string msg = fmt::format("{}: invalid element name {{}}{} ({{}}{} expected)",
+                                    location,
+                                    name_info.second,
+                                    name_info.first,
+                                    ns);
       for (const std::string& nm : allowed_names)
       {
-        msg << d << nm;
+        msg += d + nm;
         d = "|";
       }
-      msg << ") expected";
-      throw Fmi::Exception(BCP, msg.str());
+      msg + ") expected";
+      throw Fmi::Exception(BCP, msg);
     }
     else
     {
@@ -216,10 +219,10 @@ std::string get_mandatory_attr(const xercesc::DOMElement& elem,
     }
     else
     {
-      std::ostringstream msg;
-      msg << "SmartMet::Plugin::WFS::Xml::get_mandatory_attr():"
-          << " mandatory attribute " << name << " missing";
-      throw Fmi::Exception(BCP, msg.str());
+      const std::string msg = fmt::format("SmartMet::Plugin::WFS::Xml::get_mandatory_attr():"
+                                          " mandatory attribute {} missing",
+                                          name);
+      throw Fmi::Exception(BCP, msg);
     }
   }
   catch (...)
@@ -252,11 +255,12 @@ void verify_mandatory_attr_value(const xercesc::DOMElement& elem,
   const std::string value = get_mandatory_attr(elem, ns, name);
   if (value != exp_value)
   {
-    std::ostringstream msg;
-    msg << "SmartMet::Plugin::WFS::Xml::verify_mandatory_attr_value(): incorrect value '" << value
-        << "' of mandatory fixed attribute {" << ns << "}" << name << " ('" << exp_value
-        << "' expected)";
-    throw Fmi::Exception(BCP, msg.str());
+    throw Fmi::Exception(BCP,
+      fmt::format("Incorrect value '{}' of mandatory fixed attribute {{}}{} ('{}' expected)",
+                  value,
+                  ns,
+                  name,
+                  exp_value));
   }
 }
 
@@ -319,8 +323,7 @@ xercesc::DOMLSSerializer* create_dom_serializer()
 
     if (impl == nullptr)
     {
-      throw Fmi::Exception(BCP,
-                                       "Failed to get instance of xercesc::DOMImplementationLS");
+      throw Fmi::Exception(BCP, "Failed to get instance of xercesc::DOMImplementationLS");
     }
 
     return impl->createLSSerializer();
