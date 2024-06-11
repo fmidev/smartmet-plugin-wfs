@@ -5,6 +5,7 @@
 #include "XPathSnapshot.h"
 #include "XmlUtils.h"
 #include <boost/lambda/lambda.hpp>
+#include <fmt/format.h>
 #include <macgyver/StringConversion.h>
 #include <macgyver/Exception.h>
 
@@ -291,11 +292,9 @@ void bw::AdHocQuery::create_bbox_query_from_kvp(
       if (param_desc == nullptr)
       {
         // This stored query does not support BBOX, nothing to do.
-        std::ostringstream msg;
-        msg << param_name << "="
-            << "'" << bbox_string << "'";
+        std::string msg = fmt::format("{}='{}'", param_name, bbox_string);
         Fmi::Exception exception(BCP, "Stored query does not support BBOX!");
-        exception.addDetail(msg.str());
+        exception.addDetail(msg);
         exception.addParameter(WFS_EXCEPTION_CODE, WFS_OPERATION_PARSING_FAILED);
         throw exception.disableStackTrace();
       }
@@ -335,12 +334,11 @@ void bw::AdHocQuery::create_bbox_query_from_kvp(
         }
         catch (...)
         {
-          std::ostringstream msg;
-          msg << "While parsing value '" << bbox_string << "' of request parameter '" << param_name
-              << "'";
-
+          std::string msg = fmt::format("While parsing value '{}' of request parameter '{}'",
+                                        bbox_string,
+                                        param_name);
           Fmi::Exception exception(BCP, "Operation parsing failed!", nullptr);
-          exception.addDetail(msg.str());
+          exception.addDetail(msg);
           if (exception.getExceptionByParameterName(WFS_EXCEPTION_CODE) == nullptr)
             exception.addParameter(WFS_EXCEPTION_CODE, WFS_OPERATION_PARSING_FAILED);
           exception.addParameter(WFS_LANGUAGE, language);
@@ -612,9 +610,7 @@ void bw::AdHocQuery::replace_aliases(const std::vector<std::string>& aliases,
       // There should be as many aliases as there are type names.
       if (aliases.size() != type_names.size())
       {
-        std::ostringstream msg;
-        msg << "The number of aliases does not match the number of type names.";
-        Fmi::Exception exception(BCP, msg.str());
+        Fmi::Exception exception(BCP, "The number of aliases does not match the number of type names.");
         exception.addParameter(WFS_EXCEPTION_CODE, WFS_OPERATION_PARSING_FAILED);
         throw exception.disableStackTrace();
       }
