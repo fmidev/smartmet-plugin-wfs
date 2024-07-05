@@ -845,7 +845,7 @@ void PluginImpl::realRequestHandler(SmartMet::Spine::Reactor& /* theReactor */,
       // FIXME: implement correct processing phase support (parsing, processing)
       ErrorResponseGenerator error_response_generator(*this);
       const auto error_response = error_response_generator.create_error_response(
-          ErrorResponseGenerator::REQ_PROCESSING, theRequest);
+          ErrorResponseGenerator::REQ_PROCESSING, &theRequest);
       theResponse.setContent(error_response.response);
       theResponse.setStatus(error_response.status);
       theResponse.setHeader("Content-Type", "text/xml; charset=UTF8");
