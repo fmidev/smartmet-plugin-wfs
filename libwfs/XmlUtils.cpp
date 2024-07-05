@@ -390,7 +390,7 @@ std::vector<xercesc::DOMElement*> get_child_elements(const xercesc::DOMElement& 
   }
 }
 
-boost::shared_ptr<xercesc::DOMDocument> create_dom_document(const std::string& ns,
+std::shared_ptr<xercesc::DOMDocument> create_dom_document(const std::string& ns,
                                                             const std::string& name)
 {
   try
@@ -406,7 +406,7 @@ boost::shared_ptr<xercesc::DOMDocument> create_dom_document(const std::string& n
     }
     else
     {
-      boost::shared_ptr<xercesc::DOMDocument> doc(impl->createDocument());
+      std::shared_ptr<xercesc::DOMDocument> doc(impl->createDocument());
       doc->appendChild(create_element(*doc, ns, name));
       return doc;
     }

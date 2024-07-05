@@ -10,7 +10,7 @@
 #include <macgyver/DateTime.h>
 #include <boost/format.hpp>
 #include <boost/function.hpp>
-#include <boost/variant.hpp>
+#include <variant>
 
 #include <string>
 #include <vector>
@@ -101,7 +101,7 @@ class GeoServerDataIndex
 
  private:
   GeoServerDB& db;
-  boost::variant<std::string,
+  std::variant<std::string,
                  std::map<std::string, std::string>,
                  boost::function1<std::string, std::string> >
       db_table_name_def;

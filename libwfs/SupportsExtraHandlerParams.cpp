@@ -34,7 +34,7 @@ bw::SupportsExtraHandlerParams::SupportsExtraHandlerParams(
     auto& c_handler_params = config->get_mandatory_config_param<libconfig::Setting&>(path);
     config->assert_is_list(c_handler_params);
 
-    boost::shared_ptr<ParameterTemplateBase> param_def;
+    std::shared_ptr<ParameterTemplateBase> param_def;
 
     const int N = c_handler_params.getLength();
     for (int i = 0; i < N; i++)
@@ -47,7 +47,7 @@ bw::SupportsExtraHandlerParams::SupportsExtraHandlerParams(
       const auto item_path = param_desc.getPath();
       if (def.isArray())
       {
-        boost::shared_ptr<ArrayParameterTemplate> array_param_def;
+        std::shared_ptr<ArrayParameterTemplate> array_param_def;
         static const int DEF_MAX_SIZE = std::numeric_limits<int>::max();
         const int min_size = config->get_optional_config_param<int>(param_desc, "min_size", 0);
         const int max_size =
@@ -60,7 +60,7 @@ bw::SupportsExtraHandlerParams::SupportsExtraHandlerParams(
       }
       else if (def.isScalar())
       {
-        boost::shared_ptr<ScalarParameterTemplate> scalar_param_def;
+        std::shared_ptr<ScalarParameterTemplate> scalar_param_def;
         scalar_param_def.reset(new ScalarParameterTemplate(*config, item_path, "def", false));
         if (reg)
             register_scalar_param(name, "", scalar_param_def, false);
@@ -141,7 +141,7 @@ void bw::SupportsExtraHandlerParams::dump_named_params(const bw::RequestParamete
     {
       const std::string& name = map_item.first;
       bw::ParameterTemplateBase& param_template = *map_item.second;
-      boost::variant<SmartMet::Spine::Value, std::vector<SmartMet::Spine::Value> > value;
+      std::variant<SmartMet::Spine::Value, std::vector<SmartMet::Spine::Value> > value;
       auto found = param_template.get_value(value, req_param_map, this, false);
       if (found != false)
       {

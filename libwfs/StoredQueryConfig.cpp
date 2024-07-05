@@ -47,7 +47,7 @@ SmartMet::Plugin::WFS::StoredQueryConfig::StoredQueryConfig(const std::string& c
 }
 
 SmartMet::Plugin::WFS::StoredQueryConfig::StoredQueryConfig(
-    boost::shared_ptr<libconfig::Config> config, const Config* plugin_config)
+    std::shared_ptr<libconfig::Config> config, const Config* plugin_config)
 
     : SmartMet::Spine::ConfigBase(config, "WFS stored query configuration")
     , hosts(plugin_config ? plugin_config->get_hosts() : default_hosts)

@@ -52,7 +52,7 @@ class StoredQueryMap final
 
   std::vector<std::string> get_handler_names() const;
 
-  boost::shared_ptr<StoredQueryHandlerBase> get_handler_by_name(const std::string name) const;
+  std::shared_ptr<StoredQueryHandlerBase> get_handler_by_name(const std::string name) const;
 
   virtual std::vector<std::string> get_return_type_names() const;
 
@@ -63,9 +63,9 @@ class StoredQueryMap final
   bool use_case_sensitive_params() const;
 
  private:
-  void add_handler(boost::shared_ptr<StoredQueryHandlerBase> handler);
+  void add_handler(std::shared_ptr<StoredQueryHandlerBase> handler);
 
-    void add_handler(boost::shared_ptr<StoredQueryConfig> sqh_config,
+    void add_handler(std::shared_ptr<StoredQueryConfig> sqh_config,
                    const boost::filesystem::path& template_dir);
 
   void on_config_change(Fmi::DirectoryMonitor::Watcher watcher,
@@ -78,15 +78,15 @@ class StoredQueryMap final
 		       const boost::regex& pattern,
 		       const std::string& message);
 
-  boost::shared_ptr<const StoredQueryHandlerBase>
+  std::shared_ptr<const StoredQueryHandlerBase>
   get_handler_by_file_name(const std::string& config_file_name) const;
 
-  boost::shared_ptr<const StoredQueryConfig>
+  std::shared_ptr<const StoredQueryConfig>
   get_query_config_by_file_name(const std::string& name) const;
 
   bool should_be_ignored(const StoredQueryConfig& config) const;
 
-  boost::optional<std::string> get_ignore_reason(const StoredQueryConfig& config) const;
+  std::optional<std::string> get_ignore_reason(const StoredQueryConfig& config) const;
 
   void handle_query_remove(const std::string& config_file_name);
 
@@ -102,11 +102,11 @@ class StoredQueryMap final
 
   void request_reload(const std::string& reason);
 
-  void enqueue_query_add(boost::shared_ptr<StoredQueryConfig> sqh_config,
+  void enqueue_query_add(std::shared_ptr<StoredQueryConfig> sqh_config,
 			 const boost::filesystem::path& template_dir,
 			 bool initial_update);
 
-  boost::shared_ptr<StoredQueryHandlerBase> get_handler_by_name_nothrow(const std::string name) const;
+  std::shared_ptr<StoredQueryHandlerBase> get_handler_by_name_nothrow(const std::string name) const;
 
   void directory_monitor_thread_proc();
 
@@ -123,7 +123,7 @@ class StoredQueryMap final
   SmartMet::Spine::Reactor* theReactor;
   PluginImpl& plugin_impl;
   std::unique_ptr<Fmi::AsyncTaskGroup> init_tasks;
-  std::map<std::string, boost::shared_ptr<StoredQueryHandlerBase> > handler_map;
+  std::map<std::string, std::shared_ptr<StoredQueryHandlerBase> > handler_map;
   std::set<std::string> duplicate;
 
   struct ConfigDirInfo {

@@ -55,7 +55,7 @@ class ScalarParameterTemplate : public ParameterTemplateBase
                  const SupportsExtraHandlerParams* extra_params = nullptr) const;
 
   boost::tribool get_value(
-      boost::variant<SmartMet::Spine::Value, std::vector<SmartMet::Spine::Value> >& result,
+      std::variant<SmartMet::Spine::Value, std::vector<SmartMet::Spine::Value> >& result,
       const RequestParameterMap& req_param_map,
       const SupportsExtraHandlerParams* extra_params = nullptr,
       bool strict = true) const override;
@@ -98,7 +98,7 @@ class ScalarParameterTemplate : public ParameterTemplateBase
     }
 
   template <typename ValueType>
-  boost::optional<ValueType> get_optional(
+  std::optional<ValueType> get_optional(
       const RequestParameterMap& req_param_map,
       const SupportsExtraHandlerParams* extra_params = nullptr) const
     {
@@ -116,14 +116,14 @@ class ScalarParameterTemplate : public ParameterTemplateBase
    public:
       Getter(const ScalarParameterTemplate& spt) : spt(spt) {}
 
-      boost::optional<ValueType> operator()(
+      std::optional<ValueType> operator()(
           const RequestParameterMap& req_param_map,
           const SupportsExtraHandlerParams* extra_params = nullptr) const
       {
           SmartMet::Spine::Value tmp;
           bool found = spt.get_value(tmp, req_param_map, extra_params);
           if (found) {
-              return boost::optional<ValueType>(extract(tmp));
+              return std::optional<ValueType>(extract(tmp));
           } else {
               return boost::none;
           }

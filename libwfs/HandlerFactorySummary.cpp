@@ -176,7 +176,7 @@ void HandlerFactorySummary::add_handler(
 void HandlerFactorySummary::write_html(
     std::ostream& os,
     const std::string& url_prefix,
-    const boost::optional<std::string>& name) const
+    const std::optional<std::string>& name) const
 {
     const char* style =
         "<style>"
@@ -242,7 +242,7 @@ void HandlerFactorySummary::write_html(
     }
 }
 
-Json::Value HandlerFactorySummary::as_json(const boost::optional<std::string>& name) const
+Json::Value HandlerFactorySummary::as_json(const std::optional<std::string>& name) const
 {
     try {
         Json::Value result;

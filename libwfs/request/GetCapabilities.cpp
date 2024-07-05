@@ -128,7 +128,7 @@ void GetCapabilities::execute(std::ostream& output) const
   }
 }
 
-boost::shared_ptr<GetCapabilities> GetCapabilities::create_from_kvp(
+std::shared_ptr<GetCapabilities> GetCapabilities::create_from_kvp(
     const std::string& language,
     const SmartMet::Spine::HTTP::Request& http_request,
     const PluginImpl& plugin_impl)
@@ -136,7 +136,7 @@ boost::shared_ptr<GetCapabilities> GetCapabilities::create_from_kvp(
   try
   {
     check_request_name(http_request, "GetCapabilities");
-    boost::shared_ptr<GetCapabilities> request;
+    std::shared_ptr<GetCapabilities> request;
     // FIXME: verify required stuff from the request
     request.reset(new GetCapabilities(language, plugin_impl));
     request->requested_language = http_request.getParameter("language");
@@ -148,7 +148,7 @@ boost::shared_ptr<GetCapabilities> GetCapabilities::create_from_kvp(
   }
 }
 
-boost::shared_ptr<GetCapabilities> GetCapabilities::create_from_xml(
+std::shared_ptr<GetCapabilities> GetCapabilities::create_from_xml(
     const std::string& language,
     const xercesc::DOMDocument& document,
     const PluginImpl& plugin_impl)
@@ -156,7 +156,7 @@ boost::shared_ptr<GetCapabilities> GetCapabilities::create_from_xml(
   try
   {
     check_request_name(document, "GetCapabilities");
-    boost::shared_ptr<GetCapabilities> request;
+    std::shared_ptr<GetCapabilities> request;
     request.reset(new GetCapabilities(language, plugin_impl));
     return request;
   }

@@ -138,7 +138,7 @@ std::string as_string(const std::vector<SmartMet::Spine::Value>& src)
 }
 
 std::string as_string(
-    const boost::variant<SmartMet::Spine::Value, std::vector<SmartMet::Spine::Value> >& src)
+    const std::variant<SmartMet::Spine::Value, std::vector<SmartMet::Spine::Value> >& src)
 {
   try
   {

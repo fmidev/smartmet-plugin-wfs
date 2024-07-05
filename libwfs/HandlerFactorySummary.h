@@ -6,7 +6,7 @@
 #include <set>
 #include <string>
 #include <vector>
-#include <boost/optional.hpp>
+#include <optional>
 #include <json/value.h>
 
 namespace SmartMet
@@ -34,7 +34,7 @@ namespace WFS
         struct StoredQueryInfo
         {
             std::string name;
-            boost::optional<std::string> template_name;
+            std::optional<std::string> template_name;
             std::vector<std::string> return_types;
         };
 
@@ -44,7 +44,7 @@ namespace WFS
             bool mandatory;
             std::string type;
             std::string description;
-            boost::optional<SizeInfo> size_info;
+            std::optional<SizeInfo> size_info;
         };
 
         struct FactoryInfo
@@ -67,9 +67,9 @@ namespace WFS
         void write_html(
             std::ostream& os,
             const std::string& url_prefix,
-            const boost::optional<std::string>& name) const;
+            const std::optional<std::string>& name) const;
 
-        Json::Value as_json(const boost::optional<std::string>& name) const;
+        Json::Value as_json(const std::optional<std::string>& name) const;
 
     private:
         const std::string prefix;

@@ -4,7 +4,7 @@
 #include "XmlUtils.h"
 #include <boost/algorithm/string.hpp>
 #include <boost/format.hpp>
-#include <boost/optional.hpp>
+#include <optional>
 #include <algorithm>
 
 namespace bw = SmartMet::Plugin::WFS;
@@ -20,7 +20,7 @@ struct XmlNamespeceDef
 {
   std::string ns;
   std::string prefix;
-  boost::optional<std::string> loc;
+  std::optional<std::string> loc;
 };
 }  // namespace
 
@@ -84,7 +84,7 @@ void bw::Request::DescribeStoredQueries::execute(std::ostream& output) const
 
     for (const auto& id : ids)
     {
-      boost::shared_ptr<const StoredQueryHandlerBase> handler =
+      std::shared_ptr<const StoredQueryHandlerBase> handler =
           stored_query_map.get_handler_by_name(id);
 
       if (show_hidden or not handler->is_hidden())
@@ -108,7 +108,7 @@ void bw::Request::DescribeStoredQueries::execute(std::ostream& output) const
 
 	CTPP::CDT& sq = hash["storedQueryList"][cnt++];
 
-        boost::shared_ptr<const StoredQueryConfig> config = handler->get_config();
+        std::shared_ptr<const StoredQueryConfig> config = handler->get_config();
         sq["id"] = config->get_query_id();
         sq["title"] = config->get_title(language);
         sq["abstract"] = config->get_abstract(language);
@@ -196,7 +196,7 @@ void bw::Request::DescribeStoredQueries::execute(std::ostream& output) const
   }
 }
 
-boost::shared_ptr<bw::Request::DescribeStoredQueries>
+std::shared_ptr<bw::Request::DescribeStoredQueries>
 bw::Request::DescribeStoredQueries::create_from_kvp(
     const std::string& language,
     const SmartMet::Spine::HTTP::Request& http_request,
@@ -209,7 +209,7 @@ bw::Request::DescribeStoredQueries::create_from_kvp(
     bw::Request::DescribeStoredQueries::check_request_name(http_request, "DescribeStoredQueries");
     check_wfs_version(http_request);
 
-    boost::shared_ptr<bw::Request::DescribeStoredQueries> result;
+    std::shared_ptr<bw::Request::DescribeStoredQueries> result;
     // FIXME: verify required stuff from the request
     // FIXME: extract language from the request
 
@@ -234,7 +234,7 @@ bw::Request::DescribeStoredQueries::create_from_kvp(
   }
 }
 
-boost::shared_ptr<bw::Request::DescribeStoredQueries>
+std::shared_ptr<bw::Request::DescribeStoredQueries>
 bw::Request::DescribeStoredQueries::create_from_xml(const std::string& language,
                                                     const xercesc::DOMDocument& document,
                                                     const PluginImpl& plugin_impl)
@@ -245,7 +245,7 @@ bw::Request::DescribeStoredQueries::create_from_xml(const std::string& language,
 
     check_request_name(document, "DescribeStoredQueries");
 
-    boost::shared_ptr<bw::Request::DescribeStoredQueries> result;
+    std::shared_ptr<bw::Request::DescribeStoredQueries> result;
     const xercesc::DOMElement* root = bw::RequestBase::get_xml_root(document);
     std::vector<std::string> ids;
     std::vector<xercesc::DOMElement*> elems =

@@ -44,8 +44,8 @@ void ParameterTemplateItem::parse(const SmartMet::Spine::Value& item_def, bool a
       absent = false;
       weak = false;
       plain_text.reset(new SmartMet::Spine::Value(item_def));
-      param_ref = default_value = boost::optional<std::string>();
-      param_ind = boost::optional<std::size_t>();
+      param_ref = default_value = std::optional<std::string>();
+      param_ind = std::optional<std::size_t>();
     }
   }
   catch (...)
@@ -67,26 +67,26 @@ void ParameterTemplateItem::parse(const std::string& item_def, bool allow_absent
         (), ns::space_type>;
 
     this->plain_text.reset();
-    this->param_ref = this->default_value = boost::optional<std::string>();
-    this->param_ind = boost::optional<std::size_t>();
+    this->param_ref = this->default_value = std::optional<std::string>();
+    this->param_ind = std::optional<std::size_t>();
 
     bool is_weak = false;
     std::string curr_param_ref;
-    boost::optional<std::size_t> curr_param_ind;
-    boost::optional<std::string> new_default_value;
-    boost::optional<std::string> new_redirect_name;
+    std::optional<std::size_t> curr_param_ind;
+    std::optional<std::string> new_default_value;
+    std::optional<std::string> new_redirect_name;
 
     qi_rule name_p = qi::lexeme[+(ns::alnum | qi::char_('_'))];
     qi_rule ind_p = qi::char_('[') >> qi::uint_[bl::var(curr_param_ind) = bl::_1] >> qi::char_(']');
     qi_rule dflt_p = qi::lexeme[*(qi::char_ - qi::char_('}'))];
-    qi_rule cond_ind_p = (ind_p | qi::eps[bl::var(curr_param_ind) = boost::optional<std::size_t>()]);
+    qi_rule cond_ind_p = (ind_p | qi::eps[bl::var(curr_param_ind) = std::optional<std::size_t>()]);
     qi_rule ref_type_p =
         (qi::char_('$')[bl::var(is_weak) = false] | qi::char_('%')[bl::var(is_weak) = true]);
 
     qi_rule cond_dflt_p = ((qi::char_(':') >> dflt_p[bl::var(new_default_value) = bl::_1]) |
                            (qi::char_('>') >> name_p[bl::var(new_redirect_name) = bl::_1]) |
-                           qi::eps[bl::var(new_default_value) = boost::optional<std::string>(),
-                                   bl::var(new_redirect_name) = boost::optional<std::string>()]);
+                           qi::eps[bl::var(new_default_value) = std::optional<std::string>(),
+                                   bl::var(new_redirect_name) = std::optional<std::string>()]);
 
     qi_rule absent_p = ns::string("${") >> ns::string("}") >> qi::eoi;
 
@@ -137,9 +137,9 @@ void ParameterTemplateItem::reset()
     absent = false;
     weak = false;
     plain_text.reset();
-    param_ref = boost::optional<std::string>();
-    param_ind = boost::optional<std::size_t>();
-    default_value = boost::optional<std::string>();
+    param_ref = std::optional<std::string>();
+    param_ind = std::optional<std::size_t>();
+    default_value = std::optional<std::string>();
   }
   catch (...)
   {
@@ -147,14 +147,14 @@ void ParameterTemplateItem::reset()
   }
 }
 
-boost::variant<SmartMet::Spine::Value, std::vector<SmartMet::Spine::Value> >
+std::variant<SmartMet::Spine::Value, std::vector<SmartMet::Spine::Value> >
 ParameterTemplateItem::get_value(const RequestParameterMap& req_param_map,
                                  const SupportsExtraHandlerParams* extra_params,
                                  bool allow_array) const
 {
   try
   {
-    boost::variant<SmartMet::Spine::Value, std::vector<SmartMet::Spine::Value> > result;
+    std::variant<SmartMet::Spine::Value, std::vector<SmartMet::Spine::Value> > result;
     if (get_value(result, req_param_map, extra_params, allow_array))
     {
       return result;
@@ -184,7 +184,7 @@ ParameterTemplateItem::get_value(const RequestParameterMap& req_param_map,
 }
 
 bool ParameterTemplateItem::get_value(
-    boost::variant<SmartMet::Spine::Value, std::vector<SmartMet::Spine::Value> >& result,
+    std::variant<SmartMet::Spine::Value, std::vector<SmartMet::Spine::Value> >& result,
     const RequestParameterMap& req_param_map,
     const SupportsExtraHandlerParams* extra_params,
     bool allow_array) const
@@ -315,7 +315,7 @@ bool ParameterTemplateItem::get_value(
 }
 
 bool ParameterTemplateItem::handle_redirection(
-    boost::variant<SmartMet::Spine::Value, std::vector<SmartMet::Spine::Value> >& result,
+    std::variant<SmartMet::Spine::Value, std::vector<SmartMet::Spine::Value> >& result,
     const RequestParameterMap& req_param_map,
     const SupportsExtraHandlerParams* extra_params,
     const std::string& redirect_name) const

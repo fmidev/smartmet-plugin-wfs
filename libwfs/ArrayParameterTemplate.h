@@ -41,7 +41,7 @@ class ArrayParameterTemplate : public ParameterTemplateBase
       const SupportsExtraHandlerParams* extra_params = nullptr) const;
 
   boost::tribool get_value(
-      boost::variant<SmartMet::Spine::Value, std::vector<SmartMet::Spine::Value> >& result,
+      std::variant<SmartMet::Spine::Value, std::vector<SmartMet::Spine::Value> >& result,
       const RequestParameterMap& req_param_map,
       const SupportsExtraHandlerParams* extra = nullptr,
       bool strict = true) const override;

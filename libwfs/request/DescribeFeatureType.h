@@ -2,7 +2,7 @@
 
 #include "PluginImpl.h"
 #include "RequestBase.h"
-#include <boost/shared_ptr.hpp>
+#include <memory>
 #include <smartmet/spine/HTTP.h>
 #include <xercesc/dom/DOMDocument.hpp>
 #include <string>
@@ -34,12 +34,12 @@ class DescribeFeatureType : public RequestBase
 
   bool may_validate_xml() const override;
 
-  static boost::shared_ptr<DescribeFeatureType> create_from_kvp(
+  static std::shared_ptr<DescribeFeatureType> create_from_kvp(
       const std::string& language,
       const SmartMet::Spine::HTTP::Request& http_request,
       const PluginImpl& plugin_impl);
 
-  static boost::shared_ptr<DescribeFeatureType> create_from_xml(
+  static std::shared_ptr<DescribeFeatureType> create_from_xml(
       const std::string& language,
       const xercesc::DOMDocument& document,
       const PluginImpl& plugin_impl);

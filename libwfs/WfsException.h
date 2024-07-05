@@ -1,7 +1,7 @@
 #pragma once
 
 #include <macgyver/DateTime.h>
-#include <boost/optional.hpp>
+#include <optional>
 #include <ctpp2/CDT.hpp>
 #include <exception>
 #include <ostream>
@@ -73,9 +73,9 @@ class WfsException : public std::exception
   ExceptionCode exceptionCode;
   std::string whatString;
   std::vector<std::string> textStrings;
-  boost::optional<std::string> language;
-  boost::optional<std::string> location;
-  boost::optional<Fmi::DateTime> timestamp;
+  std::optional<std::string> language;
+  std::optional<std::string> location;
+  std::optional<Fmi::DateTime> timestamp;
 };
 
 inline std::ostream& operator<<(std::ostream& output, const WfsException& err)

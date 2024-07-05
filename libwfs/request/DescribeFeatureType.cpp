@@ -33,7 +33,7 @@ void bw::Request::DescribeFeatureType::execute(std::ostream& output) const
   try
   {
     auto template_formatter = plugin_impl.get_feature_type_formatter();
-    std::map<std::string, boost::optional<std::string> > namespaces;
+    std::map<std::string, std::optional<std::string> > namespaces;
     const auto& features = plugin_impl.get_capabilities().get_features();
 
     if (type_names.empty())
@@ -43,7 +43,7 @@ void bw::Request::DescribeFeatureType::execute(std::ostream& output) const
       {
         auto feature = features.at(name);
         const std::string& ns = feature->get_xml_namespace();
-        boost::optional<std::string> loc = feature->get_xml_namespace_loc();
+        std::optional<std::string> loc = feature->get_xml_namespace_loc();
 
         // No check done here that namespace location is the same
         // Should be checked when parsing features instead
@@ -63,7 +63,7 @@ void bw::Request::DescribeFeatureType::execute(std::ostream& output) const
         {
           auto feature = features.at(*it);
           const std::string& item_ns = feature->get_xml_namespace();
-          boost::optional<std::string> loc = feature->get_xml_namespace_loc();
+          std::optional<std::string> loc = feature->get_xml_namespace_loc();
           if ((name == feature->get_xml_type()) and ((ns == "*") or (ns == item_ns)))
           {
             namespaces.insert(std::make_pair(item_ns, loc));
@@ -95,7 +95,7 @@ void bw::Request::DescribeFeatureType::execute(std::ostream& output) const
     for (auto & it : namespaces)
     {
       const std::string& name = it.first;
-      const boost::optional<std::string>& loc = it.second;
+      const std::optional<std::string>& loc = it.second;
       if (ind == 0)
       {
         hash["target_namespace"] = name;
@@ -140,7 +140,7 @@ bool bw::Request::DescribeFeatureType::may_validate_xml() const
   return false;
 }
 
-boost::shared_ptr<bw::Request::DescribeFeatureType>
+std::shared_ptr<bw::Request::DescribeFeatureType>
 bw::Request::DescribeFeatureType::create_from_kvp(
     const std::string& language,
     const SmartMet::Spine::HTTP::Request& http_request,
@@ -183,7 +183,7 @@ bw::Request::DescribeFeatureType::create_from_kvp(
       type_names.emplace_back(std::string("*"), name);
     }
 
-    boost::shared_ptr<bw::Request::DescribeFeatureType> result;
+    std::shared_ptr<bw::Request::DescribeFeatureType> result;
     result.reset(new bw::Request::DescribeFeatureType(language, type_names, plugin_impl));
     return result;
   }
@@ -193,7 +193,7 @@ bw::Request::DescribeFeatureType::create_from_kvp(
   }
 }
 
-boost::shared_ptr<bw::Request::DescribeFeatureType>
+std::shared_ptr<bw::Request::DescribeFeatureType>
 bw::Request::DescribeFeatureType::create_from_xml(const std::string& language,
                                                   const xercesc::DOMDocument& document,
                                                   const PluginImpl& plugin_impl)
@@ -203,7 +203,7 @@ bw::Request::DescribeFeatureType::create_from_xml(const std::string& language,
     assert((bool)plugin_impl.get_feature_type_formatter());
 
     check_request_name(document, "DescribeFeatureType");
-    boost::shared_ptr<bw::Request::DescribeFeatureType> result;
+    std::shared_ptr<bw::Request::DescribeFeatureType> result;
     const xercesc::DOMElement* root = bw::RequestBase::get_xml_root(document);
     std::vector<std::pair<std::string, std::string> > type_names;
 

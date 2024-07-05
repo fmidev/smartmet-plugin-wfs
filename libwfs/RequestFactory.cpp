@@ -74,7 +74,7 @@ bw::RequestFactory& bw::RequestFactory::register_unimplemented_request_type(cons
   }
 }
 
-boost::shared_ptr<bw::RequestBase> bw::RequestFactory::parse_kvp(
+std::shared_ptr<bw::RequestBase> bw::RequestFactory::parse_kvp(
     const std::string& language, const SmartMet::Spine::HTTP::Request& http_request) const
 {
   try
@@ -116,7 +116,7 @@ boost::shared_ptr<bw::RequestBase> bw::RequestFactory::parse_kvp(
   }
 }
 
-boost::shared_ptr<bw::RequestBase> bw::RequestFactory::parse_xml(
+std::shared_ptr<bw::RequestBase> bw::RequestFactory::parse_xml(
     const std::string& language, const xercesc::DOMDocument& document) const
 {
   try

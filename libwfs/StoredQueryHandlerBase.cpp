@@ -21,7 +21,7 @@ namespace WFS
 StoredQueryHandlerBase::StoredQueryHandlerBase(SmartMet::Spine::Reactor* reactor,
                                                StoredQueryConfig::Ptr config,
                                                PluginImpl& plugin_impl,
-                                               boost::optional<std::string> template_file_name)
+                                               std::optional<std::string> template_file_name)
     : StoredQueryParamRegistry(config),
       SupportsExtraHandlerParams(config),
       reactor(reactor),
@@ -103,8 +103,8 @@ std::vector<std::string> StoredQueryHandlerBase::get_return_types() const
   }
 }
 
-boost::shared_ptr<RequestParameterMap> StoredQueryHandlerBase::process_params(
-    const std::string& stored_query_id, boost::shared_ptr<RequestParameterMap> orig_params) const
+std::shared_ptr<RequestParameterMap> StoredQueryHandlerBase::process_params(
+    const std::string& stored_query_id, std::shared_ptr<RequestParameterMap> orig_params) const
 {
   try
   {
@@ -116,7 +116,7 @@ boost::shared_ptr<RequestParameterMap> StoredQueryHandlerBase::process_params(
                 << ": ORIG_PARAMS=" << *orig_params << std::endl;
     }
 
-    boost::shared_ptr<RequestParameterMap> result =
+    std::shared_ptr<RequestParameterMap> result =
         StoredQueryParamRegistry::resolve_handler_parameters(*orig_params, this);
     result->add("storedquery_id", stored_query_id);
 
@@ -161,7 +161,7 @@ const StoredQueryMap& StoredQueryHandlerBase::get_stored_query_map() const
   }
 }
 
-boost::shared_ptr<Fmi::TemplateFormatter> StoredQueryHandlerBase::get_formatter(
+std::shared_ptr<Fmi::TemplateFormatter> StoredQueryHandlerBase::get_formatter(
     bool debug_format) const
 {
   try
@@ -212,7 +212,7 @@ void StoredQueryHandlerBase::format_output(CTPP::CDT& hash,
 }
 
 std::pair<std::string, std::string> StoredQueryHandlerBase::get_2D_coord(
-    boost::shared_ptr<SmartMet::Spine::CRSRegistry::Transformation> transformation,
+    std::shared_ptr<SmartMet::Spine::CRSRegistry::Transformation> transformation,
     double X,
     double Y)
 {
@@ -233,7 +233,7 @@ std::pair<std::string, std::string> StoredQueryHandlerBase::get_2D_coord(
 }
 
 void StoredQueryHandlerBase::set_2D_coord(
-    boost::shared_ptr<SmartMet::Spine::CRSRegistry::Transformation> transformation,
+    std::shared_ptr<SmartMet::Spine::CRSRegistry::Transformation> transformation,
     double sx,
     double sy,
     CTPP::CDT& hash)
@@ -251,7 +251,7 @@ void StoredQueryHandlerBase::set_2D_coord(
 }  // namespace WFS
 
 void StoredQueryHandlerBase::set_2D_coord(
-    boost::shared_ptr<SmartMet::Spine::CRSRegistry::Transformation> transformation,
+    std::shared_ptr<SmartMet::Spine::CRSRegistry::Transformation> transformation,
     const std::string& sx,
     const std::string& sy,
     CTPP::CDT& hash)

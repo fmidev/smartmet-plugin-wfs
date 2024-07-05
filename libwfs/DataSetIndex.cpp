@@ -181,12 +181,12 @@ bw::DataSetDefinition::DataSetDefinition(SmartMet::Spine::ConfigBase& config,
   }
 }
 
-boost::shared_ptr<bw::DataSetDefinition> bw::DataSetDefinition::create(
+std::shared_ptr<bw::DataSetDefinition> bw::DataSetDefinition::create(
     SmartMet::Spine::ConfigBase& config, libconfig::Setting& setting)
 {
   try
   {
-    return boost::shared_ptr<bw::DataSetDefinition>(new bw::DataSetDefinition(config, setting));
+    return std::shared_ptr<bw::DataSetDefinition>(new bw::DataSetDefinition(config, setting));
   }
   catch (...)
   {

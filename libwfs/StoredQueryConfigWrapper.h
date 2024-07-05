@@ -1,6 +1,6 @@
 #pragma once
 
-#include <boost/shared_ptr.hpp>
+#include <memory>
 
 namespace SmartMet
 {
@@ -11,7 +11,7 @@ namespace SmartMet
 
       class StoredQueryConfig;
 
-      using StoredQueryConfigPtr = boost::shared_ptr<StoredQueryConfig>;
+      using StoredQueryConfigPtr = std::shared_ptr<StoredQueryConfig>;
 
       class StoredQueryConfigWrapper
       {

@@ -6,7 +6,7 @@
 #include <boost/geometry.hpp>
 #include <boost/geometry/geometries/box.hpp>
 #include <boost/geometry/geometries/point_xy.hpp>
-#include <boost/optional.hpp>
+#include <optional>
 #include <boost/regex.hpp>
 #include <spine/ConfigBase.h>
 #include <set>
@@ -55,7 +55,7 @@ class DataSetDefinition : public boost::enable_shared_from_this<DataSetDefinitio
   DataSetDefinition(SmartMet::Spine::ConfigBase& config, libconfig::Setting& setting);
 
  public:
-  static boost::shared_ptr<DataSetDefinition> create(SmartMet::Spine::ConfigBase& config,
+  static std::shared_ptr<DataSetDefinition> create(SmartMet::Spine::ConfigBase& config,
                                                      libconfig::Setting& setting);
 
   virtual ~DataSetDefinition();

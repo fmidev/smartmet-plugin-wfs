@@ -21,7 +21,7 @@ ErrorResponseGenerator::~ErrorResponseGenerator() = default;
 
 ErrorResponseGenerator::ErrorResponse ErrorResponseGenerator::create_error_response(
     processing_phase_t phase,
-    boost::variant<const SmartMet::Spine::HTTP::Request&, StoredQuery&> query_info)
+    std::variant<const SmartMet::Spine::HTTP::Request&, StoredQuery&> query_info)
 {
   try
   {
@@ -179,7 +179,7 @@ std::string ErrorResponseGenerator::get_wfs_err_code(processing_phase_t phase)
 }
 
 void ErrorResponseGenerator::add_query_info(
-    CTPP::CDT& hash, boost::variant<const SmartMet::Spine::HTTP::Request&, StoredQuery&> query_info)
+    CTPP::CDT& hash, std::variant<const SmartMet::Spine::HTTP::Request&, StoredQuery&> query_info)
 {
   try
   {

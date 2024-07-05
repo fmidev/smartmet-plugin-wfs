@@ -69,7 +69,7 @@ bool bw::Request::GetFeature::get_cached_responses()
     bool found = true;
     for (const auto& query : queries)
     {
-      boost::optional<std::string> cached_response = query_cache.find(query->get_cache_key());
+      std::optional<std::string> cached_response = query_cache.find(query->get_cache_key());
       if (cached_response)
       {
         query->set_cached_response(*cached_response);
@@ -127,7 +127,7 @@ void bw::Request::GetFeature::execute_single_query(std::ostream& ost) const
 
     if (spp.is_hits_only_request())
     {
-      boost::shared_ptr<xercesc::DOMDocument> result = create_hits_only_response(response);
+      std::shared_ptr<xercesc::DOMDocument> result = create_hits_only_response(response);
       response = bwx::xml2string(result->getDocumentElement());
     }
     else if ((spp.get_have_counts()) || (queries[0]->get_type() == QueryBase::QUERY))
@@ -242,7 +242,7 @@ void bw::Request::GetFeature::execute_multiple_queries(std::ostream& ost) const
 
     auto a_timeStamp = Xml::to_xmlch("timeStamp");
 
-    boost::optional<std::string> time_stamp;
+    std::optional<std::string> time_stamp;
 
     std::size_t member_ind = 0;
     std::size_t num_matched = 0;
@@ -381,7 +381,7 @@ void bw::Request::GetFeature::execute_multiple_queries(std::ostream& ost) const
   }
 }
 
-boost::shared_ptr<xercesc::DOMDocument> bw::Request::GetFeature::create_hits_only_response(
+std::shared_ptr<xercesc::DOMDocument> bw::Request::GetFeature::create_hits_only_response(
     const std::string& src) const
 {
   try
@@ -459,7 +459,7 @@ bool bw::Request::GetFeature::collect_query_responses(std::vector<std::string>& 
 
     for (const auto& query_ptr : queries)
     {
-      boost::optional<std::string> cached_response = query_ptr->get_cached_response();
+      std::optional<std::string> cached_response = query_ptr->get_cached_response();
       if (cached_response)
       {
         std::ostringstream tmp;
@@ -545,7 +545,7 @@ void bw::Request::GetFeature::assert_use_default_format() const
   }
 }
 
-boost::shared_ptr<bw::Request::GetFeature> bw::Request::GetFeature::create_from_kvp(
+std::shared_ptr<bw::Request::GetFeature> bw::Request::GetFeature::create_from_kvp(
     const std::string& language,
     const SmartMet::Spine::HTTP::Request& http_request,
     PluginImpl& plugin_impl)
@@ -563,7 +563,7 @@ boost::shared_ptr<bw::Request::GetFeature> bw::Request::GetFeature::create_from_
 
     const StoredQueryMap& stored_query_map = plugin_impl.get_stored_query_map();
 
-    boost::shared_ptr<bw::Request::GetFeature> result(
+    std::shared_ptr<bw::Request::GetFeature> result(
         new bw::Request::GetFeature(language, plugin_impl));
 
     // Verify whether we have request=getFeature in HTTP request
@@ -585,7 +585,7 @@ boost::shared_ptr<bw::Request::GetFeature> bw::Request::GetFeature::create_from_
 
     if (stored_query_id)
     {
-      boost::shared_ptr<bw::StoredQuery> query =
+      std::shared_ptr<bw::StoredQuery> query =
           bw::StoredQuery::create_from_kvp(language, result->spp, http_request, stored_query_map);
       result->queries.emplace_back(query);
     }
@@ -609,7 +609,7 @@ boost::shared_ptr<bw::Request::GetFeature> bw::Request::GetFeature::create_from_
   }
 }
 
-boost::shared_ptr<bw::Request::GetFeature> bw::Request::GetFeature::create_from_xml(
+std::shared_ptr<bw::Request::GetFeature> bw::Request::GetFeature::create_from_xml(
     const std::string& language,
     const xercesc::DOMDocument& document,
     PluginImpl& plugin_impl)
@@ -623,7 +623,7 @@ boost::shared_ptr<bw::Request::GetFeature> bw::Request::GetFeature::create_from_
     const StoredQueryMap& stored_query_map = plugin_impl.get_stored_query_map();
 
     const char* method_name = "SmartMet::Plugin::WFS::Request::GetFeature::create_from_xml";
-    boost::shared_ptr<bw::Request::GetFeature> result(
+    std::shared_ptr<bw::Request::GetFeature> result(
         new bw::Request::GetFeature(language, plugin_impl));
 
     result->check_mandatory_attributes(document);
@@ -652,7 +652,7 @@ boost::shared_ptr<bw::Request::GetFeature> bw::Request::GetFeature::create_from_
       }
       else if (name == "StoredQuery")
       {
-        boost::shared_ptr<bw::StoredQuery> query =
+        std::shared_ptr<bw::StoredQuery> query =
             bw::StoredQuery::create_from_xml(language, result->spp, *child, stored_query_map);
         result->queries.emplace_back(query);
       }

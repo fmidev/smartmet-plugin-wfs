@@ -2,9 +2,9 @@
 
 #include "StoredQueryConfig.h"
 #include "WfsConvenience.h"
-#include <boost/optional.hpp>
-#include <boost/shared_ptr.hpp>
-#include <boost/variant.hpp>
+#include <optional>
+#include <memory>
+#include <variant>
 #include <spine/Value.h>
 
 namespace SmartMet
@@ -38,11 +38,11 @@ struct ParameterTemplateItem
   bool optional = false;
   bool absent = true;
   bool weak = false;
-  boost::shared_ptr<SmartMet::Spine::Value> plain_text;
-  boost::optional<std::string> param_ref;
-  boost::optional<std::size_t MAY_ALIAS> param_ind;
-  boost::optional<std::string> default_value;
-  boost::optional<std::string> redirect_name;
+  std::shared_ptr<SmartMet::Spine::Value> plain_text;
+  std::optional<std::string> param_ref;
+  std::optional<std::size_t MAY_ALIAS> param_ind;
+  std::optional<std::string> default_value;
+  std::optional<std::string> redirect_name;
 
  public:
   void parse(const SmartMet::Spine::Value& item_def, bool allow_absent = false);
@@ -67,7 +67,7 @@ struct ParameterTemplateItem
    *
    *   std::vector<SmartMet::Spine::Value> may only appear in return value if allow_array == true.
    */
-  boost::variant<SmartMet::Spine::Value, std::vector<SmartMet::Spine::Value> > get_value(
+  std::variant<SmartMet::Spine::Value, std::vector<SmartMet::Spine::Value> > get_value(
       const RequestParameterMap& req_param_map,
       const SupportsExtraHandlerParams* extra_params = nullptr,
       bool allow_array = false) const;
@@ -91,14 +91,14 @@ struct ParameterTemplateItem
    *   std::vector<SmartMet::Spine::Value> may only appear in result value if allow_array == true.
    */
   bool get_value(
-      boost::variant<SmartMet::Spine::Value, std::vector<SmartMet::Spine::Value> >& result,
+      std::variant<SmartMet::Spine::Value, std::vector<SmartMet::Spine::Value> >& result,
       const RequestParameterMap& req_param_map,
       const SupportsExtraHandlerParams* extra_params = nullptr,
       bool allow_array = false) const;
 
  private:
   bool handle_redirection(
-      boost::variant<SmartMet::Spine::Value, std::vector<SmartMet::Spine::Value> >& result,
+      std::variant<SmartMet::Spine::Value, std::vector<SmartMet::Spine::Value> >& result,
       const RequestParameterMap& req_param_map,
       const SupportsExtraHandlerParams* extra,
       const std::string& redirect_name) const;

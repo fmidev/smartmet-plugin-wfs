@@ -3,8 +3,8 @@
 #include "PluginImpl.h"
 #include "StoredQueryConfig.h"
 #include "StoredQueryHandlerBase.h"
-#include <boost/optional.hpp>
-#include <boost/shared_ptr.hpp>
+#include <optional>
+#include <memory>
 
 namespace SmartMet
 {
@@ -17,8 +17,8 @@ class PluginImpl;
 class StoredQueryHandlerFactoryDef
 {
  public:
-  using factory_t = boost::shared_ptr<StoredQueryHandlerBase>
-        (*)(SmartMet::Spine::Reactor *, StoredQueryConfig::Ptr, PluginImpl &, boost::optional<std::string>);
+  using factory_t = std::shared_ptr<StoredQueryHandlerBase>
+        (*)(SmartMet::Spine::Reactor *, StoredQueryConfig::Ptr, PluginImpl &, std::optional<std::string>);
 
  private:
   unsigned char signature[20];
@@ -29,12 +29,12 @@ class StoredQueryHandlerFactoryDef
 
   virtual ~StoredQueryHandlerFactoryDef();
 
-  static boost::shared_ptr<StoredQueryHandlerBase> construct(
+  static std::shared_ptr<StoredQueryHandlerBase> construct(
       const std::string& symbol_name,
       SmartMet::Spine::Reactor* reactor,
       StoredQueryConfig::Ptr config,
       PluginImpl& plugin_impl,
-      boost::optional<std::string> template_file_name);
+      std::optional<std::string> template_file_name);
 
  private:
   static void create_signature(unsigned char* md);

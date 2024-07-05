@@ -5,8 +5,8 @@
 #include "RequestParameterMap.h"
 #include "ScalarParameterTemplate.h"
 #include "StoredQueryConfig.h"
-#include <boost/shared_ptr.hpp>
-#include <boost/variant.hpp>
+#include <memory>
+#include <variant>
 #include <json/value.h>
 #include <map>
 #include <set>
@@ -39,7 +39,7 @@ class StoredQueryParamRegistry : public StoredQueryConfig::Wrapper
 
   struct ScalarParameterRec : public ParamRecBase
   {
-    boost::shared_ptr<ScalarParameterTemplate> param_def;
+    std::shared_ptr<ScalarParameterTemplate> param_def;
     bool required;
 
      ~ScalarParameterRec() override;
@@ -47,7 +47,7 @@ class StoredQueryParamRegistry : public StoredQueryConfig::Wrapper
 
   struct ArrayParameterRec : public ParamRecBase
   {
-    boost::shared_ptr<ArrayParameterTemplate> param_def;
+    std::shared_ptr<ArrayParameterTemplate> param_def;
     std::size_t min_size;
     std::size_t max_size;
     std::size_t step;
@@ -64,7 +64,7 @@ class StoredQueryParamRegistry : public StoredQueryConfig::Wrapper
    *   @brief Resolve provided stored query handler parameters from provided pre-processed
    *          query parameters and configuration.
    */
-  boost::shared_ptr<RequestParameterMap> resolve_handler_parameters(
+  std::shared_ptr<RequestParameterMap> resolve_handler_parameters(
       const RequestParameterMap& src, const SupportsExtraHandlerParams* extra_params = nullptr) const;
 
   std::set<std::string> get_param_names() const;
@@ -87,12 +87,12 @@ class StoredQueryParamRegistry : public StoredQueryConfig::Wrapper
 
   void register_scalar_param(const std::string& name,
                              const std::string& description,
-                             boost::shared_ptr<ScalarParameterTemplate> param_def,
+                             std::shared_ptr<ScalarParameterTemplate> param_def,
                              bool required);
 
   void register_array_param(const std::string& name,
                             const std::string& description,
-                            boost::shared_ptr<ArrayParameterTemplate> param_def,
+                            std::shared_ptr<ArrayParameterTemplate> param_def,
                             std::size_t min_size = 0,
                             std::size_t max_size = std::numeric_limits<uint16_t>::max(),
                             std::size_t step = 1);
@@ -100,11 +100,11 @@ class StoredQueryParamRegistry : public StoredQueryConfig::Wrapper
   void silence_param_init_warnings(bool enable) { silence_param_init_warnings_ = enable; }
 
  private:
-  void add_param_rec(boost::shared_ptr<ParamRecBase> rec);
+  void add_param_rec(std::shared_ptr<ParamRecBase> rec);
 
  private:
   bool silence_param_init_warnings_{false};
-  std::map<std::string, boost::shared_ptr<ParamRecBase> > param_map;
+  std::map<std::string, std::shared_ptr<ParamRecBase> > param_map;
   std::map<std::string, int> supported_type_names;
 };
 
@@ -114,7 +114,7 @@ void StoredQueryParamRegistry::register_scalar_param(const std::string& name,
                                                      bool required,
 						     bool silent)
 {
-  boost::shared_ptr<ScalarParameterRec> rec(new ScalarParameterRec);
+  std::shared_ptr<ScalarParameterRec> rec(new ScalarParameterRec);
   rec->name = name;
   rec->description = description;
   rec->param_def.reset(new ScalarParameterTemplate(*get_config(), name,
@@ -132,7 +132,7 @@ void StoredQueryParamRegistry::register_array_param(const std::string& name,
                                                     std::size_t step,
 						    bool silent)
 {
-  boost::shared_ptr<ArrayParameterRec> rec(new ArrayParameterRec);
+  std::shared_ptr<ArrayParameterRec> rec(new ArrayParameterRec);
   rec->name = name;
   rec->description = description;
   rec->param_def.reset(new ArrayParameterTemplate(*get_config(), name, min_size, max_size,

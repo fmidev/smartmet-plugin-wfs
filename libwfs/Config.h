@@ -10,7 +10,7 @@
 #include "Hosts.h"
 #include "WfsFeatureDef.h"
 #include <boost/filesystem.hpp>
-#include <boost/shared_ptr.hpp>
+#include <memory>
 #include <boost/utility.hpp>
 #include <spine/CRSRegistry.h>
 #include <spine/ConfigBase.h>
@@ -68,10 +68,10 @@ class Config : public SmartMet::Spine::ConfigBase
   inline bool silenceInitWarnings() const { return silence_init_warnings; }
   inline const std::string& get_default_locale() const { return default_locale; }
   inline bool use_case_sensitive_params() const { return enable_case_sensitive_params; }
-  std::vector<boost::shared_ptr<WfsFeatureDef> > read_features_config(
+  std::vector<std::shared_ptr<WfsFeatureDef> > read_features_config(
       SmartMet::Spine::CRSRegistry& theCRSRegistry);
   const CapabilitiesConf& get_capabilities_config() const { return capabilities_conf; }
-  boost::optional<std::pair<std::string, std::string> > get_admin_credentials() const
+  std::optional<std::pair<std::string, std::string> > get_admin_credentials() const
   {
     return adminCred;
   }
@@ -116,7 +116,7 @@ class Config : public SmartMet::Spine::ConfigBase
    *
    *   Currently only used for reload request
    */
-  boost::optional<std::pair<std::string, std::string> > adminCred;
+  std::optional<std::pair<std::string, std::string> > adminCred;
 
   /**
    *   @brief Information about hosts to which WFS responses points

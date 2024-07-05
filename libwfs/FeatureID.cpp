@@ -30,7 +30,7 @@ FeatureID::FeatureID(std::string stored_query_id,
 
 FeatureID::~FeatureID() = default;
 
-boost::shared_ptr<FeatureID> FeatureID::create_from_id(const std::string& id)
+std::shared_ptr<FeatureID> FeatureID::create_from_id(const std::string& id)
 {
   try
   {
@@ -120,7 +120,7 @@ boost::shared_ptr<FeatureID> FeatureID::create_from_id(const std::string& id)
       input.get_unsigned();
       const std::multimap<std::string, SmartMet::Spine::Value> params = input.get_value_map();
 
-      boost::shared_ptr<FeatureID> result(new FeatureID(stored_query_id, params));
+      std::shared_ptr<FeatureID> result(new FeatureID(stored_query_id, params));
       return result;
     }
     catch (...)

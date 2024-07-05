@@ -5,7 +5,7 @@
 #include "StoredQueryConfig.h"
 #include "StoredQueryParamRegistry.h"
 #include "SupportsExtraHandlerParams.h"
-#include <boost/shared_ptr.hpp>
+#include <memory>
 #include <timeseries/TimeSeriesInclude.h>
 #include <map>
 #include <string>
@@ -25,11 +25,11 @@ class SupportsTimeParameters : protected virtual SupportsExtraHandlerParams,
                                protected virtual StoredQueryParamRegistry
 {
  public:
-  SupportsTimeParameters(boost::shared_ptr<SmartMet::Plugin::WFS::StoredQueryConfig> config);
+  SupportsTimeParameters(std::shared_ptr<SmartMet::Plugin::WFS::StoredQueryConfig> config);
 
   ~SupportsTimeParameters() override;
 
-  boost::shared_ptr<TS::TimeSeriesGeneratorOptions> get_time_generator_options(
+  std::shared_ptr<TS::TimeSeriesGeneratorOptions> get_time_generator_options(
       const RequestParameterMap &param_values) const;
 
  private:

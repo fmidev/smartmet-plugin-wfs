@@ -69,7 +69,7 @@ Parser::Parser(bool stop_on_error, xercesc::XMLGrammarPool *grammar_pool)
 
 Parser::~Parser() = default;
 
-boost::shared_ptr<xercesc::DOMDocument> Parser::parse_file(
+std::shared_ptr<xercesc::DOMDocument> Parser::parse_file(
     const std::string &file_name, Parser::root_element_cb_t root_element_cb)
 {
   try
@@ -84,7 +84,7 @@ boost::shared_ptr<xercesc::DOMDocument> Parser::parse_file(
   }
 }
 
-boost::shared_ptr<xercesc::DOMDocument> Parser::parse_string(
+std::shared_ptr<xercesc::DOMDocument> Parser::parse_string(
     const std::string &xml_data,
     const std::string &doc_id,
     Parser::root_element_cb_t root_element_cb)
@@ -101,7 +101,7 @@ boost::shared_ptr<xercesc::DOMDocument> Parser::parse_string(
   }
 }
 
-boost::shared_ptr<xercesc::DOMDocument> Parser::parse_input(
+std::shared_ptr<xercesc::DOMDocument> Parser::parse_input(
     xercesc::InputSource &input, Parser::root_element_cb_t root_element_cb)
 {
   try
@@ -114,7 +114,7 @@ boost::shared_ptr<xercesc::DOMDocument> Parser::parse_input(
     // Verify that there are no errors. Throw an exception otherwise
     error_handler->check_errors("XML parser failed");
 
-    boost::shared_ptr<xercesc::DOMDocument> result(this->adoptDocument());
+    std::shared_ptr<xercesc::DOMDocument> result(this->adoptDocument());
     return result;
   }
   catch (const XmlError&)
@@ -273,7 +273,7 @@ void ParserMT::dump_schema_cache(std::ostream& os)
   oa << *entity_resolver;
 }
 
-boost::shared_ptr<xercesc::DOMDocument> str2xmldom(const std::string &src,
+std::shared_ptr<xercesc::DOMDocument> str2xmldom(const std::string &src,
                                                    const std::string &doc_id)
 {
   try
@@ -305,7 +305,7 @@ boost::shared_ptr<xercesc::DOMDocument> str2xmldom(const std::string &src,
     // Verify that parse suceeded and throw XmlError otherwise
     error_handler.check_errors("XML parser failed");
 
-    boost::shared_ptr<xercesc::DOMDocument> result(parser.adoptDocument());
+    std::shared_ptr<xercesc::DOMDocument> result(parser.adoptDocument());
     return result;
   }
   catch (...)

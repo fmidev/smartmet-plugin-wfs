@@ -22,11 +22,11 @@ namespace WFS
 {
 namespace Xml
 {
-boost::optional<GmlSRSInformationGroup> read_gml_srs_info_group(const xercesc::DOMElement& element)
+std::optional<GmlSRSInformationGroup> read_gml_srs_info_group(const xercesc::DOMElement& element)
 {
   try
   {
-    boost::optional<GmlSRSInformationGroup> result;
+    std::optional<GmlSRSInformationGroup> result;
     auto x_axis_labels = get_attr(element, GML_NAMESPACE_URI, "axisLabels");
     auto x_uom_labels = get_attr(element, GML_NAMESPACE_URI, "uomLabels");
 

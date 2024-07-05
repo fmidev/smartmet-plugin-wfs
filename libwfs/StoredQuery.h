@@ -6,7 +6,7 @@
 #include "StoredQueryHandlerBase.h"
 #include "StoredQueryMap.h"
 #include "XmlParameterExtractor.h"
-#include <boost/shared_ptr.hpp>
+#include <memory>
 #include <spine/Value.h>
 #include <xercesc/dom/DOMElement.hpp>
 #include <string>
@@ -45,7 +45,7 @@ class StoredQuery : public QueryBase
    *   Throws SmartMet::Plugin::WFS::WfsException in case of an error. Usually error
    *   code is expected to be SmartMet::Plugin::WFS::WfsException::OPERATION_PARSING_FAILED.
    */
-  static boost::shared_ptr<StoredQuery> create_from_kvp(
+  static std::shared_ptr<StoredQuery> create_from_kvp(
       const std::string& language,
       const StandardPresentationParameters& spp,
       const SmartMet::Spine::HTTP::Request& http_request,
@@ -63,12 +63,12 @@ class StoredQuery : public QueryBase
    *   Throws SmartMet::Plugin::WFS::WfsException in case of an error. Usually error
    *   code is expected to be SmartMet::Plugin::WFS::WfsException::OPERATION_PARSING_FAILED.
    */
-  static boost::shared_ptr<StoredQuery> create_from_xml(const std::string& language,
+  static std::shared_ptr<StoredQuery> create_from_xml(const std::string& language,
                                                         const StandardPresentationParameters& spp,
                                                         const xercesc::DOMElement& element,
                                                         const StoredQueryMap& sq_map);
 
-  static boost::shared_ptr<StoredQuery> create_from_feature_id(const std::string& feature_id,
+  static std::shared_ptr<StoredQuery> create_from_feature_id(const std::string& feature_id,
                                                                const StoredQueryMap& sq_map,
                                                                const StoredQuery& orig_query);
 
@@ -78,7 +78,7 @@ class StoredQuery : public QueryBase
   std::string get_cache_key() const override;
 
   bool get_use_debug_format() const { return debug_format; }
-  void execute(std::ostream& output, const std::string& language, const boost::optional<std::string>& hostname) const override;
+  void execute(std::ostream& output, const std::string& language, const std::optional<std::string>& hostname) const override;
 
   const SmartMet::Spine::Value& get_param(const std::string& name) const;
 
@@ -148,10 +148,10 @@ class StoredQuery : public QueryBase
   std::string id;
   std::string cache_key;
   std::string language;
-  boost::shared_ptr<RequestParameterMap> params;
-  boost::shared_ptr<RequestParameterMap> orig_params;
+  std::shared_ptr<RequestParameterMap> params;
+  std::shared_ptr<RequestParameterMap> orig_params;
   std::vector<std::string> skipped_params;
-  boost::shared_ptr<const SmartMet::Plugin::WFS::StoredQueryHandlerBase> handler;
+  std::shared_ptr<const SmartMet::Plugin::WFS::StoredQueryHandlerBase> handler;
   bool debug_format{false};
 
   static SmartMet::Plugin::WFS::Xml::ParameterExtractor param_extractor;
