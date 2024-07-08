@@ -26,7 +26,7 @@ const char* P_END = "endTime";
 bw::StoredFileQueryHandler::StoredFileQueryHandler(SmartMet::Spine::Reactor* reactor,
                                                    StoredQueryConfig::Ptr config,
                                                    PluginImpl& plugin_data,
-                                                   boost::optional<std::string> template_file_name)
+                                                   std::optional<std::string> template_file_name)
     : bw::StoredQueryParamRegistry(config),
       bw::SupportsExtraHandlerParams(config),
       bw::StoredAtomQueryHandlerBase(reactor, config, plugin_data, template_file_name)
@@ -48,7 +48,7 @@ bw::StoredFileQueryHandler::StoredFileQueryHandler(SmartMet::Spine::Reactor* rea
       libconfig::Setting& ds_list_item = ds_list_cfg[i];
       try
       {
-        boost::shared_ptr<bw::DataSetDefinition> ds_def =
+        std::shared_ptr<bw::DataSetDefinition> ds_def =
             bw::DataSetDefinition::create(*config, ds_list_item);
         ds_list.push_back(ds_def);
       }
@@ -99,7 +99,7 @@ std::set<ValueType> common_items(const std::set<ValueType>& A, const std::set<Va
 void bw::StoredFileQueryHandler::update_parameters(
     const RequestParameterMap& params,
     int seq_id,
-    std::vector<boost::shared_ptr<RequestParameterMap> >& result) const
+    std::vector<std::shared_ptr<RequestParameterMap> >& result) const
 {
   try
   {
@@ -173,13 +173,13 @@ void bw::StoredFileQueryHandler::update_parameters(
 
       // FIXME: check also BBOX
 
-      const std::vector<boost::filesystem::path> files = ds_def.query_files(begin, end);
+      const std::vector<std::filesystem::path> files = ds_def.query_files(begin, end);
       for (const auto & it2 : files)
       {
         if ((file.empty()) or (file == it2.string()))
         {
           Fmi::DateTime origin_time = ds_def.extract_origintime(it2);
-          boost::shared_ptr<RequestParameterMap> pm1(
+          std::shared_ptr<RequestParameterMap> pm1(
 	      new RequestParameterMap(true));
           pm1->add("name", ds_def.get_name());
           pm1->add("basename", it2.filename().string());
@@ -208,17 +208,17 @@ namespace
 {
 using namespace SmartMet::Plugin::WFS;
 
-boost::shared_ptr<SmartMet::Plugin::WFS::StoredQueryHandlerBase> wfs_stored_file_handler_create(
+std::shared_ptr<SmartMet::Plugin::WFS::StoredQueryHandlerBase> wfs_stored_file_handler_create(
     SmartMet::Spine::Reactor* reactor,
     StoredQueryConfig::Ptr config,
     PluginImpl& plugin_data,
-    boost::optional<std::string> template_file_name)
+    std::optional<std::string> template_file_name)
 {
   try
   {
     auto* qh =
         new StoredFileQueryHandler(reactor, config, plugin_data, template_file_name);
-    boost::shared_ptr<SmartMet::Plugin::WFS::StoredQueryHandlerBase> result(qh);
+    std::shared_ptr<SmartMet::Plugin::WFS::StoredQueryHandlerBase> result(qh);
     return result;
   }
   catch (...)

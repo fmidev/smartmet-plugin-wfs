@@ -40,9 +40,9 @@ using SmartMet::Spine::Value;
 using Test::add_values;
 using Test::TestConfig;
 using SmartMet::Spine::HTTP::RequestMethod;
-typedef boost::shared_ptr<bw::StoredQueryConfig> StoredQueryConfigP;
-typedef boost::shared_ptr<bw::ArrayParameterTemplate> ArrayParameterTemplateP;
-typedef boost::shared_ptr<bw::ScalarParameterTemplate> ScalarParameterTemplateP;
+typedef std::shared_ptr<bw::StoredQueryConfig> StoredQueryConfigP;
+typedef std::shared_ptr<bw::ArrayParameterTemplate> ArrayParameterTemplateP;
+typedef std::shared_ptr<bw::ScalarParameterTemplate> ScalarParameterTemplateP;
 
 BOOST_AUTO_TEST_CASE(test_extract_kvp_stored_query_id)
 {
@@ -66,7 +66,7 @@ BOOST_AUTO_TEST_CASE(test_extract_xml_stored_query_id)
 {
   bwx::EnvInit ensure_init;
   BOOST_TEST_MESSAGE("+ [Testing retrieving stored query ID from XML request]");
-  boost::shared_ptr<xercesc::DOMDocument> doc =
+  std::shared_ptr<xercesc::DOMDocument> doc =
       bwx::create_dom_document(WFS_NAMESPACE_URI, "StoredQuery");
   xercesc::DOMElement* root = doc->getDocumentElement();
   bwx::set_attr(*bwx::append_child_text_element(*root, WFS_NAMESPACE_URI, "Parameter", "fo&o"),
@@ -135,9 +135,9 @@ class TemporaryConfigFile
   inline const std::string& get_name() const { return name; }
 };
 
-boost::shared_ptr<libconfig::Config> create_initial_test_config()
+std::shared_ptr<libconfig::Config> create_initial_test_config()
 {
-  boost::shared_ptr<libconfig::Config> config(new libconfig::Config);
+  std::shared_ptr<libconfig::Config> config(new libconfig::Config);
   libconfig::Setting& root = config->getRoot();
   BOOST_REQUIRE_NO_THROW(root.add("id", libconfig::Setting::TypeString) = "foo::bar");
   BOOST_REQUIRE_NO_THROW(root.add("constructor_name", libconfig::Setting::TypeString) = "foo::bar");
@@ -628,7 +628,7 @@ BOOST_AUTO_TEST_CASE(test_parse_sample_kvp_stored_query_id)
   add_param(*config, "num", "gml:doubleList", "double[0..999]", 0, 999);
 
   std::vector<Value> v;
-  boost::shared_ptr<bw::StoredQueryConfig> sqc;
+  std::shared_ptr<bw::StoredQueryConfig> sqc;
   StoredQueryWrapper Q1, Q2, Q3;
 
   BOOST_TEST_MESSAGE("    + [part 1: 2 scalar values of different types]");
@@ -705,7 +705,7 @@ BOOST_AUTO_TEST_CASE(test_parse_sample_xml_stored_query_id)
   BOOST_TEST_MESSAGE("+ [Testing parsing sample XML format stored query request]");
 
   bwx::EnvInit ensure_init;
-  boost::shared_ptr<xercesc::DOMDocument> doc =
+  std::shared_ptr<xercesc::DOMDocument> doc =
       bwx::create_dom_document(WFS_NAMESPACE_URI, "StoredQuery");
   xercesc::DOMElement* root = doc->getDocumentElement();
   bwx::set_attr(*bwx::append_child_text_element(
@@ -721,7 +721,7 @@ BOOST_AUTO_TEST_CASE(test_parse_sample_xml_stored_query_id)
   add_param(*config, "name", "xsi:string", "string");
   add_param(*config, "num", "gml:doubleList", "double[0..999]", 0, 999);
 
-  boost::shared_ptr<bw::StoredQueryConfig> sqc;
+  std::shared_ptr<bw::StoredQueryConfig> sqc;
   StoredQueryWrapper Q1, Q2, Q3;
 
   BOOST_TEST_MESSAGE("    + [part 1: 2 scalar values of different types]");

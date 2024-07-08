@@ -4,7 +4,7 @@
 #include <boost/algorithm/string.hpp>
 #include <boost/bind/bind.hpp>
 #include <boost/chrono.hpp>
-#include <boost/filesystem.hpp>
+#include <filesystem>
 #include <spine/Convenience.h>
 #include <macgyver/Base64.h>
 #include <macgyver/Exception.h>
@@ -16,7 +16,7 @@
 
 namespace ba = boost::algorithm;
 namespace bw = SmartMet::Plugin::WFS;
-namespace fs = boost::filesystem;
+namespace fs = std::filesystem;
 namespace ph = boost::placeholders;
 
 bw::StoredQueryMap::StoredQueryMap(SmartMet::Spine::Reactor* theReactor, PluginImpl& plugin_impl)
@@ -68,8 +68,8 @@ void bw::StoredQueryMap::set_background_init(bool value)
   }
 }
 
-void bw::StoredQueryMap::add_config_dir(const boost::filesystem::path& config_dir,
-					const boost::filesystem::path& template_dir)
+void bw::StoredQueryMap::add_config_dir(const std::filesystem::path& config_dir,
+					const std::filesystem::path& template_dir)
 {
   ConfigDirInfo ci;
   ci.num_updates = 0;
@@ -214,7 +214,7 @@ std::vector<std::string> bw::StoredQueryMap::get_return_type_names() const
 }
 
 void bw::StoredQueryMap::add_handler(StoredQueryConfig::Ptr sqh_config,
-                                     const boost::filesystem::path& template_dir)
+                                     const std::filesystem::path& template_dir)
 {
   try
   {
@@ -269,7 +269,7 @@ void bw::StoredQueryMap::add_handler(StoredQueryConfig::Ptr sqh_config,
 }
 
 void bw::StoredQueryMap::on_config_change(Fmi::DirectoryMonitor::Watcher watcher,
-					  const boost::filesystem::path& path,
+					  const std::filesystem::path& path,
 					  const boost::regex& pattern,
 					  const Fmi::DirectoryMonitor::Status& status)
 {
@@ -395,7 +395,7 @@ std::vector<std::string> bw::StoredQueryMap::get_handler_names() const
 }
 
 void bw::StoredQueryMap::on_config_error(Fmi::DirectoryMonitor::Watcher watcher,
-					 const boost::filesystem::path& path,
+					 const std::filesystem::path& path,
 					 const boost::regex& pattern,
 					 const std::string& message)
 {
@@ -492,7 +492,7 @@ bw::StoredQueryMap::get_ignore_reason(const StoredQueryConfig& config) const
 }
 
 void bw::StoredQueryMap::handle_query_add(const std::string& config_file_name,
-					  const boost::filesystem::path& template_dir,
+					  const std::filesystem::path& template_dir,
 					  bool initial_update,
 					  bool silent_duplicate)
 {
@@ -532,7 +532,7 @@ void bw::StoredQueryMap::handle_query_add(const std::string& config_file_name,
 }
 
 void bw::StoredQueryMap::handle_query_modify(const std::string& config_file_name,
-					     const boost::filesystem::path& template_dir)
+					     const std::filesystem::path& template_dir)
 {
   try {
     if (not check_file_hash(config_file_name)) {
@@ -660,7 +660,7 @@ std::shared_ptr<bw::StoredQueryHandlerBase> bw::StoredQueryMap::get_handler_by_n
 }
 
 void bw::StoredQueryMap::enqueue_query_add(StoredQueryConfig::Ptr sqh_config,
-					   const boost::filesystem::path& template_dir,
+					   const std::filesystem::path& template_dir,
 					   bool initial_update)
 {
   if (background_init and initial_update) {

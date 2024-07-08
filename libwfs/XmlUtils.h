@@ -1,11 +1,11 @@
 #pragma once
 
-#include <memory>
 #include <xercesc/dom/DOMDocument.hpp>
 #include <xercesc/dom/DOMElement.hpp>
 #include <xercesc/dom/DOMLSSerializer.hpp>
 #include <xercesc/dom/DOMNode.hpp>
 #include <xercesc/util/XMLString.hpp>
+#include <functional>
 #include <memory>
 #include <set>
 #include <string>

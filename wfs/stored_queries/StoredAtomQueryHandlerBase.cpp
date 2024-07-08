@@ -1,7 +1,7 @@
 #include "stored_queries/StoredAtomQueryHandlerBase.h"
 #include "StoredQueryHandlerFactoryDef.h"
 #include <boost/bind/bind.hpp>
-#include <boost/variant.hpp>
+#include <variant>
 #include <macgyver/Exception.h>
 #include <macgyver/StringConversion.h>
 #include <smartmet/spine/Value.h>
@@ -18,7 +18,7 @@ bw::StoredAtomQueryHandlerBase::StoredAtomQueryHandlerBase(
     SmartMet::Spine::Reactor* reactor,
     StoredQueryConfig::Ptr config,
     PluginImpl& plugin_data,
-    boost::optional<std::string> template_file_name)
+    std::optional<std::string> template_file_name)
 
     : bw::StoredQueryParamRegistry(config)
     , bw::SupportsExtraHandlerParams(config, true)
@@ -50,7 +50,7 @@ std::string bw::StoredAtomQueryHandlerBase::get_handler_description() const
 
 void bw::StoredAtomQueryHandlerBase::query(const bw::StoredQuery& query,
                                            const std::string& language,
-					   const boost::optional<std::string> &hostname,
+					   const std::optional<std::string> &hostname,
                                            std::ostream& output) const
 {
   try
@@ -68,7 +68,7 @@ void bw::StoredAtomQueryHandlerBase::query(const bw::StoredQuery& query,
 
     const RequestParameterMap& req_param_map = query.get_param_map();
 
-    std::vector<boost::shared_ptr<RequestParameterMap> > param_sets;
+    std::vector<std::shared_ptr<RequestParameterMap> > param_sets;
     update_parameters(req_param_map, query.get_query_id(), param_sets);
 
     hash["numMatched"] = param_sets.size();
@@ -139,12 +139,12 @@ void bw::StoredAtomQueryHandlerBase::query(const bw::StoredQuery& query,
 void bw::StoredAtomQueryHandlerBase::update_parameters(
     const bw::RequestParameterMap& request_params,
     int seq_id,
-    std::vector<boost::shared_ptr<bw::RequestParameterMap> >& result) const
+    std::vector<std::shared_ptr<bw::RequestParameterMap> >& result) const
 {
   try
   {
     result.clear();
-    boost::shared_ptr<bw::RequestParameterMap> tmp(
+    std::shared_ptr<bw::RequestParameterMap> tmp(
 	new bw::RequestParameterMap(request_params.get_map(true), true));
     tmp->add("queryNum", seq_id);
     result.push_back(tmp);
@@ -166,19 +166,19 @@ std::vector<std::string> bw::StoredAtomQueryHandlerBase::get_param_callback(
     std::vector<std::string> result;
 
     const auto& param = get_param(param_name);
-    boost::variant<SmartMet::Spine::Value, std::vector<SmartMet::Spine::Value> > param_value;
+    std::variant<SmartMet::Spine::Value, std::vector<SmartMet::Spine::Value> > param_value;
     boost::tribool found = param.get_value(param_value, *param_map, this);
     if (found)
     {
-      const int which = param_value.which();
+      const int which = param_value.index();
       if (which == 0 /* SmartMet::Spine::Value */)
       {
-        std::string tmp = boost::get<SmartMet::Spine::Value>(param_value).to_string();
+        std::string tmp = std::get<SmartMet::Spine::Value>(param_value).to_string();
         result.push_back(tmp);
       }
       else /* std::vector<SmartMet::Spine::Value> */
       {
-        const auto& vect = boost::get<std::vector<SmartMet::Spine::Value> >(param_value);
+        const auto& vect = std::get<std::vector<SmartMet::Spine::Value> >(param_value);
         for (const auto & i : vect)
         {
           std::string tmp = i.to_string();
@@ -199,17 +199,17 @@ namespace
 {
 using namespace SmartMet::Plugin::WFS;
 
-boost::shared_ptr<SmartMet::Plugin::WFS::StoredQueryHandlerBase> wfs_stored_atom_handler_create(
+std::shared_ptr<SmartMet::Plugin::WFS::StoredQueryHandlerBase> wfs_stored_atom_handler_create(
     SmartMet::Spine::Reactor* reactor,
     StoredQueryConfig::Ptr config,
     PluginImpl& plugin_data,
-    boost::optional<std::string> template_file_name)
+    std::optional<std::string> template_file_name)
 {
   try
   {
     auto* qh =
         new StoredAtomQueryHandlerBase(reactor, config, plugin_data, template_file_name);
-    boost::shared_ptr<SmartMet::Plugin::WFS::StoredQueryHandlerBase> result(qh);
+    std::shared_ptr<SmartMet::Plugin::WFS::StoredQueryHandlerBase> result(qh);
     return result;
   }
   catch (...)

@@ -26,7 +26,7 @@ class GetDataSetByIdHandler : public StoredQueryHandlerBase
 
   void query(const StoredQuery& query,
                      const std::string& language,
-		     const boost::optional<std::string>& hostname,
+		     const std::optional<std::string>& hostname,
                      std::ostream& output) const override;
 
   bool redirect(const StoredQuery& query, std::string& new_stored_query_id) const override;

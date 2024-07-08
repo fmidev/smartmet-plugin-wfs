@@ -19,7 +19,7 @@ bw::GetFeatureByIdHandler::GetFeatureByIdHandler(SmartMet::Spine::Reactor* react
                                                  PluginImpl& plugin_data)
     : bw::StoredQueryParamRegistry(config),
       bw::SupportsExtraHandlerParams(config),
-      bw::StoredQueryHandlerBase(reactor, config, plugin_data, boost::optional<std::string>())
+      bw::StoredQueryHandlerBase(reactor, config, plugin_data, std::optional<std::string>())
 {
   try
   {
@@ -38,7 +38,7 @@ bw::GetFeatureByIdHandler::~GetFeatureByIdHandler() = default;
 
 void bw::GetFeatureByIdHandler::query(const StoredQuery& query,
                                       const std::string& language,
-				      const boost::optional<std::string>& hostname,
+				      const std::optional<std::string>& hostname,
                                       std::ostream& output) const
 {
   try
@@ -76,16 +76,16 @@ std::string bw::GetFeatureByIdHandler::get_handler_description() const
 
 namespace
 {
-boost::shared_ptr<bw::StoredQueryHandlerBase> wfs_get_feature_by_id_handler_create(
+std::shared_ptr<bw::StoredQueryHandlerBase> wfs_get_feature_by_id_handler_create(
     SmartMet::Spine::Reactor* reactor,
     bw::StoredQueryConfig::Ptr config,
     bw::PluginImpl& plugin_data,
-    boost::optional<std::string> /* unused template_file_name */)
+    std::optional<std::string> /* unused template_file_name */)
 {
   try
   {
     bw::StoredQueryHandlerBase* qh = new bw::GetFeatureByIdHandler(reactor, config, plugin_data);
-    boost::shared_ptr<bw::StoredQueryHandlerBase> result(qh);
+    std::shared_ptr<bw::StoredQueryHandlerBase> result(qh);
     return result;
   }
   catch (...)

@@ -2,7 +2,7 @@
 
 #include <macgyver/DateTime.h>
 #include <boost/enable_shared_from_this.hpp>
-#include <boost/filesystem.hpp>
+#include <filesystem>
 #include <boost/geometry.hpp>
 #include <boost/geometry/geometries/box.hpp>
 #include <boost/geometry/geometries/point_xy.hpp>
@@ -61,22 +61,22 @@ class DataSetDefinition : public boost::enable_shared_from_this<DataSetDefinitio
   virtual ~DataSetDefinition();
 
   inline const std::string& get_name() const { return name; }
-  inline const boost::filesystem::path& get_dir() const { return dir; }
+  inline const std::filesystem::path& get_dir() const { return dir; }
   inline const std::string& get_server_dir() const { return server_dir; }
   inline const std::set<std::string>& get_params() const { return params; }
   inline const std::set<int>& get_levels() const { return levels; }
   inline const box_t& get_bbox() const { return bbox; }
   bool intersects(const box_t& bbox) const;
 
-  std::vector<boost::filesystem::path> query_files(
+  std::vector<std::filesystem::path> query_files(
       const Fmi::DateTime& begin = Fmi::DateTime::POS_INFINITY,
       const Fmi::DateTime& end = Fmi::DateTime::NEG_INFINITY) const;
 
-  Fmi::DateTime extract_origintime(const boost::filesystem::path& p) const;
+  Fmi::DateTime extract_origintime(const std::filesystem::path& p) const;
 
  private:
   std::string name;
-  boost::filesystem::path dir;
+  std::filesystem::path dir;
   std::string server_dir;
   boost::basic_regex<char> file_regex;
   std::set<std::string> params;

@@ -95,9 +95,9 @@ std::string bw::UrlTemplateGenerator::generate(
 
       for (const auto& param : params)
       {
-        if (param.type() == typeid(ParamRef))
+        if (const auto* ptr = std::get_if<ParamRef>(&param))
         {
-          const auto& ref = boost::get<ParamRef>(param);
+          const auto& ref = *ptr;
           const auto value_vect = param_getter_cb(ref.name);
           if (ref.separate_param)
           {
@@ -132,9 +132,9 @@ std::string bw::UrlTemplateGenerator::generate(
             sep = "&";
           }
         }
-        else if (param.type() == typeid(StringParam))
+        else if (const auto* ptr = std::get_if<StringParam>(&param))
         {
-          const auto& p = boost::get<StringParam>(param);
+          const auto& p = *ptr;
           result << sep;
           encode(result, p.name);
           result << '=';

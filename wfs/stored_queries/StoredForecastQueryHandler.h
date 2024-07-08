@@ -55,11 +55,11 @@ class StoredForecastQueryHandler : public StoredQueryHandlerBase,
     Fmi::DateTime modification_time = Fmi::DateTime::NOT_A_DATE_TIME;
 
    public:
-    boost::shared_ptr<SmartMet::Spine::Table> result;
+    std::shared_ptr<SmartMet::Spine::Table> result;
 
     std::unique_ptr<Fmi::ValueFormatter> value_formatter;
     std::unique_ptr<Fmi::TimeFormatter> time_formatter;
-    boost::shared_ptr<TS::TimeSeriesGeneratorOptions> toptions;
+    std::shared_ptr<TS::TimeSeriesGeneratorOptions> toptions;
 
     bool have_model_area;
     NFmiPoint top_left;
@@ -77,7 +77,7 @@ class StoredForecastQueryHandler : public StoredQueryHandlerBase,
 
    public:
     Query();
-    Query(boost::shared_ptr<const StoredQueryConfig> config);
+    Query(std::shared_ptr<const StoredQueryConfig> config);
     virtual ~Query();
     void set_locale(const std::string& locale_name);
     void set_value_formatter(const Fmi::ValueFormatterParam& vf_param);
@@ -87,7 +87,7 @@ class StoredForecastQueryHandler : public StoredQueryHandlerBase,
   StoredForecastQueryHandler(SmartMet::Spine::Reactor* reactor,
                              StoredQueryConfig::Ptr config,
                              PluginImpl& plugin_impl,
-                             boost::optional<std::string> template_file_name);
+                             std::optional<std::string> template_file_name);
 
   ~StoredForecastQueryHandler() override;
 
@@ -95,11 +95,11 @@ class StoredForecastQueryHandler : public StoredQueryHandlerBase,
 
   void query(const StoredQuery& query,
                      const std::string& language,
-                     const boost::optional<std::string>& hostname,
+                     const std::optional<std::string>& hostname,
                      std::ostream& output) const override;
 
  private:
-  boost::shared_ptr<SmartMet::Spine::Table> extract_forecast(Query& query) const;
+  std::shared_ptr<SmartMet::Spine::Table> extract_forecast(Query& query) const;
 
   SmartMet::Engine::Querydata::Producer select_producer(const SmartMet::Spine::Location& loc,
                                                         const Query& query) const;

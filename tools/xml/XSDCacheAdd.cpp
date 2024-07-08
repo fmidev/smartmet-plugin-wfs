@@ -1,10 +1,10 @@
 #include <cassert>
 #include <iostream>
 #include <sstream>
-#include <boost/filesystem.hpp>
+#include <filesystem>
 #include <openssl/sha.h>
 
-namespace fs = boost::filesystem;
+namespace fs = std::filesystem;
 
 int main(int argc, char* argv[])
 {

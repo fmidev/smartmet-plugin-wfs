@@ -33,13 +33,13 @@ class StoredAviationObservationQueryHandler : public StoredQueryHandlerBase,
   StoredAviationObservationQueryHandler(SmartMet::Spine::Reactor* reactor,
                                         StoredQueryConfig::Ptr config,
                                         PluginImpl& plugin_impl,
-                                        boost::optional<std::string> template_file_name);
+                                        std::optional<std::string> template_file_name);
 
   ~StoredAviationObservationQueryHandler() override;
 
   void query(const StoredQuery& query,
                      const std::string& language,
-		     const boost::optional<std::string> &hostname,
+		     const std::optional<std::string> &hostname,
                      std::ostream& output) const override;
 
   std::string get_handler_description() const override;
@@ -48,7 +48,7 @@ class StoredAviationObservationQueryHandler : public StoredQueryHandlerBase,
   virtual void update_parameters(
       const RequestParameterMap& request_params,
       int seq_id,
-      std::vector<boost::shared_ptr<RequestParameterMap> >& result) const;
+      std::vector<std::shared_ptr<RequestParameterMap> >& result) const;
 
   bool m_sqRestrictions;
   double m_maxHours;

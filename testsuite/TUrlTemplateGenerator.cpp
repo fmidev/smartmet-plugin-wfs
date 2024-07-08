@@ -2,7 +2,7 @@
 #define BOOST_TEST_DYN_LINK 1
 #include <iostream>
 #include <boost/bind/bind.hpp>
-#include <boost/shared_ptr.hpp>
+#include <memory>
 #include <boost/test/unit_test.hpp>
 #include <newbase/NFmiPoint.h>
 #include <macgyver/TypeName.h>
@@ -68,7 +68,7 @@ BOOST_AUTO_TEST_CASE(test_template_url_generator_1)
   std::multimap<std::string, std::string> param_map;
 
   std::string result;
-  boost::shared_ptr<UrlTemplateGenerator> test;
+  std::shared_ptr<UrlTemplateGenerator> test;
   BOOST_REQUIRE_NO_THROW(
       test.reset(new UrlTemplateGenerator("http://www.example.com/test", params)));
   BOOST_REQUIRE_NO_THROW(result = test->generate(boost::bind(&get_param,  ph::_1, &param_map)));
@@ -90,7 +90,7 @@ BOOST_AUTO_TEST_CASE(test_template_url_generator_2)
   std::multimap<std::string, std::string> param_map;
 
   std::string result;
-  boost::shared_ptr<UrlTemplateGenerator> test;
+  std::shared_ptr<UrlTemplateGenerator> test;
   BOOST_REQUIRE_NO_THROW(
       test.reset(new UrlTemplateGenerator("http://www.example.com/test", params)));
   const auto& pm = test->get_content();
@@ -118,7 +118,7 @@ BOOST_AUTO_TEST_CASE(test_template_url_generator_3)
   param_map.insert(std::make_pair("a1", "A1"));
 
   std::string result;
-  boost::shared_ptr<UrlTemplateGenerator> test;
+  std::shared_ptr<UrlTemplateGenerator> test;
   BOOST_REQUIRE_NO_THROW(
       test.reset(new UrlTemplateGenerator("http://www.example.com/test", params)));
   const auto& pm = test->get_content();
@@ -150,7 +150,7 @@ BOOST_AUTO_TEST_CASE(test_template_url_generator_4)
   param_map.insert(std::make_pair("a2", "A2B"));
 
   std::string result;
-  boost::shared_ptr<UrlTemplateGenerator> test;
+  std::shared_ptr<UrlTemplateGenerator> test;
   BOOST_REQUIRE_NO_THROW(
       test.reset(new UrlTemplateGenerator("http://www.example.com/test", params)));
   const auto& pm = test->get_content();
@@ -174,7 +174,7 @@ BOOST_AUTO_TEST_CASE(test_template_url_generator_5)
   std::multimap<std::string, std::string> param_map;
 
   std::string result;
-  boost::shared_ptr<UrlTemplateGenerator> test;
+  std::shared_ptr<UrlTemplateGenerator> test;
   BOOST_REQUIRE_NO_THROW(
       test.reset(new UrlTemplateGenerator("http://www.example.com/test?a1=A1", params)));
   BOOST_REQUIRE_NO_THROW(result = test->generate(boost::bind(&get_param,  ph::_1, &param_map)));
@@ -201,7 +201,7 @@ BOOST_AUTO_TEST_CASE(test_template_url_generator_6)
   param_map.insert(std::make_pair("a2", "A2B"));
 
   std::string result;
-  boost::shared_ptr<UrlTemplateGenerator> test;
+  std::shared_ptr<UrlTemplateGenerator> test;
   BOOST_REQUIRE_NO_THROW(
       test.reset(new UrlTemplateGenerator("http://www.example.com/test", params)));
   const auto& pm = test->get_content();
@@ -228,7 +228,7 @@ BOOST_AUTO_TEST_CASE(test_template_url_generator_7)
   param_map.insert(std::make_pair("a3", "A3B"));
 
   std::string result;
-  boost::shared_ptr<UrlTemplateGenerator> test;
+  std::shared_ptr<UrlTemplateGenerator> test;
   BOOST_REQUIRE_NO_THROW(
       test.reset(new UrlTemplateGenerator("http://www.example.com/test/${a1}/${a2}/foo", params)));
   const auto& pm = test->get_content();
@@ -251,7 +251,7 @@ BOOST_AUTO_TEST_CASE(test_template_url_generator_8)
   param_map.insert(std::make_pair("a3", "A3B"));
 
   std::string result;
-  boost::shared_ptr<UrlTemplateGenerator> test;
+  std::shared_ptr<UrlTemplateGenerator> test;
   BOOST_REQUIRE_NO_THROW(
       test.reset(new UrlTemplateGenerator("http://www.example.com/test/${a1}/${a3}/foo", params)));
   const auto& pm = test->get_content();

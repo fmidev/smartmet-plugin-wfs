@@ -75,13 +75,13 @@ class StoredSoundingQueryHandler : public StoredQueryHandlerBase,
   StoredSoundingQueryHandler(SmartMet::Spine::Reactor* reactor,
                              StoredQueryConfig::Ptr config,
                              PluginImpl& pluginData,
-                             boost::optional<std::string> templateFileName);
+                             std::optional<std::string> templateFileName);
 
   ~StoredSoundingQueryHandler() override;
 
   void query(const StoredQuery& query,
                      const std::string& language,
-                     const boost::optional<std::string>& hostname,
+                     const std::optional<std::string>& hostname,
                      std::ostream& output) const override;
 
   std::string get_handler_description() const override;
@@ -90,7 +90,7 @@ class StoredSoundingQueryHandler : public StoredQueryHandlerBase,
   virtual void update_parameters(
       const RequestParameterMap& request_params,
       int seq_id,
-      std::vector<boost::shared_ptr<RequestParameterMap> >& result) const;
+      std::vector<std::shared_ptr<RequestParameterMap> >& result) const;
 
   const std::shared_ptr<SmartMet::Engine::Observation::DBRegistryConfig> dbRegistryConfig(
       const std::string& configName) const;

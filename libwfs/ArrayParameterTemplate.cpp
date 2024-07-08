@@ -71,7 +71,7 @@ std::vector<SmartMet::Spine::Value> ArrayParameterTemplate::get_value(
   {
     std::variant<SmartMet::Spine::Value, std::vector<SmartMet::Spine::Value> > result;
     get_value(result, req_param_map, extra_params, true);
-    return boost::get<std::vector<SmartMet::Spine::Value> >(result);
+    return std::get<std::vector<SmartMet::Spine::Value> >(result);
   }
   catch (...)
   {
@@ -107,13 +107,13 @@ boost::tribool ArrayParameterTemplate::get_value(
 
       if (found)
       {
-        if (item_value.which() == 0)
+        if (item_value.index() == 0)
         {
-          tmp_result.push_back(boost::get<SmartMet::Spine::Value>(item_value));
+          tmp_result.push_back(std::get<SmartMet::Spine::Value>(item_value));
         }
-        else if (item_value.which() == 1)
+        else if (item_value.index() == 1)
         {
-          auto& tmp = boost::get<std::vector<SmartMet::Spine::Value> >(item_value);
+          auto& tmp = std::get<std::vector<SmartMet::Spine::Value> >(item_value);
           std::copy(tmp.begin(), tmp.end(), std::back_inserter(tmp_result));
         }
         else

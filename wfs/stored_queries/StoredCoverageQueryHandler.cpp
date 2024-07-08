@@ -11,7 +11,7 @@ bw::StoredCoverageQueryHandler::StoredCoverageQueryHandler(
     SmartMet::Spine::Reactor* reactor,
     bw::StoredQueryConfig::Ptr config,
     PluginImpl& plugin_data,
-    boost::optional<std::string> template_file_name)
+    std::optional<std::string> template_file_name)
 
     : StoredQueryParamRegistry(config),
       SupportsExtraHandlerParams(config, false),
@@ -142,14 +142,14 @@ SmartMet::Engine::Contour::Options bw::StoredCoverageQueryHandler::getContourEng
       (reinterpret_cast<const CoverageQueryParameter&>(queryParameter)).limits);
 }
 
-boost::shared_ptr<bw::ContourQueryParameter> bw::StoredCoverageQueryHandler::getQueryParameter(
+std::shared_ptr<bw::ContourQueryParameter> bw::StoredCoverageQueryHandler::getQueryParameter(
     const SmartMet::Spine::Parameter& parameter,
     const SmartMet::Engine::Querydata::Q& q,
     OGRSpatialReference& sr) const
 {
   try
   {
-    boost::shared_ptr<bw::ContourQueryParameter> ret(new CoverageQueryParameter(parameter, q, sr));
+    std::shared_ptr<bw::ContourQueryParameter> ret(new CoverageQueryParameter(parameter, q, sr));
 
     return ret;
   }
@@ -183,15 +183,15 @@ namespace
 {
 using namespace SmartMet::Plugin::WFS;
 
-boost::shared_ptr<SmartMet::Plugin::WFS::StoredQueryHandlerBase> wfs_coverage_query_handler_create(
+std::shared_ptr<SmartMet::Plugin::WFS::StoredQueryHandlerBase> wfs_coverage_query_handler_create(
     SmartMet::Spine::Reactor* reactor,
     StoredQueryConfig::Ptr config,
     PluginImpl& plugin_data,
-    boost::optional<std::string> template_file_name)
+    std::optional<std::string> template_file_name)
 {
   auto* qh =
       new StoredCoverageQueryHandler(reactor, config, plugin_data, template_file_name);
-  boost::shared_ptr<SmartMet::Plugin::WFS::StoredQueryHandlerBase> result(qh);
+  std::shared_ptr<SmartMet::Plugin::WFS::StoredQueryHandlerBase> result(qh);
   return result;
 }
 }  // namespace

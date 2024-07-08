@@ -42,7 +42,7 @@ bw::StoredForecastQueryHandler::StoredForecastQueryHandler(
     SmartMet::Spine::Reactor* reactor,
     bw::StoredQueryConfig::Ptr config,
     PluginImpl& plugin_data,
-    boost::optional<std::string> template_file_name)
+    std::optional<std::string> template_file_name)
 
     : bw::StoredQueryParamRegistry(config),
       bw::SupportsExtraHandlerParams(config, false),
@@ -160,7 +160,7 @@ std::string bw::StoredForecastQueryHandler::get_handler_description() const
 
 void bw::StoredForecastQueryHandler::query(const StoredQuery& stored_query,
                                            const std::string& language,
-                                           const boost::optional<std::string>&  /*hostname*/,
+                                           const std::optional<std::string>&  /*hostname*/,
                                            std::ostream& output) const
 {
   try
@@ -433,7 +433,7 @@ struct StationRec
 };
 }  // namespace
 
-boost::shared_ptr<SmartMet::Spine::Table> bw::StoredForecastQueryHandler::extract_forecast(
+std::shared_ptr<SmartMet::Spine::Table> bw::StoredForecastQueryHandler::extract_forecast(
     Query& query) const
 {
   try
@@ -442,10 +442,10 @@ boost::shared_ptr<SmartMet::Spine::Table> bw::StoredForecastQueryHandler::extrac
 
     int debug_level = get_config()->get_debug_level();
 
-    boost::shared_ptr<SmartMet::Spine::Table> ennusteet(new SmartMet::Spine::Table);
+    std::shared_ptr<SmartMet::Spine::Table> ennusteet(new SmartMet::Spine::Table);
 
 #ifdef ENABLE_MODEL_PATH
-    boost::optional<std::string> model_path;
+    std::optional<std::string> model_path;
 #endif
 
     std::string language = Fmi::ascii_tolower_copy(query.language);
@@ -663,7 +663,7 @@ boost::shared_ptr<SmartMet::Spine::Table> bw::StoredForecastQueryHandler::extrac
 
             ss.str("");
             TS::OStreamVisitor osv(ss, *query.value_formatter, prec);
-            boost::apply_visitor(osv, val);
+            val.apply_visitor(osv);
 
             ennusteet->set(column, row, ss.str());
 
@@ -707,7 +707,7 @@ boost::shared_ptr<SmartMet::Spine::Table> bw::StoredForecastQueryHandler::extrac
 
               ss.str("");
               TS::OStreamVisitor osv(ss, *query.value_formatter, prec);
-              boost::apply_visitor(osv, val);
+              val.apply_visitor(osv);
 
               ennusteet->set(column, row, ss.str());
 
@@ -843,7 +843,7 @@ void bw::StoredForecastQueryHandler::parse_times(const RequestParameterMap& para
   {
     dest.toptions = get_time_generator_options(param);
 
-    // boost::optional + gcc-4.4.X käytäytyy huonosti
+    // std::optional + gcc-4.4.X käytäytyy huonosti
     if (param.count(P_ORIGIN_TIME) > 0)
       dest.origin_time.reset(new Fmi::DateTime(param.get_single<Fmi::DateTime>(P_ORIGIN_TIME)));
   }
@@ -915,7 +915,7 @@ bw::StoredForecastQueryHandler::get_model_parameters(const std::string& producer
   }
 }
 
-bw::StoredForecastQueryHandler::Query::Query(boost::shared_ptr<const StoredQueryConfig> config)
+bw::StoredForecastQueryHandler::Query::Query(std::shared_ptr<const StoredQueryConfig> config)
     : max_distance(20000.0),
       missing_text("nan"),
       language("lan"),
@@ -969,17 +969,17 @@ namespace
 {
 using namespace SmartMet::Plugin::WFS;
 
-boost::shared_ptr<SmartMet::Plugin::WFS::StoredQueryHandlerBase> wfs_forecast_handler_create(
+std::shared_ptr<SmartMet::Plugin::WFS::StoredQueryHandlerBase> wfs_forecast_handler_create(
     SmartMet::Spine::Reactor* reactor,
     StoredQueryConfig::Ptr config,
     PluginImpl& plugin_impl,
-    boost::optional<std::string> template_file_name)
+    std::optional<std::string> template_file_name)
 {
   try
   {
     auto* qh =
         new StoredForecastQueryHandler(reactor, config, plugin_impl, template_file_name);
-    boost::shared_ptr<SmartMet::Plugin::WFS::StoredQueryHandlerBase> result(qh);
+    std::shared_ptr<SmartMet::Plugin::WFS::StoredQueryHandlerBase> result(qh);
     return result;
   }
   catch (...)

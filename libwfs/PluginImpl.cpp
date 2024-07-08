@@ -753,7 +753,7 @@ void PluginImpl::realRequestHandler(SmartMet::Spine::Reactor& /* theReactor */,
 
       // Latter (false) should newer happen.
       const int expires_seconds = (result.expires_seconds)
-                                      ? result.expires_seconds.get()
+                                      ? *result.expires_seconds
                                       : get_config().getDefaultExpiresSeconds();
 
       // Build cache expiration time info

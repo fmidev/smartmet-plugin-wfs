@@ -18,7 +18,7 @@ class StoredGeoserverQueryHandler : public StoredAtomQueryHandlerBase, protected
   StoredGeoserverQueryHandler(SmartMet::Spine::Reactor *reactor,
                               StoredQueryConfig::Ptr config,
                               PluginImpl &plugin_impl,
-                              boost::optional<std::string> template_file_name);
+                              std::optional<std::string> template_file_name);
 
   ~StoredGeoserverQueryHandler() override;
 
@@ -28,7 +28,7 @@ class StoredGeoserverQueryHandler : public StoredAtomQueryHandlerBase, protected
   void update_parameters(
       const RequestParameterMap &request_params,
       int seq_id,
-      std::vector<boost::shared_ptr<RequestParameterMap> > &result) const override;
+      std::vector<std::shared_ptr<RequestParameterMap> > &result) const override;
 
  private:
   /* FIXME: optimize to avoid need to read query paremeters again and again (if needed) */
@@ -39,7 +39,7 @@ class StoredGeoserverQueryHandler : public StoredAtomQueryHandlerBase, protected
   /**
    *   @brief Maps layer name to database table name
    */
-  boost::optional<std::map<std::string, std::string> > layer_map;
+  std::optional<std::map<std::string, std::string> > layer_map;
 
   std::map<std::string, std::string> layer_param_name_map;
 
@@ -50,7 +50,7 @@ class StoredGeoserverQueryHandler : public StoredAtomQueryHandlerBase, protected
    *   The default value (if layer_nap is not provided either)
    *   is "mosaic.%1%".
    */
-  boost::optional<std::string> layer_db_table_name_format;
+  std::optional<std::string> layer_db_table_name_format;
 
   /**
    *   @brief Maps layer aliases to layer names

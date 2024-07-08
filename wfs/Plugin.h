@@ -13,11 +13,10 @@
 //#include "StoredQueryMap.h"
 //#include "XmlEnvInit.h"
 //#include "XmlParser.h"
-#include <boost/shared_ptr.hpp>
-#include <boost/smart_ptr/atomic_shared_ptr.hpp>
 #include <boost/thread.hpp>
 #include <boost/utility.hpp>
 #include <ctpp2/CDT.hpp>
+#include <macgyver/AtomicSharedPtr.h>
 #include <macgyver/TimedCache.h>
 #include <macgyver/CacheStats.h>
 #include <spine/HTTP.h>
@@ -28,6 +27,7 @@
 #include <iostream>
 #include <list>
 #include <map>
+#include <memory>
 #include <mutex>
 #include <string>
 #include <thread>
@@ -86,7 +86,7 @@ class Plugin : public SmartMetPlugin,
 
   const std::string itsModuleName;
 
-  boost::atomic_shared_ptr<PluginImpl> plugin_impl;
+  Fmi::AtomicSharedPtr<PluginImpl> plugin_impl;
 
   SmartMet::Spine::Reactor* itsReactor;
 

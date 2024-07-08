@@ -2,7 +2,7 @@
 #include "WfsConvenience.h"
 #include "WfsException.h"
 #include <macgyver/DateTime.h>
-#include <boost/optional/optional_io.hpp>
+#include <macgyver/Optional.h>
 #include <cstdint>
 #include <macgyver/Exception.h>
 

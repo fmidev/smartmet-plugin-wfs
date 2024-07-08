@@ -87,11 +87,11 @@ BOOST_AUTO_TEST_CASE(simple_param_no_default)
   BOOST_TEST_MESSAGE("+ [Testing simple scalar parameter without default value]");
 
   const std::string fn = create_config("test", "string", "foo", "\"${test}\"");
-  boost::shared_ptr<StoredQueryConfig> config;
+  std::shared_ptr<StoredQueryConfig> config;
   BOOST_REQUIRE_NO_THROW(config.reset(new StoredQueryConfig(fn, nullptr)));
   unlink(fn.c_str());
 
-  boost::shared_ptr<ScalarParameterTemplate> pt;
+  std::shared_ptr<ScalarParameterTemplate> pt;
   BOOST_REQUIRE_NO_THROW(pt.reset(new ScalarParameterTemplate(*config, "foo", false)));
 
   const ParameterTemplateItem& item = pt->get_item();
@@ -110,11 +110,11 @@ BOOST_AUTO_TEST_CASE(simple_point_param)
   BOOST_TEST_MESSAGE("+ [Testing simple SmartMet::Spine::Point parameter without default value]");
 
   const std::string fn = create_config("test", "point", "foo", "\"${test}\"");
-  boost::shared_ptr<StoredQueryConfig> config;
+  std::shared_ptr<StoredQueryConfig> config;
   BOOST_REQUIRE_NO_THROW(config.reset(new StoredQueryConfig(fn, nullptr)));
   unlink(fn.c_str());
 
-  boost::shared_ptr<ScalarParameterTemplate> pt;
+  std::shared_ptr<ScalarParameterTemplate> pt;
   BOOST_REQUIRE_NO_THROW(pt.reset(new ScalarParameterTemplate(*config, "foo", false)));
 
   Point value;
@@ -142,11 +142,11 @@ BOOST_AUTO_TEST_CASE(simple_bbox_param)
   BOOST_TEST_MESSAGE("+ [Testing simple SmartMet::Spine::BoundingBox parameter without default value]");
 
   const std::string fn = create_config("test", "bbox", "foo", "\"${test}\"");
-  boost::shared_ptr<StoredQueryConfig> config;
+  std::shared_ptr<StoredQueryConfig> config;
   BOOST_REQUIRE_NO_THROW(config.reset(new StoredQueryConfig(fn, nullptr)));
   unlink(fn.c_str());
 
-  boost::shared_ptr<ScalarParameterTemplate> pt;
+  std::shared_ptr<ScalarParameterTemplate> pt;
   BOOST_REQUIRE_NO_THROW(pt.reset(new ScalarParameterTemplate(*config, "foo", false)));
 
   BoundingBox value;
@@ -178,11 +178,11 @@ BOOST_AUTO_TEST_CASE(simple_param_weak_ref_no_default)
   BOOST_TEST_MESSAGE("+ [Testing simple scalar parameter (weak reference) without default value]");
 
   const std::string fn = create_config("test", "string", "foo", "\"%{test2}\"");
-  boost::shared_ptr<StoredQueryConfig> config;
+  std::shared_ptr<StoredQueryConfig> config;
   BOOST_REQUIRE_NO_THROW(config.reset(new StoredQueryConfig(fn, nullptr)));
   unlink(fn.c_str());
 
-  boost::shared_ptr<ScalarParameterTemplate> pt;
+  std::shared_ptr<ScalarParameterTemplate> pt;
   BOOST_REQUIRE_NO_THROW(pt.reset(new ScalarParameterTemplate(*config, "foo", false)));
 
   const ParameterTemplateItem& item = pt->get_item();
@@ -202,11 +202,11 @@ BOOST_AUTO_TEST_CASE(simple_param_no_default_non_root)
   BOOST_TEST_MESSAGE("+ [Testing simple scalar parameter without default value (not root)]");
 
   const std::string fn = create_config("test", "string", "bar", "\"${test}\"", "foo");
-  boost::shared_ptr<StoredQueryConfig> config;
+  std::shared_ptr<StoredQueryConfig> config;
   BOOST_REQUIRE_NO_THROW(config.reset(new StoredQueryConfig(fn, nullptr)));
   unlink(fn.c_str());
 
-  boost::shared_ptr<ScalarParameterTemplate> pt;
+  std::shared_ptr<ScalarParameterTemplate> pt;
   BOOST_REQUIRE_THROW(pt.reset(new ScalarParameterTemplate(*config, "fo", "bar", false)),
                       Fmi::Exception);
   BOOST_REQUIRE_NO_THROW(pt.reset(new ScalarParameterTemplate(*config, "foo", "bar", false)));
@@ -227,11 +227,11 @@ BOOST_AUTO_TEST_CASE(simple_param_with_default)
   BOOST_TEST_MESSAGE("+ [Testing simple scalar parameter with default value]");
 
   const std::string fn = create_config("test", "string", "foo", "\"${test:bar}\"");
-  boost::shared_ptr<StoredQueryConfig> config;
+  std::shared_ptr<StoredQueryConfig> config;
   BOOST_REQUIRE_NO_THROW(config.reset(new StoredQueryConfig(fn, nullptr)));
   unlink(fn.c_str());
 
-  boost::shared_ptr<ScalarParameterTemplate> pt;
+  std::shared_ptr<ScalarParameterTemplate> pt;
   BOOST_REQUIRE_NO_THROW(pt.reset(new ScalarParameterTemplate(*config, "foo", false)));
 
   const ParameterTemplateItem& item = pt->get_item();
@@ -266,11 +266,11 @@ BOOST_AUTO_TEST_CASE(simple_param_weak_ref_with_default)
   BOOST_TEST_MESSAGE("+ [Testing simple scalar parameter (weak reference) with default value]");
 
   const std::string fn = create_config("test", "string", "foo", "\"%{test2:bar}\"");
-  boost::shared_ptr<StoredQueryConfig> config;
+  std::shared_ptr<StoredQueryConfig> config;
   BOOST_REQUIRE_NO_THROW(config.reset(new StoredQueryConfig(fn, nullptr)));
   unlink(fn.c_str());
 
-  boost::shared_ptr<ScalarParameterTemplate> pt;
+  std::shared_ptr<ScalarParameterTemplate> pt;
   BOOST_REQUIRE_NO_THROW(pt.reset(new ScalarParameterTemplate(*config, "foo", false)));
 
   const ParameterTemplateItem& item = pt->get_item();
@@ -303,11 +303,11 @@ BOOST_AUTO_TEST_CASE(simple_param_with_default_containing_space)
       "+ [Testing simple scalar parameter without default value which contains space]");
 
   const std::string fn = create_config("test", "string", "foo", "\"${test:bar baz 2}\"");
-  boost::shared_ptr<StoredQueryConfig> config;
+  std::shared_ptr<StoredQueryConfig> config;
   BOOST_REQUIRE_NO_THROW(config.reset(new StoredQueryConfig(fn, nullptr)));
   unlink(fn.c_str());
 
-  boost::shared_ptr<ScalarParameterTemplate> pt;
+  std::shared_ptr<ScalarParameterTemplate> pt;
   BOOST_REQUIRE_NO_THROW(pt.reset(new ScalarParameterTemplate(*config, "foo", false)));
 
   const ParameterTemplateItem& item = pt->get_item();
@@ -342,11 +342,11 @@ BOOST_AUTO_TEST_CASE(simple_param_from_array_no_default)
   BOOST_TEST_MESSAGE("+ [Testing reading scalar parameter an array element]");
 
   const std::string fn = create_config("test", "int[4]", "foo", "\"${test[3]}\"");
-  boost::shared_ptr<StoredQueryConfig> config;
+  std::shared_ptr<StoredQueryConfig> config;
   BOOST_REQUIRE_NO_THROW(config.reset(new StoredQueryConfig(fn, nullptr)));
   unlink(fn.c_str());
 
-  boost::shared_ptr<ScalarParameterTemplate> pt;
+  std::shared_ptr<ScalarParameterTemplate> pt;
   BOOST_REQUIRE_NO_THROW(pt.reset(new ScalarParameterTemplate(*config, "foo", false)));
 
   const ParameterTemplateItem& item = pt->get_item();
@@ -386,11 +386,11 @@ BOOST_AUTO_TEST_CASE(simple_param_from_array_with_default)
       "+ [Testing reading scalar parameter from an array element with default value provided]");
 
   const std::string fn = create_config("test", "time[4]", "foo", "\"${test[3]:201210241526}\"");
-  boost::shared_ptr<StoredQueryConfig> config;
+  std::shared_ptr<StoredQueryConfig> config;
   BOOST_REQUIRE_NO_THROW(config.reset(new StoredQueryConfig(fn, nullptr)));
   unlink(fn.c_str());
 
-  boost::shared_ptr<ScalarParameterTemplate> pt;
+  std::shared_ptr<ScalarParameterTemplate> pt;
   BOOST_REQUIRE_NO_THROW(pt.reset(new ScalarParameterTemplate(*config, "foo", false)));
 
   const ParameterTemplateItem& item = pt->get_item();
@@ -430,11 +430,11 @@ BOOST_AUTO_TEST_CASE(reference_to_non_existing_request_parameter)
   BOOST_TEST_MESSAGE("+ [Testing reference to non existing parameter]");
 
   const std::string fn = create_config("test", "string", "foo", "\"${bar}\"");
-  boost::shared_ptr<StoredQueryConfig> config;
+  std::shared_ptr<StoredQueryConfig> config;
   BOOST_REQUIRE_NO_THROW(config.reset(new StoredQueryConfig(fn, nullptr)));
   unlink(fn.c_str());
 
-  boost::shared_ptr<ScalarParameterTemplate> pt;
+  std::shared_ptr<ScalarParameterTemplate> pt;
   BOOST_REQUIRE_THROW(pt.reset(new ScalarParameterTemplate(*config, "foo", false)), Fmi::Exception);
 }
 
@@ -446,11 +446,11 @@ BOOST_AUTO_TEST_CASE(request_of_copying_entire_array_to_scalar)
   BOOST_TEST_MESSAGE("+ [Testing an attempt to read an array parameter as a scalar]");
 
   const std::string fn = create_config("test", "string[3]", "foo", "\"${test}\"");
-  boost::shared_ptr<StoredQueryConfig> config;
+  std::shared_ptr<StoredQueryConfig> config;
   BOOST_REQUIRE_NO_THROW(config.reset(new StoredQueryConfig(fn, nullptr)));
   unlink(fn.c_str());
 
-  boost::shared_ptr<ScalarParameterTemplate> pt;
+  std::shared_ptr<ScalarParameterTemplate> pt;
   BOOST_REQUIRE_THROW(pt.reset(new ScalarParameterTemplate(*config, "foo", false)), Fmi::Exception);
 }
 
@@ -462,11 +462,11 @@ BOOST_AUTO_TEST_CASE(using_absent_parameters)
   BOOST_TEST_MESSAGE("+ [Testing an use of absent parameters]");
 
   const std::string fn = create_config("test", "string[3]", "foo", "\"${}\"");
-  boost::shared_ptr<StoredQueryConfig> config;
+  std::shared_ptr<StoredQueryConfig> config;
   BOOST_REQUIRE_NO_THROW(config.reset(new StoredQueryConfig(fn, nullptr)));
   unlink(fn.c_str());
 
-  boost::shared_ptr<ScalarParameterTemplate> pt;
+  std::shared_ptr<ScalarParameterTemplate> pt;
   BOOST_REQUIRE_NO_THROW(pt.reset(new ScalarParameterTemplate(*config, "foo", false)));
 
   const ParameterTemplateItem& item = pt->get_item();
@@ -491,11 +491,11 @@ BOOST_AUTO_TEST_CASE(parameter_definition_missing_from_config)
   BOOST_TEST_MESSAGE("+ [Testing case when parameter definition is missing from config (warning expected)]");
 
   const std::string fn = create_config("test", "string[3]", "foo", "\"${}\"");
-  boost::shared_ptr<StoredQueryConfig> config;
+  std::shared_ptr<StoredQueryConfig> config;
   BOOST_REQUIRE_NO_THROW(config.reset(new StoredQueryConfig(fn, nullptr)));
   unlink(fn.c_str());
 
-  boost::shared_ptr<ScalarParameterTemplate> pt;
+  std::shared_ptr<ScalarParameterTemplate> pt;
   BOOST_REQUIRE_NO_THROW(pt.reset(new ScalarParameterTemplate(*config, "bar", false)));
 
   const ParameterTemplateItem& item = pt->get_item();

@@ -33,7 +33,7 @@ bw::StoredContourQueryHandler::StoredContourQueryHandler(
     SmartMet::Spine::Reactor* reactor,
     bw::StoredQueryConfig::Ptr config,
     PluginImpl& plugin_data,
-    boost::optional<std::string> template_file_name)
+    std::optional<std::string> template_file_name)
 
     : StoredQueryParamRegistry(config),
       SupportsExtraHandlerParams(config, false),
@@ -486,7 +486,7 @@ void bw::StoredContourQueryHandler::parsePolygon(OGRPolygon* polygon,
 
 void bw::StoredContourQueryHandler::query(const StoredQuery& stored_query,
                                           const std::string& language,
-                                          const boost::optional<std::string>&  /*hostname*/,
+                                          const std::optional<std::string>&  /*hostname*/,
                                           std::ostream& output) const
 {
   try
@@ -537,7 +537,7 @@ void bw::StoredContourQueryHandler::query_qEngine(const StoredQuery& stored_quer
     }
 
     auto producer = sq_params.get_single<std::string>(P_PRODUCER);
-    boost::optional<Fmi::DateTime> requested_origintime =
+    std::optional<Fmi::DateTime> requested_origintime =
         sq_params.get_optional<Fmi::DateTime>(P_ORIGIN_TIME);
 
     SmartMet::Engine::Querydata::Q q;
@@ -551,7 +551,7 @@ void bw::StoredContourQueryHandler::query_qEngine(const StoredQuery& stored_quer
 
     SmartMet::Spine::Parameter parameter(name, SmartMet::Spine::Parameter::Type::Data, id);
 
-    boost::shared_ptr<ContourQueryParameter> query_param = getQueryParameter(parameter, q, sr);
+    std::shared_ptr<ContourQueryParameter> query_param = getQueryParameter(parameter, q, sr);
     auto* qParam = dynamic_cast<CoverageQueryParameter*>(query_param.get());
     if (qParam)
     {
@@ -575,7 +575,7 @@ void bw::StoredContourQueryHandler::query_qEngine(const StoredQuery& stored_quer
     query_param->smoothing_degree = sq_params.get_optional<uint64_t>(P_SMOOTHING_DEGREE, 2);
     query_param->smoothing_size = sq_params.get_optional<uint64_t>(P_SMOOTHING_SIZE, 2);
 
-    boost::shared_ptr<TS::TimeSeriesGeneratorOptions> pTimeOptions =
+    std::shared_ptr<TS::TimeSeriesGeneratorOptions> pTimeOptions =
         get_time_generator_options(sq_params);
 
     // get data in UTC
@@ -643,7 +643,7 @@ void bw::StoredContourQueryHandler::query_gridEngine(const StoredQuery& stored_q
 
     auto producer = sq_params.get_single<std::string>(P_PRODUCER);
 
-    boost::optional<Fmi::DateTime> requested_origintime =
+    std::optional<Fmi::DateTime> requested_origintime =
         sq_params.get_optional<Fmi::DateTime>(P_ORIGIN_TIME);
     if (requested_origintime)
     {
@@ -707,7 +707,7 @@ void bw::StoredContourQueryHandler::query_gridEngine(const StoredQuery& stored_q
       attributeList.addAttribute("param", name);
     }
 
-    boost::shared_ptr<TS::TimeSeriesGeneratorOptions> tOptions =
+    std::shared_ptr<TS::TimeSeriesGeneratorOptions> tOptions =
         get_time_generator_options(sq_params);
 
     if (tOptions->startTimeData)
@@ -730,7 +730,7 @@ void bw::StoredContourQueryHandler::query_gridEngine(const StoredQuery& stored_q
 
     SmartMet::Engine::Querydata::Q q;
     SmartMet::Spine::Parameter parameter(name, SmartMet::Spine::Parameter::Type::Data, id);
-    boost::shared_ptr<ContourQueryParameter> query_param = getQueryParameter(parameter, q, sr);
+    std::shared_ptr<ContourQueryParameter> query_param = getQueryParameter(parameter, q, sr);
 
     auto* qParam = dynamic_cast<CoverageQueryParameter*>(query_param.get());
     if (qParam)
@@ -755,7 +755,7 @@ void bw::StoredContourQueryHandler::query_gridEngine(const StoredQuery& stored_q
     query_param->smoothing_degree = sq_params.get_optional<uint64_t>(P_SMOOTHING_DEGREE, 2);
     query_param->smoothing_size = sq_params.get_optional<uint64_t>(P_SMOOTHING_SIZE, 2);
 
-    boost::shared_ptr<TS::TimeSeriesGeneratorOptions> pTimeOptions =
+    std::shared_ptr<TS::TimeSeriesGeneratorOptions> pTimeOptions =
         get_time_generator_options(sq_params);
     const std::string zone = "UTC";
     auto tz = geo_engine->getTimeZones().time_zone_from_string(zone);

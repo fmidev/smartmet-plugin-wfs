@@ -37,13 +37,13 @@ class StoredObsQueryHandler : public StoredQueryHandlerBase,
   StoredObsQueryHandler(SmartMet::Spine::Reactor* reactor,
                         StoredQueryConfig::Ptr config,
                         PluginImpl& plugin_impl,
-                        boost::optional<std::string> template_file_name);
+                        std::optional<std::string> template_file_name);
 
   ~StoredObsQueryHandler() override;
 
   void query(const StoredQuery& query,
                      const std::string& language,
-		     const boost::optional<std::string> &hostname,
+		     const std::optional<std::string> &hostname,
                      std::ostream& output) const override;
 
   std::string get_handler_description() const override;
@@ -59,13 +59,13 @@ class StoredObsQueryHandler : public StoredQueryHandlerBase,
 	std::string name;
 	
 	/** Sensor number */
-	boost::optional<std::string> sensor_name;	
+	std::optional<std::string> sensor_name;	
   };
 
   struct ExtParamIndexEntry
   {
       ParamIndexEntry p;
-      boost::optional<ParamIndexEntry> qc;
+      std::optional<ParamIndexEntry> qc;
   };
 
   /**

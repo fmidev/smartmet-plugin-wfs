@@ -70,9 +70,9 @@ class TestConfig : public libconfig::Config
   }
 };
 
-boost::shared_ptr<libconfig::Config> create_config()
+std::shared_ptr<libconfig::Config> create_config()
 {
-  boost::shared_ptr<libconfig::Config> config(new TestConfig);
+  std::shared_ptr<libconfig::Config> config(new TestConfig);
   return config;
 }
 
@@ -119,13 +119,13 @@ BOOST_AUTO_TEST_CASE(test_parameters_redirection_1)
   using namespace SmartMet::Plugin::WFS;
 
   auto raw_config = create_config();
-  boost::shared_ptr<StoredQueryConfig> config;
+  std::shared_ptr<StoredQueryConfig> config;
   BOOST_REQUIRE_NO_THROW(config.reset(new StoredQueryConfig(raw_config, nullptr)));
 
   // config->dump_config(std::cout, *raw_config);
   // std::cout << std::endl;
 
-  boost::shared_ptr<ArrayParameterTemplate> pt;
+  std::shared_ptr<ArrayParameterTemplate> pt;
   BOOST_REQUIRE_NO_THROW(
       LOG_EXCEPTION(pt.reset(new ArrayParameterTemplate(*config, "boundingBox", 4, 4))));
 
@@ -141,7 +141,7 @@ BOOST_AUTO_TEST_CASE(test_parameters_redirection_1)
   BOOST_CHECK(item1.redirect_name);
   BOOST_CHECK_EQUAL(std::string("defaultBbox"), *item1.redirect_name);
 
-  boost::shared_ptr<SupportsExtraHandlerParams> extra_params;
+  std::shared_ptr<SupportsExtraHandlerParams> extra_params;
   BOOST_REQUIRE_NO_THROW(LOG_EXCEPTION(
       extra_params.reset(new SupportsExtraHandlerParams(config, true, "named_params"))));
 

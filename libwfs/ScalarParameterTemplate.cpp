@@ -69,10 +69,10 @@ SmartMet::Spine::Value ScalarParameterTemplate::get_value(
   {
     const std::variant<SmartMet::Spine::Value, std::vector<SmartMet::Spine::Value> > value =
         item.get_value(req_param_map, extra_params);
-    if (value.which() == 0) {
-      return boost::get<SmartMet::Spine::Value>(value);
+    if (value.index() == 0) {
+      return std::get<SmartMet::Spine::Value>(value);
     } else {
-      const std::vector<SmartMet::Spine::Value>& arr = boost::get<std::vector<SmartMet::Spine::Value> >(value);
+      const std::vector<SmartMet::Spine::Value>& arr = std::get<std::vector<SmartMet::Spine::Value> >(value);
       if (arr.size() == 0) {
         // Empty array: treat as empty value
           return SmartMet::Spine::Value();
@@ -100,7 +100,7 @@ bool ScalarParameterTemplate::get_value(SmartMet::Spine::Value& result,
     std::variant<SmartMet::Spine::Value, std::vector<SmartMet::Spine::Value> > tmp;
     boost::tribool ok = get_value(tmp, req_param_map, extra_params);
     if (ok)
-      result = boost::get<SmartMet::Spine::Value>(tmp);
+      result = std::get<SmartMet::Spine::Value>(tmp);
     return static_cast<bool>(ok);
   }
   catch (...)
@@ -122,16 +122,16 @@ boost::tribool ScalarParameterTemplate::get_value(
     bool found = item.get_value(tmp, req_param_map, extra_params, false);
     if (found)
     {
-      int which = tmp.which();
+      int which = tmp.index();
       if (which == 0)
       {
-        result = boost::get<SmartMet::Spine::Value>(tmp);
+        result = std::get<SmartMet::Spine::Value>(tmp);
         return true;
       }
       else /* (which == 1) */
       {
         const std::vector<SmartMet::Spine::Value>& vect =
-            boost::get<std::vector<SmartMet::Spine::Value> >(tmp);
+            std::get<std::vector<SmartMet::Spine::Value> >(tmp);
         switch (vect.size())
         {
           case 0:  // No data available

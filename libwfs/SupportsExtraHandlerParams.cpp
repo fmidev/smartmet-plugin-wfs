@@ -145,13 +145,13 @@ void bw::SupportsExtraHandlerParams::dump_named_params(const bw::RequestParamete
       auto found = param_template.get_value(value, req_param_map, this, false);
       if (found != false)
       {
-        if (value.which() == 0)
+        if (value.index() == 0)
         {
-          hash[name][0] = boost::get<SmartMet::Spine::Value>(value).to_string();
+          hash[name][0] = std::get<SmartMet::Spine::Value>(value).to_string();
         }
-        else if (value.which() == 1)
+        else if (value.index() == 1)
         {
-          const auto& value_vect = boost::get<std::vector<SmartMet::Spine::Value> >(value);
+          const auto& value_vect = std::get<std::vector<SmartMet::Spine::Value> >(value);
           for (std::size_t i = 0; i < value_vect.size(); i++)
           {
             hash[name][i] = value_vect[i].to_string();

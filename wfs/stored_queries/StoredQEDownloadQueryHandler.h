@@ -5,7 +5,7 @@
 #include "RequiresGeoEngine.h"
 #include "RequiresQEngine.h"
 #include <boost/geometry/geometry.hpp>
-#include <boost/shared_ptr.hpp>
+#include <memory>
 #include <ogr_geometry.h>
 
 namespace SmartMet
@@ -43,7 +43,7 @@ class StoredQEDownloadQueryHandler : public StoredAtomQueryHandlerBase,
   StoredQEDownloadQueryHandler(SmartMet::Spine::Reactor* reactor,
                                StoredQueryConfig::Ptr config,
                                PluginImpl& plugin_impl,
-                               boost::optional<std::string> template_file_name);
+                               std::optional<std::string> template_file_name);
 
   ~StoredQEDownloadQueryHandler() override;
 
@@ -53,15 +53,15 @@ protected:
   void update_parameters(
       const RequestParameterMap& request_params,
       int seq_id,
-      std::vector<boost::shared_ptr<RequestParameterMap> >& result) const override;
+      std::vector<std::shared_ptr<RequestParameterMap> >& result) const override;
 
  private:
-  boost::shared_ptr<OGRPolygon> get_model_boundary(
+  std::shared_ptr<OGRPolygon> get_model_boundary(
       const SmartMet::Engine::Querydata::MetaData& meta_info,
       const std::string& crs_name,
       int num_side_points = 10) const;
 
-  boost::shared_ptr<OGRGeometry> bbox_intersection(
+  std::shared_ptr<OGRGeometry> bbox_intersection(
       const SmartMet::Spine::BoundingBox& bbox,
       const SmartMet::Engine::Querydata::MetaData& meta_info) const;
 

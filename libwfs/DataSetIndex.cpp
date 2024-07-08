@@ -10,7 +10,7 @@
 
 namespace ba = boost::algorithm;
 namespace bw = SmartMet::Plugin::WFS;
-namespace fs = boost::filesystem;
+namespace fs = std::filesystem;
 
 namespace
 {
@@ -208,12 +208,12 @@ bool bw::DataSetDefinition::intersects(const bw::DataSetDefinition::box_t& bbox)
   }
 }
 
-std::vector<boost::filesystem::path> bw::DataSetDefinition::query_files(
+std::vector<std::filesystem::path> bw::DataSetDefinition::query_files(
     const Fmi::DateTime& begin, const Fmi::DateTime& end) const
 {
   try
   {
-    std::vector<boost::filesystem::path> result;
+    std::vector<std::filesystem::path> result;
     for (auto it = fs::directory_iterator(dir); it != fs::directory_iterator(); ++it)
     {
       fs::path entry = *it;
@@ -247,7 +247,7 @@ std::vector<boost::filesystem::path> bw::DataSetDefinition::query_files(
   }
 }
 
-Fmi::DateTime bw::DataSetDefinition::extract_origintime(const boost::filesystem::path& p) const
+Fmi::DateTime bw::DataSetDefinition::extract_origintime(const std::filesystem::path& p) const
 {
   try
   {

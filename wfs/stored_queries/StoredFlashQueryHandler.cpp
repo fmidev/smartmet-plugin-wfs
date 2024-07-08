@@ -32,7 +32,7 @@ bw::StoredFlashQueryHandler::StoredFlashQueryHandler(
     SmartMet::Spine::Reactor* reactor,
     StoredQueryConfig::Ptr config,
     PluginImpl& plugin_data,
-    boost::optional<std::string> template_file_name)
+    std::optional<std::string> template_file_name)
 
     : StoredQueryParamRegistry(config),
       SupportsExtraHandlerParams(config, false),
@@ -113,7 +113,7 @@ Fmi::DateTime round_time(const Fmi::DateTime& t0, unsigned step, int offset = 0)
 
 void bw::StoredFlashQueryHandler::query(const StoredQuery& query,
                                         const std::string& language,
-                                        const boost::optional<std::string>& /*hostname*/,
+                                        const std::optional<std::string>& /*hostname*/,
                                         std::ostream& output) const
 {
   try
@@ -211,9 +211,9 @@ void bw::StoredFlashQueryHandler::query(const StoredQuery& query,
       const std::string tz_name = get_tz_name(params);
       Fmi::TimeZonePtr tzp = get_time_zone(tz_name);
 
-      boost::shared_ptr<SmartMet::Spine::CRSRegistry::Transformation> to_bbox_transform;
+      std::shared_ptr<SmartMet::Spine::CRSRegistry::Transformation> to_bbox_transform;
 
-      // boost::optional<> aiheuttaa täällä strict aliasing varoituksen jos gcc-4.4.X
+      // std::optional<> aiheuttaa täällä strict aliasing varoituksen jos gcc-4.4.X
       // on käytössä. Sen vuoksi std::unique_ptr on käytetty boost::optionla tilalle.
 
       SmartMet::Spine::BoundingBox requested_bbox;
@@ -249,7 +249,7 @@ void bw::StoredFlashQueryHandler::query(const StoredQuery& query,
 
       Fmi::ValueFormatterParam vf_param;
       vf_param.missingText = query_params.missingtext;
-      boost::shared_ptr<Fmi::ValueFormatter> value_formatter(new Fmi::ValueFormatter(vf_param));
+      std::shared_ptr<Fmi::ValueFormatter> value_formatter(new Fmi::ValueFormatter(vf_param));
 
       if (query_params.starttime > query_params.endtime)
       {
@@ -370,8 +370,8 @@ void bw::StoredFlashQueryHandler::query(const StoredQuery& query,
           // I have no clue why the ordering is this, this changed code
           // does the same as the original (sx = lat, sy = lon) - Mika
 
-          double lon = boost::get<double>(result[lat_ind][i].value);
-          double lat = boost::get<double>(result[lon_ind][i].value);
+          double lon = std::get<double>(result[lat_ind][i].value);
+          double lat = std::get<double>(result[lon_ind][i].value);
 
           if (to_bbox_transform)
           {
@@ -424,11 +424,11 @@ void bw::StoredFlashQueryHandler::query(const StoredQuery& query,
           for (int k = first_param; k <= last_param; k++)
           {
             std::string value;
-            if (boost::get<int>(&result[k][i].value))
-              value = Fmi::to_string(boost::get<int>(result[k][i].value));
-            else if (boost::get<double>(&result[k][i].value))
+            if (const int* ptr = std::get_if<int>(&result[k][i].value))
+              value = *ptr;
+            else if (const double* ptr = std::get_if<double>(&result[k][i].value))
             {
-              auto tmp = boost::get<double>(result[k][i].value);
+              auto tmp = *ptr;
               if (static_cast<int>(tmp) != tmp)
                 value = value_formatter->format(tmp, 1);
               else
@@ -521,16 +521,16 @@ namespace
 {
 using namespace SmartMet::Plugin::WFS;
 
-boost::shared_ptr<SmartMet::Plugin::WFS::StoredQueryHandlerBase> wfs_flash_handler_create(
+std::shared_ptr<SmartMet::Plugin::WFS::StoredQueryHandlerBase> wfs_flash_handler_create(
     SmartMet::Spine::Reactor* reactor,
     StoredQueryConfig::Ptr config,
     PluginImpl& plugin_data,
-    boost::optional<std::string> template_file_name)
+    std::optional<std::string> template_file_name)
 {
   try
   {
     auto* qh = new StoredFlashQueryHandler(reactor, config, plugin_data, template_file_name);
-    boost::shared_ptr<SmartMet::Plugin::WFS::StoredQueryHandlerBase> result(qh);
+    std::shared_ptr<SmartMet::Plugin::WFS::StoredQueryHandlerBase> result(qh);
     return result;
   }
   catch (...)

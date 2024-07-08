@@ -143,13 +143,13 @@ std::string as_string(
   try
   {
     std::ostringstream ost;
-    if (src.which() == 0)
+    if (src.index() == 0)
     {
-      ost << boost::get<SmartMet::Spine::Value>(src);
+      ost << std::get<SmartMet::Spine::Value>(src);
     }
     else
     {
-      ost << as_string(boost::get<std::vector<SmartMet::Spine::Value> >(src));
+      ost << as_string(std::get<std::vector<SmartMet::Spine::Value> >(src));
     }
     return ost.str();
   }

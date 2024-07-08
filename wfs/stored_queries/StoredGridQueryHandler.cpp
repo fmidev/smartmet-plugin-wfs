@@ -68,7 +68,7 @@ const char* QENGINE_CRS = "EPSG::4326";
 StoredGridQueryHandler::StoredGridQueryHandler(SmartMet::Spine::Reactor* reactor,
                                                StoredQueryConfig::Ptr config,
                                                PluginImpl& plugin_data,
-                                               boost::optional<std::string> template_file_name)
+                                               std::optional<std::string> template_file_name)
     : StoredQueryParamRegistry(config),
       SupportsExtraHandlerParams(config, false),
       RequiresGeoEngine(reactor),
@@ -148,7 +148,7 @@ std::string bw::StoredGridQueryHandler::get_handler_description() const
     return "Forecast data: download in grid format (grib1, grib2, NetCDF)";
 }
 
-StoredGridQueryHandler::Query::Query(boost::shared_ptr<const StoredQueryConfig> config)
+StoredGridQueryHandler::Query::Query(std::shared_ptr<const StoredQueryConfig> config)
     : missing_text("nan"),
       language("lan"),
       value_formatter(new Fmi::ValueFormatter(Fmi::ValueFormatterParam())),
@@ -739,7 +739,7 @@ void StoredGridQueryHandler::parse_times(const RequestParameterMap& param, Query
   {
     dest.toptions = get_time_generator_options(param);
 
-    // boost::optional + gcc-4.4.X käytäytyy huonosti
+    // std::optional + gcc-4.4.X käytäytyy huonosti
     if (param.count(P_ORIGIN_TIME) > 0)
       dest.origin_time.reset(new Fmi::DateTime(param.get_single<Fmi::DateTime>(P_ORIGIN_TIME)));
   }
@@ -1047,22 +1047,24 @@ StoredGridQueryHandler::Result StoredGridQueryHandler::extract_forecast(
             {
               auto tsValue = locationIt.timeseries[i].value;
 
-              if (boost::get<TS::None>(&(tsValue)))
+              if (std::get_if<TS::None>(&(tsValue)))
               {
                 thisXYGrid.emplace_back(query.missing_text);
               }
-              else if (!(boost::get<double>(&(tsValue))))
-              {
-                std::stringstream ss;
-                ss << tsValue;
-                thisXYGrid.emplace_back(ss.str());
-              }
               else
               {
-                double result = boost::get<double>(tsValue);
-
-                thisXYGrid.emplace_back(
-                    formatToScaledInteger(result, query.scaleFactor, query.precision));
+                const double* ptr = std::get_if<double>(&tsValue);
+                if (ptr)
+                {
+                  thisXYGrid.emplace_back(
+                    formatToScaledInteger(*ptr, query.scaleFactor, query.precision));
+                }
+                else
+                {
+                  std::stringstream ss;
+                  ss << tsValue;
+                  thisXYGrid.emplace_back(ss.str());
+                }
               }
             }
 
@@ -1108,7 +1110,7 @@ SmartMet::Engine::Querydata::Producer StoredGridQueryHandler::select_producer(
 
 void StoredGridQueryHandler::query(const StoredQuery& stored_query,
                                    const std::string& language,
-                                   const boost::optional<std::string>&  /*hostname*/,
+                                   const std::optional<std::string>&  /*hostname*/,
                                    std::ostream& output) const
 {
   try
@@ -1304,17 +1306,17 @@ namespace
 {
 using namespace SmartMet::Plugin::WFS;
 
-boost::shared_ptr<SmartMet::Plugin::WFS::StoredQueryHandlerBase> wfs_stored_grid_handler_create(
+std::shared_ptr<SmartMet::Plugin::WFS::StoredQueryHandlerBase> wfs_stored_grid_handler_create(
     SmartMet::Spine::Reactor* reactor,
     StoredQueryConfig::Ptr config,
     PluginImpl& plugin_data,
-    boost::optional<std::string> template_file_name)
+    std::optional<std::string> template_file_name)
 {
   try
   {
     StoredQueryHandlerBase* qh =
         new StoredGridQueryHandler(reactor, config, plugin_data, template_file_name);
-    boost::shared_ptr<SmartMet::Plugin::WFS::StoredQueryHandlerBase> result(qh);
+    std::shared_ptr<SmartMet::Plugin::WFS::StoredQueryHandlerBase> result(qh);
     return result;
   }
   catch (...)

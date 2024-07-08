@@ -127,7 +127,7 @@ class PluginImpl
   }
 
   inline std::shared_ptr<Fmi::TemplateFormatter> get_stored_query_formatter(
-      const boost::filesystem::path& filename) const
+      const std::filesystem::path& filename) const
   {
     return itsTemplateFactory.get(filename);
   }
@@ -225,12 +225,12 @@ class PluginImpl
 
   Fmi::TemplateFactory itsTemplateFactory;
 
-  boost::filesystem::path getCapabilitiesFormatterPath;
-  boost::filesystem::path listStoredQueriesFormatterPath;
-  boost::filesystem::path describeStoredQueriesFormatterPath;
-  boost::filesystem::path featureTypeFormatterPath;
-  boost::filesystem::path exceptionFormatterPath;
-  boost::filesystem::path ctppDumpFormatterPath;
+  std::filesystem::path getCapabilitiesFormatterPath;
+  std::filesystem::path listStoredQueriesFormatterPath;
+  std::filesystem::path describeStoredQueriesFormatterPath;
+  std::filesystem::path featureTypeFormatterPath;
+  std::filesystem::path exceptionFormatterPath;
+  std::filesystem::path ctppDumpFormatterPath;
 
   std::shared_ptr<Xml::ParserMT> xml_parser;
   std::shared_ptr<GeoServerDB> geo_server_db;

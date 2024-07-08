@@ -54,7 +54,7 @@ void Plugin::init()
 
       auto itsGisEngine = itsReactor->getEngine<SmartMet::Engine::Gis::Engine>("Gis");
 
-      boost::shared_ptr<PluginImpl> new_impl(
+      std::shared_ptr<PluginImpl> new_impl(
           new PluginImpl(
               itsReactor,
               itsConfig,

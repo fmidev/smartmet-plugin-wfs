@@ -493,7 +493,7 @@ bool bw::Request::GetFeature::collect_query_responses(std::vector<std::string>& 
             {
               ErrorResponseGenerator err_gen(plugin_impl);
               auto error_response =
-                  err_gen.create_error_response(ErrorResponseGenerator::REQ_PROCESSING, *p_sq);
+                  err_gen.create_error_response(ErrorResponseGenerator::REQ_PROCESSING, p_sq);
               std::ostringstream msg;
               msg << SmartMet::Spine::log_time_str() << " [WFS] [ERROR] [" << METHOD_NAME
                   << "] : " << error_response.log_message << std::endl;

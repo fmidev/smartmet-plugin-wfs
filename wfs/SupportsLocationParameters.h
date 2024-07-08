@@ -8,7 +8,7 @@
 #include "SupportsExtraHandlerParams.h"
 #include "SupportsLocationParameters.h"
 #include <boost/scoped_ptr.hpp>
-#include <boost/shared_ptr.hpp>
+#include <memory>
 #include <engines/geonames/Engine.h>
 #include <spine/Value.h>
 #include <map>
@@ -46,7 +46,7 @@ class SupportsLocationParameters : protected virtual SupportsExtraHandlerParams,
    */
     SupportsLocationParameters(
         SmartMet::Spine::Reactor* reactor,
-        boost::shared_ptr<StoredQueryConfig> config,
+        std::shared_ptr<StoredQueryConfig> config,
         unsigned options);
 
  public:
