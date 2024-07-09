@@ -125,7 +125,7 @@ class ScalarParameterTemplate : public ParameterTemplateBase
           if (found) {
               return std::optional<ValueType>(extract(tmp));
           } else {
-              return boost::none;
+              return std::nullopt;
           }
       }
 
