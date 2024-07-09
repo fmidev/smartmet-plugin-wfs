@@ -95,7 +95,7 @@ BOOST_AUTO_TEST_CASE(test_template_url_generator_2)
       test.reset(new UrlTemplateGenerator("http://www.example.com/test", params)));
   const auto& pm = test->get_content();
   BOOST_REQUIRE_EQUAL(1, (int)pm.size());
-  BOOST_REQUIRE(pm.at(0).type() == typeid(UrlTemplateGenerator::ParamRef));
+  BOOST_REQUIRE(std::get_if<UrlTemplateGenerator::ParamRef>(&pm.at(0)));
 
   BOOST_REQUIRE_NO_THROW(result = test->generate(boost::bind(&get_param,  ph::_1, &param_map)));
   // std::cout << result << std::endl;
@@ -123,9 +123,9 @@ BOOST_AUTO_TEST_CASE(test_template_url_generator_3)
       test.reset(new UrlTemplateGenerator("http://www.example.com/test", params)));
   const auto& pm = test->get_content();
   BOOST_REQUIRE_EQUAL(3, (int)pm.size());
-  BOOST_REQUIRE(pm.at(0).type() == typeid(UrlTemplateGenerator::ParamRef));
-  BOOST_REQUIRE(pm.at(1).type() == typeid(UrlTemplateGenerator::ParamRef));
-  BOOST_REQUIRE(pm.at(2).type() == typeid(UrlTemplateGenerator::StringParam));
+  BOOST_REQUIRE(std::get_if<UrlTemplateGenerator::ParamRef>(&pm.at(0)));
+  BOOST_REQUIRE(std::get_if<UrlTemplateGenerator::ParamRef>(&pm.at(1)));
+  BOOST_REQUIRE(std::get_if<UrlTemplateGenerator::StringParam>(&pm.at(2)));
 
   BOOST_REQUIRE_NO_THROW(result = test->generate(boost::bind(&get_param,  ph::_1, &param_map)));
   // std::cout << result << std::endl;
@@ -155,9 +155,9 @@ BOOST_AUTO_TEST_CASE(test_template_url_generator_4)
       test.reset(new UrlTemplateGenerator("http://www.example.com/test", params)));
   const auto& pm = test->get_content();
   BOOST_REQUIRE_EQUAL(3, (int)pm.size());
-  BOOST_REQUIRE(pm.at(0).type() == typeid(UrlTemplateGenerator::ParamRef));
-  BOOST_REQUIRE(pm.at(1).type() == typeid(UrlTemplateGenerator::ParamRef));
-  BOOST_REQUIRE(pm.at(2).type() == typeid(UrlTemplateGenerator::StringParam));
+  BOOST_REQUIRE(std::get_if<UrlTemplateGenerator::ParamRef>(&pm.at(0)));
+  BOOST_REQUIRE(std::get_if<UrlTemplateGenerator::ParamRef>(&pm.at(1)));
+  BOOST_REQUIRE(std::get_if<UrlTemplateGenerator::StringParam>(&pm.at(2)));
 
   BOOST_REQUIRE_NO_THROW(result = test->generate(boost::bind(&get_param,  ph::_1, &param_map)));
   BOOST_CHECK_EQUAL(std::string("http://www.example.com/test?a1=A1&a2=A2A&a2=A2B&b1=f%3Doo"),
@@ -206,9 +206,9 @@ BOOST_AUTO_TEST_CASE(test_template_url_generator_6)
       test.reset(new UrlTemplateGenerator("http://www.example.com/test", params)));
   const auto& pm = test->get_content();
   BOOST_REQUIRE_EQUAL(3, (int)pm.size());
-  BOOST_REQUIRE(pm.at(0).type() == typeid(UrlTemplateGenerator::ParamRef));
-  BOOST_REQUIRE(pm.at(1).type() == typeid(UrlTemplateGenerator::ParamRef));
-  BOOST_REQUIRE(pm.at(2).type() == typeid(UrlTemplateGenerator::StringParam));
+  BOOST_REQUIRE(std::get_if<UrlTemplateGenerator::ParamRef>(&pm.at(0)));
+  BOOST_REQUIRE(std::get_if<UrlTemplateGenerator::ParamRef>(&pm.at(1)));
+  BOOST_REQUIRE(std::get_if<UrlTemplateGenerator::StringParam>(&pm.at(2)));
 
   BOOST_REQUIRE_NO_THROW(LOG(result = test->generate(boost::bind(&get_param,  ph::_1, &param_map))));
   BOOST_CHECK_EQUAL(std::string("http://www.example.com/test?a1=A1&a2=A2A&a2=A2B&b1=foo-A1-bar"),

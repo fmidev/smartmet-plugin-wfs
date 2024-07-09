@@ -3,6 +3,7 @@
 #include <boost/test/unit_test.hpp>
 #include <iostream>
 #include <boost/optional/optional_io.hpp>
+#include <macgyver/Optional.h>
 #include <spine/CRSRegistry.h>
 #include "WfsFeatureDef.h"
 
