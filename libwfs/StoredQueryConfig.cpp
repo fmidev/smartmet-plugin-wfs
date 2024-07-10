@@ -535,7 +535,7 @@ std::time_t SmartMet::Plugin::WFS::StoredQueryConfig::config_write_time() const
          not ba::starts_with(filename, "#") and filename.substr(filename.length() - 5) == ".conf");
 
     if (validFile)
-      return Fmi::last_write_time(p).value_or(std::time(nullptr));
+      return Fmi::last_write_time_or(p, std::time(nullptr));
 
     return config_last_write_time;
   }
