@@ -508,7 +508,7 @@ void bw::StoredMastQueryHandler::query(const StoredQuery& query,
           std::string dataLevelStr = bo::QueryResult::toString(dataLevelIt, 1);
           std::string dataValueStr = bo::QueryResult::toString(dataValueIt, 1);
           std::string dataQualityStr = bo::QueryResult::toString(dataQualityIt, 0);
-          deltaHeight = boost::any_cast<double>(*dataLevelIt);
+          deltaHeight = std::any_cast<double>(*dataLevelIt);
 
           if (currentFmisid != fmisidStr or currentMeasurandId != measurandIdStr or
               currentDataTime != dataTimeStr)

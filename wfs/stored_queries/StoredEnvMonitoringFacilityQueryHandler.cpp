@@ -551,7 +551,7 @@ void bw::StoredEnvMonitoringFacilityQueryHandler::getValidStations(
         if ((*stationIdIt).type() == typeid(int64_t))
         {
           StationData s;
-          s.station_id = boost::any_cast<int64_t>(*stationIdIt);
+          s.station_id = std::any_cast<int64_t>(*stationIdIt);
           s.station_name = stationNameIt;
           s.station_start = stationStartIt;
           s.station_end = stationEndIt;
@@ -841,7 +841,7 @@ void bw::StoredEnvMonitoringFacilityQueryHandler::getStationNetworkMembershipDat
       if (station_id.empty())
         continue;
 
-      networkMemberShip.station_id = boost::any_cast<int64_t>(*stationIdIt);
+      networkMemberShip.station_id = std::any_cast<int64_t>(*stationIdIt);
       networkMemberShip.network_id = networkIdIt;
       networkMemberShip.member_code = memberCodeIt;
 
