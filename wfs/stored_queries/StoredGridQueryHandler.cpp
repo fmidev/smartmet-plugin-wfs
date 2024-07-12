@@ -68,7 +68,7 @@ const char* QENGINE_CRS = "EPSG::4326";
 StoredGridQueryHandler::StoredGridQueryHandler(SmartMet::Spine::Reactor* reactor,
                                                StoredQueryConfig::Ptr config,
                                                PluginImpl& plugin_data,
-                                               boost::optional<std::string> template_file_name)
+                                               std::optional<std::string> template_file_name)
     : StoredQueryParamRegistry(config),
       SupportsExtraHandlerParams(config, false),
       RequiresGeoEngine(reactor),
@@ -148,7 +148,7 @@ std::string bw::StoredGridQueryHandler::get_handler_description() const
     return "Forecast data: download in grid format (grib1, grib2, NetCDF)";
 }
 
-StoredGridQueryHandler::Query::Query(boost::shared_ptr<const StoredQueryConfig> config)
+StoredGridQueryHandler::Query::Query(std::shared_ptr<const StoredQueryConfig> config)
     : missing_text("nan"),
       language("lan"),
       value_formatter(new Fmi::ValueFormatter(Fmi::ValueFormatterParam())),
@@ -236,24 +236,24 @@ TS::TimeSeriesGroupPtr makeSparseGrid(const TS::TimeSeriesGroupPtr& inputGrid,
 }
 
 #ifdef OLD_IMPL
-boost::any makeSparseGrid(const boost::any& inputGrid,
+std::any makeSparseGrid(const std::any& inputGrid,
                           unsigned long step,
                           const std::pair<unsigned, unsigned>& extents)
 {
-  typedef std::vector<boost::any> AnyVector;
+  typedef std::vector<std::any> AnyVector;
 
   AnyVector result;
 
-  auto valVector = boost::any_cast<AnyVector>(inputGrid);
+  auto valVector = std::any_cast<AnyVector>(inputGrid);
 
   for (auto timeIt = valVector.begin(); timeIt != valVector.end(); ++timeIt)
   {
     AnyVector area;
     AnyVector dataVec;
 
-    auto placeVec = boost::any_cast<std::vector<boost::any> >(*timeIt);
+    auto placeVec = std::any_cast<std::vector<std::any> >(*timeIt);
 
-    auto locationVec = boost::any_cast<std::vector<boost::any> >(
+    auto locationVec = std::any_cast<std::vector<std::any> >(
         *(placeVec.begin()));  // Only one area, this is sufficient
 
     unsigned long index = 0;
@@ -532,14 +532,14 @@ std::pair<unsigned int, unsigned int> StoredGridQueryHandler::getDataIndexExtent
 
 #ifdef OLD_IMPL
 std::pair<unsigned int, unsigned int> StoredGridQueryHandler::getDataIndexExtents(
-    const boost::any& longitudes,
-    const boost::any& latitudes,
+    const std::any& longitudes,
+    const std::any& latitudes,
     const Query& query,
     const std::string& dataCrs) const
 {
   std::pair<unsigned int, unsigned int> result;
 
-  auto valVectorLon = boost::any_cast<std::vector<boost::any> >(longitudes);
+  auto valVectorLon = std::any_cast<std::vector<std::any> >(longitudes);
 
   if (valVectorLon.empty())
   {
@@ -550,7 +550,7 @@ std::pair<unsigned int, unsigned int> StoredGridQueryHandler::getDataIndexExtent
     throw exception;
   }
 
-  auto valVectorLat = boost::any_cast<std::vector<boost::any> >(latitudes);
+  auto valVectorLat = std::any_cast<std::vector<std::any> >(latitudes);
 
   if (valVectorLat.empty())
   {
@@ -562,18 +562,18 @@ std::pair<unsigned int, unsigned int> StoredGridQueryHandler::getDataIndexExtent
   }
 
   auto timeItLon = valVectorLon.begin();
-  auto placeVecLon = boost::any_cast<std::vector<boost::any> >(*timeItLon);
-  auto locationVecLon = boost::any_cast<std::vector<boost::any> >(
+  auto placeVecLon = std::any_cast<std::vector<std::any> >(*timeItLon);
+  auto locationVecLon = std::any_cast<std::vector<std::any> >(
       *(placeVecLon.begin()));  // Only one area, this is sufficient
-  auto firstLon = boost::any_cast<double>(*(locationVecLon.begin()));
+  auto firstLon = std::any_cast<double>(*(locationVecLon.begin()));
   auto lonIter = locationVecLon.begin();
   lonIter++;
 
   auto timeItLat = valVectorLat.begin();
-  auto placeVecLat = boost::any_cast<std::vector<boost::any> >(*timeItLat);
-  auto locationVecLat = boost::any_cast<std::vector<boost::any> >(
+  auto placeVecLat = std::any_cast<std::vector<std::any> >(*timeItLat);
+  auto locationVecLat = std::any_cast<std::vector<std::any> >(
       *(placeVecLat.begin()));  // Only one area, this is sufficient
-  auto firstLat = boost::any_cast<double>(*(locationVecLat.begin()));
+  auto firstLat = std::any_cast<double>(*(locationVecLat.begin()));
   auto latIter = locationVecLat.begin();
   latIter++;
 
@@ -587,7 +587,7 @@ std::pair<unsigned int, unsigned int> StoredGridQueryHandler::getDataIndexExtent
   }
 
   NFmiPoint firstPoint(firstLon, firstLat);
-  NFmiPoint secondPoint(boost::any_cast<double>(*lonIter), boost::any_cast<double>(*latIter));
+  NFmiPoint secondPoint(std::any_cast<double>(*lonIter), std::any_cast<double>(*latIter));
 
   double compDistance = ::comparisonDistance(firstPoint, secondPoint) *
                         1.1;  // A little bit of slack, just to be safe
@@ -599,7 +599,7 @@ std::pair<unsigned int, unsigned int> StoredGridQueryHandler::getDataIndexExtent
 
   while (lonIter != locationVecLon.end() && latIter != locationVecLat.end())
   {
-    NFmiPoint thisPoint(boost::any_cast<double>(*lonIter), boost::any_cast<double>(*latIter));
+    NFmiPoint thisPoint(std::any_cast<double>(*lonIter), std::any_cast<double>(*latIter));
 
     double dist = ::comparisonDistance(previousPoint, thisPoint);
 
@@ -739,7 +739,7 @@ void StoredGridQueryHandler::parse_times(const RequestParameterMap& param, Query
   {
     dest.toptions = get_time_generator_options(param);
 
-    // boost::optional + gcc-4.4.X käytäytyy huonosti
+    // std::optional + gcc-4.4.X käytäytyy huonosti
     if (param.count(P_ORIGIN_TIME) > 0)
       dest.origin_time.reset(new Fmi::DateTime(param.get_single<Fmi::DateTime>(P_ORIGIN_TIME)));
   }
@@ -1047,22 +1047,24 @@ StoredGridQueryHandler::Result StoredGridQueryHandler::extract_forecast(
             {
               auto tsValue = locationIt.timeseries[i].value;
 
-              if (boost::get<TS::None>(&(tsValue)))
+              if (std::get_if<TS::None>(&(tsValue)))
               {
                 thisXYGrid.emplace_back(query.missing_text);
               }
-              else if (!(boost::get<double>(&(tsValue))))
-              {
-                std::stringstream ss;
-                ss << tsValue;
-                thisXYGrid.emplace_back(ss.str());
-              }
               else
               {
-                double result = boost::get<double>(tsValue);
-
-                thisXYGrid.emplace_back(
-                    formatToScaledInteger(result, query.scaleFactor, query.precision));
+                const double* ptr = std::get_if<double>(&tsValue);
+                if (ptr)
+                {
+                  thisXYGrid.emplace_back(
+                    formatToScaledInteger(*ptr, query.scaleFactor, query.precision));
+                }
+                else
+                {
+                  std::stringstream ss;
+                  ss << tsValue;
+                  thisXYGrid.emplace_back(ss.str());
+                }
               }
             }
 
@@ -1108,7 +1110,7 @@ SmartMet::Engine::Querydata::Producer StoredGridQueryHandler::select_producer(
 
 void StoredGridQueryHandler::query(const StoredQuery& stored_query,
                                    const std::string& language,
-                                   const boost::optional<std::string>&  /*hostname*/,
+                                   const std::optional<std::string>&  /*hostname*/,
                                    std::ostream& output) const
 {
   try
@@ -1304,17 +1306,17 @@ namespace
 {
 using namespace SmartMet::Plugin::WFS;
 
-boost::shared_ptr<SmartMet::Plugin::WFS::StoredQueryHandlerBase> wfs_stored_grid_handler_create(
+std::shared_ptr<SmartMet::Plugin::WFS::StoredQueryHandlerBase> wfs_stored_grid_handler_create(
     SmartMet::Spine::Reactor* reactor,
     StoredQueryConfig::Ptr config,
     PluginImpl& plugin_data,
-    boost::optional<std::string> template_file_name)
+    std::optional<std::string> template_file_name)
 {
   try
   {
     StoredQueryHandlerBase* qh =
         new StoredGridQueryHandler(reactor, config, plugin_data, template_file_name);
-    boost::shared_ptr<SmartMet::Plugin::WFS::StoredQueryHandlerBase> result(qh);
+    std::shared_ptr<SmartMet::Plugin::WFS::StoredQueryHandlerBase> result(qh);
     return result;
   }
   catch (...)

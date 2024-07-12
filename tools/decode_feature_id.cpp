@@ -11,7 +11,7 @@ int main(int argc, char** argv)
   for (int i = 1; i < argc; i++) {
     try {
       std::cout << "Decoding feature ID: " << argv[i] << std::endl;
-      boost::shared_ptr<FeatureID> id = FeatureID::create_from_id(argv[i]);
+      std::shared_ptr<FeatureID> id = FeatureID::create_from_id(argv[i]);
       std::cout << "    storedquery_id: " << id->get_stored_query_id() << std::endl;
       for (const auto& item : id->get_params()) {
 	std::string nm = item.first;

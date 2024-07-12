@@ -2,7 +2,7 @@
 
 #include "RequestBase.h"
 #include <boost/function.hpp>
-#include <boost/shared_ptr.hpp>
+#include <memory>
 #include <spine/HTTP.h>
 #include <xercesc/dom/DOMDocument.hpp>
 #include <map>
@@ -25,10 +25,10 @@ namespace WFS
 class RequestFactory
 {
  public:
-  using parse_kvp_t = boost::function2<boost::shared_ptr<RequestBase>,
+  using parse_kvp_t = boost::function2<std::shared_ptr<RequestBase>,
         const std::string &, const SmartMet::Spine::HTTP::Request &>;
 
-  using parse_xml_t = boost::function3<boost::shared_ptr<RequestBase>,
+  using parse_xml_t = boost::function3<std::shared_ptr<RequestBase>,
         const std::string &, const xercesc::DOMDocument &, const xercesc::DOMElement
         &>;
 
@@ -67,7 +67,7 @@ class RequestFactory
    *   - HTTP POST with content type application/x-www-form-urlencoded when request
    *     parameters are provided in HTTP request body.
    */
-  boost::shared_ptr<RequestBase> parse_kvp(
+  std::shared_ptr<RequestBase> parse_kvp(
       const std::string& language, const SmartMet::Spine::HTTP::Request& http_request) const;
 
   /**
@@ -75,7 +75,7 @@ class RequestFactory
    *
    *   Note: SOAP requests are not yet supported
    */
-  boost::shared_ptr<RequestBase> parse_xml(const std::string& language,
+  std::shared_ptr<RequestBase> parse_xml(const std::string& language,
                                            const xercesc::DOMDocument& document) const;
 
   /**

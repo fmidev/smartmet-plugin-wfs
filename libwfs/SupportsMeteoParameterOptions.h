@@ -1,7 +1,7 @@
 #pragma once
 
 #include "StoredQueryConfig.h"
-#include <boost/shared_ptr.hpp>
+#include <memory>
 #include <map>
 #include <memory>
 #include <string>
@@ -33,7 +33,7 @@ using MeteoParameterOptions = std::map<std::string, MeteoParameterOptionItem>;
 class SupportsMeteoParameterOptions
 {
  public:
-  SupportsMeteoParameterOptions(boost::shared_ptr<SmartMet::Plugin::WFS::StoredQueryConfig> config);
+  SupportsMeteoParameterOptions(std::shared_ptr<SmartMet::Plugin::WFS::StoredQueryConfig> config);
 
   virtual ~SupportsMeteoParameterOptions();
 

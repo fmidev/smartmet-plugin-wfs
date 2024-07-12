@@ -4,7 +4,7 @@
 #include <boost/algorithm/string.hpp>
 #include <boost/bind/bind.hpp>
 #include <boost/chrono.hpp>
-#include <boost/filesystem.hpp>
+#include <filesystem>
 #include <spine/Convenience.h>
 #include <macgyver/Base64.h>
 #include <macgyver/Exception.h>
@@ -16,7 +16,7 @@
 
 namespace ba = boost::algorithm;
 namespace bw = SmartMet::Plugin::WFS;
-namespace fs = boost::filesystem;
+namespace fs = std::filesystem;
 namespace ph = boost::placeholders;
 
 bw::StoredQueryMap::StoredQueryMap(SmartMet::Spine::Reactor* theReactor, PluginImpl& plugin_impl)
@@ -68,8 +68,8 @@ void bw::StoredQueryMap::set_background_init(bool value)
   }
 }
 
-void bw::StoredQueryMap::add_config_dir(const boost::filesystem::path& config_dir,
-					const boost::filesystem::path& template_dir)
+void bw::StoredQueryMap::add_config_dir(const std::filesystem::path& config_dir,
+					const std::filesystem::path& template_dir)
 {
   ConfigDirInfo ci;
   ci.num_updates = 0;
@@ -139,7 +139,7 @@ bool bw::StoredQueryMap::is_reload_required(bool reset)
   }
 }
 
-void bw::StoredQueryMap::add_handler(boost::shared_ptr<StoredQueryHandlerBase> handler)
+void bw::StoredQueryMap::add_handler(std::shared_ptr<StoredQueryHandlerBase> handler)
 {
   try
   {
@@ -162,7 +162,7 @@ void bw::StoredQueryMap::add_handler(boost::shared_ptr<StoredQueryHandlerBase> h
   }
 }
 
-boost::shared_ptr<bw::StoredQueryHandlerBase> bw::StoredQueryMap::get_handler_by_name(
+std::shared_ptr<bw::StoredQueryHandlerBase> bw::StoredQueryMap::get_handler_by_name(
     const std::string name) const
 {
   try
@@ -214,19 +214,19 @@ std::vector<std::string> bw::StoredQueryMap::get_return_type_names() const
 }
 
 void bw::StoredQueryMap::add_handler(StoredQueryConfig::Ptr sqh_config,
-                                     const boost::filesystem::path& template_dir)
+                                     const std::filesystem::path& template_dir)
 {
   try
   {
     try
     {
-      boost::optional<std::string> sqh_template_fn;
+      std::optional<std::string> sqh_template_fn;
       if (sqh_config->have_template_fn())
       {
         sqh_template_fn = (template_dir / sqh_config->get_template_fn()).string();
       }
 
-      boost::shared_ptr<StoredQueryHandlerBase> p_handler = StoredQueryHandlerFactoryDef::construct(
+      std::shared_ptr<StoredQueryHandlerBase> p_handler = StoredQueryHandlerFactoryDef::construct(
           sqh_config->get_constructor_name(), theReactor, sqh_config, plugin_impl, sqh_template_fn);
 
       add_handler(p_handler);
@@ -269,7 +269,7 @@ void bw::StoredQueryMap::add_handler(StoredQueryConfig::Ptr sqh_config,
 }
 
 void bw::StoredQueryMap::on_config_change(Fmi::DirectoryMonitor::Watcher watcher,
-					  const boost::filesystem::path& path,
+					  const std::filesystem::path& path,
 					  const boost::regex& pattern,
 					  const Fmi::DirectoryMonitor::Status& status)
 {
@@ -395,7 +395,7 @@ std::vector<std::string> bw::StoredQueryMap::get_handler_names() const
 }
 
 void bw::StoredQueryMap::on_config_error(Fmi::DirectoryMonitor::Watcher watcher,
-					 const boost::filesystem::path& path,
+					 const std::filesystem::path& path,
 					 const boost::regex& pattern,
 					 const std::string& message)
 {
@@ -405,11 +405,11 @@ void bw::StoredQueryMap::on_config_error(Fmi::DirectoryMonitor::Watcher watcher,
   (void)message;
 }
 
-boost::shared_ptr<const bw::StoredQueryHandlerBase>
+std::shared_ptr<const bw::StoredQueryHandlerBase>
 bw::StoredQueryMap::get_handler_by_file_name(const std::string& config_file_name) const
 {
   try {
-    boost::shared_ptr<const StoredQueryHandlerBase> result;
+    std::shared_ptr<const StoredQueryHandlerBase> result;
     boost::shared_lock<boost::shared_mutex> lock(mutex);
     for (auto it2 = handler_map.begin(); not result and it2 != handler_map.end(); ++it2) {
       if (it2->second->get_config()->get_file_name() == config_file_name) {
@@ -423,11 +423,11 @@ bw::StoredQueryMap::get_handler_by_file_name(const std::string& config_file_name
   }
 }
 
-boost::shared_ptr<const bw::StoredQueryConfig>
+std::shared_ptr<const bw::StoredQueryConfig>
 bw::StoredQueryMap::get_query_config_by_file_name(const std::string& config_file_name) const
 {
   try {
-    boost::shared_ptr<const StoredQueryConfig> result;
+    std::shared_ptr<const StoredQueryConfig> result;
     auto handler = get_handler_by_file_name(config_file_name);
     if (handler) {
       result = handler->get_config();
@@ -478,10 +478,10 @@ bool bw::StoredQueryMap::should_be_ignored(const StoredQueryConfig& config) cons
     or (not enable_demo and config.is_demo());
 }
 
-boost::optional<std::string>
+std::optional<std::string>
 bw::StoredQueryMap::get_ignore_reason(const StoredQueryConfig& config) const
 {
-  boost::optional<std::string> reason;
+  std::optional<std::string> reason;
   const bool enable_demo = plugin_impl.get_config().getEnableDemoQueries();
   if (config.is_disabled()) {
     reason = std::string("Disabled stored query");
@@ -492,7 +492,7 @@ bw::StoredQueryMap::get_ignore_reason(const StoredQueryConfig& config) const
 }
 
 void bw::StoredQueryMap::handle_query_add(const std::string& config_file_name,
-					  const boost::filesystem::path& template_dir,
+					  const std::filesystem::path& template_dir,
 					  bool initial_update,
 					  bool silent_duplicate)
 {
@@ -532,7 +532,7 @@ void bw::StoredQueryMap::handle_query_add(const std::string& config_file_name,
 }
 
 void bw::StoredQueryMap::handle_query_modify(const std::string& config_file_name,
-					     const boost::filesystem::path& template_dir)
+					     const std::filesystem::path& template_dir)
 {
   try {
     if (not check_file_hash(config_file_name)) {
@@ -639,12 +639,12 @@ void bw::StoredQueryMap::request_reload(const std::string& reason)
   reload_required = true;
 }
 
-boost::shared_ptr<bw::StoredQueryHandlerBase> bw::StoredQueryMap::get_handler_by_name_nothrow(
+std::shared_ptr<bw::StoredQueryHandlerBase> bw::StoredQueryMap::get_handler_by_name_nothrow(
     const std::string name) const
 {
   try
   {
-    boost::shared_ptr<bw::StoredQueryHandlerBase> handler;
+    std::shared_ptr<bw::StoredQueryHandlerBase> handler;
     const std::string& lname = Fmi::ascii_tolower_copy(name);
     boost::shared_lock<boost::shared_mutex> lock(mutex);
     auto loc = handler_map.find(lname);
@@ -660,7 +660,7 @@ boost::shared_ptr<bw::StoredQueryHandlerBase> bw::StoredQueryMap::get_handler_by
 }
 
 void bw::StoredQueryMap::enqueue_query_add(StoredQueryConfig::Ptr sqh_config,
-					   const boost::filesystem::path& template_dir,
+					   const std::filesystem::path& template_dir,
 					   bool initial_update)
 {
   if (background_init and initial_update) {
@@ -692,7 +692,7 @@ bw::StoredQueryMap::get_handler_factory_summary() const
     boost::shared_lock<boost::shared_mutex> lock(mutex);
 
     for (const auto& map_item : handler_map) {
-        boost::shared_ptr<StoredQueryHandlerBase> handler_ptr = map_item.second;
+        std::shared_ptr<StoredQueryHandlerBase> handler_ptr = map_item.second;
         result->add_handler(*handler_ptr);
     }
     return result;

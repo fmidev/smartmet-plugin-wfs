@@ -10,7 +10,7 @@ namespace bw = SmartMet::Plugin::WFS;
 namespace ba = boost::algorithm;
 
 bw::SupportsMeteoParameterOptions::SupportsMeteoParameterOptions(
-    boost::shared_ptr<SmartMet::Plugin::WFS::StoredQueryConfig> config)
+    std::shared_ptr<SmartMet::Plugin::WFS::StoredQueryConfig> config)
     : debug_level(config->get_debug_level()), options_map(), default_option_item()
 {
   try

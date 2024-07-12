@@ -9,7 +9,7 @@ namespace ph = boost::placeholders;
 
 bw::WfsFeatureDef::WfsFeatureDef(SmartMet::Spine::CRSRegistry& crs_registry,
                                  const std::string& default_language,
-                                 boost::shared_ptr<SmartMet::Spine::ConfigBase> config,
+                                 std::shared_ptr<SmartMet::Spine::ConfigBase> config,
                                  libconfig::Setting& setting)
 {
   try

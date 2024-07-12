@@ -66,9 +66,9 @@ class TestConfig : public libconfig::Config
     param_root = &root.add("handler_params", Setting::TypeGroup);
   }
 
-  static boost::shared_ptr<TestConfig> create(const std::string& id = "foo")
+  static std::shared_ptr<TestConfig> create(const std::string& id = "foo")
   {
-    return boost::shared_ptr<TestConfig>(new TestConfig(id));
+    return std::shared_ptr<TestConfig>(new TestConfig(id));
   }
 
   ParamProxy add_param(const std::string& name,
@@ -104,9 +104,9 @@ class TestConfig : public libconfig::Config
   }
 };
 
-boost::shared_ptr<TestConfig> create_config()
+std::shared_ptr<TestConfig> create_config()
 {
-  return boost::shared_ptr<TestConfig>(new TestConfig);
+  return std::shared_ptr<TestConfig>(new TestConfig);
 }
 
 template <typename T, int N>

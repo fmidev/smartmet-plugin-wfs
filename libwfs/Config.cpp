@@ -17,7 +17,7 @@
 
 using namespace std;
 
-namespace fs = boost::filesystem;
+namespace fs = std::filesystem;
 namespace ba = boost::algorithm;
 
 namespace SmartMet
@@ -137,7 +137,7 @@ Config::Config(const string& configfile)
   }
 }
 
-std::vector<boost::shared_ptr<WfsFeatureDef> > Config::read_features_config(
+std::vector<std::shared_ptr<WfsFeatureDef> > Config::read_features_config(
     SmartMet::Spine::CRSRegistry& theCRSRegistry)
 {
   try
@@ -154,7 +154,7 @@ std::vector<boost::shared_ptr<WfsFeatureDef> > Config::read_features_config(
       throw Fmi::Exception(BCP, "'" + features_dir.string() + "' is not a directory");
     }
 
-    std::vector<boost::shared_ptr<WfsFeatureDef> > result;
+    std::vector<std::shared_ptr<WfsFeatureDef> > result;
 
     for (auto it = fs::directory_iterator(features_dir); it != fs::directory_iterator(); ++it)
     {
@@ -163,12 +163,12 @@ std::vector<boost::shared_ptr<WfsFeatureDef> > Config::read_features_config(
       if (fs::is_regular_file(entry) and not ba::starts_with(fn, ".") and
           not ba::starts_with(fn, "#") and ba::ends_with(fn, ".conf"))
       {
-        boost::shared_ptr<SmartMet::Spine::ConfigBase> desc(
+        std::shared_ptr<SmartMet::Spine::ConfigBase> desc(
             new SmartMet::Spine::ConfigBase(entry.string(), "Feature description"));
 
         try
         {
-          boost::shared_ptr<WfsFeatureDef> feature_def(
+          std::shared_ptr<WfsFeatureDef> feature_def(
               new WfsFeatureDef(theCRSRegistry, languages.at(0), desc, desc->get_root()));
           result.push_back(feature_def);
         }

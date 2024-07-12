@@ -1,11 +1,11 @@
 #pragma once
 
-#include <boost/shared_ptr.hpp>
 #include <xercesc/dom/DOMDocument.hpp>
 #include <xercesc/dom/DOMElement.hpp>
 #include <xercesc/dom/DOMLSSerializer.hpp>
 #include <xercesc/dom/DOMNode.hpp>
 #include <xercesc/util/XMLString.hpp>
+#include <functional>
 #include <memory>
 #include <set>
 #include <string>
@@ -98,7 +98,7 @@ std::vector<xercesc::DOMElement*> get_child_elements(const xercesc::DOMElement& 
  *   @brief Creates DOM document with empty root element using provided
  *          namespace and local name
  */
-boost::shared_ptr<xercesc::DOMDocument> create_dom_document(const std::string& ns,
+std::shared_ptr<xercesc::DOMDocument> create_dom_document(const std::string& ns,
                                                             const std::string& name);
 
 xercesc::DOMElement* create_element(xercesc::DOMDocument& doc,

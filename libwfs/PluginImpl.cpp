@@ -33,7 +33,7 @@ struct PluginImpl::RequestResult
   SmartMet::Spine::HTTP::Status status{SmartMet::Spine::HTTP::not_a_status};
   bool may_validate_xml{true};
   std::ostringstream output;
-  boost::optional<int> expires_seconds;
+  std::optional<int> expires_seconds;
 
  public:
   RequestResult() :  output() {}
@@ -198,7 +198,7 @@ Fmi::DateTime PluginImpl::get_local_time_stamp() const
   }
 }
 
-boost::shared_ptr<GeoServerDB> PluginImpl::get_geo_server_database() const
+std::shared_ptr<GeoServerDB> PluginImpl::get_geo_server_database() const
 {
   if (geo_server_db)
   {
@@ -557,7 +557,7 @@ void PluginImpl::query(const std::string& req_language,
 
     if (method == SmartMet::Spine::HTTP::RequestMethod::GET)
     {
-      boost::shared_ptr<RequestBase> request = request_factory->parse_kvp(language, req);
+      std::shared_ptr<RequestBase> request = request_factory->parse_kvp(language, req);
       request->set_hostname(hostname);
       request->set_protocol(protocol);
       auto fmi_apikey = get_fmi_apikey(req);
@@ -581,7 +581,7 @@ void PluginImpl::query(const std::string& req_language,
 
       if (content_type == "application/x-www-form-urlencoded")
       {
-        boost::shared_ptr<RequestBase> request = request_factory->parse_kvp(language, req);
+        std::shared_ptr<RequestBase> request = request_factory->parse_kvp(language, req);
         request->set_hostname(hostname);
         request->set_protocol(protocol);
         if (fmi_apikey)
@@ -605,7 +605,7 @@ void PluginImpl::query(const std::string& req_language,
           throw exception;
         }
 
-        boost::shared_ptr<xercesc::DOMDocument> xml_doc;
+        std::shared_ptr<xercesc::DOMDocument> xml_doc;
         Xml::Parser::RootElemInfo root_info;
         try
         {
@@ -677,7 +677,7 @@ void PluginImpl::query(const std::string& req_language,
           throw exception;
         }
 
-        boost::shared_ptr<RequestBase> request = request_factory->parse_xml(language, *xml_doc);
+        std::shared_ptr<RequestBase> request = request_factory->parse_xml(language, *xml_doc);
         request->set_hostname(hostname);
         request->set_protocol(protocol);
         if (fmi_apikey)
@@ -717,7 +717,7 @@ void PluginImpl::query(const std::string& req_language,
   }
 }
 
-boost::optional<std::string> PluginImpl::get_fmi_apikey(
+std::optional<std::string> PluginImpl::get_fmi_apikey(
     const SmartMet::Spine::HTTP::Request& theRequest) const
 {
   try
@@ -753,7 +753,7 @@ void PluginImpl::realRequestHandler(SmartMet::Spine::Reactor& /* theReactor */,
 
       // Latter (false) should newer happen.
       const int expires_seconds = (result.expires_seconds)
-                                      ? result.expires_seconds.get()
+                                      ? *result.expires_seconds
                                       : get_config().getDefaultExpiresSeconds();
 
       // Build cache expiration time info
@@ -762,7 +762,7 @@ void PluginImpl::realRequestHandler(SmartMet::Spine::Reactor& /* theReactor */,
 
       // The headers themselves
 
-      boost::shared_ptr<Fmi::TimeFormatter> tformat(Fmi::TimeFormatter::create("http"));
+      std::shared_ptr<Fmi::TimeFormatter> tformat(Fmi::TimeFormatter::create("http"));
 
       // std::string mime = "text/xml; charset=UTF-8";
       const std::string mime =
@@ -845,7 +845,7 @@ void PluginImpl::realRequestHandler(SmartMet::Spine::Reactor& /* theReactor */,
       // FIXME: implement correct processing phase support (parsing, processing)
       ErrorResponseGenerator error_response_generator(*this);
       const auto error_response = error_response_generator.create_error_response(
-          ErrorResponseGenerator::REQ_PROCESSING, theRequest);
+          ErrorResponseGenerator::REQ_PROCESSING, &theRequest);
       theResponse.setContent(error_response.response);
       theResponse.setStatus(error_response.status);
       theResponse.setHeader("Content-Type", "text/xml; charset=UTF8");
@@ -942,7 +942,7 @@ void PluginImpl::dump_xml_schema_cache(std::ostream& os)
   xml_parser->dump_schema_cache(os);
 }
 
-void PluginImpl::dump_constructor_map(std::ostream& os, const boost::optional<std::string>& handler)
+void PluginImpl::dump_constructor_map(std::ostream& os, const std::optional<std::string>& handler)
 {
     const std::string result =
         get_stored_query_map()
@@ -952,7 +952,7 @@ void PluginImpl::dump_constructor_map(std::ostream& os, const boost::optional<st
     os << result;
 }
 
-void PluginImpl::dump_constructor_map_html(std::ostream& os, const boost::optional<std::string>& handler)
+void PluginImpl::dump_constructor_map_html(std::ostream& os, const std::optional<std::string>& handler)
 {
   try
   {

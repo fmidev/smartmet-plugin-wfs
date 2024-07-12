@@ -56,7 +56,7 @@ class StoredMastQueryHandler : public StoredQueryHandlerBase,
   StoredMastQueryHandler(SmartMet::Spine::Reactor* reactor,
                          StoredQueryConfig::Ptr config,
                          PluginImpl& plugin_impl,
-                         boost::optional<std::string> template_file_name);
+                         std::optional<std::string> template_file_name);
 
   ~StoredMastQueryHandler() override;
 
@@ -64,14 +64,14 @@ class StoredMastQueryHandler : public StoredQueryHandlerBase,
 
   void query(const StoredQuery& query,
                      const std::string& language,
-		     const boost::optional<std::string> &hostname,
+		     const std::optional<std::string> &hostname,
                      std::ostream& output) const override;
 
  private:
   virtual void update_parameters(
       const RequestParameterMap& request_params,
       int seq_id,
-      std::vector<boost::shared_ptr<RequestParameterMap> >& result) const;
+      std::vector<std::shared_ptr<RequestParameterMap> >& result) const;
 
   const std::shared_ptr<SmartMet::Engine::Observation::DBRegistryConfig> dbRegistryConfig(
       const std::string& configName) const;

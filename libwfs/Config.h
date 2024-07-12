@@ -9,8 +9,8 @@
 #include "CapabilitiesConf.h"
 #include "Hosts.h"
 #include "WfsFeatureDef.h"
-#include <boost/filesystem.hpp>
-#include <boost/shared_ptr.hpp>
+#include <filesystem>
+#include <memory>
 #include <boost/utility.hpp>
 #include <spine/CRSRegistry.h>
 #include <spine/ConfigBase.h>
@@ -60,7 +60,7 @@ class Config : public SmartMet::Spine::ConfigBase
   bool getEnableConfigurationPolling() const { return enable_configuration_polling; }
   bool getSQRestrictions() const { return sq_restrictions; }
   int getDefaultExpiresSeconds() const { return default_expires_seconds; }
-  const boost::filesystem::path& get_template_directory() const { return template_directory; }
+  const std::filesystem::path& get_template_directory() const { return template_directory; }
   const std::string& get_geoserver_conn_string() const { return geoserver_conn_str; }
   const std::vector<std::string>& get_languages() const { return languages; }
   inline int getCacheSize() const { return cache_size; }
@@ -68,10 +68,10 @@ class Config : public SmartMet::Spine::ConfigBase
   inline bool silenceInitWarnings() const { return silence_init_warnings; }
   inline const std::string& get_default_locale() const { return default_locale; }
   inline bool use_case_sensitive_params() const { return enable_case_sensitive_params; }
-  std::vector<boost::shared_ptr<WfsFeatureDef> > read_features_config(
+  std::vector<std::shared_ptr<WfsFeatureDef> > read_features_config(
       SmartMet::Spine::CRSRegistry& theCRSRegistry);
   const CapabilitiesConf& get_capabilities_config() const { return capabilities_conf; }
-  boost::optional<std::pair<std::string, std::string> > get_admin_credentials() const
+  std::optional<std::pair<std::string, std::string> > get_admin_credentials() const
   {
     return adminCred;
   }
@@ -98,7 +98,7 @@ class Config : public SmartMet::Spine::ConfigBase
   int cache_time_constant;
   int default_expires_seconds;
   std::vector<std::string> languages;
-  boost::filesystem::path template_directory;
+  std::filesystem::path template_directory;
   std::string xml_grammar_pool_dump;
   bool validate_output;
   bool fail_on_validate_errors;
@@ -116,7 +116,7 @@ class Config : public SmartMet::Spine::ConfigBase
    *
    *   Currently only used for reload request
    */
-  boost::optional<std::pair<std::string, std::string> > adminCred;
+  std::optional<std::pair<std::string, std::string> > adminCred;
 
   /**
    *   @brief Information about hosts to which WFS responses points

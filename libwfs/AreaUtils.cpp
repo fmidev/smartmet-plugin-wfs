@@ -1,6 +1,6 @@
 #include "AreaUtils.h"
 #include <boost/lambda/lambda.hpp>
-#include <boost/shared_ptr.hpp>
+#include <memory>
 #include <macgyver/Exception.h>
 #include <newbase/NFmiLatLonArea.h>
 #include <newbase/NFmiMercatorArea.h>
@@ -59,7 +59,7 @@ std::vector<NFmiPoint> bbox_exclude_point(const NFmiPoint& p1,
     r1.addPoint(x2, y2);
     r1.addPoint(x2, y1);
     r1.closeRings();
-    boost::shared_ptr<OGRPolygon> g1(new OGRPolygon);
+    std::shared_ptr<OGRPolygon> g1(new OGRPolygon);
     g1->addRing(&r1);
 
     OGRPoint pxy;

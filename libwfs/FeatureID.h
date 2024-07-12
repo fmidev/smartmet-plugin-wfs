@@ -1,6 +1,6 @@
 #pragma once
 
-#include <boost/shared_ptr.hpp>
+#include <memory>
 #include <spine/Value.h>
 #include <map>
 #include <string>
@@ -35,7 +35,7 @@ class FeatureID
   /**
    *   @brief Restore FeatureID from string earlier returned by method get_id().
    */
-  static boost::shared_ptr<FeatureID> create_from_id(const std::string& id);
+  static std::shared_ptr<FeatureID> create_from_id(const std::string& id);
 
   /**
    *   @brief Generate feature ID which can be used to reconstruct FeatureID data later.

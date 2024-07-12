@@ -106,9 +106,9 @@ struct IsolineQueryResult : ContourQueryResult
   double isovalue;
 };
 
-using ContourQueryResultPtr = boost::shared_ptr<ContourQueryResult>;
-using CoverageQueryResultPtr = boost::shared_ptr<CoverageQueryResult>;
-using IsolineQueryResultPtr = boost::shared_ptr<IsolineQueryResult>;
+using ContourQueryResultPtr = std::shared_ptr<ContourQueryResult>;
+using CoverageQueryResultPtr = std::shared_ptr<CoverageQueryResult>;
+using IsolineQueryResultPtr = std::shared_ptr<IsolineQueryResult>;
 
 using ContourQueryResultSet = std::vector<ContourQueryResultPtr>;
 

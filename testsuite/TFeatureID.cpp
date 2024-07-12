@@ -47,7 +47,7 @@ BOOST_AUTO_TEST_CASE(test_generating_feature_id_and_parsing_it)
 
   FeatureID id1(stored_query_id, params);
 
-  boost::shared_ptr<FeatureID> id2;
+  std::shared_ptr<FeatureID> id2;
   try
   {
     id2 = FeatureID::create_from_id(id1.get_id());
@@ -84,7 +84,7 @@ BOOST_AUTO_TEST_CASE(test_edit_params)
 
   BOOST_CHECK_EQUAL(4, (int)id1.get_params().count("bbox"));
 
-  boost::shared_ptr<FeatureID> id2;
+  std::shared_ptr<FeatureID> id2;
   try
   {
     id2 = FeatureID::create_from_id(id1.get_id());
@@ -130,7 +130,7 @@ BOOST_AUTO_TEST_CASE(test_2)
       const double c_bbox[4] = {21.0, 60.0, 23.0, 62.0};
       FeatureID id1(stored_query_id, params);
       id1.add_param("bbox", c_bbox, c_bbox + 4);
-      boost::shared_ptr<FeatureID> id2 = FeatureID::create_from_id(id1.get_id());
+      std::shared_ptr<FeatureID> id2 = FeatureID::create_from_id(id1.get_id());
       if (id1.get_params() != id2->get_params()) {
 	num_err++;
       }

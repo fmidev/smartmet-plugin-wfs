@@ -2,7 +2,7 @@
 
 #include <macgyver/DateTime.h>
 #include <boost/lexical_cast.hpp>
-#include <boost/optional.hpp>
+#include <optional>
 #include <newbase/NFmiParameterName.h>
 #include <macgyver/Exception.h>
 #include <spine/HTTP.h>
@@ -120,7 +120,7 @@ void assert_unreachable(const char* file, int line) __attribute__((noreturn));
 std::string as_string(const std::vector<SmartMet::Spine::Value>& src);
 
 std::string as_string(
-    const boost::variant<SmartMet::Spine::Value, std::vector<SmartMet::Spine::Value> >& src);
+    const std::variant<SmartMet::Spine::Value, std::vector<SmartMet::Spine::Value> >& src);
 
 std::string remove_trailing_0(const std::string& src);
 

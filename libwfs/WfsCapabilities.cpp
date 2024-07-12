@@ -55,7 +55,7 @@ const bw::WfsFeatureDef* bw::WfsCapabilities::find_feature(const std::string& na
   }
 }
 
-void bw::WfsCapabilities::register_feature(boost::shared_ptr<WfsFeatureDef>& feature_def)
+void bw::WfsCapabilities::register_feature(std::shared_ptr<WfsFeatureDef>& feature_def)
 {
   try
   {
@@ -78,7 +78,7 @@ void bw::WfsCapabilities::register_feature(boost::shared_ptr<WfsFeatureDef>& fea
   }
 }
 
-std::map<std::string, boost::shared_ptr<bw::WfsFeatureDef> > bw::WfsCapabilities::get_features()
+std::map<std::string, std::shared_ptr<bw::WfsFeatureDef> > bw::WfsCapabilities::get_features()
     const
 {
   try

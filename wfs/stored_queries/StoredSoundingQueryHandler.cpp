@@ -24,7 +24,7 @@ StoredSoundingQueryHandler::StoredSoundingQueryHandler(
     SmartMet::Spine::Reactor* reactor,
     StoredQueryConfig::Ptr config,
     PluginImpl& pluginData,
-    boost::optional<std::string> templateFileName)
+    std::optional<std::string> templateFileName)
 
     : StoredQueryParamRegistry(config),
       SupportsExtraHandlerParams(config),
@@ -84,7 +84,7 @@ std::string StoredSoundingQueryHandler::get_handler_description() const
 
 void StoredSoundingQueryHandler::query(const StoredQuery& query,
                                        const std::string& language,
-                                       const boost::optional<std::string>& /*hostname*/,
+                                       const std::optional<std::string>& /*hostname*/,
                                        std::ostream& output) const
 {
   const auto& params = query.get_param_map();
@@ -502,7 +502,7 @@ void StoredSoundingQueryHandler::query(const StoredQuery& query,
 void StoredSoundingQueryHandler::update_parameters(
     const RequestParameterMap& params,
     int seqId,
-    std::vector<boost::shared_ptr<RequestParameterMap> >& result) const
+    std::vector<std::shared_ptr<RequestParameterMap> >& result) const
 {
 }
 
@@ -946,16 +946,16 @@ namespace
 {
 using namespace SmartMet::Plugin::WFS;
 
-boost::shared_ptr<SmartMet::Plugin::WFS::StoredQueryHandlerBase> wfsStoredSoundingHandlerCreate(
+std::shared_ptr<SmartMet::Plugin::WFS::StoredQueryHandlerBase> wfsStoredSoundingHandlerCreate(
     SmartMet::Spine::Reactor* reactor,
     StoredQueryConfig::Ptr config,
     PluginImpl& pluginData,
-    boost::optional<std::string> templateFileName)
+    std::optional<std::string> templateFileName)
 {
   try
   {
     auto* qh = new StoredSoundingQueryHandler(reactor, config, pluginData, templateFileName);
-    boost::shared_ptr<SmartMet::Plugin::WFS::StoredQueryHandlerBase> instance(qh);
+    std::shared_ptr<SmartMet::Plugin::WFS::StoredQueryHandlerBase> instance(qh);
     return instance;
   }
   catch (...)

@@ -274,15 +274,15 @@ std::string bw::GeoServerDataIndex::get_db_table_name(const std::string& layer_n
 {
   try
   {
-    const int which = db_table_name_def.which();
+    const int which = db_table_name_def.index();
     if (which == 0)
     {
-      boost::basic_format<char> fmt(boost::get<std::string>(db_table_name_def));
+      boost::basic_format<char> fmt(std::get<std::string>(db_table_name_def));
       return boost::str(fmt % layer_name);
     }
     else if (which == 1)
     {
-      const auto& name_map = boost::get<std::map<std::string, std::string> >(db_table_name_def);
+      const auto& name_map = std::get<std::map<std::string, std::string> >(db_table_name_def);
       auto pos = name_map.find(layer_name);
       if (pos == name_map.end())
       {
@@ -305,7 +305,7 @@ std::string bw::GeoServerDataIndex::get_db_table_name(const std::string& layer_n
     }
     else
     {
-      auto& cb = boost::get<boost::function1<std::string, std::string> >(db_table_name_def);
+      auto& cb = std::get<boost::function1<std::string, std::string> >(db_table_name_def);
       return cb(layer_name);
     }
   }

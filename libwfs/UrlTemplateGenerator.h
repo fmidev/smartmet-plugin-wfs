@@ -1,7 +1,7 @@
 #pragma once
 
 #include <boost/function.hpp>
-#include <boost/variant.hpp>
+#include <variant>
 #include <string>
 #include <vector>
 
@@ -46,7 +46,7 @@ class UrlTemplateGenerator
   std::string generate(
       boost::function1<std::vector<std::string>, std::string> param_getter_cb) const;
 
-  inline const std::vector<boost::variant<ParamRef, StringParam> > get_content() const
+  inline const std::vector<std::variant<ParamRef, StringParam> > get_content() const
   {
     return params;
   }
@@ -61,7 +61,7 @@ class UrlTemplateGenerator
 
  private:
   std::string url;
-  std::vector<boost::variant<ParamRef, StringParam> > params;
+  std::vector<std::variant<ParamRef, StringParam> > params;
 };
 
 }  // namespace WFS

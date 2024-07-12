@@ -17,7 +17,7 @@ class StoredCoverageQueryHandler : public StoredContourQueryHandler
   StoredCoverageQueryHandler(SmartMet::Spine::Reactor* reactor,
                              StoredQueryConfig::Ptr config,
                              PluginImpl& plugin_impl,
-                             boost::optional<std::string> template_file_name);
+                             std::optional<std::string> template_file_name);
 
   std::string get_handler_description() const override;
 
@@ -26,7 +26,7 @@ class StoredCoverageQueryHandler : public StoredContourQueryHandler
   std::vector<ContourQueryResultPtr> processQuery(ContourQueryParameter& queryParameter) const override;
   SmartMet::Engine::Contour::Options getContourEngineOptions(
       const Fmi::DateTime& time, const ContourQueryParameter& queryParameter) const override;
-  boost::shared_ptr<ContourQueryParameter> getQueryParameter(
+  std::shared_ptr<ContourQueryParameter> getQueryParameter(
       const SmartMet::Spine::Parameter& parameter,
       const SmartMet::Engine::Querydata::Q& q,
       OGRSpatialReference& sr) const override;

@@ -4,10 +4,11 @@
 #include "ParameterTemplateBase.h"
 #include "StoredQueryHandlerBase.h"
 #include <boost/algorithm/string.hpp>
-#include <boost/filesystem.hpp>
+#include <filesystem>
 #include <macgyver/TypeName.h>
 #include <spine/Convenience.h>
 #include <macgyver/Exception.h>
+#include <macgyver/FileSystem.h>
 #include <macgyver/StringConversion.h>
 #include <iostream>
 #include <sstream>
@@ -47,7 +48,7 @@ SmartMet::Plugin::WFS::StoredQueryConfig::StoredQueryConfig(const std::string& c
 }
 
 SmartMet::Plugin::WFS::StoredQueryConfig::StoredQueryConfig(
-    boost::shared_ptr<libconfig::Config> config, const Config* plugin_config)
+    std::shared_ptr<libconfig::Config> config, const Config* plugin_config)
 
     : SmartMet::Spine::ConfigBase(config, "WFS stored query configuration")
     , hosts(plugin_config ? plugin_config->get_hosts() : default_hosts)
@@ -522,7 +523,7 @@ std::time_t SmartMet::Plugin::WFS::StoredQueryConfig::config_write_time() const
   try
   {
     namespace ba = boost::algorithm;
-    namespace fs = boost::filesystem;
+    namespace fs = std::filesystem;
 
     auto filepath = get_file_name();
 
@@ -534,7 +535,7 @@ std::time_t SmartMet::Plugin::WFS::StoredQueryConfig::config_write_time() const
          not ba::starts_with(filename, "#") and filename.substr(filename.length() - 5) == ".conf");
 
     if (validFile)
-      return fs::last_write_time(p);
+      return Fmi::last_write_time_or(p, std::time(nullptr));
 
     return config_last_write_time;
   }

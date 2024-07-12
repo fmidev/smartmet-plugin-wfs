@@ -90,7 +90,7 @@ StoredQEDownloadQueryHandler::StoredQEDownloadQueryHandler(
     SmartMet::Spine::Reactor* reactor,
     StoredQueryConfig::Ptr config,
     PluginImpl& plugin_data,
-    boost::optional<std::string> template_file_name)
+    std::optional<std::string> template_file_name)
 
     : StoredQueryParamRegistry(config),
       SupportsExtraHandlerParams(config, false),
@@ -333,7 +333,7 @@ void dump_meta_query_options(const qe::MetaQueryOptions& opt)
 void StoredQEDownloadQueryHandler::update_parameters(
     const bw::RequestParameterMap& params,
     int seq_id,
-    std::vector<boost::shared_ptr<bw::RequestParameterMap> >& result) const
+    std::vector<std::shared_ptr<bw::RequestParameterMap> >& result) const
 {
   try
   {
@@ -475,7 +475,7 @@ void StoredQEDownloadQueryHandler::update_parameters(
         }
       }
 
-      boost::shared_ptr<RequestParameterMap> pm(new RequestParameterMap(true));
+      std::shared_ptr<RequestParameterMap> pm(new RequestParameterMap(true));
 
       if (debug_level > 1)
       {
@@ -685,7 +685,7 @@ void StoredQEDownloadQueryHandler::update_parameters(
   }
 }
 
-boost::shared_ptr<OGRPolygon> StoredQEDownloadQueryHandler::get_model_boundary(
+std::shared_ptr<OGRPolygon> StoredQEDownloadQueryHandler::get_model_boundary(
     const SmartMet::Engine::Querydata::MetaData& meta_info,
     const std::string& crs_name,
     int num_side_points) const
@@ -696,10 +696,10 @@ boost::shared_ptr<OGRPolygon> StoredQEDownloadQueryHandler::get_model_boundary(
     auto q = q_engine->get(meta_info.producer, meta_info.originTime);
 
     if (!q->isArea())
-      return boost::shared_ptr<OGRPolygon>();
+      return std::shared_ptr<OGRPolygon>();
 
     const NFmiArea& area = q->area();
-    boost::shared_ptr<OGRPolygon> model_area(new OGRPolygon);
+    std::shared_ptr<OGRPolygon> model_area(new OGRPolygon);
     SmartMet::Plugin::WFS::get_latlon_boundary(&area, model_area.get(), num_side_points);
 
     auto transformation = crs_registry.create_transformation(DATA_CRS_NAME, crs_name);
@@ -713,7 +713,7 @@ boost::shared_ptr<OGRPolygon> StoredQEDownloadQueryHandler::get_model_boundary(
   }
 }
 
-boost::shared_ptr<OGRGeometry> StoredQEDownloadQueryHandler::bbox_intersection(
+std::shared_ptr<OGRGeometry> StoredQEDownloadQueryHandler::bbox_intersection(
     const SmartMet::Spine::BoundingBox& bbox,
     const SmartMet::Engine::Querydata::MetaData& meta_info) const
 {
@@ -721,7 +721,7 @@ boost::shared_ptr<OGRGeometry> StoredQEDownloadQueryHandler::bbox_intersection(
   {
     // TODO TODO: STRANGE CODE WAS HERE
     const int BBOX_NPOINTS = 10;
-    boost::shared_ptr<OGRGeometry> result;
+    std::shared_ptr<OGRGeometry> result;
 
     auto q = q_engine->get(meta_info.producer, meta_info.originTime);
 
@@ -841,17 +841,17 @@ namespace
 {
 using namespace SmartMet::Plugin::WFS;
 
-boost::shared_ptr<SmartMet::Plugin::WFS::StoredQueryHandlerBase>
+std::shared_ptr<SmartMet::Plugin::WFS::StoredQueryHandlerBase>
 wfs_stored_qe_download_handler_create(SmartMet::Spine::Reactor* reactor,
                                       StoredQueryConfig::Ptr config,
                                       PluginImpl& plugin_data,
-                                      boost::optional<std::string> template_file_name)
+                                      std::optional<std::string> template_file_name)
 {
   try
   {
     StoredAtomQueryHandlerBase* qh =
         new StoredQEDownloadQueryHandler(reactor, config, plugin_data, template_file_name);
-    boost::shared_ptr<SmartMet::Plugin::WFS::StoredQueryHandlerBase> result(qh);
+    std::shared_ptr<SmartMet::Plugin::WFS::StoredQueryHandlerBase> result(qh);
     return result;
   }
   catch (...)

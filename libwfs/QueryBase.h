@@ -49,7 +49,7 @@ class QueryBase
    *  Method is expected to throw an exception in a case of an error
    *  (SmartMet::Plugin::WFS::Exception preferred but not mandatory)
    */
-  virtual void execute(std::ostream& output, const std::string& language, const boost::optional<std::string>& hostname) const = 0;
+  virtual void execute(std::ostream& output, const std::string& language, const std::optional<std::string>& hostname) const = 0;
 
   /**
    *   @brief Cast to required query type (Query or StoredQuery) from
@@ -77,7 +77,7 @@ class QueryBase
 
   void set_cached_response(const std::string& response);
 
-  inline boost::optional<std::string> get_cached_response() const { return cached_response; }
+  inline std::optional<std::string> get_cached_response() const { return cached_response; }
   /**
    *  @brief Get stale seconds after which query is stale.
    *
@@ -90,7 +90,7 @@ class QueryBase
  private:
   int query_id{1};
   int stale_seconds{0};
-  boost::optional<std::string> cached_response;
+  std::optional<std::string> cached_response;
 };
 
 }  // namespace WFS

@@ -90,7 +90,7 @@ class RequestParameterMap
   ResultType get_single(const std::string& name) const;
 
   template <typename ResultType, typename ValueType = ResultType>
-  boost::optional<ResultType> get_optional(const std::string& name) const;
+  std::optional<ResultType> get_optional(const std::string& name) const;
 
   template <typename ResultType, typename ValueType = ResultType>
   ResultType get_optional(const std::string& name, const ResultType& default_value) const;
@@ -258,11 +258,11 @@ ResultType RequestParameterMap::get_single(const std::string& name) const
 }
 
 template <typename ResultType, typename ValueType>
-boost::optional<ResultType> RequestParameterMap::get_optional(const std::string& name) const
+std::optional<ResultType> RequestParameterMap::get_optional(const std::string& name) const
 {
   try
   {
-    boost::optional<ResultType> result;
+    std::optional<ResultType> result;
     std::vector<ValueType> tmp;
     get<ValueType>(name, std::back_inserter(tmp), 0, 1);
     if (not tmp.empty())

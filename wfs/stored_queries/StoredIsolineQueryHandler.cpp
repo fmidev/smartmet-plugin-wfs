@@ -11,7 +11,7 @@ bw::StoredIsolineQueryHandler::StoredIsolineQueryHandler(
     SmartMet::Spine::Reactor* reactor,
     StoredQueryConfig::Ptr config,
     PluginImpl& plugin_data,
-    boost::optional<std::string> template_file_name)
+    std::optional<std::string> template_file_name)
 
     : StoredQueryParamRegistry(config),
       SupportsExtraHandlerParams(config, false),
@@ -109,14 +109,14 @@ SmartMet::Engine::Contour::Options bw::StoredIsolineQueryHandler::getContourEngi
   }
 }
 
-boost::shared_ptr<bw::ContourQueryParameter> bw::StoredIsolineQueryHandler::getQueryParameter(
+std::shared_ptr<bw::ContourQueryParameter> bw::StoredIsolineQueryHandler::getQueryParameter(
     const SmartMet::Spine::Parameter& parameter,
     const SmartMet::Engine::Querydata::Q& q,
     OGRSpatialReference& sr) const
 {
   try
   {
-    boost::shared_ptr<ContourQueryParameter> ret(new bw::IsolineQueryParameter(parameter, q, sr));
+    std::shared_ptr<ContourQueryParameter> ret(new bw::IsolineQueryParameter(parameter, q, sr));
 
     return ret;
   }
@@ -149,17 +149,17 @@ namespace
 {
 using namespace SmartMet::Plugin::WFS;
 
-boost::shared_ptr<SmartMet::Plugin::WFS::StoredQueryHandlerBase> wfs_isoline_query_handler_create(
+std::shared_ptr<SmartMet::Plugin::WFS::StoredQueryHandlerBase> wfs_isoline_query_handler_create(
     SmartMet::Spine::Reactor* reactor,
     StoredQueryConfig::Ptr config,
     PluginImpl& plugin_data,
-    boost::optional<std::string> template_file_name)
+    std::optional<std::string> template_file_name)
 {
   try
   {
     auto* qh =
         new StoredIsolineQueryHandler(reactor, config, plugin_data, template_file_name);
-    boost::shared_ptr<SmartMet::Plugin::WFS::StoredQueryHandlerBase> result(qh);
+    std::shared_ptr<SmartMet::Plugin::WFS::StoredQueryHandlerBase> result(qh);
     return result;
   }
   catch (...)

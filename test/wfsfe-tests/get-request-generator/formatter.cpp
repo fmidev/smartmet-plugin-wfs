@@ -2,7 +2,7 @@
 #include <boost/bind/bind.hpp>
 #include <boost/algorithm/string.hpp>
 #include <boost/algorithm/string/join.hpp>
-#include <boost/filesystem.hpp>
+#include <filesystem>
 #include <boost/range/iterator_range.hpp>
 #include <xercesc/dom/DOM.hpp>
 #include <xercesc/framework/StdOutFormatTarget.hpp>
@@ -31,7 +31,7 @@ std::string encimpl(std::string::value_type v)
 }
 }
 
-std::string get_file_contents(const boost::filesystem::path& filename)
+std::string get_file_contents(const std::filesystem::path& filename)
 {
   std::string content;
   std::ifstream in(filename.c_str());
@@ -41,7 +41,7 @@ std::string get_file_contents(const boost::filesystem::path& filename)
   return content;
 }
 
-void put_file_contents(const boost::filesystem::path& filename, const std::string& data)
+void put_file_contents(const std::filesystem::path& filename, const std::string& data)
 {
   std::ofstream out(filename.c_str());
   if (out)
@@ -395,7 +395,7 @@ int main(int argc, char* argv[])
 
     if (!output_file.empty())
     {
-      boost::filesystem::path output(output_file);
+      std::filesystem::path output(output_file);
       put_file_contents(output, get_request);
     }
     else

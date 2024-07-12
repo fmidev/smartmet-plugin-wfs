@@ -68,7 +68,7 @@ std::string bbox2string(const SmartMet::Spine::BoundingBox& bbox, OGRSpatialRefe
 }
 #endif
 
-FmiParameterName get_parameter(boost::shared_ptr<SmartMet::Plugin::WFS::StoredQueryConfig> config,
+FmiParameterName get_parameter(std::shared_ptr<SmartMet::Plugin::WFS::StoredQueryConfig> config,
                                const std::string& param_name)
 {
   try
@@ -132,15 +132,15 @@ void populate_result_vector(
       const TS::TimedValue& tv_moderate = qengine_result_moderate->at(i);
       const TS::TimedValue& tv_heavy = qengine_result_heavy->at(i);
 
-      if (!(boost::get<double>(&tv_light.value)))
+      if (!(std::get_if<double>(&tv_light.value)))
       {
         // nan-value is string
         break;
       }
 
-      double light_prob = *(boost::get<double>(&tv_light.value));
-      double moderate_prob = *(boost::get<double>(&tv_moderate.value));
-      double heavy_prob = *(boost::get<double>(&tv_heavy.value));
+      double light_prob = std::get<double>(tv_light.value);
+      double moderate_prob = std::get<double>(tv_moderate.value);
+      double heavy_prob = std::get<double>(tv_heavy.value);
       result_vector.push_back(SmartMet::Plugin::WFS::WinterWeatherProbability(
           tv_light.time.utc_time(), light_prob, moderate_prob, heavy_prob));
     }
@@ -163,7 +163,7 @@ StoredWWProbabilityQueryHandler::StoredWWProbabilityQueryHandler(
     SmartMet::Spine::Reactor* reactor,
     StoredQueryConfig::Ptr config,
     PluginImpl& pluginData,
-    boost::optional<std::string> templateFileName)
+    std::optional<std::string> templateFileName)
 
     : StoredQueryParamRegistry(config),
       SupportsExtraHandlerParams(config, false),
@@ -447,7 +447,7 @@ WinterWeatherIntensityProbabilities StoredWWProbabilityQueryHandler::getProbabil
 
 void StoredWWProbabilityQueryHandler::query(const StoredQuery& query,
                                             const std::string& language,
-					    const boost::optional<std::string>&  /*hostname*/,
+					    const std::optional<std::string>&  /*hostname*/,
                                             std::ostream& output) const
 {
   try
@@ -535,7 +535,7 @@ void StoredWWProbabilityQueryHandler::query(const StoredQuery& query,
 
     auto producer = sq_params.get_single<std::string>(P_PRODUCER);
     auto missingText = sq_params.get_single<std::string>(P_MISSING_TEXT);
-    boost::optional<Fmi::DateTime> requested_origintime =
+    std::optional<Fmi::DateTime> requested_origintime =
         sq_params.get_optional<Fmi::DateTime>(P_ORIGIN_TIME);
 
     SmartMet::Engine::Querydata::Q q;
@@ -547,7 +547,7 @@ void StoredWWProbabilityQueryHandler::query(const StoredQuery& query,
     Fmi::DateTime origintime = q->originTime();
     Fmi::DateTime modificationtime = q->modificationTime();
 
-    boost::shared_ptr<TS::TimeSeriesGeneratorOptions> pTimeOptions =
+    std::shared_ptr<TS::TimeSeriesGeneratorOptions> pTimeOptions =
         get_time_generator_options(sq_params);
     // get data in UTC
     const std::string zone = "UTC";
@@ -621,17 +621,17 @@ namespace
 {
 using namespace SmartMet::Plugin::WFS;
 
-boost::shared_ptr<SmartMet::Plugin::WFS::StoredQueryHandlerBase>
+std::shared_ptr<SmartMet::Plugin::WFS::StoredQueryHandlerBase>
 wfs_winterweather_probabilities_query_handler_create(SmartMet::Spine::Reactor* reactor,
                                                      StoredQueryConfig::Ptr config,
                                                      PluginImpl& pluginData,
-                                                     boost::optional<std::string> templateFileName)
+                                                     std::optional<std::string> templateFileName)
 {
   try
   {
     auto* qh =
         new StoredWWProbabilityQueryHandler(reactor, config, pluginData, templateFileName);
-    boost::shared_ptr<SmartMet::Plugin::WFS::StoredQueryHandlerBase> result(qh);
+    std::shared_ptr<SmartMet::Plugin::WFS::StoredQueryHandlerBase> result(qh);
     return result;
   }
   catch (...)

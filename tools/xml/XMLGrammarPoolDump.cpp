@@ -8,8 +8,8 @@
 #include <vector>
 #include <boost/algorithm/string.hpp>
 #include <boost/archive/text_oarchive.hpp>
-#include <boost/filesystem.hpp>
-#include <boost/optional.hpp>
+#include <filesystem>
+#include <optional>
 #include <boost/serialization/map.hpp>
 #include <xercesc/util/BinFileInputStream.hpp>
 #include <xercesc/framework/BinOutputStream.hpp>
@@ -27,7 +27,7 @@
 #include <openssl/sha.h>
 
 namespace ba = boost::algorithm;
-namespace fs = boost::filesystem;
+namespace fs = std::filesystem;
 
 // Renamed recently (one needs to support both versions)
 #if LIBCURL_VERSION_NUM < 0x071506
@@ -159,7 +159,7 @@ class MyEntityResolver : public xercesc::XMLEntityResolver
         }
         const std::string fn = fn_str.str();
         try {
-            if (boost::filesystem::exists(fn)) {
+            if (std::filesystem::exists(fn)) {
                 xercesc::Janitor<XMLCh> x_remote_id(xercesc::XMLString::transcode(fn.c_str()));
                 return new xercesc::LocalFileInputSource(x_remote_id.get());
             }
@@ -289,8 +289,8 @@ int run(int argc, char *argv[])
   bool verbose = false;
   std::string input_fn = "";
   std::string output_fn = "XMLGrammarPool.dump";
-  boost::optional<std::string> output_dir;
-  boost::optional<std::string> serialize_fn;
+  std::optional<std::string> output_dir;
+  std::optional<std::string> serialize_fn;
   std::vector<std::string> files_to_parse;
 
   int opt;

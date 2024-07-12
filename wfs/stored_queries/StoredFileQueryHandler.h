@@ -16,7 +16,7 @@ class StoredFileQueryHandler : public StoredAtomQueryHandlerBase
   StoredFileQueryHandler(SmartMet::Spine::Reactor* reactor,
                          StoredQueryConfig::Ptr config,
                          PluginImpl& plugin_impl,
-                         boost::optional<std::string> template_file_name);
+                         std::optional<std::string> template_file_name);
 
   ~StoredFileQueryHandler() override;
 
@@ -26,10 +26,10 @@ class StoredFileQueryHandler : public StoredAtomQueryHandlerBase
   void update_parameters(
       const RequestParameterMap& request_params,
       int seq_id,
-      std::vector<boost::shared_ptr<RequestParameterMap> >& result) const override;
+      std::vector<std::shared_ptr<RequestParameterMap> >& result) const override;
 
  private:
-  std::list<boost::shared_ptr<DataSetDefinition> > ds_list;
+  std::list<std::shared_ptr<DataSetDefinition> > ds_list;
 };
 
 }  // namespace WFS
