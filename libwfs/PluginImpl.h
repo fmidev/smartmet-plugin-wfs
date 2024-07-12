@@ -233,10 +233,10 @@ class PluginImpl
   std::filesystem::path ctppDumpFormatterPath;
 
   std::shared_ptr<Xml::ParserMT> xml_parser;
+  std::unique_ptr<WfsCapabilities> wfs_capabilities;
   std::shared_ptr<GeoServerDB> geo_server_db;
   std::unique_ptr<StoredQueryMap> stored_query_map;
   std::unique_ptr<TypeNameStoredQueryMap> type_name_stored_query_map;
-  std::unique_ptr<WfsCapabilities> wfs_capabilities;
   int debug_level;
   std::string fallback_hostname;
   std::string fallback_protocol;
