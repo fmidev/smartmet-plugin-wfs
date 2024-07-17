@@ -32,7 +32,6 @@ LIBS += -L$(libdir) \
         -lboost_serialization \
 	-lboost_thread \
 	-lboost_iostreams \
-	-lboost_filesystem \
         -lboost_chrono \
 	-lboost_system \
 	$(REQUIRED_LIBS) \
