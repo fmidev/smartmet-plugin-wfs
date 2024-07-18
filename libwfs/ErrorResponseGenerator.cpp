@@ -27,9 +27,13 @@ ErrorResponseGenerator::ErrorResponse ErrorResponseGenerator::create_error_respo
   {
     ErrorResponse response;
 
+    const std::exception_ptr eptr = std::current_exception();
+    if (!eptr)
+      throw Fmi::Exception(BCP, "[INTERNAL ERROR]: must not be be called outside an exception context");
+
     try
     {
-      throw;
+      std::rethrow_exception(eptr);
     }
     catch (Fmi::Exception& err)
     {
