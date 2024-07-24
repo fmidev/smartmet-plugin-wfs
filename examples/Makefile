@@ -1,7 +1,7 @@
 INCDIR = smartmet/smartmet/plugins/$(SUBNAME)
 TOP = $(shell pwd)/..
 
-REQUIRES = gdal
+REQUIRES = gdal libpqxx configpp ctpp2 xerces-c
 
 include $(shell echo $${PREFIX-/usr})/share/smartmet/devel/makefile.inc
 
@@ -11,8 +11,8 @@ DEFINES = -DUNIX -D_REENTRANT
 INCLUDES += \
 	-I$(includedir)/mysql
 
-LIBS += -L$(libdir) \
-	$(BOOST_LIBS) \
+LIBS += $(PREFIX_LDFLAGS) \
+	$(REQUIRED_LIBS) \
 	-lsmartmet-spine \
 	-lsmartmet-gis \
 	-lsmartmet-newbase \
@@ -25,12 +25,6 @@ LIBS += -L$(libdir) \
         -lboost_chrono \
 	-lboost_system \
         -lxqilla \
-	-lxerces-c \
-	$(GDAL_LIBS) \
-	-lpqxx \
-	-lconfig++ \
-	-lconfig \
-	-lctpp2 \
 	-lcurl \
 	-lcrypto \
 	-lbz2 -lz \

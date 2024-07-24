@@ -3,7 +3,7 @@ SPEC = smartmet-plugin-$(SUBNAME)
 INCDIR = smartmet/plugins/$(SUBNAME)
 TOP = $(shell pwd)
 
-REQUIRES = gdal jsoncpp configpp
+REQUIRES = gdal jsoncpp configpp libpqxx xerces-c libcurl
 
 include $(shell echo $${PREFIX-/usr})/share/smartmet/devel/makefile.inc
 
@@ -22,7 +22,7 @@ INCLUDES += \
 	-I$(includedir)/smartmet \
 	-isystem $(includedir)/jsoncpp
 
-LIBS += -L$(libdir) \
+LIBS += $(PREFIX_LDFLAGS) \
         -lsmartmet-grid-files \
         -lsmartmet-locus \
 	-lsmartmet-timeseries \
@@ -32,15 +32,9 @@ LIBS += -L$(libdir) \
         -lboost_serialization \
 	-lboost_thread \
 	-lboost_iostreams \
-        -lboost_chrono \
 	-lboost_system \
-	$(REQUIRED_LIBS) \
         -lxqilla \
-	-lxerces-c \
-	-lpqxx \
-	-lconfig \
-	-lctpp2 \
-	-lcurl \
+	$(REQUIRED_LIBS) \
 	-lcrypto \
 	-lbz2 -lz \
 	-lpthread \
