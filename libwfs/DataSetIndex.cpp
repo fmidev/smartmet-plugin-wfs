@@ -111,7 +111,8 @@ void bw::DataSetQuery::set_interval(const Fmi::DateTime& begin,
   }
 }
 
-bw::DataSetDefinition::DataSetDefinition(SmartMet::Spine::ConfigBase& config,
+bw::DataSetDefinition::DataSetDefinition(Private,
+                                         SmartMet::Spine::ConfigBase& config,
                                          libconfig::Setting& setting)
 {
   try
@@ -186,7 +187,7 @@ std::shared_ptr<bw::DataSetDefinition> bw::DataSetDefinition::create(
 {
   try
   {
-    return std::shared_ptr<bw::DataSetDefinition>(new bw::DataSetDefinition(config, setting));
+    return std::shared_ptr<bw::DataSetDefinition>(new bw::DataSetDefinition(Private(), config, setting));
   }
   catch (...)
   {

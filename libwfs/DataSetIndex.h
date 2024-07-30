@@ -52,9 +52,10 @@ class DataSetDefinition : public boost::enable_shared_from_this<DataSetDefinitio
   using box_t = boost::geometry::model::box<point_t>;
 
  private:
-  DataSetDefinition(SmartMet::Spine::ConfigBase& config, libconfig::Setting& setting);
-
+  struct Private { explicit Private() = default; };
  public:
+  DataSetDefinition(Private, SmartMet::Spine::ConfigBase& config, libconfig::Setting& setting);
+
   static std::shared_ptr<DataSetDefinition> create(SmartMet::Spine::ConfigBase& config,
                                                      libconfig::Setting& setting);
 
