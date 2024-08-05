@@ -425,7 +425,7 @@ void bw::StoredFlashQueryHandler::query(const StoredQuery& query,
           {
             std::string value;
             if (const int* ptr = std::get_if<int>(&result[k][i].value))
-              value = *ptr;
+              value = Fmi::to_string(*ptr);
             else if (const double* ptr = std::get_if<double>(&result[k][i].value))
             {
               auto tmp = *ptr;
