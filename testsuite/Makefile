@@ -3,7 +3,7 @@ INCDIR = smartmet/plugins/$(SUBNAME)
 TOP = $(shell pwd)/..
 
 OPTIMIZE = -O0
-REQUIRES = gdal jsoncpp libpqxx configpp
+REQUIRES = gdal jsoncpp libpqxx configpp ctpp2 xerces-c libcurl
 
 include $(shell echo $${PREFIX-/usr})/share/smartmet/devel/makefile.inc
 
@@ -11,7 +11,7 @@ DEFINES = -DUNIX -D_REENTRANT
 
 INCLUDES += -Iinclude
 
-LIBS += -L$(libdir) \
+LIBS += $(PREFIX_LDFLAGS) \
 	-lsmartmet-gis \
 	-lsmartmet-spine \
 	-lsmartmet-newbase \
@@ -24,13 +24,8 @@ LIBS += -L$(libdir) \
 	-lboost_filesystem \
         -lboost_chrono \
 	-lboost_system \
-	$(REQUIRED_LIBS) \
         -lxqilla \
-	-lxerces-c \
-	-lconfig++ \
-	-lconfig \
-	-lctpp2 \
-	-lcurl \
+	$(REQUIRED_LIBS) \
 	-lcrypto \
 	-lfmt \
 	-lbz2 -lz \

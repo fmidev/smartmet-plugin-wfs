@@ -12,10 +12,10 @@ namespace
 bw::DummyStoredQueryHandler::DummyStoredQueryHandler(SmartMet::Spine::Reactor* reactor,
 						     StoredQueryConfig::Ptr config,
 						     PluginImpl& plugin_impl,
-						     boost::optional<std::string>  /*template_file_name*/)
+						     std::optional<std::string>  /*template_file_name*/)
   : bw::StoredQueryParamRegistry(config)
   , bw::SupportsExtraHandlerParams(config)
-  , bw::StoredQueryHandlerBase(reactor, config, plugin_impl, boost::optional<std::string>())
+  , bw::StoredQueryHandlerBase(reactor, config, plugin_impl, std::optional<std::string>())
 {
   try
   {
@@ -42,7 +42,7 @@ std::string bw::DummyStoredQueryHandler::get_handler_description() const
 void
 bw::DummyStoredQueryHandler::query(const StoredQuery& query,
 				   const std::string&  /*language*/,
-				   const boost::optional<std::string>&  /*hostname*/,
+				   const std::optional<std::string>&  /*hostname*/,
 				   std::ostream& output) const
 {
   try
@@ -78,17 +78,17 @@ namespace
 {
 using namespace SmartMet::Plugin::WFS;
 
-boost::shared_ptr<SmartMet::Plugin::WFS::StoredQueryHandlerBase> dummy_handler_create(
+std::shared_ptr<SmartMet::Plugin::WFS::StoredQueryHandlerBase> dummy_handler_create(
     SmartMet::Spine::Reactor* reactor,
     StoredQueryConfig::Ptr config,
     PluginImpl& plugin_data,
-    boost::optional<std::string> template_file_name)
+    std::optional<std::string> template_file_name)
 {
   try
   {
     auto* qh =
         new DummyStoredQueryHandler(reactor, config, plugin_data, template_file_name);
-    boost::shared_ptr<SmartMet::Plugin::WFS::StoredQueryHandlerBase> result(qh);
+    std::shared_ptr<SmartMet::Plugin::WFS::StoredQueryHandlerBase> result(qh);
     return result;
   }
   catch (...)

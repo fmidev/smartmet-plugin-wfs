@@ -1,8 +1,8 @@
 #pragma once
 
 #include "WfsConvenience.h"
-#include <boost/optional.hpp>
-#include <boost/shared_ptr.hpp>
+#include <optional>
+#include <memory>
 #include <xercesc/dom/DOMElement.hpp>
 #include <string>
 #include <vector>
@@ -102,9 +102,9 @@ as part of the
  */
 struct GmlSRSReferenceGroup
 {
-  boost::optional<std::string> srs_name;
-  boost::optional<unsigned MAY_ALIAS> srs_dimension;
-  boost::optional<GmlSRSInformationGroup> srs_info;
+  std::optional<std::string> srs_name;
+  std::optional<unsigned MAY_ALIAS> srs_dimension;
+  std::optional<GmlSRSInformationGroup> srs_info;
 };
 
 /**
@@ -173,7 +173,7 @@ struct GmlEnvelopeType
   GmlDirectPositionType upper_corner;
 };
 
-boost::optional<GmlSRSInformationGroup> read_gml_srs_info_group(const xercesc::DOMElement& element);
+std::optional<GmlSRSInformationGroup> read_gml_srs_info_group(const xercesc::DOMElement& element);
 GmlSRSReferenceGroup read_gml_srs_reference_group(const xercesc::DOMElement& element);
 GmlDirectPositionType read_gml_direct_position_type(const xercesc::DOMElement& element);
 GmlEnvelopeType read_gml_envelope_type(const xercesc::DOMElement& element);

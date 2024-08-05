@@ -6,7 +6,7 @@
 #include "StoredQueryMap.h"
 #include "TypeNameStoredQueryMap.h"
 #include "XPathSnapshot.h"
-#include <boost/shared_ptr.hpp>
+#include <memory>
 #include <xercesc/dom/DOMElement.hpp>
 #include <string>
 #include <vector>
@@ -52,7 +52,7 @@ class AdHocQuery : public StoredQuery
                               const SmartMet::Spine::HTTP::Request& http_request,
                               const StoredQueryMap& sq_map,
                               const TypeNameStoredQueryMap& typename_storedquery_map,
-                              std::vector<boost::shared_ptr<QueryBase>>& queries);
+                              std::vector<std::shared_ptr<QueryBase>>& queries);
 
   /**
    *   @brief Static method for reading ad hoc query from XML format request
@@ -73,7 +73,7 @@ class AdHocQuery : public StoredQuery
                               const xercesc::DOMElement& query_root,
                               const StoredQueryMap& stored_query_map,
                               const TypeNameStoredQueryMap& typename_storedquery_map,
-                              std::vector<boost::shared_ptr<QueryBase>>& queries);
+                              std::vector<std::shared_ptr<QueryBase>>& queries);
 
   /**
    *   @brief Extract typenams from XML request
@@ -98,9 +98,9 @@ class AdHocQuery : public StoredQuery
    *
    */
   static void extract_xml_parameters(const xercesc::DOMElement& query_root,
-                                     boost::shared_ptr<const StoredQueryHandlerBase> handler,
+                                     std::shared_ptr<const StoredQueryHandlerBase> handler,
                                      std::vector<std::string>& element_tree,
-                                     std::vector<boost::shared_ptr<QueryBase>>& queries);
+                                     std::vector<std::shared_ptr<QueryBase>>& queries);
 
   /**
    *   @brief Performs XPath filtering according to filtering expression of given query.
@@ -109,7 +109,7 @@ class AdHocQuery : public StoredQuery
    *   @param xps Query response.
    *
    */
-  static void filter(boost::shared_ptr<QueryBase> query,
+  static void filter(std::shared_ptr<QueryBase> query,
                      SmartMet::Plugin::WFS::Xml::XPathSnapshot& xps);
 
   /**
@@ -144,12 +144,12 @@ class AdHocQuery : public StoredQuery
    *   code is expected to be SmartMet::Plugin::WFS::WfsException::OPERATION_PARSING_FAILED.
    */
   static void create_filter_query_from_kvp(const std::string& filter,
-                                           const boost::optional<std::string>& filter_language,
+                                           const std::optional<std::string>& filter_language,
                                            const std::string& language,
                                            const std::vector<std::string>& stored_query_ids,
                                            const StandardPresentationParameters& spp,
                                            const StoredQueryMap& stored_query_map,
-                                           std::vector<boost::shared_ptr<QueryBase>>& queries);
+                                           std::vector<std::shared_ptr<QueryBase>>& queries);
 
   /**
    *   @brief Static method for reading BBOX stored query from KVP format request
@@ -169,7 +169,7 @@ class AdHocQuery : public StoredQuery
                                          const std::vector<std::string>& stored_query_ids,
                                          const StandardPresentationParameters& spp,
                                          const StoredQueryMap& stored_query_map,
-                                         std::vector<boost::shared_ptr<QueryBase>>& queries);
+                                         std::vector<std::shared_ptr<QueryBase>>& queries);
 
   /**
    *   @brief Adds projection clause to the given queries.
@@ -179,7 +179,7 @@ class AdHocQuery : public StoredQuery
    *
    */
   static void add_projection_clause_from_xml(const xercesc::DOMElement& query_root,
-                                             std::vector<boost::shared_ptr<QueryBase>>& queries);
+                                             std::vector<std::shared_ptr<QueryBase>>& queries);
 
   /**
    *   @brief Adds projection clause to the given queries.
@@ -189,7 +189,7 @@ class AdHocQuery : public StoredQuery
    *
    */
   static void add_projection_clause(const std::vector<std::string>& property_names,
-                                    std::vector<boost::shared_ptr<QueryBase>>& queries);
+                                    std::vector<std::shared_ptr<QueryBase>>& queries);
 
   /**
    *   @brief Replaces aliases with type names in the given queries.
@@ -199,7 +199,7 @@ class AdHocQuery : public StoredQuery
    *
    */
   static void replace_aliases_from_xml(const xercesc::DOMElement& query_root,
-                                       std::vector<boost::shared_ptr<QueryBase>>& queries);
+                                       std::vector<std::shared_ptr<QueryBase>>& queries);
 
   /**
    *   @brief Replaces aliases with type names in the given queries.
@@ -211,7 +211,7 @@ class AdHocQuery : public StoredQuery
    */
   static void replace_aliases(const std::vector<std::string>& aliases,
                               const std::vector<std::string>& type_names,
-                              std::vector<boost::shared_ptr<QueryBase>>& queries);
+                              std::vector<std::shared_ptr<QueryBase>>& queries);
 
   /**
    *   @brief Creates a new ad hoc query object to query list.
@@ -220,8 +220,8 @@ class AdHocQuery : public StoredQuery
    *   @param queries Pointers to created query objects.
    *
    */
-  static void create_query(boost::shared_ptr<const StoredQueryHandlerBase> handler,
-                           std::vector<boost::shared_ptr<QueryBase>>& queries,
+  static void create_query(std::shared_ptr<const StoredQueryHandlerBase> handler,
+                           std::vector<std::shared_ptr<QueryBase>>& queries,
 			   bool case_sensitive_params);
 
   /**
@@ -238,7 +238,7 @@ class AdHocQuery : public StoredQuery
    */
   static void extract_filter_elements(const xercesc::DOMElement& root_element,
                                       std::vector<std::string>& element_tree,
-                                      std::vector<boost::shared_ptr<QueryBase>>& queries,
+                                      std::vector<std::shared_ptr<QueryBase>>& queries,
                                       AdHocQuery* upper_level_and_query,
                                       std::vector<unsigned int>& or_query_indexes,
 				      bool case_sensitive_params);
@@ -254,7 +254,7 @@ class AdHocQuery : public StoredQuery
    * expressions.
    *
    */
-  static void handle_end_of_and_element(std::vector<boost::shared_ptr<QueryBase>>& queries,
+  static void handle_end_of_and_element(std::vector<std::shared_ptr<QueryBase>>& queries,
                                         std::vector<unsigned int>& or_query_indexes,
                                         unsigned int and_query_index,
                                         AdHocQuery* and_query,
@@ -311,7 +311,7 @@ class AdHocQuery : public StoredQuery
   static void process_parms(const std::string& language,
                             const std::string& query_id,
                             const StandardPresentationParameters& spp,
-                            std::vector<boost::shared_ptr<QueryBase>>& queries);
+                            std::vector<std::shared_ptr<QueryBase>>& queries);
 
   /**
    *   @brief Checks if the given query is used, that is there is some query parameters or

@@ -16,8 +16,8 @@
 #include <macgyver/TemplateFormatter.h>
 #include <macgyver/ValueFormatter.h>
 
-#include <boost/optional.hpp>
-#include <boost/shared_ptr.hpp>
+#include <optional>
+#include <memory>
 #include <boost/thread.hpp>
 
 namespace Fmi
@@ -44,13 +44,13 @@ class StoredQueryHandlerBase : virtual protected SupportsExtraHandlerParams,
 
  protected:
   const PluginImpl& plugin_impl;
-  boost::optional<std::string> template_file;  // needed by StoredFlashQueryHandler
+  std::optional<std::string> template_file;  // needed by StoredFlashQueryHandler
 
  public:
   StoredQueryHandlerBase(SmartMet::Spine::Reactor* reactor,
                          StoredQueryConfig::Ptr config,
                          PluginImpl& plugin_impl,
-                         boost::optional<std::string> template_file_name);
+                         std::optional<std::string> template_file_name);
 
   ~StoredQueryHandlerBase() override;
 
@@ -76,12 +76,12 @@ class StoredQueryHandlerBase : virtual protected SupportsExtraHandlerParams,
    *   The default action (in base class) is to simply return
    *   original parameters unchanged.
    */
-  virtual boost::shared_ptr<RequestParameterMap> process_params(
-      const std::string& stored_query_id, boost::shared_ptr<RequestParameterMap> orig_params) const;
+  virtual std::shared_ptr<RequestParameterMap> process_params(
+      const std::string& stored_query_id, std::shared_ptr<RequestParameterMap> orig_params) const;
 
   virtual void query(const StoredQuery& query,
                      const std::string& language,
-                     const boost::optional<std::string>& hostname,
+                     const std::optional<std::string>& hostname,
                      std::ostream& output) const = 0;
 
   /**
@@ -100,7 +100,7 @@ class StoredQueryHandlerBase : virtual protected SupportsExtraHandlerParams,
    */
   virtual bool redirect(const StoredQuery& query, std::string& new_stored_query_id) const;
 
-  inline boost::shared_ptr<const StoredQueryConfig> get_config() const { return config; }
+  inline std::shared_ptr<const StoredQueryConfig> get_config() const { return config; }
   const StoredQueryMap& get_stored_query_map() const;
 
   inline bool is_hidden() const { return hidden; }
@@ -117,25 +117,25 @@ class StoredQueryHandlerBase : virtual protected SupportsExtraHandlerParams,
 protected:
   virtual void init_handler();
 
-  boost::shared_ptr<Fmi::TemplateFormatter> get_formatter(bool debug_format) const;
+  std::shared_ptr<Fmi::TemplateFormatter> get_formatter(bool debug_format) const;
 
   inline SmartMet::Spine::Reactor* get_reactor() const { return reactor; }
   inline const PluginImpl& get_plugin_impl() const { return plugin_impl; }
   void format_output(CTPP::CDT& hash, std::ostream& output, bool debug_format) const;
 
   static std::pair<std::string, std::string> get_2D_coord(
-      boost::shared_ptr<SmartMet::Spine::CRSRegistry::Transformation> transformation,
+      std::shared_ptr<SmartMet::Spine::CRSRegistry::Transformation> transformation,
       double X,
       double Y);
 
   static void set_2D_coord(
-      boost::shared_ptr<SmartMet::Spine::CRSRegistry::Transformation> transformation,
+      std::shared_ptr<SmartMet::Spine::CRSRegistry::Transformation> transformation,
       double X,
       double Y,
       CTPP::CDT& hash);
 
   static void set_2D_coord(
-      boost::shared_ptr<SmartMet::Spine::CRSRegistry::Transformation> transformation,
+      std::shared_ptr<SmartMet::Spine::CRSRegistry::Transformation> transformation,
       const std::string& X,
       const std::string& Y,
       CTPP::CDT& hash);

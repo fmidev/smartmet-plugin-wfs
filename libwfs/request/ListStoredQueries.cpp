@@ -43,7 +43,7 @@ void bw::Request::ListStoredQueries::execute(std::ostream& output) const
     std::size_t cnt = 0;
     for (auto & ind : names)
     {
-      boost::shared_ptr<const StoredQueryHandlerBase> p_handler =
+      std::shared_ptr<const StoredQueryHandlerBase> p_handler =
           stored_query_map.get_handler_by_name(ind);
       if (not p_handler->is_hidden())
       {
@@ -101,7 +101,7 @@ void bw::Request::ListStoredQueries::execute(std::ostream& output) const
   }
 }
 
-boost::shared_ptr<bw::Request::ListStoredQueries> bw::Request::ListStoredQueries::create_from_kvp(
+std::shared_ptr<bw::Request::ListStoredQueries> bw::Request::ListStoredQueries::create_from_kvp(
     const std::string& language,
     const SmartMet::Spine::HTTP::Request& http_request,
     const bw::PluginImpl& plugin_impl)
@@ -112,7 +112,7 @@ boost::shared_ptr<bw::Request::ListStoredQueries> bw::Request::ListStoredQueries
     bw::Request::ListStoredQueries::check_request_name(http_request, "ListStoredQueries");
     check_wfs_version(http_request);
 
-    boost::shared_ptr<bw::Request::ListStoredQueries> result;
+    std::shared_ptr<bw::Request::ListStoredQueries> result;
     // FIXME: verify required stuff from the request
     result.reset(new bw::Request::ListStoredQueries(language, plugin_impl));
     return result;
@@ -123,7 +123,7 @@ boost::shared_ptr<bw::Request::ListStoredQueries> bw::Request::ListStoredQueries
   }
 }
 
-boost::shared_ptr<bw::Request::ListStoredQueries> bw::Request::ListStoredQueries::create_from_xml(
+std::shared_ptr<bw::Request::ListStoredQueries> bw::Request::ListStoredQueries::create_from_xml(
     const std::string& language,
     const xercesc::DOMDocument& document,
     const bw::PluginImpl& plugin_impl)
@@ -131,7 +131,7 @@ boost::shared_ptr<bw::Request::ListStoredQueries> bw::Request::ListStoredQueries
   try
   {
     bw::Request::ListStoredQueries::check_request_name(document, "ListStoredQueries");
-    boost::shared_ptr<bw::Request::ListStoredQueries> result;
+    std::shared_ptr<bw::Request::ListStoredQueries> result;
     result.reset(new bw::Request::ListStoredQueries(language, plugin_impl));
     result->check_mandatory_attributes(document);
     // FIXME: extract language from the request

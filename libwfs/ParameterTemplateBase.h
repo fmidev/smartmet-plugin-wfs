@@ -3,9 +3,9 @@
 #include "StoredQueryConfig.h"
 #include "WfsConvenience.h"
 #include <boost/logic/tribool.hpp>
-#include <boost/optional.hpp>
-#include <boost/shared_ptr.hpp>
-#include <boost/variant.hpp>
+#include <optional>
+#include <memory>
+#include <variant>
 #include <spine/Value.h>
 
 namespace SmartMet
@@ -51,7 +51,7 @@ class ParameterTemplateBase
    *           members for @ref ArrayParameterTemplate)
    */
   virtual boost::tribool get_value(
-      boost::variant<SmartMet::Spine::Value, std::vector<SmartMet::Spine::Value> >& result,
+      std::variant<SmartMet::Spine::Value, std::vector<SmartMet::Spine::Value> >& result,
       const RequestParameterMap& req_param_map,
       const SupportsExtraHandlerParams* extra = nullptr,
       bool strict = true) const = 0;

@@ -22,11 +22,11 @@ class WfsCapabilities
 
   bool register_operation(const std::string& operation);
 
-  std::map<std::string, boost::shared_ptr<WfsFeatureDef> > get_features() const;
+  std::map<std::string, std::shared_ptr<WfsFeatureDef> > get_features() const;
 
   const WfsFeatureDef* find_feature(const std::string& name) const;
 
-  void register_feature(boost::shared_ptr<WfsFeatureDef>& feature_def);
+  void register_feature(std::shared_ptr<WfsFeatureDef>& feature_def);
 
   void register_feature_use(const std::string& name);
 
@@ -45,7 +45,7 @@ class WfsCapabilities
   /**
    *  @brief The map of supported WFS features
    */
-  std::map<std::string, boost::shared_ptr<WfsFeatureDef> > features;
+  std::map<std::string, std::shared_ptr<WfsFeatureDef> > features;
 
   /**
    *  @brief The set of used features

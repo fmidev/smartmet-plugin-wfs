@@ -28,7 +28,7 @@ using boost::str;
 using Fmi::current_exception_type;
 using SmartMet::Plugin::WFS::Request::GetPropertyValue;
 
-static void decrease(boost::optional<int>& value)
+static void decrease(std::optional<int>& value)
 {
   if (value and *value > 0)
   {
@@ -61,7 +61,7 @@ void GetPropertyValue::execute(std::ostream& output) const
       throw exception;
     }
 
-    boost::shared_ptr<xercesc::DOMDocument> result =
+    std::shared_ptr<xercesc::DOMDocument> result =
         bwx::create_dom_document(WFS_NAMESPACE_URI, "wfs:ValueCollection");
 
     int num_returned = 0;
@@ -101,8 +101,8 @@ void GetPropertyValue::execute(std::ostream& output) const
   }
 }
 
-void GetPropertyValue::initialize(boost::optional<int>& max_members,
-                                  boost::optional<int>& start_index) const
+void GetPropertyValue::initialize(std::optional<int>& max_members,
+                                  std::optional<int>& start_index) const
 {
   try
   {
@@ -125,7 +125,7 @@ void GetPropertyValue::initialize(boost::optional<int>& max_members,
   }
 }
 
-void GetPropertyValue::finalize(boost::shared_ptr<xercesc::DOMDocument> result,
+void GetPropertyValue::finalize(std::shared_ptr<xercesc::DOMDocument> result,
                                 const int cumulative_num_returned,
                                 const int cumulative_num_matched,
                                 const bool is_timestamp_set,
@@ -159,7 +159,7 @@ void GetPropertyValue::finalize(boost::shared_ptr<xercesc::DOMDocument> result,
   }
 }
 
-void GetPropertyValue::add_responses(boost::shared_ptr<xercesc::DOMDocument> result,
+void GetPropertyValue::add_responses(std::shared_ptr<xercesc::DOMDocument> result,
                                      const std::vector<std::string>& query_responses,
                                      int& cumulative_num_returned,
                                      int& cumulative_num_matched,
@@ -170,8 +170,8 @@ void GetPropertyValue::add_responses(boost::shared_ptr<xercesc::DOMDocument> res
   {
     using namespace xercesc;
 
-    boost::optional<int> max_members;
-    boost::optional<int> start_index;
+    std::optional<int> max_members;
+    std::optional<int> start_index;
     initialize(max_members, start_index);
 
     int number_of_responses = query_responses.size();
@@ -219,13 +219,13 @@ void GetPropertyValue::add_responses(boost::shared_ptr<xercesc::DOMDocument> res
   }
 }
 
-void GetPropertyValue::filter(boost::shared_ptr<xercesc::DOMDocument> result,
+void GetPropertyValue::filter(std::shared_ptr<xercesc::DOMDocument> result,
                               const std::string& response,
                               int& cumulative_num_returned,
                               int& cumulative_num_matched,
-                              boost::optional<int>& max_members,
-                              boost::optional<int>& start_index,
-                              const boost::shared_ptr<QueryBase> query,
+                              std::optional<int>& max_members,
+                              std::optional<int>& start_index,
+                              const std::shared_ptr<QueryBase> query,
                               bool& is_timestamp_set,
                               bool& is_schemalocation_set) const
 {
@@ -278,12 +278,12 @@ void GetPropertyValue::filter(boost::shared_ptr<xercesc::DOMDocument> result,
   }
 }
 
-void GetPropertyValue::extract_property(boost::shared_ptr<xercesc::DOMDocument> result,
+void GetPropertyValue::extract_property(std::shared_ptr<xercesc::DOMDocument> result,
                                         const std::string& response,
                                         int& cumulative_num_returned,
                                         int& cumulative_num_matched,
-                                        boost::optional<int>& max_members,
-                                        boost::optional<int>& start_index,
+                                        std::optional<int>& max_members,
+                                        std::optional<int>& start_index,
                                         bool& is_timestamp_set,
                                         bool& is_schemalocation_set) const
 {
@@ -319,11 +319,11 @@ void GetPropertyValue::extract_property(boost::shared_ptr<xercesc::DOMDocument> 
   }
 }
 
-void GetPropertyValue::append_members(boost::shared_ptr<xercesc::DOMDocument> result,
+void GetPropertyValue::append_members(std::shared_ptr<xercesc::DOMDocument> result,
                                       bw::Xml::XPathSnapshot& xpath_snapshot,
                                       int& cumulative_num_returned,
-                                      boost::optional<int>& max_members,
-                                      boost::optional<int>& start_index,
+                                      std::optional<int>& max_members,
+                                      std::optional<int>& start_index,
                                       bool& is_timestamp_set,
                                       bool& is_schemalocation_set) const
 {
@@ -381,8 +381,8 @@ void GetPropertyValue::append_members(boost::shared_ptr<xercesc::DOMDocument> re
   }
 }
 
-void GetPropertyValue::calculate_loop_limits(const boost::optional<int>& max_members,
-                                             const boost::optional<int>& start_index,
+void GetPropertyValue::calculate_loop_limits(const std::optional<int>& max_members,
+                                             const std::optional<int>& start_index,
                                              const int num_members,
                                              int& first,
                                              int& last) const
@@ -445,7 +445,7 @@ bool GetPropertyValue::copy_timestamp(const xercesc::DOMElement* source,
   }
 }
 
-boost::shared_ptr<GetPropertyValue> GetPropertyValue::create_from_kvp(
+std::shared_ptr<GetPropertyValue> GetPropertyValue::create_from_kvp(
     const std::string& language,
     const SmartMet::Spine::HTTP::Request& http_request,
     PluginImpl& plugin_impl)
@@ -484,7 +484,7 @@ boost::shared_ptr<GetPropertyValue> GetPropertyValue::create_from_kvp(
     }
 
     const StoredQueryMap& stored_query_map = plugin_impl.get_stored_query_map();
-    boost::shared_ptr<GetPropertyValue> result(
+    std::shared_ptr<GetPropertyValue> result(
        new GetPropertyValue(language, plugin_impl));
     result->spp.read_from_kvp(http_request);
     result->xpath_string = *value_reference;
@@ -494,7 +494,7 @@ boost::shared_ptr<GetPropertyValue> GetPropertyValue::create_from_kvp(
 
     if (stored_query_id)
     {
-      boost::shared_ptr<bw::StoredQuery> query =
+      std::shared_ptr<bw::StoredQuery> query =
           bw::StoredQuery::create_from_kvp(language, result->spp, http_request, stored_query_map);
       result->queries.emplace_back(query);
     }
@@ -519,7 +519,7 @@ boost::shared_ptr<GetPropertyValue> GetPropertyValue::create_from_kvp(
   }
 }
 
-boost::shared_ptr<GetPropertyValue> GetPropertyValue::create_from_xml(
+std::shared_ptr<GetPropertyValue> GetPropertyValue::create_from_xml(
     const std::string& language,
     const xercesc::DOMDocument& document,
     PluginImpl& plugin_impl)
@@ -532,7 +532,7 @@ boost::shared_ptr<GetPropertyValue> GetPropertyValue::create_from_xml(
     check_output_format_attribute(root, plugin_impl);
 
     const char* method_name = "SmartMet::Plugin::WFS::Request::GetPropertyValue::create_from_xml";
-    boost::shared_ptr<GetPropertyValue> result(
+    std::shared_ptr<GetPropertyValue> result(
         new GetPropertyValue(language, plugin_impl));
 
     result->check_mandatory_attributes(document);
@@ -566,7 +566,7 @@ boost::shared_ptr<GetPropertyValue> GetPropertyValue::create_from_xml(
       else if (name == "StoredQuery")
       {
         // There should be no more than one according to the XML schema.
-        boost::shared_ptr<bw::StoredQuery> query =
+        std::shared_ptr<bw::StoredQuery> query =
             bw::StoredQuery::create_from_xml(language, result->spp, *child, stored_query_map);
         result->queries.emplace_back(query);
       }
@@ -594,7 +594,7 @@ bool GetPropertyValue::collect_query_responses(std::vector<std::string>& query_r
 
     for (const auto& query_ptr : queries)
     {
-      boost::optional<std::string> cached_response = query_ptr->get_cached_response();
+      std::optional<std::string> cached_response = query_ptr->get_cached_response();
 
       if (cached_response)
       {
@@ -645,7 +645,7 @@ bool GetPropertyValue::get_cached_responses()
     bool found = true;
     for (const auto& query : queries)
     {
-      boost::optional<std::string> cached_response = query_cache.find(query->get_cache_key());
+      std::optional<std::string> cached_response = query_cache.find(query->get_cache_key());
       if (cached_response)
       {
         query->set_cached_response(*cached_response);

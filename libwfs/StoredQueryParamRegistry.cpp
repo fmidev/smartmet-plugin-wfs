@@ -58,13 +58,13 @@ StoredQueryParamRegistry::ScalarParameterRec::~ScalarParameterRec() = default;
 StoredQueryParamRegistry::ArrayParameterRec::~ArrayParameterRec() = default;
 
 
-boost::shared_ptr<bw::RequestParameterMap> StoredQueryParamRegistry::resolve_handler_parameters(
+std::shared_ptr<bw::RequestParameterMap> StoredQueryParamRegistry::resolve_handler_parameters(
     const bw::RequestParameterMap& src, const SupportsExtraHandlerParams* extra_params) const
 {
   try
   {
     bool case_sensitive_params = get_config()->use_case_sensitive_params();
-    boost::shared_ptr<bw::RequestParameterMap> result(
+    std::shared_ptr<bw::RequestParameterMap> result(
 	new bw::RequestParameterMap(case_sensitive_params));
 
     for (const auto& map_item : param_map)
@@ -242,7 +242,7 @@ std::set<std::string> StoredQueryParamRegistry::get_param_names() const
         param_map.begin(),
         param_map.end(),
         std::inserter(result, result.begin()),
-        boost::bind(&std::pair<const std::string, boost::shared_ptr<ParamRecBase> >::first, ph::_1));
+        boost::bind(&std::pair<const std::string, std::shared_ptr<ParamRecBase> >::first, ph::_1));
     return result;
   }
   catch (...)
@@ -299,12 +299,12 @@ StoredQueryParamRegistry::get_param_info() const
 void StoredQueryParamRegistry::register_scalar_param(
     const std::string& name,
     const std::string& description,
-    boost::shared_ptr<ScalarParameterTemplate> param_def,
+    std::shared_ptr<ScalarParameterTemplate> param_def,
     bool required)
 {
   try
   {
-    boost::shared_ptr<ScalarParameterRec> rec(new ScalarParameterRec);
+    std::shared_ptr<ScalarParameterRec> rec(new ScalarParameterRec);
     rec->name = name;
     rec->description = description;
     rec->param_def = param_def;
@@ -322,14 +322,14 @@ void StoredQueryParamRegistry::register_scalar_param(
 void SmartMet::Plugin::WFS::StoredQueryParamRegistry::register_array_param(
     const std::string& name,
     const std::string& description,
-    boost::shared_ptr<ArrayParameterTemplate> param_def,
+    std::shared_ptr<ArrayParameterTemplate> param_def,
     std::size_t min_size,
     std::size_t max_size,
     std::size_t step)
 {
   try
   {
-    boost::shared_ptr<ArrayParameterRec> rec(new ArrayParameterRec);
+    std::shared_ptr<ArrayParameterRec> rec(new ArrayParameterRec);
     rec->name = name;
     rec->description = description;
     rec->param_def = param_def;
@@ -345,7 +345,7 @@ void SmartMet::Plugin::WFS::StoredQueryParamRegistry::register_array_param(
   }
 }
 
-void StoredQueryParamRegistry::add_param_rec(boost::shared_ptr<ParamRecBase> rec)
+void StoredQueryParamRegistry::add_param_rec(std::shared_ptr<ParamRecBase> rec)
 {
   try
   {

@@ -123,13 +123,13 @@ class StoredWWProbabilityQueryHandler : public StoredQueryHandlerBase,
   StoredWWProbabilityQueryHandler(SmartMet::Spine::Reactor* reactor,
                                   StoredQueryConfig::Ptr config,
                                   PluginImpl& plugin_impl,
-                                  boost::optional<std::string> templateFileileName);
+                                  std::optional<std::string> templateFileileName);
 
   ~StoredWWProbabilityQueryHandler() override;
 
   void query(const StoredQuery& query,
                      const std::string& language,
-		     const boost::optional<std::string>& hostname,
+		     const std::optional<std::string>& hostname,
                      std::ostream& output) const override;
 
   std::string get_handler_description() const override;

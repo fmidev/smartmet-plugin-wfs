@@ -41,7 +41,7 @@ std::string bw::StoredQuery::get_cache_key() const
   return cache_key;
 }
 
-boost::shared_ptr<bw::StoredQuery> bw::StoredQuery::create_from_kvp(
+std::shared_ptr<bw::StoredQuery> bw::StoredQuery::create_from_kvp(
     const std::string& language,
     const StandardPresentationParameters& spp,
     const SmartMet::Spine::HTTP::Request& http_request,
@@ -63,7 +63,7 @@ boost::shared_ptr<bw::StoredQuery> bw::StoredQuery::create_from_kvp(
 
     redirect_id_set.insert(query_id);
 
-    boost::shared_ptr<bw::StoredQuery> query(new bw::StoredQuery);
+    std::shared_ptr<bw::StoredQuery> query(new bw::StoredQuery);
 
     do
     {
@@ -115,7 +115,7 @@ boost::shared_ptr<bw::StoredQuery> bw::StoredQuery::create_from_kvp(
   }
 }
 
-boost::shared_ptr<bw::StoredQuery> bw::StoredQuery::create_from_xml(
+std::shared_ptr<bw::StoredQuery> bw::StoredQuery::create_from_xml(
     const std::string& language,
     const StandardPresentationParameters& spp,
     const xercesc::DOMElement& element,
@@ -137,7 +137,7 @@ boost::shared_ptr<bw::StoredQuery> bw::StoredQuery::create_from_xml(
 
     redirect_id_set.insert(query_id);
 
-    boost::shared_ptr<bw::StoredQuery> query(new bw::StoredQuery);
+    std::shared_ptr<bw::StoredQuery> query(new bw::StoredQuery);
 
     do
     {
@@ -188,19 +188,19 @@ boost::shared_ptr<bw::StoredQuery> bw::StoredQuery::create_from_xml(
   }
 }
 
-boost::shared_ptr<bw::StoredQuery> bw::StoredQuery::create_from_feature_id(
+std::shared_ptr<bw::StoredQuery> bw::StoredQuery::create_from_feature_id(
     const std::string& feature_id_str,
     const StoredQueryMap& sq_map,
     const bw::StoredQuery& orig_query)
 {
   try
   {
-    boost::shared_ptr<bw::FeatureID> feature_id = bw::FeatureID::create_from_id(feature_id_str);
+    std::shared_ptr<bw::FeatureID> feature_id = bw::FeatureID::create_from_id(feature_id_str);
     const std::string& query_id = feature_id->get_stored_query_id();
 
-    boost::shared_ptr<bw::StoredQuery> query(new bw::StoredQuery);
+    std::shared_ptr<bw::StoredQuery> query(new bw::StoredQuery);
     query->id = query_id;
-    boost::shared_ptr<bw::RequestParameterMap> param_map(
+    std::shared_ptr<bw::RequestParameterMap> param_map(
 	new RequestParameterMap(feature_id->get_params(),
 				sq_map.use_case_sensitive_params()));
     query->params = param_map;
@@ -226,7 +226,7 @@ boost::shared_ptr<bw::StoredQuery> bw::StoredQuery::create_from_feature_id(
   }
 }
 
-void bw::StoredQuery::execute(std::ostream& output, const std::string& language, const boost::optional<std::string>& hostname) const
+void bw::StoredQuery::execute(std::ostream& output, const std::string& language, const std::optional<std::string>& hostname) const
 {
   try
   {

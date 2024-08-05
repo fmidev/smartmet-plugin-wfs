@@ -2,7 +2,7 @@
 
 #include "PluginImpl.h"
 #include "RequestBase.h"
-#include <boost/shared_ptr.hpp>
+#include <memory>
 
 namespace SmartMet
 {
@@ -26,12 +26,12 @@ class GetCapabilities : public RequestBase
 
   void execute(std::ostream& ost) const override;
 
-  static boost::shared_ptr<GetCapabilities> create_from_kvp(
+  static std::shared_ptr<GetCapabilities> create_from_kvp(
       const std::string& language,
       const SmartMet::Spine::HTTP::Request& http_request,
       const PluginImpl& plugin_impl);
 
-  static boost::shared_ptr<GetCapabilities> create_from_xml(const std::string& language,
+  static std::shared_ptr<GetCapabilities> create_from_xml(const std::string& language,
                                                             const xercesc::DOMDocument& document,
                                                             const PluginImpl& plugin_impl);
 
@@ -39,7 +39,7 @@ class GetCapabilities : public RequestBase
 
  private:
   std::set<std::string> languages;
-  boost::optional<std::string> requested_language;
+  std::optional<std::string> requested_language;
 };
 
 }  // namespace Request

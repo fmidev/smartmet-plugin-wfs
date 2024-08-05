@@ -47,7 +47,7 @@ using boost::str;
 StoredObsQueryHandler::StoredObsQueryHandler(SmartMet::Spine::Reactor* reactor,
                                              StoredQueryConfig::Ptr config,
                                              PluginImpl& plugin_data,
-                                             boost::optional<std::string> template_file_name)
+                                             std::optional<std::string> template_file_name)
     : StoredQueryParamRegistry(config),
       SupportsExtraHandlerParams(config, false),
       RequiresGeoEngine(reactor),
@@ -139,7 +139,7 @@ std::string StoredObsQueryHandler::get_handler_description() const
 
 void StoredObsQueryHandler::query(const StoredQuery& query,
                                   const std::string& language,
-                                  const boost::optional<std::string>& /*hostname*/,
+                                  const std::optional<std::string>& /*hostname*/,
                                   std::ostream& output) const
 {
   std::string curr_lang = language;
@@ -404,7 +404,7 @@ void StoredObsQueryHandler::query(const StoredQuery& query,
         {
           // Fmisids are doubles for some reason, fix this!!!!
           sv.setPrecision(0);
-          const std::string fmisid = boost::apply_visitor(sv, ts_fmisid[i].value);
+          const std::string fmisid = ts_fmisid[i].value.apply_visitor(sv);
           site_map[fmisid].row_index_vect.push_back(i);
         }
       }
@@ -509,16 +509,16 @@ void StoredObsQueryHandler::query(const StoredQuery& query,
           group["obsStationList"][ind]["fmisid"] = fmisid;
 
           sv.setPrecision(5);
-          const std::string lat = boost::apply_visitor(sv, ts_lat[row_1].value);
-          const std::string lon = boost::apply_visitor(sv, ts_lon[row_1].value);
+          const std::string lat = ts_lat[row_1].value.apply_visitor(sv);
+          const std::string lon = ts_lon[row_1].value.apply_visitor(sv);
 
           sv.setPrecision(1);
-          const std::string height = boost::apply_visitor(sv, ts_height[row_1].value);
-          const std::string name = boost::apply_visitor(sv, ts_name[row_1].value);
-          const std::string distance = boost::apply_visitor(sv, ts_dist[row_1].value);
-          const std::string bearing = boost::apply_visitor(sv, ts_direction[row_1].value);
-          const std::string geoid = boost::apply_visitor(sv, ts_geoid[row_1].value);
-          const std::string wmo = boost::apply_visitor(sv, ts_wmo[row_1].value);
+          const std::string height = ts_height[row_1].value.apply_visitor(sv);
+          const std::string name = ts_name[row_1].value.apply_visitor(sv);
+          const std::string distance = ts_dist[row_1].value.apply_visitor(sv);
+          const std::string bearing = ts_direction[row_1].value.apply_visitor(sv);
+          const std::string geoid = ts_geoid[row_1].value.apply_visitor(sv);
+          const std::string wmo = ts_wmo[row_1].value.apply_visitor(sv);
 
           if (not lat.empty() and not lon.empty())
             set_2D_coord(transformation, lat, lon, group["obsStationList"][ind]);
@@ -626,9 +626,9 @@ void StoredObsQueryHandler::query(const StoredQuery& query,
                 sv.setPrecision(5);
                 // Use first row instead of row_num for static parameter values
                 // SHOULD FIX Delfoi instead!
-                const std::string latitude = boost::apply_visitor(sv, ts_lat[row_1].value);
-                const std::string longitude = boost::apply_visitor(sv, ts_lon[row_1].value);
-                const std::string geoid = boost::apply_visitor(sv, ts_geoid[row_1].value);
+                const std::string latitude = ts_lat[row_1].value.apply_visitor(sv);
+                const std::string longitude = ts_lon[row_1].value.apply_visitor(sv);
+                const std::string geoid = ts_geoid[row_1].value.apply_visitor(sv);
 
                 if (first)
                 {
@@ -641,7 +641,7 @@ void StoredObsQueryHandler::query(const StoredQuery& query,
                 if (show_height)
                 {
                   sv.setPrecision(1);
-                  const std::string height = boost::apply_visitor(sv, ts_height[row_num].value);
+                  const std::string height = ts_height[row_num].value.apply_visitor(sv);
                   obs_rec["height"] = (height.empty() ? query_params.missingtext : height);
                 }
 
@@ -665,7 +665,7 @@ void StoredObsQueryHandler::query(const StoredQuery& query,
                     const TS::TimeSeries& ts_k = obsengine_result->at(ind);
                     const uint precision = get_meteo_parameter_options(name)->precision;
                     sv.setPrecision(precision);
-                    const std::string value = boost::apply_visitor(sv, ts_k[row_num].value);
+                    const std::string value = ts_k[row_num].value.apply_visitor(sv);
                     obs_rec["data"][k]["value"] = value;
                     if (entry.qc)
                     {
@@ -673,7 +673,7 @@ void StoredObsQueryHandler::query(const StoredQuery& query,
                       std::stringstream qc_value;
                       const TS::TimeSeries& ts_qc_k = obsengine_result->at(qc_ind);
                       sv.setPrecision(0);
-                      const std::string value_qc = boost::apply_visitor(sv, ts_qc_k[row_num].value);
+                      const std::string value_qc = ts_qc_k[row_num].value.apply_visitor(sv);
                       obs_rec["data"][k]["qcValue"] = value_qc;
                     }
                   }
@@ -940,16 +940,16 @@ namespace
 {
 using namespace SmartMet::Plugin::WFS;
 
-boost::shared_ptr<SmartMet::Plugin::WFS::StoredQueryHandlerBase> wfs_obs_handler_create(
+std::shared_ptr<SmartMet::Plugin::WFS::StoredQueryHandlerBase> wfs_obs_handler_create(
     SmartMet::Spine::Reactor* reactor,
     StoredQueryConfig::Ptr config,
     PluginImpl& plugin_data,
-    boost::optional<std::string> template_file_name)
+    std::optional<std::string> template_file_name)
 {
   try
   {
     auto* qh = new StoredObsQueryHandler(reactor, config, plugin_data, template_file_name);
-    boost::shared_ptr<SmartMet::Plugin::WFS::StoredQueryHandlerBase> result(qh);
+    std::shared_ptr<SmartMet::Plugin::WFS::StoredQueryHandlerBase> result(qh);
     return result;
   }
   catch (...)

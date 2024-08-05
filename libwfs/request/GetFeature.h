@@ -32,12 +32,12 @@ class GetFeature : public RequestBase
 
   int get_response_expires_seconds() const override;
 
-  static boost::shared_ptr<GetFeature> create_from_kvp(
+  static std::shared_ptr<GetFeature> create_from_kvp(
       const std::string& language,
       const SmartMet::Spine::HTTP::Request& http_request,
       PluginImpl& plugin_impl);
 
-  static boost::shared_ptr<GetFeature> create_from_xml(const std::string& language,
+  static std::shared_ptr<GetFeature> create_from_xml(const std::string& language,
                                                        const xercesc::DOMDocument& document,
                                                        PluginImpl& plugin_impl);
 
@@ -48,7 +48,7 @@ class GetFeature : public RequestBase
 
   void execute_multiple_queries(std::ostream& ost) const;
 
-  boost::shared_ptr<xercesc::DOMDocument> create_hits_only_response(const std::string& src) const;
+  std::shared_ptr<xercesc::DOMDocument> create_hits_only_response(const std::string& src) const;
 
   /**
    *   @brief Collects responses of all queries from the GetFeature request as strings
@@ -67,7 +67,7 @@ class GetFeature : public RequestBase
   void assert_use_default_format() const;
 
  private:
-  std::vector<boost::shared_ptr<QueryBase> > queries;
+  std::vector<std::shared_ptr<QueryBase> > queries;
   StandardPresentationParameters spp;
   QueryResponseCache& query_cache;
   bool fast;

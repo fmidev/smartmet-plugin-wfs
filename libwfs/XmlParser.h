@@ -3,7 +3,7 @@
 #include "XmlError.h"
 #include "XmlErrorHandler.h"
 #include <boost/function.hpp>
-#include <boost/shared_ptr.hpp>
+#include <memory>
 #include <boost/thread.hpp>
 #include <xercesc/parsers/XercesDOMParser.hpp>
 #include <list>
@@ -55,18 +55,18 @@ class Parser : public xercesc::XercesDOMParser
   /**
    *   @brief Parse XML document from provided file
    */
-  boost::shared_ptr<xercesc::DOMDocument> parse_file(
+  std::shared_ptr<xercesc::DOMDocument> parse_file(
       const std::string& file_name, root_element_cb_t root_element_cb = root_element_cb_t());
 
   /**
    *   @brief Parse XML document from provided string
    */
-  boost::shared_ptr<xercesc::DOMDocument> parse_string(
+  std::shared_ptr<xercesc::DOMDocument> parse_string(
       const std::string& xml_data,
       const std::string& doc_id = "XML",
       root_element_cb_t root_element_cb = root_element_cb_t());
 
-  boost::shared_ptr<xercesc::DOMDocument> parse_input(
+  std::shared_ptr<xercesc::DOMDocument> parse_input(
       xercesc::InputSource& input, root_element_cb_t root_element_cb = root_element_cb_t());
 
   std::list<std::string> get_messages() const;
@@ -116,7 +116,7 @@ class ParserMT
 /**
  *  @brief Parses XML document from std::string without validation.
  */
-boost::shared_ptr<xercesc::DOMDocument> str2xmldom(const std::string& src,
+std::shared_ptr<xercesc::DOMDocument> str2xmldom(const std::string& src,
                                                    const std::string& doc_id);
 
 }  // namespace Xml

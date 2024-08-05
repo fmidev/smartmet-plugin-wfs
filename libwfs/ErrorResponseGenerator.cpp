@@ -21,15 +21,19 @@ ErrorResponseGenerator::~ErrorResponseGenerator() = default;
 
 ErrorResponseGenerator::ErrorResponse ErrorResponseGenerator::create_error_response(
     processing_phase_t phase,
-    boost::variant<const SmartMet::Spine::HTTP::Request&, StoredQuery&> query_info)
+    std::variant<const SmartMet::Spine::HTTP::Request*, StoredQuery*> query_info)
 {
   try
   {
     ErrorResponse response;
 
+    const std::exception_ptr eptr = std::current_exception();
+    if (!eptr)
+      throw Fmi::Exception(BCP, "[INTERNAL ERROR]: must not be be called outside an exception context");
+
     try
     {
-      throw;
+      std::rethrow_exception(eptr);
     }
     catch (Fmi::Exception& err)
     {
@@ -179,18 +183,18 @@ std::string ErrorResponseGenerator::get_wfs_err_code(processing_phase_t phase)
 }
 
 void ErrorResponseGenerator::add_query_info(
-    CTPP::CDT& hash, boost::variant<const SmartMet::Spine::HTTP::Request&, StoredQuery&> query_info)
+    CTPP::CDT& hash, std::variant<const SmartMet::Spine::HTTP::Request*, StoredQuery*> query_info)
 {
   try
   {
-    switch (query_info.which())
+    switch (query_info.index())
     {
       case 0:
-        add_http_request_info(hash, boost::get<const SmartMet::Spine::HTTP::Request&>(query_info));
+        add_http_request_info(hash, *std::get<const SmartMet::Spine::HTTP::Request*>(query_info));
         break;
 
       case 1:
-        add_stored_query_info(hash, boost::get<StoredQuery>(query_info));
+        add_stored_query_info(hash, *std::get<StoredQuery*>(query_info));
         break;
 
       default:

@@ -1,6 +1,6 @@
 #pragma once
 
-#include <boost/variant.hpp>
+#include <variant>
 #include <ctpp2/CDT.hpp>
 #include <macgyver/Exception.h>
 #include <spine/HTTP.h>
@@ -43,7 +43,7 @@ class ErrorResponseGenerator
    */
   ErrorResponse create_error_response(
       processing_phase_t phase,
-      boost::variant<const SmartMet::Spine::HTTP::Request&, StoredQuery&> query_info);
+      std::variant<const SmartMet::Spine::HTTP::Request*, StoredQuery*> query_info);
 
  private:
   CTPP::CDT handle_wfs_exception(Fmi::Exception& err);
@@ -56,7 +56,7 @@ class ErrorResponseGenerator
 
   void add_query_info(
       CTPP::CDT& hash,
-      boost::variant<const SmartMet::Spine::HTTP::Request&, StoredQuery&> query_info);
+      std::variant<const SmartMet::Spine::HTTP::Request*, StoredQuery*> query_info);
 
   void add_http_request_info(CTPP::CDT& hash, const SmartMet::Spine::HTTP::Request& request);
 

@@ -19,7 +19,7 @@ class DummyStoredQueryHandler : public StoredQueryHandlerBase
   DummyStoredQueryHandler(SmartMet::Spine::Reactor* reactor,
                           StoredQueryConfig::Ptr config,
                           PluginImpl& plugin_impl,
-                          boost::optional<std::string> template_file_name);
+                          std::optional<std::string> template_file_name);
 
   ~DummyStoredQueryHandler() override;
 
@@ -29,7 +29,7 @@ class DummyStoredQueryHandler : public StoredQueryHandlerBase
 
   void query(const StoredQuery& query,
 	     const std::string& language,
-	     const boost::optional<std::string>& hostname,
+	     const std::optional<std::string>& hostname,
 	     std::ostream& output) const override;
 };
 

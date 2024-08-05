@@ -14,7 +14,7 @@ namespace bw = SmartMet::Plugin::WFS;
 bw::StoredMastQueryHandler::StoredMastQueryHandler(SmartMet::Spine::Reactor* reactor,
                                                    StoredQueryConfig::Ptr config,
                                                    PluginImpl& plugin_data,
-                                                   boost::optional<std::string> template_file_name)
+                                                   std::optional<std::string> template_file_name)
     : bw::StoredQueryParamRegistry(config),
       bw::SupportsExtraHandlerParams(config),
       bw::RequiresGeoEngine(reactor),
@@ -82,7 +82,7 @@ std::string bw::StoredMastQueryHandler::get_handler_description() const
 
 void bw::StoredMastQueryHandler::query(const StoredQuery& query,
                                        const std::string& language,
-                                       const boost::optional<std::string>& /*hostname*/,
+                                       const std::optional<std::string>& /*hostname*/,
                                        std::ostream& output) const
 {
   try
@@ -508,7 +508,7 @@ void bw::StoredMastQueryHandler::query(const StoredQuery& query,
           std::string dataLevelStr = bo::QueryResult::toString(dataLevelIt, 1);
           std::string dataValueStr = bo::QueryResult::toString(dataValueIt, 1);
           std::string dataQualityStr = bo::QueryResult::toString(dataQualityIt, 0);
-          deltaHeight = boost::any_cast<double>(*dataLevelIt);
+          deltaHeight = std::any_cast<double>(*dataLevelIt);
 
           if (currentFmisid != fmisidStr or currentMeasurandId != measurandIdStr or
               currentDataTime != dataTimeStr)
@@ -666,7 +666,7 @@ void bw::StoredMastQueryHandler::query(const StoredQuery& query,
 void bw::StoredMastQueryHandler::update_parameters(
     const RequestParameterMap& /*params*/,
     int /*seq_id*/,
-    std::vector<boost::shared_ptr<RequestParameterMap>>& /*result*/) const
+    std::vector<std::shared_ptr<RequestParameterMap>>& /*result*/) const
 {
   try
   {
@@ -718,16 +718,16 @@ namespace
 {
 using namespace SmartMet::Plugin::WFS;
 
-boost::shared_ptr<SmartMet::Plugin::WFS::StoredQueryHandlerBase> wfs_stored_mast_handler_create(
+std::shared_ptr<SmartMet::Plugin::WFS::StoredQueryHandlerBase> wfs_stored_mast_handler_create(
     SmartMet::Spine::Reactor* reactor,
     StoredQueryConfig::Ptr config,
     PluginImpl& plugin_data,
-    boost::optional<std::string> template_file_name)
+    std::optional<std::string> template_file_name)
 {
   try
   {
     auto* qh = new bw::StoredMastQueryHandler(reactor, config, plugin_data, template_file_name);
-    boost::shared_ptr<SmartMet::Plugin::WFS::StoredQueryHandlerBase> instance(qh);
+    std::shared_ptr<SmartMet::Plugin::WFS::StoredQueryHandlerBase> instance(qh);
     return instance;
   }
   catch (...)

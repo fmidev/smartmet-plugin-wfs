@@ -70,7 +70,7 @@ StoredGridForecastQueryHandler::StoredGridForecastQueryHandler(
     Spine::Reactor* reactor,
     StoredQueryConfig::Ptr config,
     PluginImpl& plugin_impl,
-    boost::optional<std::string> template_file_name)
+    std::optional<std::string> template_file_name)
     :
 
       StoredQueryParamRegistry(config),
@@ -194,7 +194,7 @@ void StoredGridForecastQueryHandler::init_handler()
 
 void StoredGridForecastQueryHandler::query(const StoredQuery& stored_query,
                                            const std::string& language,
-                                           const boost::optional<std::string>&  /*hostname*/,
+                                           const std::optional<std::string>&  /*hostname*/,
                                            std::ostream& output) const
 {
   try
@@ -1115,17 +1115,17 @@ namespace
 {
 using namespace SmartMet::Plugin::WFS;
 
-boost::shared_ptr<SmartMet::Plugin::WFS::StoredQueryHandlerBase> wfs_grid_forecast_handler_create(
+std::shared_ptr<SmartMet::Plugin::WFS::StoredQueryHandlerBase> wfs_grid_forecast_handler_create(
     SmartMet::Spine::Reactor* reactor,
-    boost::shared_ptr<StoredQueryConfig> config,
+    std::shared_ptr<StoredQueryConfig> config,
     PluginImpl& plugin_impl,
-    boost::optional<std::string> template_file_name)
+    std::optional<std::string> template_file_name)
 {
   try
   {
     auto* qh =
         new StoredGridForecastQueryHandler(reactor, config, plugin_impl, template_file_name);
-    boost::shared_ptr<SmartMet::Plugin::WFS::StoredQueryHandlerBase> result(qh);
+    std::shared_ptr<SmartMet::Plugin::WFS::StoredQueryHandlerBase> result(qh);
     return result;
   }
   catch (...)

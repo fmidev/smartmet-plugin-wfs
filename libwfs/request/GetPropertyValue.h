@@ -46,7 +46,7 @@ class GetPropertyValue : public RequestBase
    *   @param plugin_impl plugin data for spp, map etc.
    *   @param query_cache cached stored query responses.
    */
-  static boost::shared_ptr<GetPropertyValue> create_from_kvp(
+  static std::shared_ptr<GetPropertyValue> create_from_kvp(
       const std::string& language,
       const SmartMet::Spine::HTTP::Request& http_request,
       PluginImpl& plugin_impl);
@@ -59,7 +59,7 @@ class GetPropertyValue : public RequestBase
    *   @param plugin_impl plugin data for spp, map etc.
    *   @param query_cache cached stored query responses.
    */
-  static boost::shared_ptr<GetPropertyValue> create_from_xml(const std::string& language,
+  static std::shared_ptr<GetPropertyValue> create_from_xml(const std::string& language,
                                                              const xercesc::DOMDocument& document,
                                                              PluginImpl& plugin_impl);
 
@@ -85,7 +85,7 @@ class GetPropertyValue : public RequestBase
    *   @param max_members maximum number of members in output
    *   @param start_index index of first member from responses to go output
    */
-  void initialize(boost::optional<int>& max_members, boost::optional<int>& start_index) const;
+  void initialize(std::optional<int>& max_members, std::optional<int>& start_index) const;
 
   /**
    *   @brief Add hits and members received etc. to final output
@@ -98,7 +98,7 @@ class GetPropertyValue : public RequestBase
    *   @param is_schemalocation_set value "false", schema location has not been already set, so set
    * it here.
    */
-  void finalize(boost::shared_ptr<xercesc::DOMDocument> result,
+  void finalize(std::shared_ptr<xercesc::DOMDocument> result,
                 const int cumulative_num_returned,
                 const int cumulative_num_matched,
                 const bool is_timestamp_set,
@@ -120,7 +120,7 @@ class GetPropertyValue : public RequestBase
    *
    *   Throws xercesc::DOMException or SmartMet::Plugin::WFS::Xml::XmlError in case of an error.
    */
-  void add_responses(boost::shared_ptr<xercesc::DOMDocument> result,
+  void add_responses(std::shared_ptr<xercesc::DOMDocument> result,
                      const std::vector<std::string>& query_responses,
                      int& cumulative_num_returned,
                      int& cumulative_num_matched,
@@ -147,13 +147,13 @@ class GetPropertyValue : public RequestBase
    *   @param is_schemalocation_set value changes to "true", when valid schema location has been
    * copied from query response to result tree.
    */
-  void filter(boost::shared_ptr<xercesc::DOMDocument> result,
+  void filter(std::shared_ptr<xercesc::DOMDocument> result,
               const std::string& response,
               int& cumulative_num_returned,
               int& cumulative_num_matched,
-              boost::optional<int>& max_members,
-              boost::optional<int>& start_index,
-              const boost::shared_ptr<QueryBase> query,
+              std::optional<int>& max_members,
+              std::optional<int>& start_index,
+              const std::shared_ptr<QueryBase> query,
               bool& is_timestamp_set,
               bool& is_schemalocation_set) const;
 
@@ -175,12 +175,12 @@ class GetPropertyValue : public RequestBase
    *   @param is_schemalocation_set value changes to "true", when valid schema location has been
    * copied from query response to result tree.
    */
-  void extract_property(boost::shared_ptr<xercesc::DOMDocument> result,
+  void extract_property(std::shared_ptr<xercesc::DOMDocument> result,
                         const std::string& response,
                         int& cumulative_num_returned,
                         int& cumulative_num_matched,
-                        boost::optional<int>& max_members,
-                        boost::optional<int>& start_index,
+                        std::optional<int>& max_members,
+                        std::optional<int>& start_index,
                         bool& is_timestamp_set,
                         bool& is_schemalocation_set) const;
 
@@ -201,11 +201,11 @@ class GetPropertyValue : public RequestBase
    *   @param is_schemalocation_set value changes to "true", when valid schema location has been
    * copied from query response to result tree.
    */
-  void append_members(boost::shared_ptr<xercesc::DOMDocument> result,
+  void append_members(std::shared_ptr<xercesc::DOMDocument> result,
                       Xml::XPathSnapshot& xpath_snapshot,
                       int& cumulative_num_returned,
-                      boost::optional<int>& max_members,
-                      boost::optional<int>& start_index,
+                      std::optional<int>& max_members,
+                      std::optional<int>& start_index,
                       bool& is_timestamp_set,
                       bool& is_schemalocation_set) const;
 
@@ -221,8 +221,8 @@ class GetPropertyValue : public RequestBase
    *   @param first index of first member to include to result tree.
    *   @param last index of last member to include to result tree.
    */
-  void calculate_loop_limits(const boost::optional<int>& max_members,
-                             const boost::optional<int>& start_index,
+  void calculate_loop_limits(const std::optional<int>& max_members,
+                             const std::optional<int>& start_index,
                              const int num_members,
                              int& first,
                              int& last) const;
@@ -265,7 +265,7 @@ class GetPropertyValue : public RequestBase
                            const std::string& response) const;
 
  private:
-  std::vector<boost::shared_ptr<QueryBase> > queries;
+  std::vector<std::shared_ptr<QueryBase> > queries;
   std::string xpath_string;
   StandardPresentationParameters spp;
   QueryResponseCache& query_cache;

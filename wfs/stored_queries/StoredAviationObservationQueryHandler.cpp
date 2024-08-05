@@ -29,7 +29,7 @@ bw::StoredAviationObservationQueryHandler::StoredAviationObservationQueryHandler
     SmartMet::Spine::Reactor* reactor,
     StoredQueryConfig::Ptr config,
     PluginImpl& plugin_data,
-    boost::optional<std::string> template_file_name)
+    std::optional<std::string> template_file_name)
 
     : bw::StoredQueryParamRegistry(config),
       bw::SupportsExtraHandlerParams(config),
@@ -87,7 +87,7 @@ std::string bw::StoredAviationObservationQueryHandler::get_handler_description()
 
 void bw::StoredAviationObservationQueryHandler::query(const StoredQuery& query,
                                                       const std::string& language,
-						      const boost::optional<std::string>&  /*hostname*/,
+						      const std::optional<std::string>&  /*hostname*/,
                                                       std::ostream& output) const
 {
   try
@@ -377,7 +377,7 @@ void bw::StoredAviationObservationQueryHandler::query(const StoredQuery& query,
 void bw::StoredAviationObservationQueryHandler::update_parameters(
     const RequestParameterMap& params,
     int seq_id,
-    std::vector<boost::shared_ptr<RequestParameterMap> >& result) const
+    std::vector<std::shared_ptr<RequestParameterMap> >& result) const
 {
 }
 
@@ -385,17 +385,17 @@ namespace
 {
 using namespace SmartMet::Plugin::WFS;
 
-boost::shared_ptr<SmartMet::Plugin::WFS::StoredQueryHandlerBase>
+std::shared_ptr<SmartMet::Plugin::WFS::StoredQueryHandlerBase>
 wfs_stored_aviation_observation_handler_create(SmartMet::Spine::Reactor* reactor,
                                                StoredQueryConfig::Ptr config,
                                                PluginImpl& plugin_data,
-                                               boost::optional<std::string> template_file_name)
+                                               std::optional<std::string> template_file_name)
 {
   try
   {
     auto* qh = new bw::StoredAviationObservationQueryHandler(
         reactor, config, plugin_data, template_file_name);
-    boost::shared_ptr<SmartMet::Plugin::WFS::StoredQueryHandlerBase> instance(qh);
+    std::shared_ptr<SmartMet::Plugin::WFS::StoredQueryHandlerBase> instance(qh);
     return instance;
   }
   catch (...)

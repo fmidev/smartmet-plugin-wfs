@@ -20,7 +20,7 @@ class SupportsTimeZone : protected virtual SupportsExtraHandlerParams,
                          protected virtual RequiresGeoEngine
 {
  public:
-    SupportsTimeZone(SmartMet::Spine::Reactor* reactor, boost::shared_ptr<StoredQueryConfig> config);
+    SupportsTimeZone(SmartMet::Spine::Reactor* reactor, std::shared_ptr<StoredQueryConfig> config);
 
   ~SupportsTimeZone() override;
 

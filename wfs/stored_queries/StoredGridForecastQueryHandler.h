@@ -19,7 +19,7 @@ namespace WFS
 
 using Query = StoredForecastQueryHandler::Query;
 using ModelParameters = std::map<std::string, Engine::Querydata::ModelParameter>;
-using Table_sptr = boost::shared_ptr<Spine::Table>;
+using Table_sptr = std::shared_ptr<Spine::Table>;
 
 
 
@@ -35,14 +35,14 @@ class StoredGridForecastQueryHandler: public StoredQueryHandlerBase,
 
                 StoredGridForecastQueryHandler(
                     Spine::Reactor* reactor,
-                    boost::shared_ptr<StoredQueryConfig> config,
+                    std::shared_ptr<StoredQueryConfig> config,
                     PluginImpl& plugin_impl,
-                    boost::optional<std::string> template_file_name);
+                    std::optional<std::string> template_file_name);
 
         ~StoredGridForecastQueryHandler() override;
 
     void        init_handler() override;
-    void        query(const StoredQuery& query, const std::string& language, const boost::optional<std::string>& hostname, std::ostream& output) const override;
+    void        query(const StoredQuery& query, const std::string& language, const std::optional<std::string>& hostname, std::ostream& output) const override;
 
   std::string get_handler_description() const override;
 

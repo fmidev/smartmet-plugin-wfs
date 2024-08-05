@@ -3,6 +3,7 @@
 #include <boost/test/unit_test.hpp>
 #include <iostream>
 #include <boost/optional/optional_io.hpp>
+#include <macgyver/Optional.h>
 #include <spine/CRSRegistry.h>
 #include "WfsFeatureDef.h"
 
@@ -25,9 +26,9 @@ using SmartMet::Spine::CRSRegistry;
 
 namespace
 {
-boost::shared_ptr<CRSRegistry> create_crs_registry()
+std::shared_ptr<CRSRegistry> create_crs_registry()
 {
-  boost::shared_ptr<CRSRegistry> registry(new CRSRegistry);
+  std::shared_ptr<CRSRegistry> registry(new CRSRegistry);
   registry->register_epsg("WGS84", 4326, std::string("(urn:ogc:def:crs:|)EPSG::4326"));
   registry->register_epsg("UTM-ZONE-35", 4037, std::string("(urn:ogc:def:crs:|)EPSG::4037"));
   registry->register_epsg("WGS72-UTM-35", 32235, std::string("(urn:ogc:def:crs:|)EPSG::32235"));
@@ -49,7 +50,7 @@ BOOST_AUTO_TEST_CASE(test_feature_def_1)
 
   auto crs_registry = create_crs_registry();
 
-  boost::shared_ptr<Config> raw_config(new Config);
+  std::shared_ptr<Config> raw_config(new Config);
   try
   {
     auto& root = raw_config->getRoot();
@@ -75,12 +76,12 @@ BOOST_AUTO_TEST_CASE(test_feature_def_1)
     BOOST_REQUIRE(false);
   }
 
-  boost::shared_ptr<ConfigBase> config;
+  std::shared_ptr<ConfigBase> config;
   BOOST_REQUIRE_NO_THROW(config.reset(new ConfigBase(raw_config, "Test")));
 
   // config->dump_config(std::cout, *raw_config);
 
-  boost::shared_ptr<WfsFeatureDef> feature;
+  std::shared_ptr<WfsFeatureDef> feature;
   try
   {
     Setting& setting = config->get_mandatory_config_param<Setting&>("def");

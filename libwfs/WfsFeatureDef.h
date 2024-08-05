@@ -1,7 +1,7 @@
 #pragma once
 
-#include <boost/optional.hpp>
-#include <boost/shared_ptr.hpp>
+#include <optional>
+#include <memory>
 #include <spine/CRSRegistry.h>
 #include <spine/ConfigBase.h>
 #include <spine/MultiLanguageString.h>
@@ -18,7 +18,7 @@ class WfsFeatureDef
  public:
   WfsFeatureDef(SmartMet::Spine::CRSRegistry& crs_registry,
                 const std::string& default_language,
-                boost::shared_ptr<SmartMet::Spine::ConfigBase> config,
+                std::shared_ptr<SmartMet::Spine::ConfigBase> config,
                 libconfig::Setting& setting);
 
   virtual ~WfsFeatureDef();
@@ -26,7 +26,7 @@ class WfsFeatureDef
   inline const std::string& get_name() const { return name; }
   inline const std::string& get_xml_type() const { return xml_type; }
   inline const std::string& get_xml_namespace() const { return xml_namespace; }
-  inline boost::optional<std::string> get_xml_namespace_loc() const { return xml_namespace_loc; }
+  inline std::optional<std::string> get_xml_namespace_loc() const { return xml_namespace_loc; }
   inline std::string get_title(const std::string& language) const { return title->get(language); }
   inline std::string get_abstract(const std::string& language) const
   {
@@ -46,7 +46,7 @@ class WfsFeatureDef
   std::string name;
   std::string xml_type;
   std::string xml_namespace;
-  boost::optional<std::string> xml_namespace_loc;
+  std::optional<std::string> xml_namespace_loc;
   SmartMet::Spine::MultiLanguageStringP title;
   SmartMet::Spine::MultiLanguageStringP abstract;
   std::string default_crs_url;

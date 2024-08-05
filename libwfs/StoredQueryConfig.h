@@ -3,7 +3,7 @@
 #include "Config.h"
 #include "StoredQueryParamDef.h"
 #include "StoredQueryConfigWrapper.h"
-#include <boost/optional.hpp>
+#include <optional>
 #include <ctpp2/CDT.hpp>
 #include <spine/ConfigBase.h>
 #include <spine/MultiLanguageString.h>
@@ -88,8 +88,8 @@ class StoredQueryConfig : public SmartMet::Spine::ConfigBase
     int max_occurs;
     std::string xml_type;
     StoredQueryParamDef param_def;
-    boost::optional<SmartMet::Spine::Value> lower_limit;
-    boost::optional<SmartMet::Spine::Value> upper_limit;
+    std::optional<SmartMet::Spine::Value> lower_limit;
+    std::optional<SmartMet::Spine::Value> upper_limit;
     std::set<std::string> conflicts_with;
 
     inline ParamDesc()  = default;
@@ -107,7 +107,7 @@ class StoredQueryConfig : public SmartMet::Spine::ConfigBase
 
  public:
   StoredQueryConfig(const std::string& fn, const Config* plugin_config);
-  StoredQueryConfig(boost::shared_ptr<libconfig::Config> config, const Config* plugin_config);
+  StoredQueryConfig(std::shared_ptr<libconfig::Config> config, const Config* plugin_config);
   ~StoredQueryConfig() override;
 
   inline bool is_disabled() const { return disabled; }
@@ -223,7 +223,7 @@ class StoredQueryConfig : public SmartMet::Spine::ConfigBase
                          */
   std::string constructor_name;
 
-  boost::optional<std::string> template_fn;
+  std::optional<std::string> template_fn;
   std::string default_language;
   SmartMet::Spine::MultiLanguageStringP title;
   SmartMet::Spine::MultiLanguageStringP abstract;

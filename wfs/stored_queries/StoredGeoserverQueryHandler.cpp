@@ -27,7 +27,7 @@ bw::StoredGeoserverQueryHandler::StoredGeoserverQueryHandler(
     SmartMet::Spine::Reactor* reactor,
     StoredQueryConfig::Ptr config,
     PluginImpl& plugin_data,
-    boost::optional<std::string> template_file_name)
+    std::optional<std::string> template_file_name)
 
     : bw::StoredQueryParamRegistry(config),
       bw::SupportsExtraHandlerParams(config),
@@ -178,7 +178,7 @@ std::string bw::StoredGeoserverQueryHandler::get_handler_description() const
 void bw::StoredGeoserverQueryHandler::update_parameters(
     const RequestParameterMap& params,
     int seq_id,
-    std::vector<boost::shared_ptr<RequestParameterMap> >& result) const
+    std::vector<std::shared_ptr<RequestParameterMap> >& result) const
 {
   try
   {
@@ -306,7 +306,7 @@ void bw::StoredGeoserverQueryHandler::update_parameters(
           feature_id.erase_param(P_SELECTED_NAME);
           feature_id.add_param(P_SELECTED_NAME, it2->name);
 
-          boost::shared_ptr<RequestParameterMap> pm1(
+          std::shared_ptr<RequestParameterMap> pm1(
 	       new RequestParameterMap(true));
           pm1->add("epoch", Fmi::to_iso_extended_string(it1.second.epoch) + "Z");
           pm1->add("name", it2->name);
@@ -425,17 +425,17 @@ namespace
 {
 using namespace SmartMet::Plugin::WFS;
 
-boost::shared_ptr<SmartMet::Plugin::WFS::StoredQueryHandlerBase>
+std::shared_ptr<SmartMet::Plugin::WFS::StoredQueryHandlerBase>
 wfs_stored_geoserver_handler_create(SmartMet::Spine::Reactor* reactor,
                                     StoredQueryConfig::Ptr config,
                                     PluginImpl& plugin_data,
-                                    boost::optional<std::string> template_file_name)
+                                    std::optional<std::string> template_file_name)
 {
   try
   {
     StoredAtomQueryHandlerBase* qh =
         new StoredGeoserverQueryHandler(reactor, config, plugin_data, template_file_name);
-    boost::shared_ptr<SmartMet::Plugin::WFS::StoredQueryHandlerBase> result(qh);
+    std::shared_ptr<SmartMet::Plugin::WFS::StoredQueryHandlerBase> result(qh);
     return result;
   }
   catch (...)

@@ -36,13 +36,13 @@ class StoredContourQueryHandler : public StoredQueryHandlerBase,
 {
  public:
   StoredContourQueryHandler(SmartMet::Spine::Reactor* reactor,
-                            boost::shared_ptr<StoredQueryConfig> config,
+                            std::shared_ptr<StoredQueryConfig> config,
                             PluginImpl& plugin_impl,
-                            boost::optional<std::string> template_file_name);
+                            std::optional<std::string> template_file_name);
   ~StoredContourQueryHandler() override;
   void query(const StoredQuery& query,
                      const std::string& language,
-		     const boost::optional<std::string>& hostname,
+		     const std::optional<std::string>& hostname,
                      std::ostream& output) const override;
 
  protected:
@@ -62,7 +62,7 @@ class StoredContourQueryHandler : public StoredQueryHandlerBase,
       ContourQueryParameter& queryParameter) const = 0;
   virtual SmartMet::Engine::Contour::Options getContourEngineOptions(
       const Fmi::DateTime& time, const ContourQueryParameter& queryParameter) const = 0;
-  virtual boost::shared_ptr<ContourQueryParameter> getQueryParameter(
+  virtual std::shared_ptr<ContourQueryParameter> getQueryParameter(
       const SmartMet::Spine::Parameter& parameter,
       const SmartMet::Engine::Querydata::Q& q,
       OGRSpatialReference& sr) const = 0;

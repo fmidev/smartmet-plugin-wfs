@@ -22,10 +22,10 @@ namespace
 
 const std::string test_dir = "/home/pavenis/smartmet/plugins/smartmet-plugin-wfs";
 
-boost::shared_ptr<libconfig::Config> create_config()
+std::shared_ptr<libconfig::Config> create_config()
 {
   using libconfig::Setting;
-  boost::shared_ptr<libconfig::Config> config(new libconfig::Config);
+  std::shared_ptr<libconfig::Config> config(new libconfig::Config);
   auto& root = config->getRoot();
   root.add("name", Setting::TypeString) = "Test1";
   root.add("dir", Setting::TypeString) = test_dir;
@@ -54,7 +54,7 @@ boost::shared_ptr<libconfig::Config> create_config()
 
 using SmartMet::Spine::ConfigBase;
 using SmartMet::Plugin::WFS::DataSetDefinition;
-using namespace boost::filesystem;
+using namespace std::filesystem;
 using Fmi::Date_time::neg_infin;
 using Fmi::Date_time::pos_infin;
 

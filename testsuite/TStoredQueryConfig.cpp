@@ -70,16 +70,16 @@ using libconfig::Setting;
 using Test::TestConfig;
 using Test::add_values;
 
-typedef boost::shared_ptr<bw::StoredQueryConfig> StoredQueryConfigP;
-typedef boost::shared_ptr<bw::ScalarParameterTemplate> ScalarParameterTemplateP;
-typedef boost::shared_ptr<bw::ArrayParameterTemplate> ArrayParameterTemplateP;
+typedef std::shared_ptr<bw::StoredQueryConfig> StoredQueryConfigP;
+typedef std::shared_ptr<bw::ScalarParameterTemplate> ScalarParameterTemplateP;
+typedef std::shared_ptr<bw::ArrayParameterTemplate> ArrayParameterTemplateP;
 
 #if 0
 BOOST_AUTO_TEST_CASE(test_config_create)
 {
   BOOST_TEST_MESSAGE("+ [Create test config]");
 
-  boost::shared_ptr<TestConfig> raw_config(new TestConfig);
+  std::shared_ptr<TestConfig> raw_config(new TestConfig);
 
   raw_config->add_param("foo", "xxx", "string")
     .min_occurs(1)
@@ -103,7 +103,7 @@ BOOST_AUTO_TEST_CASE(test_single_scalar_parameter_without_default)
   dummy_proc(__PRETTY_FUNCTION__);
   BOOST_TEST_MESSAGE("+ [Single scalar parameter without default value]");
 
-  boost::shared_ptr<TestConfig> raw_config(new TestConfig);
+  std::shared_ptr<TestConfig> raw_config(new TestConfig);
 
   raw_config->add_param("foo", "xxx", "int");
   raw_config->add_scalar("p", "${foo}");
@@ -138,7 +138,7 @@ BOOST_AUTO_TEST_CASE(test_single_scalar_parameter_with_default_value)
   dummy_proc(__PRETTY_FUNCTION__);
   BOOST_TEST_MESSAGE("+ [Single scalar parameter with default value]");
 
-  boost::shared_ptr<TestConfig> raw_config(new TestConfig);
+  std::shared_ptr<TestConfig> raw_config(new TestConfig);
 
   raw_config->add_param("foo", "xxx", "int");
   raw_config->add_scalar("p", "${foo : 512}");
@@ -174,7 +174,7 @@ BOOST_AUTO_TEST_CASE(test_single_scalar_parameter_with_lower_limit)
   dummy_proc(__PRETTY_FUNCTION__);
   BOOST_TEST_MESSAGE("+ [Single scalar parameter with lower limit specified]");
 
-  boost::shared_ptr<TestConfig> raw_config(new TestConfig);
+  std::shared_ptr<TestConfig> raw_config(new TestConfig);
 
   raw_config->add_param("foo", "xxx", "time").lower_limit("2012-01-01T00:00:00Z");
   raw_config->add_scalar("p", "${foo}");
@@ -214,7 +214,7 @@ BOOST_AUTO_TEST_CASE(test_single_mandatory_array_parameter_with_fixed_length)
   dummy_proc(__PRETTY_FUNCTION__);
   BOOST_TEST_MESSAGE("+ [Single mandatory array parameter of constant size]");
 
-  boost::shared_ptr<TestConfig> raw_config(new TestConfig);
+  std::shared_ptr<TestConfig> raw_config(new TestConfig);
 
   raw_config->add_param("foo", "xxx", "double[2]").min_occurs(1).max_occurs(1);
   std::array<std::string, 1> p001 = {{"${foo}"}};

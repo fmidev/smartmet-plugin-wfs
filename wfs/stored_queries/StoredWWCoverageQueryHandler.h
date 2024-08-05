@@ -17,7 +17,7 @@ class StoredWWCoverageQueryHandler : public StoredCoverageQueryHandler
   StoredWWCoverageQueryHandler(SmartMet::Spine::Reactor* reactor,
                                StoredQueryConfig::Ptr config,
                                PluginImpl& plugin_impl,
-                               boost::optional<std::string> template_file_name);
+                               std::optional<std::string> template_file_name);
 
   std::string get_handler_description() const override;
 

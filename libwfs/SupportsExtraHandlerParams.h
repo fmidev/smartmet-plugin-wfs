@@ -4,7 +4,7 @@
 #include "RequestParameterMap.h"
 #include "StoredQueryConfig.h"
 #include "StoredQueryParamRegistry.h"
-#include <boost/shared_ptr.hpp>
+#include <memory>
 #include <ctpp2/CDT.hpp>
 #include <map>
 
@@ -35,7 +35,7 @@ class SupportsExtraHandlerParams : virtual protected StoredQueryParamRegistry
 
   const ParameterTemplateBase& get_param(const std::string& name) const;
 
-  inline const std::map<std::string, boost::shared_ptr<ParameterTemplateBase> >& get_param_map()
+  inline const std::map<std::string, std::shared_ptr<ParameterTemplateBase> >& get_param_map()
       const
   {
     return handler_params;
@@ -50,7 +50,7 @@ class SupportsExtraHandlerParams : virtual protected StoredQueryParamRegistry
 
  private:
   const std::string path;
-  std::map<std::string, boost::shared_ptr<ParameterTemplateBase> > handler_params;
+  std::map<std::string, std::shared_ptr<ParameterTemplateBase> > handler_params;
   StoredQueryConfig::Ptr config;
 };
 

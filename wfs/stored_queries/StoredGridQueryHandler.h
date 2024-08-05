@@ -2,7 +2,7 @@
 
 #include <macgyver/DateTime.h>
 #include <boost/geometry/geometry.hpp>
-#include <boost/shared_ptr.hpp>
+#include <memory>
 #include <ogr_geometry.h>
 
 #include <engines/geonames/Engine.h>
@@ -88,7 +88,7 @@ class StoredGridQueryHandler : public StoredQueryHandlerBase,
 
     std::unique_ptr<Fmi::ValueFormatter> value_formatter;
     std::unique_ptr<Fmi::TimeFormatter> time_formatter;
-    boost::shared_ptr<TS::TimeSeriesGeneratorOptions> toptions;
+    std::shared_ptr<TS::TimeSeriesGeneratorOptions> toptions;
 
     SmartMet::Spine::BoundingBox requested_bbox;
 
@@ -111,21 +111,21 @@ class StoredGridQueryHandler : public StoredQueryHandlerBase,
 
     bool includeDebugData;
 
-    Query(boost::shared_ptr<const StoredQueryConfig> config);
+    Query(std::shared_ptr<const StoredQueryConfig> config);
     ~Query();
   };
 
   StoredGridQueryHandler(SmartMet::Spine::Reactor* reactor,
                          StoredQueryConfig::Ptr config,
                          PluginImpl& plugin_impl,
-                         boost::optional<std::string> template_file_name);
+                         std::optional<std::string> template_file_name);
   ~StoredGridQueryHandler() override;
 
   std::string get_handler_description() const override;
 
   void query(const StoredQuery& query,
                      const std::string& language,
-                     const boost::optional<std::string>& hostname,
+                     const std::optional<std::string>& hostname,
                      std::ostream& output) const override;
 
  private:

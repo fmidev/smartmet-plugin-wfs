@@ -2,7 +2,7 @@
 #include "WfsConvenience.h"
 #include "WfsException.h"
 #include <macgyver/DateTime.h>
-#include <boost/optional/optional_io.hpp>
+#include <macgyver/Optional.h>
 #include <cstdint>
 #include <macgyver/Exception.h>
 
@@ -77,12 +77,12 @@ bw::SupportsTimeParameters::SupportsTimeParameters(bw::StoredQueryConfig::Ptr co
 
 bw::SupportsTimeParameters::~SupportsTimeParameters() = default;
 
-boost::shared_ptr<TS::TimeSeriesGeneratorOptions>
+std::shared_ptr<TS::TimeSeriesGeneratorOptions>
 bw::SupportsTimeParameters::get_time_generator_options(const RequestParameterMap &param) const
 {
   try
   {
-    boost::shared_ptr<TS::TimeSeriesGeneratorOptions> options(
+    std::shared_ptr<TS::TimeSeriesGeneratorOptions> options(
         new TS::TimeSeriesGeneratorOptions);
 
     options->endTimeUTC = true;
@@ -132,7 +132,7 @@ bw::SupportsTimeParameters::get_time_generator_options(const RequestParameterMap
       }
     }
 
-    boost::optional<uint64_t> time_step = param.get_optional<uint64_t>(P_TIME_STEP);
+    std::optional<uint64_t> time_step = param.get_optional<uint64_t>(P_TIME_STEP);
     if (time_step)
     {
       if (options->mode != TS::TimeSeriesGeneratorOptions::TimeSteps)
@@ -162,7 +162,7 @@ bw::SupportsTimeParameters::get_time_generator_options(const RequestParameterMap
       }
     }
 
-    boost::optional<uint64_t> num_steps = param.get_optional<uint64_t>(P_NUM_STEPS);
+    std::optional<uint64_t> num_steps = param.get_optional<uint64_t>(P_NUM_STEPS);
     if (num_steps)
     {
       if ((*num_steps > 0) and
@@ -186,7 +186,7 @@ bw::SupportsTimeParameters::get_time_generator_options(const RequestParameterMap
         std::cout << __FILE__ << "#" << __LINE__ << ": timestep=" << options->timeStep << std::endl;
     }
 
-    if (param.count(P_BEGIN_TIME))  // using boost::optional<> cause compiler warning on RHEL6
+    if (param.count(P_BEGIN_TIME))  // using std::optional<> cause compiler warning on RHEL6
     {
       options->startTime = param.get_single<Fmi::DateTime>(P_BEGIN_TIME);
       if (debug_level > 2)
@@ -194,7 +194,7 @@ bw::SupportsTimeParameters::get_time_generator_options(const RequestParameterMap
                   << std::endl;
     }
 
-    boost::optional<uint64_t> start_step = param.get_optional<uint64_t>(P_START_STEP);
+    std::optional<uint64_t> start_step = param.get_optional<uint64_t>(P_START_STEP);
     if (start_step)
     {
       if (*start_step > 10000)
