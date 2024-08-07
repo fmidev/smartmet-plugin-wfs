@@ -17,8 +17,8 @@ BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 %define smartmet_boost boost
 %endif
 
-%define smartmet_fmt_min 8.1.1
-%define smartmet_fmt_max 8.2.0
+%define smartmet_fmt_min 11.0.0
+%define smartmet_fmt_max 12.0.0
 
 BuildRequires: rpm-build
 BuildRequires: gcc-c++
@@ -26,7 +26,7 @@ BuildRequires: make
 BuildRequires: %{smartmet_boost}-devel
 BuildRequires: ctpp2-devel
 BuildRequires: fmt-devel >= %{smartmet_fmt_min}, fmt-devel < %{smartmet_fmt_max}
-BuildRequires: gdal35-devel
+BuildRequires: gdal38-devel
 BuildRequires: jsoncpp-devel
 BuildRequires: libcurl-devel
 BuildRequires: xerces-c-devel
@@ -51,7 +51,7 @@ BuildRequires: smartmet-library-grid-files-devel >= 24.7.12
 BuildRequires: smartmet-engine-observation-devel >= 24.7.22
 %endif
 Requires: ctpp2
-Requires: fmt >= %{smartmet_fmt_min}, fmt < %{smartmet_fmt_max}
+Requires: fmt-libs >= %{smartmet_fmt_min}, fmt-libs < %{smartmet_fmt_max}
 Requires: libcurl
 Requires: jsoncpp
 Requires: zlib
