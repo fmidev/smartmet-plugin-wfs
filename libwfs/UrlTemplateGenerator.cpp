@@ -71,7 +71,7 @@ bw::UrlTemplateGenerator::UrlTemplateGenerator(const std::string& url,
 bw::UrlTemplateGenerator::~UrlTemplateGenerator() = default;
 
 std::string bw::UrlTemplateGenerator::generate(
-    boost::function1<std::vector<std::string>, std::string> param_getter_cb) const
+    std::function<std::vector<std::string>(const std::string&)> param_getter_cb) const
 {
   try
   {
@@ -222,7 +222,7 @@ void bw::UrlTemplateGenerator::parse_param_def(const std::string& str)
 
 std::string bw::UrlTemplateGenerator::eval_string_param(
     const std::string& param_str,
-    boost::function1<std::vector<std::string>, std::string> param_getter_cb,
+    std::function<std::vector<std::string>(const std::string&)> param_getter_cb,
     bool allow_list)
 {
   try

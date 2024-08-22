@@ -57,7 +57,7 @@ class GeoServerDataIndex
 
   GeoServerDataIndex(GeoServerDB& db, const std::map<std::string, std::string>& db_table_name_map);
 
-  GeoServerDataIndex(GeoServerDB& db, boost::function1<std::string, std::string> db_table_name_cb);
+  GeoServerDataIndex(GeoServerDB& db, std::function<std::string(const std::string&)> db_table_name_cb);
 
   virtual ~GeoServerDataIndex();
 
@@ -103,7 +103,7 @@ class GeoServerDataIndex
   GeoServerDB& db;
   std::variant<std::string,
                  std::map<std::string, std::string>,
-                 boost::function1<std::string, std::string> >
+                 std::function<std::string(const std::string&)> >
       db_table_name_def;
   std::map<Fmi::DateTime, Item> data;
   int debug_level;

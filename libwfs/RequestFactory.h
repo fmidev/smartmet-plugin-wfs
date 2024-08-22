@@ -25,12 +25,11 @@ namespace WFS
 class RequestFactory
 {
  public:
-  using parse_kvp_t = boost::function2<std::shared_ptr<RequestBase>,
-        const std::string &, const SmartMet::Spine::HTTP::Request &>;
+  using parse_kvp_t = std::function<std::shared_ptr<RequestBase>(
+        const std::string&, const SmartMet::Spine::HTTP::Request &)>;
 
-  using parse_xml_t = boost::function3<std::shared_ptr<RequestBase>,
-        const std::string &, const xercesc::DOMDocument &, const xercesc::DOMElement
-        &>;
+  using parse_xml_t = std::function<std::shared_ptr<RequestBase>(
+        const std::string &, const xercesc::DOMDocument &, const xercesc::DOMElement&)>;
 
  public:
   RequestFactory(PluginImpl& plugin_impl);
@@ -43,10 +42,10 @@ class RequestFactory
    *   @param name the name of the request
    *   @param feature_id ID to register for use for GetCapabilities response
    *   @param create_from_kvp factory method for creating the request object from
-   *          HTTP format KVP request. KVP is not supported if empty boost::function1
+   *          HTTP format KVP request. KVP is not supported if empty std::function1
    *          provided.
    *   @param create_from_xml factory method for creating the request object from
-   *          HTTP format XML request. XML is not supported if empty boost::function1
+   *          HTTP format XML request. XML is not supported if empty std::function1
    *          provided.
    */
   RequestFactory& register_request_type(const std::string& name,

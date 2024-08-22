@@ -44,7 +44,7 @@ class UrlTemplateGenerator
   virtual ~UrlTemplateGenerator();
 
   std::string generate(
-      boost::function1<std::vector<std::string>, std::string> param_getter_cb) const;
+      std::function<std::vector<std::string>(const std::string&)> param_getter_cb) const;
 
   inline const std::vector<std::variant<ParamRef, StringParam> > get_content() const
   {
@@ -56,7 +56,7 @@ class UrlTemplateGenerator
 
   static std::string eval_string_param(
       const std::string& param_str,
-      boost::function1<std::vector<std::string>, std::string> param_getter_cb,
+      std::function<std::vector<std::string>(const std::string&)> param_getter_cb,
       bool allow_list = true);
 
  private:

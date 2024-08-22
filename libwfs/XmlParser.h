@@ -37,7 +37,7 @@ class Parser : public xercesc::XercesDOMParser
     std::map<std::string, std::string> attr_map;
   };
 
-  using root_element_cb_t = boost::function1<void, RootElemInfo>;
+  using root_element_cb_t = std::function<void(RootElemInfo&)>;
 
  public:
   /**

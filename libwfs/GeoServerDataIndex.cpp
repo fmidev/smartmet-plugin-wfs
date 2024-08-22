@@ -197,7 +197,7 @@ bw::GeoServerDataIndex::GeoServerDataIndex(
 }
 
 bw::GeoServerDataIndex::GeoServerDataIndex(
-    GeoServerDB& db, boost::function1<std::string, std::string> db_table_name_cb)
+    GeoServerDB& db, std::function<std::string(const std::string&)> db_table_name_cb)
     : db(db), db_table_name_def(db_table_name_cb), data(), debug_level(0)
 {
   try
@@ -305,7 +305,7 @@ std::string bw::GeoServerDataIndex::get_db_table_name(const std::string& layer_n
     }
     else
     {
-      auto& cb = std::get<boost::function1<std::string, std::string> >(db_table_name_def);
+      auto& cb = std::get<std::function<std::string(const std::string&)> >(db_table_name_def);
       return cb(layer_name);
     }
   }

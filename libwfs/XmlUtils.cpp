@@ -12,6 +12,7 @@
 #include <xercesc/util/XMLUni.hpp>
 #include <fmt/format.h>
 #include <memory>
+#include <sstream>
 #include <stdexcept>
 
 namespace ba = boost::algorithm;

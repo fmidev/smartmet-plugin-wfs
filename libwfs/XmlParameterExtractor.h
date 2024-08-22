@@ -26,8 +26,7 @@ namespace Xml
 class ParameterExtractor
 {
  public:
-  using xml_param_extract_t = boost::function1<std::vector<SmartMet::Spine::Value>,
-        const xercesc::DOMElement &>;
+  using xml_param_extract_t = std::function<std::vector<SmartMet::Spine::Value>(const xercesc::DOMElement &)>;
 
  public:
   ParameterExtractor();
