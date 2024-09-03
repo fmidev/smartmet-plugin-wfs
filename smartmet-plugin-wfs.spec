@@ -43,10 +43,10 @@ BuildRequires: smartmet-library-macgyver-devel >= 24.8.7
 BuildRequires: smartmet-engine-contour-devel >= 24.8.7
 BuildRequires: smartmet-engine-geonames-devel >= 24.8.7
 BuildRequires: smartmet-engine-gis-devel >= 24.8.7
-BuildRequires: smartmet-engine-grid-devel >= 24.8.7
-BuildRequires: smartmet-engine-querydata-devel >= 24.8.7
-BuildRequires: smartmet-library-grid-content-devel >= 24.8.7
-BuildRequires: smartmet-library-grid-files-devel >= 24.8.7
+BuildRequires: smartmet-engine-grid-devel >= 24.9.3
+BuildRequires: smartmet-engine-querydata-devel >= 24.9.2
+BuildRequires: smartmet-library-grid-content-devel >= 24.9.3
+BuildRequires: smartmet-library-grid-files-devel >= 24.9.3
 %if %{with observation}
 BuildRequires: smartmet-engine-observation-devel >= 24.8.7
 %endif
@@ -64,13 +64,13 @@ Requires: smartmet-library-trax >= 24.8.7
 Requires: smartmet-engine-contour >= 24.8.7
 Requires: smartmet-engine-geonames >= 24.8.7
 Requires: smartmet-engine-gis >= 24.8.7
-Requires: smartmet-engine-grid >= 24.8.7
-Requires: smartmet-library-grid-content >= 24.8.7
-Requires: smartmet-library-grid-files >= 24.8.7
+Requires: smartmet-engine-grid >= 24.9.3
+Requires: smartmet-library-grid-content >= 24.9.3
+Requires: smartmet-library-grid-files >= 24.9.3
 %if %{with observation}
 Requires: smartmet-engine-observation >= 24.8.7
 %endif
-Requires: smartmet-engine-querydata >= 24.8.7
+Requires: smartmet-engine-querydata >= 24.9.2
 Requires: smartmet-server >= 24.8.7
 Requires: xerces-c
 Requires: xqilla
@@ -111,11 +111,11 @@ Obsoletes: smartmet-brainstorm-wfs-debuginfo < 16.11.1
 #TestRequires: smartmet-library-spine-plugin-test >= 24.8.7
 #TestRequires: smartmet-engine-geonames >= 24.8.7
 #TestRequires: smartmet-engine-gis >= 24.8.7
-#TestRequires: smartmet-engine-querydata >= 24.8.7
+#TestRequires: smartmet-engine-querydata >= 24.9.2
 %if %{with observation}
 #TestRequires: smartmet-engine-observation >= 24.8.7
 %endif
-#TestRequires: smartmet-engine-grid >= 24.8.7
+#TestRequires: smartmet-engine-grid >= 24.9.3
 #TestRequires: redis
 #TestRequires: smartmet-engine-grid-test
 # Required by top level Makefile
