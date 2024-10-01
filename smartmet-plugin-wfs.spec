@@ -3,7 +3,7 @@
 %define SPECNAME smartmet-plugin-%{DIRNAME}
 Summary: SmartMet WFS plugin
 Name: %{SPECNAME}
-Version: 24.9.3
+Version: 24.9.28
 Release: 1%{?dist}.fmi
 License: MIT
 Group: SmartMet/Plugins
@@ -35,40 +35,40 @@ BuildRequires: openssl-devel
 BuildRequires: bzip2-devel
 BuildRequires: zlib-devel
 BuildRequires: smartmet-library-timeseries-devel >= 24.8.7
-BuildRequires: smartmet-library-spine-devel >= 24.8.7
+BuildRequires: smartmet-library-spine-devel >= 24.9.28
 BuildRequires: smartmet-library-gis-devel >= 24.8.7
 BuildRequires: smartmet-library-trax-devel >= 24.8.7
-BuildRequires: smartmet-library-locus-devel >= 24.8.7
-BuildRequires: smartmet-library-macgyver-devel >= 24.8.7
+BuildRequires: smartmet-library-locus-devel >= 24.9.28
+BuildRequires: smartmet-library-macgyver-devel >= 24.9.28
 BuildRequires: smartmet-engine-contour-devel >= 24.8.7
-BuildRequires: smartmet-engine-geonames-devel >= 24.8.7
+BuildRequires: smartmet-engine-geonames-devel >= 24.9.28
 BuildRequires: smartmet-engine-gis-devel >= 24.8.7
 BuildRequires: smartmet-engine-grid-devel >= 24.9.3
 BuildRequires: smartmet-engine-querydata-devel >= 24.9.2
 BuildRequires: smartmet-library-grid-content-devel >= 24.9.3
 BuildRequires: smartmet-library-grid-files-devel >= 24.9.3
 %if %{with observation}
-BuildRequires: smartmet-engine-observation-devel >= 24.8.7
+BuildRequires: smartmet-engine-observation-devel >= 24.9.28
 %endif
 Requires: ctpp2
 Requires: fmt-libs >= %{smartmet_fmt_min}, fmt-libs < %{smartmet_fmt_max}
 Requires: libcurl
 Requires: jsoncpp
 Requires: zlib
-Requires: smartmet-library-locus >= 24.8.7
-Requires: smartmet-library-macgyver >= 24.8.7
-Requires: smartmet-library-spine >= 24.8.7
+Requires: smartmet-library-locus >= 24.9.28
+Requires: smartmet-library-macgyver >= 24.9.28
+Requires: smartmet-library-spine >= 24.9.28
 Requires: smartmet-library-timeseries >= 24.8.7
 Requires: smartmet-library-gis >= 24.8.7
 Requires: smartmet-library-trax >= 24.8.7
 Requires: smartmet-engine-contour >= 24.8.7
-Requires: smartmet-engine-geonames >= 24.8.7
+Requires: smartmet-engine-geonames >= 24.9.28
 Requires: smartmet-engine-gis >= 24.8.7
 Requires: smartmet-engine-grid >= 24.9.3
 Requires: smartmet-library-grid-content >= 24.9.3
 Requires: smartmet-library-grid-files >= 24.9.3
 %if %{with observation}
-Requires: smartmet-engine-observation >= 24.8.7
+Requires: smartmet-engine-observation >= 24.9.28
 %endif
 Requires: smartmet-engine-querydata >= 24.9.2
 Requires: smartmet-server >= 24.8.7
@@ -103,17 +103,17 @@ Obsoletes: smartmet-brainstorm-wfs-debuginfo < 16.11.1
 
 #TestRequires: ctpp2
 #TestRequires: smartmet-test-db >= 24.8.7
-#TestRequires: smartmet-test-data >= 24.5.22
-#TestRequires: smartmet-utils-devel >= 24.8.7
-#TestRequires: smartmet-library-macgyver >= 24.8.7
+#TestRequires: smartmet-test-data >= 24.8.12
+#TestRequires: smartmet-utils-devel >= 24.9.10
+#TestRequires: smartmet-library-macgyver >= 24.9.28
 #TestRequires: smartmet-library-gis >= 24.8.7
-#TestRequires: smartmet-library-newbase >= 24.8.7
-#TestRequires: smartmet-library-spine-plugin-test >= 24.8.7
-#TestRequires: smartmet-engine-geonames >= 24.8.7
+#TestRequires: smartmet-library-newbase >= 24.9.25
+#TestRequires: smartmet-library-spine-plugin-test >= 24.9.28
+#TestRequires: smartmet-engine-geonames >= 24.9.28
 #TestRequires: smartmet-engine-gis >= 24.8.7
 #TestRequires: smartmet-engine-querydata >= 24.9.2
 %if %{with observation}
-#TestRequires: smartmet-engine-observation >= 24.8.7
+#TestRequires: smartmet-engine-observation >= 24.9.28
 %endif
 #TestRequires: smartmet-engine-grid >= 24.9.3
 #TestRequires: redis
@@ -127,10 +127,10 @@ SmartMet WFS plugin
 
 %package -n %{SPECNAME}-devel
 Summary: SmartMet WFS plugin development files
-Requires: smartmet-library-spine-devel >= 24.8.7
+Requires: smartmet-library-spine-devel >= 24.9.28
 Requires: smartmet-library-gis-devel >= 24.8.7
-Requires: smartmet-library-locus-devel >= 24.8.7
-Requires: smartmet-library-macgyver-devel >= 24.8.7
+Requires: smartmet-library-locus-devel >= 24.9.28
+Requires: smartmet-library-macgyver-devel >= 24.9.28
 Requires: %{SPECNAME} = %{version}-%{release}
 %description -n %{SPECNAME}-devel
 SmartMet WFS plugin development files (for building testsuite without rebuilding plugin)
@@ -164,6 +164,9 @@ rm -rf $RPM_BUILD_ROOT
 %{_includedir}/smartmet/plugin/wfs/request/*.h
 
 %changelog
+* Sat Sep 28 2024 Mika Heiskanen <mika.heiskanen@fmi.fi> - 24.9.28-1.fmi
+- Repackaged due to PostgreSQLConnection ABI change
+
 * Tue Sep  3 2024 Andris Pavēnis <andris.pavenis@fmi.fi> 24.9.3-1.fmi
 - Repackage due smartmlibrary-grid-data and smartmet-engine-querydata changes
 
