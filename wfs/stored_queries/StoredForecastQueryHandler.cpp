@@ -475,16 +475,6 @@ std::shared_ptr<SmartMet::Spine::Table> bw::StoredForecastQueryHandler::extract_
         std::cout << "Selected producer: " << producer << std::endl;
       }
 
-      if (producer.empty())
-      {
-        if (query.keyword.empty())
-        {
-          Fmi::Exception exception(BCP, "No data available for '" + loc->name + "'!");
-          exception.addParameter(WFS_EXCEPTION_CODE, WFS_OPERATION_PROCESSING_FAILED);
-          throw exception.disableStackTrace();
-        }
-      }
-
       auto q = (origin_time ? q_engine->get(producer, *origin_time) : q_engine->get(producer));
       query.modification_time = q->modificationTime();
 
@@ -755,7 +745,7 @@ SmartMet::Engine::Querydata::Producer bw::StoredForecastQueryHandler::select_pro
                                 query.level_type);
     }
 
-    if (producer.empty() && query.keyword.empty())
+    if (producer.empty())
     {
       throw Fmi::Exception(BCP, "No data available for '" + location.name + "'!")
           .addParameter(WFS_EXCEPTION_CODE, WFS_OPERATION_PROCESSING_FAILED)
