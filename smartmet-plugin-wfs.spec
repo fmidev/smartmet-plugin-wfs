@@ -3,7 +3,7 @@
 %define SPECNAME smartmet-plugin-%{DIRNAME}
 Summary: SmartMet WFS plugin
 Name: %{SPECNAME}
-Version: 24.9.28
+Version: 24.10.8
 Release: 1%{?dist}.fmi
 License: MIT
 Group: SmartMet/Plugins
@@ -164,6 +164,9 @@ rm -rf $RPM_BUILD_ROOT
 %{_includedir}/smartmet/plugin/wfs/request/*.h
 
 %changelog
+* Tue Oct  8 2024 Andris Pavēnis <andris.pavenis@fmi.fi> 24.10.8-1.fmi
+- StoredForecastQueryHandler: fail in case of empty producer and remove duplicate check
+
 * Sat Sep 28 2024 Mika Heiskanen <mika.heiskanen@fmi.fi> - 24.9.28-1.fmi
 - Repackaged due to PostgreSQLConnection ABI change
 
