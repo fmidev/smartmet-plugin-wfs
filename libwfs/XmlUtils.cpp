@@ -167,7 +167,7 @@ std::string check_name_info(const xercesc::DOMNode* node,
         msg += d + nm;
         d = "|";
       }
-      msg + ") expected";
+      msg += ") expected";
       throw Fmi::Exception(BCP, msg);
     }
     else
