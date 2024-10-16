@@ -1,6 +1,6 @@
 #pragma once
 
-#include <boost/function.hpp>
+#include <functional>
 #include <variant>
 #include <string>
 #include <vector>
