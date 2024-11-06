@@ -127,8 +127,6 @@ Config::Config(const string& configfile)
     // Verify that stored queries template directory exists
     template_directory = sq_template_dir;
 
-    read_admin_cred();
-
     read_hosts_info();
   }
   catch (...)
@@ -262,25 +260,6 @@ void Config::read_capabilities_config()
         throw Fmi::Exception::Trace(BCP,
                                     "Incorrect value of configuration entry capabilities_config");
       }
-    }
-  }
-  catch (...)
-  {
-    throw Fmi::Exception::Trace(BCP, "Operation failed!");
-  }
-}
-
-void Config::read_admin_cred()
-{
-  try
-  {
-    const char* setting_name = "admin";
-    if (get_config().exists(setting_name))
-    {
-      libconfig::Setting& s1 = assert_is_group(get_config().lookup(setting_name));
-      const auto user = get_optional_config_param<std::string>(s1, "admin", "admin");
-      const auto password = get_mandatory_config_param<std::string>(s1, "password");
-      adminCred = std::make_pair(user, password);
     }
   }
   catch (...)

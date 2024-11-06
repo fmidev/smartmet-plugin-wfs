@@ -72,15 +72,11 @@ class Plugin : public SmartMetPlugin,
                           const SmartMet::Spine::HTTP::Request& theRequest,
                           SmartMet::Spine::HTTP::Response& theResponse);
 
-  void adminHandler(SmartMet::Spine::Reactor& theReactor,
-                    const SmartMet::Spine::HTTP::Request& theRequest,
-                    SmartMet::Spine::HTTP::Response& theResponse);
-
   void updateLoop();
 
   void ensureUpdateLoopStarted();
   void stopUpdateLoop();
-  
+
  private:
   Fmi::Cache::CacheStatistics getCacheStats() const override;
 

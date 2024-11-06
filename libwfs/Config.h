@@ -71,10 +71,7 @@ class Config : public SmartMet::Spine::ConfigBase
   std::vector<std::shared_ptr<WfsFeatureDef> > read_features_config(
       SmartMet::Spine::CRSRegistry& theCRSRegistry);
   const CapabilitiesConf& get_capabilities_config() const { return capabilities_conf; }
-  std::optional<std::pair<std::string, std::string> > get_admin_credentials() const
-  {
-    return adminCred;
-  }
+
   const Hosts& get_hosts() const { return hosts; }
 
   void read_typename_config(std::map<std::string, std::string>& typename_storedqry);
@@ -83,7 +80,6 @@ class Config : public SmartMet::Spine::ConfigBase
 
  private:
   void read_capabilities_config();
-  void read_admin_cred();
   void read_hosts_info();
 
  private:
@@ -110,13 +106,6 @@ class Config : public SmartMet::Spine::ConfigBase
   bool sq_restrictions;
   SmartMet::Spine::MultiLanguageStringP fallback_encoding;
   CapabilitiesConf capabilities_conf;
-
-  /**
-   *   @brief Admin user name and password if provided
-   *
-   *   Currently only used for reload request
-   */
-  std::optional<std::pair<std::string, std::string> > adminCred;
 
   /**
    *   @brief Information about hosts to which WFS responses points
