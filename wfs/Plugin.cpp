@@ -83,6 +83,15 @@ void Plugin::init()
       throw Fmi::Exception::Trace(BCP, "Operation failed!");
     }
 
+    if (!itsReactor->addContentHandler(
+            this,
+            plugin_impl.load()->get_config().defaultUrl(),
+            boost::bind(&Plugin::realRequestHandler, this, ph::_1, "", ph::_2, ph::_3)))
+    {
+      throw Fmi::Exception(
+          BCP, "Failed to register WFS content handler for default language");
+    }
+
     itsReactor->addAdminBoolRequestHandler(
         this,
         "wfs:reload",
