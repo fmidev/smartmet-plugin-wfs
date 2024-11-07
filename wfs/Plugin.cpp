@@ -86,7 +86,7 @@ void Plugin::init()
     if (!itsReactor->addContentHandler(
             this,
             plugin_impl.load()->get_config().defaultUrl(),
-            boost::bind(&Plugin::realRequestHandler, this, p::_1, "", p::_2, p::_3)))
+            std::bind(&Plugin::realRequestHandler, this, p::_1, "", p::_2, p::_3)))
     {
       throw Fmi::Exception(
           BCP, "Failed to register WFS content handler for default language");
