@@ -24,6 +24,13 @@ defaultlogging = true;
 debug           = true;
 verbose         = false;
 
+admin:
+{
+	uri = "/admin";
+	user = "admin";
+	password = "admin";
+}
+
 engines:
 {
 	geonames:

@@ -6,17 +6,17 @@
 
 #include "WfsConst.h"
 #include "WfsException.h"
-#include <boost/bind/bind.hpp>
 #include <json/json.h>
 #include <spine/Convenience.h>
 #include <macgyver/Exception.h>
 #include <spine/Reactor.h>
 #include <spine/SmartMet.h>
 #include <Plugin.h>
+#include <functional>
 #include <sstream>
 #include <thread>
 
-namespace ph = boost::placeholders;
+namespace p = std::placeholders;
 
 namespace SmartMet
 {
@@ -67,7 +67,7 @@ void Plugin::init()
       {
         const std::string url = new_impl->get_config().defaultUrl() + "/" + language;
         if (!itsReactor->addContentHandler(
-                this, url, boost::bind(&Plugin::realRequestHandler, this, ph::_1, language, ph::_2, ph::_3)))
+                this, url, std::bind(&Plugin::realRequestHandler, this, p::_1, language, p::_2, p::_3)))
         {
           std::ostringstream msg;
           msg << "Failed to register WFS content handler for language '" << language << "'";
@@ -86,7 +86,7 @@ void Plugin::init()
     if (!itsReactor->addContentHandler(
             this,
             plugin_impl.load()->get_config().defaultUrl(),
-            boost::bind(&Plugin::realRequestHandler, this, ph::_1, "", ph::_2, ph::_3)))
+            boost::bind(&Plugin::realRequestHandler, this, p::_1, "", p::_2, p::_3)))
     {
       throw Fmi::Exception(
           BCP, "Failed to register WFS content handler for default language");
@@ -96,50 +96,24 @@ void Plugin::init()
         this,
         "wfs:reload",
         true,  // WFS reload requires authentication
-        [this](Spine::Reactor&, const Spine::HTTP::Request&) -> bool { return reload(itsConfig); },
+        [this](Spine::Reactor&, const Spine::HTTP::Request&) -> bool
+        {
+          return reload(itsConfig);
+        },
         "Reloads the WFS plugin configuration");
 
     itsReactor->addAdminCustomRequestHandler(
         this,
         "wfs:xmlSchemaCache",
         false,
-        [this](Spine::Reactor&, const Spine::HTTP::Request& theRequest, Spine::HTTP::Response& theResponse) {
-          if (authenticateRequest(theRequest, theResponse))
-          {
-            std::ostringstream content;
-            plugin_impl.load()->dump_xml_schema_cache(content);
-            theResponse.setStatus(200);
-            theResponse.setHeader("Content-type", "application/octet-stream");
-            theResponse.setContent(content.str());
-          }
-        },
+        std::bind(&Plugin::adminListCacheContents, this, p::_2, p::_3),
         "Dumps the XML schema cache");
 
     itsReactor->addAdminCustomRequestHandler(
         this,
         "wfs:constructors",
         false,
-        [this](Spine::Reactor&, const Spine::HTTP::Request& theRequest, Spine::HTTP::Response& theResponse) {
-          if (authenticateRequest(theRequest, theResponse))
-          {
-            const auto handler = theRequest.getParameter("handler");
-            const auto format = theRequest.getParameter("format");
-            std::ostringstream content;
-            if (format and *format == "json") {
-                plugin_impl.load()->dump_constructor_map(content, handler);
-                theResponse.setStatus(200);
-                theResponse.setHeader("Content-type", "application/json");
-            } else if (not format or *format == "HTML" or *format == "html") {
-                plugin_impl.load()->dump_constructor_map_html(content, handler);
-                theResponse.setStatus(200);
-                theResponse.setHeader("Content-type", "text/html; charset=UTF-8");
-            } else {
-                std::cout << "#### BAD format \n";
-                throw std::runtime_error("format " + *format + " is not supported");
-            }
-            theResponse.setContent(content.str());
-          }
-        },
+        std::bind(&Plugin::adminListConstructors, this, p::_2, p::_3),
         "Dumps the stored query constructor map");
   }
   catch (...)
@@ -356,6 +330,54 @@ Fmi::Cache::CacheStatistics Plugin::getCacheStats() const
 {
   return plugin_impl.load()->getCacheStats();
 }
+
+
+void Plugin::adminListConstructors(const SmartMet::Spine::HTTP::Request& theRequest,
+                                   SmartMet::Spine::HTTP::Response& theResponse)
+try
+{
+  const auto handler = theRequest.getParameter("handler");
+  const auto format = theRequest.getParameter("format");
+  std::ostringstream content;
+  if (format and *format == "json") {
+    plugin_impl.load()->dump_constructor_map(content, handler);
+    theResponse.setStatus(200);
+    theResponse.setHeader("Content-type", "application/json");
+  } else if (not format or *format == "HTML" or *format == "html") {
+    plugin_impl.load()->dump_constructor_map_html(content, handler);
+    theResponse.setStatus(200);
+    theResponse.setHeader("Content-type", "text/html; charset=UTF-8");
+  } else {
+    std::cout << "#### BAD format \n";
+    throw std::runtime_error("format " + *format + " is not supported");
+  }
+  theResponse.setContent(content.str());
+}
+catch (...)
+{
+  auto error = Fmi::Exception::Trace(BCP, "Operation failed!");
+  error.addParameter("Request", theRequest.getURI());
+  throw error;
+}
+
+
+void Plugin::adminListCacheContents(const SmartMet::Spine::HTTP::Request& theRequest,
+                                    SmartMet::Spine::HTTP::Response& theResponse)
+try
+{
+  std::ostringstream content;
+  plugin_impl.load()->dump_xml_schema_cache(content);
+  theResponse.setStatus(200);
+  theResponse.setHeader("Content-type", "application/octet-stream");
+  theResponse.setContent(content.str());
+}
+catch (...)
+{
+  auto error = Fmi::Exception::Trace(BCP, "Operation failed!");
+  error.addParameter("Request", theRequest.getURI());
+  throw error;
+}
+
 
 }  // namespace WFS
 }  // namespace Plugin
