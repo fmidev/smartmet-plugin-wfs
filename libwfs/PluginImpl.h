@@ -143,7 +143,9 @@ class PluginImpl
    */
   void dump_constructor_map(std::ostream& os, const std::optional<std::string>& handler = {});
 
-  void dump_constructor_map_html(std::ostream& os, const std::optional<std::string>& handler = {});
+  void dump_constructor_map_html(std::ostream& os,
+          const std::string& uri,
+          const std::optional<std::string>& handler = {});
 
   bool is_reload_required(bool reset = false);
 

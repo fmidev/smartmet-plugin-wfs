@@ -175,7 +175,7 @@ void HandlerFactorySummary::add_handler(
 
 void HandlerFactorySummary::write_html(
     std::ostream& os,
-    const std::string& url_prefix,
+    const std::string& uri,
     const std::optional<std::string>& name) const
 {
     const char* style =
@@ -231,8 +231,8 @@ void HandlerFactorySummary::write_html(
             assert(ci.get());
             os << "<tr>";
             os << "<td>";
-            os << "<a href=\"" << url_prefix << "/admin?request=constructors&handler="
-               << ci->name << "&format=html\">"
+            os << "<a href=\"" << uri << "&handler="
+               << ci->name << "\">"
                << ci->name << "</a>";
             os << "</td>\n";
             os << "<td>" << ci->description << "</td>";

@@ -72,17 +72,19 @@ class Plugin : public SmartMetPlugin,
                           const SmartMet::Spine::HTTP::Request& theRequest,
                           SmartMet::Spine::HTTP::Response& theResponse);
 
-  void adminHandler(SmartMet::Spine::Reactor& theReactor,
-                    const SmartMet::Spine::HTTP::Request& theRequest,
-                    SmartMet::Spine::HTTP::Response& theResponse);
-
   void updateLoop();
 
   void ensureUpdateLoopStarted();
   void stopUpdateLoop();
-  
+
  private:
   Fmi::Cache::CacheStatistics getCacheStats() const override;
+
+  void adminListConstructors(const Spine::HTTP::Request& theRequest,
+                             Spine::HTTP::Response& theResponse);
+
+  void adminListCacheContents(const Spine::HTTP::Request& theRequest,
+                              Spine::HTTP::Response& theResponse);
 
   const std::string itsModuleName;
 

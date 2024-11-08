@@ -952,14 +952,15 @@ void PluginImpl::dump_constructor_map(std::ostream& os, const std::optional<std:
     os << result;
 }
 
-void PluginImpl::dump_constructor_map_html(std::ostream& os, const std::optional<std::string>& handler)
+void PluginImpl::dump_constructor_map_html(std::ostream& os,
+                                           const std::string& uri,
+                                           const std::optional<std::string>& handler)
 {
   try
   {
-      const std::string url_base = get_config().defaultUrl();
       const auto& sqm = get_stored_query_map();
       auto summary_ptr = sqm.get_handler_factory_summary();
-      summary_ptr->write_html(os, url_base, handler);
+      summary_ptr->write_html(os, uri, handler);
   }
   catch (...)
   {

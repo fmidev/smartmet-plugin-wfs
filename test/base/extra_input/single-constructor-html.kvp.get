@@ -1,4 +1,4 @@
-GET /wfs/admin?request=constructors&handler=wfs_coverage_query_handler_factory HTTP/1.1
+GET /admin?what=wfs:constructors&handler=wfs_coverage_query_handler_factory HTTP/1.1
 Host: opendata.fmi.fi
 fmi-apikey: foobar
 
