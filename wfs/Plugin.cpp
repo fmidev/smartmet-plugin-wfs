@@ -15,8 +15,10 @@
 #include <functional>
 #include <sstream>
 #include <thread>
+#include <boost/algorithm/string.hpp>
 
 namespace p = std::placeholders;
+namespace ba = boost::algorithm;
 using namespace std::literals;
 
 namespace SmartMet
@@ -348,8 +350,11 @@ try
     theResponse.setHeader("Content-type", "application/json");
   } else if (not format or *format == "HTML" or *format == "html") {
     std::string uri = theRequest.getResource();
-    uri += format ? "?format=" + urlencode(*format) : ""s;
-    uri += "&what=" + optional_string(theRequest.getParameter("what"), "wfs:constructors");
+    std::vector<std::string> params;
+    params.push_back("what=wfs:constructors");
+    if (format) params.push_back("format=" + urlencode(*format));
+    if (handler) params.push_back("handler=" + urlencode(*handler));
+    uri += "?"s + ba::join(params, "&"s);
     plugin_impl.load()->dump_constructor_map_html(content, uri, handler);
     theResponse.setStatus(200);
     theResponse.setHeader("Content-type", "text/html; charset=UTF-8");
