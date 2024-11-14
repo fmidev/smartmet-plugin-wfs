@@ -6,24 +6,24 @@
 <br>
 <ul>
 <table border="1px solid black" padding="10pt"><tr><th>Constructor</th><th>Description</th></tr>
-<tr><td><a href="/admin?what=constructors&format=html&handler=wfs_coverage_query_handler_factory">wfs_coverage_query_handler_factory</a></td>
+<tr><td><a href="/admin?what=wfs:constructors&format=html&handler=wfs_coverage_query_handler_factory">wfs_coverage_query_handler_factory</a></td>
 <td>Forecast data: areas as GML isobars</td></tr>
-<tr><td><a href="/admin?what=constructors&format=html&handler=wfs_dummy_handler_factory">wfs_dummy_handler_factory</a></td>
+<tr><td><a href="/admin?what=wfs:constructors&format=html&handler=wfs_dummy_handler_factory">wfs_dummy_handler_factory</a></td>
 <td>Simple stored query handler for testing purposes only</td></tr>
-<tr><td><a href="/admin?what=constructors&format=html&handler=wfs_forecast_handler_factory">wfs_forecast_handler_factory</a></td>
+<tr><td><a href="/admin?what=wfs:constructors&format=html&handler=wfs_forecast_handler_factory">wfs_forecast_handler_factory</a></td>
 <td>Forecast data (general)</td></tr>
-<tr><td><a href="/admin?what=constructors&format=html&handler=wfs_get_data_set_by_id_handler_factory">wfs_get_data_set_by_id_handler_factory</a></td>
+<tr><td><a href="/admin?what=wfs:constructors&format=html&handler=wfs_get_data_set_by_id_handler_factory">wfs_get_data_set_by_id_handler_factory</a></td>
 <td>Predefined data sets</td></tr>
-<tr><td><a href="/admin?what=constructors&format=html&handler=wfs_get_feature_by_id_handler_factory">wfs_get_feature_by_id_handler_factory</a></td>
+<tr><td><a href="/admin?what=wfs:constructors&format=html&handler=wfs_get_feature_by_id_handler_factory">wfs_get_feature_by_id_handler_factory</a></td>
 <td>The mandatory implementation of the "GetFeatureById" stored query defined in the WFS 2.0 standard</td></tr>
-<tr><td><a href="/admin?what=constructors&format=html&handler=wfs_grid_forecast_handler_factory">wfs_grid_forecast_handler_factory</a></td>
+<tr><td><a href="/admin?what=wfs:constructors&format=html&handler=wfs_grid_forecast_handler_factory">wfs_grid_forecast_handler_factory</a></td>
 <td>Forecast data: download in grid format (grib1, grib2, NetCDF)</td></tr>
-<tr><td><a href="/admin?what=constructors&format=html&handler=wfs_isoline_query_handler_factory">wfs_isoline_query_handler_factory</a></td>
+<tr><td><a href="/admin?what=wfs:constructors&format=html&handler=wfs_isoline_query_handler_factory">wfs_isoline_query_handler_factory</a></td>
 <td>Forecast data: areas as GML isolines</td></tr>
-<tr><td><a href="/admin?what=constructors&format=html&handler=wfs_obs_handler_factory">wfs_obs_handler_factory</a></td>
+<tr><td><a href="/admin?what=wfs:constructors&format=html&handler=wfs_obs_handler_factory">wfs_obs_handler_factory</a></td>
 <td>Observation data (general, no lightning, aviation or multi-sensor)</td></tr>
-<tr><td><a href="/admin?what=constructors&format=html&handler=wfs_stored_geoserver_handler_factory">wfs_stored_geoserver_handler_factory</a></td>
+<tr><td><a href="/admin?what=wfs:constructors&format=html&handler=wfs_stored_geoserver_handler_factory">wfs_stored_geoserver_handler_factory</a></td>
 <td>Geographical data downloading</td></tr>
-<tr><td><a href="/admin?what=constructors&format=html&handler=wfs_stored_sounding_handler_factory">wfs_stored_sounding_handler_factory</a></td>
+<tr><td><a href="/admin?what=wfs:constructors&format=html&handler=wfs_stored_sounding_handler_factory">wfs_stored_sounding_handler_factory</a></td>
 <td></td></tr>
 </table>
