@@ -3,8 +3,8 @@
 %define SPECNAME smartmet-plugin-%{DIRNAME}
 Summary: SmartMet WFS plugin
 Name: %{SPECNAME}
-Version: 24.11.8
-Release: 2%{?dist}.fmi
+Version: 24.11.14
+Release: 1%{?dist}.fmi
 License: MIT
 Group: SmartMet/Plugins
 URL: https://github.com/fmidev/smartmet-plugin-wfs
@@ -164,6 +164,9 @@ rm -rf $RPM_BUILD_ROOT
 %{_includedir}/smartmet/plugin/wfs/request/*.h
 
 %changelog
+* Thu Nov 14 2024 Andris Pavēnis <andris.pavenis@fmi.fi> 24.11.14-1.fmi
+- Fix links in output of /admin?what=what=wfs:constructors
+
 * Fri Nov  8 2024 Andris Pavēnis <andris.pavenis@fmi.fi> 24.11.8-2.fmi
 - Register WFS related admin queries instead of usingh local content handler (/wfs/admin?...)
 
