@@ -26,7 +26,7 @@ BuildRequires: make
 BuildRequires: %{smartmet_boost}-devel
 BuildRequires: ctpp2-devel
 BuildRequires: fmt-devel >= %{smartmet_fmt_min}, fmt-devel < %{smartmet_fmt_max}
-BuildRequires: gdal38-devel
+BuildRequires: gdal310-devel
 BuildRequires: jsoncpp-devel
 BuildRequires: libcurl-devel
 BuildRequires: xerces-c-devel
