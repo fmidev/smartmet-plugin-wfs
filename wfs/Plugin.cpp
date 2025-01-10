@@ -95,10 +95,12 @@ void Plugin::init()
           BCP, "Failed to register WFS content handler for default language");
     }
 
+    using AdminRequestAccess = Spine::ContentHandlerMap::AdminRequestAccess;
+
     itsReactor->addAdminBoolRequestHandler(
         this,
         "wfs:reload",
-        true,  // WFS reload requires authentication
+        AdminRequestAccess::RequiresAuthentication,
         [this](Spine::Reactor&, const Spine::HTTP::Request&) -> bool
         {
           return reload(itsConfig);
@@ -108,14 +110,14 @@ void Plugin::init()
     itsReactor->addAdminCustomRequestHandler(
         this,
         "wfs:xmlSchemaCache",
-        false,
+        AdminRequestAccess::Private,
         std::bind(&Plugin::adminListCacheContents, this, p::_2, p::_3),
         "Dumps the XML schema cache");
 
     itsReactor->addAdminCustomRequestHandler(
         this,
         "wfs:constructors",
-        false,
+        AdminRequestAccess::Public,
         std::bind(&Plugin::adminListConstructors, this, p::_2, p::_3),
         "Dumps the stored query constructor map");
   }
