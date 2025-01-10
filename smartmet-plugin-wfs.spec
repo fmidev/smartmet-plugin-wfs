@@ -57,20 +57,20 @@ Requires: jsoncpp
 Requires: zlib
 Requires: smartmet-library-locus >= 24.9.28
 Requires: smartmet-library-macgyver >= 24.12.4
-Requires: smartmet-library-spine >= 24.11.27
+Requires: smartmet-library-spine >= 25.1.10
 Requires: smartmet-library-timeseries >= 24.12.11
 Requires: smartmet-library-gis >= 24.11.12
 Requires: smartmet-library-trax >= 24.8.7
 Requires: smartmet-engine-contour >= 24.11.8
-Requires: smartmet-engine-geonames >= 24.11.19
+Requires: smartmet-engine-geonames >= 25.1.10
 Requires: smartmet-engine-gis >= 24.11.8
 Requires: smartmet-engine-grid >= 25.1.9
 Requires: smartmet-library-grid-content >= 25.1.9
 Requires: smartmet-library-grid-files >= 25.1.9
 %if %{with observation}
-Requires: smartmet-engine-observation >= 24.11.30
+Requires: smartmet-engine-observation >= 25.1.10
 %endif
-Requires: smartmet-engine-querydata >= 24.11.30
+Requires: smartmet-engine-querydata >= 25.1.10
 Requires: smartmet-server >= 24.11.27
 Requires: xerces-c
 Requires: xqilla
@@ -108,12 +108,12 @@ Obsoletes: smartmet-brainstorm-wfs-debuginfo < 16.11.1
 #TestRequires: smartmet-library-macgyver >= 24.12.4
 #TestRequires: smartmet-library-gis >= 24.11.12
 #TestRequires: smartmet-library-newbase >= 24.12.16
-#TestRequires: smartmet-library-spine-plugin-test >= 24.11.27
-#TestRequires: smartmet-engine-geonames >= 24.11.19
+#TestRequires: smartmet-library-spine-plugin-test >= 25.1.10
+#TestRequires: smartmet-engine-geonames >= 25.1.10
 #TestRequires: smartmet-engine-gis >= 24.11.8
-#TestRequires: smartmet-engine-querydata >= 24.11.30
+#TestRequires: smartmet-engine-querydata >= 25.1.10
 %if %{with observation}
-#TestRequires: smartmet-engine-observation >= 24.11.30
+#TestRequires: smartmet-engine-observation >= 25.1.10
 %endif
 #TestRequires: smartmet-engine-grid >= 25.1.9
 #TestRequires: redis
@@ -127,7 +127,7 @@ SmartMet WFS plugin
 
 %package -n %{SPECNAME}-devel
 Summary: SmartMet WFS plugin development files
-Requires: smartmet-library-spine-devel >= 24.11.27
+Requires: smartmet-library-spine-devel >= 25.1.10
 Requires: smartmet-library-gis-devel >= 24.11.12
 Requires: smartmet-library-locus-devel >= 24.9.28
 Requires: smartmet-library-macgyver-devel >= 24.12.4
