@@ -18,6 +18,7 @@ namespace qi = boost::spirit::qi;
 namespace ns = boost::spirit::standard;
 namespace ba = boost::algorithm;
 namespace bl = boost::lambda;
+namespace p = boost::phoenix;
 
 using qi_rule = qi::rule<std::string::const_iterator, std::string
         (), ns::space_type>;
@@ -61,7 +62,7 @@ void StoredQueryParamDef::parse_def(const std::string& desc)
     ;
 
     qi_rule array_dim_p =
-        qi::char_('[') >> qi::uint_[bl::var(min_size) = bl::_1, bl::var(max_size) = bl::_1] >>
+        qi::char_('[') >> qi::uint_[(bl::var(min_size) = bl::_1, bl::var(max_size) = bl::_1)] >>
         -(ns::string("..") >> qi::uint_[bl::var(max_size) = bl::_1]) >> qi::char_(']');
 
     qi_rule param_p = type_p >> -(array_dim_p[bl::var(is_array) = true]) >> qi::eoi;

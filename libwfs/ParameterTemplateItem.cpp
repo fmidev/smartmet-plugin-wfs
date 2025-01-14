@@ -85,8 +85,8 @@ void ParameterTemplateItem::parse(const std::string& item_def, bool allow_absent
 
     qi_rule cond_dflt_p = ((qi::char_(':') >> dflt_p[bl::var(new_default_value) = bl::_1]) |
                            (qi::char_('>') >> name_p[bl::var(new_redirect_name) = bl::_1]) |
-                           qi::eps[bl::var(new_default_value) = std::optional<std::string>(),
-                                   bl::var(new_redirect_name) = std::optional<std::string>()]);
+                           qi::eps[(bl::var(new_default_value) = std::optional<std::string>(),
+                                   bl::var(new_redirect_name) = std::optional<std::string>())]);
 
     qi_rule absent_p = ns::string("${") >> ns::string("}") >> qi::eoi;
 
