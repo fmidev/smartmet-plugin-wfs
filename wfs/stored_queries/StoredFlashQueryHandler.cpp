@@ -400,8 +400,9 @@ void bw::StoredFlashQueryHandler::query(const StoredQuery& query,
             }
             catch (...)
             {
-              // Ignore errors while extra bounding box checks
-              //(void)err;
+              // Ignore errors while extra bounding box checks.
+              // Use unused exception object to ensure that possible boost::thread_interrupted is rethrown
+              (void) Fmi::Exception::Trace(BCP, "Ignore exception");
             }
           }
 
