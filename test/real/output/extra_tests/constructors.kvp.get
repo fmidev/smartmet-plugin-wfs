@@ -1684,81 +1684,6 @@
 				}
 			]
 		},
-		"wfs_stored_file_handler_factory" : 
-		{
-			"description" : "Forecast data: download in querydata format",
-			"parameters" : 
-			{
-				"bbox" : 
-				{
-					"description" : "",
-					"is_array" : true,
-					"mandatory" : false,
-					"max_size" : 4,
-					"min_size" : 0,
-					"step" : 4,
-					"type" : "double"
-				},
-				"beginTime" : 
-				{
-					"description" : "",
-					"is_array" : true,
-					"mandatory" : false,
-					"max_size" : 65535,
-					"min_size" : 0,
-					"step" : 1,
-					"type" : "posix_time"
-				},
-				"endTime" : 
-				{
-					"description" : "",
-					"is_array" : true,
-					"mandatory" : false,
-					"max_size" : 65535,
-					"min_size" : 0,
-					"step" : 1,
-					"type" : "posix_time"
-				},
-				"levels" : 
-				{
-					"description" : "",
-					"is_array" : true,
-					"mandatory" : false,
-					"max_size" : 65535,
-					"min_size" : 0,
-					"step" : 1,
-					"type" : "long"
-				},
-				"name" : 
-				{
-					"description" : "",
-					"is_array" : false,
-					"mandatory" : false,
-					"type" : "string"
-				},
-				"params" : 
-				{
-					"description" : "",
-					"is_array" : true,
-					"mandatory" : false,
-					"max_size" : 65535,
-					"min_size" : 0,
-					"step" : 1,
-					"type" : "string"
-				}
-			},
-			"stored_queries" : 
-			[
-				{
-					"name" : "FileDownloadDemo",
-					"return_types" : 
-					[
-						"testType"
-					],
-					"template" : "FileDownloadDemo.c2t"
-				}
-			]
-		},
 		"wfs_stored_geoserver_handler_factory" : 
 		{
 			"description" : "Geographical data downloading",
@@ -2483,10 +2408,6 @@
 	},
 	"templates" : 
 	{
-		"FileDownloadDemo.c2t" : 
-		[
-			"testType"
-		],
 		"_download_query_demo.c2t" : 
 		[
 			"testType"
