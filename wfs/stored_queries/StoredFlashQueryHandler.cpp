@@ -425,9 +425,14 @@ void bw::StoredFlashQueryHandler::query(const StoredQuery& query,
           for (int k = first_param; k <= last_param; k++)
           {
             std::string value;
-            if (const int* ptr = std::get_if<int>(&result[k][i].value))
+            const auto& data_vect = result[k];
+            if (i >= data_vect.size())
+            {
+              value = query_params.missingtext;
+            }
+            else if (const int* ptr = std::get_if<int>(&data_vect[i].value))
               value = Fmi::to_string(*ptr);
-            else if (const double* ptr = std::get_if<double>(&result[k][i].value))
+            else if (const double* ptr = std::get_if<double>(&data_vect[i].value))
             {
               auto tmp = *ptr;
               if (static_cast<int>(tmp) != tmp)
