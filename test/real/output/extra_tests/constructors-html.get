@@ -24,8 +24,6 @@
 <td>StoredAtomQueryHandlerBase</td></tr>
 <tr><td><a href="/admin?what=wfs:constructors&format=html&handler=wfs_stored_aviation_observation_handler_factory">wfs_stored_aviation_observation_handler_factory</a></td>
 <td>Observation data: Aviation</td></tr>
-<tr><td><a href="/admin?what=wfs:constructors&format=html&handler=wfs_stored_file_handler_factory">wfs_stored_file_handler_factory</a></td>
-<td>Forecast data: download in querydata format</td></tr>
 <tr><td><a href="/admin?what=wfs:constructors&format=html&handler=wfs_stored_geoserver_handler_factory">wfs_stored_geoserver_handler_factory</a></td>
 <td>Geographical data downloading</td></tr>
 <tr><td><a href="/admin?what=wfs:constructors&format=html&handler=wfs_stored_mast_handler_factory">wfs_stored_mast_handler_factory</a></td>
