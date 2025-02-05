@@ -540,6 +540,7 @@ void StoredObsQueryHandler::query(const StoredQuery& query,
             }
             catch (...)
             {
+              (void) Fmi::Exception::Trace(BCP, "Ignore exceptions here");
             }
 
             sites[geoid] = geoLoc;

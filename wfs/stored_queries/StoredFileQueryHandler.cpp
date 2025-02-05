@@ -54,10 +54,7 @@ bw::StoredFileQueryHandler::StoredFileQueryHandler(SmartMet::Spine::Reactor* rea
       }
       catch (const std::exception& err)
       {
-        std::ostringstream msg;
-        msg << SmartMet::Spine::log_time_str() << ": [WFS] [ERROR] [C++ exception of type '"
-            << current_exception_type() << "']: " << err.what() << std::endl;
-        std::cout << msg.str() << std::flush;
+        std::cout << Fmi::Exception::Trace(BCP, "Operation failed") << std::endl;
       }
     }
   }

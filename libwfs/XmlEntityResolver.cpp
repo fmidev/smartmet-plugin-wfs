@@ -54,7 +54,7 @@ EntityResolver::merge_downloaded_schemas()
       download_map.erase(uri);
       changed = true;
     } catch (...) {
-      // Ignore exceptions here
+      (void) Fmi::Exception::Trace(BCP, "Ignore exceptions here");
     }
   }
   return changed;
