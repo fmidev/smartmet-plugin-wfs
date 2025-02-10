@@ -567,6 +567,7 @@ void bw::StoredEnvMonitoringFacilityQueryHandler::getValidStations(
     }
     catch (...)
     {
+      (void) Fmi::Exception::Trace(BCP, "Ignore exceptions here");
       return;
     }
   }
