@@ -3,7 +3,7 @@
 %define SPECNAME smartmet-plugin-%{DIRNAME}
 Summary: SmartMet WFS plugin
 Name: %{SPECNAME}
-Version: 25.2.18
+Version: 25.3.19
 Release: 1%{?dist}.fmi
 License: MIT
 Group: SmartMet/Plugins
@@ -35,7 +35,7 @@ BuildRequires: openssl-devel
 BuildRequires: bzip2-devel
 BuildRequires: zlib-devel
 BuildRequires: smartmet-library-timeseries-devel >= 25.2.18
-BuildRequires: smartmet-library-spine-devel >= 25.2.18
+BuildRequires: smartmet-library-spine-devel >= 25.3.3
 BuildRequires: smartmet-library-gis-devel >= 25.2.18
 BuildRequires: smartmet-library-trax-devel >= 25.2.18
 BuildRequires: smartmet-library-locus-devel >= 25.2.18
@@ -43,12 +43,12 @@ BuildRequires: smartmet-library-macgyver-devel >= 25.2.18
 BuildRequires: smartmet-engine-contour-devel >= 25.2.18
 BuildRequires: smartmet-engine-geonames-devel >= 25.2.18
 BuildRequires: smartmet-engine-gis-devel >= 25.2.18
-BuildRequires: smartmet-engine-grid-devel >= 25.2.18
+BuildRequires: smartmet-engine-grid-devel >= 25.3.19
 BuildRequires: smartmet-engine-querydata-devel >= 25.2.18
-BuildRequires: smartmet-library-grid-content-devel >= 25.2.18
-BuildRequires: smartmet-library-grid-files-devel >= 25.2.18
+BuildRequires: smartmet-library-grid-content-devel >= 25.3.19
+BuildRequires: smartmet-library-grid-files-devel >= 25.3.19
 %if %{with observation}
-BuildRequires: smartmet-engine-observation-devel >= 25.2.18
+BuildRequires: smartmet-engine-observation-devel >= 25.2.28
 %endif
 Requires: ctpp2
 Requires: fmt-libs >= %{smartmet_fmt_min}, fmt-libs < %{smartmet_fmt_max}
@@ -57,18 +57,18 @@ Requires: jsoncpp
 Requires: zlib
 Requires: smartmet-library-locus >= 25.2.18
 Requires: smartmet-library-macgyver >= 25.2.18
-Requires: smartmet-library-spine >= 25.2.18
+Requires: smartmet-library-spine >= 25.3.3
 Requires: smartmet-library-timeseries >= 25.2.18
 Requires: smartmet-library-gis >= 25.2.18
 Requires: smartmet-library-trax >= 25.2.18
 Requires: smartmet-engine-contour >= 25.2.18
 Requires: smartmet-engine-geonames >= 25.2.18
 Requires: smartmet-engine-gis >= 25.2.18
-Requires: smartmet-engine-grid >= 25.2.18
-Requires: smartmet-library-grid-content >= 25.2.18
-Requires: smartmet-library-grid-files >= 25.2.18
+Requires: smartmet-engine-grid >= 25.3.19
+Requires: smartmet-library-grid-content >= 25.3.19
+Requires: smartmet-library-grid-files >= 25.3.19
 %if %{with observation}
-Requires: smartmet-engine-observation >= 25.2.18
+Requires: smartmet-engine-observation >= 25.2.28
 %endif
 Requires: smartmet-engine-querydata >= 25.2.18
 Requires: smartmet-server >= 25.2.18
@@ -108,14 +108,14 @@ Obsoletes: smartmet-brainstorm-wfs-debuginfo < 16.11.1
 #TestRequires: smartmet-library-macgyver >= 25.2.18
 #TestRequires: smartmet-library-gis >= 25.2.18
 #TestRequires: smartmet-library-newbase >= 25.2.18
-#TestRequires: smartmet-library-spine-plugin-test >= 25.2.18
+#TestRequires: smartmet-library-spine-plugin-test >= 25.3.3
 #TestRequires: smartmet-engine-geonames >= 25.2.18
 #TestRequires: smartmet-engine-gis >= 25.2.18
 #TestRequires: smartmet-engine-querydata >= 25.2.18
 %if %{with observation}
-#TestRequires: smartmet-engine-observation >= 25.2.18
+#TestRequires: smartmet-engine-observation >= 25.2.28
 %endif
-#TestRequires: smartmet-engine-grid >= 25.2.18
+#TestRequires: smartmet-engine-grid >= 25.3.19
 #TestRequires: redis
 #TestRequires: smartmet-engine-grid-test
 # Required by top level Makefile
@@ -127,7 +127,7 @@ SmartMet WFS plugin
 
 %package -n %{SPECNAME}-devel
 Summary: SmartMet WFS plugin development files
-Requires: smartmet-library-spine-devel >= 25.2.18
+Requires: smartmet-library-spine-devel >= 25.3.3
 Requires: smartmet-library-gis-devel >= 25.2.18
 Requires: smartmet-library-locus-devel >= 25.2.18
 Requires: smartmet-library-macgyver-devel >= 25.2.18
@@ -164,6 +164,9 @@ rm -rf $RPM_BUILD_ROOT
 %{_includedir}/smartmet/plugin/wfs/request/*.h
 
 %changelog
+* Wed Mar 19 2025 Mika Heiskanen <mika.heiskanen@fmi.fi> - 25.3.19-1.fmi
+- Repackaged due to base library ABI changes
+
 * Tue Feb 18 2025 Andris Pavēnis <andris.pavenis@fmi.fi> 25.2.18-1.fmi
 - Update to gdal-3.10, geos-3.13 and proj-9.5
 
