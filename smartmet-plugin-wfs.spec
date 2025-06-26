@@ -151,7 +151,7 @@ make %{_smp_mflags} \
 rm -rf $RPM_BUILD_ROOT
 
 %files
-%defattr(0775,root,root,07.27
+%defattr(0775,root,root,0775)
 %{_datadir}/smartmet/plugins/wfs.so
 %defattr(0664,root,root,0775)
 %{_datadir}/smartmet/wfs/*.c2t
