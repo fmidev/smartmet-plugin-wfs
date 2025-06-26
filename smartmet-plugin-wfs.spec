@@ -11,21 +11,31 @@ URL: https://github.com/fmidev/smartmet-plugin-wfs
 Source0: %{name}.tar.gz
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
+# https://fedoraproject.org/wiki/Changes/Broken_RPATH_will_fail_rpmbuild
+%global __brp_check_rpaths %{nil}
+
 %if 0%{?rhel} && 0%{rhel} < 9
 %define smartmet_boost boost169
 %else
 %define smartmet_boost boost
 %endif
 
-%define smartmet_fmt_min 11.0.0
+%if 0%{?rhel} && 0%{rhel} <= 9
+%define smartmet_fmt_min 11.0.1
 %define smartmet_fmt_max 12.0.0
+%define smartmet_fmt fmt-libs >= %{smartmet_fmt_min}, fmt-libs < %{smartmet_fmt_max}
+%define smartmet_fmt_devel fmt-devel >= %{smartmet_fmt_min}, fmt-devel < %{smartmet_fmt_max}
+%else
+%define smartmet_fmt fmt
+%define smartmet_fmt_devel fmt-devel
+%endif
 
 BuildRequires: rpm-build
 BuildRequires: gcc-c++
 BuildRequires: make
 BuildRequires: %{smartmet_boost}-devel
 BuildRequires: ctpp2-devel
-BuildRequires: fmt-devel >= %{smartmet_fmt_min}, fmt-devel < %{smartmet_fmt_max}
+BuildRequires: %{smartmet_fmt_devel}
 BuildRequires: gdal310-devel
 BuildRequires: jsoncpp-devel
 BuildRequires: libcurl-devel
@@ -51,7 +61,7 @@ BuildRequires: smartmet-library-grid-files-devel >= 25.4.8
 BuildRequires: smartmet-engine-observation-devel >= 25.3.21
 %endif
 Requires: ctpp2
-Requires: fmt-libs >= %{smartmet_fmt_min}, fmt-libs < %{smartmet_fmt_max}
+Requires: %{smartmet_fmt}
 Requires: libcurl
 Requires: jsoncpp
 Requires: zlib
@@ -87,13 +97,20 @@ Requires: libpqxx >= 1:7.7.0, libpqxx < 1:7.8.0
 BuildRequires: libpqxx-devel >= 1:7.7.0, libpqxx-devel < 1:7.8.0
 #TestRequires: libpqxx-devel >= 1:7.7.0, libpqxx-devel < 1:7.8.0
 %else
-%if 0%{?rhel} && 0%{rhel} >= 9
-Requires: libpqxx >= 1:7.9.0, libpqxx < 1:8.0.0
-BuildRequires: libpqxx-devel >= 1:7.9.0, libpqxx-devel < 1:8.0.0
-#TestRequires: libpqxx-devel >= 1:7.9.0, libpqxx-devel < 1:8.0.0
+%if 0%{?rhel} && 0%{rhel} == 9
+Requires: libpqxx >= 1:7.9.0, libpqxx < 1:7.10.0
+BuildRequires: libpqxx-devel >= 1:7.9.0, libpqxx-devel < 1:7.10.0
+#TestRequires: libpqxx-devel >= 1:7.9.0, libpqxx-devel < 1:7.10.0
+%else
+%if 0%{?rhel} && 0%{rhel} >= 10
+Requires: libpqxx >= 1:7.10.0, libpqxx < 1:7.11.0
+BuildRequires: libpqxx-devel >= 1:7.10.0, libpqxx-devel < 1:7.11.0
+#TestRequires: libpqxx-devel >= 1:7.10.0, libpqxx-devel < 1:7.11.0
+%else
 Requires: libpqxx
 BuildRequires: libpqxx-devel
 #TestRequires: libpqxx-devel
+%endif
 %endif
 %endif
 
