@@ -42,6 +42,10 @@ Plugin::Plugin(SmartMet::Spine::Reactor* theReactor, const char* theConfig)
 
 void Plugin::init()
 {
+  // x-www-form-urlencoded is always supported and there is no need to specify it here.
+  // Specify it anyway for better readability (it does not cause performance issues)
+  const std::set<std::string> content_types = {"x-www-form-urlencoded", "text/xml"};
+
   try
   {
     try
@@ -70,7 +74,10 @@ void Plugin::init()
       {
         const std::string url = new_impl->get_config().defaultUrl() + "/" + language;
         if (!itsReactor->addContentHandler(
-                this, url, std::bind(&Plugin::realRequestHandler, this, p::_1, language, p::_2, p::_3)))
+                this,
+                url,
+                std::bind(&Plugin::realRequestHandler, this, p::_1, language, p::_2, p::_3),
+                content_types))
         {
           std::ostringstream msg;
           msg << "Failed to register WFS content handler for language '" << language << "'";
@@ -89,7 +96,8 @@ void Plugin::init()
     if (!itsReactor->addContentHandler(
             this,
             plugin_impl.load()->get_config().defaultUrl(),
-            std::bind(&Plugin::realRequestHandler, this, p::_1, "", p::_2, p::_3)))
+            std::bind(&Plugin::realRequestHandler, this, p::_1, "", p::_2, p::_3),
+            content_types))
     {
       throw Fmi::Exception(
           BCP, "Failed to register WFS content handler for default language");
@@ -237,11 +245,6 @@ void Plugin::realRequestHandler(SmartMet::Spine::Reactor& theReactor,
 {
   try
   {
-    // Check request method (support GET, POST, OPTIONS)
-    if (checkRequest(theRequest, theResponse, true)) {
-        return;
-    }
-
     auto impl = plugin_impl.load();
     std::string data_source = Spine::optional_string(theRequest.getParameter("source"),
                                                      impl->get_primary_data_source());

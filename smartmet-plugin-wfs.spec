@@ -45,7 +45,7 @@ BuildRequires: openssl-devel
 BuildRequires: bzip2-devel
 BuildRequires: zlib-devel
 BuildRequires: smartmet-library-timeseries-devel >= 25.2.18
-BuildRequires: smartmet-library-spine-devel >= 25.3.24
+BuildRequires: smartmet-library-spine-devel >= 25.9.1
 BuildRequires: smartmet-library-gis-devel >= 25.2.18
 BuildRequires: smartmet-library-trax-devel >= 25.2.18
 BuildRequires: smartmet-library-locus-devel >= 25.2.18
@@ -67,7 +67,7 @@ Requires: jsoncpp
 Requires: zlib
 Requires: smartmet-library-locus >= 25.2.18
 Requires: smartmet-library-macgyver >= 25.2.18
-Requires: smartmet-library-spine >= 25.3.24
+Requires: smartmet-library-spine >= 25.9.1
 Requires: smartmet-library-timeseries >= 25.2.18
 Requires: smartmet-library-gis >= 25.2.18
 Requires: smartmet-library-trax >= 25.2.18
@@ -125,7 +125,7 @@ Obsoletes: smartmet-brainstorm-wfs-debuginfo < 16.11.1
 #TestRequires: smartmet-library-macgyver >= 25.2.18
 #TestRequires: smartmet-library-gis >= 25.2.18
 #TestRequires: smartmet-library-newbase >= 25.3.20
-#TestRequires: smartmet-library-spine-plugin-test >= 25.3.24
+#TestRequires: smartmet-library-spine-plugin-test >= 25.9.1
 #TestRequires: smartmet-engine-geonames >= 25.2.18
 #TestRequires: smartmet-engine-gis >= 25.2.18
 #TestRequires: smartmet-engine-querydata >= 25.2.18
