@@ -3,7 +3,7 @@
 %define SPECNAME smartmet-plugin-%{DIRNAME}
 Summary: SmartMet WFS plugin
 Name: %{SPECNAME}
-Version: 25.8.25
+Version: 25.9.1
 Release: 1%{?dist}.fmi
 License: MIT
 Group: SmartMet/Plugins
@@ -181,6 +181,9 @@ rm -rf $RPM_BUILD_ROOT
 %{_includedir}/smartmet/plugin/wfs/request/*.h
 
 %changelog
+* Mon Sep  1 2025 Andris Pavēnis <andris.pavenis@fmi.fi> 25.9.1-1.fmi
+- Update according to smartmet-library-spine ABI changes
+
 * Mon Aug 25 2025 Andris Pavēnis <andris.pavenis@fmi.fi> 25.8.25-1.fmi
 - Repackage due to smartmet-library-grid-files changes
 
