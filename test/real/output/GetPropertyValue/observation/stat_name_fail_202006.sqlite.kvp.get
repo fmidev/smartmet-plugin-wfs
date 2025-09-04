@@ -9,6 +9,7 @@
                 -16000063 Helsinki-Vantaa airport 19.8 
                 -16000150 Kaisaniemi 20.7 
                 -16000138 Kumpula 20.7 
+                -16011680 Railway station square 21.1 
                 </gml:doubleOrNilReasonTupleList>
       </gml:DataBlock>
     </gml:rangeSet>
