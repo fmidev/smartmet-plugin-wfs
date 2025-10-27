@@ -24,7 +24,7 @@ public:
     }
 
 protected:
-  SmartMet::Engine::Grid::Engine* grid_engine;
+  std::shared_ptr<SmartMet::Engine::Grid::Engine> grid_engine;
 };
 
 }  // namespace WFS

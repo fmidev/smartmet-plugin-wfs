@@ -24,7 +24,7 @@ public:
     }
 
 protected:
-  SmartMet::Engine::Observation::Engine* obs_engine;
+  std::shared_ptr<SmartMet::Engine::Observation::Engine> obs_engine;
 };
 
 }  // namespace WFS

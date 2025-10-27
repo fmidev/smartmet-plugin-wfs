@@ -173,18 +173,9 @@ void StoredGridForecastQueryHandler::init_handler()
   try
   {
     auto* reactor = get_reactor();
-    void* engine;
-    engine = reactor->getSingleton("Geonames", nullptr);
-    if (engine == nullptr)
-      throw Fmi::Exception(BCP, "No Geonames engine available");
 
-    geo_engine = reinterpret_cast<Engine::Geonames::Engine*>(engine);
-
-    engine = reactor->getSingleton("grid", nullptr);
-    if (engine == nullptr)
-      throw Fmi::Exception(BCP, "No Grid engine available");
-
-    grid_engine = reinterpret_cast<Engine::Grid::Engine*>(engine);
+    geo_engine = reactor->getEngine<SmartMet::Engine::Geonames::Engine>("Geonames");
+    grid_engine = reactor->getEngine<SmartMet::Engine::Grid::Engine>("grid");
   }
   catch (...)
   {

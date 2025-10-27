@@ -24,7 +24,7 @@ public:
     }
 
 protected:
-  SmartMet::Engine::Geonames::Engine* geo_engine;
+  std::shared_ptr<SmartMet::Engine::Geonames::Engine> geo_engine;
 };
 
 }  // namespace WFS

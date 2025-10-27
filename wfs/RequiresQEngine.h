@@ -23,7 +23,7 @@ public:
     }
 
 protected:
-  SmartMet::Engine::Querydata::Engine* q_engine;
+  std::shared_ptr<SmartMet::Engine::Querydata::Engine> q_engine;
 };
 
 }  // namespace WFS

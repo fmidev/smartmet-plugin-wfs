@@ -23,7 +23,7 @@ public:
     }
 
 protected:
-  SmartMet::Engine::Contour::Engine* contour_engine;
+  std::shared_ptr<SmartMet::Engine::Contour::Engine> contour_engine;
 };
 
 }  // namespace WFS
