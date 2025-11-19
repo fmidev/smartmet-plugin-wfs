@@ -16,15 +16,14 @@ LIBS += $(PREFIX_LDFLAGS) \
 	-lsmartmet-spine \
 	-lsmartmet-newbase \
 	-lsmartmet-macgyver \
-        -lboost_unit_test_framework \
-        -lboost_serialization \
+	-lboost_unit_test_framework \
+	-lboost_serialization \
 	-lboost_thread \
 	-lboost_regex \
 	-lboost_iostreams \
 	-lboost_filesystem \
-        -lboost_chrono \
-	-lboost_system \
-        -lxqilla \
+	-lboost_chrono \
+	-lxqilla \
 	$(REQUIRED_LIBS) \
 	-lcrypto \
 	-lfmt \
