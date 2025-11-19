@@ -35,6 +35,11 @@ ErrorResponseGenerator::ErrorResponse ErrorResponseGenerator::create_error_respo
     {
       std::rethrow_exception(eptr);
     }
+    catch (boost::thread_interrupted&)
+    {
+      // Let thread interruption exceptions pass through
+      throw;
+    }
     catch (Fmi::Exception& err)
     {
       auto hash = handle_wfs_exception(err);
