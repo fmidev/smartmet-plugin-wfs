@@ -55,7 +55,7 @@ PluginImpl::PluginImpl(SmartMet::Spine::Reactor* theReactor,
     }
 
     query_cache.reset(new QueryResponseCache(
-        itsConfig.getCacheSize(), std::chrono::seconds(itsConfig.getCacheTimeConstant())));
+        itsConfig.getCacheSize(), itsConfig.getCacheTimeConstant()));
 
     request_factory.reset(new RequestFactory(*this));
 
@@ -973,25 +973,9 @@ bool PluginImpl::is_reload_required(bool reset)
   return stored_query_map->is_reload_required(reset);
 }
 
-// Convert TimedCache statistics to regular statistics
-template <typename T>
-Fmi::Cache::CacheStats convert_stats(const T& cache)
-{
-  auto stats = cache.getCacheStatistics();
-  auto time = Fmi::date_time::from_time_t(std::chrono::duration_cast<std::chrono::seconds>(
-                                                 stats.getConstructionTime().time_since_epoch())
-                                                 .count());
-  return {time,
-          cache.maxSize(),
-          cache.size(),
-          stats.getHits(),
-          stats.getMisses(),
-          stats.getInsertSuccesses()};
-}
-
 Fmi::Cache::CacheStatistics PluginImpl::getCacheStats() const
 {
   Fmi::Cache::CacheStatistics ret;
-  ret["Wfs::query_cache"] = convert_stats(*query_cache);
+  ret["Wfs::query_cache"] = query_cache->statistics();
   return ret;
 }

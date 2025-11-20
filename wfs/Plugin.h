@@ -7,17 +7,12 @@
 // ======================================================================
 
 #include "Config.h"
-//#include "GeoServerDB.h"
 #include "PluginImpl.h"
-//#include "RequestFactory.h"
-//#include "StoredQueryMap.h"
-//#include "XmlEnvInit.h"
-//#include "XmlParser.h"
 #include <boost/thread.hpp>
 #include <boost/utility.hpp>
 #include <ctpp2/CDT.hpp>
 #include <macgyver/AtomicSharedPtr.h>
-#include <macgyver/TimedCache.h>
+#include <macgyver/Cache.h>
 #include <macgyver/CacheStats.h>
 #include <spine/HTTP.h>
 #include <spine/HTTPAuthentication.h>

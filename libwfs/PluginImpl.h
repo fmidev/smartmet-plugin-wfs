@@ -19,7 +19,7 @@
 #include <spine/CRSRegistry.h>
 #include <macgyver/DirectoryMonitor.h>
 #include <macgyver/TemplateFactory.h>
-#include <macgyver/TimedCache.h>
+#include <macgyver/Cache.h>
 #include <macgyver/CacheStats.h>
 
 namespace SmartMet
@@ -30,7 +30,7 @@ namespace WFS
 {
 class StoredQueryMap;
 
-using QueryResponseCache = Fmi::TimedCache::Cache<std::string,
+using QueryResponseCache = Fmi::Cache::Cache<std::string,
         std::string>;
 
 class PluginImpl

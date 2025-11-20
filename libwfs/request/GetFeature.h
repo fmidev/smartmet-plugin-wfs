@@ -4,7 +4,6 @@
 #include "QueryBase.h"
 #include "RequestBase.h"
 #include "StandardPresentationParameters.h"
-#include <macgyver/TimedCache.h>
 #include <xercesc/dom/DOMDocument.hpp>
 
 namespace SmartMet
