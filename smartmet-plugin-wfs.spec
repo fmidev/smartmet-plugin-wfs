@@ -81,7 +81,7 @@ Requires: smartmet-library-grid-files >= 25.10.15
 Requires: smartmet-engine-observation >= 25.10.27
 %endif
 Requires: smartmet-engine-querydata >= 25.9.17
-Requires: smartmet-server >= 25.9.9
+Requires: smartmet-server >= 25.10.27
 Requires: xerces-c
 Requires: xqilla
 Requires: zlib
@@ -125,12 +125,12 @@ Obsoletes: smartmet-brainstorm-wfs-debuginfo < 16.11.1
 #TestRequires: smartmet-library-macgyver >= 25.9.30
 #TestRequires: smartmet-library-gis >= 25.9.15
 #TestRequires: smartmet-library-newbase >= 25.3.20
-#TestRequires: smartmet-library-spine-plugin-test >= 25.9.16
+#TestRequires: smartmet-library-spine-plugin-test >= 25.10.27
 #TestRequires: smartmet-engine-geonames >= 25.9.29
 #TestRequires: smartmet-engine-gis >= 25.9.29
 #TestRequires: smartmet-engine-querydata >= 25.9.17
 %if %{with observation}
-#TestRequires: smartmet-engine-observation >= 25.9.4
+#TestRequires: smartmet-engine-observation >= 25.10.27
 %endif
 #TestRequires: smartmet-engine-grid >= 25.10.15
 #TestRequires: redis
@@ -144,7 +144,7 @@ SmartMet WFS plugin
 
 %package -n %{SPECNAME}-devel
 Summary: SmartMet WFS plugin development files
-Requires: smartmet-library-spine-devel >= 25.9.16
+Requires: smartmet-library-spine-devel >= 25.10.27
 Requires: smartmet-library-gis-devel >= 25.9.15
 Requires: smartmet-library-locus-devel >= 25.9.29
 Requires: smartmet-library-macgyver-devel >= 25.9.30
