@@ -123,7 +123,7 @@ jobs:
           destination: dist/
   unit-test-rhel10:
     docker:
-      - image: fmidev/smartmet-cibase-10:latest
+      - image: quay.io/fmi/smartmet-cibase-10:latest
     resource_class: xlarge
     environment:
       RPM_BUILD_NCPUS: 8
