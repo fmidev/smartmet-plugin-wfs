@@ -3,7 +3,7 @@
 %define SPECNAME smartmet-plugin-%{DIRNAME}
 Summary: SmartMet WFS plugin
 Name: %{SPECNAME}
-Version: 25.11.21
+Version: 25.11.27
 Release: 1%{?dist}.fmi
 License: MIT
 Group: SmartMet/Plugins
@@ -181,6 +181,9 @@ rm -rf $RPM_BUILD_ROOT
 %{_includedir}/smartmet/plugin/wfs/request/*.h
 
 %changelog
+* Thu Nov 27 2025 Andris Pavēnis <andris.pavenis@fmi.fi> 25.11.27-1.fmi
+- Repackage due to grid-files changes
+
 * Fri Nov 21 2025 Andris Pavēnis <andris.pavenis@fmi.fi> 25.11.21-1.fmi
 - Replace Fmi::TimedCache::Cache<> with Fmi::Cache<>
 
