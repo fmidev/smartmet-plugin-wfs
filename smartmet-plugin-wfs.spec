@@ -53,10 +53,10 @@ BuildRequires: smartmet-library-macgyver-devel >= 25.9.30
 BuildRequires: smartmet-engine-contour-devel >= 25.2.18
 BuildRequires: smartmet-engine-geonames-devel >= 25.9.29
 BuildRequires: smartmet-engine-gis-devel >= 25.9.29
-BuildRequires: smartmet-engine-grid-devel >= 25.10.15
+BuildRequires: smartmet-engine-grid-devel >= 25.11.27
 BuildRequires: smartmet-engine-querydata-devel >= 25.9.17
 BuildRequires: smartmet-library-grid-content-devel >= 25.10.15
-BuildRequires: smartmet-library-grid-files-devel >= 25.10.15
+BuildRequires: smartmet-library-grid-files-devel >= 25.11.27
 %if %{with observation}
 BuildRequires: smartmet-engine-observation-devel >= 25.10.27
 %endif
@@ -74,9 +74,9 @@ Requires: smartmet-library-trax >= 25.9.29
 Requires: smartmet-engine-contour >= 25.2.18
 Requires: smartmet-engine-geonames >= 25.9.29
 Requires: smartmet-engine-gis >= 25.9.29
-Requires: smartmet-engine-grid >= 25.10.15
-Requires: smartmet-library-grid-content >= 25.10.15
-Requires: smartmet-library-grid-files >= 25.10.15
+Requires: smartmet-engine-grid >= 25.11.27
+Requires: smartmet-library-grid-content >= 25.11.27
+Requires: smartmet-library-grid-files >= 25.11.27
 %if %{with observation}
 Requires: smartmet-engine-observation >= 25.10.27
 %endif
