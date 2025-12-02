@@ -4,7 +4,7 @@
 Summary: SmartMet WFS plugin
 Name: %{SPECNAME}
 Version: 25.12.2
-Release: 1%{?dist}.fmi
+Release: 2%{?dist}.fmi
 License: MIT
 Group: SmartMet/Plugins
 URL: https://github.com/fmidev/smartmet-plugin-wfs
@@ -181,7 +181,7 @@ rm -rf $RPM_BUILD_ROOT
 %{_includedir}/smartmet/plugin/wfs/request/*.h
 
 %changelog
-* Tue Dec  2 2025 Andris Pavēnis <andris.pavenis@fmi.fi> 25.12.2-1.fmi
+* Tue Dec  2 2025 Andris Pavēnis <andris.pavenis@fmi.fi> 25.12.2-2.fmi
 - Repackage due to Fmi::Pool<> changes
 
 * Thu Nov 27 2025 Andris Pavēnis <andris.pavenis@fmi.fi> 25.11.27-1.fmi
