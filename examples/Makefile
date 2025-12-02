@@ -23,7 +23,6 @@ LIBS += $(PREFIX_LDFLAGS) \
 	-lboost_iostreams \
 	-lboost_filesystem \
         -lboost_chrono \
-	-lboost_system \
         -lxqilla \
 	-lcurl \
 	-lcrypto \

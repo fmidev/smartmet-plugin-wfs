@@ -1,7 +1,6 @@
 
 include $(shell echo $${PREFIX-/usr})/share/smartmet/devel/makefile.inc
 
-LIBS += -lboost_serialization -lboost_filesystem -lboost_system -lxerces-c -lcurl -lcrypto
 
 TARGETS = XMLGrammarPoolDump XMLGrammarPool.dump XSDCacheAdd
 
