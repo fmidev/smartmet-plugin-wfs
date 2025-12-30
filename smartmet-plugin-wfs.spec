@@ -3,7 +3,7 @@
 %define SPECNAME smartmet-plugin-%{DIRNAME}
 Summary: SmartMet WFS plugin
 Name: %{SPECNAME}
-Version: 25.12.29
+Version: 25.12.30
 Release: 1%{?dist}.fmi
 License: MIT
 Group: SmartMet/Plugins
@@ -46,7 +46,7 @@ BuildRequires: bzip2-devel
 BuildRequires: zlib-devel
 BuildRequires: smartmet-library-timeseries-devel >= 25.12.29
 BuildRequires: smartmet-library-spine-devel >= 25.12.12
-BuildRequires: smartmet-library-gis-devel >= 25.12.299
+BuildRequires: smartmet-library-gis-devel >= 25.12.29
 BuildRequires: smartmet-library-trax-devel >= 25.9.29
 BuildRequires: smartmet-library-locus-devel >= 25.9.29
 BuildRequires: smartmet-library-macgyver-devel >= 25.12.2
@@ -69,7 +69,7 @@ Requires: smartmet-library-locus >= 25.9.29
 Requires: smartmet-library-macgyver >= 25.12.2
 Requires: smartmet-library-spine >= 25.12.12
 Requires: smartmet-library-timeseries >= 25.12.29
-Requires: smartmet-library-gis >= 25.12.299
+Requires: smartmet-library-gis >= 25.12.29
 Requires: smartmet-library-trax >= 25.9.29
 Requires: smartmet-engine-contour >= 25.2.18
 Requires: smartmet-engine-geonames >= 25.12.2
@@ -78,7 +78,7 @@ Requires: smartmet-engine-grid >= 25.12.29
 Requires: smartmet-library-grid-content >= 25.12.29
 Requires: smartmet-library-grid-files >= 25.12.29
 %if %{with observation}
-Requires: smartmet-engine-observation >= 25.12.299
+Requires: smartmet-engine-observation >= 25.12.29
 %endif
 Requires: smartmet-engine-querydata >= 25.12.29
 Requires: smartmet-server >= 25.12.2
@@ -123,14 +123,14 @@ Obsoletes: smartmet-brainstorm-wfs-debuginfo < 16.11.1
 #TestRequires: smartmet-test-data >= 25.8.13
 #TestRequires: smartmet-utils-devel >= 25.11.27
 #TestRequires: smartmet-library-macgyver >= 25.12.2
-#TestRequires: smartmet-library-gis >= 25.12.299
+#TestRequires: smartmet-library-gis >= 25.12.29
 #TestRequires: smartmet-library-newbase >= 25.3.20
 #TestRequires: smartmet-library-spine-plugin-test >= 25.12.12
 #TestRequires: smartmet-engine-geonames >= 25.12.2
 #TestRequires: smartmet-engine-gis >= 25.9.29
 #TestRequires: smartmet-engine-querydata >= 25.12.29
 %if %{with observation}
-#TestRequires: smartmet-engine-observation >= 25.12.299
+#TestRequires: smartmet-engine-observation >= 25.12.29
 %endif
 #TestRequires: smartmet-engine-grid >= 25.12.29
 #TestRequires: redis
@@ -145,7 +145,7 @@ SmartMet WFS plugin
 %package -n %{SPECNAME}-devel
 Summary: SmartMet WFS plugin development files
 Requires: smartmet-library-spine-devel >= 25.12.12
-Requires: smartmet-library-gis-devel >= 25.12.299
+Requires: smartmet-library-gis-devel >= 25.12.29
 Requires: smartmet-library-locus-devel >= 25.9.29
 Requires: smartmet-library-macgyver-devel >= 25.12.2
 Requires: %{SPECNAME} = %{version}-%{release}
@@ -181,6 +181,9 @@ rm -rf $RPM_BUILD_ROOT
 %{_includedir}/smartmet/plugin/wfs/request/*.h
 
 %changelog
+* Tue Dec 30 2025 Mika Heiskanen <mika.heiskanen@fmi.fi> 25.12.30-1.fmi
+- Fixed GIS library dependency
+
 * Mon Dec 29 2025 Mika Heiskanen <mika.heiskanen@fmi.fi> 25.12.29-1.fmi
 - Repackaged due to API changes
 
