@@ -3,7 +3,7 @@
 %define SPECNAME smartmet-plugin-%{DIRNAME}
 Summary: SmartMet WFS plugin
 Name: %{SPECNAME}
-Version: 25.12.30
+Version: 26.1.13
 Release: 1%{?dist}.fmi
 License: MIT
 Group: SmartMet/Plugins
@@ -130,7 +130,7 @@ Obsoletes: smartmet-brainstorm-wfs-debuginfo < 16.11.1
 #TestRequires: smartmet-engine-gis >= 25.9.29
 #TestRequires: smartmet-engine-querydata >= 25.12.29
 %if %{with observation}
-#TestRequires: smartmet-engine-observation >= 25.12.29
+#TestRequires: smartmet-engine-observation >= 26.1.13
 %endif
 #TestRequires: smartmet-engine-grid >= 25.12.29
 #TestRequires: redis
@@ -181,6 +181,9 @@ rm -rf $RPM_BUILD_ROOT
 %{_includedir}/smartmet/plugin/wfs/request/*.h
 
 %changelog
+* Tue Jan 13 2026 Andris Pavēnis <andris.pavenis@fmi.fi> 26.1.13-1.fmi
+- Repackage due to smartmet-engine-observation changes
+
 * Tue Dec 30 2025 Mika Heiskanen <mika.heiskanen@fmi.fi> 25.12.30-1.fmi
 - Fixed GIS library dependency
 
