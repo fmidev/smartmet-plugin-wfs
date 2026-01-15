@@ -328,6 +328,7 @@ void bw::RequestBase::report_incorrect_output_format(const std::string& value,
   std::cout << msg.str();
   Fmi::Exception exception(BCP, msg.str());
   exception.addParameter(WFS_EXCEPTION_CODE, WFS_OPERATION_PARSING_FAILED);
+  exception.disableLogging();
   throw exception;
 }
 

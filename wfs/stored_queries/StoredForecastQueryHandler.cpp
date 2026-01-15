@@ -749,7 +749,7 @@ SmartMet::Engine::Querydata::Producer bw::StoredForecastQueryHandler::select_pro
     {
       throw Fmi::Exception(BCP, "No data available for '" + location.name + "'!")
           .addParameter(WFS_EXCEPTION_CODE, WFS_OPERATION_PROCESSING_FAILED)
-          .disableStackTrace();
+          .disableLogging();
     }
 
     return producer;

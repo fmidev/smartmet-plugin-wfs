@@ -148,7 +148,7 @@ void bw::SupportsLocationParameters::get_location_options(
     {
       throw Fmi::Exception(BCP, "Invalid location list in parameter 'latlon'!")
           .addParameter(WFS_EXCEPTION_CODE, WFS_OPERATION_PARSING_FAILED)
-          .disableStackTrace();
+          .disableLogging();
     }
     for (std::size_t i = 0; i < values.size(); i += 2)
     {
@@ -193,7 +193,7 @@ void bw::SupportsLocationParameters::get_location_options(
             .addParameter(WFS_EXCEPTION_CODE, WFS_OPERATION_PARSING_FAILED)
             .addParameter("Place", name)
             .addParameter("Language", language_requested)
-            .disableStackTrace();
+            .disableLogging();
       }
       else
       {
@@ -218,7 +218,7 @@ void bw::SupportsLocationParameters::get_location_options(
           throw Fmi::Exception(BCP, "No locations found for the keyword!")
               .addParameter(WFS_EXCEPTION_CODE, WFS_OPERATION_PARSING_FAILED)
               .addParameter("Keyword", keyword)
-              .disableStackTrace();
+              .disableLogging();
         }
         else
         {
@@ -254,7 +254,7 @@ void bw::SupportsLocationParameters::get_geoids(
           throw Fmi::Exception(BCP, "The 'geoid' value is out of the range!")
               .addParameter(WFS_EXCEPTION_CODE, WFS_OPERATION_PARSING_FAILED)
               .addParameter("SmartMet::Spine::GeoId", std::to_string(id))
-              .disableStackTrace();
+              .disableLogging();
         }
         else
         {
@@ -294,7 +294,7 @@ void bw::SupportsLocationParameters::get_fmisids(
         throw Fmi::Exception(BCP, "The 'fmisid' value is out of the range!")
             .addParameter(WFS_EXCEPTION_CODE, WFS_OPERATION_PARSING_FAILED)
             .addParameter("Fmsid", std::to_string(id))
-            .disableStackTrace();
+            .disableLogging();
       }
       else
       {
@@ -305,7 +305,7 @@ void bw::SupportsLocationParameters::get_fmisids(
           throw Fmi::Exception(BCP, "Unknown 'fmisid' value!")
               .addParameter(WFS_EXCEPTION_CODE, WFS_OPERATION_PARSING_FAILED)
               .addParameter("Fmsid", std::to_string(id))
-              .disableStackTrace();
+              .disableLogging();
         }
         // Including location of the current fmisid if enabled.
         if (include_fmisids)
@@ -343,7 +343,7 @@ void bw::SupportsLocationParameters::get_wmos(
         throw Fmi::Exception(BCP, "The 'wmoid' value is out of the range!")
             .addParameter(WFS_EXCEPTION_CODE, WFS_OPERATION_PARSING_FAILED)
             .addParameter("WmoId", std::to_string(id))
-            .disableStackTrace();
+            .disableLogging();
       }
       else
       {
@@ -392,7 +392,7 @@ void bw::SupportsLocationParameters::get_lpnns(
         throw Fmi::Exception(BCP, "The 'lpnn' value is out of the range!")
             .addParameter(WFS_EXCEPTION_CODE, WFS_OPERATION_PARSING_FAILED)
             .addParameter("LPNN", std::to_string(id))
-            .disableStackTrace();
+            .disableLogging();
       }
       else
       {
@@ -403,7 +403,7 @@ void bw::SupportsLocationParameters::get_lpnns(
           throw Fmi::Exception(BCP, "Unknown 'lpnn' value!")
               .addParameter(WFS_EXCEPTION_CODE, WFS_OPERATION_PARSING_FAILED)
               .addParameter("LPNN", id_s)
-              .disableStackTrace();
+              .disableLogging();
         }
         // Including location of the current lpnn id if enabled.
         if (include_lpnns)
