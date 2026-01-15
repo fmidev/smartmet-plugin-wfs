@@ -89,7 +89,7 @@ void check_time_interval(const Fmi::DateTime& start,
           .addParameter(WFS_EXCEPTION_CODE, WFS_OPERATION_PARSING_FAILED)
           .addParameter("Start time", Fmi::date_time::to_simple_string(start))
           .addParameter("End time", Fmi::date_time::to_simple_string(end))
-          .disableStackTrace();
+          .disableLogging();
     }
 
     Fmi::TimeDuration interval_length = end - start;
@@ -102,7 +102,7 @@ void check_time_interval(const Fmi::DateTime& start,
           .addParameter(WFS_EXCEPTION_CODE, WFS_OPERATION_PROCESSING_FAILED)
           .addParameter("Start time", Fmi::date_time::to_simple_string(start))
           .addParameter("End time", Fmi::date_time::to_simple_string(end))
-          .disableStackTrace();
+          .disableLogging();
     }
   }
   catch (...)

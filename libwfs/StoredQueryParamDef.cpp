@@ -104,6 +104,7 @@ SmartMet::Spine::Value StoredQueryParamDef::readValue(const std::string& value) 
   try
   {
     SmartMet::Spine::Value result;
+    bool disableLogging = true;
 
     try
     {
@@ -149,6 +150,7 @@ SmartMet::Spine::Value StoredQueryParamDef::readValue(const std::string& value) 
 
         default:
         {
+          disableLogging = false;
           Fmi::Exception exception(
               BCP, "INTERNAL ERROR: incorrect type code '" + std::to_string(value_type) + "'!");
           exception.addParameter(WFS_EXCEPTION_CODE, WFS_OPERATION_PARSING_FAILED);
@@ -164,14 +166,18 @@ SmartMet::Spine::Value StoredQueryParamDef::readValue(const std::string& value) 
           BCP, "Invalid stored query parameter value in '" + value + "'!", nullptr);
       if (exception.getExceptionByParameterName(WFS_EXCEPTION_CODE) == nullptr)
         exception.addParameter(WFS_EXCEPTION_CODE, WFS_OPERATION_PARSING_FAILED);
-      throw exception.disableStackTrace();
+      if (disableLogging)
+        exception.disableLogging();
+      throw exception;
     }
     catch (...)
     {
       Fmi::Exception exception(BCP, "Operation failed!", nullptr);
       if (exception.getExceptionByParameterName(WFS_EXCEPTION_CODE) == nullptr)
         exception.addParameter(WFS_EXCEPTION_CODE, WFS_OPERATION_PARSING_FAILED);
-      throw exception.disableStackTrace();
+      if (disableLogging)
+        exception.disableLogging();
+      throw exception;
     }
   }
   catch (...)
@@ -254,6 +260,7 @@ std::vector<SmartMet::Spine::Value> StoredQueryParamDef::readValues(
           BCP, "Invalid array size '" + std::to_string(values.size()) + "' in parameter!");
       exception.addDetail(msg.str());
       exception.addParameter(WFS_EXCEPTION_CODE, WFS_OPERATION_PARSING_FAILED);
+      exception.disableLogging();
       throw exception;
     }
   }
