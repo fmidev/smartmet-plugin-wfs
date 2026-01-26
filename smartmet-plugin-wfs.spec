@@ -36,7 +36,7 @@ BuildRequires: make
 BuildRequires: %{smartmet_boost}-devel
 BuildRequires: ctpp2-devel
 BuildRequires: %{smartmet_fmt_devel}
-BuildRequires: gdal310-devel
+BuildRequires: gdal312-devel
 BuildRequires: jsoncpp-devel
 BuildRequires: libcurl-devel
 BuildRequires: xerces-c-devel
