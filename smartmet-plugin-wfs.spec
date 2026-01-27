@@ -3,7 +3,7 @@
 %define SPECNAME smartmet-plugin-%{DIRNAME}
 Summary: SmartMet WFS plugin
 Name: %{SPECNAME}
-Version: 26.1.15
+Version: 26.1.27
 Release: 1%{?dist}.fmi
 License: MIT
 Group: SmartMet/Plugins
@@ -181,6 +181,9 @@ rm -rf $RPM_BUILD_ROOT
 %{_includedir}/smartmet/plugin/wfs/request/*.h
 
 %changelog
+* Tue Jan 27 2026 Andris Pavēnis <andris.pavenis@fmi.fi> 26.1.27-1.fmi
+- Disable some more log messages
+
 * Thu Jan 15 2026 Andris Pavēnis <andris.pavenis@fmi.fi> 26.1.15-1.fmi
 - Disable logging several error messages
 
