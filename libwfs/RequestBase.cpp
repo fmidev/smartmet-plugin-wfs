@@ -301,8 +301,8 @@ void bw::RequestBase::check_output_format_attribute(const xercesc::DOMElement* r
     if (attrInfo.second) {
       const std::string fmt = CapabilitiesConf::conv_output_format_str(attrInfo.first);
       if (fmts.count(fmt) == 0) {
-	// Something wrong with format
-	report_incorrect_output_format(fmt, plugin_impl);
+	      // Something wrong with format
+	      report_incorrect_output_format(fmt, plugin_impl);
       }
     }
   }
@@ -325,7 +325,6 @@ void bw::RequestBase::report_incorrect_output_format(const std::string& value,
     dlm = ", ";
   }
   msg << " expected)";
-  std::cout << msg.str();
   Fmi::Exception exception(BCP, msg.str());
   exception.addParameter(WFS_EXCEPTION_CODE, WFS_OPERATION_PARSING_FAILED);
   exception.disableLogging();
