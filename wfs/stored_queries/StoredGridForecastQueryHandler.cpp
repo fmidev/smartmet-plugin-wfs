@@ -462,7 +462,7 @@ uint StoredGridForecastQueryHandler::processGridQuery(Query& wfsQuery,
     Fmi::TimeZonePtr localtz = itsTimezones.time_zone_from_string(loc->timezone);
     Fmi::TimeZonePtr tz = localtz;
     uint lastRow = rowCount;
-    uint generationId = 0;
+    T::GenerationId generationId = 0;
     uint geometryId = 0;
 
     if (wfsQuery.tz_name != "localtime")
