@@ -1,24 +1,8 @@
-# WFS interface for SmartMet Server
+# smartmet-plugin-wfs
 
-## Table of Contents
+Part of [SmartMet Server](https://github.com/fmidev/smartmet-server). See the [SmartMet Server documentation](https://github.com/fmidev/smartmet-server) for a full overview of the ecosystem.
 
-* [SmartMet Server](#SmartMet Server)
-* [Introduction](#introduction)
-  * [WFS Requests](#wfs-requests)
-* [Using the WFS Interface](#using-the-wfs-interface)
-  * [WFS Request Types](#wfs-request-types)
-  * [Show Available Stored Queries](#show-available-stored-queries)
-  * [Show Details for a Stored Query](#show-details-for-a-stored-query)
-  * [Making a HTTP Request](#making-a-http-request)
-* [Configuring the WFS plugin](#configuring-the-wfs-plugin)
-* [Configuring Stored Queries](#configuring-stored-queries)
-
-## SmartMet Server
-
-[SmartMet Server](https://github.com/fmidev/smartmet-server) is a data and product server for MetOcean data. It
-provides a high capacity and high availability data and product server
-for MetOcean data. The server is written in C++, since 2008 it has
-been in operational use by the Finnish Meteorological Institute FMI.
+The WFS plugin implements OGC Web Feature Service 2.0 for SmartMet Server, providing an INSPIRE-compliant interface for meteorological and geographical feature data.
 
 ## Introduction
 
