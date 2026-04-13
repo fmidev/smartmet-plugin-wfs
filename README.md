@@ -250,3 +250,4 @@ See page [Configuring the WFS Plugin](docs/Configuring-the-WFS-Plugin.md) for he
 
 For each stored query a separate configuration file is required.
 See page [Configuring Stored Queries](docs/Configuring-Stored-Queries.md) for help.
+See also [Configuring Query Handler for a Stored Query](docs/Configuring-Query-Handler-for-a-Stored-Query.md) for query handler details.
