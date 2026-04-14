@@ -105,7 +105,7 @@ SmartMet::Engine::Querydata::ParameterOptions get_qengine_parameter(
                                                                 queryParam.outputLocale,
                                                                 queryParam.tz_name,
                                                                 nearestFlag,
-                                                                nearestpoint,
+                                                                0.0,
                                                                 nearestpoint);
 
     return qengine_param;

@@ -828,8 +828,6 @@ StoredGridQueryHandler::Result StoredGridQueryHandler::extract_forecast(
       throw exception;
     }
 
-    NFmiPoint nearestpoint(kFloatMissing, kFloatMissing);
-
     if (debug_level > 0)
     {
       std::cout << "Producer : " << producer << std::endl;
@@ -936,7 +934,7 @@ StoredGridQueryHandler::Result StoredGridQueryHandler::extract_forecast(
                                                                    *query.output_locale,
                                                                    loc->timezone,
                                                                    query.find_nearest_valid_point,
-                                                                   nearestpoint,
+                                                                   0.0,
                                                                    query.lastpoint);
 
     auto longitudeData = model->values(qengine_lonparam, mask, oneTimeStep);
@@ -952,7 +950,7 @@ StoredGridQueryHandler::Result StoredGridQueryHandler::extract_forecast(
                                                                    *query.output_locale,
                                                                    loc->timezone,
                                                                    query.find_nearest_valid_point,
-                                                                   nearestpoint,
+                                                                   0.0,
                                                                    query.lastpoint);
 
     auto latitudeData = model->values(qengine_latparam, mask, oneTimeStep);
@@ -1027,7 +1025,7 @@ StoredGridQueryHandler::Result StoredGridQueryHandler::extract_forecast(
               *query.output_locale,
               loc->timezone,
               query.find_nearest_valid_point,
-              nearestpoint,
+              0.0,
               query.lastpoint);
 
           auto val = model->values(qengine_param, mask, tlist);

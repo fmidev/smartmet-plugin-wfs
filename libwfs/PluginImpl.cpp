@@ -55,7 +55,7 @@ PluginImpl::PluginImpl(SmartMet::Spine::Reactor* theReactor,
     }
 
     query_cache.reset(new QueryResponseCache(
-        itsConfig.getCacheSize(), itsConfig.getCacheTimeConstant()));
+        itsConfig.getCacheSize()));
 
     request_factory.reset(new RequestFactory(*this));
 

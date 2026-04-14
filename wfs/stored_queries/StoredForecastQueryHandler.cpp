@@ -527,16 +527,8 @@ std::shared_ptr<SmartMet::Spine::Table> bw::StoredForecastQueryHandler::extract_
         std::cout << msg.str() << std::flush;
       }
 
-      // If we accept nearest valid points, find it now for this location
-      // This is fast if the nearest point is already valid
-
-      NFmiPoint nearestpoint(kFloatMissing, kFloatMissing);
-      if (query.find_nearest_valid_point)
-      {
-        NFmiPoint latlon(loc->longitude, loc->latitude);
-        // Querydata is using kilometers and WFS meters for a distance.
-        nearestpoint = q->validPoint(latlon, query.max_np_distance / 1000.0);
-      }
+      // The nearest valid point search is now handled internally by the engine
+      // when maxDist > 0 in ParameterOptions
 
       if (debug_level > 0)
       {
@@ -647,7 +639,7 @@ std::shared_ptr<SmartMet::Spine::Table> bw::StoredForecastQueryHandler::extract_
                 *query.output_locale,
                 zone,
                 query.find_nearest_valid_point,
-                nearestpoint,
+                query.max_np_distance / 1000.0,
                 query.lastpoint);
             TS::Value val = q->valueAtHeight(qengine_param, dt, level_height);
 
@@ -691,7 +683,7 @@ std::shared_ptr<SmartMet::Spine::Table> bw::StoredForecastQueryHandler::extract_
                   *query.output_locale,
                   zone,
                   query.find_nearest_valid_point,
-                  nearestpoint,
+                  query.max_np_distance / 1000.0,
                   query.lastpoint);
               TS::Value val = q->value(qengine_param, d);
 
