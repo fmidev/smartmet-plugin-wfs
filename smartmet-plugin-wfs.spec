@@ -3,7 +3,7 @@
 %define SPECNAME smartmet-plugin-%{DIRNAME}
 Summary: SmartMet WFS plugin
 Name: %{SPECNAME}
-Version: 26.3.18
+Version: 26.4.13
 Release: 1%{?dist}.fmi
 License: MIT
 Group: SmartMet/Plugins
@@ -39,44 +39,44 @@ BuildRequires: xqilla-devel
 BuildRequires: openssl-devel
 BuildRequires: bzip2-devel
 BuildRequires: zlib-devel
-BuildRequires: smartmet-library-timeseries-devel >= 26.2.4
-BuildRequires: smartmet-library-spine-devel >= 26.3.13
-BuildRequires: smartmet-library-gis-devel >= 26.2.17
-BuildRequires: smartmet-library-trax-devel >= 26.2.4
-BuildRequires: smartmet-library-locus-devel >= 26.2.4
-BuildRequires: smartmet-library-macgyver-devel >= 26.2.4
-BuildRequires: smartmet-engine-contour-devel >= 26.2.4
-BuildRequires: smartmet-engine-geonames-devel >= 26.3.10
-BuildRequires: smartmet-engine-gis-devel >= 26.2.4
-BuildRequires: smartmet-engine-grid-devel >= 26.3.18
-BuildRequires: smartmet-engine-querydata-devel >= 26.2.4
-BuildRequires: smartmet-library-grid-content-devel >= 26.3.18
-BuildRequires: smartmet-library-grid-files-devel >= 26.3.18
+BuildRequires: smartmet-library-timeseries-devel >= 26.4.13
+BuildRequires: smartmet-library-spine-devel >= 26.4.13
+BuildRequires: smartmet-library-gis-devel >= 26.4.13
+BuildRequires: smartmet-library-trax-devel >= 26.4.13
+BuildRequires: smartmet-library-locus-devel >= 26.4.13
+BuildRequires: smartmet-library-macgyver-devel >= 26.4.13
+BuildRequires: smartmet-engine-contour-devel >= 26.4.13
+BuildRequires: smartmet-engine-geonames-devel >= 26.4.13
+BuildRequires: smartmet-engine-gis-devel >= 26.4.13
+BuildRequires: smartmet-engine-grid-devel >= 26.4.13
+BuildRequires: smartmet-engine-querydata-devel >= 26.4.13
+BuildRequires: smartmet-library-grid-content-devel >= 26.4.13
+BuildRequires: smartmet-library-grid-files-devel >= 26.4.13
 %if %{with observation}
-BuildRequires: smartmet-engine-observation-devel >= 26.2.4
+BuildRequires: smartmet-engine-observation-devel >= 26.4.13
 %endif
 Requires: ctpp2
 Requires: %{smartmet_fmt}
 Requires: libcurl
 Requires: jsoncpp
 Requires: zlib
-Requires: smartmet-library-locus >= 26.2.4
-Requires: smartmet-library-macgyver >= 26.2.4
-Requires: smartmet-library-spine >= 26.3.13
-Requires: smartmet-library-timeseries >= 26.2.4
-Requires: smartmet-library-gis >= 26.2.17
-Requires: smartmet-library-trax >= 26.2.4
-Requires: smartmet-engine-contour >= 26.2.4
-Requires: smartmet-engine-geonames >= 26.3.10
-Requires: smartmet-engine-gis >= 26.2.4
-Requires: smartmet-engine-grid >= 26.3.18
-Requires: smartmet-library-grid-content >= 26.3.18
-Requires: smartmet-library-grid-files >= 26.3.18
+Requires: smartmet-library-locus >= 26.4.13
+Requires: smartmet-library-macgyver >= 26.4.13
+Requires: smartmet-library-spine >= 26.4.13
+Requires: smartmet-library-timeseries >= 26.4.13
+Requires: smartmet-library-gis >= 26.4.13
+Requires: smartmet-library-trax >= 26.4.13
+Requires: smartmet-engine-contour >= 26.4.13
+Requires: smartmet-engine-geonames >= 26.4.13
+Requires: smartmet-engine-gis >= 26.4.13
+Requires: smartmet-engine-grid >= 26.4.13
+Requires: smartmet-library-grid-content >= 26.4.13
+Requires: smartmet-library-grid-files >= 26.4.13
 %if %{with observation}
-Requires: smartmet-engine-observation >= 26.2.4
+Requires: smartmet-engine-observation >= 26.4.13
 %endif
-Requires: smartmet-engine-querydata >= 26.2.4
-Requires: smartmet-server >= 26.3.9
+Requires: smartmet-engine-querydata >= 26.4.13
+Requires: smartmet-server >= 26.4.13
 Requires: xerces-c
 Requires: xqilla
 Requires: zlib
@@ -115,19 +115,19 @@ Obsoletes: smartmet-brainstorm-wfs-debuginfo < 16.11.1
 
 #TestRequires: ctpp2
 #TestRequires: smartmet-test-db >= 26.2.17
-#TestRequires: smartmet-test-data >= 25.8.13
+#TestRequires: smartmet-test-data >= 26.4.1
 #TestRequires: smartmet-utils-devel >= 26.2.4
-#TestRequires: smartmet-library-macgyver >= 26.2.4
-#TestRequires: smartmet-library-gis >= 26.2.17
+#TestRequires: smartmet-library-macgyver >= 26.4.13
+#TestRequires: smartmet-library-gis >= 26.4.13
 #TestRequires: smartmet-library-newbase >= 26.2.4
-#TestRequires: smartmet-library-spine-plugin-test >= 26.3.13
-#TestRequires: smartmet-engine-geonames >= 26.3.10
-#TestRequires: smartmet-engine-gis >= 26.2.4
-#TestRequires: smartmet-engine-querydata >= 26.2.4
+#TestRequires: smartmet-library-spine-plugin-test >= 26.4.13
+#TestRequires: smartmet-engine-geonames >= 26.4.13
+#TestRequires: smartmet-engine-gis >= 26.4.13
+#TestRequires: smartmet-engine-querydata >= 26.4.13
 %if %{with observation}
-#TestRequires: smartmet-engine-observation >= 26.2.4
+#TestRequires: smartmet-engine-observation >= 26.4.13
 %endif
-#TestRequires: smartmet-engine-grid >= 26.3.18
+#TestRequires: smartmet-engine-grid >= 26.4.13
 #TestRequires: redis
 #TestRequires: smartmet-engine-grid-test
 # Required by top level Makefile
@@ -139,10 +139,10 @@ SmartMet WFS plugin
 
 %package -n %{SPECNAME}-devel
 Summary: SmartMet WFS plugin development files
-Requires: smartmet-library-spine-devel >= 26.3.13
-Requires: smartmet-library-gis-devel >= 26.2.17
-Requires: smartmet-library-locus-devel >= 26.2.4
-Requires: smartmet-library-macgyver-devel >= 26.2.4
+Requires: smartmet-library-spine-devel >= 26.4.13
+Requires: smartmet-library-gis-devel >= 26.4.13
+Requires: smartmet-library-locus-devel >= 26.4.13
+Requires: smartmet-library-macgyver-devel >= 26.4.13
 Requires: %{SPECNAME} = %{version}-%{release}
 %description -n %{SPECNAME}-devel
 SmartMet WFS plugin development files (for building testsuite without rebuilding plugin)
@@ -176,6 +176,9 @@ rm -rf $RPM_BUILD_ROOT
 %{_includedir}/smartmet/plugin/wfs/request/*.h
 
 %changelog
+* Mon Apr 13 2026 Mika Heiskanen <mika.heiskanen@fmi.fi> - 26.4.13-1.fmi
+- Repackaged due to API changes
+
 * Wed Mar 18 2026 Mika Heiskanen <mika.heiskanen@fmi.fi> - 26.3.18-1.fmi
 - Harmonizing types
 
