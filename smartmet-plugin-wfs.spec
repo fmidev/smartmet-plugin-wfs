@@ -3,7 +3,7 @@
 %define SPECNAME smartmet-plugin-%{DIRNAME}
 Summary: SmartMet WFS plugin
 Name: %{SPECNAME}
-Version: 26.4.13
+Version: 26.4.17
 Release: 1%{?dist}.fmi
 License: MIT
 Group: SmartMet/Plugins
@@ -48,10 +48,10 @@ BuildRequires: smartmet-library-macgyver-devel >= 26.4.13
 BuildRequires: smartmet-engine-contour-devel >= 26.4.13
 BuildRequires: smartmet-engine-geonames-devel >= 26.4.13
 BuildRequires: smartmet-engine-gis-devel >= 26.4.13
-BuildRequires: smartmet-engine-grid-devel >= 26.4.13
+BuildRequires: smartmet-engine-grid-devel >= 26.4.17
 BuildRequires: smartmet-engine-querydata-devel >= 26.4.13
-BuildRequires: smartmet-library-grid-content-devel >= 26.4.13
-BuildRequires: smartmet-library-grid-files-devel >= 26.4.13
+BuildRequires: smartmet-library-grid-content-devel >= 26.4.17
+BuildRequires: smartmet-library-grid-files-devel >= 26.4.17
 %if %{with observation}
 BuildRequires: smartmet-engine-observation-devel >= 26.4.13
 %endif
@@ -69,9 +69,9 @@ Requires: smartmet-library-trax >= 26.4.13
 Requires: smartmet-engine-contour >= 26.4.13
 Requires: smartmet-engine-geonames >= 26.4.13
 Requires: smartmet-engine-gis >= 26.4.13
-Requires: smartmet-engine-grid >= 26.4.13
-Requires: smartmet-library-grid-content >= 26.4.13
-Requires: smartmet-library-grid-files >= 26.4.13
+Requires: smartmet-engine-grid >= 26.4.17
+Requires: smartmet-library-grid-content >= 26.4.17
+Requires: smartmet-library-grid-files >= 26.4.17
 %if %{with observation}
 Requires: smartmet-engine-observation >= 26.4.13
 %endif
@@ -127,7 +127,7 @@ Obsoletes: smartmet-brainstorm-wfs-debuginfo < 16.11.1
 %if %{with observation}
 #TestRequires: smartmet-engine-observation >= 26.4.13
 %endif
-#TestRequires: smartmet-engine-grid >= 26.4.13
+#TestRequires: smartmet-engine-grid >= 26.4.17
 #TestRequires: redis
 #TestRequires: smartmet-engine-grid-test
 # Required by top level Makefile
@@ -176,6 +176,9 @@ rm -rf $RPM_BUILD_ROOT
 %{_includedir}/smartmet/plugin/wfs/request/*.h
 
 %changelog
+* Fri Apr 17 2026 Mika Heiskanen <mika.heiskanen@fmi.fi> - 26.4.17-1.fmi
+- Repackaged due to API changes
+
 * Mon Apr 13 2026 Mika Heiskanen <mika.heiskanen@fmi.fi> - 26.4.13-1.fmi
 - Repackaged due to API changes
 
