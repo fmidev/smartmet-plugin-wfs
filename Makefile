@@ -23,11 +23,13 @@ INCLUDES += \
 	-isystem $(includedir)/jsoncpp
 
 LIBS += $(PREFIX_LDFLAGS) \
+	-lsmartmet-grid-content \
 	-lsmartmet-grid-files \
 	-lsmartmet-locus \
 	-lsmartmet-timeseries \
 	-lsmartmet-spine \
 	-lsmartmet-newbase \
+	-lsmartmet-gis \
 	-lsmartmet-macgyver \
 	-lboost_serialization \
 	-lboost_thread \
