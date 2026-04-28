@@ -3,7 +3,7 @@
 %define SPECNAME smartmet-plugin-%{DIRNAME}
 Summary: SmartMet WFS plugin
 Name: %{SPECNAME}
-Version: 26.4.24
+Version: 26.4.28
 Release: 1%{?dist}.fmi
 License: MIT
 Group: SmartMet/Plugins
@@ -40,7 +40,7 @@ BuildRequires: openssl-devel
 BuildRequires: bzip2-devel
 BuildRequires: zlib-devel
 BuildRequires: smartmet-library-timeseries-devel >= 26.4.13
-BuildRequires: smartmet-library-spine-devel >= 26.4.14
+BuildRequires: smartmet-library-spine-devel >= 26.4.27
 BuildRequires: smartmet-library-gis-devel >= 26.4.13
 BuildRequires: smartmet-library-trax-devel >= 26.4.22
 BuildRequires: smartmet-library-locus-devel >= 26.4.13
@@ -62,7 +62,7 @@ Requires: jsoncpp
 Requires: zlib
 Requires: smartmet-library-locus >= 26.4.13
 Requires: smartmet-library-macgyver >= 26.4.13
-Requires: smartmet-library-spine >= 26.4.14
+Requires: smartmet-library-spine >= 26.4.27
 Requires: smartmet-library-timeseries >= 26.4.13
 Requires: smartmet-library-gis >= 26.4.13
 Requires: smartmet-library-trax >= 26.4.22
@@ -116,11 +116,11 @@ Obsoletes: smartmet-brainstorm-wfs-debuginfo < 16.11.1
 #TestRequires: ctpp2
 #TestRequires: smartmet-test-db >= 26.2.17
 #TestRequires: smartmet-test-data >= 26.4.1
-#TestRequires: smartmet-utils-devel >= 26.2.4
+#TestRequires: smartmet-utils-devel >= 26.4.27
 #TestRequires: smartmet-library-macgyver >= 26.4.13
 #TestRequires: smartmet-library-gis >= 26.4.13
 #TestRequires: smartmet-library-newbase >= 26.2.4
-#TestRequires: smartmet-library-spine-plugin-test >= 26.4.14
+#TestRequires: smartmet-library-spine-plugin-test >= 26.4.27
 #TestRequires: smartmet-engine-geonames >= 26.4.13
 #TestRequires: smartmet-engine-gis >= 26.4.13
 #TestRequires: smartmet-engine-querydata >= 26.4.13
@@ -139,7 +139,7 @@ SmartMet WFS plugin
 
 %package -n %{SPECNAME}-devel
 Summary: SmartMet WFS plugin development files
-Requires: smartmet-library-spine-devel >= 26.4.14
+Requires: smartmet-library-spine-devel >= 26.4.27
 Requires: smartmet-library-gis-devel >= 26.4.13
 Requires: smartmet-library-locus-devel >= 26.4.13
 Requires: smartmet-library-macgyver-devel >= 26.4.13
@@ -176,6 +176,9 @@ rm -rf $RPM_BUILD_ROOT
 %{_includedir}/smartmet/plugin/wfs/request/*.h
 
 %changelog
+* Tue Apr 28 2026 Mika Heiskanen <mika.heiskanen@fmi.fi> - 26.4.28-1.fmi
+- Repackaged due to API changes
+
 * Fri Apr 24 2026 Mika Heiskanen <mika.heiskanen@fmi.fi> - 26.4.24-1.fmi
 - Repackaged due to API changes
 
