@@ -392,7 +392,12 @@ void bw::GeoServerDataIndex::process_sql_result(pqxx::result& result, const std:
 
     for (auto row = result.begin(); row != result.end(); ++row)
     {
-      const auto s_epoch = row[0].as<std::string>();
+      // libpqxx 8 changed the result iterator to a random-access iterator whose
+      // operator[] indexes rows by offset; in 7.x it inherited from pqxx::row so
+      // operator[] indexed columns. Dereference explicitly to access columns in
+      // a way that works with both 7.7-7.10 and 8.x.
+      const auto& current = *row;
+      const auto s_epoch = current[0].as<std::string>();
       Fmi::DateTime epoch = Fmi::DateTime::from_string(s_epoch);
 
       Item& item = data[epoch];
@@ -402,11 +407,11 @@ void bw::GeoServerDataIndex::process_sql_result(pqxx::result& result, const std:
       try
       {
         LayerRec rec;
-        rec.name = row[1].as<std::string>();
+        rec.name = current[1].as<std::string>();
         rec.layer = layer;
 
-        const auto s_orig_geom = row[2].as<std::string>();
-        const auto s_dest_geom = row[3].as<std::string>();
+        const auto s_orig_geom = current[2].as<std::string>();
+        const auto s_dest_geom = current[3].as<std::string>();
 
         geom = OGRGeometryFactory::createFromGML(s_orig_geom.c_str());
         check_geometry(geom, __PRETTY_FUNCTION__, s_orig_geom);
@@ -442,7 +447,7 @@ void bw::GeoServerDataIndex::process_sql_result(pqxx::result& result, const std:
 
         for (unsigned i = col_begin; i < num_columns; i++)
         {
-          const auto& value = row[i];
+          const auto& value = current[i];
           if (not value.is_null())
           {
             SmartMet::Spine::Value tmp(value.as<std::string>());
