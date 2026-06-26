@@ -8,6 +8,7 @@
 #include <spine/Convenience.h>
 #include <macgyver/Base64.h>
 #include <macgyver/Exception.h>
+#include <macgyver/ThreadName.h>
 #include <queue>
 #include <sstream>
 #include <stdexcept>
@@ -81,7 +82,12 @@ void bw::StoredQueryMap::add_config_dir(const std::filesystem::path& config_dir,
 	   boost::bind(&bw::StoredQueryMap::on_config_error, this,  ph::_1,  ph::_2,  ph::_3, ph::_4),
 	   5, Fmi::DirectoryMonitor::CREATE | Fmi::DirectoryMonitor::DELETE | Fmi::DirectoryMonitor::MODIFY);
   if (config_dirs.empty()) {
-    std::thread tmp(std::bind(&bw::StoredQueryMap::directory_monitor_thread_proc, this));
+    std::thread tmp(
+        [this]()
+        {
+          Fmi::set_thread_name("upd-wfs-sq");
+          directory_monitor_thread_proc();
+        });
     directory_monitor_thread.swap(tmp);
   }
 
