@@ -330,6 +330,36 @@ void dump_meta_query_options(const qe::MetaQueryOptions& opt)
 }
 }  // namespace
 
+std::string StoredQEDownloadQueryHandler::get_cache_key_qualifier(
+    const bw::RequestParameterMap& params) const
+{
+  try
+  {
+    // The response depends on the latest available model origin time(s), which
+    // are not part of the request parameters unless the client explicitly asked
+    // for a specific origin time. Fold the origin times of the models that would
+    // be selected into the cache key, so that a cached response is invalidated
+    // automatically as soon as a new model run becomes available.
+    qe::MetaQueryOptions opt;
+    handle_opt_param(params, P_PRODUCER, opt, &qe::MetaQueryOptions::setProducer);
+    handle_opt_param(params, P_ORIGIN_TIME, opt, &qe::MetaQueryOptions::setOriginTime);
+
+    std::set<std::string> origin_times;
+    for (const auto& meta_info : q_engine->getEngineMetadata(opt))
+    {
+      if (not producers.empty() and producers.count(meta_info.producer) == 0)
+        continue;
+      origin_times.insert(meta_info.producer + ':' + Fmi::to_iso_string(meta_info.originTime));
+    }
+
+    return ba::join(origin_times, ",");
+  }
+  catch (...)
+  {
+    throw Fmi::Exception::Trace(BCP, "Operation failed!");
+  }
+}
+
 void StoredQEDownloadQueryHandler::update_parameters(
     const bw::RequestParameterMap& params,
     int seq_id,
