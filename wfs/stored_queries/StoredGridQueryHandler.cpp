@@ -148,6 +148,23 @@ std::string bw::StoredGridQueryHandler::get_handler_description() const
     return "Forecast data: download in grid format (grib1, grib2, NetCDF)";
 }
 
+std::string bw::StoredGridQueryHandler::get_cache_key_qualifier(
+    const RequestParameterMap& params) const
+{
+  try
+  {
+    // An explicitly requested origin time is already part of the cache key.
+    if (params.count(P_ORIGIN_TIME) > 0 || params.count(P_PRODUCER) == 0)
+      return {};
+
+    return get_qengine_origintime_qualifier(params.get_single<std::string>(P_PRODUCER));
+  }
+  catch (...)
+  {
+    throw Fmi::Exception::Trace(BCP, "Operation failed!");
+  }
+}
+
 StoredGridQueryHandler::Query::Query(std::shared_ptr<const StoredQueryConfig> config)
     : missing_text("nan"),
       language("lan"),

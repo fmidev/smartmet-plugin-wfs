@@ -46,6 +46,8 @@ class StoredGridForecastQueryHandler: public StoredQueryHandlerBase,
 
   std::string get_handler_description() const override;
 
+  std::string get_cache_key_qualifier(const RequestParameterMap& params) const override;
+
   protected:
 
 

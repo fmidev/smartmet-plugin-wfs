@@ -4,7 +4,7 @@
 Summary: SmartMet WFS plugin
 Name: %{SPECNAME}
 Version: 26.7.8
-Release: 1%{?dist}.fmi
+Release: 2%{?dist}.fmi
 License: MIT
 Group: SmartMet/Plugins
 URL: https://github.com/fmidev/smartmet-plugin-wfs
@@ -176,6 +176,9 @@ rm -rf $RPM_BUILD_ROOT
 %{_includedir}/smartmet/plugin/wfs/request/*.h
 
 %changelog
+* Wed Jul  8 2026 Mika Heiskanen <mika.heiskanen@fmi.fi> - 26.7.8-2.fmi
+- Extend model origin time cache-key invalidation to the grid-engine handlers (grid forecast, coverage, isoline, weather warning coverage) and the grid querydata download handler
+
 * Wed Jul  8 2026 Mika Heiskanen <mika.heiskanen@fmi.fi> - 26.7.8-1.fmi
 - Include the latest model origin time in the response cache key so that cached responses are invalidated when a new model run becomes available
 
