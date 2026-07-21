@@ -4,7 +4,7 @@
 Summary: SmartMet WFS plugin
 Name: %{SPECNAME}
 Version: 26.7.21
-Release: 1%{?dist}.fmi
+Release: 2%{?dist}.fmi
 License: MIT
 Group: SmartMet/Plugins
 URL: https://github.com/fmidev/smartmet-plugin-wfs
@@ -53,7 +53,7 @@ BuildRequires: smartmet-engine-querydata-devel >= 26.6.24
 BuildRequires: smartmet-library-grid-content-devel >= 26.6.24
 BuildRequires: smartmet-library-grid-files-devel >= 26.6.24
 %if %{with observation}
-BuildRequires: smartmet-engine-observation-devel >= 26.6.24
+BuildRequires: smartmet-engine-observation-devel >= 26.7.13
 %endif
 Requires: ctpp2
 Requires: %{smartmet_fmt}
@@ -73,7 +73,7 @@ Requires: smartmet-engine-grid >= 26.6.24
 Requires: smartmet-library-grid-content >= 26.6.24
 Requires: smartmet-library-grid-files >= 26.6.24
 %if %{with observation}
-Requires: smartmet-engine-observation >= 26.6.24
+Requires: smartmet-engine-observation >= 26.7.13
 %endif
 Requires: smartmet-engine-querydata >= 26.6.24
 Requires: smartmet-server >= 26.6.24
@@ -125,7 +125,7 @@ Obsoletes: smartmet-brainstorm-wfs-debuginfo < 16.11.1
 #TestRequires: smartmet-engine-gis >= 26.6.24
 #TestRequires: smartmet-engine-querydata >= 26.6.24
 %if %{with observation}
-#TestRequires: smartmet-engine-observation >= 26.6.24
+#TestRequires: smartmet-engine-observation >= 26.7.13
 %endif
 #TestRequires: smartmet-engine-grid >= 26.6.24
 #TestRequires: redis
@@ -176,7 +176,7 @@ rm -rf $RPM_BUILD_ROOT
 %{_includedir}/smartmet/plugin/wfs/request/*.h
 
 %changelog
-* Tue Jul 21 2026 Andris Pavēnis <andris.pavenis@fmi.fi> 26.7.21-1.fmi
+* Tue Jul 21 2026 Andris Pavēnis <andris.pavenis@fmi.fi> 26.7.21-2.fmi
 - Repackage due to ABI changes
 
 * Wed Jul  8 2026 Mika Heiskanen <mika.heiskanen@fmi.fi> - 26.7.8-2.fmi
