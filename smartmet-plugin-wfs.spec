@@ -3,7 +3,7 @@
 %define SPECNAME smartmet-plugin-%{DIRNAME}
 Summary: SmartMet WFS plugin
 Name: %{SPECNAME}
-Version: 26.8.26
+Version: 26.8.29
 Release: 1%{?dist}.fmi
 License: MIT
 Group: SmartMet/Plugins
@@ -176,6 +176,9 @@ rm -rf $RPM_BUILD_ROOT
 %{_includedir}/smartmet/plugin/wfs/request/*.h
 
 %changelog
+* Fri Aug 29 2026 Mika Heiskanen <mika.heiskanen@fmi.fi> - 26.8.29-1.fmi
+- Harden XML POST parsing against XXE (arbitrary local file read / SSRF) and entity-expansion (billion laughs) attacks: disallow DOCTYPE, cap entity expansion, and restrict the schema entity resolver to the pre-loaded schema cache
+
 * Wed Aug 26 2026 Mika Heiskanen <mika.heiskanen@fmi.fi> - 26.8.26-1.fmi
 - QEngine ABI changed
 
