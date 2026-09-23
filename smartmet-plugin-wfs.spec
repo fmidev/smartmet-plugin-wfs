@@ -4,7 +4,7 @@
 Summary: SmartMet WFS plugin
 Name: %{SPECNAME}
 Version: 26.9.13
-Release: 2%{?dist}.fmi
+Release: 3%{?dist}.fmi
 License: MIT
 Group: SmartMet/Plugins
 URL: https://github.com/fmidev/smartmet-plugin-wfs
@@ -49,7 +49,7 @@ BuildRequires: smartmet-engine-contour-devel >= 26.9.23
 BuildRequires: smartmet-engine-geonames-devel >= 26.9.23
 BuildRequires: smartmet-engine-gis-devel >= 26.9.23
 BuildRequires: smartmet-engine-grid-devel >= 26.9.23
-BuildRequires: smartmet-engine-querydata-devel >= 26.9.16
+BuildRequires: smartmet-engine-querydata-devel >= 26.9.23
 BuildRequires: smartmet-library-grid-content-devel >= 26.9.23
 BuildRequires: smartmet-library-grid-files-devel >= 26.9.23
 %if %{with observation}
@@ -75,7 +75,7 @@ Requires: smartmet-library-grid-files >= 26.9.23
 %if %{with observation}
 Requires: smartmet-engine-observation >= 26.9.23
 %endif
-Requires: smartmet-engine-querydata >= 26.9.16
+Requires: smartmet-engine-querydata >= 26.9.23
 Requires: smartmet-server >= 26.9.2
 Requires: xerces-c
 Requires: xqilla
@@ -123,7 +123,7 @@ Obsoletes: smartmet-brainstorm-wfs-debuginfo < 16.11.1
 #TestRequires: smartmet-library-spine-plugin-test >= 26.9.23
 #TestRequires: smartmet-engine-geonames >= 26.9.23
 #TestRequires: smartmet-engine-gis >= 26.9.23
-#TestRequires: smartmet-engine-querydata >= 26.9.16
+#TestRequires: smartmet-engine-querydata >= 26.9.23
 %if %{with observation}
 #TestRequires: smartmet-engine-observation >= 26.9.23
 %endif
@@ -176,10 +176,14 @@ rm -rf $RPM_BUILD_ROOT
 %{_includedir}/smartmet/plugin/wfs/request/*.h
 
 %changelog
+* Wed Sep 23 2026 Mika Heiskanen <mika.heiskanen@fmi.fi> - 26.9.13-3.fmi
+- Use std instead of boost for enable_shared_from_this
+
 * Wed Sep 23 2026 Mika Heiskanen <mika.heiskanen@fmi.fi> - 26.9.13-2.fmi
 - Repackaged due to base library ABI changes
+
 * Wed Sep 16 2026 Mika Heiskanen <mika.heiskanen@fmi.fi> - 26.9.16-2.fmi
-- Repackaged due to QEngine ABI changes (smartmet-engine-querydata >= 26.9.16)
+- Repackaged due to QEngine ABI changes (smartmet-engine-querydata >= 26.9.23)
 
 * Wed Sep 16 2026 Mika Heiskanen <mika.heiskanen@fmi.fi> - 26.9.16-1.fmi
 - Repackaged due to Fmi::Cache::Cache locking changes
