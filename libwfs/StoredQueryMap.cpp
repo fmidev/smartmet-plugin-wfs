@@ -91,7 +91,7 @@ void bw::StoredQueryMap::add_config_dir(const std::filesystem::path& config_dir,
     directory_monitor_thread.swap(tmp);
   }
 
-  boost::unique_lock<boost::shared_mutex> lock(mutex);
+  std::unique_lock<std::shared_mutex> lock(mutex);
   config_dirs[ci.watcher] = ci;
 }
 
@@ -149,7 +149,7 @@ void bw::StoredQueryMap::add_handler(std::shared_ptr<StoredQueryHandlerBase> han
 {
   try
   {
-    boost::unique_lock<boost::shared_mutex> lock(mutex);
+    std::unique_lock<std::shared_mutex> lock(mutex);
     const std::string name = handler->get_query_name();
     std::string lname = Fmi::ascii_tolower_copy(handler->get_query_name());
 
@@ -174,7 +174,7 @@ std::shared_ptr<bw::StoredQueryHandlerBase> bw::StoredQueryMap::get_handler_by_n
   try
   {
     const std::string& lname = Fmi::ascii_tolower_copy(name);
-    boost::shared_lock<boost::shared_mutex> lock(mutex);
+    std::shared_lock<std::shared_mutex> lock(mutex);
     auto loc = handler_map.find(lname);
     if (loc == handler_map.end())
     {
@@ -198,7 +198,7 @@ std::vector<std::string> bw::StoredQueryMap::get_return_type_names() const
   try
   {
     std::set<std::string> return_type_set;
-    boost::shared_lock<boost::shared_mutex> lock(mutex);
+    std::shared_lock<std::shared_mutex> lock(mutex);
     for (auto& handler_map_item : handler_map)
     {
       // NOTE: Cannot call StoredQueryHandlerBase::get_return_type_names() here to
@@ -286,7 +286,7 @@ void bw::StoredQueryMap::on_config_change(Fmi::DirectoryMonitor::Watcher watcher
 
     int have_errors = 0;
     const bool initial_update = [this, &watcher]() {
-        boost::shared_lock<boost::shared_mutex> lock(mutex);
+        std::shared_lock<std::shared_mutex> lock(mutex);
         return config_dirs.at(watcher).num_updates == 0; } ();
 
     const auto template_dir = config_dirs.at(watcher).template_dir;
@@ -388,7 +388,7 @@ std::vector<std::string> bw::StoredQueryMap::get_handler_names() const
 {
   try {
     std::vector<std::string> result;
-    boost::shared_lock<boost::shared_mutex> lock(mutex);
+    std::shared_lock<std::shared_mutex> lock(mutex);
     for (const auto& item : handler_map) {
       result.push_back(item.first);
     }
@@ -416,7 +416,7 @@ bw::StoredQueryMap::get_handler_by_file_name(const std::string& config_file_name
 {
   try {
     std::shared_ptr<const StoredQueryHandlerBase> result;
-    boost::shared_lock<boost::shared_mutex> lock(mutex);
+    std::shared_lock<std::shared_mutex> lock(mutex);
     for (auto it2 = handler_map.begin(); not result and it2 != handler_map.end(); ++it2) {
       if (it2->second->get_config()->get_file_name() == config_file_name) {
 	result = it2->second;
@@ -455,7 +455,7 @@ void bw::StoredQueryMap::handle_query_remove(const std::string& config_file_name
       msg << SmartMet::Spine::log_time_str() << ": [WFS] [INFO] Removing storedquery_id='"
 	  << config->get_query_id() << "' (File '" << config_file_name << "' deleted)\n";
       std::cout << msg.str() << std::flush;
-      boost::unique_lock<boost::shared_mutex> lock(mutex);
+      std::unique_lock<std::shared_mutex> lock(mutex);
       handler_map.erase(Fmi::ascii_tolower_copy(config->get_query_id()));
     }
   } catch (...) {
@@ -568,7 +568,7 @@ void bw::StoredQueryMap::handle_query_modify(const std::string& config_file_name
 	    msg.str("");
 	    msg << SmartMet::Spine::log_time_str() << ": [WFS] [INFO] Removing stored query: id='" << id2 << "'\n";
 	    std::cout << msg.str() << std::flush;
-	    boost::unique_lock<boost::shared_mutex> lock(mutex);
+	    std::unique_lock<std::shared_mutex> lock(mutex);
 	    handler_map.erase(id2);
 	  }
 	}
@@ -614,7 +614,7 @@ void bw::StoredQueryMap::handle_query_ignore(const StoredQueryConfig& sqh_config
 	  std::cout << msg.str() << std::flush;
 	}
 
-	boost::unique_lock<boost::shared_mutex> lock(mutex);
+	std::unique_lock<std::shared_mutex> lock(mutex);
 	handler_map.erase(Fmi::ascii_tolower_copy(id));
       } else {
 	// ID changed since last update: request reload
@@ -652,7 +652,7 @@ std::shared_ptr<bw::StoredQueryHandlerBase> bw::StoredQueryMap::get_handler_by_n
   {
     std::shared_ptr<bw::StoredQueryHandlerBase> handler;
     const std::string& lname = Fmi::ascii_tolower_copy(name);
-    boost::shared_lock<boost::shared_mutex> lock(mutex);
+    std::shared_lock<std::shared_mutex> lock(mutex);
     auto loc = handler_map.find(lname);
     if (loc != handler_map.end()) {
      handler = loc->second;
@@ -695,7 +695,7 @@ bw::StoredQueryMap::get_handler_factory_summary() const
 {
     const std::string url_base = plugin_impl.get_config().defaultUrl();
     std::shared_ptr<HandlerFactorySummary> result = std::make_shared<HandlerFactorySummary>(url_base);
-    boost::shared_lock<boost::shared_mutex> lock(mutex);
+    std::shared_lock<std::shared_mutex> lock(mutex);
 
     for (const auto& map_item : handler_map) {
         std::shared_ptr<StoredQueryHandlerBase> handler_ptr = map_item.second;
