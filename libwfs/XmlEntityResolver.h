@@ -43,6 +43,23 @@ namespace SmartMet {
 
 	  bool merge_downloaded_schemas();
 
+	  // SECURITY: schemas may be downloaded only while a DownloadScope is alive in
+	  // the calling thread. The plugin opens one when validating its own XML
+	  // output. Client requests are parsed without one, so attacker-chosen
+	  // xsi:schemaLocation URLs are resolved from the preloaded cache only and
+	  // never fetched (blind SSRF, unbounded download_map growth).
+	  class DownloadScope
+	  {
+	  public:
+	    DownloadScope();
+	    ~DownloadScope();
+	    DownloadScope(const DownloadScope&) = delete;
+	    DownloadScope& operator=(const DownloadScope&) = delete;
+
+	  private:
+	    bool previous;
+	  };
+
           xercesc::InputSource *resolveEntity(xercesc::XMLResourceIdentifier *resource_identifier) override;
 
 
