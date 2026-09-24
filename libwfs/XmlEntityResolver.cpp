@@ -64,6 +64,22 @@ xercesc::InputSource *
 EntityResolver::resolveEntity(xercesc::XMLResourceIdentifier *resource_identifier)
 try
   {
+    // SECURITY (XXE): this resolver serves XML *schema* references only, strictly
+    // from the pre-loaded schema cache. General external entities and external
+    // DTD subsets (the classic XXE vector, e.g. <!ENTITY xxe SYSTEM "/etc/passwd">)
+    // must never be resolved. Reject any non-schema resource identifier.
+    switch (resource_identifier->getResourceIdentifierType())
+      {
+      case xercesc::XMLResourceIdentifier::SchemaGrammar:
+      case xercesc::XMLResourceIdentifier::SchemaImport:
+      case xercesc::XMLResourceIdentifier::SchemaInclude:
+      case xercesc::XMLResourceIdentifier::SchemaRedefine:
+	break;
+      default:
+	// ExternalEntity, external DTD, unknown, ... -> never resolve.
+	return nullptr;
+      }
+
     const XMLCh *x_public_id = resource_identifier->getPublicId();
     const XMLCh *x_system_id = resource_identifier->getSystemId();
     const XMLCh *x_base_uri = resource_identifier->getBaseURI();
@@ -71,6 +87,8 @@ try
     const std::string public_id = to_opt_string(x_public_id).first;
     const std::string system_id = to_opt_string(x_system_id).first;
     const std::string base_uri = to_opt_string(x_base_uri).first;
+
+    (void)public_id;
 
     std::string remote_uri;
 
@@ -82,9 +100,11 @@ try
       {
 	return nullptr;
       }
-    else if ((*system_id.begin() == '/') or (*base_uri.begin() == '/'))
+    else if ((*system_id.begin() == '/') or (not base_uri.empty() and *base_uri.begin() == '/'))
       {
-	return new xercesc::LocalFileInputSource(x_base_uri, x_system_id);
+	// SECURITY (XXE): never open an arbitrary absolute local path. Legitimate
+	// schemas are addressed by their (http) URI and served from the cache.
+	return nullptr;
       }
     else
       {
