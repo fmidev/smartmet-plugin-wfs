@@ -12,3 +12,4 @@ compile_commands.json
 .gdb_history
 /tools/decode_feature_id
 /smartmet-plugin-wfs.tar.gz
+.cache
