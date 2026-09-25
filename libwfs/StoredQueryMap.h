@@ -51,7 +51,7 @@ class StoredQueryMap final : private FileContentChecker
 
   std::vector<std::string> get_handler_names() const;
 
-  std::shared_ptr<StoredQueryHandlerBase> get_handler_by_name(const std::string name) const;
+  std::shared_ptr<StoredQueryHandlerBase> get_handler_by_name(const std::string& name) const;
 
   virtual std::vector<std::string> get_return_type_names() const;
 
@@ -62,9 +62,9 @@ class StoredQueryMap final : private FileContentChecker
   bool use_case_sensitive_params() const;
 
  private:
-  void add_handler(std::shared_ptr<StoredQueryHandlerBase> handler);
+  void add_handler(const std::shared_ptr<StoredQueryHandlerBase>& handler);
 
-  void add_handler(std::shared_ptr<StoredQueryConfig> sqh_config,
+  void add_handler(const std::shared_ptr<StoredQueryConfig>& sqh_config,
                    const std::filesystem::path& template_dir);
 
   void on_config_change(Fmi::DirectoryMonitor::Watcher watcher,
@@ -101,11 +101,12 @@ class StoredQueryMap final : private FileContentChecker
 
   void request_reload(const std::string& reason);
 
-  void enqueue_query_add(std::shared_ptr<StoredQueryConfig> sqh_config,
+  void enqueue_query_add(const std::shared_ptr<StoredQueryConfig>& sqh_config,
                          const std::filesystem::path& template_dir,
                          bool initial_update);
 
-  std::shared_ptr<StoredQueryHandlerBase> get_handler_by_name_nothrow(const std::string name) const;
+  std::shared_ptr<StoredQueryHandlerBase> get_handler_by_name_nothrow(
+      const std::string& name) const;
 
   void directory_monitor_thread_proc();
 

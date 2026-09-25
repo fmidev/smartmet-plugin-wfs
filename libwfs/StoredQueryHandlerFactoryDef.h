@@ -32,7 +32,7 @@ class StoredQueryHandlerFactoryDef
   static std::shared_ptr<StoredQueryHandlerBase> construct(
       const std::string& symbol_name,
       SmartMet::Spine::Reactor* reactor,
-      StoredQueryConfig::Ptr config,
+      const StoredQueryConfig::Ptr& config,
       PluginImpl& plugin_impl,
       std::optional<std::string> template_file_name);
 

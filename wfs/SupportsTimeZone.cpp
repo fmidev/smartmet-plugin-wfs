@@ -14,10 +14,11 @@ namespace
 const char* P_TZ = "timeZone";
 }
 
-bw::SupportsTimeZone::SupportsTimeZone(SmartMet::Spine::Reactor* reactor, StoredQueryConfig::Ptr config)
-    : bw::StoredQueryParamRegistry(config)
-    , bw::SupportsExtraHandlerParams(config, false)
-    , bw::RequiresGeoEngine(reactor)
+bw::SupportsTimeZone::SupportsTimeZone(SmartMet::Spine::Reactor* reactor,
+                                       const StoredQueryConfig::Ptr& config)
+    : bw::StoredQueryParamRegistry(config),
+      bw::SupportsExtraHandlerParams(config, false),
+      bw::RequiresGeoEngine(reactor)
 {
   try
   {
@@ -87,7 +88,7 @@ Fmi::TimeZonePtr bw::SupportsTimeZone::get_time_zone(const std::string& tz_name)
 }
 
 std::string bw::SupportsTimeZone::format_local_time(const Fmi::DateTime& utc_time,
-                                                    Fmi::TimeZonePtr tz)
+                                                    const Fmi::TimeZonePtr& tz)
 {
   try
   {

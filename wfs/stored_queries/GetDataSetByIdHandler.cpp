@@ -10,6 +10,7 @@
 #include <spine/Value.h>
 #include <sstream>
 #include <stdexcept>
+#include <utility>
 
 namespace ba = boost::algorithm;
 namespace bw = SmartMet::Plugin::WFS;
@@ -20,7 +21,7 @@ const char* P_DATA_SET_ID = "datasetid";
 }
 
 bw::GetDataSetByIdHandler::GetDataSetByIdHandler(SmartMet::Spine::Reactor* reactor,
-                                                 bw::StoredQueryConfig::Ptr config,
+                                                 const bw::StoredQueryConfig::Ptr& config,
                                                  PluginImpl& plugin_data)
     : bw::StoredQueryParamRegistry(config),
       bw::SupportsExtraHandlerParams(config),
@@ -150,7 +151,8 @@ std::shared_ptr<bw::StoredQueryHandlerBase> wfs_get_data_set_by_id_handler_creat
 {
   try
   {
-    bw::StoredQueryHandlerBase* qh = new bw::GetDataSetByIdHandler(reactor, config, plugin_data);
+    bw::StoredQueryHandlerBase* qh =
+        new bw::GetDataSetByIdHandler(reactor, std::move(config), plugin_data);
     std::shared_ptr<bw::StoredQueryHandlerBase> result(qh);
     return result;
   }

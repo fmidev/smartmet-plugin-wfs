@@ -4,12 +4,13 @@
 
 #include <boost/algorithm/string/replace.hpp>
 #include <iomanip>
+#include <utility>
 
 namespace bw = SmartMet::Plugin::WFS;
 
 bw::StoredIsolineQueryHandler::StoredIsolineQueryHandler(
     SmartMet::Spine::Reactor* reactor,
-    StoredQueryConfig::Ptr config,
+    const StoredQueryConfig::Ptr& config,
     PluginImpl& plugin_data,
     std::optional<std::string> template_file_name)
 
@@ -19,7 +20,7 @@ bw::StoredIsolineQueryHandler::StoredIsolineQueryHandler(
       RequiresContourEngine(reactor),
       RequiresQEngine(reactor),
       RequiresGeoEngine(reactor),
-      StoredContourQueryHandler(reactor, config, plugin_data, template_file_name)
+      StoredContourQueryHandler(reactor, config, plugin_data, std::move(template_file_name))
 {
   try
   {
@@ -157,8 +158,8 @@ std::shared_ptr<SmartMet::Plugin::WFS::StoredQueryHandlerBase> wfs_isoline_query
 {
   try
   {
-    auto* qh =
-        new StoredIsolineQueryHandler(reactor, config, plugin_data, template_file_name);
+    auto* qh = new StoredIsolineQueryHandler(
+        reactor, std::move(config), plugin_data, std::move(template_file_name));
     std::shared_ptr<SmartMet::Plugin::WFS::StoredQueryHandlerBase> result(qh);
     return result;
   }

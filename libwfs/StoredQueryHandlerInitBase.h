@@ -29,7 +29,7 @@ public:
 
     void execute_init_actions();
 
-    void add_init_action(const std::string& name, std::function<void()> action);
+    void add_init_action(const std::string& name, const std::function<void()>& action);
 
 private:
     std::queue<std::pair<std::string, std::function<void()> > > action_queue;

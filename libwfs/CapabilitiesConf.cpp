@@ -75,7 +75,9 @@ namespace
     }
   }
 
-  void put(CTPP::CDT& dest, const std::string& name, SmartMet::Spine::MultiLanguageStringP value,
+  void put(CTPP::CDT& dest,
+           const std::string& name,
+           const SmartMet::Spine::MultiLanguageStringP& value,
 	   const std::string& language)
   {
     if (value) {
@@ -83,7 +85,9 @@ namespace
     }
   }
 
-  void put(CTPP::CDT& dest, const std::string& name, SmartMet::Spine::MultiLanguageStringArray::Ptr value,
+  void put(CTPP::CDT& dest,
+           const std::string& name,
+           const SmartMet::Spine::MultiLanguageStringArray::Ptr& value,
 	   const std::string& language)
   {
     if (value) {

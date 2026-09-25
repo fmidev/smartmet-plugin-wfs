@@ -16,7 +16,7 @@ const char *bw::SupportsTimeParameters::P_END_TIME = "endTime";
 const char *bw::SupportsTimeParameters::P_TIME_STEP = "timeStep";
 const char *bw::SupportsTimeParameters::P_NUM_STEPS = "timeSteps";
 
-bw::SupportsTimeParameters::SupportsTimeParameters(bw::StoredQueryConfig::Ptr config)
+bw::SupportsTimeParameters::SupportsTimeParameters(const bw::StoredQueryConfig::Ptr& config)
     : bw::StoredQueryParamRegistry(config)
     , SupportsExtraHandlerParams(config, false)
     , debug_level(config->get_debug_level())

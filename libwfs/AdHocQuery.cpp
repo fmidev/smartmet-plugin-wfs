@@ -5,6 +5,7 @@
 #include "XPathSnapshot.h"
 #include "XmlUtils.h"
 #include <boost/lambda/lambda.hpp>
+#include <utility>
 #include <fmt/format.h>
 #include <macgyver/StringConversion.h>
 #include <macgyver/Exception.h>
@@ -455,7 +456,7 @@ void bw::AdHocQuery::get_xml_typenames(const xercesc::DOMElement& query_root,
 
 void bw::AdHocQuery::extract_xml_parameters(
     const xercesc::DOMElement& root_element,
-    std::shared_ptr<const bw::StoredQueryHandlerBase> handler,
+    const std::shared_ptr<const bw::StoredQueryHandlerBase>& handler,
     std::vector<std::string>& element_tree,
     std::vector<std::shared_ptr<bw::QueryBase>>& queries)
 {
@@ -489,7 +490,7 @@ void bw::AdHocQuery::create_query(std::shared_ptr<const bw::StoredQueryHandlerBa
     query->params.reset(new bw::RequestParameterMap(case_sensitive_params));
     query->orig_params = query->params;
     query->skipped_params.clear();
-    query->handler = handler;
+    query->handler = std::move(handler);
 
     queries.emplace_back(query);
   }
@@ -1294,7 +1295,7 @@ void bw::AdHocQuery::copy_params(const AdHocQuery* src_query, AdHocQuery* target
   }
 }
 
-void bw::AdHocQuery::filter(std::shared_ptr<QueryBase> query, bwx::XPathSnapshot& xps)
+void bw::AdHocQuery::filter(const std::shared_ptr<QueryBase>& query, bwx::XPathSnapshot& xps)
 {
   try
   {

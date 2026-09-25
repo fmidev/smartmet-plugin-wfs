@@ -129,7 +129,7 @@ std::vector<SmartMet::Spine::Value> bw::RequestParameterMap::get_values(
         range.first,
         range.second,
         std::back_inserter(result),
-	[](const ParamMapType::value_type x) { return x.second.value; });
+	[](const ParamMapType::value_type& x) { return x.second.value; });
     return result;
   }
   catch (...)

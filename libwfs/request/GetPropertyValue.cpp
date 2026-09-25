@@ -8,6 +8,7 @@
 #include <boost/format.hpp>
 #include <macgyver/StringConversion.h>
 #include <macgyver/TypeName.h>
+#include <utility>
 #include <xercesc/dom/DOM.hpp>
 #include <xercesc/dom/DOMException.hpp>
 #include <xercesc/dom/DOMXPathNSResolver.hpp>
@@ -125,7 +126,7 @@ void GetPropertyValue::initialize(std::optional<int>& max_members,
   }
 }
 
-void GetPropertyValue::finalize(std::shared_ptr<xercesc::DOMDocument> result,
+void GetPropertyValue::finalize(const std::shared_ptr<xercesc::DOMDocument>& result,
                                 const int cumulative_num_returned,
                                 const int cumulative_num_matched,
                                 const bool is_timestamp_set,
@@ -159,7 +160,7 @@ void GetPropertyValue::finalize(std::shared_ptr<xercesc::DOMDocument> result,
   }
 }
 
-void GetPropertyValue::add_responses(std::shared_ptr<xercesc::DOMDocument> result,
+void GetPropertyValue::add_responses(const std::shared_ptr<xercesc::DOMDocument>& result,
                                      const std::vector<std::string>& query_responses,
                                      int& cumulative_num_returned,
                                      int& cumulative_num_matched,
@@ -219,13 +220,13 @@ void GetPropertyValue::add_responses(std::shared_ptr<xercesc::DOMDocument> resul
   }
 }
 
-void GetPropertyValue::filter(std::shared_ptr<xercesc::DOMDocument> result,
+void GetPropertyValue::filter(const std::shared_ptr<xercesc::DOMDocument>& result,
                               const std::string& response,
                               int& cumulative_num_returned,
                               int& cumulative_num_matched,
                               std::optional<int>& max_members,
                               std::optional<int>& start_index,
-                              const std::shared_ptr<QueryBase> query,
+                              const std::shared_ptr<QueryBase>& query,
                               bool& is_timestamp_set,
                               bool& is_schemalocation_set) const
 {
@@ -303,7 +304,7 @@ void GetPropertyValue::extract_property(std::shared_ptr<xercesc::DOMDocument> re
 
       if (not max_members or (max_members and *max_members > 0))
       {
-        append_members(result,
+        append_members(std::move(result),
                        xpath_snapshot,
                        cumulative_num_returned,
                        max_members,
@@ -319,7 +320,7 @@ void GetPropertyValue::extract_property(std::shared_ptr<xercesc::DOMDocument> re
   }
 }
 
-void GetPropertyValue::append_members(std::shared_ptr<xercesc::DOMDocument> result,
+void GetPropertyValue::append_members(const std::shared_ptr<xercesc::DOMDocument>& result,
                                       bw::Xml::XPathSnapshot& xpath_snapshot,
                                       int& cumulative_num_returned,
                                       std::optional<int>& max_members,

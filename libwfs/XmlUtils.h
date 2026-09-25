@@ -68,7 +68,7 @@ void verify_mandatory_attr_value(const xercesc::DOMElement& elem,
 void verify_mandatory_attr_value(const xercesc::DOMElement& elem,
                                  const std::string& ns,
                                  const std::string& name,
-                                 std::function<void(const std::string&)> checker);
+                                 const std::function<void(const std::string&)>& checker);
 
 /**
  *   @brief Extract text from XML DOM element

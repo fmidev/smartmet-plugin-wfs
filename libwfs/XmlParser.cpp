@@ -8,6 +8,7 @@
 #include <curl/curl.h>
 #include <macgyver/TypeName.h>
 #include <macgyver/Exception.h>
+#include <utility>
 #include <xercesc/framework/LocalFileInputSource.hpp>
 #include <xercesc/framework/MemBufInputSource.hpp>
 #include <xercesc/framework/XMLGrammarPoolImpl.hpp>
@@ -95,7 +96,7 @@ std::shared_ptr<xercesc::DOMDocument> Parser::parse_file(
   {
     auto fn = to_xmlch(file_name.c_str());
     xercesc::LocalFileInputSource input(fn.get());
-    return parse_input(input, root_element_cb);
+    return parse_input(input, std::move(root_element_cb));
   }
   catch (...)
   {
@@ -112,7 +113,7 @@ std::shared_ptr<xercesc::DOMDocument> Parser::parse_string(
   {
     xercesc::MemBufInputSource input(
         (const XMLByte *)xml_data.c_str(), xml_data.length(), doc_id.c_str());
-    return parse_input(input, root_element_cb);
+    return parse_input(input, std::move(root_element_cb));
   }
   catch (...)
   {
@@ -127,7 +128,7 @@ std::shared_ptr<xercesc::DOMDocument> Parser::parse_input(
   {
     error_handler->resetErrors();
 
-    this->root_element_cb = root_element_cb;
+    this->root_element_cb = std::move(root_element_cb);
     this->parse(input);
 
     // Verify that there are no errors. Throw an exception otherwise

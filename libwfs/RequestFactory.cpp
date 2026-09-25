@@ -7,6 +7,7 @@
 #include <macgyver/Exception.h>
 #include <sstream>
 #include <stdexcept>
+#include <utility>
 
 namespace bw = SmartMet::Plugin::WFS;
 namespace ba = boost::algorithm;
@@ -24,8 +25,8 @@ bw::RequestFactory& bw::RequestFactory::register_request_type(const std::string&
   {
     TypeRec rec;
     const std::string lname = Fmi::ascii_tolower_copy(name);
-    rec.kvp_parser = create_from_kvp;
-    rec.xml_parser = create_from_xml;
+    rec.kvp_parser = std::move(create_from_kvp);
+    rec.xml_parser = std::move(create_from_xml);
 
     if (unimplemented_requests.count(lname) > 0)
     {

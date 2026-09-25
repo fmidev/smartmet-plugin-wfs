@@ -22,6 +22,7 @@
 #include <cpl_error.h>
 #include <list>
 #include <string>
+#include <utility>
 
 namespace bw = SmartMet::Plugin::WFS;
 namespace ba = boost::algorithm;
@@ -88,7 +89,7 @@ class ToLatLonVisitor : public OGRDefaultGeometryVisitor
 
 StoredQEDownloadQueryHandler::StoredQEDownloadQueryHandler(
     SmartMet::Spine::Reactor* reactor,
-    StoredQueryConfig::Ptr config,
+    const StoredQueryConfig::Ptr& config,
     PluginImpl& plugin_data,
     std::optional<std::string> template_file_name)
 
@@ -96,7 +97,7 @@ StoredQEDownloadQueryHandler::StoredQEDownloadQueryHandler(
       SupportsExtraHandlerParams(config, false),
       RequiresGeoEngine(reactor),
       RequiresQEngine(reactor),
-      StoredAtomQueryHandlerBase(reactor, config, plugin_data, template_file_name),
+      StoredAtomQueryHandlerBase(reactor, config, plugin_data, std::move(template_file_name)),
       SupportsBoundingBox(config, plugin_data.get_crs_registry(), false),
       producers(),
       default_format("grib2"),
@@ -879,8 +880,8 @@ wfs_stored_qe_download_handler_create(SmartMet::Spine::Reactor* reactor,
 {
   try
   {
-    StoredAtomQueryHandlerBase* qh =
-        new StoredQEDownloadQueryHandler(reactor, config, plugin_data, template_file_name);
+    StoredAtomQueryHandlerBase* qh = new StoredQEDownloadQueryHandler(
+        reactor, std::move(config), plugin_data, std::move(template_file_name));
     std::shared_ptr<SmartMet::Plugin::WFS::StoredQueryHandlerBase> result(qh);
     return result;
   }

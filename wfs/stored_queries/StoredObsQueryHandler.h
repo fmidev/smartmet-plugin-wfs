@@ -35,7 +35,7 @@ class StoredObsQueryHandler : public StoredQueryHandlerBase,
 {
  public:
   StoredObsQueryHandler(SmartMet::Spine::Reactor* reactor,
-                        StoredQueryConfig::Ptr config,
+                        const StoredQueryConfig::Ptr& config,
                         PluginImpl& plugin_impl,
                         std::optional<std::string> template_file_name);
 

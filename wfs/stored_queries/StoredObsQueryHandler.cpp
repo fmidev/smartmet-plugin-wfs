@@ -14,6 +14,7 @@
 #include <timeseries/TimeSeriesInclude.h>
 #include <algorithm>
 #include <functional>
+#include <utility>
 
 #define P_BEGIN_TIME "beginTime"
 #define P_END_TIME "endTime"
@@ -45,14 +46,14 @@ using boost::format;
 using boost::str;
 
 StoredObsQueryHandler::StoredObsQueryHandler(SmartMet::Spine::Reactor* reactor,
-                                             StoredQueryConfig::Ptr config,
+                                             const StoredQueryConfig::Ptr& config,
                                              PluginImpl& plugin_data,
                                              std::optional<std::string> template_file_name)
     : StoredQueryParamRegistry(config),
       SupportsExtraHandlerParams(config, false),
       RequiresGeoEngine(reactor),
       RequiresObsEngine(reactor),
-      StoredQueryHandlerBase(reactor, config, plugin_data, template_file_name),
+      StoredQueryHandlerBase(reactor, config, plugin_data, std::move(template_file_name)),
       SupportsLocationParameters(
           reactor,
           config,
@@ -680,7 +681,7 @@ void StoredObsQueryHandler::query(const StoredQuery& query,
                   }
                   else
                   {
-                    auto geoLoc = sites.at(geoid);
+                    const auto& geoLoc = sites.at(geoid);
                     if (geoLoc)
                     {
                       if (SmartMet::TimeSeries::is_location_parameter(name))
@@ -949,7 +950,8 @@ std::shared_ptr<SmartMet::Plugin::WFS::StoredQueryHandlerBase> wfs_obs_handler_c
 {
   try
   {
-    auto* qh = new StoredObsQueryHandler(reactor, config, plugin_data, template_file_name);
+    auto* qh = new StoredObsQueryHandler(
+        reactor, std::move(config), plugin_data, std::move(template_file_name));
     std::shared_ptr<SmartMet::Plugin::WFS::StoredQueryHandlerBase> result(qh);
     return result;
   }

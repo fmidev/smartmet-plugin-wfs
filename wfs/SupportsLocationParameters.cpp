@@ -44,7 +44,7 @@ void bw::SupportsLocationParameters::engOrFinToEnOrFi(std::string &language)
 
 bw::SupportsLocationParameters::SupportsLocationParameters(
     SmartMet::Spine::Reactor* reactor,
-    bw::StoredQueryConfig::Ptr config,
+    const bw::StoredQueryConfig::Ptr& config,
     unsigned options)
 
     : StoredQueryParamRegistry(config),
@@ -222,7 +222,7 @@ void bw::SupportsLocationParameters::get_location_options(
         }
         else
         {
-          for (SmartMet::Spine::LocationPtr loc : places)
+          for (const SmartMet::Spine::LocationPtr& loc : places)
           {
             locations->push_back(std::make_pair(loc->name, loc));
           }

@@ -33,7 +33,8 @@ using MeteoParameterOptions = std::map<std::string, MeteoParameterOptionItem>;
 class SupportsMeteoParameterOptions
 {
  public:
-  SupportsMeteoParameterOptions(std::shared_ptr<SmartMet::Plugin::WFS::StoredQueryConfig> config);
+  SupportsMeteoParameterOptions(
+      const std::shared_ptr<SmartMet::Plugin::WFS::StoredQueryConfig>& config);
 
   virtual ~SupportsMeteoParameterOptions();
 

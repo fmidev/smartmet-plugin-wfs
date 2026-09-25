@@ -31,6 +31,7 @@
 #include <limits>
 #include <locale>
 #include <map>
+#include <utility>
 
 namespace ba = boost::algorithm;
 
@@ -68,7 +69,7 @@ struct StationRec
 
 StoredGridForecastQueryHandler::StoredGridForecastQueryHandler(
     Spine::Reactor* reactor,
-    StoredQueryConfig::Ptr config,
+    const StoredQueryConfig::Ptr& config,
     PluginImpl& plugin_impl,
     std::optional<std::string> template_file_name)
     :
@@ -77,7 +78,7 @@ StoredGridForecastQueryHandler::StoredGridForecastQueryHandler(
       SupportsExtraHandlerParams(config, false),
       RequiresGridEngine(reactor),
       RequiresGeoEngine(reactor),
-      StoredQueryHandlerBase(reactor, config, plugin_impl, template_file_name),
+      StoredQueryHandlerBase(reactor, config, plugin_impl, std::move(template_file_name)),
       SupportsLocationParameters(reactor, config, SUPPORT_KEYWORDS | INCLUDE_GEOIDS),
       SupportsTimeParameters(config),
       SupportsTimeZone(reactor, config),
@@ -464,10 +465,10 @@ void StoredGridForecastQueryHandler::query(const StoredQuery& stored_query,
 
 uint StoredGridForecastQueryHandler::processGridQuery(Query& wfsQuery,
                                                       const std::string& tag,
-                                                      const Spine::LocationPtr loc,
-                                                      std::string country,
+                                                      const Spine::LocationPtr& loc,
+                                                      const std::string& country,
                                                       QueryServer::Query& gridQuery,
-                                                      Table_sptr output,
+                                                      const Table_sptr& output,
                                                       uint rowCount) const
 {
   try
@@ -1128,8 +1129,8 @@ std::shared_ptr<SmartMet::Plugin::WFS::StoredQueryHandlerBase> wfs_grid_forecast
 {
   try
   {
-    auto* qh =
-        new StoredGridForecastQueryHandler(reactor, config, plugin_impl, template_file_name);
+    auto* qh = new StoredGridForecastQueryHandler(
+        reactor, std::move(config), plugin_impl, std::move(template_file_name));
     std::shared_ptr<SmartMet::Plugin::WFS::StoredQueryHandlerBase> result(qh);
     return result;
   }

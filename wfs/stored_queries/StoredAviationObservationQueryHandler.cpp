@@ -27,7 +27,7 @@ const char* P_RETURN_ONLY_LATEST = "returnOnlyLatest";
 
 bw::StoredAviationObservationQueryHandler::StoredAviationObservationQueryHandler(
     SmartMet::Spine::Reactor* reactor,
-    StoredQueryConfig::Ptr config,
+    const StoredQueryConfig::Ptr& config,
     PluginImpl& plugin_data,
     std::optional<std::string> template_file_name)
 
@@ -35,7 +35,7 @@ bw::StoredAviationObservationQueryHandler::StoredAviationObservationQueryHandler
       bw::SupportsExtraHandlerParams(config),
       bw::RequiresGeoEngine(reactor),
       bw::RequiresObsEngine(reactor),
-      bw::StoredQueryHandlerBase(reactor, config, plugin_data, template_file_name),
+      bw::StoredQueryHandlerBase(reactor, config, plugin_data, std::move(template_file_name)),
       bw::SupportsLocationParameters(reactor, config, SUPPORT_KEYWORDS | INCLUDE_GEOIDS),
       bw::SupportsBoundingBox(config, plugin_data.get_crs_registry())
 {
@@ -394,7 +394,7 @@ wfs_stored_aviation_observation_handler_create(SmartMet::Spine::Reactor* reactor
   try
   {
     auto* qh = new bw::StoredAviationObservationQueryHandler(
-        reactor, config, plugin_data, template_file_name);
+        reactor, std::move(config), plugin_data, std::move(template_file_name));
     std::shared_ptr<SmartMet::Plugin::WFS::StoredQueryHandlerBase> instance(qh);
     return instance;
   }

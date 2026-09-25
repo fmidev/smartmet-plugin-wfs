@@ -747,8 +747,9 @@ void PluginImpl::realRequestHandler(SmartMet::Spine::Reactor& /* theReactor */,
       std::ostringstream output;
       RequestResult result;
       query(language, theRequest, result);
-      const std::string& content = result.output.str();
-      theResponse.setContent(content);
+      std::string content = result.output.str();
+      const bool is_html = (content.compare(0, 6, "<html>") == 0);
+      theResponse.setContent(std::move(content));
       auto status = result.status ? result.status : SmartMet::Spine::HTTP::ok;
       theResponse.setStatus(status);
 
@@ -766,15 +767,14 @@ void PluginImpl::realRequestHandler(SmartMet::Spine::Reactor& /* theReactor */,
       std::shared_ptr<Fmi::TimeFormatter> tformat(Fmi::TimeFormatter::create("http"));
 
       // std::string mime = "text/xml; charset=UTF-8";
-      const std::string mime =
-          content.substr(0, 6) == "<html>" ? "text/html; charset=UTF-8" : "text/xml; charset=UTF-8";
+      const std::string mime = is_html ? "text/html; charset=UTF-8" : "text/xml; charset=UTF-8";
       theResponse.setHeader("Content-Type", mime);
 
       if (theResponse.getContentLength() == 0)
       {
         std::ostringstream msg;
         msg << "Warning: Empty input for request " << theRequest.getQueryString() << " from "
-            << theRequest.getClientIP() << std::endl;
+            << theRequest.getClientIP() << '\n';
         Fmi::Exception exception(BCP, msg.str());
         exception.addParameter(WFS_EXCEPTION_CODE, WFS_OPERATION_PROCESSING_FAILED);
         throw exception;
@@ -898,7 +898,7 @@ void PluginImpl::maybe_validate_output(const SmartMet::Spine::HTTP::Request& req
             << " [WFS] [ERROR] XML Response validation failed: " << err.what() << '\n';
         for (const std::string& err_msg : err.get_messages())
         {
-          msg << "       XML: " << err_msg << std::endl;
+          msg << "       XML: " << err_msg << '\n';
         }
         const std::string req_str = req.toString();
         std::vector<std::string> lines;

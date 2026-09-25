@@ -8,6 +8,7 @@
 #include <engines/observation/DBRegistry.h>
 #include <macgyver/Exception.h>
 #include <memory>
+#include <utility>
 
 namespace bw = SmartMet::Plugin::WFS;
 namespace bo = SmartMet::Engine::Observation;
@@ -27,7 +28,7 @@ const char* P_AUTHORITY_DOMAIN = "authorityDomain";
 
 bw::StoredEnvMonitoringNetworkQueryHandler::StoredEnvMonitoringNetworkQueryHandler(
     SmartMet::Spine::Reactor* reactor,
-    StoredQueryConfig::Ptr config,
+    const StoredQueryConfig::Ptr& config,
     PluginImpl& plugin_data,
     std::optional<std::string> template_file_name)
 
@@ -35,7 +36,7 @@ bw::StoredEnvMonitoringNetworkQueryHandler::StoredEnvMonitoringNetworkQueryHandl
     , RequiresObsEngine(reactor)
     , StoredQueryParamRegistry(config)
     , SupportsExtraHandlerParams(config)
-    , StoredQueryHandlerBase(reactor, config, plugin_data, template_file_name)
+    , StoredQueryHandlerBase(reactor, config, plugin_data, std::move(template_file_name))
 {
   try
   {
@@ -332,7 +333,7 @@ wfs_stored_env_monitoring_network_handler_create(SmartMet::Spine::Reactor* react
   try
   {
     auto* qh = new bw::StoredEnvMonitoringNetworkQueryHandler(
-        reactor, config, plugin_data, template_file_name);
+        reactor, std::move(config), plugin_data, std::move(template_file_name));
     std::shared_ptr<SmartMet::Plugin::WFS::StoredQueryHandlerBase> instance(qh);
     return instance;
   }

@@ -20,7 +20,8 @@ class SupportsTimeZone : protected virtual SupportsExtraHandlerParams,
                          protected virtual RequiresGeoEngine
 {
  public:
-    SupportsTimeZone(SmartMet::Spine::Reactor* reactor, std::shared_ptr<StoredQueryConfig> config);
+  SupportsTimeZone(SmartMet::Spine::Reactor* reactor,
+                   const std::shared_ptr<StoredQueryConfig>& config);
 
   ~SupportsTimeZone() override;
 
@@ -33,7 +34,7 @@ class SupportsTimeZone : protected virtual SupportsExtraHandlerParams,
   Fmi::TimeZonePtr get_time_zone(const std::string& tz_name) const;
 
   static std::string format_local_time(const Fmi::DateTime& utc_time,
-                                       Fmi::TimeZonePtr tz);
+                                       const Fmi::TimeZonePtr& tz);
 };
 
 }  // namespace WFS

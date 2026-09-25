@@ -36,7 +36,7 @@ class ParameterExtractor
                                                     const std::string& xml_type);
 
  private:
-  void add_type(const std::string& name, xml_param_extract_t extractor);
+  void add_type(const std::string& name, const xml_param_extract_t& extractor);
 
   template <typename IntType>
   void add_int_type(const std::string& name);

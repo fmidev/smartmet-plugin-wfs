@@ -111,12 +111,12 @@ class StoredGridQueryHandler : public StoredQueryHandlerBase,
 
     bool includeDebugData;
 
-    Query(std::shared_ptr<const StoredQueryConfig> config);
+    Query(const std::shared_ptr<const StoredQueryConfig>& config);
     ~Query();
   };
 
   StoredGridQueryHandler(SmartMet::Spine::Reactor* reactor,
-                         StoredQueryConfig::Ptr config,
+                         const StoredQueryConfig::Ptr& config,
                          PluginImpl& plugin_impl,
                          std::optional<std::string> template_file_name);
   ~StoredGridQueryHandler() override;
