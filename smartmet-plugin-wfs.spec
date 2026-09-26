@@ -40,17 +40,17 @@ BuildRequires: openssl-devel
 BuildRequires: bzip2-devel
 BuildRequires: zlib-devel
 BuildRequires: smartmet-library-timeseries-devel >= 26.9.16
-BuildRequires: smartmet-library-spine-devel >= 26.9.23
-BuildRequires: smartmet-library-gis-devel >= 26.9.23
+BuildRequires: smartmet-library-spine-devel >= 26.9.26
+BuildRequires: smartmet-library-gis-devel >= 26.9.26
 BuildRequires: smartmet-library-trax-devel >= 26.6.26
 BuildRequires: smartmet-library-locus-devel >= 26.4.13
-BuildRequires: smartmet-library-macgyver-devel >= 26.9.23
+BuildRequires: smartmet-library-macgyver-devel >= 26.9.26-2
 BuildRequires: smartmet-engine-contour-devel >= 26.9.23
 BuildRequires: smartmet-engine-geonames-devel >= 26.9.26
 BuildRequires: smartmet-engine-gis-devel >= 26.9.23
-BuildRequires: smartmet-engine-grid-devel >= 26.9.23
+BuildRequires: smartmet-engine-grid-devel >= 26.9.26
 BuildRequires: smartmet-engine-querydata-devel >= 26.9.23
-BuildRequires: smartmet-library-grid-content-devel >= 26.9.23
+BuildRequires: smartmet-library-grid-content-devel >= 26.9.26
 BuildRequires: smartmet-library-grid-files-devel >= 26.9.26
 %if %{with observation}
 BuildRequires: smartmet-engine-observation-devel >= 26.9.23
@@ -61,16 +61,16 @@ Requires: libcurl
 Requires: jsoncpp
 Requires: zlib
 Requires: smartmet-library-locus >= 26.4.13
-Requires: smartmet-library-macgyver >= 26.9.23
-Requires: smartmet-library-spine >= 26.9.23
+Requires: smartmet-library-macgyver >= 26.9.26-2
+Requires: smartmet-library-spine >= 26.9.26
 Requires: smartmet-library-timeseries >= 26.9.16
-Requires: smartmet-library-gis >= 26.9.23
+Requires: smartmet-library-gis >= 26.9.26
 Requires: smartmet-library-trax >= 26.6.26
 Requires: smartmet-engine-contour >= 26.9.23
 Requires: smartmet-engine-geonames >= 26.9.26
 Requires: smartmet-engine-gis >= 26.9.23
-Requires: smartmet-engine-grid >= 26.9.23
-Requires: smartmet-library-grid-content >= 26.9.23
+Requires: smartmet-engine-grid >= 26.9.26
+Requires: smartmet-library-grid-content >= 26.9.26
 Requires: smartmet-library-grid-files >= 26.9.26
 %if %{with observation}
 Requires: smartmet-engine-observation >= 26.9.23
@@ -117,17 +117,17 @@ Obsoletes: smartmet-brainstorm-wfs-debuginfo < 16.11.1
 #TestRequires: smartmet-test-db >= 26.5.8
 #TestRequires: smartmet-test-data >= 26.8.26
 #TestRequires: smartmet-utils-devel >= 26.9.3
-#TestRequires: smartmet-library-macgyver >= 26.9.23
-#TestRequires: smartmet-library-gis >= 26.9.23
+#TestRequires: smartmet-library-macgyver >= 26.9.26-2
+#TestRequires: smartmet-library-gis >= 26.9.26
 #TestRequires: smartmet-library-newbase >= 26.9.23
-#TestRequires: smartmet-library-spine-plugin-test >= 26.9.23
+#TestRequires: smartmet-library-spine-plugin-test >= 26.9.26
 #TestRequires: smartmet-engine-geonames >= 26.9.26
 #TestRequires: smartmet-engine-gis >= 26.9.23
 #TestRequires: smartmet-engine-querydata >= 26.9.23
 %if %{with observation}
 #TestRequires: smartmet-engine-observation >= 26.9.23
 %endif
-#TestRequires: smartmet-engine-grid >= 26.9.23
+#TestRequires: smartmet-engine-grid >= 26.9.26
 #TestRequires: redis
 #TestRequires: smartmet-engine-grid-test
 # Required by top level Makefile
@@ -139,10 +139,10 @@ SmartMet WFS plugin
 
 %package -n %{SPECNAME}-devel
 Summary: SmartMet WFS plugin development files
-Requires: smartmet-library-spine-devel >= 26.9.23
-Requires: smartmet-library-gis-devel >= 26.9.23
+Requires: smartmet-library-spine-devel >= 26.9.26
+Requires: smartmet-library-gis-devel >= 26.9.26
 Requires: smartmet-library-locus-devel >= 26.4.13
-Requires: smartmet-library-macgyver-devel >= 26.9.23
+Requires: smartmet-library-macgyver-devel >= 26.9.26-2
 Requires: %{SPECNAME} = %{version}-%{release}
 %description -n %{SPECNAME}-devel
 SmartMet WFS plugin development files (for building testsuite without rebuilding plugin)
@@ -178,6 +178,7 @@ rm -rf $RPM_BUILD_ROOT
 %changelog
 * Sat Sep 26 2026 Mika Heiskanen <mika.heiskanen@fmi.fi> - 26.9.26-2.fmi
 - Repackaged due to grid-files ABI changes
+- Require the 26.9.26 releases of the SmartMet dependencies
 
 * Sat Sep 26 2026 Mika Heiskanen <mika.heiskanen@fmi.fi> - 26.9.26-1.fmi
 - Resolve local timezones of sites with the geonames engine timezone polygons
