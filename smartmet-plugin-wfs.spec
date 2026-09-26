@@ -4,7 +4,7 @@
 Summary: SmartMet WFS plugin
 Name: %{SPECNAME}
 Version: 26.9.26
-Release: 1%{?dist}.fmi
+Release: 2%{?dist}.fmi
 License: MIT
 Group: SmartMet/Plugins
 URL: https://github.com/fmidev/smartmet-plugin-wfs
@@ -51,7 +51,7 @@ BuildRequires: smartmet-engine-gis-devel >= 26.9.23
 BuildRequires: smartmet-engine-grid-devel >= 26.9.23
 BuildRequires: smartmet-engine-querydata-devel >= 26.9.23
 BuildRequires: smartmet-library-grid-content-devel >= 26.9.23
-BuildRequires: smartmet-library-grid-files-devel >= 26.9.23
+BuildRequires: smartmet-library-grid-files-devel >= 26.9.26
 %if %{with observation}
 BuildRequires: smartmet-engine-observation-devel >= 26.9.23
 %endif
@@ -71,7 +71,7 @@ Requires: smartmet-engine-geonames >= 26.9.26
 Requires: smartmet-engine-gis >= 26.9.23
 Requires: smartmet-engine-grid >= 26.9.23
 Requires: smartmet-library-grid-content >= 26.9.23
-Requires: smartmet-library-grid-files >= 26.9.23
+Requires: smartmet-library-grid-files >= 26.9.26
 %if %{with observation}
 Requires: smartmet-engine-observation >= 26.9.23
 %endif
@@ -176,6 +176,9 @@ rm -rf $RPM_BUILD_ROOT
 %{_includedir}/smartmet/plugin/wfs/request/*.h
 
 %changelog
+* Sat Sep 26 2026 Mika Heiskanen <mika.heiskanen@fmi.fi> - 26.9.26-2.fmi
+- Repackaged due to grid-files ABI changes
+
 * Sat Sep 26 2026 Mika Heiskanen <mika.heiskanen@fmi.fi> - 26.9.26-1.fmi
 - Resolve local timezones of sites with the geonames engine timezone polygons
 
