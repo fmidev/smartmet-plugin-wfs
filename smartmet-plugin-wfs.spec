@@ -3,8 +3,8 @@
 %define SPECNAME smartmet-plugin-%{DIRNAME}
 Summary: SmartMet WFS plugin
 Name: %{SPECNAME}
-Version: 26.9.24
-Release: 3%{?dist}.fmi
+Version: 26.9.26
+Release: 1%{?dist}.fmi
 License: MIT
 Group: SmartMet/Plugins
 URL: https://github.com/fmidev/smartmet-plugin-wfs
@@ -46,7 +46,7 @@ BuildRequires: smartmet-library-trax-devel >= 26.6.26
 BuildRequires: smartmet-library-locus-devel >= 26.4.13
 BuildRequires: smartmet-library-macgyver-devel >= 26.9.23
 BuildRequires: smartmet-engine-contour-devel >= 26.9.23
-BuildRequires: smartmet-engine-geonames-devel >= 26.9.23
+BuildRequires: smartmet-engine-geonames-devel >= 26.9.26
 BuildRequires: smartmet-engine-gis-devel >= 26.9.23
 BuildRequires: smartmet-engine-grid-devel >= 26.9.23
 BuildRequires: smartmet-engine-querydata-devel >= 26.9.23
@@ -67,7 +67,7 @@ Requires: smartmet-library-timeseries >= 26.9.16
 Requires: smartmet-library-gis >= 26.9.23
 Requires: smartmet-library-trax >= 26.6.26
 Requires: smartmet-engine-contour >= 26.9.23
-Requires: smartmet-engine-geonames >= 26.9.23
+Requires: smartmet-engine-geonames >= 26.9.26
 Requires: smartmet-engine-gis >= 26.9.23
 Requires: smartmet-engine-grid >= 26.9.23
 Requires: smartmet-library-grid-content >= 26.9.23
@@ -121,7 +121,7 @@ Obsoletes: smartmet-brainstorm-wfs-debuginfo < 16.11.1
 #TestRequires: smartmet-library-gis >= 26.9.23
 #TestRequires: smartmet-library-newbase >= 26.9.23
 #TestRequires: smartmet-library-spine-plugin-test >= 26.9.23
-#TestRequires: smartmet-engine-geonames >= 26.9.23
+#TestRequires: smartmet-engine-geonames >= 26.9.26
 #TestRequires: smartmet-engine-gis >= 26.9.23
 #TestRequires: smartmet-engine-querydata >= 26.9.23
 %if %{with observation}
@@ -176,6 +176,9 @@ rm -rf $RPM_BUILD_ROOT
 %{_includedir}/smartmet/plugin/wfs/request/*.h
 
 %changelog
+* Sat Sep 26 2026 Mika Heiskanen <mika.heiskanen@fmi.fi> - 26.9.26-1.fmi
+- Resolve local timezones of sites with the geonames engine timezone polygons
+
 * Thu Sep 24 2026 Mika Heiskanen <mika.heiskanen@fmi.fi> - 26.9.24-3.fmi
 - Security: XML schemas are downloaded only while validating the plugin's own output, never for schema locations given in client requests (blind SSRF)
 - Security: schema downloads are limited to HTTP(S) incl. redirects, with timeouts; fixed curl options passed as pointers (verbose logging was on)
