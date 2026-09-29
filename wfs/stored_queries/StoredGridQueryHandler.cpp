@@ -22,10 +22,10 @@
 #include <macgyver/StringConversion.h>
 #include <macgyver/TypeName.h>
 
-#include <smartmet/engines/gis/GdalUtils.h>
-#include <smartmet/engines/querydata/MetaQueryOptions.h>
-#include <smartmet/spine/Convenience.h>
-#include <smartmet/timeseries/ParameterFactory.h>
+#include <engines/gis/GdalUtils.h>
+#include <engines/querydata/MetaQueryOptions.h>
+#include <spine/Convenience.h>
+#include <timeseries/ParameterFactory.h>
 
 #include "AreaUtils.h"
 #include "FeatureID.h"

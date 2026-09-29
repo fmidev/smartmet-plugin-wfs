@@ -11,7 +11,7 @@
 #include <boost/format.hpp>
 #include <macgyver/StringConversion.h>
 #include <macgyver/TypeName.h>
-#include <smartmet/spine/Convenience.h>
+#include <spine/Convenience.h>
 #include <xercesc/dom/DOM.hpp>
 #include <xercesc/dom/DOMException.hpp>
 #include <xercesc/dom/DOMXPathNSResolver.hpp>
