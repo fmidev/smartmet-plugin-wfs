@@ -6,6 +6,7 @@
 #include <memory>
 #include <boost/thread.hpp>
 #include <xercesc/parsers/XercesDOMParser.hpp>
+#include <xercesc/util/SecurityManager.hpp>
 #include <list>
 #include <ostream>
 #include <stdexcept>
@@ -82,6 +83,11 @@ class Parser : public xercesc::XercesDOMParser
 
  private:
   std::unique_ptr<XmlErrorHandler> error_handler;
+
+  /**
+   *  @brief XXE/entity-expansion hardening (kept alive for the parser's lifetime)
+   */
+  std::unique_ptr<xercesc::SecurityManager> security_manager;
 
   /**
    *  @brief Root element callback for the current parse

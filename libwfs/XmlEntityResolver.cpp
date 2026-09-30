@@ -23,6 +23,21 @@ namespace {
 
 } // anonymous namespace
 
+namespace
+{
+thread_local bool download_allowed_in_thread = false;
+}
+
+EntityResolver::DownloadScope::DownloadScope() : previous(download_allowed_in_thread)
+{
+  download_allowed_in_thread = true;
+}
+
+EntityResolver::DownloadScope::~DownloadScope()
+{
+  download_allowed_in_thread = previous;
+}
+
 EntityResolver::EntityResolver()
    
 = default;
@@ -64,6 +79,22 @@ xercesc::InputSource *
 EntityResolver::resolveEntity(xercesc::XMLResourceIdentifier *resource_identifier)
 try
   {
+    // SECURITY (XXE): this resolver serves XML *schema* references only, strictly
+    // from the pre-loaded schema cache. General external entities and external
+    // DTD subsets (the classic XXE vector, e.g. <!ENTITY xxe SYSTEM "/etc/passwd">)
+    // must never be resolved. Reject any non-schema resource identifier.
+    switch (resource_identifier->getResourceIdentifierType())
+      {
+      case xercesc::XMLResourceIdentifier::SchemaGrammar:
+      case xercesc::XMLResourceIdentifier::SchemaImport:
+      case xercesc::XMLResourceIdentifier::SchemaInclude:
+      case xercesc::XMLResourceIdentifier::SchemaRedefine:
+	break;
+      default:
+	// ExternalEntity, external DTD, unknown, ... -> never resolve.
+	return nullptr;
+      }
+
     const XMLCh *x_public_id = resource_identifier->getPublicId();
     const XMLCh *x_system_id = resource_identifier->getSystemId();
     const XMLCh *x_base_uri = resource_identifier->getBaseURI();
@@ -71,6 +102,8 @@ try
     const std::string public_id = to_opt_string(x_public_id).first;
     const std::string system_id = to_opt_string(x_system_id).first;
     const std::string base_uri = to_opt_string(x_base_uri).first;
+
+    (void)public_id;
 
     std::string remote_uri;
 
@@ -82,9 +115,11 @@ try
       {
 	return nullptr;
       }
-    else if ((*system_id.begin() == '/') or (*base_uri.begin() == '/'))
+    else if ((*system_id.begin() == '/') or (not base_uri.empty() and *base_uri.begin() == '/'))
       {
-	return new xercesc::LocalFileInputSource(x_base_uri, x_system_id);
+	// SECURITY (XXE): never open an arbitrary absolute local path. Legitimate
+	// schemas are addressed by their (http) URI and served from the cache.
+	return nullptr;
       }
     else
       {
@@ -137,14 +172,14 @@ try
   std::unique_lock<std::mutex> lock(mutex);
   it = cache.find(uri);
   if (it == cache.end()) {
-    if (enable_download) {
+    if (enable_download && download_allowed_in_thread) {
       bool downloading = false;
       it_d = download_map.find(uri);
       if (it_d == download_map.end()) {
 	// URI encountered first time: try to download
 	downloading = true;
 	auto x = download_map.emplace(uri, Download());
-	assert (not x.second); // Should not happen
+	assert (x.second); // Should not happen: the URI was not in download_map
 	it_d = x.first;
       } else if (it_d->second.num_failed and it_d->second.num_failed < 100) {
 	unsigned inc = it_d->second.num_failed < 10 ? 10 : 600;
@@ -194,24 +229,31 @@ std::string EntityResolver::download(const std::string& uri) const
 
   std::ostringstream result;
 
-  const int verbose = 0;
-  const int autoreferer = 1;
-  const int fail_on_error = 1;
-  const int content_decoding = 1;
-  const int transfer_decoding = 1;
+  // Note: curl_easy_setopt takes long values, not pointers to them (a pointer
+  // is always "true", which e.g. turned CURLOPT_VERBOSE on)
   const char *accept_encoding = "gzip, deflate";
-  const long follow_location = 1;
 
-  curl_easy_setopt(curl, CURLOPT_VERBOSE, &verbose);
+  curl_easy_setopt(curl, CURLOPT_VERBOSE, 0L);
   curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, &append_data);
   curl_easy_setopt(curl, CURLOPT_WRITEDATA, &result);
   curl_easy_setopt(curl, CURLOPT_URL, uri.c_str());
-  curl_easy_setopt(curl, CURLOPT_AUTOREFERER, &autoreferer);
-  curl_easy_setopt(curl, CURLOPT_FAILONERROR, &fail_on_error);
+  curl_easy_setopt(curl, CURLOPT_AUTOREFERER, 1L);
+  curl_easy_setopt(curl, CURLOPT_FAILONERROR, 1L);
   curl_easy_setopt(curl, CURLOPT_ACCEPT_ENCODING, accept_encoding);
-  curl_easy_setopt(curl, CURLOPT_HTTP_CONTENT_DECODING, &content_decoding);
-  curl_easy_setopt(curl, CURLOPT_HTTP_TRANSFER_DECODING, &transfer_decoding);
-  curl_easy_setopt(curl, CURLOPT_FOLLOWLOCATION, &follow_location);
+  curl_easy_setopt(curl, CURLOPT_HTTP_CONTENT_DECODING, 1L);
+  curl_easy_setopt(curl, CURLOPT_HTTP_TRANSFER_DECODING, 1L);
+  curl_easy_setopt(curl, CURLOPT_FOLLOWLOCATION, 1L);
+  curl_easy_setopt(curl, CURLOPT_MAXREDIRS, 5L);
+  // Only HTTP(S), also for redirects, and never hang a worker thread
+#if LIBCURL_VERSION_NUM >= 0x075500  // 7.85.0
+  curl_easy_setopt(curl, CURLOPT_PROTOCOLS_STR, "http,https");
+  curl_easy_setopt(curl, CURLOPT_REDIR_PROTOCOLS_STR, "http,https");
+#else  // RHEL8
+  curl_easy_setopt(curl, CURLOPT_PROTOCOLS, static_cast<long>(CURLPROTO_HTTP | CURLPROTO_HTTPS));
+  curl_easy_setopt(curl, CURLOPT_REDIR_PROTOCOLS, static_cast<long>(CURLPROTO_HTTP | CURLPROTO_HTTPS));
+#endif
+  curl_easy_setopt(curl, CURLOPT_CONNECTTIMEOUT, 10L);
+  curl_easy_setopt(curl, CURLOPT_TIMEOUT, 60L);
 
   if (!proxy.empty()) {
     curl_easy_setopt(curl, CURLOPT_PROXY, proxy.c_str());

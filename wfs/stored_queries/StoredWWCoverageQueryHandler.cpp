@@ -1,7 +1,7 @@
 #include "stored_queries/StoredWWCoverageQueryHandler.h"
 #include <gis/Box.h>
 #include <newbase/NFmiEnumConverter.h>
-#include <smartmet/macgyver/Exception.h>
+#include <macgyver/Exception.h>
 
 #include <boost/algorithm/string/replace.hpp>
 #include <iomanip>

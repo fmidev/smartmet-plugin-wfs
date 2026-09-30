@@ -10,6 +10,7 @@
 #include <macgyver/DirectoryMonitor.h>
 #include <spine/Reactor.h>
 #include <atomic>
+#include <shared_mutex>
 #include <condition_variable>
 #include <filesystem>
 #include <map>

@@ -56,9 +56,7 @@ Fmi::TimeZonePtr bw::SupportsTimeZone::get_tz_for_site(double longitude,
   {
     if (ba::iequals(tz_name, "local"))
     {
-      return geo_engine
-          ->getTimeZones()
-          .time_zone_from_coordinate(longitude, latitude);
+      return geo_engine->getTimeZone(longitude, latitude);
     }
     else
     {

@@ -4,7 +4,7 @@
 #include <variant>
 #include <macgyver/Exception.h>
 #include <macgyver/StringConversion.h>
-#include <smartmet/spine/Value.h>
+#include <spine/Value.h>
 #include <cassert>
 #include <limits>
 #include <sstream>

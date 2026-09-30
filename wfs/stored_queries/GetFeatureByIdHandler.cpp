@@ -3,8 +3,8 @@
 #include "StoredQueryHandlerFactoryDef.h"
 #include "StoredQueryMap.h"
 #include "WfsConvenience.h"
-#include <smartmet/macgyver/Exception.h>
-#include <smartmet/spine/Value.h>
+#include <macgyver/Exception.h>
+#include <spine/Value.h>
 #include <sstream>
 
 namespace bw = SmartMet::Plugin::WFS;

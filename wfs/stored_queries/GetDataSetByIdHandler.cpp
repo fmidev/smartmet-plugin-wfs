@@ -6,8 +6,8 @@
 #include <boost/algorithm/string.hpp>
 #include <macgyver/StringConversion.h>
 #include <macgyver/TypeName.h>
-#include <smartmet/macgyver/Exception.h>
-#include <smartmet/spine/Value.h>
+#include <macgyver/Exception.h>
+#include <spine/Value.h>
 #include <sstream>
 #include <stdexcept>
 
