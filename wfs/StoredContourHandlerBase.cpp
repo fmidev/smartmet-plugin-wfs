@@ -512,6 +512,34 @@ void bw::StoredContourQueryHandler::query(const StoredQuery& stored_query,
   }
 }
 
+std::string bw::StoredContourQueryHandler::get_cache_key_qualifier(
+    const RequestParameterMap& params) const
+{
+  try
+  {
+    // An explicitly requested origin time is already part of the cache key.
+    if (params.count(P_ORIGIN_TIME) > 0 || params.count(P_PRODUCER) == 0)
+      return {};
+
+    const auto producer = params.get_single<std::string>(P_PRODUCER);
+    const std::string dataSource = get_plugin_impl().get_data_source();
+    const bool gridengine_disabled = get_plugin_impl().is_gridengine_disabled();
+
+    // Resolve the origin time from the same backend the query itself will use.
+    if (!gridengine_disabled && dataSource == P_GRID && grid_engine->isEnabled() &&
+        grid_engine->isGridProducer(producer))
+    {
+      return get_grid_generation_qualifier({producer});
+    }
+
+    return get_qengine_origintime_qualifier(producer);
+  }
+  catch (...)
+  {
+    throw Fmi::Exception::Trace(BCP, "Operation failed!");
+  }
+}
+
 void bw::StoredContourQueryHandler::query_qEngine(const StoredQuery& stored_query,
                                                   const std::string& language,
                                                   std::ostream& output) const

@@ -22,10 +22,10 @@
 #include <macgyver/StringConversion.h>
 #include <macgyver/TypeName.h>
 
-#include <smartmet/engines/gis/GdalUtils.h>
-#include <smartmet/engines/querydata/MetaQueryOptions.h>
-#include <smartmet/spine/Convenience.h>
-#include <smartmet/timeseries/ParameterFactory.h>
+#include <engines/gis/GdalUtils.h>
+#include <engines/querydata/MetaQueryOptions.h>
+#include <spine/Convenience.h>
+#include <timeseries/ParameterFactory.h>
 
 #include "AreaUtils.h"
 #include "FeatureID.h"
@@ -146,6 +146,23 @@ StoredGridQueryHandler::~StoredGridQueryHandler() = default;
 std::string bw::StoredGridQueryHandler::get_handler_description() const
 {
     return "Forecast data: download in grid format (grib1, grib2, NetCDF)";
+}
+
+std::string bw::StoredGridQueryHandler::get_cache_key_qualifier(
+    const RequestParameterMap& params) const
+{
+  try
+  {
+    // An explicitly requested origin time is already part of the cache key.
+    if (params.count(P_ORIGIN_TIME) > 0 || params.count(P_PRODUCER) == 0)
+      return {};
+
+    return get_qengine_origintime_qualifier(params.get_single<std::string>(P_PRODUCER));
+  }
+  catch (...)
+  {
+    throw Fmi::Exception::Trace(BCP, "Operation failed!");
+  }
 }
 
 StoredGridQueryHandler::Query::Query(std::shared_ptr<const StoredQueryConfig> config)
@@ -828,8 +845,6 @@ StoredGridQueryHandler::Result StoredGridQueryHandler::extract_forecast(
       throw exception;
     }
 
-    NFmiPoint nearestpoint(kFloatMissing, kFloatMissing);
-
     if (debug_level > 0)
     {
       std::cout << "Producer : " << producer << std::endl;
@@ -936,7 +951,7 @@ StoredGridQueryHandler::Result StoredGridQueryHandler::extract_forecast(
                                                                    *query.output_locale,
                                                                    loc->timezone,
                                                                    query.find_nearest_valid_point,
-                                                                   nearestpoint,
+                                                                   0.0,
                                                                    query.lastpoint);
 
     auto longitudeData = model->values(qengine_lonparam, mask, oneTimeStep);
@@ -952,7 +967,7 @@ StoredGridQueryHandler::Result StoredGridQueryHandler::extract_forecast(
                                                                    *query.output_locale,
                                                                    loc->timezone,
                                                                    query.find_nearest_valid_point,
-                                                                   nearestpoint,
+                                                                   0.0,
                                                                    query.lastpoint);
 
     auto latitudeData = model->values(qengine_latparam, mask, oneTimeStep);
@@ -1027,7 +1042,7 @@ StoredGridQueryHandler::Result StoredGridQueryHandler::extract_forecast(
               *query.output_locale,
               loc->timezone,
               query.find_nearest_valid_point,
-              nearestpoint,
+              0.0,
               query.lastpoint);
 
           auto val = model->values(qengine_param, mask, tlist);

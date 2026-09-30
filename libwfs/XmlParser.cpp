@@ -59,6 +59,25 @@ Parser::Parser(bool stop_on_error, xercesc::XMLGrammarPool *grammar_pool)
     // Cannot save grammars to locked pool
     // cacheGrammarFromParse(true);
 
+    // Security hardening against XXE (arbitrary local file read / SSRF) and
+    // entity-expansion (billion laughs) denial of service. WFS 2.0 requests are
+    // plain XML and never contain a DOCTYPE, so reject any document that carries
+    // one. This alone blocks both external-entity injection and internal
+    // entity-expansion bombs, since both require a DOCTYPE.
+    setDisallowDoctype(true);
+
+    // Defence in depth: never resolve external entities/DTDs through the default
+    // resolver, do not load external DTD subsets, and do not materialise entity
+    // reference nodes.
+    setDisableDefaultEntityResolution(true);
+    setLoadExternalDTD(false);
+    setCreateEntityReferenceNodes(false);
+
+    // Cap entity expansion as an additional safeguard.
+    security_manager.reset(new xercesc::SecurityManager);
+    security_manager->setEntityExpansionLimit(1000);
+    setSecurityManager(security_manager.get());
+
     setErrorHandler(error_handler.get());
   }
   catch (...)
@@ -283,6 +302,16 @@ std::shared_ptr<xercesc::DOMDocument> str2xmldom(const std::string &src,
     parser.setDoNamespaces(true);
     parser.setValidationScheme(xercesc::XercesDOMParser::Val_Never);
     // parser.setExitOnFirstFatalError(true);
+
+    // Security hardening against XXE / entity-expansion attacks (see Parser ctor).
+    xercesc::SecurityManager security_manager;
+    security_manager.setEntityExpansionLimit(1000);
+    parser.setSecurityManager(&security_manager);
+    parser.setDisallowDoctype(true);
+    parser.setDisableDefaultEntityResolution(true);
+    parser.setLoadExternalDTD(false);
+    parser.setCreateEntityReferenceNodes(false);
+
     parser.setErrorHandler(&error_handler);
 
     xercesc::MemBufInputSource input((const XMLByte *)src.c_str(), src.length(), doc_id.c_str());

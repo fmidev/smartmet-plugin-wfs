@@ -9,6 +9,7 @@
 #include <json/json.h>
 #include <spine/Convenience.h>
 #include <macgyver/Exception.h>
+#include <macgyver/ThreadName.h>
 #include <spine/Reactor.h>
 #include <spine/SmartMet.h>
 #include <Plugin.h>
@@ -311,7 +312,12 @@ void Plugin::ensureUpdateLoopStarted()
     std::unique_lock<std::mutex> lock(itsUpdateNotifyMutex);
     if (not itsUpdateLoopThread)
     {
-      itsUpdateLoopThread.reset(new std::thread(std::bind(&Plugin::updateLoop, this)));
+      itsUpdateLoopThread.reset(new std::thread(
+          [this]()
+          {
+            Fmi::set_thread_name("upd-wfs");
+            updateLoop();
+          }));
     }
   }
 }

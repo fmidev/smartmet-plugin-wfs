@@ -3,8 +3,8 @@
 #include "StoredQueryHandlerFactoryDef.h"
 #include <macgyver/StringConversion.h>
 #include <macgyver/TypeName.h>
-#include <smartmet/spine/Convenience.h>
-#include <smartmet/macgyver/Exception.h>
+#include <spine/Convenience.h>
+#include <macgyver/Exception.h>
 #include <set>
 
 namespace bw = SmartMet::Plugin::WFS;

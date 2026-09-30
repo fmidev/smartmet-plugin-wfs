@@ -104,6 +104,12 @@ std::shared_ptr<bw::StoredQuery> bw::StoredQuery::create_from_kvp(
     feature_id.add_param("language", language);
     if (query->debug_format)
       feature_id.add_param("debugFormat", 1);
+    // Let the handler add a qualifier (e.g. the latest model origin time) so
+    // that the response cache is invalidated when the underlying data changes.
+    const std::string cache_key_qualifier =
+        query->handler->get_cache_key_qualifier(*query->params);
+    if (!cache_key_qualifier.empty())
+      feature_id.add_param("cacheKeyQualifier", cache_key_qualifier);
     query->cache_key = feature_id.get_id();
     query->set_stale_seconds(query->handler->get_config()->get_expires_seconds());
 
@@ -177,6 +183,12 @@ std::shared_ptr<bw::StoredQuery> bw::StoredQuery::create_from_xml(
     feature_id.add_param("language", language);
     if (query->debug_format)
       feature_id.add_param("debugFormat", 1);
+    // Let the handler add a qualifier (e.g. the latest model origin time) so
+    // that the response cache is invalidated when the underlying data changes.
+    const std::string cache_key_qualifier =
+        query->handler->get_cache_key_qualifier(*query->params);
+    if (!cache_key_qualifier.empty())
+      feature_id.add_param("cacheKeyQualifier", cache_key_qualifier);
     query->cache_key = feature_id.get_id();
     query->set_stale_seconds(query->handler->get_config()->get_expires_seconds());
 
@@ -215,6 +227,10 @@ std::shared_ptr<bw::StoredQuery> bw::StoredQuery::create_from_feature_id(
     cache_feature_id.add_param("language", query->language);
     if (query->debug_format)
       cache_feature_id.add_param("debugFormat", 1);
+    const std::string cache_key_qualifier =
+        query->handler->get_cache_key_qualifier(*query->params);
+    if (!cache_key_qualifier.empty())
+      cache_feature_id.add_param("cacheKeyQualifier", cache_key_qualifier);
     query->cache_key = cache_feature_id.get_id();
     query->set_stale_seconds(query->handler->get_config()->get_expires_seconds());
 

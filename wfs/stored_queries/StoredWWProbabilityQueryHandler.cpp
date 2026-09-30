@@ -3,7 +3,7 @@
 #include <gis/OGR.h>
 #include <macgyver/TimeFormatter.h>
 #include <newbase/NFmiEnumConverter.h>
-#include <smartmet/macgyver/Exception.h>
+#include <macgyver/Exception.h>
 
 #include <boost/algorithm/string/replace.hpp>
 #include <boost/range/adaptor/map.hpp>
@@ -105,7 +105,7 @@ SmartMet::Engine::Querydata::ParameterOptions get_qengine_parameter(
                                                                 queryParam.outputLocale,
                                                                 queryParam.tz_name,
                                                                 nearestFlag,
-                                                                nearestpoint,
+                                                                0.0,
                                                                 nearestpoint);
 
     return qengine_param;

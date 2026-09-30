@@ -1,14 +1,13 @@
 #pragma once
 
-#include <macgyver/DateTime.h>
-#include <boost/enable_shared_from_this.hpp>
-#include <filesystem>
 #include <boost/geometry.hpp>
 #include <boost/geometry/geometries/box.hpp>
 #include <boost/geometry/geometries/point_xy.hpp>
-#include <optional>
 #include <boost/regex.hpp>
+#include <macgyver/DateTime.h>
 #include <spine/ConfigBase.h>
+#include <filesystem>
+#include <optional>
 #include <set>
 #include <string>
 
@@ -45,19 +44,23 @@ class DataSetQuery
   std::set<int> levels;
 };
 
-class DataSetDefinition : public boost::enable_shared_from_this<DataSetDefinition>
+class DataSetDefinition : public std::enable_shared_from_this<DataSetDefinition>
 {
  public:
   using point_t = boost::geometry::model::d2::point_xy<double>;
   using box_t = boost::geometry::model::box<point_t>;
 
  private:
-  struct Private { explicit Private() = default; };
+  struct Private
+  {
+    explicit Private() = default;
+  };
+
  public:
   DataSetDefinition(Private, SmartMet::Spine::ConfigBase& config, libconfig::Setting& setting);
 
   static std::shared_ptr<DataSetDefinition> create(SmartMet::Spine::ConfigBase& config,
-                                                     libconfig::Setting& setting);
+                                                   libconfig::Setting& setting);
 
   virtual ~DataSetDefinition();
 

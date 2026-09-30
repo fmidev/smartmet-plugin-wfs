@@ -45,6 +45,8 @@ class StoredContourQueryHandler : public StoredQueryHandlerBase,
 		     const std::optional<std::string>& hostname,
                      std::ostream& output) const override;
 
+  std::string get_cache_key_qualifier(const RequestParameterMap& params) const override;
+
  protected:
 
   virtual void  query_qEngine(

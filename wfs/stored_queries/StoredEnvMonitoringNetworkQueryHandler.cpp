@@ -5,8 +5,8 @@
 #include "StoredQueryHandlerFactoryDef.h"
 #include "SupportsLocationParameters.h"
 #include <boost/icl/type_traits/to_string.hpp>
-#include <smartmet/engines/observation/DBRegistry.h>
-#include <smartmet/macgyver/Exception.h>
+#include <engines/observation/DBRegistry.h>
+#include <macgyver/Exception.h>
 #include <memory>
 
 namespace bw = SmartMet::Plugin::WFS;

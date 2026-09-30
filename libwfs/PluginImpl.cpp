@@ -2,6 +2,7 @@
 #include "ErrorResponseGenerator.h"
 #include "HandlerFactorySummary.h"
 #include "WfsConst.h"
+#include "XmlEntityResolver.h"
 #include "XmlParser.h"
 #include "request/DescribeFeatureType.h"
 #include "request/DescribeStoredQueries.h"
@@ -55,7 +56,7 @@ PluginImpl::PluginImpl(SmartMet::Spine::Reactor* theReactor,
     }
 
     query_cache.reset(new QueryResponseCache(
-        itsConfig.getCacheSize(), itsConfig.getCacheTimeConstant()));
+        itsConfig.getCacheSize()));
 
     request_factory.reset(new RequestFactory(*this));
 
@@ -886,6 +887,8 @@ void PluginImpl::maybe_validate_output(const SmartMet::Spine::HTTP::Request& req
           return;
         }
 
+        // Our own output may refer to schemas missing from the cache: allow downloads
+        Xml::EntityResolver::DownloadScope download_scope;
         xml_parser->get()->parse_string(content);
       }
       catch (const Xml::XmlError& err)

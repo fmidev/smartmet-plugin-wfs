@@ -3,7 +3,7 @@
 %define SPECNAME smartmet-plugin-%{DIRNAME}
 Summary: SmartMet WFS plugin
 Name: %{SPECNAME}
-Version: 26.3.18
+Version: 26.9.26
 Release: 2%{?dist}.fmi
 License: MIT
 Group: SmartMet/Plugins
@@ -39,44 +39,44 @@ BuildRequires: xqilla-devel
 BuildRequires: openssl-devel
 BuildRequires: bzip2-devel
 BuildRequires: zlib-devel
-BuildRequires: smartmet-library-timeseries-devel >= 26.2.4
-BuildRequires: smartmet-library-spine-devel >= 26.3.13
-BuildRequires: smartmet-library-gis-devel >= 26.2.5
-BuildRequires: smartmet-library-trax-devel >= 26.2.4
-BuildRequires: smartmet-library-locus-devel >= 26.2.4
-BuildRequires: smartmet-library-macgyver-devel >= 26.2.4
-BuildRequires: smartmet-engine-contour-devel >= 26.2.4
-BuildRequires: smartmet-engine-geonames-devel >= 26.3.10
-BuildRequires: smartmet-engine-gis-devel >= 26.2.4
-BuildRequires: smartmet-engine-grid-devel >= 26.3.18
-BuildRequires: smartmet-engine-querydata-devel >= 26.2.4
-BuildRequires: smartmet-library-grid-content-devel >= 26.3.18
-BuildRequires: smartmet-library-grid-files-devel >= 26.3.18
+BuildRequires: smartmet-library-timeseries-devel >= 26.9.16
+BuildRequires: smartmet-library-spine-devel >= 26.9.26
+BuildRequires: smartmet-library-gis-devel >= 26.9.26
+BuildRequires: smartmet-library-trax-devel >= 26.6.26
+BuildRequires: smartmet-library-locus-devel >= 26.4.13
+BuildRequires: smartmet-library-macgyver-devel >= 26.9.26-2
+BuildRequires: smartmet-engine-contour-devel >= 26.9.23
+BuildRequires: smartmet-engine-geonames-devel >= 26.9.26
+BuildRequires: smartmet-engine-gis-devel >= 26.9.23
+BuildRequires: smartmet-engine-grid-devel >= 26.9.26
+BuildRequires: smartmet-engine-querydata-devel >= 26.9.23
+BuildRequires: smartmet-library-grid-content-devel >= 26.9.26
+BuildRequires: smartmet-library-grid-files-devel >= 26.9.26
 %if %{with observation}
-BuildRequires: smartmet-engine-observation-devel >= 26.2.4
+BuildRequires: smartmet-engine-observation-devel >= 26.9.23
 %endif
 Requires: ctpp2
 Requires: %{smartmet_fmt}
 Requires: libcurl
 Requires: jsoncpp
 Requires: zlib
-Requires: smartmet-library-locus >= 26.2.4
-Requires: smartmet-library-macgyver >= 26.2.4
-Requires: smartmet-library-spine >= 26.3.13
-Requires: smartmet-library-timeseries >= 26.2.4
-Requires: smartmet-library-gis >= 26.2.5
-Requires: smartmet-library-trax >= 26.2.4
-Requires: smartmet-engine-contour >= 26.2.4
-Requires: smartmet-engine-geonames >= 26.3.10
-Requires: smartmet-engine-gis >= 26.2.4
-Requires: smartmet-engine-grid >= 26.3.18
-Requires: smartmet-library-grid-content >= 26.3.18
-Requires: smartmet-library-grid-files >= 26.3.18
+Requires: smartmet-library-locus >= 26.4.13
+Requires: smartmet-library-macgyver >= 26.9.26-2
+Requires: smartmet-library-spine >= 26.9.26
+Requires: smartmet-library-timeseries >= 26.9.16
+Requires: smartmet-library-gis >= 26.9.26
+Requires: smartmet-library-trax >= 26.6.26
+Requires: smartmet-engine-contour >= 26.9.23
+Requires: smartmet-engine-geonames >= 26.9.26
+Requires: smartmet-engine-gis >= 26.9.23
+Requires: smartmet-engine-grid >= 26.9.26
+Requires: smartmet-library-grid-content >= 26.9.26
+Requires: smartmet-library-grid-files >= 26.9.26
 %if %{with observation}
-Requires: smartmet-engine-observation >= 26.2.4
+Requires: smartmet-engine-observation >= 26.9.23
 %endif
-Requires: smartmet-engine-querydata >= 26.2.4
-Requires: smartmet-server >= 26.3.9
+Requires: smartmet-engine-querydata >= 26.9.23
+Requires: smartmet-server >= 26.9.2
 Requires: xerces-c
 Requires: xqilla
 Requires: zlib
@@ -114,20 +114,20 @@ Obsoletes: smartmet-brainstorm-wfs < 16.11.1
 Obsoletes: smartmet-brainstorm-wfs-debuginfo < 16.11.1
 
 #TestRequires: ctpp2
-#TestRequires: smartmet-test-db >= 26.2.17
-#TestRequires: smartmet-test-data >= 25.8.13
-#TestRequires: smartmet-utils-devel >= 26.2.4
-#TestRequires: smartmet-library-macgyver >= 26.2.4
-#TestRequires: smartmet-library-gis >= 26.2.5
-#TestRequires: smartmet-library-newbase >= 26.2.4
-#TestRequires: smartmet-library-spine-plugin-test >= 26.3.13
-#TestRequires: smartmet-engine-geonames >= 26.3.10
-#TestRequires: smartmet-engine-gis >= 26.2.4
-#TestRequires: smartmet-engine-querydata >= 26.2.4
+#TestRequires: smartmet-test-db >= 26.5.8
+#TestRequires: smartmet-test-data >= 26.8.26
+#TestRequires: smartmet-utils-devel >= 26.9.3
+#TestRequires: smartmet-library-macgyver >= 26.9.26-2
+#TestRequires: smartmet-library-gis >= 26.9.26
+#TestRequires: smartmet-library-newbase >= 26.9.23
+#TestRequires: smartmet-library-spine-plugin-test >= 26.9.26
+#TestRequires: smartmet-engine-geonames >= 26.9.26
+#TestRequires: smartmet-engine-gis >= 26.9.23
+#TestRequires: smartmet-engine-querydata >= 26.9.23
 %if %{with observation}
-#TestRequires: smartmet-engine-observation >= 26.2.4
+#TestRequires: smartmet-engine-observation >= 26.9.23
 %endif
-#TestRequires: smartmet-engine-grid >= 26.3.18
+#TestRequires: smartmet-engine-grid >= 26.9.26
 #TestRequires: redis
 #TestRequires: smartmet-engine-grid-test
 # Required by top level Makefile
@@ -139,10 +139,10 @@ SmartMet WFS plugin
 
 %package -n %{SPECNAME}-devel
 Summary: SmartMet WFS plugin development files
-Requires: smartmet-library-spine-devel >= 26.3.13
-Requires: smartmet-library-gis-devel >= 26.2.5
-Requires: smartmet-library-locus-devel >= 26.2.4
-Requires: smartmet-library-macgyver-devel >= 26.2.4
+Requires: smartmet-library-spine-devel >= 26.9.26
+Requires: smartmet-library-gis-devel >= 26.9.26
+Requires: smartmet-library-locus-devel >= 26.4.13
+Requires: smartmet-library-macgyver-devel >= 26.9.26-2
 Requires: %{SPECNAME} = %{version}-%{release}
 %description -n %{SPECNAME}-devel
 SmartMet WFS plugin development files (for building testsuite without rebuilding plugin)
@@ -176,7 +176,69 @@ rm -rf $RPM_BUILD_ROOT
 %{_includedir}/smartmet/plugin/wfs/request/*.h
 
 %changelog
-* Wed Mar 18 2026 Mika Heiskanen <mika.heiskanen@fmi.fi> - 26.3.18-2.fmi
+* Sat Sep 26 2026 Mika Heiskanen <mika.heiskanen@fmi.fi> - 26.9.26-2.fmi
+- Repackaged due to grid-files ABI changes
+- Require the 26.9.26 releases of the SmartMet dependencies
+
+* Sat Sep 26 2026 Mika Heiskanen <mika.heiskanen@fmi.fi> - 26.9.26-1.fmi
+- Resolve local timezones of sites with the geonames engine timezone polygons
+
+* Thu Sep 24 2026 Mika Heiskanen <mika.heiskanen@fmi.fi> - 26.9.24-3.fmi
+- Security: XML schemas are downloaded only while validating the plugin's own output, never for schema locations given in client requests (blind SSRF)
+- Security: schema downloads are limited to HTTP(S) incl. redirects, with timeouts; fixed curl options passed as pointers (verbose logging was on)
+
+* Thu Sep 24 2026 Mika Heiskanen <mika.heiskanen@fmi.fi> - 26.9.24-2.fmi
+- Harden XML POST parsing against XXE (arbitrary local file read / SSRF) and entity-expansion (billion laughs) attacks: disallow DOCTYPE, cap entity expansion, and restrict the schema entity resolver to the pre-loaded schema cache
+
+* Thu Sep 24 2026 Mika Heiskanen <mika.heiskanen@fmi.fi> - 26.9.24-1.fmi
+- Use std instead of boost for enable_shared_from_this
+
+* Wed Sep 23 2026 Mika Heiskanen <mika.heiskanen@fmi.fi> - 26.9.13-2.fmi
+- Repackaged due to base library ABI changes
+
+* Wed Sep 16 2026 Mika Heiskanen <mika.heiskanen@fmi.fi> - 26.9.16-2.fmi
+- Repackaged due to QEngine ABI changes (smartmet-engine-querydata >= 26.9.23)
+
+* Wed Sep 16 2026 Mika Heiskanen <mika.heiskanen@fmi.fi> - 26.9.16-1.fmi
+- Repackaged due to Fmi::Cache::Cache locking changes
+
+* Wed Aug 26 2026 Mika Heiskanen <mika.heiskanen@fmi.fi> - 26.8.26-1.fmi
+- QEngine ABI changed
+
+* Tue Jul 21 2026 Andris Pavēnis <andris.pavenis@fmi.fi> 26.7.21-2.fmi
+- Repackage due to ABI changes
+
+* Wed Jul  8 2026 Mika Heiskanen <mika.heiskanen@fmi.fi> - 26.7.8-2.fmi
+- Extend model origin time cache-key invalidation to the grid-engine handlers (grid forecast, coverage, isoline, weather warning coverage) and the grid querydata download handler
+
+* Wed Jul  8 2026 Mika Heiskanen <mika.heiskanen@fmi.fi> - 26.7.8-1.fmi
+- Include the latest model origin time in the response cache key so that cached responses are invalidated when a new model run becomes available
+
+* Fri Jun 26 2026 Mika Heiskanen <mika.heiskanen@fmi.fi> 26.6.26-1.fmi
+- Thread naming: Named the update-loop and stored-query monitor threads
+
+* Wed Jun 24 2026 Mika Heiskanen <mika.heiskanen@fmi.fi> - 26.6.24-1.fmi
+- Mass rebuild
+
+* Mon Jun 15 2026 Mika Heiskanen <mika.heiskanen@fmi.fi> - 26.6.15-1.fmi
+- Repackaged due to ABI changes
+
+* Tue Apr 28 2026 Mika Heiskanen <mika.heiskanen@fmi.fi> - 26.4.28-2.fmi
+- Link explicitly against smartmet-library-gis and -grid-content (was relying on transitive linking)
+
+* Tue Apr 28 2026 Mika Heiskanen <mika.heiskanen@fmi.fi> - 26.4.28-1.fmi
+- Repackaged due to API changes
+
+* Fri Apr 24 2026 Mika Heiskanen <mika.heiskanen@fmi.fi> - 26.4.24-1.fmi
+- Repackaged due to API changes
+
+* Fri Apr 17 2026 Mika Heiskanen <mika.heiskanen@fmi.fi> - 26.4.17-1.fmi
+- Repackaged due to API changes
+
+* Mon Apr 13 2026 Mika Heiskanen <mika.heiskanen@fmi.fi> - 26.4.13-1.fmi
+- Repackaged due to API changes
+
+* Wed Mar 18 2026 Mika Heiskanen <mika.heiskanen@fmi.fi> - 26.3.18-1.fmi
 - Harmonizing types
 
 * Wed Feb  4 2026 Andris Pavēnis <andris.pavenis@fmi.fi> 26.2.4-1.fmi

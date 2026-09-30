@@ -100,6 +100,24 @@ class StoredQueryHandlerBase : virtual protected SupportsExtraHandlerParams,
    */
   virtual bool redirect(const StoredQuery& query, std::string& new_stored_query_id) const;
 
+  /**
+   *   @brief Provides an extra qualifier to add to the response cache key
+   *
+   *   The response cache key is normally derived from the request parameters
+   *   only. When a handler serves data whose freshness is not captured by the
+   *   request parameters (for example the latest available model origin time),
+   *   the cached response would keep being served even after fresher data has
+   *   become available. Such handlers can override this method to return a
+   *   value that changes whenever the underlying data changes; the value is
+   *   folded into the cache key so the cache is invalidated automatically.
+   *
+   *   The default (base class) implementation returns an empty string, which
+   *   leaves the cache key unchanged.
+   *
+   *   @param params The processed stored query parameters
+   */
+  virtual std::string get_cache_key_qualifier(const RequestParameterMap& params) const;
+
   inline std::shared_ptr<const StoredQueryConfig> get_config() const { return config; }
   const StoredQueryMap& get_stored_query_map() const;
 

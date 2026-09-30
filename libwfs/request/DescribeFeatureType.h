@@ -3,7 +3,7 @@
 #include "PluginImpl.h"
 #include "RequestBase.h"
 #include <memory>
-#include <smartmet/spine/HTTP.h>
+#include <spine/HTTP.h>
 #include <xercesc/dom/DOMDocument.hpp>
 #include <string>
 #include <vector>

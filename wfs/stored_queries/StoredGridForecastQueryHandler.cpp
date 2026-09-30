@@ -168,6 +168,26 @@ std::string StoredGridForecastQueryHandler::get_handler_description() const
     return "Forecast data: download in grid format (grib1, grib2, NetCDF)";
 }
 
+std::string StoredGridForecastQueryHandler::get_cache_key_qualifier(
+    const RequestParameterMap& params) const
+{
+  try
+  {
+    // An explicitly requested origin time is already part of the cache key.
+    if (params.count(P_ORIGIN_TIME) > 0)
+      return {};
+
+    std::vector<std::string> models;
+    params.get<std::string>(P_MODEL, std::back_inserter(models));
+
+    return get_grid_generation_qualifier(models);
+  }
+  catch (...)
+  {
+    throw Fmi::Exception::Trace(BCP, "Operation failed!");
+  }
+}
+
 void StoredGridForecastQueryHandler::init_handler()
 {
   try

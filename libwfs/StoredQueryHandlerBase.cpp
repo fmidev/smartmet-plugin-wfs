@@ -149,6 +149,12 @@ bool StoredQueryHandlerBase::redirect(const StoredQuery& query,
   }
 }
 
+std::string StoredQueryHandlerBase::get_cache_key_qualifier(const RequestParameterMap& params) const
+{
+  (void)params;
+  return {};
+}
+
 const StoredQueryMap& StoredQueryHandlerBase::get_stored_query_map() const
 {
   try

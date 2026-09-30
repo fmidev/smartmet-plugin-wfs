@@ -4,9 +4,9 @@
 #include "StoredQueryHandlerFactoryDef.h"
 #include <engines/observation/DBRegistry.h>
 #include <macgyver/StringConversion.h>
-#include <smartmet/engines/observation/MastQuery.h>
-#include <smartmet/macgyver/Exception.h>
-#include <smartmet/spine/Convenience.h>
+#include <engines/observation/MastQuery.h>
+#include <macgyver/Exception.h>
+#include <spine/Convenience.h>
 #include <tuple>
 
 namespace bw = SmartMet::Plugin::WFS;
