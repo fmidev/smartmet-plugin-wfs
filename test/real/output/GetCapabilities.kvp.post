@@ -90,6 +90,7 @@
         <ows:AllowedValues>
           <ows:Value>application/gml+xml; subtype=gml/3.2</ows:Value>
           <ows:Value>application/gml+xml; version=3.2</ows:Value>
+          <ows:Value>debug</ows:Value>
           <ows:Value>text/xml; subtype=gml/3.2</ows:Value>
           <ows:Value>text/xml; version=3.2</ows:Value>
         </ows:AllowedValues>
@@ -130,6 +131,7 @@
         <ows:AllowedValues>
           <ows:Value>application/gml+xml; subtype=gml/3.2</ows:Value>
           <ows:Value>application/gml+xml; version=3.2</ows:Value>
+          <ows:Value>debug</ows:Value>
           <ows:Value>text/xml; subtype=gml/3.2</ows:Value>
           <ows:Value>text/xml; version=3.2</ows:Value>
         </ows:AllowedValues>
@@ -250,23 +252,75 @@
         </inspire_common:ResponseLanguage>
 
         <inspire_dls:SpatialDataSetIdentifier>
-          <inspire_common:Code>2000001</inspire_common:Code>
+          <inspire_common:Code>1000549</inspire_common:Code>
           <inspire_common:Namespace>FI</inspire_common:Namespace>
         </inspire_dls:SpatialDataSetIdentifier>
         <inspire_dls:SpatialDataSetIdentifier>
-          <inspire_common:Code>2000002</inspire_common:Code>
+          <inspire_common:Code>1000550</inspire_common:Code>
           <inspire_common:Namespace>FI</inspire_common:Namespace>
         </inspire_dls:SpatialDataSetIdentifier>
         <inspire_dls:SpatialDataSetIdentifier>
-          <inspire_common:Code>2000003</inspire_common:Code>
+          <inspire_common:Code>1000551</inspire_common:Code>
           <inspire_common:Namespace>FI</inspire_common:Namespace>
         </inspire_dls:SpatialDataSetIdentifier>
         <inspire_dls:SpatialDataSetIdentifier>
-          <inspire_common:Code>2000004</inspire_common:Code>
+          <inspire_common:Code>1000552</inspire_common:Code>
           <inspire_common:Namespace>FI</inspire_common:Namespace>
         </inspire_dls:SpatialDataSetIdentifier>
         <inspire_dls:SpatialDataSetIdentifier>
-          <inspire_common:Code>2000005</inspire_common:Code>
+          <inspire_common:Code>1000554</inspire_common:Code>
+          <inspire_common:Namespace>FI</inspire_common:Namespace>
+        </inspire_dls:SpatialDataSetIdentifier>
+        <inspire_dls:SpatialDataSetIdentifier>
+          <inspire_common:Code>1000555</inspire_common:Code>
+          <inspire_common:Namespace>FI</inspire_common:Namespace>
+        </inspire_dls:SpatialDataSetIdentifier>
+        <inspire_dls:SpatialDataSetIdentifier>
+          <inspire_common:Code>1000556</inspire_common:Code>
+          <inspire_common:Namespace>FI</inspire_common:Namespace>
+        </inspire_dls:SpatialDataSetIdentifier>
+        <inspire_dls:SpatialDataSetIdentifier>
+          <inspire_common:Code>1000557</inspire_common:Code>
+          <inspire_common:Namespace>FI</inspire_common:Namespace>
+        </inspire_dls:SpatialDataSetIdentifier>
+        <inspire_dls:SpatialDataSetIdentifier>
+          <inspire_common:Code>1000558</inspire_common:Code>
+          <inspire_common:Namespace>FI</inspire_common:Namespace>
+        </inspire_dls:SpatialDataSetIdentifier>
+        <inspire_dls:SpatialDataSetIdentifier>
+          <inspire_common:Code>1000559</inspire_common:Code>
+          <inspire_common:Namespace>FI</inspire_common:Namespace>
+        </inspire_dls:SpatialDataSetIdentifier>
+        <inspire_dls:SpatialDataSetIdentifier>
+          <inspire_common:Code>1000560</inspire_common:Code>
+          <inspire_common:Namespace>FI</inspire_common:Namespace>
+        </inspire_dls:SpatialDataSetIdentifier>
+        <inspire_dls:SpatialDataSetIdentifier>
+          <inspire_common:Code>1000561</inspire_common:Code>
+          <inspire_common:Namespace>FI</inspire_common:Namespace>
+        </inspire_dls:SpatialDataSetIdentifier>
+        <inspire_dls:SpatialDataSetIdentifier>
+          <inspire_common:Code>1000562</inspire_common:Code>
+          <inspire_common:Namespace>FI</inspire_common:Namespace>
+        </inspire_dls:SpatialDataSetIdentifier>
+        <inspire_dls:SpatialDataSetIdentifier>
+          <inspire_common:Code>1000565</inspire_common:Code>
+          <inspire_common:Namespace>FI</inspire_common:Namespace>
+        </inspire_dls:SpatialDataSetIdentifier>
+        <inspire_dls:SpatialDataSetIdentifier>
+          <inspire_common:Code>1000566</inspire_common:Code>
+          <inspire_common:Namespace>FI</inspire_common:Namespace>
+        </inspire_dls:SpatialDataSetIdentifier>
+        <inspire_dls:SpatialDataSetIdentifier>
+          <inspire_common:Code>1000890</inspire_common:Code>
+          <inspire_common:Namespace>FI</inspire_common:Namespace>
+        </inspire_dls:SpatialDataSetIdentifier>
+        <inspire_dls:SpatialDataSetIdentifier>
+          <inspire_common:Code>1000930</inspire_common:Code>
+          <inspire_common:Namespace>FI</inspire_common:Namespace>
+        </inspire_dls:SpatialDataSetIdentifier>
+        <inspire_dls:SpatialDataSetIdentifier>
+          <inspire_common:Code>1000931</inspire_common:Code>
           <inspire_common:Namespace>FI</inspire_common:Namespace>
         </inspire_dls:SpatialDataSetIdentifier>
 
@@ -276,6 +330,36 @@
 
   <!-- Returned FeatureTypes -->
   <FeatureTypeList>
+    <FeatureType xmlns:BsWfs="http://xml.fmi.fi/schema/wfs/2.0" xsi:schemaLocation="http://xml.fmi.fi/schema/wfs/2.0 https://xml.fmi.fi/schema/wfs/2.0/fmi_wfs_simplefeature.xsd">
+      <Name>BsWfs:BsWfsElement</Name>
+      <Title>Observations and forecasts</Title>
+      <Abstract>Timeseries data of surface weather observations from meteorological and road
+        weather observation stations, as well as air quality measurement stations, as well as
+        point forecasts of the basic surface weather parameters for the major towns and cities
+        in Finland. Each of these features contains measured or predicted atmospheric property
+        values from one station over the requested time period and resolution in &apos;simple feature&apos; format.</Abstract>
+      <DefaultCRS>http://www.opengis.net/def/crs/EPSG/0/4258</DefaultCRS>
+      <OtherCRS>http://www.opengis.net/def/crs/EPSG/0/4326</OtherCRS>
+      <OtherCRS>http://www.opengis.net/def/crs/EPSG/0/3035</OtherCRS>
+      <OtherCRS>http://www.opengis.net/def/crs/EPSG/0/3067</OtherCRS>
+      <OtherCRS>http://www.opengis.net/def/crs/EPSG/0/3047</OtherCRS>
+      <OtherCRS>http://www.opengis.net/def/crs/EPSG/0/2393</OtherCRS>
+      <OtherCRS>http://www.opengis.net/def/crs/EPSG/0/3857</OtherCRS>
+      <ows:WGS84BoundingBox>
+        <ows:LowerCorner>-180 -90</ows:LowerCorner>
+        <ows:UpperCorner>180 90</ows:UpperCorner>
+      </ows:WGS84BoundingBox>
+    </FeatureType>
+    <FeatureType xmlns:avi="http://xml.fmi.fi/namespace/aviation-weather/2014/02/15" xsi:schemaLocation="http://xml.fmi.fi/namespace/aviation-weather/2014/02/15 https://xml.fmi.fi/schema/aviation-weather/2014/02/15/fmiavi.xsd">
+      <Name>avi:VerifiableMessage</Name>
+      <Title>Verifiable message</Title>
+      <Abstract>Any message that can be verified.</Abstract>
+      <DefaultCRS>http://www.opengis.net/def/crs/EPSG/0/4326</DefaultCRS>
+      <ows:WGS84BoundingBox>
+        <ows:LowerCorner>-180 -90</ows:LowerCorner>
+        <ows:UpperCorner>180 90</ows:UpperCorner>
+      </ows:WGS84BoundingBox>
+    </FeatureType>
     <FeatureType xmlns:omso="http://inspire.ec.europa.eu/schemas/omso/3.0" xsi:schemaLocation="http://inspire.ec.europa.eu/schemas/omso/3.0 https://inspire.ec.europa.eu/schemas/omso/3.0/SpecialisedObservations.xsd">
       <Name>omso:GridSeriesObservation</Name>
       <Title>Observation</Title>
@@ -297,6 +381,24 @@
       </ows:WGS84BoundingBox>
     </FeatureType>
     <FeatureType xmlns:omso="http://inspire.ec.europa.eu/schemas/omso/3.0" xsi:schemaLocation="http://inspire.ec.europa.eu/schemas/omso/3.0 https://inspire.ec.europa.eu/schemas/omso/3.0/SpecialisedObservations.xsd">
+      <Name>omso:PointObservation</Name>
+      <Title>Observed, predicted or measured point data</Title>
+      <Abstract>Observations, forecasts or measurement of properties at a single
+        point in time and space.</Abstract>
+      <DefaultCRS>http://www.opengis.net/def/crs/EPSG/0/4258</DefaultCRS>
+      <OtherCRS>http://www.opengis.net/def/crs/EPSG/0/4326</OtherCRS>
+      <OtherCRS>http://www.opengis.net/def/crs/EPSG/0/3035</OtherCRS>
+      <OtherCRS>http://www.opengis.net/def/crs/EPSG/0/3067</OtherCRS>
+      <OtherCRS>http://www.opengis.net/def/crs/EPSG/0/3047</OtherCRS>
+      <OtherCRS>http://www.opengis.net/def/crs/EPSG/0/2393</OtherCRS>
+      <OtherCRS>http://www.opengis.net/def/crs/EPSG/0/3857</OtherCRS>
+      <OtherCRS>http://www.opengis.net/def/crs/EPSG/0/7423</OtherCRS>
+      <ows:WGS84BoundingBox>
+        <ows:LowerCorner>-180 -90</ows:LowerCorner>
+        <ows:UpperCorner>180 90</ows:UpperCorner>
+      </ows:WGS84BoundingBox>
+    </FeatureType>
+    <FeatureType xmlns:omso="http://inspire.ec.europa.eu/schemas/omso/3.0" xsi:schemaLocation="http://inspire.ec.europa.eu/schemas/omso/3.0 https://inspire.ec.europa.eu/schemas/omso/3.0/SpecialisedObservations.xsd">
       <Name>omso:PointTimeSeriesObservation</Name>
       <Title>Observation</Title>
       <Abstract>Timeseries data of surface weather observations from meteorological and
@@ -312,6 +414,19 @@
       <OtherCRS>http://www.opengis.net/def/crs/EPSG/0/3047</OtherCRS>
       <OtherCRS>http://www.opengis.net/def/crs/EPSG/0/2393</OtherCRS>
       <OtherCRS>http://www.opengis.net/def/crs/EPSG/0/3857</OtherCRS>
+      <ows:WGS84BoundingBox>
+        <ows:LowerCorner>-180 -90</ows:LowerCorner>
+        <ows:UpperCorner>180 90</ows:UpperCorner>
+      </ows:WGS84BoundingBox>
+    </FeatureType>
+    <FeatureType xmlns:omso="http://inspire.ec.europa.eu/schemas/omso/3.0" xsi:schemaLocation="http://inspire.ec.europa.eu/schemas/omso/3.0 https://inspire.ec.europa.eu/schemas/omso/3.0/SpecialisedObservations.xsd">
+      <Name>omso:ProfileObservation</Name>
+      <Title>Atmospheric sounding and profile observations and simulated soundings</Title>
+      <Abstract>Periodic atmospheric (balloon) sounding observations from the Finnish sounding stations,
+        as well as vertical profile weather observations and simulated soundings at anywhere in the numeric Hirlam weather model or FMI Baltic
+        Sea circulation model area.</Abstract>
+      <DefaultCRS>http://www.opengis.net/def/crs/EPSG/0/7423</DefaultCRS>
+      <OtherCRS>http://www.opengis.net/def/crs/EPSG/0/7423</OtherCRS>
       <ows:WGS84BoundingBox>
         <ows:LowerCorner>-180 -90</ows:LowerCorner>
         <ows:UpperCorner>180 90</ows:UpperCorner>

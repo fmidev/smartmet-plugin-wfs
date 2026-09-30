@@ -562,7 +562,7 @@ void PluginImpl::query(const std::string& req_language,
       request->set_hostname(hostname);
       request->set_protocol(protocol);
       auto fmi_apikey = get_fmi_apikey(req);
-      if (fmi_apikey)
+      if (fmi_apikey && Spine::FmiApiKey::shouldReturnApiKey(req))
       {
         request->set_fmi_apikey_prefix(fmi_apikey_prefix);
         request->set_fmi_apikey(*fmi_apikey);
@@ -585,7 +585,7 @@ void PluginImpl::query(const std::string& req_language,
         std::shared_ptr<RequestBase> request = request_factory->parse_kvp(language, req);
         request->set_hostname(hostname);
         request->set_protocol(protocol);
-        if (fmi_apikey)
+        if (fmi_apikey && Spine::FmiApiKey::shouldReturnApiKey(req))
         {
           request->set_fmi_apikey_prefix(fmi_apikey_prefix);
           request->set_fmi_apikey(*fmi_apikey);
@@ -681,7 +681,7 @@ void PluginImpl::query(const std::string& req_language,
         std::shared_ptr<RequestBase> request = request_factory->parse_xml(language, *xml_doc);
         request->set_hostname(hostname);
         request->set_protocol(protocol);
-        if (fmi_apikey)
+        if (fmi_apikey && Spine::FmiApiKey::shouldReturnApiKey(req))
         {
           request->set_fmi_apikey_prefix(fmi_apikey_prefix);
           request->set_fmi_apikey(*fmi_apikey);

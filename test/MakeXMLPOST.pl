@@ -16,6 +16,11 @@ sub MakeXMLPost
     print $output "Host: opendata.fmi.fi\r\n";
     print $output "Content-Type: text/xml\r\n";
     print $output "fmi-apikey: foobar\r\n";
+    if ($output_fn eq "input/GetCapabilities/GetCapabilities.xml.post")
+    {
+        # Test for omit-fmi-apikey header.
+        print $output "omit-fmi-apikey: 1\r\n";
+    }
     print $output  "Content-Length: $len\r\n";
     print $output  "\r\n";
     print $output  $data;
