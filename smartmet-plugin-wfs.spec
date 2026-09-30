@@ -4,7 +4,7 @@
 Summary: SmartMet WFS plugin
 Name: %{SPECNAME}
 Version: 26.9.30
-Release: 1%{?dist}.fmi
+Release: 2%{?dist}.fmi
 License: MIT
 Group: SmartMet/Plugins
 URL: https://github.com/fmidev/smartmet-plugin-wfs
@@ -40,7 +40,7 @@ BuildRequires: openssl-devel
 BuildRequires: bzip2-devel
 BuildRequires: zlib-devel
 BuildRequires: smartmet-library-timeseries-devel >= 26.9.26
-BuildRequires: smartmet-library-spine-devel >= 26.9.29
+BuildRequires: smartmet-library-spine-devel >= 26.9.30
 BuildRequires: smartmet-library-gis-devel >= 26.9.26
 BuildRequires: smartmet-library-trax-devel >= 26.6.26
 BuildRequires: smartmet-library-locus-devel >= 26.4.13
@@ -62,7 +62,7 @@ Requires: jsoncpp
 Requires: zlib
 Requires: smartmet-library-locus >= 26.4.13
 Requires: smartmet-library-macgyver >= 26.9.26
-Requires: smartmet-library-spine >= 26.9.29
+Requires: smartmet-library-spine >= 26.9.30
 Requires: smartmet-library-timeseries >= 26.9.26
 Requires: smartmet-library-gis >= 26.9.26
 Requires: smartmet-library-trax >= 26.6.26
@@ -176,6 +176,9 @@ rm -rf $RPM_BUILD_ROOT
 %{_includedir}/smartmet/plugin/wfs/request/*.h
 
 %changelog
+* Wed Sep 30 2026 Petteri Hintsanen <petteri.hintsanen@fmi.fi> - 26.9.30-2.fmi
+- Security: Optionally hide fmi-apikey from responses.
+
 * Wed Sep 30 2026 Mika Heiskanen <mika.heiskanen@fmi.fi> - 26.9.30-1.fmi
 - Updated license information
 
