@@ -127,7 +127,7 @@ Obsoletes: smartmet-brainstorm-wfs-debuginfo < 16.11.1
 %if %{with observation}
 #TestRequires: smartmet-engine-observation >= 26.10.3
 %endif
-#TestRequires: smartmet-engine-grid >= 26.9.26
+#TestRequires: smartmet-engine-grid >= 26.10.3
 #TestRequires: redis
 #TestRequires: smartmet-engine-grid-test
 # Required by top level Makefile
