@@ -13,6 +13,7 @@
 #include <future>
 #include <memory>
 #include <unordered_map>
+#include <utility>
 
 namespace bw = SmartMet::Plugin::WFS;
 namespace bo = SmartMet::Engine::Observation;
@@ -38,7 +39,7 @@ const char *P_SHOW_OBSERVING_CAPABILITY = "showObservingCapability";
 
 bw::StoredEnvMonitoringFacilityQueryHandler::StoredEnvMonitoringFacilityQueryHandler(
     SmartMet::Spine::Reactor *reactor,
-    StoredQueryConfig::Ptr config,
+    const StoredQueryConfig::Ptr& config,
     PluginImpl &plugin_data,
     std::optional<std::string> template_file_name)
 
@@ -46,7 +47,7 @@ bw::StoredEnvMonitoringFacilityQueryHandler::StoredEnvMonitoringFacilityQueryHan
       SupportsExtraHandlerParams(config),
       RequiresGeoEngine(reactor),
       RequiresObsEngine(reactor),
-      StoredQueryHandlerBase(reactor, config, plugin_data, template_file_name)
+      StoredQueryHandlerBase(reactor, config, plugin_data, std::move(template_file_name))
 {
   try
   {
@@ -237,7 +238,7 @@ void bw::StoredEnvMonitoringFacilityQueryHandler::query(const StoredQuery &query
         SmartMet::Spine::LocationList locList = geo_engine->nameSearch(opts, validStation.first);
         if (not locList.empty())
         {
-          SmartMet::Spine::LocationPtr stationLocPtr = locList.front();
+          const SmartMet::Spine::LocationPtr& stationLocPtr = locList.front();
           if (stationLocPtr->geoid != 0)
             hash["stations"][stationCounter]["geoid"] = Fmi::to_string(stationLocPtr->geoid);
           if (not stationLocPtr->area.empty())
@@ -875,7 +876,7 @@ wfs_stored_env_monitoring_facility_handler_create(SmartMet::Spine::Reactor *reac
   {
     auto *qh =
         new bw::StoredEnvMonitoringFacilityQueryHandler(
-            reactor, config, plugin_data, template_file_name);
+            reactor, std::move(config), plugin_data, std::move(template_file_name));
     std::shared_ptr<SmartMet::Plugin::WFS::StoredQueryHandlerBase> instance(qh);
     return instance;
   }

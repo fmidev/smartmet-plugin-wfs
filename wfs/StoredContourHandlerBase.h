@@ -36,7 +36,7 @@ class StoredContourQueryHandler : public StoredQueryHandlerBase,
 {
  public:
   StoredContourQueryHandler(SmartMet::Spine::Reactor* reactor,
-                            std::shared_ptr<StoredQueryConfig> config,
+                            const std::shared_ptr<StoredQueryConfig>& config,
                             PluginImpl& plugin_impl,
                             std::optional<std::string> template_file_name);
   ~StoredContourQueryHandler() override;

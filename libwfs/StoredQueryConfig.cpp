@@ -48,7 +48,7 @@ SmartMet::Plugin::WFS::StoredQueryConfig::StoredQueryConfig(const std::string& c
 }
 
 SmartMet::Plugin::WFS::StoredQueryConfig::StoredQueryConfig(
-    std::shared_ptr<libconfig::Config> config, const Config* plugin_config)
+    const std::shared_ptr<libconfig::Config>& config, const Config* plugin_config)
 
     : SmartMet::Spine::ConfigBase(config, "WFS stored query configuration")
     , hosts(plugin_config ? plugin_config->get_hosts() : default_hosts)
@@ -278,7 +278,7 @@ void SmartMet::Plugin::WFS::StoredQueryConfig::parse_config()
           {
             std::ostringstream msg;
             msg << METHOD_NAME << ": stored query parameter '" << desc.name
-                << "' cannot conflict with itself" << std::endl;
+                << "' cannot conflict with itself" << '\n';
             std::cerr << msg.str() << std::flush;
             have_error = true;
           }
@@ -287,7 +287,7 @@ void SmartMet::Plugin::WFS::StoredQueryConfig::parse_config()
           {
             std::ostringstream msg;
             msg << METHOD_NAME << ": stored query parameter '" << desc.name
-                << "' conflicts with non-existing parameter '" << *it << "'" << std::endl;
+                << "' conflicts with non-existing parameter '" << *it << "'" << '\n';
             std::cerr << msg.str() << std::flush;
             have_error = true;
           }
@@ -297,7 +297,7 @@ void SmartMet::Plugin::WFS::StoredQueryConfig::parse_config()
           {
             std::ostringstream msg;
             msg << METHOD_NAME << ": mandatory configuration parameters '" << desc.name << "' and '"
-                << desc2.name << "' marked as conflicting" << std::endl;
+                << desc2.name << "' marked as conflicting" << '\n';
             std::cerr << msg.str() << std::flush;
             have_error = true;
           }
@@ -386,6 +386,7 @@ SmartMet::Plugin::WFS::StoredQueryConfig::get_param_desc(const std::string& name
             auto desc_it = param_map.find(real_name);
             if (desc_it == param_map.end()) {
                 std::vector<std::string> available;
+                available.reserve(param_map.size());
                 for (const auto& item : param_map) { available.push_back(item.first); }
                 throw Fmi::Exception(BCP, "[INTERNAL ERROR] Parameter " + real_name
                     + " description not found when lovercase name " + tmp
@@ -509,7 +510,7 @@ void SmartMet::Plugin::WFS::StoredQueryConfig::dump_params(std::ostream& stream)
     {
       stream << "(PARAMETER '" << item.first << "'";
       item.second.dump(stream);
-      stream << std::endl;
+      stream << '\n';
     }
   }
   catch (...)

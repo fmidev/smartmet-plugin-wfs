@@ -97,7 +97,7 @@ class GetPropertyValue : public RequestBase
    *   @param is_schemalocation_set value "false", schema location has not been already set, so set
    * it here.
    */
-  void finalize(std::shared_ptr<xercesc::DOMDocument> result,
+  void finalize(const std::shared_ptr<xercesc::DOMDocument>& result,
                 const int cumulative_num_returned,
                 const int cumulative_num_matched,
                 const bool is_timestamp_set,
@@ -119,7 +119,7 @@ class GetPropertyValue : public RequestBase
    *
    *   Throws xercesc::DOMException or SmartMet::Plugin::WFS::Xml::XmlError in case of an error.
    */
-  void add_responses(std::shared_ptr<xercesc::DOMDocument> result,
+  void add_responses(const std::shared_ptr<xercesc::DOMDocument>& result,
                      const std::vector<std::string>& query_responses,
                      int& cumulative_num_returned,
                      int& cumulative_num_matched,
@@ -146,13 +146,13 @@ class GetPropertyValue : public RequestBase
    *   @param is_schemalocation_set value changes to "true", when valid schema location has been
    * copied from query response to result tree.
    */
-  void filter(std::shared_ptr<xercesc::DOMDocument> result,
+  void filter(const std::shared_ptr<xercesc::DOMDocument>& result,
               const std::string& response,
               int& cumulative_num_returned,
               int& cumulative_num_matched,
               std::optional<int>& max_members,
               std::optional<int>& start_index,
-              const std::shared_ptr<QueryBase> query,
+              const std::shared_ptr<QueryBase>& query,
               bool& is_timestamp_set,
               bool& is_schemalocation_set) const;
 
@@ -200,7 +200,7 @@ class GetPropertyValue : public RequestBase
    *   @param is_schemalocation_set value changes to "true", when valid schema location has been
    * copied from query response to result tree.
    */
-  void append_members(std::shared_ptr<xercesc::DOMDocument> result,
+  void append_members(const std::shared_ptr<xercesc::DOMDocument>& result,
                       Xml::XPathSnapshot& xpath_snapshot,
                       int& cumulative_num_returned,
                       std::optional<int>& max_members,

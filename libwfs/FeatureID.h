@@ -27,7 +27,7 @@ class FeatureID
 
  public:
   FeatureID(std::string stored_query_id,
-            const std::multimap<std::string, SmartMet::Spine::Value> params,
+            const std::multimap<std::string, SmartMet::Spine::Value>& params,
             unsigned seq_id = 0);
 
   virtual ~FeatureID();

@@ -8,6 +8,7 @@
 #include <boost/format.hpp>
 #include <boost/lambda/lambda.hpp>
 #include <boost/shared_array.hpp>
+#include <utility>
 
 #include <cpl_error.h>
 
@@ -66,14 +67,14 @@ const char* QENGINE_CRS = "EPSG::4326";
 }  // namespace
 
 StoredGridQueryHandler::StoredGridQueryHandler(SmartMet::Spine::Reactor* reactor,
-                                               StoredQueryConfig::Ptr config,
+                                               const StoredQueryConfig::Ptr& config,
                                                PluginImpl& plugin_data,
                                                std::optional<std::string> template_file_name)
     : StoredQueryParamRegistry(config),
       SupportsExtraHandlerParams(config, false),
       RequiresGeoEngine(reactor),
       RequiresQEngine(reactor),
-      StoredQueryHandlerBase(reactor, config, plugin_data, template_file_name),
+      StoredQueryHandlerBase(reactor, config, plugin_data, std::move(template_file_name)),
       SupportsBoundingBox(config, plugin_data.get_crs_registry(), false),
       SupportsTimeParameters(config),
       debug_level(get_config()->get_debug_level())
@@ -165,7 +166,7 @@ std::string bw::StoredGridQueryHandler::get_cache_key_qualifier(
   }
 }
 
-StoredGridQueryHandler::Query::Query(std::shared_ptr<const StoredQueryConfig> config)
+StoredGridQueryHandler::Query::Query(const std::shared_ptr<const StoredQueryConfig>& config)
     : missing_text("nan"),
       language("lan"),
       value_formatter(new Fmi::ValueFormatter(Fmi::ValueFormatterParam())),
@@ -1329,8 +1330,8 @@ std::shared_ptr<SmartMet::Plugin::WFS::StoredQueryHandlerBase> wfs_stored_grid_h
 {
   try
   {
-    StoredQueryHandlerBase* qh =
-        new StoredGridQueryHandler(reactor, config, plugin_data, template_file_name);
+    StoredQueryHandlerBase* qh = new StoredGridQueryHandler(
+        reactor, std::move(config), plugin_data, std::move(template_file_name));
     std::shared_ptr<SmartMet::Plugin::WFS::StoredQueryHandlerBase> result(qh);
     return result;
   }

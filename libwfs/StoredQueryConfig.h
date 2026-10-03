@@ -107,7 +107,7 @@ class StoredQueryConfig : public SmartMet::Spine::ConfigBase
 
  public:
   StoredQueryConfig(const std::string& fn, const Config* plugin_config);
-  StoredQueryConfig(std::shared_ptr<libconfig::Config> config, const Config* plugin_config);
+  StoredQueryConfig(const std::shared_ptr<libconfig::Config>& config, const Config* plugin_config);
   ~StoredQueryConfig() override;
 
   inline bool is_disabled() const { return disabled; }

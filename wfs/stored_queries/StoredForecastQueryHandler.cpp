@@ -19,6 +19,7 @@
 #include <limits>
 #include <locale>
 #include <map>
+#include <utility>
 
 namespace bw = SmartMet::Plugin::WFS;
 namespace ba = boost::algorithm;
@@ -40,7 +41,7 @@ const char* bw::StoredForecastQueryHandler::P_CRS = "crs";
 
 bw::StoredForecastQueryHandler::StoredForecastQueryHandler(
     SmartMet::Spine::Reactor* reactor,
-    bw::StoredQueryConfig::Ptr config,
+    const bw::StoredQueryConfig::Ptr& config,
     PluginImpl& plugin_data,
     std::optional<std::string> template_file_name)
 
@@ -48,7 +49,7 @@ bw::StoredForecastQueryHandler::StoredForecastQueryHandler(
       bw::SupportsExtraHandlerParams(config, false),
       bw::RequiresGeoEngine(reactor),
       bw::RequiresQEngine(reactor),
-      bw::StoredQueryHandlerBase(reactor, config, plugin_data, template_file_name),
+      bw::StoredQueryHandlerBase(reactor, config, plugin_data, std::move(template_file_name)),
       bw::SupportsLocationParameters(
           reactor,
           config,
@@ -523,7 +524,7 @@ std::shared_ptr<SmartMet::Spine::Table> bw::StoredForecastQueryHandler::extract_
         if (model_path)
           msg << " for " << *model_path;
 #endif
-        msg << std::endl;
+        msg << '\n';
         std::cout << msg.str() << std::flush;
       }
 
@@ -897,7 +898,7 @@ bw::StoredForecastQueryHandler::get_model_parameters(const std::string& producer
   }
 }
 
-bw::StoredForecastQueryHandler::Query::Query(std::shared_ptr<const StoredQueryConfig> config)
+bw::StoredForecastQueryHandler::Query::Query(const std::shared_ptr<const StoredQueryConfig>& config)
     : max_distance(20000.0),
       missing_text("nan"),
       language("lan"),
@@ -959,8 +960,8 @@ std::shared_ptr<SmartMet::Plugin::WFS::StoredQueryHandlerBase> wfs_forecast_hand
 {
   try
   {
-    auto* qh =
-        new StoredForecastQueryHandler(reactor, config, plugin_impl, template_file_name);
+    auto* qh = new StoredForecastQueryHandler(
+        reactor, std::move(config), plugin_impl, std::move(template_file_name));
     std::shared_ptr<SmartMet::Plugin::WFS::StoredQueryHandlerBase> result(qh);
     return result;
   }

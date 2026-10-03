@@ -74,7 +74,7 @@ ParameterExtractor::ParameterExtractor()
 ParameterExtractor::~ParameterExtractor() = default;
 
 void ParameterExtractor::add_type(const std::string& name,
-                                  ParameterExtractor::xml_param_extract_t extractor)
+                                  const ParameterExtractor::xml_param_extract_t& extractor)
 {
   try
   {

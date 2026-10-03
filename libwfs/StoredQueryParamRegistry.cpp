@@ -10,6 +10,7 @@
 #include <algorithm>
 #include <sstream>
 #include <boost/bind/bind.hpp>
+#include <utility>
 
 namespace bw = SmartMet::Plugin::WFS;
 namespace ph = boost::placeholders;
@@ -33,7 +34,7 @@ enum TypeInd
 }
 
 StoredQueryParamRegistry::StoredQueryParamRegistry(StoredQueryConfig::Ptr config)
-    : bw::StoredQueryConfig::Wrapper(config)
+    : bw::StoredQueryConfig::Wrapper(std::move(config))
 {
   try
   {
@@ -307,7 +308,7 @@ void StoredQueryParamRegistry::register_scalar_param(
     std::shared_ptr<ScalarParameterRec> rec(new ScalarParameterRec);
     rec->name = name;
     rec->description = description;
-    rec->param_def = param_def;
+    rec->param_def = std::move(param_def);
     rec->type_name = typeid(std::string).name();
     rec->required = required;
     add_param_rec(rec);
@@ -332,7 +333,7 @@ void SmartMet::Plugin::WFS::StoredQueryParamRegistry::register_array_param(
     std::shared_ptr<ArrayParameterRec> rec(new ArrayParameterRec);
     rec->name = name;
     rec->description = description;
-    rec->param_def = param_def;
+    rec->param_def = std::move(param_def);
     rec->type_name = typeid(std::string).name();
     rec->min_size = min_size;
     rec->max_size = max_size;
@@ -345,7 +346,7 @@ void SmartMet::Plugin::WFS::StoredQueryParamRegistry::register_array_param(
   }
 }
 
-void StoredQueryParamRegistry::add_param_rec(std::shared_ptr<ParamRecBase> rec)
+void StoredQueryParamRegistry::add_param_rec(const std::shared_ptr<ParamRecBase>& rec)
 {
   try
   {

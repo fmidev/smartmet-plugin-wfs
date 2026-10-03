@@ -27,7 +27,7 @@ class ParameterTemplateBase;
 class SupportsExtraHandlerParams : virtual protected StoredQueryParamRegistry
 {
  public:
-  SupportsExtraHandlerParams(StoredQueryConfig::Ptr config,
+  SupportsExtraHandlerParams(const StoredQueryConfig::Ptr& config,
                              bool mandatory = false,
                              const char* path = "named_params");
 

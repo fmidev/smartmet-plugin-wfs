@@ -1,6 +1,7 @@
 #pragma once
 
 #include <memory>
+#include <utility>
 
 namespace SmartMet
 {
@@ -16,7 +17,7 @@ namespace SmartMet
       class StoredQueryConfigWrapper
       {
       public:
-        StoredQueryConfigWrapper(StoredQueryConfigPtr config_p) : config_p(config_p) {}
+        StoredQueryConfigWrapper(StoredQueryConfigPtr config_p) : config_p(std::move(config_p)) {}
           virtual ~StoredQueryConfigWrapper();
         StoredQueryConfigPtr get_config() const { return config_p; }
       private:

@@ -9,6 +9,8 @@
 #include <spine/Value.h>
 #include <timeseries/ParameterTools.h>
 
+#include <utility>
+
 namespace bw = SmartMet::Plugin::WFS;
 namespace pt = boost::posix_time;
 namespace bg = boost::gregorian;
@@ -30,7 +32,7 @@ const char* P_MULTIPOINTCOVERAGE_QUERY = "lightning_multipointcoverage.c2t";
 
 bw::StoredFlashQueryHandler::StoredFlashQueryHandler(
     SmartMet::Spine::Reactor* reactor,
-    StoredQueryConfig::Ptr config,
+    const StoredQueryConfig::Ptr& config,
     PluginImpl& plugin_data,
     std::optional<std::string> template_file_name)
 
@@ -38,7 +40,7 @@ bw::StoredFlashQueryHandler::StoredFlashQueryHandler(
       SupportsExtraHandlerParams(config, false),
       RequiresGeoEngine(reactor),
       RequiresObsEngine(reactor),
-      StoredQueryHandlerBase(reactor, config, plugin_data, template_file_name),
+      StoredQueryHandlerBase(reactor, config, plugin_data, std::move(template_file_name)),
       SupportsBoundingBox(config, plugin_data.get_crs_registry()),
       SupportsTimeZone(reactor, config),
       bs_param(),
@@ -535,7 +537,8 @@ std::shared_ptr<SmartMet::Plugin::WFS::StoredQueryHandlerBase> wfs_flash_handler
 {
   try
   {
-    auto* qh = new StoredFlashQueryHandler(reactor, config, plugin_data, template_file_name);
+    auto* qh = new StoredFlashQueryHandler(
+        reactor, std::move(config), plugin_data, std::move(template_file_name));
     std::shared_ptr<SmartMet::Plugin::WFS::StoredQueryHandlerBase> result(qh);
     return result;
   }

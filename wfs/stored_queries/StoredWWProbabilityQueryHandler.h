@@ -25,7 +25,7 @@ struct AirportLocation
   std::string icao_code;
   SmartMet::Spine::LocationPtr loc;
 
-  AirportLocation(const std::string& icao, const SmartMet::Spine::LocationPtr l)
+  AirportLocation(const std::string& icao, const SmartMet::Spine::LocationPtr& l)
       : icao_code(icao), loc(l)
   {
   }
@@ -121,7 +121,7 @@ class StoredWWProbabilityQueryHandler : public StoredQueryHandlerBase,
 {
  public:
   StoredWWProbabilityQueryHandler(SmartMet::Spine::Reactor* reactor,
-                                  StoredQueryConfig::Ptr config,
+                                  const StoredQueryConfig::Ptr& config,
                                   PluginImpl& plugin_impl,
                                   std::optional<std::string> templateFileileName);
 

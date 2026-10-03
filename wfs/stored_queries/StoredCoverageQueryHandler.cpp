@@ -4,12 +4,13 @@
 
 #include <boost/algorithm/string/replace.hpp>
 #include <iomanip>
+#include <utility>
 
 namespace bw = SmartMet::Plugin::WFS;
 
 bw::StoredCoverageQueryHandler::StoredCoverageQueryHandler(
     SmartMet::Spine::Reactor* reactor,
-    bw::StoredQueryConfig::Ptr config,
+    const bw::StoredQueryConfig::Ptr& config,
     PluginImpl& plugin_data,
     std::optional<std::string> template_file_name)
 
@@ -19,7 +20,7 @@ bw::StoredCoverageQueryHandler::StoredCoverageQueryHandler(
       RequiresContourEngine(reactor),
       RequiresQEngine(reactor),
       RequiresGeoEngine(reactor),
-      StoredContourQueryHandler(reactor, config, plugin_data, template_file_name)
+      StoredContourQueryHandler(reactor, config, plugin_data, std::move(template_file_name))
 {
   try
   {
@@ -189,8 +190,8 @@ std::shared_ptr<SmartMet::Plugin::WFS::StoredQueryHandlerBase> wfs_coverage_quer
     PluginImpl& plugin_data,
     std::optional<std::string> template_file_name)
 {
-  auto* qh =
-      new StoredCoverageQueryHandler(reactor, config, plugin_data, template_file_name);
+  auto* qh = new StoredCoverageQueryHandler(
+      reactor, std::move(config), plugin_data, std::move(template_file_name));
   std::shared_ptr<SmartMet::Plugin::WFS::StoredQueryHandlerBase> result(qh);
   return result;
 }

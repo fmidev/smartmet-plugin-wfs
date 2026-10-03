@@ -14,7 +14,7 @@ namespace bw = SmartMet::Plugin::WFS;
 using SmartMet::Spine::Value;
 
 bw::SupportsExtraHandlerParams::SupportsExtraHandlerParams(
-    StoredQueryConfig::Ptr config, bool mandatory, const char* path)
+    const StoredQueryConfig::Ptr& config, bool mandatory, const char* path)
 
     : bw::StoredQueryParamRegistry(config)
     , path(path)

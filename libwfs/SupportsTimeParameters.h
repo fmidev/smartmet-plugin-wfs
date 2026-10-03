@@ -25,7 +25,7 @@ class SupportsTimeParameters : protected virtual SupportsExtraHandlerParams,
                                protected virtual StoredQueryParamRegistry
 {
  public:
-  SupportsTimeParameters(std::shared_ptr<SmartMet::Plugin::WFS::StoredQueryConfig> config);
+  SupportsTimeParameters(const std::shared_ptr<SmartMet::Plugin::WFS::StoredQueryConfig>& config);
 
   ~SupportsTimeParameters() override;
 

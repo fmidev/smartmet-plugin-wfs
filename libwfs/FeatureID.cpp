@@ -7,6 +7,7 @@
 #include <macgyver/Exception.h>
 #include <cstring>
 #include <sstream>
+#include <utility>
 
 using SmartMet::Plugin::WFS::FeatureID;
 using SmartMet::Spine::Value;
@@ -22,9 +23,9 @@ const unsigned FEATURE_ID_REVISION = 1;
 std::string FeatureID::prefix = "WFS-";
 
 FeatureID::FeatureID(std::string stored_query_id,
-                     const std::multimap<std::string, SmartMet::Spine::Value> params,
+                     const std::multimap<std::string, SmartMet::Spine::Value>& params,
                      unsigned seq_id)
-    : stored_query_id(stored_query_id), params(params), seq_id(seq_id)
+    : stored_query_id(std::move(stored_query_id)), params(params), seq_id(seq_id)
 {
 }
 

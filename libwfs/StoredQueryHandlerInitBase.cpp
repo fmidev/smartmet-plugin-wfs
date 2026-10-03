@@ -36,7 +36,7 @@ void StoredQueryHandlerInitBase::execute_init_actions()
 
 void StoredQueryHandlerInitBase::add_init_action(
     const std::string& name,
-    std::function<void()> action)
+    const std::function<void()>& action)
 {
     action_queue.push(std::make_pair(name, action));
 }

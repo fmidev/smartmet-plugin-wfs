@@ -31,6 +31,7 @@
 #include <limits>
 #include <locale>
 #include <map>
+#include <utility>
 
 namespace ba = boost::algorithm;
 
@@ -68,7 +69,7 @@ struct StationRec
 
 StoredGridForecastQueryHandler::StoredGridForecastQueryHandler(
     Spine::Reactor* reactor,
-    StoredQueryConfig::Ptr config,
+    const StoredQueryConfig::Ptr& config,
     PluginImpl& plugin_impl,
     std::optional<std::string> template_file_name)
     :
@@ -77,7 +78,7 @@ StoredGridForecastQueryHandler::StoredGridForecastQueryHandler(
       SupportsExtraHandlerParams(config, false),
       RequiresGridEngine(reactor),
       RequiresGeoEngine(reactor),
-      StoredQueryHandlerBase(reactor, config, plugin_impl, template_file_name),
+      StoredQueryHandlerBase(reactor, config, plugin_impl, std::move(template_file_name)),
       SupportsLocationParameters(reactor, config, SUPPORT_KEYWORDS | INCLUDE_GEOIDS),
       SupportsTimeParameters(config),
       SupportsTimeZone(reactor, config),
@@ -464,10 +465,10 @@ void StoredGridForecastQueryHandler::query(const StoredQuery& stored_query,
 
 uint StoredGridForecastQueryHandler::processGridQuery(Query& wfsQuery,
                                                       const std::string& tag,
-                                                      const Spine::LocationPtr loc,
-                                                      std::string country,
+                                                      const Spine::LocationPtr& loc,
+                                                      const std::string& country,
                                                       QueryServer::Query& gridQuery,
-                                                      Table_sptr output,
+                                                      const Table_sptr& output,
                                                       uint rowCount) const
 {
   try
@@ -768,12 +769,11 @@ uint StoredGridForecastQueryHandler::processGridQuery(Query& wfsQuery,
                   pList.insert(std::string(tmp));
               }
             }
-            char* pp = tmp;
-            pp += sprintf(pp, "### MULTI-MATCH ### ");
+            std::string multiMatch = "### MULTI-MATCH ### ";
             for (const auto & p : pList)
-              pp += sprintf(pp, "%s ", p.c_str());
+              multiMatch += p + " ";
 
-            output->set(col, row, std::string(tmp));
+            output->set(col, row, multiMatch);
           }
           else if (!SmartMet::AdditionalParameters::isAdditionalParameter(
                        gridQuery.mQueryParameterList[p].mParam.c_str()))
@@ -867,9 +867,7 @@ Table_sptr StoredGridForecastQueryHandler::extract_forecast(Query& wfsQuery) con
       uint sz = wfsQuery.models.size();
       if (sz > 0)
       {
-        char tmp[1000];
-        char* p = tmp;
-        *p = '\0';
+        std::string producerList;
         for (auto & model : wfsQuery.models)
         {
           std::string mappingName = grid_engine->getProducerName(model);
@@ -878,13 +876,12 @@ Table_sptr StoredGridForecastQueryHandler::extract_forecast(Query& wfsQuery) con
           grid_engine->getProducerNameList(mappingName, nameList);
           for (auto & n : nameList)
           {
-            if (p > tmp)
-              p += sprintf(p, ",%s", n.c_str());
-            else
-              p += sprintf(p, "%s", n.c_str());
+            if (!producerList.empty())
+              producerList += ",";
+            producerList += n;
           }
         }
-        attributeList.addAttribute("producer", tmp);
+        attributeList.addAttribute("producer", producerList);
       }
 
       if (!wfsQuery.levels.empty())
@@ -928,14 +925,12 @@ Table_sptr StoredGridForecastQueryHandler::extract_forecast(Query& wfsQuery) con
       if (wfsQuery.toptions->timeStep)
         attributeList.addAttribute("timestep", std::to_string(*wfsQuery.toptions->timeStep));
 
-      char tmp[10000];
-      tmp[0] = '\0';
-      char* p = tmp;
+      std::string paramList;
 
       for (auto param = wfsQuery.data_params.begin(); param != wfsQuery.data_params.end(); ++param)
       {
         if (param != wfsQuery.data_params.begin())
-          p += sprintf(p, ",");
+          paramList += ",";
 
         std::string paramName = param->name();
         std::string interpolationMethod;
@@ -967,10 +962,10 @@ Table_sptr StoredGridForecastQueryHandler::extract_forecast(Query& wfsQuery) con
             name = paramName;
         }
 
-        p += sprintf(p, "%s", name.c_str());
+        paramList += name;
       }
 
-      attributeList.addAttribute("param", tmp);
+      attributeList.addAttribute("param", paramList);
 
       QueryServer::Query query;
       // attributeList.print(std::cout,0,0);
@@ -1134,8 +1129,8 @@ std::shared_ptr<SmartMet::Plugin::WFS::StoredQueryHandlerBase> wfs_grid_forecast
 {
   try
   {
-    auto* qh =
-        new StoredGridForecastQueryHandler(reactor, config, plugin_impl, template_file_name);
+    auto* qh = new StoredGridForecastQueryHandler(
+        reactor, std::move(config), plugin_impl, std::move(template_file_name));
     std::shared_ptr<SmartMet::Plugin::WFS::StoredQueryHandlerBase> result(qh);
     return result;
   }

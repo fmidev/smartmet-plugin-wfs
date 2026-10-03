@@ -6,6 +6,7 @@
 #include <macgyver/Exception.h>
 #include <spine/Value.h>
 #include <sstream>
+#include <utility>
 
 namespace bw = SmartMet::Plugin::WFS;
 
@@ -15,7 +16,7 @@ const char* P_ID = "feature_id";
 }
 
 bw::GetFeatureByIdHandler::GetFeatureByIdHandler(SmartMet::Spine::Reactor* reactor,
-                                                 bw::StoredQueryConfig::Ptr config,
+                                                 const bw::StoredQueryConfig::Ptr& config,
                                                  PluginImpl& plugin_data)
     : bw::StoredQueryParamRegistry(config),
       bw::SupportsExtraHandlerParams(config),
@@ -84,7 +85,8 @@ std::shared_ptr<bw::StoredQueryHandlerBase> wfs_get_feature_by_id_handler_create
 {
   try
   {
-    bw::StoredQueryHandlerBase* qh = new bw::GetFeatureByIdHandler(reactor, config, plugin_data);
+    bw::StoredQueryHandlerBase* qh =
+        new bw::GetFeatureByIdHandler(reactor, std::move(config), plugin_data);
     std::shared_ptr<bw::StoredQueryHandlerBase> result(qh);
     return result;
   }

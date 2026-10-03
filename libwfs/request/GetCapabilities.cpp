@@ -16,7 +16,7 @@ GetCapabilities::GetCapabilities(const std::string& language, const PluginImpl& 
 {
   try
   {
-    const auto lang_vect = plugin_impl.get_languages();
+    const auto& lang_vect = plugin_impl.get_languages();
     std::copy(lang_vect.begin(), lang_vect.end(), std::inserter(languages, languages.begin()));
   }
   catch (...)

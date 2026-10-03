@@ -108,6 +108,7 @@ std::vector<NFmiPoint> bbox_exclude_point(const NFmiPoint& p1,
     std::vector<NFmiPoint> result;
     auto* boundary = g1->getExteriorRing();
     int num_points = boundary->getNumPoints();
+    result.reserve(num_points);
     for (int i = 0; i < num_points; i++)
     {
       result.emplace_back(boundary->getX(i), boundary->getY(i));
@@ -127,7 +128,7 @@ void get_latlon_boundary(const NFmiArea* area, OGRPolygon* result, int NP, doubl
   {
     namespace bl = boost::lambda;
 
-    const NFmiRect area_rect = area->XYArea();
+    const NFmiRect& area_rect = area->XYArea();
     const auto& area_type = typeid(*area);
 
     const NFmiPoint lb(area_rect.Left(), area_rect.Bottom());

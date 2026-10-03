@@ -11,6 +11,7 @@
 #include <macgyver/TimeParser.h>
 #include <newbase/NFmiEnumConverter.h>
 #include <iomanip>
+#include <utility>
 
 namespace bw = SmartMet::Plugin::WFS;
 
@@ -31,7 +32,7 @@ const char* P_IMAGE_FILE = "imageFile";
 
 bw::StoredContourQueryHandler::StoredContourQueryHandler(
     SmartMet::Spine::Reactor* reactor,
-    bw::StoredQueryConfig::Ptr config,
+    const bw::StoredQueryConfig::Ptr& config,
     PluginImpl& plugin_data,
     std::optional<std::string> template_file_name)
 
@@ -41,7 +42,7 @@ bw::StoredContourQueryHandler::StoredContourQueryHandler(
       RequiresContourEngine(reactor),
       RequiresQEngine(reactor),
       RequiresGeoEngine(reactor),
-      bw::StoredQueryHandlerBase(reactor, config, plugin_data, template_file_name),
+      bw::StoredQueryHandlerBase(reactor, config, plugin_data, std::move(template_file_name)),
       bw::SupportsBoundingBox(config, plugin_data.get_crs_registry(), false),
       bw::SupportsTimeParameters(config),
       bw::SupportsTimeZone(reactor, config)
@@ -1100,7 +1101,7 @@ void bw::StoredContourQueryHandler::parseQueryResults(
     unsigned int precision = ((targetSRS.IsGeographic()) ? 6 : 1);
     // coordinate order
     bool latLonOrder(targetSRS.EPSGTreatsAsLatLong());
-    SmartMet::Spine::BoundingBox query_bbox = bbox;
+    const SmartMet::Spine::BoundingBox& query_bbox = bbox;
 
     // handle lowerCorner and upperCorner
     if (latLonOrder)

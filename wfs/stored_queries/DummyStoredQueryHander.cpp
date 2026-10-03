@@ -1,3 +1,5 @@
+#include <utility>
+
 #include "StoredQueryHandlerFactoryDef.h"
 #include "DummyStoredQueryHandler.h"
 
@@ -10,9 +12,9 @@ namespace
 }
 
 bw::DummyStoredQueryHandler::DummyStoredQueryHandler(SmartMet::Spine::Reactor* reactor,
-						     StoredQueryConfig::Ptr config,
+						     const StoredQueryConfig::Ptr& config,
 						     PluginImpl& plugin_impl,
-						     std::optional<std::string>  /*template_file_name*/)
+						     const std::optional<std::string>&  /*template_file_name*/)
   : bw::StoredQueryParamRegistry(config)
   , bw::SupportsExtraHandlerParams(config)
   , bw::StoredQueryHandlerBase(reactor, config, plugin_impl, std::optional<std::string>())
@@ -47,7 +49,7 @@ bw::DummyStoredQueryHandler::query(const StoredQuery& query,
 {
   try
     {
-      auto params = query.get_param_map();
+      const auto& params = query.get_param_map();
 
       Json::Value result = Json::objectValue;
 
@@ -86,8 +88,8 @@ std::shared_ptr<SmartMet::Plugin::WFS::StoredQueryHandlerBase> dummy_handler_cre
 {
   try
   {
-    auto* qh =
-        new DummyStoredQueryHandler(reactor, config, plugin_data, template_file_name);
+    auto* qh = new DummyStoredQueryHandler(
+        reactor, std::move(config), plugin_data, std::move(template_file_name));
     std::shared_ptr<SmartMet::Plugin::WFS::StoredQueryHandlerBase> result(qh);
     return result;
   }

@@ -35,7 +35,7 @@ class StoredGridForecastQueryHandler: public StoredQueryHandlerBase,
 
                 StoredGridForecastQueryHandler(
                     Spine::Reactor* reactor,
-                    std::shared_ptr<StoredQueryConfig> config,
+                    const std::shared_ptr<StoredQueryConfig>& config,
                     PluginImpl& plugin_impl,
                     std::optional<std::string> template_file_name);
 
@@ -62,10 +62,10 @@ class StoredGridForecastQueryHandler: public StoredQueryHandlerBase,
     uint        processGridQuery(
                     Query& wfsQuery,
                     const std::string& tag,
-                    const Spine::LocationPtr loc,
-                    std::string country,
+                    const Spine::LocationPtr& loc,
+                    const std::string& country,
                     QueryServer::Query& gridQuery,
-                    Table_sptr output,
+                    const Table_sptr& output,
                     uint rowCount) const;
 
   private:

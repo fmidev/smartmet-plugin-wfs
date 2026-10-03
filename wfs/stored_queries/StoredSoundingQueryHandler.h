@@ -73,7 +73,7 @@ class StoredSoundingQueryHandler : public StoredQueryHandlerBase,
 
  public:
   StoredSoundingQueryHandler(SmartMet::Spine::Reactor* reactor,
-                             StoredQueryConfig::Ptr config,
+                             const StoredQueryConfig::Ptr& config,
                              PluginImpl& pluginData,
                              std::optional<std::string> templateFileName);
 
@@ -118,7 +118,7 @@ class StoredSoundingQueryHandler : public StoredQueryHandlerBase,
                                 const RequestParameterMap& params,
                                 const std::string& language) const;
 
-  void checkMaxSoundings(const Fmi::DateTime startTime,
+  void checkMaxSoundings(const Fmi::DateTime& startTime,
                          const Fmi::DateTime& endTime,
                          const RadioSoundingMap& radioSoundingMap) const;
 

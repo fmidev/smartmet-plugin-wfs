@@ -98,7 +98,7 @@ class AdHocQuery : public StoredQuery
    *
    */
   static void extract_xml_parameters(const xercesc::DOMElement& query_root,
-                                     std::shared_ptr<const StoredQueryHandlerBase> handler,
+                                     const std::shared_ptr<const StoredQueryHandlerBase>& handler,
                                      std::vector<std::string>& element_tree,
                                      std::vector<std::shared_ptr<QueryBase>>& queries);
 
@@ -109,7 +109,7 @@ class AdHocQuery : public StoredQuery
    *   @param xps Query response.
    *
    */
-  static void filter(std::shared_ptr<QueryBase> query,
+  static void filter(const std::shared_ptr<QueryBase>& query,
                      SmartMet::Plugin::WFS::Xml::XPathSnapshot& xps);
 
   /**

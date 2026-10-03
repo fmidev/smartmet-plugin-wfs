@@ -9,6 +9,7 @@
 #include <spine/Value.h>
 #include <sstream>
 #include <stdexcept>
+#include <utility>
 
 namespace ba = boost::algorithm;
 
@@ -19,7 +20,7 @@ namespace Plugin
 namespace WFS
 {
 StoredQueryHandlerBase::StoredQueryHandlerBase(SmartMet::Spine::Reactor* reactor,
-                                               StoredQueryConfig::Ptr config,
+                                               const StoredQueryConfig::Ptr& config,
                                                PluginImpl& plugin_impl,
                                                std::optional<std::string> template_file_name)
     : StoredQueryParamRegistry(config),
@@ -27,7 +28,7 @@ StoredQueryHandlerBase::StoredQueryHandlerBase(SmartMet::Spine::Reactor* reactor
       reactor(reactor),
       config(config),
       plugin_impl(plugin_impl),
-      template_file(template_file_name)
+      template_file(std::move(template_file_name))
 {
   try
   {
@@ -218,7 +219,7 @@ void StoredQueryHandlerBase::format_output(CTPP::CDT& hash,
 }
 
 std::pair<std::string, std::string> StoredQueryHandlerBase::get_2D_coord(
-    std::shared_ptr<SmartMet::Spine::CRSRegistry::Transformation> transformation,
+    const std::shared_ptr<SmartMet::Spine::CRSRegistry::Transformation>& transformation,
     double X,
     double Y)
 {
@@ -246,7 +247,7 @@ void StoredQueryHandlerBase::set_2D_coord(
 {
   try
   {
-    auto xy = get_2D_coord(transformation, sx, sy);
+    auto xy = get_2D_coord(std::move(transformation), sx, sy);
     hash["x"] = xy.first;
     hash["y"] = xy.second;
   }
@@ -264,7 +265,7 @@ void StoredQueryHandlerBase::set_2D_coord(
 {
   try
   {
-    set_2D_coord(transformation, std::stod(sx), std::stod(sy), hash);
+    set_2D_coord(std::move(transformation), std::stod(sx), std::stod(sy), hash);
   }
   catch (...)
   {

@@ -250,6 +250,7 @@ bw::Request::DescribeStoredQueries::create_from_xml(const std::string& language,
     std::vector<std::string> ids;
     std::vector<xercesc::DOMElement*> elems =
         bwx::get_child_elements(*root, WFS_NAMESPACE_URI, "StoredQueryId");
+    ids.reserve(elems.size());
     for (const xercesc::DOMElement* elem : elems)
     {
       ids.push_back(ba::trim_copy(bwx::extract_text(*elem)));

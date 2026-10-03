@@ -10,6 +10,7 @@
 #include <boost/range/algorithm/copy.hpp>
 #include <iomanip>
 #include <locale>
+#include <utility>
 
 namespace
 {
@@ -68,8 +69,9 @@ std::string bbox2string(const SmartMet::Spine::BoundingBox& bbox, OGRSpatialRefe
 }
 #endif
 
-FmiParameterName get_parameter(std::shared_ptr<SmartMet::Plugin::WFS::StoredQueryConfig> config,
-                               const std::string& param_name)
+FmiParameterName get_parameter(
+    const std::shared_ptr<SmartMet::Plugin::WFS::StoredQueryConfig>& config,
+    const std::string& param_name)
 {
   try
   {
@@ -117,9 +119,9 @@ SmartMet::Engine::Querydata::ParameterOptions get_qengine_parameter(
 }
 
 void populate_result_vector(
-    TS::TimeSeriesPtr qengine_result_light,
-    TS::TimeSeriesPtr qengine_result_moderate,
-    TS::TimeSeriesPtr qengine_result_heavy,
+    const TS::TimeSeriesPtr& qengine_result_light,
+    const TS::TimeSeriesPtr& qengine_result_moderate,
+    const TS::TimeSeriesPtr& qengine_result_heavy,
     SmartMet::Plugin::WFS::WinterWeatherIntensityProbabilities& result_vector)
 {
   try
@@ -161,7 +163,7 @@ namespace WFS
 {
 StoredWWProbabilityQueryHandler::StoredWWProbabilityQueryHandler(
     SmartMet::Spine::Reactor* reactor,
-    StoredQueryConfig::Ptr config,
+    const StoredQueryConfig::Ptr& config,
     PluginImpl& pluginData,
     std::optional<std::string> templateFileName)
 
@@ -169,7 +171,7 @@ StoredWWProbabilityQueryHandler::StoredWWProbabilityQueryHandler(
       SupportsExtraHandlerParams(config, false),
       RequiresGeoEngine(reactor),
       RequiresQEngine(reactor),
-      StoredQueryHandlerBase(reactor, config, pluginData, templateFileName),
+      StoredQueryHandlerBase(reactor, config, pluginData, std::move(templateFileName)),
       SupportsLocationParameters(reactor, config, SUPPORT_KEYWORDS | INCLUDE_GEOIDS),
       SupportsBoundingBox(config, pluginData.get_crs_registry(), false),
       SupportsTimeParameters(config),
@@ -277,7 +279,7 @@ void StoredWWProbabilityQueryHandler::parseQueryResults(
     // coordinate order
     bool latLonOrder(targetSRS.EPSGTreatsAsLatLong());
 
-    SmartMet::Spine::BoundingBox query_bbox = bbox;
+    const SmartMet::Spine::BoundingBox& query_bbox = bbox;
 
     // handle lowerCorner and upperCorner
     if (latLonOrder)
@@ -629,8 +631,8 @@ wfs_winterweather_probabilities_query_handler_create(SmartMet::Spine::Reactor* r
 {
   try
   {
-    auto* qh =
-        new StoredWWProbabilityQueryHandler(reactor, config, pluginData, templateFileName);
+    auto* qh = new StoredWWProbabilityQueryHandler(
+        reactor, std::move(config), pluginData, std::move(templateFileName));
     std::shared_ptr<SmartMet::Plugin::WFS::StoredQueryHandlerBase> result(qh);
     return result;
   }

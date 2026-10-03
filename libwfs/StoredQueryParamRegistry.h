@@ -100,7 +100,7 @@ class StoredQueryParamRegistry : public StoredQueryConfig::Wrapper
   void silence_param_init_warnings(bool enable) { silence_param_init_warnings_ = enable; }
 
  private:
-  void add_param_rec(std::shared_ptr<ParamRecBase> rec);
+  void add_param_rec(const std::shared_ptr<ParamRecBase>& rec);
 
  private:
   bool silence_param_init_warnings_{false};

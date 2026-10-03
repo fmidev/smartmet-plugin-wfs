@@ -145,7 +145,7 @@ bool bw::StoredQueryMap::is_reload_required(bool reset)
   }
 }
 
-void bw::StoredQueryMap::add_handler(std::shared_ptr<StoredQueryHandlerBase> handler)
+void bw::StoredQueryMap::add_handler(const std::shared_ptr<StoredQueryHandlerBase>& handler)
 {
   try
   {
@@ -169,7 +169,7 @@ void bw::StoredQueryMap::add_handler(std::shared_ptr<StoredQueryHandlerBase> han
 }
 
 std::shared_ptr<bw::StoredQueryHandlerBase> bw::StoredQueryMap::get_handler_by_name(
-    const std::string name) const
+    const std::string& name) const
 {
   try
   {
@@ -219,7 +219,7 @@ std::vector<std::string> bw::StoredQueryMap::get_return_type_names() const
   }
 }
 
-void bw::StoredQueryMap::add_handler(StoredQueryConfig::Ptr sqh_config,
+void bw::StoredQueryMap::add_handler(const StoredQueryConfig::Ptr& sqh_config,
                                      const std::filesystem::path& template_dir)
 {
   try
@@ -299,7 +299,7 @@ void bw::StoredQueryMap::on_config_change(Fmi::DirectoryMonitor::Watcher watcher
       return;
     }
 
-    Fmi::DirectoryMonitor::Status s = status;
+    const Fmi::DirectoryMonitor::Status& s = status;
 
     for (auto it = s->begin(); not reload_required and it != s->end(); ++it) {
       try {
@@ -389,6 +389,7 @@ std::vector<std::string> bw::StoredQueryMap::get_handler_names() const
   try {
     std::vector<std::string> result;
     std::shared_lock<std::shared_mutex> lock(mutex);
+    result.reserve(handler_map.size());
     for (const auto& item : handler_map) {
       result.push_back(item.first);
     }
@@ -598,7 +599,7 @@ void bw::StoredQueryMap::handle_query_ignore(const StoredQueryConfig& sqh_config
   try {
     const int debug_level = plugin_impl.get_debug_level();
     const auto reason = get_ignore_reason(sqh_config);
-    const auto id = sqh_config.get_query_id();
+    const auto& id = sqh_config.get_query_id();
     auto prev_handler = get_handler_by_name_nothrow(sqh_config.get_query_id());
     if (prev_handler) {
       if (sqh_config.get_file_name() == prev_handler->get_config()->get_file_name()) {
@@ -646,7 +647,7 @@ void bw::StoredQueryMap::request_reload(const std::string& reason)
 }
 
 std::shared_ptr<bw::StoredQueryHandlerBase> bw::StoredQueryMap::get_handler_by_name_nothrow(
-    const std::string name) const
+    const std::string& name) const
 {
   try
   {
@@ -665,7 +666,7 @@ std::shared_ptr<bw::StoredQueryHandlerBase> bw::StoredQueryMap::get_handler_by_n
   }
 }
 
-void bw::StoredQueryMap::enqueue_query_add(StoredQueryConfig::Ptr sqh_config,
+void bw::StoredQueryMap::enqueue_query_add(const StoredQueryConfig::Ptr& sqh_config,
 					   const std::filesystem::path& template_dir,
 					   bool initial_update)
 {

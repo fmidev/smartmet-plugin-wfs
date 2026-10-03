@@ -48,7 +48,7 @@ class StoredQueryHandlerBase : virtual protected SupportsExtraHandlerParams,
 
  public:
   StoredQueryHandlerBase(SmartMet::Spine::Reactor* reactor,
-                         StoredQueryConfig::Ptr config,
+                         const StoredQueryConfig::Ptr& config,
                          PluginImpl& plugin_impl,
                          std::optional<std::string> template_file_name);
 
@@ -142,7 +142,7 @@ protected:
   void format_output(CTPP::CDT& hash, std::ostream& output, bool debug_format) const;
 
   static std::pair<std::string, std::string> get_2D_coord(
-      std::shared_ptr<SmartMet::Spine::CRSRegistry::Transformation> transformation,
+      const std::shared_ptr<SmartMet::Spine::CRSRegistry::Transformation>& transformation,
       double X,
       double Y);
 

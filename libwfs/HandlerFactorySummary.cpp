@@ -112,7 +112,7 @@ namespace
             write_html(os, item.second);
         }
         end_param_table(os);
-        os << std::endl;
+        os << '\n';
     }
 
     void write_stored_query_table(
@@ -238,7 +238,7 @@ void HandlerFactorySummary::write_html(
             os << "<td>" << ci->description << "</td>";
             os << "</tr>\n";
         }
-        os << "</table>" << std::endl;
+        os << "</table>" << '\n';
     }
 }
 

@@ -8,18 +8,19 @@
 #include <macgyver/Exception.h>
 #include <spine/Convenience.h>
 #include <tuple>
+#include <utility>
 
 namespace bw = SmartMet::Plugin::WFS;
 
 bw::StoredMastQueryHandler::StoredMastQueryHandler(SmartMet::Spine::Reactor* reactor,
-                                                   StoredQueryConfig::Ptr config,
+                                                   const StoredQueryConfig::Ptr& config,
                                                    PluginImpl& plugin_data,
                                                    std::optional<std::string> template_file_name)
     : bw::StoredQueryParamRegistry(config),
       bw::SupportsExtraHandlerParams(config),
       bw::RequiresGeoEngine(reactor),
       bw::RequiresObsEngine(reactor),
-      bw::StoredQueryHandlerBase(reactor, config, plugin_data, template_file_name),
+      bw::StoredQueryHandlerBase(reactor, config, plugin_data, std::move(template_file_name)),
       bw::SupportsLocationParameters(
           reactor, config, INCLUDE_FMISIDS | INCLUDE_GEOIDS | INCLUDE_WMOS),
       bw::SupportsBoundingBox(config, plugin_data.get_crs_registry()),
@@ -726,7 +727,8 @@ std::shared_ptr<SmartMet::Plugin::WFS::StoredQueryHandlerBase> wfs_stored_mast_h
 {
   try
   {
-    auto* qh = new bw::StoredMastQueryHandler(reactor, config, plugin_data, template_file_name);
+    auto* qh = new bw::StoredMastQueryHandler(
+        reactor, std::move(config), plugin_data, std::move(template_file_name));
     std::shared_ptr<SmartMet::Plugin::WFS::StoredQueryHandlerBase> instance(qh);
     return instance;
   }

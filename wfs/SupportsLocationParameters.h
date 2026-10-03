@@ -46,7 +46,7 @@ class SupportsLocationParameters : protected virtual SupportsExtraHandlerParams,
    */
     SupportsLocationParameters(
         SmartMet::Spine::Reactor* reactor,
-        std::shared_ptr<StoredQueryConfig> config,
+        const std::shared_ptr<StoredQueryConfig>& config,
         unsigned options);
 
  public:

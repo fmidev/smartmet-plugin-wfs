@@ -17,9 +17,9 @@ class DummyStoredQueryHandler : public StoredQueryHandlerBase
 {
  public:
   DummyStoredQueryHandler(SmartMet::Spine::Reactor* reactor,
-                          StoredQueryConfig::Ptr config,
+                          const StoredQueryConfig::Ptr& config,
                           PluginImpl& plugin_impl,
-                          std::optional<std::string> template_file_name);
+                          const std::optional<std::string>& template_file_name);
 
   ~DummyStoredQueryHandler() override;
 

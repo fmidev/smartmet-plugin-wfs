@@ -11,6 +11,7 @@
 #include <spine/Convenience.h>
 #include <macgyver/Exception.h>
 #include <sstream>
+#include <utility>
 
 namespace ba = boost::algorithm;
 namespace bw = SmartMet::Plugin::WFS;
@@ -25,13 +26,13 @@ const char* bw::StoredGeoserverQueryHandler::P_CRS = "crs";
 
 bw::StoredGeoserverQueryHandler::StoredGeoserverQueryHandler(
     SmartMet::Spine::Reactor* reactor,
-    StoredQueryConfig::Ptr config,
+    const StoredQueryConfig::Ptr& config,
     PluginImpl& plugin_data,
     std::optional<std::string> template_file_name)
 
     : bw::StoredQueryParamRegistry(config),
       bw::SupportsExtraHandlerParams(config),
-      bw::StoredAtomQueryHandlerBase(reactor, config, plugin_data, template_file_name),
+      bw::StoredAtomQueryHandlerBase(reactor, config, plugin_data, std::move(template_file_name)),
       bw::SupportsBoundingBox(config, plugin_data.get_crs_registry()),
       debug_level(get_config()->get_debug_level())
 {
@@ -433,8 +434,8 @@ wfs_stored_geoserver_handler_create(SmartMet::Spine::Reactor* reactor,
 {
   try
   {
-    StoredAtomQueryHandlerBase* qh =
-        new StoredGeoserverQueryHandler(reactor, config, plugin_data, template_file_name);
+    StoredAtomQueryHandlerBase* qh = new StoredGeoserverQueryHandler(
+        reactor, std::move(config), plugin_data, std::move(template_file_name));
     std::shared_ptr<SmartMet::Plugin::WFS::StoredQueryHandlerBase> result(qh);
     return result;
   }

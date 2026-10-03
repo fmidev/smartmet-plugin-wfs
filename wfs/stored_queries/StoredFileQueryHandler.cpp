@@ -6,6 +6,7 @@
 #include <spine/Convenience.h>
 #include <macgyver/Exception.h>
 #include <set>
+#include <utility>
 
 namespace bw = SmartMet::Plugin::WFS;
 
@@ -24,7 +25,7 @@ const char* P_END = "endTime";
 }  // namespace
 
 bw::StoredFileQueryHandler::StoredFileQueryHandler(SmartMet::Spine::Reactor* reactor,
-                                                   StoredQueryConfig::Ptr config,
+                                                   const StoredQueryConfig::Ptr& config,
                                                    PluginImpl& plugin_data,
                                                    std::optional<std::string> template_file_name)
     : bw::StoredQueryParamRegistry(config),
@@ -219,8 +220,8 @@ std::shared_ptr<SmartMet::Plugin::WFS::StoredQueryHandlerBase> wfs_stored_file_h
 {
   try
   {
-    auto* qh =
-        new StoredFileQueryHandler(reactor, config, plugin_data, template_file_name);
+    auto* qh = new StoredFileQueryHandler(
+        reactor, std::move(config), plugin_data, std::move(template_file_name));
     std::shared_ptr<SmartMet::Plugin::WFS::StoredQueryHandlerBase> result(qh);
     return result;
   }

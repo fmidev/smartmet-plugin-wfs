@@ -11,6 +11,7 @@
 #include <spine/Convenience.h>
 
 #include <tuple>
+#include <utility>
 
 namespace bo = SmartMet::Engine::Observation;
 
@@ -22,7 +23,7 @@ namespace WFS
 {
 StoredSoundingQueryHandler::StoredSoundingQueryHandler(
     SmartMet::Spine::Reactor* reactor,
-    StoredQueryConfig::Ptr config,
+    const StoredQueryConfig::Ptr& config,
     PluginImpl& pluginData,
     std::optional<std::string> templateFileName)
 
@@ -30,7 +31,7 @@ StoredSoundingQueryHandler::StoredSoundingQueryHandler(
       SupportsExtraHandlerParams(config),
       RequiresGeoEngine(reactor),
       RequiresObsEngine(reactor),
-      StoredQueryHandlerBase(reactor, config, pluginData, templateFileName),
+      StoredQueryHandlerBase(reactor, config, pluginData, std::move(templateFileName)),
       SupportsLocationParameters(
           reactor, config, SUPPORT_KEYWORDS | INCLUDE_FMISIDS | INCLUDE_GEOIDS | INCLUDE_WMOS),
       SupportsBoundingBox(config, pluginData.get_crs_registry()),
@@ -921,7 +922,7 @@ void StoredSoundingQueryHandler::getStationSearchSettings(
   settings.taggedFMISIDs = obs_engine->translateToFMISID(settings, stationSettings);
 }
 
-void StoredSoundingQueryHandler::checkMaxSoundings(const Fmi::DateTime startTime,
+void StoredSoundingQueryHandler::checkMaxSoundings(const Fmi::DateTime& startTime,
                                                    const Fmi::DateTime& endTime,
                                                    const RadioSoundingMap& radioSoundingMap) const
 {
@@ -954,7 +955,8 @@ std::shared_ptr<SmartMet::Plugin::WFS::StoredQueryHandlerBase> wfsStoredSounding
 {
   try
   {
-    auto* qh = new StoredSoundingQueryHandler(reactor, config, pluginData, templateFileName);
+    auto* qh = new StoredSoundingQueryHandler(
+        reactor, std::move(config), pluginData, std::move(templateFileName));
     std::shared_ptr<SmartMet::Plugin::WFS::StoredQueryHandlerBase> instance(qh);
     return instance;
   }

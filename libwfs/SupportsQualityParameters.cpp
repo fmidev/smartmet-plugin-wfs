@@ -7,7 +7,7 @@ namespace bw = SmartMet::Plugin::WFS;
 const char* bw::SupportsQualityParameters::P_QUALITY_INFO = "qualityInfo";
 
 bw::SupportsQualityParameters::SupportsQualityParameters(
-    StoredQueryConfig::Ptr config)
+    const StoredQueryConfig::Ptr& config)
 
     : bw::StoredQueryParamRegistry(config)
     , bw::SupportsExtraHandlerParams(config, false)

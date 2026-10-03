@@ -15,6 +15,8 @@
 
 #include <gis/OGR.h>
 
+#include <utility>
+
 namespace SmartMet
 {
 namespace Plugin
@@ -81,7 +83,7 @@ struct WeatherAreaGeometry
   OGRGeometryPtr geometry;
 
   WeatherAreaGeometry(const Fmi::DateTime& t, OGRGeometryPtr g)
-      : timestamp(t), geometry(g)
+      : timestamp(t), geometry(std::move(g))
   {
   }
 };

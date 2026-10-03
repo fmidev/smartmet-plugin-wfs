@@ -77,7 +77,7 @@ class StoredForecastQueryHandler : public StoredQueryHandlerBase,
 
    public:
     Query();
-    Query(std::shared_ptr<const StoredQueryConfig> config);
+    Query(const std::shared_ptr<const StoredQueryConfig>& config);
     virtual ~Query();
     void set_locale(const std::string& locale_name);
     void set_value_formatter(const Fmi::ValueFormatterParam& vf_param);
@@ -85,7 +85,7 @@ class StoredForecastQueryHandler : public StoredQueryHandlerBase,
 
  public:
   StoredForecastQueryHandler(SmartMet::Spine::Reactor* reactor,
-                             StoredQueryConfig::Ptr config,
+                             const StoredQueryConfig::Ptr& config,
                              PluginImpl& plugin_impl,
                              std::optional<std::string> template_file_name);
 
