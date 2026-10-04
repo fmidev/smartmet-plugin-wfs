@@ -1,0 +1,1 @@
+service=WFS&version=2.0.0&request=GetFeature&storedquery_id=fmi::forecast::hirlam::surface::point::simple&starttime=2013-03-18T06:00:00Z&endtime=2013-03-18T09:00:00Z&parameters=Temperature,WindSpeedMS&place=Helsinki

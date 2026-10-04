@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wfs:FeatureCollection
+    timeStamp="2012-12-12T12:12:12Z"
+    numberMatched="2"
+    numberReturned="2"
+    xmlns:wfs="http://www.opengis.net/wfs/2.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:xlink="http://www.w3.org/1999/xlink"
+    xmlns:om="http://www.opengis.net/om/2.0"
+    xmlns:omso="http://inspire.ec.europa.eu/schemas/omso/3.0"
+    xmlns:ompr="http://inspire.ec.europa.eu/schemas/ompr/3.0"
+    xmlns:gml="http://www.opengis.net/gml/3.2"
+    xmlns:gmd="http://www.isotc211.org/2005/gmd"
+    xmlns:gco="http://www.isotc211.org/2005/gco"
+    xmlns:swe="http://www.opengis.net/swe/2.0"
+    xmlns:gmlcov="http://www.opengis.net/gmlcov/1.0"
+    xmlns:sam="http://www.opengis.net/sampling/2.0"
+    xmlns:sams="http://www.opengis.net/samplingSpatial/2.0"
+    xmlns:wml2="http://www.opengis.net/waterml/2.0"
+    xmlns:target="http://xml.fmi.fi/namespace/om/atmosphericfeatures/1.1"
+    xsi:schemaLocation="http://www.opengis.net/wfs/2.0 http://schemas.opengis.net/wfs/2.0/wfs.xsd
+    http://www.opengis.net/gmlcov/1.0 http://schemas.opengis.net/gmlcov/1.0/gmlcovAll.xsd
+    http://www.opengis.net/sampling/2.0 http://schemas.opengis.net/sampling/2.0/samplingFeature.xsd
+    http://www.opengis.net/samplingSpatial/2.0 http://schemas.opengis.net/samplingSpatial/2.0/spatialSamplingFeature.xsd
+    http://www.opengis.net/swe/2.0 http://schemas.opengis.net/sweCommon/2.0/swe.xsd
+    http://inspire.ec.europa.eu/schemas/omso/3.0 https://inspire.ec.europa.eu/schemas/omso/3.0/SpecialisedObservations.xsd
+    http://inspire.ec.europa.eu/schemas/ompr/3.0 https://inspire.ec.europa.eu/schemas/ompr/3.0/Processes.xsd
+    http://www.opengis.net/waterml/2.0 http://schemas.opengis.net/waterml/2.0/waterml2.xsd
+    http://xml.fmi.fi/namespace/om/atmosphericfeatures/1.1 https://xml.fmi.fi/schema/om/atmosphericfeatures/1.1/atmosphericfeatures.xsd">
+
+    
+    <wfs:member>
+        <omso:PointTimeSeriesObservation gml:id="WFS-ZMZZ3p3ypygLuoxpcpKGgCVtIReJTowtIWbbpdOs2_llx4efR060aeWzDtdOufXlmw48rp1w36d3R066aduXth2dcvDDp5QtLFlz6d1TTty2vfoUbJgj1MbHy51qRaFOO6dNGTVwzsu7JU07ctr36FGycNPzgzad2Sdlw8svPpWw7NOSQzM.Xfpyc6zGzNo5bM3Rry.e._lkv7.2Xl35aemHFsyxNLZl7ZdlTzwy1MzZvx4dmWtTNpvxpK7r0zOGttw.Imnn0w7seWlauhAa23Tz56d2epl8dKxp2Gcytu_Jl2VmaNPLZh2srhh5Ydta1TLt4ZeWHp15ZW5z6b.WXJx65eXm_pyV0hZtul06zb.WXHh59HTrRp5bMO10659eWbDjyunXDfp3dHTrpp25e2HZ1y8MOnk0Omnblp9MvCfkJodNO3La37stY1WpDA---Temperature">
+	                     <om:phenomenonTime>
+                <gml:TimePeriod gml:id="time-interval-1-1">
+                    <gml:beginPosition>2013-03-18T06:00:00Z</gml:beginPosition>
+                    <gml:endPosition>2013-03-18T09:00:00Z</gml:endPosition>
+                </gml:TimePeriod>
+            </om:phenomenonTime>
+            <om:resultTime>
+                <gml:TimeInstant gml:id="time-1-1">
+                    <gml:timePosition>2013-03-17T22:00:00Z</gml:timePosition>
+                </gml:TimeInstant>
+            </om:resultTime> 
+
+	    <om:procedure xlink:href="http://xml.fmi.fi/inspire/process/hirlam"/>
+	                <om:parameter>
+                <om:NamedValue>
+                    <om:name xlink:href="https://inspire.ec.europa.eu/codeList/ProcessParameterValue/value/numericalModel/analysisTime"/>
+                    <om:value>
+                        <gml:TimeInstant gml:id="analysis-time-1-1-Temperature--"> 
+                            <gml:timePosition>2013-03-18T00:00:00Z</gml:timePosition>
+                           
+                        </gml:TimeInstant>
+                    </om:value>
+                </om:NamedValue>
+            </om:parameter>
+
+            <om:observedProperty  xlink:href="http://opendata.fmi.fi/fmi-apikey/foobar/meta?observableProperty=forecast&amp;param=Temperature&amp;language=eng"/>
+	                <om:featureOfInterest>
+                <sams:SF_SpatialSamplingFeature gml:id="enn-s-1-1-Temperature">
+          <sam:sampledFeature>
+		<target:LocationCollection gml:id="sampled-target-1-1-Temperature">
+		    <target:member>
+		    <target:Location gml:id="forloc-geoid-634963-pos-Temperature">
+		        <gml:identifier codeSpace="http://xml.fmi.fi/namespace/stationcode/geoid">634963</gml:identifier>
+			<gml:name codeSpace="http://xml.fmi.fi/namespace/locationcode/name">Tampere</gml:name>
+			<gml:name codeSpace="http://xml.fmi.fi/namespace/locationcode/geoid">634963</gml:name>
+			<target:representativePoint xlink:href="#point-634963-Temperature"/>
+			<target:country codeSpace="http://xml.fmi.fi/namespace/location/country">Finland</target:country>
+			<target:timezone>Europe/Helsinki</target:timezone>
+			<target:region codeSpace="http://xml.fmi.fi/namespace/location/region">Finland</target:region>	   			
+		    </target:Location></target:member>
+		</target:LocationCollection>
+ 	   </sam:sampledFeature>
+                <sams:shape>
+                    <gml:MultiPoint gml:id="foi-multipoint-1-1-Temperature">
+                        <gml:pointMembers> 
+                           <gml:Point gml:id="point-634963-Temperature" srsName="http://www.opengis.net/def/crs/EPSG/0/4258" srsDimension="2">
+                               <gml:name>Tampere</gml:name>
+                               <gml:pos>61.49911 23.78712 </gml:pos>
+                           </gml:Point>
+                        </gml:pointMembers>
+                    </gml:MultiPoint>
+                </sams:shape>
+            </sams:SF_SpatialSamplingFeature>
+        </om:featureOfInterest>
+                        <om:result>
+                    <wml2:MeasurementTimeseries gml:id="mts-1-1-Temperature">  
+                        <wml2:point>
+                            <wml2:MeasurementTVP> 
+                                      <wml2:time>2013-03-18T06:00:00Z</wml2:time>
+				      <wml2:value>-15.99</wml2:value> 
+                            </wml2:MeasurementTVP>
+                        </wml2:point>                          
+                        <wml2:point>
+                            <wml2:MeasurementTVP> 
+                                      <wml2:time>2013-03-18T07:00:00Z</wml2:time>
+				      <wml2:value>-14.32</wml2:value> 
+                            </wml2:MeasurementTVP>
+                        </wml2:point>                          
+                        <wml2:point>
+                            <wml2:MeasurementTVP> 
+                                      <wml2:time>2013-03-18T08:00:00Z</wml2:time>
+				      <wml2:value>-12.47</wml2:value> 
+                            </wml2:MeasurementTVP>
+                        </wml2:point>                          
+                        <wml2:point>
+                            <wml2:MeasurementTVP> 
+                                      <wml2:time>2013-03-18T09:00:00Z</wml2:time>
+				      <wml2:value>-10.59</wml2:value> 
+                            </wml2:MeasurementTVP>
+                        </wml2:point>                         
+                    </wml2:MeasurementTimeseries>
+                </om:result>
+
+        </omso:PointTimeSeriesObservation>
+    </wfs:member>
+
+    <wfs:member>
+        <omso:PointTimeSeriesObservation gml:id="WFS-FjVwOcYsNdDSpccn5dRMQUfv96GJTowtIWbbpdOs2_llx4efR060aeWzDtdOufXlmw48rp1w36d3R066aduXth2dcvDDp5QtLFlz6d1TTty2vfoUbJgj1MbHy51qRaFOO6dNGTVwzsu7JU07ctr36FGycNPzgzad2Sdlw8svPpWw7NOSQzM.Xfpyc6zGzVwyZNXRry.e._lkv7.2Xl35aemHFsyxNLZl7ZdlTzwy1MzZvx4dmWtTNpvxpK7r0zOGttw.Imnn0w7seWlauhAa23Tz56d2epl8dKxp2Gcytu_Jl2VmaNPLZh2srhh5Ydta1TLt4ZeWHp15ZW5z6b.WXJx65eXm_pyV0hZtul06zb.WXHh59HTrRp5bMO10659eWbDjyunXDfp3dHTrpp25e2HZ1y8MOnk0Omnblp9MvCfkJodNO3La37stY1WpDA---Temperature">
+	                     <om:phenomenonTime>
+                <gml:TimePeriod gml:id="time-interval-1-2">
+                    <gml:beginPosition>2013-03-18T06:00:00Z</gml:beginPosition>
+                    <gml:endPosition>2013-03-18T09:00:00Z</gml:endPosition>
+                </gml:TimePeriod>
+            </om:phenomenonTime>
+            <om:resultTime>
+                <gml:TimeInstant gml:id="time-1-2">
+                    <gml:timePosition>2013-03-17T22:00:00Z</gml:timePosition>
+                </gml:TimeInstant>
+            </om:resultTime> 
+
+	    <om:procedure xlink:href="http://xml.fmi.fi/inspire/process/hirlam"/>
+	                <om:parameter>
+                <om:NamedValue>
+                    <om:name xlink:href="https://inspire.ec.europa.eu/codeList/ProcessParameterValue/value/numericalModel/analysisTime"/>
+                    <om:value>
+                        <gml:TimeInstant gml:id="analysis-time-1-2-Temperature--"> 
+                            <gml:timePosition>2013-03-18T00:00:00Z</gml:timePosition>
+                           
+                        </gml:TimeInstant>
+                    </om:value>
+                </om:NamedValue>
+            </om:parameter>
+
+            <om:observedProperty  xlink:href="http://opendata.fmi.fi/fmi-apikey/foobar/meta?observableProperty=forecast&amp;param=Temperature&amp;language=eng"/>
+	                <om:featureOfInterest>
+                <sams:SF_SpatialSamplingFeature gml:id="enn-s-1-2-Temperature">
+          <sam:sampledFeature>
+		<target:LocationCollection gml:id="sampled-target-1-2-Temperature">
+		    <target:member>
+		    <target:Location gml:id="forloc-geoid-658225-pos-Temperature">
+		        <gml:identifier codeSpace="http://xml.fmi.fi/namespace/stationcode/geoid">658225</gml:identifier>
+			<gml:name codeSpace="http://xml.fmi.fi/namespace/locationcode/name">Helsinki</gml:name>
+			<gml:name codeSpace="http://xml.fmi.fi/namespace/locationcode/geoid">658225</gml:name>
+			<target:representativePoint xlink:href="#point-658225-Temperature"/>
+			<target:country codeSpace="http://xml.fmi.fi/namespace/location/country">Finland</target:country>
+			<target:timezone>Europe/Helsinki</target:timezone>
+			<target:region codeSpace="http://xml.fmi.fi/namespace/location/region">Finland</target:region>	   			
+		    </target:Location></target:member>
+		</target:LocationCollection>
+ 	   </sam:sampledFeature>
+                <sams:shape>
+                    <gml:MultiPoint gml:id="foi-multipoint-1-2-Temperature">
+                        <gml:pointMembers> 
+                           <gml:Point gml:id="point-658225-Temperature" srsName="http://www.opengis.net/def/crs/EPSG/0/4258" srsDimension="2">
+                               <gml:name>Helsinki</gml:name>
+                               <gml:pos>60.16952 24.93545 </gml:pos>
+                           </gml:Point>
+                        </gml:pointMembers>
+                    </gml:MultiPoint>
+                </sams:shape>
+            </sams:SF_SpatialSamplingFeature>
+        </om:featureOfInterest>
+                        <om:result>
+                    <wml2:MeasurementTimeseries gml:id="mts-1-2-Temperature">  
+                        <wml2:point>
+                            <wml2:MeasurementTVP> 
+                                      <wml2:time>2013-03-18T06:00:00Z</wml2:time>
+				      <wml2:value>-14.09</wml2:value> 
+                            </wml2:MeasurementTVP>
+                        </wml2:point>                          
+                        <wml2:point>
+                            <wml2:MeasurementTVP> 
+                                      <wml2:time>2013-03-18T07:00:00Z</wml2:time>
+				      <wml2:value>-13.19</wml2:value> 
+                            </wml2:MeasurementTVP>
+                        </wml2:point>                          
+                        <wml2:point>
+                            <wml2:MeasurementTVP> 
+                                      <wml2:time>2013-03-18T08:00:00Z</wml2:time>
+				      <wml2:value>-12.04</wml2:value> 
+                            </wml2:MeasurementTVP>
+                        </wml2:point>                          
+                        <wml2:point>
+                            <wml2:MeasurementTVP> 
+                                      <wml2:time>2013-03-18T09:00:00Z</wml2:time>
+				      <wml2:value>-10.98</wml2:value> 
+                            </wml2:MeasurementTVP>
+                        </wml2:point>                         
+                    </wml2:MeasurementTimeseries>
+                </om:result>
+
+        </omso:PointTimeSeriesObservation>
+    </wfs:member>
+
+</wfs:FeatureCollection>
