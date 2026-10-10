@@ -158,7 +158,7 @@ void bw::SupportsLocationParameters::get_location_options(
       // Note: geoengine and locus use kilometers instead of meters
       SmartMet::Spine::LocationPtr loc =
           geo_engine->lonlatSearch(lon, lat, language, max_distance / 1000.0);
-      locations->push_back(std::make_pair(name, loc));
+      locations->emplace_back(name, loc);
     }
 
     get_geoids(param, language, locations);
@@ -197,7 +197,7 @@ void bw::SupportsLocationParameters::get_location_options(
       }
       else
       {
-        locations->push_back(std::make_pair(name, ptrs.front()));
+        locations->emplace_back(name, ptrs.front());
       }
     }
 
@@ -224,7 +224,7 @@ void bw::SupportsLocationParameters::get_location_options(
         {
           for (const SmartMet::Spine::LocationPtr& loc : places)
           {
-            locations->push_back(std::make_pair(loc->name, loc));
+            locations->emplace_back(loc->name, loc);
           }
         }
       }
@@ -259,7 +259,7 @@ void bw::SupportsLocationParameters::get_geoids(
         else
         {
           SmartMet::Spine::LocationPtr loc = geo_engine->idSearch(id, language);
-          locations->push_back(std::make_pair(Fmi::to_string(id), loc));
+          locations->emplace_back(Fmi::to_string(id), loc);
         }
       }
     }
@@ -309,7 +309,7 @@ void bw::SupportsLocationParameters::get_fmisids(
         }
         // Including location of the current fmisid if enabled.
         if (include_fmisids)
-          locations->push_back(std::make_pair(id_s, locList.front()));
+          locations->emplace_back(id_s, locList.front());
       }
     }
   }
@@ -358,7 +358,7 @@ void bw::SupportsLocationParameters::get_wmos(
         }
         // Including location of the current wmo id if enabled.
         if (include_wmos)
-          locations->push_back(std::make_pair(id_s, locList.front()));
+          locations->emplace_back(id_s, locList.front());
       }
     }
   }
@@ -407,7 +407,7 @@ void bw::SupportsLocationParameters::get_lpnns(
         }
         // Including location of the current lpnn id if enabled.
         if (include_lpnns)
-          locations->push_back(std::make_pair(id_s, locList.front()));
+          locations->emplace_back(id_s, locList.front());
       }
     }
   }

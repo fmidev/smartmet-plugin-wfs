@@ -362,7 +362,7 @@ try
   } else if (not format or *format == "HTML" or *format == "html") {
     std::string uri = theRequest.getResource();
     std::vector<std::string> params;
-    params.push_back("what=wfs:constructors");
+    params.emplace_back("what=wfs:constructors");
     if (format) params.push_back("format=" + urlencode(*format));
     if (handler) params.push_back("handler=" + urlencode(*handler));
     uri += "?"s + ba::join(params, "&"s);

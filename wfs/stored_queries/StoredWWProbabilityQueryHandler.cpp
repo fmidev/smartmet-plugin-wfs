@@ -143,8 +143,7 @@ void populate_result_vector(
       double light_prob = std::get<double>(tv_light.value);
       double moderate_prob = std::get<double>(tv_moderate.value);
       double heavy_prob = std::get<double>(tv_heavy.value);
-      result_vector.push_back(SmartMet::Plugin::WFS::WinterWeatherProbability(
-          tv_light.time.utc_time(), light_prob, moderate_prob, heavy_prob));
+      result_vector.emplace_back(tv_light.time.utc_time(), light_prob, moderate_prob, heavy_prob);
     }
   }
   catch (...)
@@ -496,11 +495,11 @@ void StoredWWProbabilityQueryHandler::query(const StoredQuery& query,
 
     std::unique_ptr<OGRGeometry> geom;
     Fmi::OGR::CoordinatePoints geoCoordinates;
-    geoCoordinates.push_back(std::pair<double, double>(bbox.xMin, bbox.yMin));
-    geoCoordinates.push_back(std::pair<double, double>(bbox.xMin, bbox.yMax));
-    geoCoordinates.push_back(std::pair<double, double>(bbox.xMax, bbox.yMax));
-    geoCoordinates.push_back(std::pair<double, double>(bbox.xMax, bbox.yMin));
-    geoCoordinates.push_back(std::pair<double, double>(bbox.xMin, bbox.yMin));
+    geoCoordinates.emplace_back(bbox.xMin, bbox.yMin);
+    geoCoordinates.emplace_back(bbox.xMin, bbox.yMax);
+    geoCoordinates.emplace_back(bbox.xMax, bbox.yMax);
+    geoCoordinates.emplace_back(bbox.xMax, bbox.yMin);
+    geoCoordinates.emplace_back(bbox.xMin, bbox.yMin);
     geom.reset(Fmi::OGR::constructGeometry(geoCoordinates, wkbPolygon, 4326));
 
     // fetch all icao codes
@@ -529,7 +528,7 @@ void StoredWWProbabilityQueryHandler::query(const StoredQuery& query,
               icaoCodeSet.find(icao_item.second->name) == icaoCodeSet.end())
             break;
 
-          airp_llist.push_back(AirportLocation(icao_item.first, item.second));
+          airp_llist.emplace_back(icao_item.first, item.second);
           break;
         }
       }

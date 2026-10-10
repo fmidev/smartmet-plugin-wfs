@@ -241,7 +241,7 @@ TS::TimeSeriesGroupPtr makeSparseGrid(const TS::TimeSeriesGroupPtr& inputGrid,
 
       if (xindex % step == 0 && yindex % step == 0)
       {
-        result->push_back(TS::LonLatTimeSeries(locationIt->lonlat, locationIt->timeseries));
+        result->emplace_back(locationIt->lonlat, locationIt->timeseries);
       }
     }
 
