@@ -727,7 +727,7 @@ std::shared_ptr<OGRPolygon> StoredQEDownloadQueryHandler::get_model_boundary(
     auto q = q_engine->get(meta_info.producer, meta_info.originTime);
 
     if (!q->isArea())
-      return std::shared_ptr<OGRPolygon>();
+      return {};
 
     const NFmiArea& area = q->area();
     std::shared_ptr<OGRPolygon> model_area(new OGRPolygon);

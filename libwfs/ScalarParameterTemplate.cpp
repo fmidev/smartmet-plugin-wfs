@@ -72,10 +72,10 @@ SmartMet::Spine::Value ScalarParameterTemplate::get_value(
     if (value.index() == 0) {
       return std::get<SmartMet::Spine::Value>(value);
     } else {
-      const std::vector<SmartMet::Spine::Value>& arr = std::get<std::vector<SmartMet::Spine::Value> >(value);
+      const auto& arr = std::get<std::vector<SmartMet::Spine::Value>>(value);
       if (arr.size() == 0) {
         // Empty array: treat as empty value
-          return SmartMet::Spine::Value();
+        return {};
       } else if (arr.size() == 1) {
         return arr.at(0);
       } else {
