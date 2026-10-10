@@ -1,14 +1,15 @@
 #include "stored_queries/StoredAtomQueryHandlerBase.h"
 #include "StoredQueryHandlerFactoryDef.h"
 #include <boost/bind/bind.hpp>
-#include <utility>
-#include <variant>
 #include <macgyver/Exception.h>
 #include <macgyver/StringConversion.h>
 #include <spine/Value.h>
 #include <cassert>
 #include <limits>
+#include <memory>
 #include <sstream>
+#include <utility>
+#include <variant>
 #include <vector>
 
 namespace bw = SmartMet::Plugin::WFS;
@@ -32,7 +33,7 @@ bw::StoredAtomQueryHandlerBase::StoredAtomQueryHandlerBase(
     const std::vector<std::string> url_params =
         config->get_mandatory_config_array<std::string>("url_template.params");
 
-    url_generator.reset(new UrlTemplateGenerator(url, url_params));
+    url_generator = std::make_shared<UrlTemplateGenerator>(url, url_params);
   }
   catch (...)
   {

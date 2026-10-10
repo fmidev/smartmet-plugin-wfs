@@ -12,7 +12,7 @@ namespace
     void start_param_table(std::ostream& os)
     {
         os << "<br>";
-        os << "<table border=\"1px solid black\" padding=\"10pt\">";
+        os << R"(<table border="1px solid black" padding="10pt">)";
         os << "<tr>";
         os << "<th>Parameter</th>";
         os << "<th>Mandatory</th>";
@@ -219,7 +219,7 @@ void HandlerFactorySummary::write_html(
         os << "<br>\n";
         os << "<ul>\n";
 
-        os << "<table border=\"1px solid black\" padding=\"10pt\">";
+        os << R"(<table border="1px solid black" padding="10pt">)";
         os << "<tr>";
         os << "<th>Constructor</th>";
         os << "<th>Description</th>";

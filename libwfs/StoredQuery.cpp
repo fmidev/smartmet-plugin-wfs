@@ -5,9 +5,10 @@
 #include "XmlUtils.h"
 #include <boost/algorithm/string.hpp>
 #include <macgyver/DistanceParser.h>
+#include <macgyver/Exception.h>
 #include <macgyver/StringConversion.h>
 #include <macgyver/TypeName.h>
-#include <macgyver/Exception.h>
+#include <memory>
 #include <set>
 #include <sstream>
 
@@ -370,7 +371,7 @@ void bw::StoredQuery::extract_kvp_parameters(const SmartMet::Spine::HTTP::Reques
   {
     const char* method = "SmartMet::Plugin::WFS::StoredQuery::extract_kvp_parameters";
 
-    query.params.reset(new bw::RequestParameterMap(config.use_case_sensitive_params()));
+    query.params = std::make_shared<bw::RequestParameterMap>(config.use_case_sensitive_params());
     query.orig_params = query.params;
     query.skipped_params.clear();
 
@@ -490,7 +491,7 @@ void bw::StoredQuery::extract_xml_parameters(const xercesc::DOMElement& query_ro
   {
     const char* method = "SmartMet::Plugin::WFS::StoredQuery::extract_xml_parameters";
 
-    query.params.reset(new bw::RequestParameterMap(config.use_case_sensitive_params()));
+    query.params = std::make_shared<bw::RequestParameterMap>(config.use_case_sensitive_params());
     query.orig_params = query.params;
     query.skipped_params.clear();
 

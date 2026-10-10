@@ -6,6 +6,7 @@
 #include <boost/format.hpp>
 #include <ctpp2/CDT.hpp>
 #include <macgyver/TypeName.h>
+#include <memory>
 #include <sstream>
 
 namespace bw = SmartMet::Plugin::WFS;
@@ -184,7 +185,7 @@ bw::Request::DescribeFeatureType::create_from_kvp(
     }
 
     std::shared_ptr<bw::Request::DescribeFeatureType> result;
-    result.reset(new bw::Request::DescribeFeatureType(language, type_names, plugin_impl));
+    result = std::make_shared<bw::Request::DescribeFeatureType>(language, type_names, plugin_impl);
     return result;
   }
   catch (...)
@@ -243,7 +244,7 @@ bw::Request::DescribeFeatureType::create_from_xml(const std::string& language,
       type_names.emplace_back(Xml::to_string(x_uri), name);
     }
 
-    result.reset(new bw::Request::DescribeFeatureType(language, type_names, plugin_impl));
+    result = std::make_shared<bw::Request::DescribeFeatureType>(language, type_names, plugin_impl);
     result->check_mandatory_attributes(document);
     return result;
   }

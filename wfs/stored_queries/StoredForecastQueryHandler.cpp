@@ -4,14 +4,14 @@
 #include "WfsConvenience.h"
 #include <boost/algorithm/string.hpp>
 #include <boost/format.hpp>
+#include <engines/querydata/MetaQueryOptions.h>
+#include <macgyver/Exception.h>
 #include <macgyver/StringConversion.h>
 #include <macgyver/TimeFormatter.h>
 #include <macgyver/TimeParser.h>
 #include <macgyver/TypeName.h>
 #include <newbase/NFmiPoint.h>
 #include <newbase/NFmiQueryData.h>
-#include <engines/querydata/MetaQueryOptions.h>
-#include <macgyver/Exception.h>
 #include <spine/Convenience.h>
 #include <spine/Table.h>
 #include <spine/Value.h>
@@ -19,6 +19,7 @@
 #include <limits>
 #include <locale>
 #include <map>
+#include <memory>
 #include <utility>
 
 namespace bw = SmartMet::Plugin::WFS;
@@ -932,7 +933,7 @@ void bw::StoredForecastQueryHandler::Query::set_locale(const std::string& locale
   {
     try
     {
-      output_locale.reset(new std::locale(locale_name.c_str()));
+      output_locale = std::make_shared<std::locale>(locale_name.c_str());
     }
     catch (...)
     {

@@ -5,10 +5,11 @@
 #include "XPathSnapshot.h"
 #include "XmlUtils.h"
 #include <boost/lambda/lambda.hpp>
-#include <utility>
 #include <fmt/format.h>
-#include <macgyver/StringConversion.h>
 #include <macgyver/Exception.h>
+#include <macgyver/StringConversion.h>
+#include <memory>
+#include <utility>
 
 XERCES_CPP_NAMESPACE_USE
 
@@ -315,7 +316,7 @@ void bw::AdHocQuery::create_bbox_query_from_kvp(
           query->language = language;
           query->set_stale_seconds(config->get_expires_seconds());
 
-          query->params.reset(new bw::RequestParameterMap(case_sensitive_params));
+          query->params = std::make_shared<bw::RequestParameterMap>(case_sensitive_params);
           query->orig_params = query->params;
           query->skipped_params.clear();
 
@@ -487,7 +488,7 @@ void bw::AdHocQuery::create_query(std::shared_ptr<const bw::StoredQueryHandlerBa
   {
     std::shared_ptr<bw::AdHocQuery> query(new bw::AdHocQuery);
 
-    query->params.reset(new bw::RequestParameterMap(case_sensitive_params));
+    query->params = std::make_shared<bw::RequestParameterMap>(case_sensitive_params);
     query->orig_params = query->params;
     query->skipped_params.clear();
     query->handler = std::move(handler);

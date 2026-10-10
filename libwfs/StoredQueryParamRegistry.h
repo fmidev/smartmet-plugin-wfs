@@ -117,8 +117,8 @@ void StoredQueryParamRegistry::register_scalar_param(const std::string& name,
   std::shared_ptr<ScalarParameterRec> rec(new ScalarParameterRec);
   rec->name = name;
   rec->description = description;
-  rec->param_def.reset(new ScalarParameterTemplate(*get_config(), name,
-						   silence_param_init_warnings_ or silent));
+  rec->param_def = std::make_shared<ScalarParameterTemplate>(
+      *get_config(), name, silence_param_init_warnings_ or silent);
   rec->type_name = typeid(ParamType).name();
   rec->required = required;
   add_param_rec(rec);
@@ -135,8 +135,8 @@ void StoredQueryParamRegistry::register_array_param(const std::string& name,
   std::shared_ptr<ArrayParameterRec> rec(new ArrayParameterRec);
   rec->name = name;
   rec->description = description;
-  rec->param_def.reset(new ArrayParameterTemplate(*get_config(), name, min_size, max_size,
-						  silence_param_init_warnings_ or silent));
+  rec->param_def = std::make_shared<ArrayParameterTemplate>(
+      *get_config(), name, min_size, max_size, silence_param_init_warnings_ or silent);
   rec->type_name = typeid(ParamType).name();
   rec->min_size = min_size;
   rec->max_size = max_size;

@@ -1,16 +1,17 @@
 #include "StoredQueryConfig.h"
-#include "StoredQueryConfigWrapper.h"
 #include "Config.h"
 #include "ParameterTemplateBase.h"
+#include "StoredQueryConfigWrapper.h"
 #include "StoredQueryHandlerBase.h"
 #include <boost/algorithm/string.hpp>
-#include <filesystem>
-#include <macgyver/TypeName.h>
-#include <spine/Convenience.h>
 #include <macgyver/Exception.h>
 #include <macgyver/FileSystem.h>
 #include <macgyver/StringConversion.h>
+#include <macgyver/TypeName.h>
+#include <spine/Convenience.h>
+#include <filesystem>
 #include <iostream>
+#include <memory>
 #include <sstream>
 #include <stdexcept>
 #include <utility>
@@ -569,7 +570,7 @@ bool SmartMet::Plugin::WFS::StoredQueryConfig::last_write_time_changed() const
 void SmartMet::Plugin::WFS::StoredQueryConfig::set_locale(const std::string& name)
 {
   locale_name = name;
-  locale.reset(new std::locale(name.c_str()));
+  locale = std::make_shared<std::locale>(name.c_str());
 }
 
 std::shared_ptr<const std::locale> SmartMet::Plugin::WFS::StoredQueryConfig::get_locale() const

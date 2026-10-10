@@ -1,10 +1,11 @@
 #include "DataSetIndex.h"
 #include <boost/algorithm/string.hpp>
 #include <boost/regex.hpp>
+#include <macgyver/Exception.h>
 #include <macgyver/TimeParser.h>
 #include <macgyver/TypeName.h>
 #include <spine/Convenience.h>
-#include <macgyver/Exception.h>
+#include <memory>
 #include <stdexcept>
 #include <vector>
 
@@ -187,7 +188,7 @@ std::shared_ptr<bw::DataSetDefinition> bw::DataSetDefinition::create(
 {
   try
   {
-    return std::shared_ptr<bw::DataSetDefinition>(new bw::DataSetDefinition(Private(), config, setting));
+    return std::make_shared<bw::DataSetDefinition>(Private(), config, setting);
   }
   catch (...)
   {

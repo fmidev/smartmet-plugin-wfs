@@ -5,6 +5,7 @@
 #include <boost/algorithm/string.hpp>
 #include <ctpp2/CDT.hpp>
 #include <macgyver/TypeName.h>
+#include <memory>
 
 namespace bw = SmartMet::Plugin::WFS;
 namespace bwx = SmartMet::Plugin::WFS::Xml;
@@ -138,7 +139,7 @@ std::shared_ptr<GetCapabilities> GetCapabilities::create_from_kvp(
     check_request_name(http_request, "GetCapabilities");
     std::shared_ptr<GetCapabilities> request;
     // FIXME: verify required stuff from the request
-    request.reset(new GetCapabilities(language, plugin_impl));
+    request = std::make_shared<GetCapabilities>(language, plugin_impl);
     request->requested_language = http_request.getParameter("language");
     return request;
   }
@@ -157,7 +158,7 @@ std::shared_ptr<GetCapabilities> GetCapabilities::create_from_xml(
   {
     check_request_name(document, "GetCapabilities");
     std::shared_ptr<GetCapabilities> request;
-    request.reset(new GetCapabilities(language, plugin_impl));
+    request = std::make_shared<GetCapabilities>(language, plugin_impl);
     return request;
   }
   catch (...)

@@ -2,10 +2,11 @@
 #include "ArrayParameterTemplate.h"
 #include "ScalarParameterTemplate.h"
 #include <boost/algorithm/string.hpp>
+#include <macgyver/Exception.h>
 #include <macgyver/StringConversion.h>
 #include <macgyver/TypeName.h>
-#include <macgyver/Exception.h>
 #include <spine/Value.h>
+#include <memory>
 #include <sstream>
 
 namespace ba = boost::algorithm;
@@ -52,8 +53,8 @@ bw::SupportsExtraHandlerParams::SupportsExtraHandlerParams(
         const int min_size = config->get_optional_config_param<int>(param_desc, "min_size", 0);
         const int max_size =
             config->get_optional_config_param<int>(param_desc, "max_size", DEF_MAX_SIZE);
-        array_param_def.reset(
-            new ArrayParameterTemplate(*config, item_path, "def", min_size, max_size));
+        array_param_def =
+            std::make_shared<ArrayParameterTemplate>(*config, item_path, "def", min_size, max_size);
         if (reg)
             register_array_param(name, "", array_param_def, min_size, max_size);
         param_def = array_param_def;
@@ -61,7 +62,8 @@ bw::SupportsExtraHandlerParams::SupportsExtraHandlerParams(
       else if (def.isScalar())
       {
         std::shared_ptr<ScalarParameterTemplate> scalar_param_def;
-        scalar_param_def.reset(new ScalarParameterTemplate(*config, item_path, "def", false));
+        scalar_param_def =
+            std::make_shared<ScalarParameterTemplate>(*config, item_path, "def", false);
         if (reg)
             register_scalar_param(name, "", scalar_param_def, false);
         param_def = scalar_param_def;

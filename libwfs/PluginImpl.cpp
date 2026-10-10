@@ -12,10 +12,10 @@
 #include "request/ListStoredQueries.h"
 #include <boost/algorithm/string.hpp>
 #include <boost/bind/bind.hpp>
-#include <macgyver/DateTime.h>
 #include <boost/format.hpp>
 #include <boost/lambda/lambda.hpp>
 #include <json/json.h>
+#include <macgyver/DateTime.h>
 #include <macgyver/Exception.h>
 #include <macgyver/StringConversion.h>
 #include <macgyver/TimeParser.h>
@@ -23,6 +23,7 @@
 #include <spine/Convenience.h>
 #include <spine/FmiApiKey.h>
 #include <spine/HostInfo.h>
+#include <memory>
 
 using namespace SmartMet::Plugin::WFS;
 namespace ba = boost::algorithm;
@@ -259,7 +260,7 @@ void PluginImpl::create_xml_parser()
     const std::string xml_grammar_pool_fn = itsConfig.getXMLGrammarPoolDumpFn();
     std::cout << "\t\t+ [Using XML grammar pool dump file '" << xml_grammar_pool_fn << "']"
               << std::endl;
-    xml_parser.reset(new Xml::ParserMT(xml_grammar_pool_fn, false));
+    xml_parser = std::make_shared<Xml::ParserMT>(xml_grammar_pool_fn, false);
 
     std::string serialized_xml_schemas = itsConfig.get_optional_path("serializedXmlSchemas", "");
     if (!serialized_xml_schemas.empty())
@@ -298,7 +299,7 @@ void PluginImpl::init_geo_server_access()
       const std::string geoserver_conn_str = itsConfig.get_geoserver_conn_string();
       if (!geoserver_conn_str.empty())
       {
-        geo_server_db.reset(new GeoServerDB(itsConfig.get_geoserver_conn_string(), 5));
+        geo_server_db = std::make_shared<GeoServerDB>(itsConfig.get_geoserver_conn_string(), 5);
       }
     }
     catch (...)

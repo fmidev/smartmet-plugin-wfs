@@ -7,6 +7,7 @@
 #include <boost/spirit/include/qi.hpp>
 #include <macgyver/Exception.h>
 #include <spine/Value.h>
+#include <memory>
 #include <sstream>
 
 namespace
@@ -43,7 +44,7 @@ void ParameterTemplateItem::parse(const SmartMet::Spine::Value& item_def, bool a
     {
       absent = false;
       weak = false;
-      plain_text.reset(new SmartMet::Spine::Value(item_def));
+      plain_text = std::make_shared<SmartMet::Spine::Value>(item_def);
       param_ref = default_value = std::optional<std::string>();
       param_ind = std::optional<std::size_t>();
     }
@@ -121,7 +122,7 @@ void ParameterTemplateItem::parse(const std::string& item_def, bool allow_absent
     else
     {
       this->reset();
-      this->plain_text.reset(new SmartMet::Spine::Value(item_def));
+      this->plain_text = std::make_shared<SmartMet::Spine::Value>(item_def);
     }
   }
   catch (...)
