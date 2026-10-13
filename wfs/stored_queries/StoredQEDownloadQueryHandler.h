@@ -69,7 +69,7 @@ protected:
 
   void add_bbox_info(RequestParameterMap* param_map,
                      const std::string& name,
-                     OGRGeometry& geom) const;
+                     const OGRGeometry& geom) const;
 
   void add_boundary(RequestParameterMap* param_map,
                     const std::string& name,

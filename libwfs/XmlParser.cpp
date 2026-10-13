@@ -121,8 +121,8 @@ std::shared_ptr<xercesc::DOMDocument> Parser::parse_string(
   }
 }
 
-std::shared_ptr<xercesc::DOMDocument> Parser::parse_input(
-    xercesc::InputSource &input, Parser::root_element_cb_t root_element_cb)
+std::shared_ptr<xercesc::DOMDocument> Parser::parse_input(const xercesc::InputSource& input,
+                                                          Parser::root_element_cb_t root_element_cb)
 {
   try
   {

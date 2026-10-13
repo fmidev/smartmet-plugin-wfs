@@ -820,7 +820,7 @@ std::shared_ptr<OGRGeometry> StoredQEDownloadQueryHandler::bbox_intersection(
 
 void StoredQEDownloadQueryHandler::add_bbox_info(RequestParameterMap* param_map,
                                                  const std::string& name,
-                                                 OGRGeometry& geom) const
+                                                 const OGRGeometry& geom) const
 {
   try
   {

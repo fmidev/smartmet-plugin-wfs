@@ -93,11 +93,11 @@ class GeoServerDataIndex
                                  const std::string& layer,
                                  const double* boundingBox,
                                  int boundingBoxCRS,
-                                 int destCRS = 4326);
+                                 int destCRS = 4326) const;
 
   static std::string create_geometry_str(const double* boundingBox, int boundingBoxCRS);
 
-  void process_sql_result(pqxx::result& result, const std::string& layers);
+  void process_sql_result(const pqxx::result& result, const std::string& layers);
 
  private:
   GeoServerDB& db;

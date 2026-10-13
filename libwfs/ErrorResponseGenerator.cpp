@@ -81,7 +81,7 @@ ErrorResponseGenerator::ErrorResponse ErrorResponseGenerator::create_error_respo
   }
 }
 
-CTPP::CDT ErrorResponseGenerator::handle_wfs_exception(Fmi::Exception& err)
+CTPP::CDT ErrorResponseGenerator::handle_wfs_exception(const Fmi::Exception& err)
 {
   // std::cerr << err;
 

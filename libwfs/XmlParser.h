@@ -68,7 +68,7 @@ class Parser : public xercesc::XercesDOMParser
       root_element_cb_t root_element_cb = root_element_cb_t());
 
   std::shared_ptr<xercesc::DOMDocument> parse_input(
-      xercesc::InputSource& input, root_element_cb_t root_element_cb = root_element_cb_t());
+      const xercesc::InputSource& input, root_element_cb_t root_element_cb = root_element_cb_t());
 
   std::list<std::string> get_messages() const;
 

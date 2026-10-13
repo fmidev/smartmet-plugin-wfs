@@ -141,11 +141,11 @@ class PluginImpl
    *  @param handler stored query handler for which to output information or
    *         all handlers when empty string is specified
    */
-  void dump_constructor_map(std::ostream& os, const std::optional<std::string>& handler = {});
+  void dump_constructor_map(std::ostream& os, const std::optional<std::string>& handler = {}) const;
 
   void dump_constructor_map_html(std::ostream& os,
           const std::string& uri,
-          const std::optional<std::string>& handler = {});
+                                 const std::optional<std::string>& handler = {}) const;
 
   bool is_reload_required(bool reset = false);
 
@@ -156,19 +156,19 @@ class PluginImpl
              const SmartMet::Spine::HTTP::Request& req,
              RequestResult& result);
 
-  RequestBaseP parse_kvp_get_capabilities_request(const std::string& language,
-                                                  const SmartMet::Spine::HTTP::Request& request);
+  RequestBaseP parse_kvp_get_capabilities_request(
+      const std::string& language, const SmartMet::Spine::HTTP::Request& request) const;
 
   RequestBaseP parse_xml_get_capabilities_request(const std::string& language,
                                                   const xercesc::DOMDocument& document,
-                                                  const xercesc::DOMElement& root);
+                                                  const xercesc::DOMElement& root) const;
 
   RequestBaseP parse_kvp_describe_feature_type_request(
-      const std::string& language, const SmartMet::Spine::HTTP::Request& request);
+      const std::string& language, const SmartMet::Spine::HTTP::Request& request) const;
 
   RequestBaseP parse_xml_describe_feature_type_request(const std::string& language,
                                                        const xercesc::DOMDocument& document,
-                                                       const xercesc::DOMElement& root);
+                                                       const xercesc::DOMElement& root) const;
 
   RequestBaseP parse_kvp_get_feature_request(const std::string& language,
                                              const SmartMet::Spine::HTTP::Request& request);
@@ -184,19 +184,19 @@ class PluginImpl
                                                     const xercesc::DOMDocument& document,
                                                     const xercesc::DOMElement& root);
 
-  RequestBaseP parse_kvp_list_stored_queries_request(const std::string& language,
-                                                     const SmartMet::Spine::HTTP::Request& request);
+  RequestBaseP parse_kvp_list_stored_queries_request(
+      const std::string& language, const SmartMet::Spine::HTTP::Request& request) const;
 
   RequestBaseP parse_xml_list_stored_queries_request(const std::string& language,
                                                      const xercesc::DOMDocument& document,
-                                                     const xercesc::DOMElement& root);
+                                                     const xercesc::DOMElement& root) const;
 
   RequestBaseP parse_kvp_describe_stored_queries_request(
-      const std::string& language, const SmartMet::Spine::HTTP::Request& request);
+      const std::string& language, const SmartMet::Spine::HTTP::Request& request) const;
 
   RequestBaseP parse_xml_describe_stored_queries_request(const std::string& language,
                                                          const xercesc::DOMDocument& document,
-                                                         const xercesc::DOMElement& root);
+                                                         const xercesc::DOMElement& root) const;
 
   std::optional<std::string> get_fmi_apikey(
       const SmartMet::Spine::HTTP::Request& theRequest) const;

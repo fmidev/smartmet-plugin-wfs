@@ -320,7 +320,7 @@ std::string bw::GeoServerDataIndex::create_sql_request(const Fmi::DateTime& begi
                                                        const std::string& layer,
                                                        const double* boundingBox,
                                                        int boundingBoxCRS,
-                                                       int destCRS)
+                                                       int destCRS) const
 {
   try
   {
@@ -378,7 +378,8 @@ std::string bw::GeoServerDataIndex::create_geometry_str(const double* boundingBo
   }
 }
 
-void bw::GeoServerDataIndex::process_sql_result(pqxx::result& result, const std::string& layer)
+void bw::GeoServerDataIndex::process_sql_result(const pqxx::result& result,
+                                                const std::string& layer)
 {
   try
   {

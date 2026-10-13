@@ -178,8 +178,9 @@ class AdHocQuery : public StoredQuery
    *   @param queries Pointers to created query objects.
    *
    */
-  static void add_projection_clause_from_xml(const xercesc::DOMElement& query_root,
-                                             std::vector<std::shared_ptr<QueryBase>>& queries);
+  static void add_projection_clause_from_xml(
+      const xercesc::DOMElement& query_root,
+      const std::vector<std::shared_ptr<QueryBase>>& queries);
 
   /**
    *   @brief Adds projection clause to the given queries.
@@ -189,7 +190,7 @@ class AdHocQuery : public StoredQuery
    *
    */
   static void add_projection_clause(const std::vector<std::string>& property_names,
-                                    std::vector<std::shared_ptr<QueryBase>>& queries);
+                                    const std::vector<std::shared_ptr<QueryBase>>& queries);
 
   /**
    *   @brief Replaces aliases with type names in the given queries.
@@ -199,7 +200,7 @@ class AdHocQuery : public StoredQuery
    *
    */
   static void replace_aliases_from_xml(const xercesc::DOMElement& query_root,
-                                       std::vector<std::shared_ptr<QueryBase>>& queries);
+                                       const std::vector<std::shared_ptr<QueryBase>>& queries);
 
   /**
    *   @brief Replaces aliases with type names in the given queries.
@@ -211,7 +212,7 @@ class AdHocQuery : public StoredQuery
    */
   static void replace_aliases(const std::vector<std::string>& aliases,
                               const std::vector<std::string>& type_names,
-                              std::vector<std::shared_ptr<QueryBase>>& queries);
+                              const std::vector<std::shared_ptr<QueryBase>>& queries);
 
   /**
    *   @brief Creates a new ad hoc query object to query list.
@@ -311,7 +312,7 @@ class AdHocQuery : public StoredQuery
   static void process_parms(const std::string& language,
                             const std::string& query_id,
                             const StandardPresentationParameters& spp,
-                            std::vector<std::shared_ptr<QueryBase>>& queries);
+                            const std::vector<std::shared_ptr<QueryBase>>& queries);
 
   /**
    *   @brief Checks if the given query is used, that is there is some query parameters or

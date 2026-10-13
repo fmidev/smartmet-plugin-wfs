@@ -130,7 +130,7 @@ PluginImpl::PluginImpl(SmartMet::Spine::Reactor* theReactor,
     init_geo_server_access();
 
     const auto& feature_vect = itsConfig.read_features_config(itsCRSRegistry);
-    for (auto feature : feature_vect)
+    for (const auto& feature : feature_vect)
     {
       wfs_capabilities->register_feature(feature);
     }
@@ -357,7 +357,7 @@ void PluginImpl::create_stored_query_map(SmartMet::Spine::Reactor* theReactor)
 }
 
 RequestBaseP PluginImpl::parse_kvp_get_capabilities_request(
-    const std::string& language, const SmartMet::Spine::HTTP::Request& request)
+    const std::string& language, const SmartMet::Spine::HTTP::Request& request) const
 {
   try
   {
@@ -371,7 +371,7 @@ RequestBaseP PluginImpl::parse_kvp_get_capabilities_request(
 
 RequestBaseP PluginImpl::parse_xml_get_capabilities_request(const std::string& language,
                                                             const xercesc::DOMDocument& document,
-                                                            const xercesc::DOMElement& root)
+                                                            const xercesc::DOMElement& root) const
 {
   try
   {
@@ -386,7 +386,7 @@ RequestBaseP PluginImpl::parse_xml_get_capabilities_request(const std::string& l
 }
 
 RequestBaseP PluginImpl::parse_kvp_describe_feature_type_request(
-    const std::string& language, const SmartMet::Spine::HTTP::Request& request)
+    const std::string& language, const SmartMet::Spine::HTTP::Request& request) const
 {
   try
   {
@@ -401,7 +401,7 @@ RequestBaseP PluginImpl::parse_kvp_describe_feature_type_request(
 RequestBaseP PluginImpl::parse_xml_describe_feature_type_request(
     const std::string& language,
     const xercesc::DOMDocument& document,
-    const xercesc::DOMElement& root)
+    const xercesc::DOMElement& root) const
 {
   try
   {
@@ -471,7 +471,7 @@ RequestBaseP PluginImpl::parse_xml_get_property_value_request(const std::string&
 }
 
 RequestBaseP PluginImpl::parse_kvp_list_stored_queries_request(
-    const std::string& language, const SmartMet::Spine::HTTP::Request& request)
+    const std::string& language, const SmartMet::Spine::HTTP::Request& request) const
 {
   try
   {
@@ -483,9 +483,10 @@ RequestBaseP PluginImpl::parse_kvp_list_stored_queries_request(
   }
 }
 
-RequestBaseP PluginImpl::parse_xml_list_stored_queries_request(const std::string& language,
-                                                               const xercesc::DOMDocument& document,
-                                                               const xercesc::DOMElement& root)
+RequestBaseP PluginImpl::parse_xml_list_stored_queries_request(
+    const std::string& language,
+    const xercesc::DOMDocument& document,
+    const xercesc::DOMElement& root) const
 {
   try
   {
@@ -499,7 +500,7 @@ RequestBaseP PluginImpl::parse_xml_list_stored_queries_request(const std::string
 }
 
 RequestBaseP PluginImpl::parse_kvp_describe_stored_queries_request(
-    const std::string& language, const SmartMet::Spine::HTTP::Request& request)
+    const std::string& language, const SmartMet::Spine::HTTP::Request& request) const
 {
   try
   {
@@ -514,7 +515,7 @@ RequestBaseP PluginImpl::parse_kvp_describe_stored_queries_request(
 RequestBaseP PluginImpl::parse_xml_describe_stored_queries_request(
     const std::string& language,
     const xercesc::DOMDocument& document,
-    const xercesc::DOMElement& root)
+    const xercesc::DOMElement& root) const
 {
   try
   {
@@ -946,7 +947,8 @@ void PluginImpl::dump_xml_schema_cache(std::ostream& os)
   xml_parser->dump_schema_cache(os);
 }
 
-void PluginImpl::dump_constructor_map(std::ostream& os, const std::optional<std::string>& handler)
+void PluginImpl::dump_constructor_map(std::ostream& os,
+                                      const std::optional<std::string>& handler) const
 {
     const std::string result =
         get_stored_query_map()
@@ -958,7 +960,7 @@ void PluginImpl::dump_constructor_map(std::ostream& os, const std::optional<std:
 
 void PluginImpl::dump_constructor_map_html(std::ostream& os,
                                            const std::string& uri,
-                                           const std::optional<std::string>& handler)
+                                           const std::optional<std::string>& handler) const
 {
   try
   {

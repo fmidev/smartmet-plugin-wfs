@@ -46,7 +46,7 @@ class ErrorResponseGenerator
       std::variant<const SmartMet::Spine::HTTP::Request*, StoredQuery*> query_info);
 
  private:
-  CTPP::CDT handle_wfs_exception(Fmi::Exception& err);
+  CTPP::CDT handle_wfs_exception(const Fmi::Exception& err);
 
   CTPP::CDT handle_std_exception(const std::exception& err, processing_phase_t phase);
 

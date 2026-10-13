@@ -502,7 +502,8 @@ void bw::AdHocQuery::create_query(std::shared_ptr<const bw::StoredQueryHandlerBa
 }
 
 void bw::AdHocQuery::add_projection_clause_from_xml(
-    const xercesc::DOMElement& query_root, std::vector<std::shared_ptr<bw::QueryBase>>& queries)
+    const xercesc::DOMElement& query_root,
+    const std::vector<std::shared_ptr<bw::QueryBase>>& queries)
 {
   try
   {
@@ -527,8 +528,9 @@ void bw::AdHocQuery::add_projection_clause_from_xml(
   }
 }
 
-void bw::AdHocQuery::add_projection_clause(const std::vector<std::string>& property_names,
-                                           std::vector<std::shared_ptr<bw::QueryBase>>& queries)
+void bw::AdHocQuery::add_projection_clause(
+    const std::vector<std::string>& property_names,
+    const std::vector<std::shared_ptr<bw::QueryBase>>& queries)
 {
   try
   {
@@ -570,7 +572,8 @@ void bw::AdHocQuery::add_projection_clause(const std::vector<std::string>& prope
 }
 
 void bw::AdHocQuery::replace_aliases_from_xml(
-    const xercesc::DOMElement& query_root, std::vector<std::shared_ptr<bw::QueryBase>>& queries)
+    const xercesc::DOMElement& query_root,
+    const std::vector<std::shared_ptr<bw::QueryBase>>& queries)
 {
   try
   {
@@ -602,7 +605,7 @@ void bw::AdHocQuery::replace_aliases_from_xml(
 
 void bw::AdHocQuery::replace_aliases(const std::vector<std::string>& aliases,
                                      const std::vector<std::string>& type_names,
-                                     std::vector<std::shared_ptr<bw::QueryBase>>& queries)
+                                     const std::vector<std::shared_ptr<bw::QueryBase>>& queries)
 {
   try
   {
@@ -649,7 +652,7 @@ void bw::AdHocQuery::replace_aliases(const std::vector<std::string>& aliases,
 void bw::AdHocQuery::process_parms(const std::string& language,
                                    const std::string& query_id,
                                    const StandardPresentationParameters& spp,
-                                   std::vector<std::shared_ptr<bw::QueryBase>>& queries)
+                                   const std::vector<std::shared_ptr<bw::QueryBase>>& queries)
 {
   try
   {

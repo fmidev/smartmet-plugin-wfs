@@ -67,7 +67,7 @@ void bwx::XmlErrorHandler::resetErrors()
   }
 }
 
-void bwx::XmlErrorHandler::check_errors(const std::string& text)
+void bwx::XmlErrorHandler::check_errors(const std::string& text) const
 {
   using boost::format;
   using boost::str;
@@ -97,7 +97,7 @@ void bwx::XmlErrorHandler::add_message(const std::string& prefix,
 }
 
 void bwx::XmlErrorHandler::check_terminate(const std::string& prefix,
-                                           XmlError::error_level_t error_level)
+                                           XmlError::error_level_t error_level) const
 {
   try
   {

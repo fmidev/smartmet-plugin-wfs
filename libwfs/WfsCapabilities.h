@@ -26,7 +26,7 @@ class WfsCapabilities
 
   const WfsFeatureDef* find_feature(const std::string& name) const;
 
-  void register_feature(std::shared_ptr<WfsFeatureDef>& feature_def);
+  void register_feature(const std::shared_ptr<WfsFeatureDef>& feature_def);
 
   void register_feature_use(const std::string& name);
 

@@ -86,7 +86,7 @@ class StoredContourQueryHandler : public StoredQueryHandlerBase,
   void parseQueryResults(const std::vector<ContourQueryResultPtr>& query_results,
                          const SmartMet::Spine::BoundingBox& bbox,
                          const std::string& language,
-                         SmartMet::Spine::CRSRegistry& crsRegistry,
+                         const SmartMet::Spine::CRSRegistry& crsRegistry,
                          const std::string& requestedCRS,
                          const Fmi::DateTime& origintime,
                          const Fmi::DateTime& modificationtime,
@@ -106,7 +106,7 @@ class StoredContourQueryHandler : public StoredQueryHandlerBase,
                                 std::vector<CTPP::CDT>& results) const;
   std::string double2string(double d, unsigned int precision) const;
   std::string bbox2string(const SmartMet::Spine::BoundingBox& bbox,
-                          OGRSpatialReference& targetSRS) const;
+                          const OGRSpatialReference& targetSRS) const;
 };
 
 }  // namespace WFS

@@ -258,7 +258,7 @@ void StoredWWProbabilityQueryHandler::parseQueryResults(
     const SmartMet::Spine::BoundingBox& bbox,
     const AirportLocationList& airp_llist,
     const std::string& language,
-    SmartMet::Spine::CRSRegistry&  /*crsRegistry*/,
+    const SmartMet::Spine::CRSRegistry& /*crsRegistry*/,
     const std::string& requestedCRS,
     const Fmi::DateTime& origintime,
     const Fmi::DateTime& modificationtime,

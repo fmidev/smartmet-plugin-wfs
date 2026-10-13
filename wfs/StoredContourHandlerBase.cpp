@@ -933,7 +933,7 @@ std::string bw::StoredContourQueryHandler::double2string(double d, unsigned int 
 }
 
 std::string bw::StoredContourQueryHandler::bbox2string(const SmartMet::Spine::BoundingBox& bbox,
-                                                       OGRSpatialReference& targetSRS) const
+                                                       const OGRSpatialReference& targetSRS) const
 {
   unsigned int precision(targetSRS.IsGeographic() ? 6 : 1);
 
@@ -1081,7 +1081,7 @@ void bw::StoredContourQueryHandler::parseQueryResults(
     const std::vector<ContourQueryResultPtr>& query_results,
     const SmartMet::Spine::BoundingBox& bbox,
     const std::string& language,
-    SmartMet::Spine::CRSRegistry&  /*crsRegistry*/,
+    const SmartMet::Spine::CRSRegistry& /*crsRegistry*/,
     const std::string& requestedCRS,
     const Fmi::DateTime& origintime,
     const Fmi::DateTime& modificationtime,
