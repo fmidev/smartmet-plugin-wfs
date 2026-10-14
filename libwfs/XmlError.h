@@ -23,13 +23,12 @@ class XmlError : public std::runtime_error
     FATAL_ERROR
   };
 
- public:
   XmlError(const std::string& text, error_level_t error_level);
 
   ~XmlError() throw() override;
 
-  inline const std::list<std::string>& get_messages() const { return messages; }
-  inline error_level_t get_error_level() const { return error_level; }
+  const std::list<std::string>& get_messages() const { return messages; }
+  error_level_t get_error_level() const { return error_level; }
   void add_messages(const std::list<std::string>& messages);
 
   static const char* error_level_name(enum error_level_t error_level);

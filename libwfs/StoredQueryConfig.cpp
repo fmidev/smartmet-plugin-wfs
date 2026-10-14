@@ -191,12 +191,15 @@ void SmartMet::Plugin::WFS::StoredQueryConfig::parse_config()
         {
           assert_is_group(c_param_desc[i]);
           item.name = get_mandatory_config_param<std::string>(c_item, "name");
-          if (not (plugin_config != nullptr and plugin_config->use_case_sensitive_params())) {
-              const std::string lc_name = Fmi::ascii_tolower_copy(item.name);
-              if (not case_map.emplace(lc_name, item.name).second) {
-                  throw Fmi::Exception(BCP, "Query parameter nane conflict: " + item.name +
-                      " conflicts with " + case_map.at(lc_name));
-              }
+          if (plugin_config == nullptr || !plugin_config->use_case_sensitive_params())
+          {
+            const std::string lc_name = Fmi::ascii_tolower_copy(item.name);
+            if (not case_map.emplace(lc_name, item.name).second)
+            {
+              throw Fmi::Exception(BCP,
+                                   "Query parameter nane conflict: " + item.name +
+                                       " conflicts with " + case_map.at(lc_name));
+            }
           }
           item.xml_type = get_mandatory_config_param<std::string>(c_item, "xmlType");
           auto& s1 = get_mandatory_config_param<libconfig::Setting&>(c_item, "title");
@@ -323,8 +326,8 @@ void SmartMet::Plugin::WFS::StoredQueryConfig::parse_config()
       try {
 	handle_libconfig_exceptions(METHOD_NAME);
       } catch (Fmi::Exception& e) {
-	auto *e1 = dynamic_cast<Fmi::Exception*>(&e);
-	if (e1) {
+        auto* e1 = (&e);
+        if (e1) {
 	  std::cout << e1->disableStackTraceRecursive() << std::endl;
 	}
 

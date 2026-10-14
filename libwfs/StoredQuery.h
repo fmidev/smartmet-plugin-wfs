@@ -141,7 +141,7 @@ class StoredQuery : public QueryBase
                                      const StoredQueryConfig& config,
                                      StoredQuery& query);
 
-  inline const RequestParameterMap& get_param_map() const { return *params; }
+  const RequestParameterMap& get_param_map() const { return *params; }
   void dump_query_info(std::ostream& output) const;
 
  protected:

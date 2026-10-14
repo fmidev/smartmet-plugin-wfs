@@ -38,7 +38,6 @@ class UrlTemplateGenerator
     std::string value;
   };
 
- public:
   UrlTemplateGenerator(const std::string& url, const std::vector<std::string>& param_templates);
 
   virtual ~UrlTemplateGenerator();
@@ -46,10 +45,7 @@ class UrlTemplateGenerator
   std::string generate(
       const std::function<std::vector<std::string>(const std::string&)>& param_getter_cb) const;
 
-  inline const std::vector<std::variant<ParamRef, StringParam> > get_content() const
-  {
-    return params;
-  }
+  const std::vector<std::variant<ParamRef, StringParam> > get_content() const { return params; }
 
  private:
   void parse_param_def(const std::string& str);
@@ -59,7 +55,6 @@ class UrlTemplateGenerator
       const std::function<std::vector<std::string>(const std::string&)>& param_getter_cb,
       bool allow_list = true);
 
- private:
   std::string url;
   std::vector<std::variant<ParamRef, StringParam> > params;
 };

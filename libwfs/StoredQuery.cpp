@@ -16,19 +16,22 @@ namespace ba = boost::algorithm;
 namespace bw = SmartMet::Plugin::WFS;
 namespace bwx = SmartMet::Plugin::WFS::Xml;
 
-static void check_param_max_occurs(int actual_count,
+namespace
+{
+void check_param_max_occurs(int actual_count,
                                    int max_occurs,
                                    const std::string& location,
                                    const std::string& param_name);
 
-static void check_param_min_occurs(int actual_count,
+void check_param_min_occurs(int actual_count,
                                    int min_occurs,
                                    const std::string& location,
                                    const std::string& param_name);
+}  // namespace
 
 bwx::ParameterExtractor bw::StoredQuery::param_extractor;
 
-bw::StoredQuery::StoredQuery() : handler() {}
+bw::StoredQuery::StoredQuery() {}
 
 bw::StoredQuery::~StoredQuery() = default;
 
@@ -625,6 +628,8 @@ void bw::StoredQuery::dump_query_info(std::ostream& output) const
   }
 }
 
+namespace
+{
 void check_param_max_occurs(int actual_count,
                             int max_occurs,
                             const std::string& location,
@@ -679,6 +684,7 @@ void check_param_min_occurs(int actual_count,
     throw Fmi::Exception::Trace(BCP, "Operation failed!");
   }
 }
+}  // namespace
 
 std::ostream& bw::operator<<(
     std::ostream& ost, const std::map<std::string, std::vector<SmartMet::Spine::Value> >& params)

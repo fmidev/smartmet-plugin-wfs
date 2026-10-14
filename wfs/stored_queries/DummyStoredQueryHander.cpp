@@ -1,4 +1,5 @@
 #include <utility>
+#include "StoredQueryHandlerFactories.h"
 
 #include "StoredQueryHandlerFactoryDef.h"
 #include "DummyStoredQueryHandler.h"

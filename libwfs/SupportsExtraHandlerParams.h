@@ -35,8 +35,7 @@ class SupportsExtraHandlerParams : virtual protected StoredQueryParamRegistry
 
   const ParameterTemplateBase& get_param(const std::string& name) const;
 
-  inline const std::map<std::string, std::shared_ptr<ParameterTemplateBase> >& get_param_map()
-      const
+  const std::map<std::string, std::shared_ptr<ParameterTemplateBase> >& get_param_map() const
   {
     return handler_params;
   }

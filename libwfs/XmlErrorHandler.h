@@ -24,9 +24,9 @@ class XmlErrorHandler : public xercesc::ErrorHandler
   void fatalError(const xercesc::SAXParseException& exc) override;
   void resetErrors() override;
 
-  inline bool isOk() const { return (num_errors == 0) and (num_fatal_errors == 0); }
-  inline bool haveFatalErrors() const { return num_fatal_errors > 0; }
-  inline const std::list<std::string>& get_messages() const { return messages; }
+  bool isOk() const { return (num_errors == 0) and (num_fatal_errors == 0); }
+  bool haveFatalErrors() const { return num_fatal_errors > 0; }
+  const std::list<std::string>& get_messages() const { return messages; }
   void check_errors(const std::string& location) const;
 
  private:
@@ -34,7 +34,6 @@ class XmlErrorHandler : public xercesc::ErrorHandler
   void check_terminate(const std::string& prefix, XmlError::error_level_t error_level) const;
   void local_reset_errors();
 
- private:
   bool throw_on_error;
   std::list<std::string> messages;
     int num_warnings = 0;

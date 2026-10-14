@@ -40,7 +40,6 @@ class Parser : public xercesc::XercesDOMParser
 
   using root_element_cb_t = std::function<void(RootElemInfo&)>;
 
- public:
   /**
    *   @brief Constructor for XMLParser object
    *

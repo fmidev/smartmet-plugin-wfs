@@ -117,13 +117,13 @@ class AdHocQuery : public StoredQuery
    *
    *
    */
-  inline bool has_filter() const { return not filter_expression.empty(); }
+  bool has_filter() const { return not filter_expression.empty(); }
   /**
    *   @brief get filter expression.
    *
    *
    */
-  inline const std::string& get_filter_expression() const { return filter_expression; }
+  const std::string& get_filter_expression() const { return filter_expression; }
 
  private:
   std::string filter_expression;

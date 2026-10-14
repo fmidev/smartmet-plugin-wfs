@@ -92,33 +92,32 @@ class StoredQueryConfig : public SmartMet::Spine::ConfigBase
     std::optional<SmartMet::Spine::Value> upper_limit;
     std::set<std::string> conflicts_with;
 
-    inline ParamDesc()  = default;
-    inline bool isArray() const { return max_occurs > 1 or param_def.isArray(); }
-    inline unsigned getMinSize() const { return min_occurs * param_def.getMinSize(); }
-    inline unsigned getMaxSize() const { return max_occurs * param_def.getMaxSize(); }
+    ParamDesc() = default;
+    bool isArray() const { return max_occurs > 1 or param_def.isArray(); }
+    unsigned getMinSize() const { return min_occurs * param_def.getMinSize(); }
+    unsigned getMaxSize() const { return max_occurs * param_def.getMaxSize(); }
     void dump(std::ostream& stream) const;
 
-    inline void set_used() const { used = true; }
-    inline bool get_used() const { return used; }
+    void set_used() const { used = true; }
+    bool get_used() const { return used; }
 
    private:
     mutable bool used{false};
   };
 
- public:
   StoredQueryConfig(const std::string& fn, const Config* plugin_config);
   StoredQueryConfig(const std::shared_ptr<libconfig::Config>& config, const Config* plugin_config);
   ~StoredQueryConfig() override;
 
-  inline bool is_disabled() const { return disabled; }
-  inline bool is_demo() const { return demo; }
-  inline bool is_test() const { return test; }
-  inline const std::string& get_query_id() const { return query_id; }
-  inline const std::string& get_constructor_name() const { return constructor_name; }
+  bool is_disabled() const { return disabled; }
+  bool is_demo() const { return demo; }
+  bool is_test() const { return test; }
+  const std::string& get_query_id() const { return query_id; }
+  const std::string& get_constructor_name() const { return constructor_name; }
   /**
    *   @brief Query whether CTPP2 template file name is specified
    */
-  inline bool have_template_fn() const { return !!template_fn; }
+  bool have_template_fn() const { return !!template_fn; }
   /**
    *   @brief Query CTPP2 template file name
    *
@@ -126,17 +125,14 @@ class StoredQueryConfig : public SmartMet::Spine::ConfigBase
    */
   std::string get_template_fn() const;
 
-  inline const std::string& get_default_language() const { return default_language; }
+  const std::string& get_default_language() const { return default_language; }
   std::string get_title(const std::string& language) const;
 
   std::string get_abstract(const std::string& language) const;
 
   const ParamDesc* get_param_desc(const std::string& name) const;
 
-  inline const std::vector<std::string>& get_return_type_names() const
-  {
-    return return_type_names;
-  }
+  const std::vector<std::string>& get_return_type_names() const { return return_type_names; }
 
   /**
    *  @brief Get reference to internal map with parameter descriptions
@@ -144,18 +140,12 @@ class StoredQueryConfig : public SmartMet::Spine::ConfigBase
    *  NOTE: MUST NOT be used for looking up parameter descriptions.
    *        Use method get_param_desc(const std::string&) instead
    */
-  inline const std::map<std::string, ParamDesc>& get_param_descriptions() const
-  {
-    return param_map;
-  }
+  const std::map<std::string, ParamDesc>& get_param_descriptions() const { return param_map; }
 
-  inline std::size_t get_num_param_desc() const { return param_names.size(); }
-  inline const ParamDesc& get_param_desc(int ind) const
-  {
-    return param_map.at(param_names.at(ind));
-  }
+  std::size_t get_num_param_desc() const { return param_names.size(); }
+  const ParamDesc& get_param_desc(int ind) const { return param_map.at(param_names.at(ind)); }
 
-  inline const std::string& get_param_name(int ind) const
+  const std::string& get_param_name(int ind) const
   {
     return param_map.at(param_names.at(ind)).name;
   }
@@ -164,13 +154,13 @@ class StoredQueryConfig : public SmartMet::Spine::ConfigBase
 
   std::string get_param_abstract(int ind, const std::string& language) const;
 
-  inline const std::string& get_param_xml_type(int ind) const
+  const std::string& get_param_xml_type(int ind) const
   {
     return param_map.at(param_names.at(ind)).xml_type;
   }
 
-  inline int get_debug_level() const { return debug_level; }
-  inline int get_expires_seconds() const { return expires_seconds; }
+  int get_debug_level() const { return debug_level; }
+  int get_expires_seconds() const { return expires_seconds; }
   void dump_params(std::ostream& stream) const;
 
   void warn_about_unused_params(const StoredQueryHandlerBase* handler = nullptr);
@@ -210,7 +200,6 @@ class StoredQueryConfig : public SmartMet::Spine::ConfigBase
  private:
   void parse_config();
 
- private:
   std::string locale_name;
   std::shared_ptr<std::locale> locale;
   std::string query_id;

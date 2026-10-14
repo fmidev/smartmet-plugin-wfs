@@ -33,9 +33,9 @@ class ArrayParameterTemplate : public ParameterTemplateBase
 
   ~ArrayParameterTemplate() override = default;
 
-  inline const std::vector<ParameterTemplateItem>& get_items() const { return items; }
-  inline std::size_t get_num_items() const { return items.size(); }
-  inline const ParameterTemplateItem& get_item(std::size_t ind) const { return items.at(ind); }
+  const std::vector<ParameterTemplateItem>& get_items() const { return items; }
+  std::size_t get_num_items() const { return items.size(); }
+  const ParameterTemplateItem& get_item(std::size_t ind) const { return items.at(ind); }
   std::vector<SmartMet::Spine::Value> get_value(
       const RequestParameterMap& req_param_map,
       const SupportsExtraHandlerParams* extra_params = nullptr) const;
@@ -74,7 +74,6 @@ class ArrayParameterTemplate : public ParameterTemplateBase
  private:
   void init(bool silent);
 
- private:
   std::vector<ParameterTemplateItem> items;
   const std::size_t min_size;
   const std::size_t max_size;

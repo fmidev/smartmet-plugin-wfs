@@ -76,7 +76,7 @@ std::string bw::RequestBase::extract_request_name(const xercesc::DOMDocument& do
     }
     else
     {
-      if (name_info.second == "")
+      if (name_info.second.empty())
       {
         std::ostringstream msg;
         msg << "SmartMet::Plugin::WFS::Xml::RequestBase::extractRequestName():"

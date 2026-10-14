@@ -1,4 +1,5 @@
 #include "stored_queries/GetFeatureByIdHandler.h"
+#include "StoredQueryHandlerFactories.h"
 #include "StoredQueryHandlerBase.h"
 #include "StoredQueryHandlerFactoryDef.h"
 #include "StoredQueryMap.h"

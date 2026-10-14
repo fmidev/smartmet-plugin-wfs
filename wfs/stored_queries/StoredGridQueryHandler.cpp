@@ -1,4 +1,5 @@
 #include <algorithm>
+#include "StoredQueryHandlerFactories.h"
 #include <iomanip>
 #include <list>
 #include <string>
@@ -18,6 +19,7 @@
 #include <newbase/NFmiQueryData.h>
 #include <newbase/NFmiSvgPath.h>
 #include <newbase/NFmiSvgTools.h>
+#include <cmath>
 
 #include <macgyver/Exception.h>
 #include <macgyver/StringConversion.h>
@@ -231,8 +233,8 @@ TS::TimeSeriesGroupPtr makeSparseGrid(const TS::TimeSeriesGroupPtr& inputGrid,
     TS::TimeSeriesGroupPtr result(new TS::TimeSeriesGroup);
 
     unsigned long index = 0;
-    unsigned long xindex;
-    unsigned long yindex;
+    unsigned long xindex = 0;
+    unsigned long yindex = 0;
     for (auto locationIt = inputGrid->begin(); locationIt != inputGrid->end();
          ++locationIt, ++index)
     {
@@ -800,7 +802,7 @@ StoredGridQueryHandler::Result StoredGridQueryHandler::extract_forecast(
 
     int debug_level = get_config()->get_debug_level();
 
-    double lon1, lat1;
+    double lon1 = NAN, lat1 = NAN;
 
     // Get the bbox for corner (should be middle) coordinates
 

@@ -28,7 +28,6 @@ class StoredFileQueryHandler : public StoredAtomQueryHandlerBase
       int seq_id,
       std::vector<std::shared_ptr<RequestParameterMap> >& result) const override;
 
- private:
   std::list<std::shared_ptr<DataSetDefinition> > ds_list;
 };
 

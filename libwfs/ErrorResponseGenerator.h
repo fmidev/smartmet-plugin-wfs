@@ -33,7 +33,6 @@ class ErrorResponseGenerator
     std::string wfs_err_code;
   };
 
- public:
   ErrorResponseGenerator(const PluginImpl& plugin_impl);
 
   virtual ~ErrorResponseGenerator();
@@ -66,7 +65,6 @@ class ErrorResponseGenerator
 
   std::string format_log_message(CTPP::CDT& hash);
 
- private:
   const PluginImpl& plugin_impl;
 };
 

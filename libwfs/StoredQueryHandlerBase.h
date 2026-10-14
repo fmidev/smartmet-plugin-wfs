@@ -118,11 +118,11 @@ class StoredQueryHandlerBase : virtual protected SupportsExtraHandlerParams,
    */
   virtual std::string get_cache_key_qualifier(const RequestParameterMap& params) const;
 
-  inline std::shared_ptr<const StoredQueryConfig> get_config() const { return config; }
+  std::shared_ptr<const StoredQueryConfig> get_config() const { return config; }
   const StoredQueryMap& get_stored_query_map() const;
 
-  inline bool is_hidden() const { return hidden; }
-  inline std::set<std::string> get_handler_param_names() const
+  bool is_hidden() const { return hidden; }
+  std::set<std::string> get_handler_param_names() const
   {
     return StoredQueryParamRegistry::get_param_names();
   }
@@ -137,8 +137,8 @@ protected:
 
   std::shared_ptr<Fmi::TemplateFormatter> get_formatter(bool debug_format) const;
 
-  inline SmartMet::Spine::Reactor* get_reactor() const { return reactor; }
-  inline const PluginImpl& get_plugin_impl() const { return plugin_impl; }
+  SmartMet::Spine::Reactor* get_reactor() const { return reactor; }
+  const PluginImpl& get_plugin_impl() const { return plugin_impl; }
   void format_output(CTPP::CDT& hash, std::ostream& output, bool debug_format) const;
 
   static std::pair<std::string, std::string> get_2D_coord(

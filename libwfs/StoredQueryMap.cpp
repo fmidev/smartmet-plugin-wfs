@@ -199,7 +199,7 @@ std::vector<std::string> bw::StoredQueryMap::get_return_type_names() const
   {
     std::set<std::string> return_type_set;
     std::shared_lock<std::shared_mutex> lock(mutex);
-    for (auto& handler_map_item : handler_map)
+    for (const auto& handler_map_item : handler_map)
     {
       // NOTE: Cannot call StoredQueryHandlerBase::get_return_type_names() here to
       //       avoid recursion as hander itself may call StoredQueryMap::get_return_type_names().

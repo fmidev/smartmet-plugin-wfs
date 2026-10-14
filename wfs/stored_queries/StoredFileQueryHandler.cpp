@@ -1,4 +1,5 @@
 #include "stored_queries/StoredFileQueryHandler.h"
+#include "StoredQueryHandlerFactories.h"
 #include "FeatureID.h"
 #include "StoredQueryHandlerFactoryDef.h"
 #include <macgyver/StringConversion.h>

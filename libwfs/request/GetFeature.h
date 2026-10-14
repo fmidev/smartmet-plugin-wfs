@@ -65,7 +65,6 @@ class GetFeature : public RequestBase
    */
   void assert_use_default_format() const;
 
- private:
   std::vector<std::shared_ptr<QueryBase> > queries;
   StandardPresentationParameters spp;
   QueryResponseCache& query_cache;

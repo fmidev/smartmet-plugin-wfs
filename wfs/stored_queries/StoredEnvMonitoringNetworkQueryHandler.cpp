@@ -344,9 +344,12 @@ wfs_stored_env_monitoring_network_handler_create(SmartMet::Spine::Reactor* react
 }
 }  // namespace
 
+namespace
+{
 SmartMet::Plugin::WFS::StoredQueryHandlerFactoryDef
     wfs_stored_env_monitoring_network_handler_factory(
         &wfs_stored_env_monitoring_network_handler_create);
+}  // namespace
 
 /**
 

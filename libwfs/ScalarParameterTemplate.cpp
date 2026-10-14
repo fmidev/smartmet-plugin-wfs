@@ -73,12 +73,17 @@ SmartMet::Spine::Value ScalarParameterTemplate::get_value(
       return std::get<SmartMet::Spine::Value>(value);
     } else {
       const auto& arr = std::get<std::vector<SmartMet::Spine::Value>>(value);
-      if (arr.size() == 0) {
+      if (arr.empty())
+      {
         // Empty array: treat as empty value
         return {};
-      } else if (arr.size() == 1) {
+      }
+      else if (arr.size() == 1)
+      {
         return arr.at(0);
-      } else {
+      }
+      else
+      {
         throw Fmi::Exception::Trace(BCP,
             METHOD_NAME + ": cannot convert array of size > 2 to scalar value")
             .disableStackTrace();

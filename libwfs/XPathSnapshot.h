@@ -42,7 +42,6 @@ class XPathSnapshot : private XmlDomErrorHandler
 
   void assert_have_result() const;
 
- private:
   xercesc::DOMImplementation* xqillaImplementation;
   AutoRelease<xercesc::DOMLSParser> parser;
   xercesc::DOMDocument* document{nullptr};

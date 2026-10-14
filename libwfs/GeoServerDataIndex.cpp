@@ -93,8 +93,8 @@ bw::GeoServerDataIndex::LayerRec::LayerRec(
     const SmartMet::Plugin::WFS::GeoServerDataIndex::LayerRec& rec)
     : name(rec.name),
       layer(rec.layer),
-      orig_geom(rec.orig_geom ? &dynamic_cast<OGRLineString&>(*(rec.orig_geom->clone())) : nullptr),
-      dest_geom(rec.dest_geom ? &dynamic_cast<OGRLineString&>(*(rec.dest_geom->clone())) : nullptr),
+      orig_geom(rec.orig_geom ? &(*(rec.orig_geom->clone())) : nullptr),
+      dest_geom(rec.dest_geom ? &(*(rec.dest_geom->clone())) : nullptr),
       orig_srs(rec.orig_srs),
       dest_srs(rec.dest_srs),
       orig_srs_swapped(rec.orig_srs_swapped),
@@ -121,8 +121,8 @@ bw::GeoServerDataIndex::LayerRec& bw::GeoServerDataIndex::LayerRec::operator=(
     if (this != &rec) {
         name = rec.name;
         layer = rec.layer;
-        orig_geom = rec.orig_geom ? &dynamic_cast<OGRLineString&>(*(rec.orig_geom->clone())) : nullptr;
-        dest_geom = rec.dest_geom ? &dynamic_cast<OGRLineString&>(*(rec.dest_geom->clone())) : nullptr;
+        orig_geom = rec.orig_geom ? &(*(rec.orig_geom->clone())) : nullptr;
+        dest_geom = rec.dest_geom ? &(*(rec.dest_geom->clone())) : nullptr;
         orig_srs = rec.orig_srs;
         dest_srs = rec.dest_srs;
         orig_srs_swapped = rec.orig_srs_swapped;
@@ -198,7 +198,7 @@ bw::GeoServerDataIndex::GeoServerDataIndex(
 
 bw::GeoServerDataIndex::GeoServerDataIndex(
     GeoServerDB& db, std::function<std::string(const std::string&)> db_table_name_cb)
-    : db(db), db_table_name_def(db_table_name_cb), data(), debug_level(0)
+    : db(db), db_table_name_def(db_table_name_cb), debug_level(0)
 {
   try
   {
@@ -305,7 +305,7 @@ std::string bw::GeoServerDataIndex::get_db_table_name(const std::string& layer_n
     }
     else
     {
-      auto& cb = std::get<std::function<std::string(const std::string&)> >(db_table_name_def);
+      const auto& cb = std::get<std::function<std::string(const std::string&)> >(db_table_name_def);
       return cb(layer_name);
     }
   }

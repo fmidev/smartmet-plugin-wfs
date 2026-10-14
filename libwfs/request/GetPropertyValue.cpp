@@ -8,7 +8,6 @@
 #include <boost/format.hpp>
 #include <macgyver/StringConversion.h>
 #include <macgyver/TypeName.h>
-#include <utility>
 #include <xercesc/dom/DOM.hpp>
 #include <xercesc/dom/DOMException.hpp>
 #include <xercesc/dom/DOMXPathNSResolver.hpp>
@@ -16,6 +15,8 @@
 #include <xercesc/framework/MemBufInputSource.hpp>
 #include <xercesc/util/Janitor.hpp>
 #include <xqilla/xqilla-dom3.hpp>
+#include <algorithm>
+#include <utility>
 
 #define SCHEMA_LOCATION "schemaLocation"
 #define TIMESTAMP "timeStamp"
@@ -29,13 +30,16 @@ using boost::str;
 using Fmi::current_exception_type;
 using SmartMet::Plugin::WFS::Request::GetPropertyValue;
 
-static void decrease(std::optional<int>& value)
+namespace
+{
+void decrease(std::optional<int>& value)
 {
   if (value and *value > 0)
   {
     value = *value - 1;
   }
 }
+}  // namespace
 
 GetPropertyValue::GetPropertyValue(const std::string& language,
                                    PluginImpl& plugin_impl)
@@ -342,7 +346,7 @@ void GetPropertyValue::append_members(const std::shared_ptr<xercesc::DOMDocument
       is_schemalocation_set =
           copy_schema_location(xpath_snapshot.get_document()->getDocumentElement(), result_root);
 
-    int first, last;
+    int first = 0, last = 0;
     calculate_loop_limits(max_members, start_index, xpath_snapshot.size(), first, last);
 
     for (int i = first; i <= last; i++)
@@ -394,8 +398,7 @@ void GetPropertyValue::calculate_loop_limits(const std::optional<int>& max_membe
 
     int count = max_members ? *max_members : 0x7FFFFF;
 
-    if (count > num_members)
-      count = num_members;
+    count = std::min(count, num_members);
 
     last = first + count - 1;
   }
@@ -433,7 +436,7 @@ bool GetPropertyValue::copy_timestamp(const xercesc::DOMElement* source,
   {
     if (source->hasAttribute(X(TIMESTAMP)))
     {
-      const auto timeStamp = source->getAttribute(X(TIMESTAMP));
+      const auto* const timeStamp = source->getAttribute(X(TIMESTAMP));
       destination->setAttribute(X(TIMESTAMP), timeStamp);
       return true;
     }

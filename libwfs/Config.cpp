@@ -26,8 +26,11 @@ namespace Plugin
 {
 namespace WFS
 {
+namespace
+{
 const char* default_url = "/wfs";
 const char* c_get_feature_by_id = "urn:ogc:def:query:OGC-WFS::GetFeatureById";
+}  // namespace
 
 Config::~Config() = default;
 

@@ -27,8 +27,9 @@ namespace
 		     std::vector<std::string>& unknown)
   {
     if (parent->isGroup()) {
-      for (int i = 0; i < int(parent->getLength()); i++) {
-	const std::string name = (*parent)[i].getName();
+      for (int i = 0; i < parent->getLength(); i++)
+      {
+        const std::string name = (*parent)[i].getName();
 	if (names.count(name) == 0) {
 	  unknown.push_back(prefix + name);
 	}

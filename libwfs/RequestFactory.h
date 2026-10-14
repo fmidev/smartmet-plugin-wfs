@@ -31,7 +31,6 @@ class RequestFactory
   using parse_xml_t = std::function<std::shared_ptr<RequestBase>(
         const std::string &, const xercesc::DOMDocument &, const xercesc::DOMElement&)>;
 
- public:
   RequestFactory(PluginImpl& plugin_impl);
 
   virtual ~RequestFactory();
@@ -82,10 +81,7 @@ class RequestFactory
    *
    *   Warning: check is case sensitive in this case
    */
-  inline bool check_request_name(const std::string& name) const
-  {
-    return request_names.count(name) > 0;
-  }
+  bool check_request_name(const std::string& name) const { return request_names.count(name) > 0; }
 
  private:
   struct TypeRec

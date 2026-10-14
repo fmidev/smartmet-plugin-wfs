@@ -157,7 +157,6 @@ class StoredGridQueryHandler : public StoredQueryHandlerBase,
       const Query& query,
       const std::string& dataCrs) const;
 
- private:
   const int debug_level;
 };
 

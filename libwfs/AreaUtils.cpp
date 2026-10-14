@@ -1,9 +1,10 @@
 #include "AreaUtils.h"
 #include <boost/lambda/lambda.hpp>
-#include <memory>
 #include <macgyver/Exception.h>
 #include <newbase/NFmiLatLonArea.h>
 #include <newbase/NFmiMercatorArea.h>
+#include <cmath>
+#include <memory>
 #include <stdexcept>
 
 namespace SmartMet
@@ -74,7 +75,7 @@ std::vector<NFmiPoint> bbox_exclude_point(const NFmiPoint& p1,
       const double dyb = xy.Y() - y1;
       const double dyt = y2 - xy.Y();
 
-      double qx, qy;
+      double qx = NAN, qy = NAN;
       if (std::min(dxl, dxr) < std::min(dyt, dyb))
       {
         qy = xy.Y();

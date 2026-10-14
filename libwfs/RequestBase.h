@@ -35,14 +35,13 @@ class RequestBase
     LIST_STORED_QUERIES
   };
 
- public:
   RequestBase(const std::string& language, const PluginImpl& plugin_impl);
 
   virtual ~RequestBase();
 
   void set_is_soap_request(bool value);
 
-  inline bool is_soap_request() const { return soap_request; }
+  bool is_soap_request() const { return soap_request; }
   /**
    *   @brief Get seconds after which response is considered expire.
    *
@@ -118,7 +117,7 @@ class RequestBase
 
   void set_http_status(SmartMet::Spine::HTTP::Status status) const;
 
-  inline SmartMet::Spine::HTTP::Status get_http_status() const { return status; }
+  SmartMet::Spine::HTTP::Status get_http_status() const { return status; }
 
  protected:
   /**
@@ -157,7 +156,6 @@ class RequestBase
    */
   static void check_wfs_version(const SmartMet::Spine::HTTP::Request& request);
 
- protected:
   const PluginImpl& plugin_impl;
 
  private:

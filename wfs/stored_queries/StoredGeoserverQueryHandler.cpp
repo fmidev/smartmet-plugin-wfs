@@ -1,4 +1,5 @@
 #include "FeatureID.h"
+#include "StoredQueryHandlerFactories.h"
 #include "GeoServerDataIndex.h"
 #include "StoredQueryHandlerFactoryDef.h"
 #include "WfsConvenience.h"

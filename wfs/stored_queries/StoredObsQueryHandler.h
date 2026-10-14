@@ -85,7 +85,6 @@ class StoredObsQueryHandler : public StoredQueryHandlerBase,
                       SmartMet::Engine::Observation::Settings& query_params,
                       std::vector<ExtParamIndexEntry>& parameter_index) const;
 
- private:
   struct GroupRec
   {
     int group_id;
@@ -103,7 +102,6 @@ class StoredObsQueryHandler : public StoredQueryHandlerBase,
     std::vector<int> row_index_vect;
   };
 
- private:
   /**
    *   @brief The vector of initial parameters which are queried always
    */

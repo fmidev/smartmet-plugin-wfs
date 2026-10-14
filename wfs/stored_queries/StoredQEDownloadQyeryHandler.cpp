@@ -1,4 +1,5 @@
 #include "AreaUtils.h"
+#include "StoredQueryHandlerFactories.h"
 #include "FeatureID.h"
 #include "StoredQueryHandlerFactoryDef.h"
 #include "WfsConvenience.h"
@@ -99,7 +100,6 @@ StoredQEDownloadQueryHandler::StoredQEDownloadQueryHandler(
       RequiresQEngine(reactor),
       StoredAtomQueryHandlerBase(reactor, config, plugin_data, std::move(template_file_name)),
       SupportsBoundingBox(config, plugin_data.get_crs_registry(), false),
-      producers(),
       default_format("grib2"),
       debug_level(get_config()->get_debug_level())
 {
@@ -806,7 +806,7 @@ std::shared_ptr<OGRGeometry> StoredQEDownloadQueryHandler::bbox_intersection(
       int last_err = CPLGetLastErrorNo();
       if (last_err != CPLE_None)
       {
-        throw Fmi::Exception(BCP, str(format("GDAL error: %1%") % (int)last_err));
+        throw Fmi::Exception(BCP, str(format("GDAL error: %1%") % last_err));
       }
     }
 

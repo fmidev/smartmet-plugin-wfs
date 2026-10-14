@@ -33,7 +33,6 @@ class TypeNameStoredQueryMap
   void init(const std::map<std::string, std::string>& typename_storedqry);
 
  private:
- private:
   std::map<std::string, std::vector<std::string> > typename_qry_map;
 };
 

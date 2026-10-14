@@ -32,10 +32,10 @@ class DataSetQuery
 
   void set_interval(const Fmi::DateTime& begin, const Fmi::DateTime& end);
 
-  inline const std::set<std::string>& get_names() const { return names; }
-  inline const Fmi::TimePeriod& get_time_interval() const { return period; }
-  inline const std::set<std::string>& get_parameters() const { return parameters; }
-  inline const std::set<int>& get_levels() const { return levels; }
+  const std::set<std::string>& get_names() const { return names; }
+  const Fmi::TimePeriod& get_time_interval() const { return period; }
+  const std::set<std::string>& get_parameters() const { return parameters; }
+  const std::set<int>& get_levels() const { return levels; }
 
  private:
   std::set<std::string> names;
@@ -64,12 +64,12 @@ class DataSetDefinition : public std::enable_shared_from_this<DataSetDefinition>
 
   virtual ~DataSetDefinition();
 
-  inline const std::string& get_name() const { return name; }
-  inline const std::filesystem::path& get_dir() const { return dir; }
-  inline const std::string& get_server_dir() const { return server_dir; }
-  inline const std::set<std::string>& get_params() const { return params; }
-  inline const std::set<int>& get_levels() const { return levels; }
-  inline const box_t& get_bbox() const { return bbox; }
+  const std::string& get_name() const { return name; }
+  const std::filesystem::path& get_dir() const { return dir; }
+  const std::string& get_server_dir() const { return server_dir; }
+  const std::set<std::string>& get_params() const { return params; }
+  const std::set<int>& get_levels() const { return levels; }
+  const box_t& get_bbox() const { return bbox; }
   bool intersects(const box_t& bbox) const;
 
   std::vector<std::filesystem::path> query_files(

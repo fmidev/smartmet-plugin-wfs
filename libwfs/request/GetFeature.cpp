@@ -232,7 +232,7 @@ void bw::Request::GetFeature::execute_multiple_queries(std::ostream& ost) const
 
     auto xml_doc_p =
         bwx::create_dom_document("http://www.opengis.net/wfs/2.0", "wfs:FeatureCollection");
-    auto root = xml_doc_p->getDocumentElement();
+    auto* root = xml_doc_p->getDocumentElement();
     bwx::set_attr(*root, "xmlns:gml", "http://www.opengis.net/gml/3.2");
     bwx::set_attr(*root, "xmlns:xsi", "http://www.w3.org/2001/XMLSchema-instance");
     bwx::set_attr(*root,

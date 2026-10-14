@@ -1,4 +1,5 @@
 #include "stored_queries/StoredFlashQueryHandler.h"
+#include "StoredQueryHandlerFactories.h"
 #include "FeatureID.h"
 #include "StoredQueryHandlerFactoryDef.h"
 #include "WfsConst.h"
@@ -30,11 +31,10 @@ const char* P_MULTIPOINTCOVERAGE_QUERY = "lightning_multipointcoverage.c2t";
 
 }  // namespace
 
-bw::StoredFlashQueryHandler::StoredFlashQueryHandler(
-    SmartMet::Spine::Reactor* reactor,
-    const StoredQueryConfig::Ptr& config,
-    PluginImpl& plugin_data,
-    std::optional<std::string> template_file_name)
+bw::StoredFlashQueryHandler::StoredFlashQueryHandler(SmartMet::Spine::Reactor* reactor,
+                                                     const StoredQueryConfig::Ptr& config,
+                                                     PluginImpl& plugin_data,
+                                                     std::optional<std::string> template_file_name)
 
     : StoredQueryParamRegistry(config),
       SupportsExtraHandlerParams(config, false),
@@ -43,7 +43,7 @@ bw::StoredFlashQueryHandler::StoredFlashQueryHandler(
       StoredQueryHandlerBase(reactor, config, plugin_data, std::move(template_file_name)),
       SupportsBoundingBox(config, plugin_data.get_crs_registry()),
       SupportsTimeZone(reactor, config),
-      bs_param(),
+
       stroke_time_ind(
           add_param(bs_param, "utctime", SmartMet::Spine::Parameter::Type::DataIndependent)),
       lon_ind(add_param(bs_param, "longitude", SmartMet::Spine::Parameter::Type::DataDerived)),

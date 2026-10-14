@@ -1,6 +1,7 @@
 #ifndef WITHOUT_OBSERVATION
 
 #include "stored_queries/StoredAviationObservationQueryHandler.h"
+#include "StoredQueryHandlerFactories.h"
 #include "StoredQueryHandlerFactoryDef.h"
 #include <macgyver/DateTime.h>
 #include <engines/observation/DBRegistry.h>

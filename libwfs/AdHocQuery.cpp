@@ -20,18 +20,21 @@ namespace bw = SmartMet::Plugin::WFS;
 namespace bwx = SmartMet::Plugin::WFS::Xml;
 namespace bl = boost::lambda;
 
-static bool is_query_parameter(const std::string& element_name);
+namespace
+{
+bool is_query_parameter(const std::string& element_name);
 
-static bool is_comparison_operation(const std::string& element_name);
+bool is_comparison_operation(const std::string& element_name);
 
-static bool read_value_reference(const SmartMet::Spine::Value& value, std::string& value_reference);
+bool read_value_reference(const SmartMet::Spine::Value& value, std::string& value_reference);
 
-static void get_comparison_operation(const std::string& element_name, std::string& operation);
+void get_comparison_operation(const std::string& element_name, std::string& operation);
 
-static void check_param_max_occurs(int actual_count,
+void check_param_max_occurs(int actual_count,
                                    int max_occurs,
                                    const std::string& location,
                                    const std::string& param_name);
+}  // namespace
 
 bw::AdHocQuery::AdHocQuery() = default;
 bw::AdHocQuery::~AdHocQuery() = default;
@@ -1052,7 +1055,7 @@ void bw::AdHocQuery::read_comparison_operation(const xercesc::DOMElement& elemen
         limit_value = values[0].get_string();
 
         // Check if limit_value is a string.
-        char* pEnd;
+        char* pEnd = nullptr;
         (void)std::strtod(limit_value.c_str(), &pEnd);
         if (pEnd != nullptr)
         {
@@ -1353,6 +1356,8 @@ void bw::AdHocQuery::get_stored_query_ids_from_typenames(
   }
 }
 
+namespace
+{
 bool is_query_parameter(const std::string& element_name)
 {
   try
@@ -1475,3 +1480,4 @@ void check_param_max_occurs(int actual_count,
     throw Fmi::Exception::Trace(BCP, "Operation failed!");
   }
 }
+}  // namespace

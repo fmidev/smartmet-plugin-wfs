@@ -52,10 +52,10 @@ class StoredQueryParamDef
 
   virtual ~StoredQueryParamDef();
 
-  inline ValueType getValueType() const { return value_type; }
-  inline bool isArray() const { return is_array; }
-  inline unsigned getMinSize() const { return min_size; }
-  inline unsigned getMaxSize() const { return max_size; }
+  ValueType getValueType() const { return value_type; }
+  bool isArray() const { return is_array; }
+  unsigned getMinSize() const { return min_size; }
+  unsigned getMaxSize() const { return max_size; }
   /**
    *   @brief Read the single value according the type specification
    *

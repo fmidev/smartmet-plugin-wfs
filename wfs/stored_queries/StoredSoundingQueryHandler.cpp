@@ -1,5 +1,6 @@
 #ifndef WITHOUT_OBSERVATION
 #include "stored_queries/StoredSoundingQueryHandler.h"
+#include "StoredQueryHandlerFactories.h"
 #include "FeatureID.h"
 #include "StoredQueryHandlerFactoryDef.h"
 #include <engines/gis/Engine.h>
@@ -745,7 +746,7 @@ void StoredSoundingQueryHandler::makeSoundingQuery(const RequestParameterMap& pa
   profileQueryParams.addField("SOUNDING_TYPE");
 
   // Station identities
-  for (auto& station : stations)
+  for (const auto& station : stations)
   {
     profileQueryParams.addOperation(
         "OR_GROUP_station_id", "STATION_ID", "PropertyIsEqualTo", station.fmisid);
@@ -817,14 +818,14 @@ void StoredSoundingQueryHandler::makeSoundingDataQuery(const RequestParameterMap
   dataQueryParams.addOrderBy("MEASURAND_ID", "ASC");
   dataQueryParams.addOrderBy("LEVEL_NO", "ASC");
 
-  for (auto& radioSounding : radioSoundingMap)
+  for (const auto& radioSounding : radioSoundingMap)
   {
     dataQueryParams.addOperation(
         "OR_GROUP_sounding_id", "SOUNDING_ID", "PropertyIsEqualTo", radioSounding.first);
   }
 
   // Measurand identities
-  for (auto& item : meteoParameterMap)
+  for (const auto& item : meteoParameterMap)
   {
     dataQueryParams.addOperation("OR_GROUP_measurand_id",
                                  "MEASURAND_ID",

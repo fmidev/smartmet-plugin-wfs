@@ -63,11 +63,11 @@ class Config : public SmartMet::Spine::ConfigBase
   const std::filesystem::path& get_template_directory() const { return template_directory; }
   const std::string& get_geoserver_conn_string() const { return geoserver_conn_str; }
   const std::vector<std::string>& get_languages() const { return languages; }
-  inline int getCacheSize() const { return cache_size; }
-  inline int getCacheTimeConstant() const { return cache_time_constant; }
-  inline bool silenceInitWarnings() const { return silence_init_warnings; }
-  inline const std::string& get_default_locale() const { return default_locale; }
-  inline bool use_case_sensitive_params() const { return enable_case_sensitive_params; }
+  int getCacheSize() const { return cache_size; }
+  int getCacheTimeConstant() const { return cache_time_constant; }
+  bool silenceInitWarnings() const { return silence_init_warnings; }
+  const std::string& get_default_locale() const { return default_locale; }
+  bool use_case_sensitive_params() const { return enable_case_sensitive_params; }
   std::vector<std::shared_ptr<WfsFeatureDef> > read_features_config(
       SmartMet::Spine::CRSRegistry& theCRSRegistry);
   const CapabilitiesConf& get_capabilities_config() const { return capabilities_conf; }
@@ -82,7 +82,6 @@ class Config : public SmartMet::Spine::ConfigBase
   void read_capabilities_config();
   void read_hosts_info();
 
- private:
   std::string itsDefaultUrl;
   std::string getFeatureById;
   std::vector<std::string> sq_config_dirs;

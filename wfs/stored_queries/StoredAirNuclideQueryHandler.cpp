@@ -1,6 +1,7 @@
 #ifndef WITHOUT_OBSERVATION
 
 #include "stored_queries/StoredAirNuclideQueryHandler.h"
+#include "StoredQueryHandlerFactories.h"
 #include "FeatureID.h"
 #include "StoredQueryHandlerFactoryDef.h"
 #include <boost/format.hpp>

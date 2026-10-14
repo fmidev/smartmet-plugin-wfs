@@ -54,7 +54,6 @@ class StoredAtomQueryHandlerBase : public StoredQueryHandlerBase
   std::vector<std::string> get_param_callback(const std::string& param_name,
                                               const RequestParameterMap* param_map) const;
 
- private:
   std::shared_ptr<UrlTemplateGenerator> url_generator;
 };
 

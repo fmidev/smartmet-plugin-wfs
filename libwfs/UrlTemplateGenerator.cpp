@@ -54,7 +54,7 @@ void encode(std::ostream& stream, const std::string& text)
 
 bw::UrlTemplateGenerator::UrlTemplateGenerator(const std::string& url,
                                                const std::vector<std::string>& param_templates)
-    : url(url), params()
+    : url(url)
 {
   try
   {

@@ -128,7 +128,7 @@ void OBStream::put_int(int64_t value)
 {
   try
   {
-    put_bit(value < 0 ? true : false);
+    put_bit(value < 0);
     put_unsigned(static_cast<uint64_t>(value >= 0 ? value : -value));
   }
   catch (...)
@@ -144,7 +144,7 @@ void OBStream::put_unsigned(uint64_t value)
     while (value)
     {
       unsigned part = value & 0x1F;
-      put_bit(value ? true : false);
+      put_bit(value != 0);
       put_bits(part, 5);
       value >>= 5;
     }
@@ -161,7 +161,7 @@ void OBStream::put_double(double value)
 {
   try
   {
-    int first;
+    int first = 0;
     union {
       uint8_t c[8];
       double d;

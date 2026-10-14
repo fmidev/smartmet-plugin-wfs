@@ -39,7 +39,6 @@ class ParameterTemplateBase
  public:
   static const char* HANDLER_PARAM_NAME;
 
- public:
   virtual ~ParameterTemplateBase();
 
   /**
@@ -57,9 +56,9 @@ class ParameterTemplateBase
       bool strict = true) const = 0;
 
  protected:
-  inline const StoredQueryConfig& get_config() const { return config; }
-  inline const std::string& get_base_path() const { return base_path; }
-  inline const std::string& get_config_path() const { return config_path; }
+  const StoredQueryConfig& get_config() const { return config; }
+  const std::string& get_base_path() const { return base_path; }
+  const std::string& get_config_path() const { return config_path; }
   libconfig::Setting* get_setting_root();
 
   /**

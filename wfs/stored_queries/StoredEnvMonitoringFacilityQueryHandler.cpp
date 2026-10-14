@@ -887,9 +887,12 @@ wfs_stored_env_monitoring_facility_handler_create(SmartMet::Spine::Reactor *reac
 }
 }  // namespace
 
+namespace
+{
 SmartMet::Plugin::WFS::StoredQueryHandlerFactoryDef
     wfs_stored_env_monitoring_facility_handler_factory(
         &wfs_stored_env_monitoring_facility_handler_create);
+}  // namespace
 
 /**
 

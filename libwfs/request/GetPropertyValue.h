@@ -263,7 +263,6 @@ class GetPropertyValue : public RequestBase
   void add_query_responses(std::vector<std::string>& query_responses,
                            const std::string& response) const;
 
- private:
   std::vector<std::shared_ptr<QueryBase> > queries;
   std::string xpath_string;
   StandardPresentationParameters spp;

@@ -52,7 +52,6 @@ class GeoServerDataIndex
     std::vector<LayerRec> layers;
   };
 
- public:
   GeoServerDataIndex(GeoServerDB& db, const std::string& db_table_name_format = "mosaic.%1%");
 
   GeoServerDataIndex(GeoServerDB& db, const std::map<std::string, std::string>& db_table_name_map);
@@ -75,17 +74,14 @@ class GeoServerDataIndex
                           int boundingBoxCRS = 4326,
                           int destCRS = 4326);
 
-  inline std::map<Fmi::DateTime, Item>::const_iterator begin() const
-  {
-    return data.begin();
-  }
+  std::map<Fmi::DateTime, Item>::const_iterator begin() const { return data.begin(); }
 
-  inline std::map<Fmi::DateTime, Item>::const_iterator end() const { return data.end(); }
-  inline const std::map<Fmi::DateTime, Item>& get_data() const { return data; }
-  inline std::size_t size() const { return data.size(); }
+  std::map<Fmi::DateTime, Item>::const_iterator end() const { return data.end(); }
+  const std::map<Fmi::DateTime, Item>& get_data() const { return data; }
+  std::size_t size() const { return data.size(); }
   std::string get_db_table_name(const std::string& layer_name) const;
 
-  inline void set_debug_level(int new_debug_level) { this->debug_level = new_debug_level; }
+  void set_debug_level(int new_debug_level) { this->debug_level = new_debug_level; }
 
  private:
   std::string create_sql_request(const Fmi::DateTime& begin,
@@ -99,7 +95,6 @@ class GeoServerDataIndex
 
   void process_sql_result(const pqxx::result& result, const std::string& layers);
 
- private:
   GeoServerDB& db;
   std::variant<std::string,
                  std::map<std::string, std::string>,

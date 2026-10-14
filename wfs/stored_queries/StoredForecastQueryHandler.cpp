@@ -1,4 +1,5 @@
 #include "stored_queries/StoredForecastQueryHandler.h"
+#include "StoredQueryHandlerFactories.h"
 #include "FeatureID.h"
 #include "StoredQueryHandlerFactoryDef.h"
 #include "WfsConvenience.h"
@@ -58,7 +59,7 @@ bw::StoredForecastQueryHandler::StoredForecastQueryHandler(
       bw::SupportsMeteoParameterOptions(config),
       bw::SupportsTimeParameters(config),
       bw::SupportsTimeZone(reactor, config),
-      common_params(),
+
       ind_geoid(
           SmartMet::add_param(common_params, "geoid", Parameter::Type::DataIndependent, kFmiGEOID)),
       ind_epoch(

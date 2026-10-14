@@ -21,14 +21,12 @@ class QueryBase
   static const char* HOSTNAME_SUBST;
   static const char* PROTOCOL_SUBST;
 
- public:
   enum QueryType
   {
     QUERY,
     STORED_QUERY
   };
 
- public:
   QueryBase();
 
   virtual ~QueryBase();
@@ -64,7 +62,7 @@ class QueryBase
     return &result;
   }
 
-  inline int get_query_id() const { return query_id; }
+  int get_query_id() const { return query_id; }
   void set_query_id(int id);
 
   /**
@@ -77,7 +75,7 @@ class QueryBase
 
   void set_cached_response(const std::string& response);
 
-  inline std::optional<std::string> get_cached_response() const { return cached_response; }
+  std::optional<std::string> get_cached_response() const { return cached_response; }
   /**
    *  @brief Get stale seconds after which query is stale.
    *
@@ -85,7 +83,7 @@ class QueryBase
    *  Default value is 0.
    *  @return The stale seconds as an integer.
    */
-  inline int get_stale_seconds() const { return stale_seconds; }
+  int get_stale_seconds() const { return stale_seconds; }
 
  private:
   int query_id{1};

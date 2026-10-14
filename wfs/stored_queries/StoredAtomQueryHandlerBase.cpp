@@ -1,4 +1,5 @@
 #include "stored_queries/StoredAtomQueryHandlerBase.h"
+#include "StoredQueryHandlerFactories.h"
 #include "StoredQueryHandlerFactoryDef.h"
 #include <boost/bind/bind.hpp>
 #include <macgyver/Exception.h>

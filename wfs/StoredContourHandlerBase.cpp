@@ -158,7 +158,7 @@ bw::ContourQueryResultSet bw::StoredContourQueryHandler::getContours_qEngine(
   {
     ContourQueryResultSet ret;
 
-    for (auto& timestep : queryParameter.tlist)
+    for (const auto& timestep : queryParameter.tlist)
     {
       Fmi::DateTime utctime(timestep.utc_time());
 
@@ -993,7 +993,7 @@ void bw::StoredContourQueryHandler::parseGeometry(OGRGeometry* geom,
       for (int i = 0; i < num_geometries; i++)
       {
         CTPP::CDT& polygon_patch = result["surface_members"][i];
-        auto* pPolygon = reinterpret_cast<OGRPolygon*>(pMultiPolygon->getGeometryRef(i));
+        auto* pPolygon = pMultiPolygon->getGeometryRef(i);
         pPolygon->assignSpatialReference(pMultiPolygon->getSpatialReference());
         parsePolygon(pPolygon, latLonOrder, precision, polygon_patch);
       }
@@ -1028,8 +1028,7 @@ void bw::StoredContourQueryHandler::parseGeometry(OGRGeometry* geom,
       for (int i = 0; i < pMultiLineString->getNumGeometries(); i++)
       {
         CTPP::CDT& linestring_patch = result["isolines"][i];
-        auto* pLineString =
-            reinterpret_cast<OGRLineString*>(pMultiLineString->getGeometryRef(i));
+        auto* pLineString = pMultiLineString->getGeometryRef(i);
         linestring_patch["coordinates"] = formatCoordinates(pLineString, latLonOrder, precision);
       }
     }

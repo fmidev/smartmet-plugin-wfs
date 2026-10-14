@@ -4,6 +4,7 @@
 #include <macgyver/Exception.h>
 
 #include <boost/algorithm/string/replace.hpp>
+#include <algorithm>
 #include <iomanip>
 #include <utility>
 
@@ -92,8 +93,8 @@ std::vector<bw::ContourQueryResultPtr> bw::StoredWWCoverageQueryHandler::process
     // order result set primarily by isoline value and secondarily by timestep
     unsigned int max_geoms_per_timestep = 0;
     for (const auto& result_item : result_set)
-      if (max_geoms_per_timestep < result_item->area_geoms.size())
-        max_geoms_per_timestep = result_item->area_geoms.size();
+      max_geoms_per_timestep =
+          std::max<std::size_t>(max_geoms_per_timestep, result_item->area_geoms.size());
 
     for (std::size_t i = 0; i < max_geoms_per_timestep; i++)
     {
@@ -161,6 +162,9 @@ wfs_winterweather_coverage_query_handler_create(SmartMet::Spine::Reactor* reacto
 }
 }  // namespace
 
+namespace
+{
 SmartMet::Plugin::WFS::StoredQueryHandlerFactoryDef
     wfs_winterweather_coverage_query_handler_factory(
         &wfs_winterweather_coverage_query_handler_create);
+}  // namespace

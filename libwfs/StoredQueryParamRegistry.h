@@ -102,7 +102,6 @@ class StoredQueryParamRegistry : public StoredQueryConfig::Wrapper
  private:
   void add_param_rec(const std::shared_ptr<ParamRecBase>& rec);
 
- private:
   bool silence_param_init_warnings_{false};
   std::map<std::string, std::shared_ptr<ParamRecBase> > param_map;
   std::map<std::string, int> supported_type_names;

@@ -1,5 +1,6 @@
 #ifndef WITHOUT_OBSERVATION
 #include "stored_queries/StoredMastQueryHandler.h"
+#include "StoredQueryHandlerFactories.h"
 #include "FeatureID.h"
 #include "StoredQueryHandlerFactoryDef.h"
 #include <engines/observation/DBRegistry.h>

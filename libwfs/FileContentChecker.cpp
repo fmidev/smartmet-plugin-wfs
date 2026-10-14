@@ -22,7 +22,7 @@ bool FileContentChecker::check_file_hash(const std::string& fn)
   char buffer[1024];
   int fd = open(fn.c_str(), O_RDONLY);
   if (fd >= 0) {
-    int len;
+    int len = 0;
     std::size_t size = 0;
     while ((len = read(fd, buffer, sizeof(buffer))) > 0 and (max_size == 0 or size < max_size)) {
       SHA256_Update(&ctx, buffer, len);

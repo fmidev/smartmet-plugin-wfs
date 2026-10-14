@@ -75,7 +75,6 @@ protected:
                     const std::string& name,
                     OGRGeometry& polygon) const;
 
- private:
   std::set<std::string> producers;
   std::set<std::string> formats;
   std::string default_format;

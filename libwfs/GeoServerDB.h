@@ -18,7 +18,6 @@ class GeoServerDB
   using ConnectionPtr = std::shared_ptr<Connection>;
   using Transaction = Fmi::Database::PostgreSQLConnection::Transaction;
 
- public:
   GeoServerDB(const std::string& conn_str, std::size_t keep_conn = 5);
   GeoServerDB(const GeoServerDB&) = delete;
   GeoServerDB& operator = (const GeoServerDB&) = delete;
@@ -30,7 +29,6 @@ class GeoServerDB
  private:
   ConnectionPtr create_new_conn();
 
- private:
   ConnectionOpt conn_opt;
   Fmi::WorkerPool<Connection> conn_pool;
 };

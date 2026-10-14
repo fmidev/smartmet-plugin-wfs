@@ -39,7 +39,7 @@ class ScalarParameterTemplate : public ParameterTemplateBase
 
   ~ScalarParameterTemplate() override;
 
-  inline const ParameterTemplateItem& get_item() const { return item; }
+  const ParameterTemplateItem& get_item() const { return item; }
   /**
    *   @brief Gets the value of parameter from request parameter map
    *
@@ -135,14 +135,11 @@ class ScalarParameterTemplate : public ParameterTemplateBase
           return src.get<ValueType>();
       }
 
-  private:
       const ScalarParameterTemplate& spt;
   };
 
- private:
   void init(bool silent);
 
- private:
   ParameterTemplateItem item;
 };
 

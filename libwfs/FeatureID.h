@@ -42,11 +42,8 @@ class FeatureID
    */
   std::string get_id() const;
 
-  inline const std::string& get_stored_query_id() const { return stored_query_id; }
-  inline const std::multimap<std::string, SmartMet::Spine::Value> get_params() const
-  {
-    return params;
-  }
+  const std::string& get_stored_query_id() const { return stored_query_id; }
+  const std::multimap<std::string, SmartMet::Spine::Value> get_params() const { return params; }
   void erase_param(const std::string& name);
 
   template <typename ValueType>
@@ -65,7 +62,6 @@ class FeatureID
     }
   }
 
- public:
   static std::string prefix;
 };
 

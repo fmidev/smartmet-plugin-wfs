@@ -1,4 +1,5 @@
 #include "stored_queries/StoredObsQueryHandler.h"
+#include "StoredQueryHandlerFactories.h"
 #include "FeatureID.h"
 #include "StoredQueryHandlerFactoryDef.h"
 #include "WfsConst.h"
@@ -63,7 +64,7 @@ StoredObsQueryHandler::StoredObsQueryHandler(SmartMet::Spine::Reactor* reactor,
       SupportsQualityParameters(config),
       SupportsMeteoParameterOptions(config),
       SupportsTimeParameters(config),
-      initial_bs_param(),
+
       fmisid_ind(SmartMet::add_param(
           initial_bs_param, "fmisid", Parameter::Type::DataIndependent, kFmiFMISID)),
       geoid_ind(SmartMet::add_param(

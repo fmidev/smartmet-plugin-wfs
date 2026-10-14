@@ -7,16 +7,13 @@ namespace bw = SmartMet::Plugin::WFS;
 namespace ph = boost::placeholders;
 
 bw::RequestParameterMap::RequestParameterMap(bool case_sensitive_params)
-  : params()
-  , case_sensitive_params(case_sensitive_params)
+    : case_sensitive_params(case_sensitive_params)
 {
 }
 
 bw::RequestParameterMap::RequestParameterMap(
-    const std::multimap<std::string, SmartMet::Spine::Value>& params,
-    bool case_sensitive_params)
-  : params()
-  , case_sensitive_params(case_sensitive_params)
+    const std::multimap<std::string, SmartMet::Spine::Value>& params, bool case_sensitive_params)
+    : case_sensitive_params(case_sensitive_params)
 {
   for (const auto& item : params) {
     insert_value(item.first, item.second);
@@ -143,7 +140,7 @@ void bw::RequestParameterMap::dump_params(CTPP::CDT& hash) const
   try
   {
     const auto keys = get_keys();
-    for (auto& item : params)
+    for (const auto& item : params)
     {
         const std::string str = item.second.value.to_string();
         CTPP::CDT& hash_item = hash[item.second.real_name];

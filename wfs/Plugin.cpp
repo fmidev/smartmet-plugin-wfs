@@ -32,8 +32,7 @@ namespace WFS
  *  @brief Plugin constructor
  */
 Plugin::Plugin(SmartMet::Spine::Reactor* theReactor, const char* theConfig)
-    : SmartMetPlugin(),
-      itsModuleName("WFS"),
+    : itsModuleName("WFS"),
       itsReactor(theReactor),
       itsConfig(theConfig),
       itsShuttingDown(false),

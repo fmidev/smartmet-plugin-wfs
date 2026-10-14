@@ -38,7 +38,7 @@ struct PluginImpl::RequestResult
   std::optional<int> expires_seconds;
 
  public:
-  RequestResult() :  output() {}
+  RequestResult() {}
 };
 
 PluginImpl::PluginImpl(SmartMet::Spine::Reactor* theReactor,

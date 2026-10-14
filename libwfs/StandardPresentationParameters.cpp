@@ -19,11 +19,14 @@ const char* bw::StandardPresentationParameters::DEFAULT_OUTPUT_FORMAT =
 
 const char* bw::StandardPresentationParameters::DEBUG_OUTPUT_FORMAT = "debug";
 
+namespace
+{
 std::vector<std::string> SUPPORTED_FORMATS = {
     "text/xml; subtype=gml/3.2",
     "text/xml; version=3.2",
     "application/gml+xml; subtype=gml/3.2",
     bw::StandardPresentationParameters::DEFAULT_OUTPUT_FORMAT};
+}  // namespace
 
 bw::StandardPresentationParameters::StandardPresentationParameters()
     : 

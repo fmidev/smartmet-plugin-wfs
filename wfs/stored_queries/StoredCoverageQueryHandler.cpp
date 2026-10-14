@@ -1,8 +1,10 @@
 #include "stored_queries/StoredCoverageQueryHandler.h"
+#include "StoredQueryHandlerFactories.h"
 #include <gis/Box.h>
 #include <newbase/NFmiEnumConverter.h>
 
 #include <boost/algorithm/string/replace.hpp>
+#include <algorithm>
 #include <iomanip>
 #include <utility>
 
@@ -106,8 +108,8 @@ std::vector<bw::ContourQueryResultPtr> bw::StoredCoverageQueryHandler::processQu
     // order result set primarily by isoline value and secondarily by timestep
     unsigned int max_geoms_per_timestep = 0;
     for (const auto& result_item : result_set)
-      if (max_geoms_per_timestep < result_item->area_geoms.size())
-        max_geoms_per_timestep = result_item->area_geoms.size();
+      max_geoms_per_timestep =
+          std::max<std::size_t>(max_geoms_per_timestep, result_item->area_geoms.size());
 
     for (std::size_t i = 0; i < max_geoms_per_timestep; i++)
     {

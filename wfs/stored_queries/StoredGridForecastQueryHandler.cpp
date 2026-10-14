@@ -1,4 +1,5 @@
 #include "stored_queries/StoredGridForecastQueryHandler.h"
+#include "StoredQueryHandlerFactories.h"
 #include "FeatureID.h"
 #include "StoredQueryHandlerFactoryDef.h"
 #include "WfsConvenience.h"
@@ -6,6 +7,7 @@
 #include <boost/format.hpp>
 #include <boost/math/constants/constants.hpp>
 #include <engines/grid/Engine.h>
+#include <engines/querydata/MetaQueryOptions.h>
 #include <grid-content/queryServer/definition/QueryConfigurator.h>
 #include <grid-files/common/AdditionalParameters.h>
 #include <grid-files/common/GeneralFunctions.h>
@@ -14,20 +16,20 @@
 #include <grid-files/common/Typedefs.h>
 #include <grid-files/identification/GridDef.h>
 #include <macgyver/DateTime.h>
+#include <macgyver/Exception.h>
 #include <macgyver/StringConversion.h>
 #include <macgyver/TimeFormatter.h>
 #include <macgyver/TimeParser.h>
 #include <macgyver/TypeName.h>
 #include <newbase/NFmiPoint.h>
 #include <newbase/NFmiQueryData.h>
-#include <engines/querydata/MetaQueryOptions.h>
-#include <macgyver/Exception.h>
 #include <spine/Convenience.h>
 #include <spine/HTTP.h>
 #include <spine/Table.h>
 #include <spine/Value.h>
 #include <timeseries/ParameterFactory.h>
 #include <timeseries/TimeSeriesInclude.h>
+#include <algorithm>
 #include <limits>
 #include <locale>
 #include <map>
@@ -82,7 +84,6 @@ StoredGridForecastQueryHandler::StoredGridForecastQueryHandler(
       SupportsLocationParameters(reactor, config, SUPPORT_KEYWORDS | INCLUDE_GEOIDS),
       SupportsTimeParameters(config),
       SupportsTimeZone(reactor, config),
-      common_params(),
       ind_geoid(add_param(common_params, "geoid", Spine::Parameter::Type::DataIndependent)),
       ind_epoch(add_param(common_params, "time", Spine::Parameter::Type::DataIndependent)),
       ind_place(add_param(common_params, "name", Spine::Parameter::Type::DataIndependent)),
@@ -530,9 +531,8 @@ uint StoredGridForecastQueryHandler::processGridQuery(Query& wfsQuery,
         uint timestepCount = gridQuery.mQueryParameterList[p].mValueList.size();
         for (uint x = 0; x < timestepCount; x++)
         {
-          uint vv = (uint)gridQuery.mQueryParameterList[p].mValueList[x]->mValueList.getLength();
-          if (vv > vLen)
-            vLen = vv;
+          uint vv = gridQuery.mQueryParameterList[p].mValueList[x]->mValueList.getLength();
+          vLen = std::max(vv, vLen);
         }
       }
 
@@ -554,8 +554,7 @@ uint StoredGridForecastQueryHandler::processGridQuery(Query& wfsQuery,
               generationId = gridQuery.mQueryParameterList[p].mValueList[t]->mGenerationId;
 
             uint row = rows + t;
-            if (row > lastRow)
-              lastRow = row;
+            lastRow = std::max(row, lastRow);
 
             if (!wfsQuery.have_model_area)
             {
@@ -567,9 +566,9 @@ uint StoredGridForecastQueryHandler::processGridQuery(Query& wfsQuery,
             T::GridValue val;
             if (gridQuery.mQueryParameterList[p].mValueList[t]->mValueList.getGridValueByIndex(
                     v, val) &&
-                (val.mValue != ParamValueMissing || val.mValueString.length() > 0))
+                (val.mValue != ParamValueMissing || !val.mValueString.empty()))
             {
-              if (val.mValueString.length() > 0)
+              if (!val.mValueString.empty())
               {
                 // The parameter value is a string
                 if (vLen == 1)
@@ -632,8 +631,7 @@ uint StoredGridForecastQueryHandler::processGridQuery(Query& wfsQuery,
              ++ft)
         {
           uint row = rows + t;
-          if (row > lastRow)
-            lastRow = row;
+          lastRow = std::max(row, lastRow);
 
           Fmi::DateTime utcTime = Fmi::date_time::from_time_t(*ft);
           Fmi::LocalDateTime queryTime(utcTime, tz);

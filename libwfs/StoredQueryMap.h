@@ -112,7 +112,6 @@ class StoredQueryMap final : private FileContentChecker
 
   void notify_failed();
 
- private:
   bool background_init{false};
   std::atomic<bool> reload_required;
   std::atomic<bool> loading_started;

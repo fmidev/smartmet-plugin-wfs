@@ -61,7 +61,6 @@ class Plugin : public SmartMetPlugin,
 
   bool queryIsFast(const SmartMet::Spine::HTTP::Request& theRequest) const override;
 
- private:
   void realRequestHandler(SmartMet::Spine::Reactor& theReactor,
                           const std::string& language,
                           const SmartMet::Spine::HTTP::Request& theRequest,
@@ -72,7 +71,6 @@ class Plugin : public SmartMetPlugin,
   void ensureUpdateLoopStarted();
   void stopUpdateLoop();
 
- private:
   Fmi::Cache::CacheStatistics getCacheStats() const override;
 
   void adminListConstructors(const Spine::HTTP::Request& theRequest,

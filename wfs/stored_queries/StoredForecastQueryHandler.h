@@ -75,7 +75,6 @@ class StoredForecastQueryHandler : public StoredQueryHandlerBase,
     std::size_t first_data_ind;
     std::size_t last_data_ind;
 
-   public:
     Query();
     Query(const std::shared_ptr<const StoredQueryConfig>& config);
     virtual ~Query();
@@ -83,7 +82,6 @@ class StoredForecastQueryHandler : public StoredQueryHandlerBase,
     void set_value_formatter(const Fmi::ValueFormatterParam& vf_param);
   };
 
- public:
   StoredForecastQueryHandler(SmartMet::Spine::Reactor* reactor,
                              const StoredQueryConfig::Ptr& config,
                              PluginImpl& plugin_impl,
@@ -113,7 +111,6 @@ class StoredForecastQueryHandler : public StoredQueryHandlerBase,
   std::map<std::string, SmartMet::Engine::Querydata::ModelParameter> get_model_parameters(
       const std::string& producer, const Fmi::DateTime& origin_time) const;
 
- private:
   std::vector<SmartMet::Spine::Parameter> common_params;
   double max_np_distance;
   bool separate_groups;

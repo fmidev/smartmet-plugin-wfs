@@ -28,7 +28,6 @@ class ParameterExtractor
  public:
   using xml_param_extract_t = std::function<std::vector<SmartMet::Spine::Value>(const xercesc::DOMElement &)>;
 
- public:
   ParameterExtractor();
   virtual ~ParameterExtractor();
 
