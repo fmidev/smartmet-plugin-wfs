@@ -112,11 +112,9 @@ bool bw::GetDataSetByIdHandler::redirect(const StoredQuery& query,
       exception.addParameter(WFS_EXCEPTION_CODE, WFS_OPERATION_PROCESSING_FAILED);
       throw exception.disableStackTrace();
     }
-    else
-    {
-      new_stored_query_id = it2->second;
-      return true;
-    }
+
+    new_stored_query_id = it2->second;
+    return true;
   }
   catch (...)
   {

@@ -70,7 +70,7 @@ std::string bw::RequestBase::extract_request_name(const xercesc::DOMDocument& do
       msg << FN << ": HTTP/SOAP requests are not yet supported";
       throw Fmi::Exception(BCP, msg.str());
     }
-    else if (name_info.second == WFS_NAMESPACE_URI)
+    if (name_info.second == WFS_NAMESPACE_URI)
     {
       return name_info.first;
     }

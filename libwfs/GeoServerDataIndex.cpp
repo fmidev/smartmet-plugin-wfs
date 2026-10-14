@@ -71,11 +71,9 @@ bool find_srs(const std::string& gml, int& srs)
       srs = std::stoi(match);
       return true;
     }
-    else
-    {
-      srs = -1;
-      return false;
-    }
+
+    srs = -1;
+    return false;
   }
   catch (...)
   {
@@ -280,7 +278,7 @@ std::string bw::GeoServerDataIndex::get_db_table_name(const std::string& layer_n
       boost::basic_format<char> fmt(std::get<std::string>(db_table_name_def));
       return boost::str(fmt % layer_name);
     }
-    else if (which == 1)
+    if (which == 1)
     {
       const auto& name_map = std::get<std::map<std::string, std::string> >(db_table_name_def);
       auto pos = name_map.find(layer_name);

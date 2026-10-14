@@ -69,11 +69,11 @@ class ScalarParameterTemplate : public ParameterTemplateBase
             const auto tmp = get_optional<ValueType>(req_param_map, extra_params);
             if (tmp) {
                 return *tmp;
-            } else {
-                const std::string name = this->get_config_path();
-                throw Fmi::Exception::Trace(BCP, "Mandatory scalar query parameter '"
-                    + name + "' missing").disableStackTrace();
             }
+            const std::string name = this->get_config_path();
+            throw Fmi::Exception::Trace(BCP,
+                                        "Mandatory scalar query parameter '" + name + "' missing")
+                .disableStackTrace();
         } catch (...) {
             throw Fmi::Exception::Trace(BCP, "Operation failed!");
         }
@@ -89,9 +89,8 @@ class ScalarParameterTemplate : public ParameterTemplateBase
             if (tmp) {
                 *dest = *tmp;
                 return true;
-            } else {
-                return false;
             }
+            return false;
         } catch (...) {
             throw Fmi::Exception::Trace(BCP, "Operation failed!");
         }
@@ -124,9 +123,8 @@ class ScalarParameterTemplate : public ParameterTemplateBase
           bool found = spt.get_value(tmp, req_param_map, extra_params);
           if (found) {
               return std::optional<ValueType>(extract(tmp));
-          } else {
-              return std::nullopt;
           }
+          return std::nullopt;
       }
 
    private:

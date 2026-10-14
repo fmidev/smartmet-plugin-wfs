@@ -103,13 +103,10 @@ std::shared_ptr<bw::RequestBase> bw::RequestFactory::parse_kvp(
     {
       return (type_rec.kvp_parser)(language, http_request);
     }
-    else
-    {
-      Fmi::Exception exception(
-          BCP, "KVP format not supported for the WFS request '" + name + "'!");
-      exception.addParameter(WFS_EXCEPTION_CODE, WFS_OPERATION_PARSING_FAILED);
-      throw exception;
-    }
+
+    Fmi::Exception exception(BCP, "KVP format not supported for the WFS request '" + name + "'!");
+    exception.addParameter(WFS_EXCEPTION_CODE, WFS_OPERATION_PARSING_FAILED);
+    throw exception;
   }
   catch (...)
   {
@@ -143,14 +140,12 @@ std::shared_ptr<bw::RequestBase> bw::RequestFactory::parse_xml(
     {
       return (type_rec.xml_parser)(language, document, *root);
     }
-    else
-    {
-      Fmi::Exception exception(BCP, "Unsupported WFS request!");
-      exception.addDetail("The XML format is not (yet) supported for the current WFS request!");
-      exception.addParameter(WFS_EXCEPTION_CODE, WFS_OPERATION_PARSING_FAILED);
-      exception.addParameter("WFS request", name);
-      throw exception;
-    }
+
+    Fmi::Exception exception(BCP, "Unsupported WFS request!");
+    exception.addDetail("The XML format is not (yet) supported for the current WFS request!");
+    exception.addParameter(WFS_EXCEPTION_CODE, WFS_OPERATION_PARSING_FAILED);
+    exception.addParameter("WFS request", name);
+    throw exception;
   }
   catch (...)
   {

@@ -166,7 +166,9 @@ void bw::UrlTemplateGenerator::parse_param_def(const std::string& str)
     bool separate_param = false;
     bool have_const = false;
     bool have_ref = false;
-    std::string name, ref_name, value;
+    std::string name;
+    std::string ref_name;
+    std::string value;
 
     using qi_rule = qi::rule<std::string::const_iterator, std::string
         ()>;

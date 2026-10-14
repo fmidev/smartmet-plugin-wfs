@@ -249,20 +249,18 @@ std::vector<SmartMet::Spine::Value> StoredQueryParamDef::readValues(
           boost::bind(&StoredQueryParamDef::readValue, this, boost::placeholders::_1));
       return result;
     }
-    else
-    {
-      std::ostringstream msg;
-      msg << "Expected: " << min_size;
-      if (min_size != max_size)
-        msg << ".." << max_size;
 
-      Fmi::Exception exception(
-          BCP, "Invalid array size '" + std::to_string(values.size()) + "' in parameter!");
-      exception.addDetail(msg.str());
-      exception.addParameter(WFS_EXCEPTION_CODE, WFS_OPERATION_PARSING_FAILED);
-      exception.disableLogging();
-      throw exception;
-    }
+    std::ostringstream msg;
+    msg << "Expected: " << min_size;
+    if (min_size != max_size)
+      msg << ".." << max_size;
+
+    Fmi::Exception exception(
+        BCP, "Invalid array size '" + std::to_string(values.size()) + "' in parameter!");
+    exception.addDetail(msg.str());
+    exception.addParameter(WFS_EXCEPTION_CODE, WFS_OPERATION_PARSING_FAILED);
+    exception.disableLogging();
+    throw exception;
   }
   catch (...)
   {

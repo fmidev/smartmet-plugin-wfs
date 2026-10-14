@@ -303,52 +303,49 @@ void bw::AdHocQuery::create_bbox_query_from_kvp(
         exception.addParameter(WFS_EXCEPTION_CODE, WFS_OPERATION_PARSING_FAILED);
         throw exception.disableStackTrace();
       }
-      else
+
+      try
       {
-        try
-        {
-	  bool case_sensitive_params = stored_query_map.use_case_sensitive_params();
-          const bw::StoredQueryParamDef& param_def = param_desc->param_def;
-          SmartMet::Spine::Value value = param_def.readValue(bbox_string);
-          value.check_limits(param_desc->lower_limit, param_desc->upper_limit);
+        bool case_sensitive_params = stored_query_map.use_case_sensitive_params();
+        const bw::StoredQueryParamDef& param_def = param_desc->param_def;
+        SmartMet::Spine::Value value = param_def.readValue(bbox_string);
+        value.check_limits(param_desc->lower_limit, param_desc->upper_limit);
 
-          std::shared_ptr<bw::AdHocQuery> query(new bw::AdHocQuery);
-          query->handler = handler;
-          query->id = query_id;
-          query->debug_format = spp.get_output_format() == "debug";
-          query->language = language;
-          query->set_stale_seconds(config->get_expires_seconds());
+        std::shared_ptr<bw::AdHocQuery> query(new bw::AdHocQuery);
+        query->handler = handler;
+        query->id = query_id;
+        query->debug_format = spp.get_output_format() == "debug";
+        query->language = language;
+        query->set_stale_seconds(config->get_expires_seconds());
 
-          query->params = std::make_shared<bw::RequestParameterMap>(case_sensitive_params);
-          query->orig_params = query->params;
-          query->skipped_params.clear();
+        query->params = std::make_shared<bw::RequestParameterMap>(case_sensitive_params);
+        query->orig_params = query->params;
+        query->skipped_params.clear();
 
-          query->params->insert_value(param_name, value);
+        query->params->insert_value(param_name, value);
 
-          query->params = query->handler->process_params(query_id, query->orig_params);
+        query->params = query->handler->process_params(query_id, query->orig_params);
 
-          bw::FeatureID feature_id(query_id, query->params->get_map(true), 0);
-          feature_id.add_param("language", language);
+        bw::FeatureID feature_id(query_id, query->params->get_map(true), 0);
+        feature_id.add_param("language", language);
 
-          if (query->debug_format)
-            feature_id.add_param("debugFormat", 1);
+        if (query->debug_format)
+          feature_id.add_param("debugFormat", 1);
 
-          query->cache_key = feature_id.get_id();
+        query->cache_key = feature_id.get_id();
 
-          queries.push_back(query);
-        }
-        catch (...)
-        {
-          std::string msg = fmt::format("While parsing value '{}' of request parameter '{}'",
-                                        bbox_string,
-                                        param_name);
-          Fmi::Exception exception(BCP, "Operation parsing failed!", nullptr);
-          exception.addDetail(msg);
-          if (exception.getExceptionByParameterName(WFS_EXCEPTION_CODE) == nullptr)
-            exception.addParameter(WFS_EXCEPTION_CODE, WFS_OPERATION_PARSING_FAILED);
-          exception.addParameter(WFS_LANGUAGE, language);
-          throw exception;
-        }
+        queries.push_back(query);
+      }
+      catch (...)
+      {
+        std::string msg = fmt::format(
+            "While parsing value '{}' of request parameter '{}'", bbox_string, param_name);
+        Fmi::Exception exception(BCP, "Operation parsing failed!", nullptr);
+        exception.addDetail(msg);
+        if (exception.getExceptionByParameterName(WFS_EXCEPTION_CODE) == nullptr)
+          exception.addParameter(WFS_EXCEPTION_CODE, WFS_OPERATION_PARSING_FAILED);
+        exception.addParameter(WFS_LANGUAGE, language);
+        throw exception;
       }
     }
   }

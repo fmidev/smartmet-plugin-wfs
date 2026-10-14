@@ -112,7 +112,7 @@ void bw::DataSetQuery::set_interval(const Fmi::DateTime& begin,
   }
 }
 
-bw::DataSetDefinition::DataSetDefinition(Private,
+bw::DataSetDefinition::DataSetDefinition(Private /*unused*/,
                                          SmartMet::Spine::ConfigBase& config,
                                          libconfig::Setting& setting)
 {

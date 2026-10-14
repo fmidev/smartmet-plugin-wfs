@@ -173,10 +173,8 @@ std::string remove_trailing_0(const std::string& src)
         c2--;
       return std::string(c1, c2);
     }
-    else
-    {
-      return src;
-    }
+
+    return src;
   }
   catch (...)
   {

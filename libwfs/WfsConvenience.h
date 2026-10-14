@@ -75,10 +75,8 @@ DestIntType cast_int_type(const SourceIntType value)
           << "..." << std::numeric_limits<DestIntType>::max();
       throw Fmi::Exception(BCP, msg.str());
     }
-    else
-    {
-      return value;
-    }
+
+    return value;
   }
   catch (...)
   {
@@ -102,8 +100,7 @@ ParamType get_param(const SmartMet::Spine::HTTP::Request& request,
     auto value = request.getParameter(name);
     if (value)
       return boost::lexical_cast<ParamType>(*value);
-    else
-      return default_value;
+    return default_value;
   }
   catch (...)
   {

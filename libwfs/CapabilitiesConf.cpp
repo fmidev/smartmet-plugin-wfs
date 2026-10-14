@@ -17,9 +17,8 @@ namespace
   {
     if (parent->exists(name)) {
       return &(*parent)[name.c_str()];
-    } else {
-      return nullptr;
     }
+    return nullptr;
   }
 
   void checkSettings(const std::string& prefix, libconfig::Setting* parent,
@@ -179,12 +178,12 @@ void CapabilitiesConf::parse(const std::string& default_language, libconfig::Set
 	}
 	break;
       default:
-	do {
+	{
 	  std::ostringstream item;
 	  ConfigBase::dump_setting(item, *s_formats, 10);
 	  throw Exception::Trace(BCP, "Incorrect value of configuration entry outputFormats")
 	    .addDetail(item.str());
-	} while (false);
+	}
 	break;
       }
 
@@ -211,9 +210,8 @@ std::string CapabilitiesConf::conv_output_format_str(const std::string& src)
   ba::split(w, src, ba::is_any_of(";"));
   if (w.size() == 2) {
     return ba::trim_copy(w[0]) + "; " + ba::trim_copy(w[1]);
-  } else {
-    return src;
   }
+  return src;
 }
 
 void CapabilitiesConf::apply(CTPP::CDT& hash, const std::string& language) const

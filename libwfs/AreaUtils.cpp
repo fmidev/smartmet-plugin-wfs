@@ -75,7 +75,8 @@ std::vector<NFmiPoint> bbox_exclude_point(const NFmiPoint& p1,
       const double dyb = xy.Y() - y1;
       const double dyt = y2 - xy.Y();
 
-      double qx = NAN, qy = NAN;
+      double qx = NAN;
+      double qy = NAN;
       if (std::min(dxl, dxr) < std::min(dyt, dyb))
       {
         qy = xy.Y();

@@ -188,21 +188,21 @@ bool Plugin::reload(const char* theConfig)
   {
     return false;
   }
-  else
+
+  // FIXME: Use atomic
+  itsReloading = true;
+  std::cout << "Plugin reload requested" << std::endl;
+  try
   {
-    // FIXME: Use atomic
-    itsReloading = true;
-    std::cout << "Plugin reload requested" << std::endl;
-    try
-    {
-      itsConfig = theConfig;
-      init();
-    } catch (...) {
-      throw Fmi::Exception(BCP, "Reload failed");
-    }
-    itsReloading = false;
-    return true;
+    itsConfig = theConfig;
+    init();
   }
+  catch (...)
+  {
+    throw Fmi::Exception(BCP, "Reload failed");
+  }
+  itsReloading = false;
+  return true;
 }
 
 // ----------------------------------------------------------------------

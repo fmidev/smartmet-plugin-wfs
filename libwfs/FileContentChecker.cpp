@@ -37,18 +37,22 @@ bool FileContentChecker::check_file_hash(const std::string& fn)
       if (it == file_hash_map.end()) {
 	file_hash_map[fn] = digest;
 	return true;
-      } else if (it->second == digest) {
-	if (debug_level >= 1) {
-	  std::cout << SmartMet::Spine::log_time_str()
-		    << ": [WFS] [DEBUG]: " << fn << " unchanged"
-		    << std::endl;
-	}
+      }
+      if (it->second == digest)
+      {
+        if (debug_level >= 1)
+        {
+          std::cout << SmartMet::Spine::log_time_str() << ": [WFS] [DEBUG]: " << fn << " unchanged"
+                    << std::endl;
+        }
         // SHA256 digest has not changed since last check: no need to reread
-	return false;
-      } else {
-	// File SHA256 digest has changed: should reread
-	it->second = digest;
-	return true;
+        return false;
+      }
+      else
+      {
+        // File SHA256 digest has changed: should reread
+        it->second = digest;
+        return true;
       }
     } else {
       // File is too long: let's ignore it

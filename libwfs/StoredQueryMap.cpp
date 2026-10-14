@@ -103,7 +103,7 @@ void bw::StoredQueryMap::wait_for_init()
                                      or directory_monitor.ready()
                                      or load_failed;
                              };
-  do {
+  {
     std::time_t start = std::time(nullptr);
     std::unique_lock<std::mutex> lock(mutex2);
     while (not cond.wait_for(lock, std::chrono::seconds(1), done)) {
@@ -112,7 +112,7 @@ void bw::StoredQueryMap::wait_for_init()
                 " configuration loading to start");
       }
     }
-  } while (false);
+  }
 
   if (init_tasks) {
     if (Spine::Reactor::isShuttingDown() or load_failed) {
@@ -140,9 +140,8 @@ bool bw::StoredQueryMap::is_reload_required(bool reset)
       std::cout << SmartMet::Spine::log_time_str() << ": [WFS] Cleared reload required flag" << std::endl;
     }
     return response;
-  } else {
-    return reload_required;
   }
+  return reload_required;
 }
 
 void bw::StoredQueryMap::add_handler(const std::shared_ptr<StoredQueryHandlerBase>& handler)
@@ -182,10 +181,8 @@ std::shared_ptr<bw::StoredQueryHandlerBase> bw::StoredQueryMap::get_handler_by_n
       exception.addParameter(WFS_EXCEPTION_CODE, WFS_OPERATION_PARSING_FAILED);
       throw exception.disableLogging();
     }
-    else
-    {
-      return loc->second;
-    }
+
+    return loc->second;
   }
   catch (...)
   {
@@ -369,9 +366,8 @@ void bw::StoredQueryMap::on_config_change(Fmi::DirectoryMonitor::Watcher watcher
           if (initial_update) {
               load_failed = true;
               throw err;
-          } else {
-              std::cout << err.disableStackTraceRecursive() << std::endl;
           }
+          std::cout << err.disableStackTraceRecursive() << std::endl;
       }
     }
 

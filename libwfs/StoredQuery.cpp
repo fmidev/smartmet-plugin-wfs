@@ -69,7 +69,7 @@ std::shared_ptr<bw::StoredQuery> bw::StoredQuery::create_from_kvp(
 
     std::shared_ptr<bw::StoredQuery> query(new bw::StoredQuery);
 
-    do
+    for (bool more = true; more; more = redirect)
     {
       query->language = language;
 
@@ -97,7 +97,7 @@ std::shared_ptr<bw::StoredQuery> bw::StoredQuery::create_from_kvp(
               " stored query redirect");
         }
       }
-    } while (redirect);
+    }
 
     query->id = query_id;
     query->debug_format = spp.get_output_format() == "debug";
@@ -149,7 +149,7 @@ std::shared_ptr<bw::StoredQuery> bw::StoredQuery::create_from_xml(
 
     std::shared_ptr<bw::StoredQuery> query(new bw::StoredQuery);
 
-    do
+    for (bool more = true; more; more = redirect)
     {
       query->language = language;
 
@@ -177,7 +177,7 @@ std::shared_ptr<bw::StoredQuery> bw::StoredQuery::create_from_xml(
               " stored query redirect");
         }
       }
-    } while (redirect);
+    }
 
     query->id = query_id;
     query->debug_format = spp.get_output_format() == "debug";
@@ -324,10 +324,8 @@ bool bw::StoredQuery::get_kvp_stored_query_id(const SmartMet::Spine::HTTP::Reque
       *stored_query_id = *sqi;
       return true;
     }
-    else
-    {
-      return false;
-    }
+
+    return false;
   }
   catch (...)
   {

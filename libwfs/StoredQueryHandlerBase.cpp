@@ -177,12 +177,10 @@ std::shared_ptr<Fmi::TemplateFormatter> StoredQueryHandlerBase::get_formatter(
     {
       return plugin_impl.get_ctpp_dump_formatter();
     }
-    else
-    {
-      if (!template_file)
-        throw Fmi::Exception(BCP, "Template formatter not set for stored query!");
-      return plugin_impl.get_stored_query_formatter(*template_file);
-    }
+
+    if (!template_file)
+      throw Fmi::Exception(BCP, "Template formatter not set for stored query!");
+    return plugin_impl.get_stored_query_formatter(*template_file);
   }
   catch (...)
   {

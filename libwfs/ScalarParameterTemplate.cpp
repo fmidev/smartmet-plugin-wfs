@@ -71,23 +71,22 @@ SmartMet::Spine::Value ScalarParameterTemplate::get_value(
         item.get_value(req_param_map, extra_params);
     if (value.index() == 0) {
       return std::get<SmartMet::Spine::Value>(value);
-    } else {
-      const auto& arr = std::get<std::vector<SmartMet::Spine::Value>>(value);
-      if (arr.empty())
-      {
-        // Empty array: treat as empty value
-        return {};
-      }
-      else if (arr.size() == 1)
-      {
-        return arr.at(0);
-      }
-      else
-      {
-        throw Fmi::Exception::Trace(BCP,
-            METHOD_NAME + ": cannot convert array of size > 2 to scalar value")
-            .disableStackTrace();
-      }
+    }
+    const auto& arr = std::get<std::vector<SmartMet::Spine::Value>>(value);
+    if (arr.empty())
+    {
+      // Empty array: treat as empty value
+      return {};
+    }
+    else if (arr.size() == 1)
+    {
+      return arr.at(0);
+    }
+    else
+    {
+      throw Fmi::Exception::Trace(
+          BCP, METHOD_NAME + ": cannot convert array of size > 2 to scalar value")
+          .disableStackTrace();
     }
   }
   catch (...)
@@ -133,24 +132,21 @@ boost::tribool ScalarParameterTemplate::get_value(
         result = std::get<SmartMet::Spine::Value>(tmp);
         return true;
       }
-      else /* (which == 1) */
+      /* (which == 1) */
+      const std::vector<SmartMet::Spine::Value>& vect =
+          std::get<std::vector<SmartMet::Spine::Value>>(tmp);
+      switch (vect.size())
       {
-        const std::vector<SmartMet::Spine::Value>& vect =
-            std::get<std::vector<SmartMet::Spine::Value> >(tmp);
-        switch (vect.size())
+        case 0:  // No data available
+          return false;
+
+        case 1:
+          result = *vect.begin();
+          return true;
+
+        default:
         {
-          case 0:  // No data available
-            return false;
-
-          case 1:
-            result = *vect.begin();
-            return true;
-
-          default:
-          {
-            throw Fmi::Exception(
-                BCP, "Scalar value expected. Got '" + as_string(vect) + "'!");
-          }
+          throw Fmi::Exception(BCP, "Scalar value expected. Got '" + as_string(vect) + "'!");
         }
       }
     }
@@ -184,13 +180,13 @@ void ScalarParameterTemplate::init(bool silent)
                     msg << "Cannot copy entire parameter array '" << *item.param_ref << "' to scalar value";
                     throw Fmi::Exception(BCP, msg.str());
                 }
-                else if (*item.param_ind >= param.getMaxSize())
+                if (*item.param_ind >= param.getMaxSize())
                 {
-                    // The requested index is above max. possible size of parameter array
-                    std::ostringstream msg;
-                    msg << "The array index " << *item.param_ind << " is out of range 0.."
-                        << param.getMaxSize();
-                    throw Fmi::Exception(BCP, msg.str());
+                  // The requested index is above max. possible size of parameter array
+                  std::ostringstream msg;
+                  msg << "The array index " << *item.param_ind << " is out of range 0.."
+                      << param.getMaxSize();
+                  throw Fmi::Exception(BCP, msg.str());
                 }
             }
         }

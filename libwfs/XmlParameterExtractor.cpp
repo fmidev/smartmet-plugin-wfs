@@ -351,13 +351,11 @@ std::vector<SmartMet::Spine::Value> ParameterExtractor::extract_gml_pos(
         result.emplace_back(pos.data[1]);
         return result;
       }
-      else
-      {
-        std::ostringstream msg;
-        msg << "Unexpected size " << pos.data.size() << " of gml:DirectPositionType"
-            << " (only size 2 is supported)";
-        throw Fmi::Exception(BCP, msg.str());
-      }
+
+      std::ostringstream msg;
+      msg << "Unexpected size " << pos.data.size() << " of gml:DirectPositionType"
+          << " (only size 2 is supported)";
+      throw Fmi::Exception(BCP, msg.str());
     }
     else
     {
@@ -404,13 +402,11 @@ std::vector<SmartMet::Spine::Value> ParameterExtractor::extract_gml_envelope(
         result.emplace_back(bbox);
         return result;
       }
-      else
-      {
-        std::ostringstream msg;
-        msg << "Unexpected value " << *envelope.srs_reference.srs_dimension << " of srsDimension"
-            << " (2 expected)";
-        throw Fmi::Exception(BCP, msg.str());
-      }
+
+      std::ostringstream msg;
+      msg << "Unexpected value " << *envelope.srs_reference.srs_dimension << " of srsDimension"
+          << " (2 expected)";
+      throw Fmi::Exception(BCP, msg.str());
     }
     else
     {

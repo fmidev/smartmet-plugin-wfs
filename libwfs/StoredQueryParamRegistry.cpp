@@ -175,7 +175,11 @@ std::shared_ptr<bw::RequestParameterMap> StoredQueryParamRegistry::resolve_handl
             case 5:
               msg << " (";
               for (int i = 0; i < cnt; i++)
-                msg << (i == 0 ? "" : i == cnt - 1 ? " or " : ", ") << rec.min_size + i * rec.step;
+              {
+                if (i > 0)
+                  msg << (i == cnt - 1 ? " or " : ", ");
+                msg << rec.min_size + i * rec.step;
+              }
               msg << " values expected)";
               break;
 

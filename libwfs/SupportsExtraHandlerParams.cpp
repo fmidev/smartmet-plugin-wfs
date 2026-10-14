@@ -121,10 +121,8 @@ const bw::ParameterTemplateBase& bw::SupportsExtraHandlerParams::get_param(
       exception.addDetail(msg.str());
       throw exception;
     }
-    else
-    {
-      return *it->second;
-    }
+
+    return *it->second;
   }
   catch (...)
   {

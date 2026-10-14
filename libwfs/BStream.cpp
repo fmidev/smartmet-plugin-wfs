@@ -537,19 +537,23 @@ Fmi::DateTime IBStream::get_ptime()
       Fmi::Date d(year, month, day);
       return Fmi::DateTime(d, Fmi::Seconds(sec));
     }
+
+    if (get_bit())
+    {
+      if (get_bit())
+      {
+        return Fmi::DateTime::POS_INFINITY;
+      }
+      else
+      {
+        return Fmi::DateTime::NEG_INFINITY;
+      }
+    }
     else
     {
-      if (get_bit()) {
-	if (get_bit()) {
-            return Fmi::DateTime::POS_INFINITY;
-	} else {
-            return Fmi::DateTime::NEG_INFINITY;
-	}
-      } else {
-	return Fmi::DateTime::NOT_A_DATE_TIME;
-      }
-      throw Fmi::Exception(BCP, "Special time values are not yet supported");
+      return Fmi::DateTime::NOT_A_DATE_TIME;
     }
+    throw Fmi::Exception(BCP, "Special time values are not yet supported");
   }
   catch (...)
   {

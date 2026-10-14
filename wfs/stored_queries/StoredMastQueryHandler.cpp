@@ -284,19 +284,17 @@ void bw::StoredMastQueryHandler::query(const StoredQuery& query,
             exception.addParameter(WFS_EXCEPTION_CODE, WFS_INVALID_PARAMETER_VALUE);
             throw exception;
           }
+
+          // Update values of a tuple item.
+          if (isQCParameter)
+          {
+            std::get<2>(paramIdIt->second) = name;
+            std::get<4>(paramIdIt->second) = true;
+          }
           else
           {
-            // Update values of a tuple item.
-            if (isQCParameter)
-            {
-              std::get<2>(paramIdIt->second) = name;
-              std::get<4>(paramIdIt->second) = true;
-            }
-            else
-            {
-              std::get<1>(paramIdIt->second) = name;
-              std::get<3>(paramIdIt->second) = true;
-            }
+            std::get<1>(paramIdIt->second) = name;
+            std::get<3>(paramIdIt->second) = true;
           }
         }
         else

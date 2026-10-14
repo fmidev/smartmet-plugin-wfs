@@ -58,7 +58,8 @@ EntityResolver::merge_downloaded_schemas()
 {
   bool changed = false;
   std::unique_lock<std::mutex> lock(mutex);
-  std::map<std::string, Download>::iterator curr, next;
+  std::map<std::string, Download>::iterator curr;
+  std::map<std::string, Download>::iterator next;
   for (curr = download_map.begin(); curr != download_map.end(); curr = next) {
     next = curr;
     next++;
@@ -155,9 +156,8 @@ try
 					    len,
 					    x_remote_id.get(),
 					    true /* adopt buffer */);
-    } else {
-      return nullptr;
     }
+    return nullptr;
   }
  catch (...)
    {
@@ -207,10 +207,8 @@ try
 	throw;
       }
       return true;
-    } else {
-      // Not found and downloading schemas is not allowed
-      return false;
-    }
+    }  // Not found and downloading schemas is not allowed
+    return false;
   } else {
     result = it->second;
     return true;
@@ -273,10 +271,8 @@ std::string EntityResolver::download(const std::string& uri) const
     std::cout << SmartMet::Spine::log_time_str() << ": [WFS] Downloaded XML schema from "
 	      << uri << std::endl;
     return result.str();
-  } else {
-    // FIXME: for some reason throwing Fmi::Exception causes it to crash instead
-    //        of postponing exception handling. Throwing std::runtime_error works
-    //throw Fmi::Exception::Trace(BCP, "Failed to download " + uri);
-    throw std::runtime_error("Failed to download " + uri + ": " + curl_easy_strerror(ret));
-  }
+  }  // FIXME: for some reason throwing Fmi::Exception causes it to crash instead
+  //        of postponing exception handling. Throwing std::runtime_error works
+  // throw Fmi::Exception::Trace(BCP, "Failed to download " + uri);
+  throw std::runtime_error("Failed to download " + uri + ": " + curl_easy_strerror(ret));
 }

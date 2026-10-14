@@ -209,7 +209,8 @@ void Config::read_typename_config(std::map<std::string, std::string>& typename_s
         for (int i = 0; i < count; ++i)
         {
           const libconfig::Setting& item = map[i];
-          std::string type_name, stored_queries;
+          std::string type_name;
+          std::string stored_queries;
 
           if (!(item.lookupValue("type_name", type_name) &&
                 item.lookupValue("stored_queries", stored_queries)))
@@ -303,10 +304,8 @@ std::string Config::guess_fallback_encoding(const std::string& language) const
   {
     return fallback_encoding->get(language);
   }
-  else
-  {
-    return "ISO-8859-1";
-  }
+
+  return "ISO-8859-1";
 }
 
 }  // namespace WFS

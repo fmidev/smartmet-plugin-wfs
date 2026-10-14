@@ -473,7 +473,7 @@ void StoredQEDownloadQueryHandler::update_parameters(
           }
           continue;
         }
-        else if (start_time.is_not_a_date_time() and not end_time.is_not_a_date_time())
+        if (start_time.is_not_a_date_time() and not end_time.is_not_a_date_time())
         {
         }
         else

@@ -111,8 +111,10 @@ void bw::StoredFileQueryHandler::update_parameters(
     using point_t = DataSetDefinition::point_t;
     using box_t = DataSetDefinition::box_t;
 
-    std::set<int> level_set, common_levels;
-    std::set<std::string> param_set, common_params;
+    std::set<int> level_set;
+    std::set<int> common_levels;
+    std::set<std::string> param_set;
+    std::set<std::string> common_params;
     std::vector<double> bbox;
 
     const auto name = params.get_optional<std::string>(P_NAME, std::string(""));

@@ -57,7 +57,9 @@ class DataSetDefinition : public std::enable_shared_from_this<DataSetDefinition>
   };
 
  public:
-  DataSetDefinition(Private, SmartMet::Spine::ConfigBase& config, libconfig::Setting& setting);
+  DataSetDefinition(Private /*unused*/,
+                    SmartMet::Spine::ConfigBase& config,
+                    libconfig::Setting& setting);
 
   static std::shared_ptr<DataSetDefinition> create(SmartMet::Spine::ConfigBase& config,
                                                    libconfig::Setting& setting);

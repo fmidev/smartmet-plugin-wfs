@@ -249,7 +249,8 @@ void bw::StoredGeoserverQueryHandler::update_parameters(
     if (debug_level > 1)
     {
       std::ostringstream msg;
-      SmartMet::Spine::Value bbox1(requested_bbox), bbox2(bb_epsg);
+      SmartMet::Spine::Value bbox1(requested_bbox);
+      SmartMet::Spine::Value bbox2(bb_epsg);
       msg << SmartMet::Spine::log_time_str() << ": [WFS] [DEBUG] [" << get_config()->get_query_id()
           << "]:"
           << " requested BBOX:" << bbox1 << ", converted BBOX:" << bbox2 << "\n";

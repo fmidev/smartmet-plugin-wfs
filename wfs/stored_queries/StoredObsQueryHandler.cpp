@@ -414,7 +414,9 @@ void StoredObsQueryHandler::query(const StoredQuery& query,
       // Get the sequence number of query in the request
       int sq_id = query.get_query_id();
 
-      const int num_groups = separate_groups ? site_map.size() : ((!site_map.empty()) ? 1 : 0);
+      int num_groups = ((!site_map.empty()) ? 1 : 0);
+      if (separate_groups)
+        num_groups = static_cast<int>(site_map.size());
 
       FeatureID feature_id(get_config()->get_query_id(), params.get_map(true), sq_id);
 

@@ -76,10 +76,8 @@ std::string bw::WfsFeatureDef::resolve_crs_url(const std::string& name,
     {
       return value;
     }
-    else
-    {
-      return name;
-    }
+
+    return name;
   }
   catch (...)
   {

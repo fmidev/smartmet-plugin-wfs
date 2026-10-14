@@ -54,10 +54,8 @@ const std::vector<std::string>& bw::TypeNameStoredQueryMap::get_stored_queries_b
       exception.addParameter("Stored query name", name);
       throw exception;
     }
-    else
-    {
-      return loc->second;
-    }
+
+    return loc->second;
   }
   catch (...)
   {

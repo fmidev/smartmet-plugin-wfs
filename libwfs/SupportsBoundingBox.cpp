@@ -71,10 +71,8 @@ bool bw::SupportsBoundingBox::get_bounding_box(const RequestParameterMap& param_
 #endif
       return true;
     }
-    else
-    {
-      return false;
-    }
+
+    return false;
   }
   catch (...)
   {

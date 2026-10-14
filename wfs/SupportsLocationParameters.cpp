@@ -195,10 +195,8 @@ void bw::SupportsLocationParameters::get_location_options(
             .addParameter("Language", language_requested)
             .disableLogging();
       }
-      else
-      {
-        locations->emplace_back(name, ptrs.front());
-      }
+
+      locations->emplace_back(name, ptrs.front());
     }
 
     const bool locations_given = (not locations->empty() or param.count(P_FMISIDS) or
@@ -220,12 +218,10 @@ void bw::SupportsLocationParameters::get_location_options(
               .addParameter("Keyword", keyword)
               .disableLogging();
         }
-        else
+
+        for (const SmartMet::Spine::LocationPtr& loc : places)
         {
-          for (const SmartMet::Spine::LocationPtr& loc : places)
-          {
-            locations->emplace_back(loc->name, loc);
-          }
+          locations->emplace_back(loc->name, loc);
         }
       }
     }
@@ -256,11 +252,9 @@ void bw::SupportsLocationParameters::get_geoids(
               .addParameter("SmartMet::Spine::GeoId", std::to_string(id))
               .disableLogging();
         }
-        else
-        {
-          SmartMet::Spine::LocationPtr loc = geo_engine->idSearch(id, language);
-          locations->emplace_back(Fmi::to_string(id), loc);
-        }
+
+        SmartMet::Spine::LocationPtr loc = geo_engine->idSearch(id, language);
+        locations->emplace_back(Fmi::to_string(id), loc);
       }
     }
   }
@@ -296,21 +290,19 @@ void bw::SupportsLocationParameters::get_fmisids(
             .addParameter("Fmsid", std::to_string(id))
             .disableLogging();
       }
-      else
+
+      std::string id_s = Fmi::to_string(id);
+      SmartMet::Spine::LocationList locList = geo_engine->nameSearch(opts, id_s);
+      if (include_fmisids and locList.empty())
       {
-        std::string id_s = Fmi::to_string(id);
-        SmartMet::Spine::LocationList locList = geo_engine->nameSearch(opts, id_s);
-        if (include_fmisids and locList.empty())
-        {
-          throw Fmi::Exception(BCP, "Unknown 'fmisid' value!")
-              .addParameter(WFS_EXCEPTION_CODE, WFS_OPERATION_PARSING_FAILED)
-              .addParameter("Fmsid", std::to_string(id))
-              .disableLogging();
-        }
-        // Including location of the current fmisid if enabled.
-        if (include_fmisids)
-          locations->emplace_back(id_s, locList.front());
+        throw Fmi::Exception(BCP, "Unknown 'fmisid' value!")
+            .addParameter(WFS_EXCEPTION_CODE, WFS_OPERATION_PARSING_FAILED)
+            .addParameter("Fmsid", std::to_string(id))
+            .disableLogging();
       }
+      // Including location of the current fmisid if enabled.
+      if (include_fmisids)
+        locations->emplace_back(id_s, locList.front());
     }
   }
   catch (...)
@@ -345,21 +337,19 @@ void bw::SupportsLocationParameters::get_wmos(
             .addParameter("WmoId", std::to_string(id))
             .disableLogging();
       }
-      else
+
+      std::string id_s = Fmi::to_string(id);
+      SmartMet::Spine::LocationList locList = geo_engine->nameSearch(opts, id_s);
+      if (include_wmos and locList.empty())
       {
-        std::string id_s = Fmi::to_string(id);
-        SmartMet::Spine::LocationList locList = geo_engine->nameSearch(opts, id_s);
-        if (include_wmos and locList.empty())
-        {
-          throw Fmi::Exception(BCP, "Unknown 'wmoid' value!")
-              .addParameter(WFS_EXCEPTION_CODE, WFS_OPERATION_PARSING_FAILED)
-              .addParameter("WmoId", id_s)
-              .disableStackTrace();
-        }
-        // Including location of the current wmo id if enabled.
-        if (include_wmos)
-          locations->emplace_back(id_s, locList.front());
+        throw Fmi::Exception(BCP, "Unknown 'wmoid' value!")
+            .addParameter(WFS_EXCEPTION_CODE, WFS_OPERATION_PARSING_FAILED)
+            .addParameter("WmoId", id_s)
+            .disableStackTrace();
       }
+      // Including location of the current wmo id if enabled.
+      if (include_wmos)
+        locations->emplace_back(id_s, locList.front());
     }
   }
   catch (...)
@@ -394,21 +384,19 @@ void bw::SupportsLocationParameters::get_lpnns(
             .addParameter("LPNN", std::to_string(id))
             .disableLogging();
       }
-      else
+
+      std::string id_s = Fmi::to_string(id);
+      SmartMet::Spine::LocationList locList = geo_engine->nameSearch(opts, id_s);
+      if (include_lpnns and locList.empty())
       {
-        std::string id_s = Fmi::to_string(id);
-        SmartMet::Spine::LocationList locList = geo_engine->nameSearch(opts, id_s);
-        if (include_lpnns and locList.empty())
-        {
-          throw Fmi::Exception(BCP, "Unknown 'lpnn' value!")
-              .addParameter(WFS_EXCEPTION_CODE, WFS_OPERATION_PARSING_FAILED)
-              .addParameter("LPNN", id_s)
-              .disableLogging();
-        }
-        // Including location of the current lpnn id if enabled.
-        if (include_lpnns)
-          locations->emplace_back(id_s, locList.front());
+        throw Fmi::Exception(BCP, "Unknown 'lpnn' value!")
+            .addParameter(WFS_EXCEPTION_CODE, WFS_OPERATION_PARSING_FAILED)
+            .addParameter("LPNN", id_s)
+            .disableLogging();
       }
+      // Including location of the current lpnn id if enabled.
+      if (include_lpnns)
+        locations->emplace_back(id_s, locList.front());
     }
   }
   catch (...)

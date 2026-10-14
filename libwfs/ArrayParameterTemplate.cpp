@@ -153,7 +153,7 @@ boost::tribool ArrayParameterTemplate::get_value(
     {
       return true;
     }
-    else if (some_resolved)
+    if (some_resolved)
     {
       return boost::indeterminate;
     }
@@ -369,16 +369,15 @@ void ArrayParameterTemplate::init(bool silent)
 	      << "' with minimal size " << min_size
 	      << " not provided in stored query configuration '" << get_config().get_file_name() << "'";
             throw Fmi::Exception::Trace(BCP, msg.str());
-        } else {
-	  // Definition of array not provided and zero size array is permitted:
-	  // -> interpret as empty array and optionally provide a warning
-	    if (not silent) {
-                std::cout << "WARNING: Definition of array parameter '" << get_config_path()
-			  << "' with minimal size 0 is not provided in stored query configuration '"
-			  << get_config().get_file_name() << "'" << std::endl;
-	    }
-	    return;
+        }  // Definition of array not provided and zero size array is permitted:
+           // -> interpret as empty array and optionally provide a warning
+        if (not silent)
+        {
+          std::cout << "WARNING: Definition of array parameter '" << get_config_path()
+                    << "' with minimal size 0 is not provided in stored query configuration '"
+                    << get_config().get_file_name() << "'" << std::endl;
         }
+        return;
     }
 
     std::vector<libconfig::Setting*> setting_array;

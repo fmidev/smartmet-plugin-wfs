@@ -289,10 +289,8 @@ ResultType RequestParameterMap::get_optional(const std::string& name,
     {
       return default_value;
     }
-    else
-    {
-      return tmp.at(0);
-    }
+
+    return tmp.at(0);
   }
   catch (...)
   {

@@ -170,10 +170,8 @@ Fmi::DateTime PluginImpl::get_time_stamp() const
     {
       return *locked_time_stamp;
     }
-    else
-    {
-      return Fmi::SecondClock::universal_time();
-    }
+
+    return Fmi::SecondClock::universal_time();
   }
   catch (...)
   {
@@ -189,10 +187,8 @@ Fmi::DateTime PluginImpl::get_local_time_stamp() const
     {
       return *locked_time_stamp;
     }
-    else
-    {
-      return Fmi::SecondClock::universal_time();
-    }
+
+    return Fmi::SecondClock::universal_time();
   }
   catch (...)
   {
@@ -206,12 +202,10 @@ std::shared_ptr<GeoServerDB> PluginImpl::get_geo_server_database() const
   {
     return geo_server_db;
   }
-  else
-  {
-    Fmi::Exception exception(BCP, "GeoServer database is not available");
-    exception.addParameter(WFS_EXCEPTION_CODE, WFS_OPERATION_PROCESSING_FAILED);
-    throw exception;
-  }
+
+  Fmi::Exception exception(BCP, "GeoServer database is not available");
+  exception.addParameter(WFS_EXCEPTION_CODE, WFS_OPERATION_PROCESSING_FAILED);
+  throw exception;
 }
 
 void PluginImpl::create_template_formatters()
@@ -633,7 +627,7 @@ void PluginImpl::query(const std::string& req_language,
               exception.addParameter(WFS_LANGUAGE, req_language);
               throw exception;
             }
-            else if (root_info.attr_map.at("service") != "WFS")
+            if (root_info.attr_map.at("service") != "WFS")
             {
               Fmi::Exception exception(
                   BCP, "Incorrect value for the 'service' attribute!", nullptr);
@@ -657,7 +651,7 @@ void PluginImpl::query(const std::string& req_language,
               exception.addParameter(WFS_LANGUAGE, req_language);
               throw exception;
             }
-            else if (root_info.attr_map.at("version") != "2.0.0")
+            if (root_info.attr_map.at("version") != "2.0.0")
             {
               Fmi::Exception exception(
                   BCP, "Incorrect value for the 'version' attribute!", nullptr);
@@ -824,10 +818,8 @@ void PluginImpl::realRequestHandler(SmartMet::Spine::Reactor& /* theReactor */,
             err.addParameter(WFS_EXCEPTION_CODE, WFS_OPERATION_PROCESSING_FAILED);
             throw err;
           }
-          else
-          {
-            Fmi::Exception::Trace(BCP, "Response validation failed!").printError();
-          }
+
+          Fmi::Exception::Trace(BCP, "Response validation failed!").printError();
         }
     }
     catch (...)

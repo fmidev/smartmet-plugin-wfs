@@ -140,10 +140,8 @@ bw::ContourQueryResultSet bw::StoredContourQueryHandler::getContours(
     {
       return getContours_gridEngine(queryParameter);
     }
-    else
-    {
-      return getContours_qEngine(queryParameter);
-    }
+
+    return getContours_qEngine(queryParameter);
   }
   catch (...)
   {

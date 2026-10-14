@@ -531,12 +531,10 @@ std::pair<unsigned int, unsigned int> StoredGridQueryHandler::getDataIndexExtent
       {
         break;
       }
-      else
-      {
-        lonIter++;
-        latIter++;
-        previousPoint = thisPoint;
-      }
+
+      lonIter++;
+      latIter++;
+      previousPoint = thisPoint;
     }
 
     result.first = lonIter - locationVecLon.begin();
@@ -802,7 +800,8 @@ StoredGridQueryHandler::Result StoredGridQueryHandler::extract_forecast(
 
     int debug_level = get_config()->get_debug_level();
 
-    double lon1 = NAN, lat1 = NAN;
+    double lon1 = NAN;
+    double lat1 = NAN;
 
     // Get the bbox for corner (should be middle) coordinates
 

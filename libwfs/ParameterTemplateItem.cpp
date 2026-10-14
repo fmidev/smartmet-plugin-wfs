@@ -160,7 +160,7 @@ ParameterTemplateItem::get_value(const RequestParameterMap& req_param_map,
     {
       return result;
     }
-    else if (absent)
+    if (absent)
     {
       std::ostringstream msg;
       msg << "CONFIGURATION ERROR: absent parameter specification not"
@@ -196,7 +196,7 @@ bool ParameterTemplateItem::get_value(
     {
       return false;
     }
-    else if (plain_text)
+    if (plain_text)
     {
       // If an exact string provided in the configuration then return it.
       // Note that casting to actual type is not done here
@@ -294,8 +294,8 @@ bool ParameterTemplateItem::get_value(
             // Array found, but it is not permitted to return an array
             // NOTE: this error should not normally happen and it most
             //       likely indicates configuration problem
-            Fmi::Exception exception(
-                BCP, "Cannot return an array (parameter '" + *param_ref + "')");
+            Fmi::Exception exception(BCP,
+                                     "Cannot return an array (parameter '" + *param_ref + "')");
             exception.addParameter(WFS_EXCEPTION_CODE, WFS_OPERATION_PARSING_FAILED);
             throw exception;
           }
@@ -305,8 +305,8 @@ bool ParameterTemplateItem::get_value(
     else
     {
       // This is not supposed to happen and indicates error in program code
-      throw Fmi::Exception(
-          BCP, "INTERNAL ERROR: neither of members plain_text and param_ref are set!");
+      throw Fmi::Exception(BCP,
+                           "INTERNAL ERROR: neither of members plain_text and param_ref are set!");
     }
   }
   catch (...)

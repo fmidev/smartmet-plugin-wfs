@@ -187,7 +187,8 @@ void bw::StoredFlashQueryHandler::query(const StoredQuery& query,
       bool have_meteo_param = false;
       std::vector<std::string> param_names;
       params.get<std::string>(P_PARAM, std::back_inserter(param_names));
-      int first_param = 0, last_param = 0;
+      int first_param = 0;
+      int last_param = 0;
       for (const std::string& name : param_names)
       {
         SmartMet::Spine::Parameter param = SmartMet::TimeSeries::makeParameter(name);

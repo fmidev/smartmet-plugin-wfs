@@ -354,13 +354,11 @@ std::string SmartMet::Plugin::WFS::StoredQueryConfig::get_template_fn() const
     {
       return *template_fn;
     }
-    else
-    {
-      std::ostringstream msg;
-      msg << "Template file name is not available"
-          << " for stored request '" << query_id << "'";
-      throw Fmi::Exception(BCP, msg.str());
-    }
+
+    std::ostringstream msg;
+    msg << "Template file name is not available"
+        << " for stored request '" << query_id << "'";
+    throw Fmi::Exception(BCP, msg.str());
   }
   catch (...)
   {
@@ -376,32 +374,37 @@ SmartMet::Plugin::WFS::StoredQueryConfig::get_param_desc(const std::string& name
         auto desc_it = param_map.find(name);
         if (desc_it == param_map.end()) {
             return nullptr;
-        } else {
-              return &desc_it->second;
         }
+        return &desc_it->second;
     } else {
         // Case insensitive parameters
         const std::string tmp = Fmi::ascii_tolower_copy(name);
         auto case_it = case_map.find(tmp);
         if (case_it == case_map.end()) {
             return nullptr;
-        } else {
-            const std::string& real_name = case_it->second;
-            auto desc_it = param_map.find(real_name);
-            if (desc_it == param_map.end()) {
-                std::vector<std::string> available;
-                available.reserve(param_map.size());
-                for (const auto& item : param_map) { available.push_back(item.first); }
-                throw Fmi::Exception(BCP, "[INTERNAL ERROR] Parameter " + real_name
-                    + " description not found when lovercase name " + tmp
-                    + " is present")
-                    .addParameter("Provided parameter name", name)
-                    .addParameter("Requested parameter name", real_name)
-                    .addParameter("Found parameter names", boost::algorithm::join(available, " "))
-                    .disableStackTrace();
-            } else {
-                return &desc_it->second;
-            }
+        }
+        const std::string& real_name = case_it->second;
+        auto desc_it = param_map.find(real_name);
+        if (desc_it == param_map.end())
+        {
+          std::vector<std::string> available;
+          available.reserve(param_map.size());
+          for (const auto& item : param_map)
+          {
+            available.push_back(item.first);
+          }
+          throw Fmi::Exception(BCP,
+                               "[INTERNAL ERROR] Parameter " + real_name +
+                                   " description not found when lovercase name " + tmp +
+                                   " is present")
+              .addParameter("Provided parameter name", name)
+              .addParameter("Requested parameter name", real_name)
+              .addParameter("Found parameter names", boost::algorithm::join(available, " "))
+              .disableStackTrace();
+        }
+        else
+        {
+          return &desc_it->second;
         }
     }
 }

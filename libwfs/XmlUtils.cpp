@@ -34,11 +34,9 @@ std::pair<std::string, bool> to_opt_string(const XMLCh* src)
     {
       return std::make_pair(to_string(src), true);
     }
-    else
-    {
-      return std::make_pair<std::string, bool>("", false);
-      ;
-    }
+
+    return std::make_pair<std::string, bool>("", false);
+    ;
   }
   catch (...)
   {
@@ -58,11 +56,9 @@ std::string to_string(const XMLCh* src)
 
       return tmp.get();
     }
-    else
-    {
-      throw Fmi::Exception(
-          BCP, "SmartMet::Plugin::WFS::Xml::to_string: XML string expected but got nullptr");
-    }
+
+    throw Fmi::Exception(
+        BCP, "SmartMet::Plugin::WFS::Xml::to_string: XML string expected but got nullptr");
   }
   catch (...)
   {
@@ -99,12 +95,10 @@ std::pair<std::string, std::string> get_name_info(const xercesc::DOMNode* node)
       const std::string ns_info = to_opt_string(node->getNamespaceURI()).first;
       return std::make_pair(name, ns_info);
     }
-    else
-    {
-      throw Fmi::Exception(
-          BCP,
-          "SmartMet::Plugin::WFS::Xml::get_name_info(): nullptr is not permitted as the argument");
-    }
+
+    throw Fmi::Exception(
+        BCP,
+        "SmartMet::Plugin::WFS::Xml::get_name_info(): nullptr is not permitted as the argument");
   }
   catch (...)
   {
@@ -170,10 +164,8 @@ std::string check_name_info(const xercesc::DOMNode* node,
       msg += ") expected";
       throw Fmi::Exception(BCP, msg);
     }
-    else
-    {
-      return name_info.first;
-    }
+
+    return name_info.first;
   }
   catch (...)
   {
@@ -194,10 +186,8 @@ std::pair<std::string, bool> get_attr(const xercesc::DOMElement& elem,
       const XMLCh* x_val = elem.getAttribute(x_name.get());
       return std::make_pair(to_string(x_val), true);
     }
-    else
-    {
-      return std::make_pair<std::string, bool>("", false);
-    }
+
+    return std::make_pair<std::string, bool>("", false);
   }
   catch (...)
   {
@@ -218,13 +208,12 @@ std::string get_mandatory_attr(const xercesc::DOMElement& elem,
       const XMLCh* x_val = elem.getAttribute(x_name.get());
       return to_string(x_val);
     }
-    else
-    {
-      const std::string msg = fmt::format("SmartMet::Plugin::WFS::Xml::get_mandatory_attr():"
-                                          " mandatory attribute {} missing",
-                                          name);
-      throw Fmi::Exception(BCP, msg);
-    }
+
+    const std::string msg = fmt::format(
+        "SmartMet::Plugin::WFS::Xml::get_mandatory_attr():"
+        " mandatory attribute {} missing",
+        name);
+    throw Fmi::Exception(BCP, msg);
   }
   catch (...)
   {
@@ -405,12 +394,10 @@ std::shared_ptr<xercesc::DOMDocument> create_dom_document(const std::string& ns,
     {
       throw Fmi::Exception(BCP, "Failed to get xercesc::DOMImplementation instance");
     }
-    else
-    {
-      std::shared_ptr<xercesc::DOMDocument> doc(impl->createDocument());
-      doc->appendChild(create_element(*doc, ns, name));
-      return doc;
-    }
+
+    std::shared_ptr<xercesc::DOMDocument> doc(impl->createDocument());
+    doc->appendChild(create_element(*doc, ns, name));
+    return doc;
   }
   catch (...)
   {

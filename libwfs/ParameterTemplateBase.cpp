@@ -53,11 +53,9 @@ const StoredQueryConfig::ParamDesc& ParameterTemplateBase::get_param_desc(
       throw Fmi::Exception(
           BCP, "The description of the '" + link_name + "' parameter is not found!");
     }
-    else
-    {
-      param_desc->set_used();
-      return *param_desc;
-    }
+
+    param_desc->set_used();
+    return *param_desc;
   }
   catch (...)
   {

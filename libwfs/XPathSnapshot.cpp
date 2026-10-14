@@ -49,7 +49,7 @@ struct ParserFilter : public DOMLSParserFilter
     }
   }
 
-  FilterAction startElement(DOMElement*) override { return FILTER_ACCEPT; }
+  FilterAction startElement(DOMElement* /*node*/) override { return FILTER_ACCEPT; }
   xercesc::DOMNodeFilter::ShowType getWhatToShow() const override
   {
     return xercesc::DOMNodeFilter::SHOW_ALL;
@@ -218,10 +218,8 @@ std::string XPathSnapshot::lookup_prefix(const std::string& uri) const
     {
       return UTF8(x_prefix);
     }
-    else
-    {
-      throw Fmi::Exception(BCP, ": URI '" + uri + "' not found!");
-    }
+
+    throw Fmi::Exception(BCP, ": URI '" + uri + "' not found!");
   }
   catch (...)
   {

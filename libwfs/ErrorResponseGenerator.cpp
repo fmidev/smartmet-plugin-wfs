@@ -285,7 +285,8 @@ std::string ErrorResponseGenerator::format_message(CTPP::CDT& hash)
 {
   try
   {
-    std::ostringstream output, log_messages;
+    std::ostringstream output;
+    std::ostringstream log_messages;
     try
     {
       auto exception_formatter = plugin_impl.get_exception_formatter();

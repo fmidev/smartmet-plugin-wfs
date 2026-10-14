@@ -346,7 +346,8 @@ void GetPropertyValue::append_members(const std::shared_ptr<xercesc::DOMDocument
       is_schemalocation_set =
           copy_schema_location(xpath_snapshot.get_document()->getDocumentElement(), result_root);
 
-    int first = 0, last = 0;
+    int first = 0;
+    int last = 0;
     calculate_loop_limits(max_members, start_index, xpath_snapshot.size(), first, last);
 
     for (int i = first; i <= last; i++)

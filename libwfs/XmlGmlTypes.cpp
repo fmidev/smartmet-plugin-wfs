@@ -41,7 +41,7 @@ std::optional<GmlSRSInformationGroup> read_gml_srs_info_group(const xercesc::DOM
       result = group;
       return result;
     }
-    else if (not(x_axis_labels.second or x_uom_labels.second))
+    if (not(x_axis_labels.second or x_uom_labels.second))
     {
       return result;
     }
@@ -135,7 +135,8 @@ GmlEnvelopeType read_gml_envelope_type(const xercesc::DOMElement& element)
     // NOTE: only lookup for correct combinations is performed as
     //       it is assumed that XML document has been validated
 
-    std::vector<xercesc::DOMElement*> v1, v2;
+    std::vector<xercesc::DOMElement*> v1;
+    std::vector<xercesc::DOMElement*> v2;
 
     v1 = get_child_elements(element, GML_NAMESPACE_URI, "lowerCorner");
     v2 = get_child_elements(element, GML_NAMESPACE_URI, "upperCorner");
@@ -164,14 +165,11 @@ GmlEnvelopeType read_gml_envelope_type(const xercesc::DOMElement& element)
           exception.addParameter(WFS_EXCEPTION_CODE, WFS_OPERATION_PROCESSING_FAILED);
           throw exception;
         }
-        else
-        {
-          Fmi::Exception exception(BCP,
-                                               "Failed to read 'gml::EnvelopeType' from the XML!");
-          exception.addParameter(WFS_EXCEPTION_CODE, WFS_OPERATION_PROCESSING_FAILED);
-          exception.addParameter("XML", xml2string(&element));
-          throw exception;
-        }
+
+        Fmi::Exception exception(BCP, "Failed to read 'gml::EnvelopeType' from the XML!");
+        exception.addParameter(WFS_EXCEPTION_CODE, WFS_OPERATION_PROCESSING_FAILED);
+        exception.addParameter("XML", xml2string(&element));
+        throw exception;
       }
     }
 
@@ -186,13 +184,11 @@ GmlEnvelopeType read_gml_envelope_type(const xercesc::DOMElement& element)
       result.srs_reference.srs_dimension = result.lower_corner.data.size();
       return result;
     }
-    else
-    {
-      Fmi::Exception exception(BCP, "Conflicting data provided in the XML!");
-      exception.addParameter(WFS_EXCEPTION_CODE, WFS_OPERATION_PROCESSING_FAILED);
-      exception.addParameter("XML", xml2string(&element));
-      throw exception;
-    }
+
+    Fmi::Exception exception(BCP, "Conflicting data provided in the XML!");
+    exception.addParameter(WFS_EXCEPTION_CODE, WFS_OPERATION_PROCESSING_FAILED);
+    exception.addParameter("XML", xml2string(&element));
+    throw exception;
   }
   catch (...)
   {

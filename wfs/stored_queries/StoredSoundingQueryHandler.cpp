@@ -212,11 +212,14 @@ void StoredSoundingQueryHandler::query(const StoredQuery& query,
         auto dataValueIt = dataContainer->begin("DATA_VALUE");
         auto dataSignificanceIt = dataContainer->begin("SIGNIFICANCE");
 
-        std::string currentStationId, currentMeasId;
-        int dataId = 0, groupId = 0;
+        std::string currentStationId;
+        std::string currentMeasId;
+        int dataId = 0;
+        int groupId = 0;
         int paramcount = 0;
         int paramListCount = 0;
-        bool showValue = false, showDataQuality = false;
+        bool showValue = false;
+        bool showDataQuality = false;
         INT_64 sEpoch = 0;
         int64_t currentSoundingId = 0;
         long double stationLatitude = 0.0;
@@ -629,19 +632,17 @@ void StoredSoundingQueryHandler::validateAndPopulateMeteoParametersToMap(
         exception.addDetail(msg.str());
         throw exception;
       }
+
+      // Update values of a tuple item.
+      if (isQCParameter)
+      {
+        std::get<2>(paramIdIt->second) = name;
+        std::get<4>(paramIdIt->second) = true;
+      }
       else
       {
-        // Update values of a tuple item.
-        if (isQCParameter)
-        {
-          std::get<2>(paramIdIt->second) = name;
-          std::get<4>(paramIdIt->second) = true;
-        }
-        else
-        {
-          std::get<1>(paramIdIt->second) = name;
-          std::get<3>(paramIdIt->second) = true;
-        }
+        std::get<1>(paramIdIt->second) = name;
+        std::get<3>(paramIdIt->second) = true;
       }
     }
     else
@@ -678,7 +679,8 @@ void StoredSoundingQueryHandler::parseSoundingQuery(const RequestParameterMap& p
   auto launchTimeIt = soundingQueryResult->begin("LAUNCH_TIME");
   auto soundingEndIt = soundingQueryResult->begin("SOUNDING_END");
   auto soundingTypeIt = soundingQueryResult->begin("SOUNDING_TYPE");
-  std::string stationId, prevStationId;
+  std::string stationId;
+  std::string prevStationId;
 
   const bool latest = params.get_single<bool>(P_LATEST);
   for (; soundingIdIt != soundingIdItEnd; ++soundingIdIt,
@@ -706,7 +708,9 @@ void StoredSoundingQueryHandler::parseSoundingQuery(const RequestParameterMap& p
     }
   }
 
-  RadioSoundingMap::iterator curr, next, it;
+  RadioSoundingMap::iterator curr;
+  RadioSoundingMap::iterator next;
+  RadioSoundingMap::iterator it;
   for (curr = radioSoundingMap.begin(); curr != radioSoundingMap.end(); curr = next)
   {
     next = curr;
