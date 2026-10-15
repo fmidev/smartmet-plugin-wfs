@@ -36,7 +36,7 @@ class StoredEnvMonitoringNetworkQueryHandler : protected virtual RequiresGeoEngi
                      std::ostream& output) const override;
 
  private:
-  const std::shared_ptr<SmartMet::Engine::Observation::DBRegistryConfig> dbRegistryConfig(
+  std::shared_ptr<SmartMet::Engine::Observation::DBRegistryConfig> dbRegistryConfig(
       const std::string& configName) const;
 
   std::string m_missingText;

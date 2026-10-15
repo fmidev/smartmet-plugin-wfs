@@ -652,7 +652,7 @@ std::string bw::StoredAirNuclideQueryHandler::prepare_nuclide(const std::string&
   }
 }
 
-const std::shared_ptr<SmartMet::Engine::Observation::DBRegistryConfig>
+std::shared_ptr<SmartMet::Engine::Observation::DBRegistryConfig>
 bw::StoredAirNuclideQueryHandler::dbRegistryConfig(const std::string& configName) const
 {
   try

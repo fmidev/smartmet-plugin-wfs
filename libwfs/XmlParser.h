@@ -73,12 +73,12 @@ class Parser : public xercesc::XercesDOMParser
 
  protected:
   void startElement(const xercesc::XMLElementDecl& elemDecl,
-                            const unsigned int uriId,
-                            const XMLCh* const prefixName,
+                            unsigned int uriId,
+                            const XMLCh* prefixName,
                             const xercesc::RefVectorOf<xercesc::XMLAttr>& attrList,
-                            const XMLSize_t attrCount,
-                            const bool isEmpty,
-                            const bool isRoot) override;
+                            XMLSize_t attrCount,
+                            bool isEmpty,
+                            bool isRoot) override;
 
  private:
   std::unique_ptr<XmlErrorHandler> error_handler;

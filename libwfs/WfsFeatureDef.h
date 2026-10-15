@@ -32,7 +32,7 @@ class WfsFeatureDef
 
   std::string get_default_crs() const { return default_crs_url; }
   const std::vector<std::string>& get_other_crs() const { return other_crs_urls; }
-  const std::array<double, 4> get_bbox() const { return bbox; }
+  std::array<double, 4> get_bbox() const { return bbox; }
   bool is_hidden() const { return hidden; }
 
  private:

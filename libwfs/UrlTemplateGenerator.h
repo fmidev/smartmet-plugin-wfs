@@ -45,7 +45,7 @@ class UrlTemplateGenerator
   std::string generate(
       const std::function<std::vector<std::string>(const std::string&)>& param_getter_cb) const;
 
-  const std::vector<std::variant<ParamRef, StringParam> > get_content() const { return params; }
+  std::vector<std::variant<ParamRef, StringParam> > get_content() const { return params; }
 
  private:
   void parse_param_def(const std::string& str);

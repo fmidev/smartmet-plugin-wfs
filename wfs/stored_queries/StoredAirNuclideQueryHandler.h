@@ -62,7 +62,7 @@ class StoredAirNuclideQueryHandler : public StoredQueryHandlerBase,
 
  private:
   std::string prepare_nuclide(const std::string& nuclide) const;
-  const std::shared_ptr<SmartMet::Engine::Observation::DBRegistryConfig> dbRegistryConfig(
+  std::shared_ptr<SmartMet::Engine::Observation::DBRegistryConfig> dbRegistryConfig(
       const std::string& configName) const;
 
   double m_maxHours;

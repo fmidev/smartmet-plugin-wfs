@@ -31,11 +31,11 @@ class SupportsBoundingBox : protected virtual SupportsExtraHandlerParams,
 
   static void bbox2polygon(const SmartMet::Spine::BoundingBox& src,
                            OGRPolygon* dest,
-                           const int npoints = 10);
+                           int npoints = 10);
 
   SmartMet::Spine::BoundingBox transform_bounding_box(const SmartMet::Spine::BoundingBox& src,
                                                       const std::string& dest_crs,
-                                                      const int npoints = 10) const;
+                                                      int npoints = 10) const;
 
   /**
    * Test if a EPSG code use inverse coordinate order

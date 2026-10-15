@@ -62,12 +62,10 @@ namespace SmartMet {
 
           xercesc::InputSource *resolveEntity(xercesc::XMLResourceIdentifier *resource_identifier) override;
 
-
-
           template <class Archive>
-          void serialize(Archive &ar, const unsigned int version);
+          void serialize(Archive& ar, unsigned int version);
 
-	private:
+         private:
 	  xercesc::InputSource* get_schema(const std::string& remote_uri);
 
 	  bool get_schema(const std::string& remote_uri, std::string& result);

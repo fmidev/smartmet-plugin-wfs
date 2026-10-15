@@ -36,7 +36,7 @@ class StoredEnvMonitoringFacilityQueryHandler : public StoredQueryHandlerBase,
   std::string get_handler_description() const override;
 
  private:
-  const std::shared_ptr<SmartMet::Engine::Observation::DBRegistryConfig> dbRegistryConfig(
+  std::shared_ptr<SmartMet::Engine::Observation::DBRegistryConfig> dbRegistryConfig(
       const std::string& configName) const;
 
   struct CapabilityData

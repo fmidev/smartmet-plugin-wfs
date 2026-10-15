@@ -285,7 +285,7 @@ void bw::StoredEnvMonitoringNetworkQueryHandler::query(const StoredQuery& query,
   }
 }
 
-const std::shared_ptr<SmartMet::Engine::Observation::DBRegistryConfig>
+std::shared_ptr<SmartMet::Engine::Observation::DBRegistryConfig>
 bw::StoredEnvMonitoringNetworkQueryHandler::dbRegistryConfig(const std::string& configName) const
 {
   try

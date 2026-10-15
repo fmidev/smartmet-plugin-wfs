@@ -49,8 +49,8 @@ class Config : public SmartMet::Spine::ConfigBase
 
   const std::string& defaultUrl() const { return itsDefaultUrl; }
   const std::vector<std::string>& getStoredQueriesConfigDirs() const { return sq_config_dirs; }
-  const std::string getGetFeatureById() const { return getFeatureById; }
-  const std::string getXMLGrammarPoolDumpFn() const { return xml_grammar_pool_dump; }
+  std::string getGetFeatureById() const { return getFeatureById; }
+  std::string getXMLGrammarPoolDumpFn() const { return xml_grammar_pool_dump; }
   bool getValidateXmlOutput() const { return validate_output; }
   bool getFailOnValidateErrors() const { return fail_on_validate_errors; }
   std::string getProxy() const { return httpProxy; }

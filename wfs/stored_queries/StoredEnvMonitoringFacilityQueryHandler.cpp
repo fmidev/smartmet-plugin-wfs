@@ -379,8 +379,8 @@ void bw::StoredEnvMonitoringFacilityQueryHandler::query(const StoredQuery &query
   }
 }
 
-const std::shared_ptr<SmartMet::Engine::Observation::DBRegistryConfig>
-bw::StoredEnvMonitoringFacilityQueryHandler::dbRegistryConfig(const std::string &configName) const
+std::shared_ptr<SmartMet::Engine::Observation::DBRegistryConfig>
+bw::StoredEnvMonitoringFacilityQueryHandler::dbRegistryConfig(const std::string& configName) const
 {
   try
   {

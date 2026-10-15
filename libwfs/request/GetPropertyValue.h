@@ -98,10 +98,10 @@ class GetPropertyValue : public RequestBase
    * it here.
    */
   void finalize(const std::shared_ptr<xercesc::DOMDocument>& result,
-                const int cumulative_num_returned,
-                const int cumulative_num_matched,
-                const bool is_timestamp_set,
-                const bool is_schemalocation_set) const;
+                int cumulative_num_returned,
+                int cumulative_num_matched,
+                bool is_timestamp_set,
+                bool is_schemalocation_set) const;
 
   /**
    *   @brief Add collected responses to result tree
@@ -222,7 +222,7 @@ class GetPropertyValue : public RequestBase
    */
   void calculate_loop_limits(const std::optional<int>& max_members,
                              const std::optional<int>& start_index,
-                             const int num_members,
+                             int num_members,
                              int& first,
                              int& last) const;
 

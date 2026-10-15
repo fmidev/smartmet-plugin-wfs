@@ -92,7 +92,7 @@ class StoredSoundingQueryHandler : public StoredQueryHandlerBase,
       int seq_id,
       std::vector<std::shared_ptr<RequestParameterMap> >& result) const;
 
-  const std::shared_ptr<SmartMet::Engine::Observation::DBRegistryConfig> dbRegistryConfig(
+  std::shared_ptr<SmartMet::Engine::Observation::DBRegistryConfig> dbRegistryConfig(
       const std::string& configName) const;
 
   std::string solveCrs(const RequestParameterMap& params) const;

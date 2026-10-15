@@ -678,7 +678,7 @@ void bw::StoredMastQueryHandler::update_parameters(
   }
 }
 
-const std::shared_ptr<SmartMet::Engine::Observation::DBRegistryConfig>
+std::shared_ptr<SmartMet::Engine::Observation::DBRegistryConfig>
 bw::StoredMastQueryHandler::dbRegistryConfig(const std::string& configName) const
 {
   try
