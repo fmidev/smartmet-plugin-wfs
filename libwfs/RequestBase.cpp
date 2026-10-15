@@ -91,7 +91,6 @@ std::string bw::RequestBase::extract_request_name(const xercesc::DOMDocument& do
       throw Fmi::Exception(BCP, msg.str());
     }
 
-    return name_info.first;
   }
   catch (...)
   {

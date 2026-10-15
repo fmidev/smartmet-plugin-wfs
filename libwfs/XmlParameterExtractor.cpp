@@ -185,9 +185,6 @@ std::vector<SmartMet::Spine::Value> ParameterExtractor::extract_integer(
           << " is out of range " << lower_limit << ".." << upper_limit;
       throw Fmi::Exception(BCP, msg.str());
     }
-    SmartMet::Spine::Value value(int_val);
-    result.push_back(value);
-    return result;
   }
   catch (...)
   {
@@ -216,9 +213,6 @@ std::vector<SmartMet::Spine::Value> ParameterExtractor::extract_unsigned_integer
           << " is out of range " << lower_limit << ".." << upper_limit;
       throw Fmi::Exception(BCP, msg.str());
     }
-    SmartMet::Spine::Value value(uint_val);
-    result.push_back(value);
-    return result;
   }
   catch (...)
   {
