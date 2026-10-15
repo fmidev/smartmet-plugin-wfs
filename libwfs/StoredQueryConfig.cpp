@@ -369,42 +369,43 @@ std::string SmartMet::Plugin::WFS::StoredQueryConfig::get_template_fn() const
 const SmartMet::Plugin::WFS::StoredQueryConfig::ParamDesc*
 SmartMet::Plugin::WFS::StoredQueryConfig::get_param_desc(const std::string& name) const
 {
-    if (case_map.empty()) {
-        // Case sensitive parameters
-        auto desc_it = param_map.find(name);
-        if (desc_it == param_map.end()) {
-            return nullptr;
-        }
-        return &desc_it->second;
-    }  // Case insensitive parameters
-    const std::string tmp = Fmi::ascii_tolower_copy(name);
-    auto case_it = case_map.find(tmp);
-    if (case_it == case_map.end())
+  if (case_map.empty())
+  {
+    // Case sensitive parameters
+    auto desc_it = param_map.find(name);
+    if (desc_it == param_map.end())
     {
       return nullptr;
     }
-    const std::string& real_name = case_it->second;
-    auto desc_it = param_map.find(real_name);
-    if (desc_it == param_map.end())
+    return &desc_it->second;
+  }
+
+  // Case insensitive parameters
+  const std::string tmp = Fmi::ascii_tolower_copy(name);
+  auto case_it = case_map.find(tmp);
+  if (case_it == case_map.end())
+  {
+    return nullptr;
+  }
+  const std::string& real_name = case_it->second;
+  auto desc_it = param_map.find(real_name);
+  if (desc_it == param_map.end())
+  {
+    std::vector<std::string> available;
+    available.reserve(param_map.size());
+    for (const auto& item : param_map)
     {
-      std::vector<std::string> available;
-      available.reserve(param_map.size());
-      for (const auto& item : param_map)
-      {
-        available.push_back(item.first);
-      }
-      throw Fmi::Exception(BCP,
-                           "[INTERNAL ERROR] Parameter " + real_name +
-                               " description not found when lovercase name " + tmp + " is present")
-          .addParameter("Provided parameter name", name)
-          .addParameter("Requested parameter name", real_name)
-          .addParameter("Found parameter names", boost::algorithm::join(available, " "))
-          .disableStackTrace();
+      available.push_back(item.first);
     }
-    else
-    {
-      return &desc_it->second;
-    }
+    throw Fmi::Exception(BCP,
+                         "[INTERNAL ERROR] Parameter " + real_name +
+                             " description not found when lovercase name " + tmp + " is present")
+        .addParameter("Provided parameter name", name)
+        .addParameter("Requested parameter name", real_name)
+        .addParameter("Found parameter names", boost::algorithm::join(available, " "))
+        .disableStackTrace();
+  }
+  return &desc_it->second;
 }
 
 std::string SmartMet::Plugin::WFS::StoredQueryConfig::get_title(const std::string& language) const

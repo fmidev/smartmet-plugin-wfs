@@ -631,7 +631,7 @@ wfs_winterweather_probabilities_query_handler_create(SmartMet::Spine::Reactor* r
   try
   {
     auto* qh = new StoredWWProbabilityQueryHandler(
-        reactor, std::move(config), pluginData, std::move(templateFileName));
+        reactor, config, pluginData, templateFileName);
     std::shared_ptr<SmartMet::Plugin::WFS::StoredQueryHandlerBase> result(qh);
     return result;
   }
