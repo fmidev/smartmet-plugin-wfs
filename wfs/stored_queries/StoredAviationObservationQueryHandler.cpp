@@ -100,7 +100,7 @@ void bw::StoredAviationObservationQueryHandler::query(const StoredQuery& query,
       std::map<std::string, SmartMet::Spine::LocationPtr> validIcaoCodes;
 
       const bool returnOnlyLatest =
-          (params.get_optional<bool>(P_RETURN_ONLY_LATEST), false);
+          params.get_optional<bool>(P_RETURN_ONLY_LATEST, false);
 
       // Search the name
       Locus::QueryOptions nameSearchOptions;
