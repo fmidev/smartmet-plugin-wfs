@@ -4,7 +4,9 @@
 #include <macgyver/TypeName.h>
 #include <macgyver/Exception.h>
 #include <algorithm>
+#include <array>
 #include <cstdio>
+#include <cstring>
 #include <set>
 
 namespace bw = SmartMet::Plugin::WFS;
@@ -162,20 +164,17 @@ void OBStream::put_double(double value)
   try
   {
     int first = 0;
-    union {
-      uint8_t c[8];
-      double d;
-    } tmp;
-    tmp.d = value;
+    std::array<uint8_t, 8> bytes{};
+    std::memcpy(bytes.data(), &value, sizeof(value));
 
-    for (first = 0; (first < 7) and (tmp.c[first] == 0); first++)
+    for (first = 0; (first < 7) and (bytes[first] == 0); first++)
     {
     }
 
     put_bits(first, 3);
     for (int i = first; i <= 7; i++)
     {
-      put_bits(tmp.c[i], 8);
+      put_bits(bytes[i], 8);
     }
   }
   catch (...)
@@ -467,18 +466,16 @@ double IBStream::get_double()
 {
   try
   {
-    union {
-      uint8_t c[8];
-      double d;
-    } tmp;
-    std::fill(tmp.c, tmp.c + 8, 0);
+    std::array<uint8_t, 8> bytes{};
     unsigned first = get_bits(3);
     for (unsigned i = first; i <= 7; i++)
     {
-      tmp.c[i] = static_cast<uint8_t>(get_bits(8));
+      bytes[i] = static_cast<uint8_t>(get_bits(8));
     }
 
-    return tmp.d;
+    double value = 0;
+    std::memcpy(&value, bytes.data(), sizeof(value));
+    return value;
   }
   catch (...)
   {

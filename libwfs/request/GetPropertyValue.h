@@ -267,7 +267,7 @@ class GetPropertyValue : public RequestBase
   std::string xpath_string;
   StandardPresentationParameters spp;
   QueryResponseCache& query_cache;
-  bool fast;
+  bool fast = false;
 };
 
 }  // namespace Request

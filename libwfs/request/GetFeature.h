@@ -68,7 +68,7 @@ class GetFeature : public RequestBase
   std::vector<std::shared_ptr<QueryBase> > queries;
   StandardPresentationParameters spp;
   QueryResponseCache& query_cache;
-  bool fast;
+  bool fast = false;
 };
 
 }  // namespace Request

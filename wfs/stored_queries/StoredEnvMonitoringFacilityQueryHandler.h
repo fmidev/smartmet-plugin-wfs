@@ -56,7 +56,7 @@ class StoredEnvMonitoringFacilityQueryHandler : public StoredQueryHandlerBase,
 
   struct StationData
   {
-    int64_t station_id;
+    int64_t station_id = 0;
     SmartMet::Engine::Observation::QueryResult::ValueVectorType::const_iterator station_name;
     SmartMet::Engine::Observation::QueryResult::ValueVectorType::const_iterator station_start;
     SmartMet::Engine::Observation::QueryResult::ValueVectorType::const_iterator station_end;
@@ -70,7 +70,7 @@ class StoredEnvMonitoringFacilityQueryHandler : public StoredQueryHandlerBase,
 
   struct StationGroup
   {
-    int64_t station_id;
+    int64_t station_id = 0;
     SmartMet::Engine::Observation::QueryResult::ValueVectorType::const_iterator group_id;
     SmartMet::Engine::Observation::QueryResult::ValueVectorType::const_iterator group_name;
   };
@@ -79,7 +79,7 @@ class StoredEnvMonitoringFacilityQueryHandler : public StoredQueryHandlerBase,
 
   struct NetworkMembership
   {
-    int64_t station_id;
+    int64_t station_id = 0;
     SmartMet::Engine::Observation::QueryResult::ValueVectorType::const_iterator network_id;
     SmartMet::Engine::Observation::QueryResult::ValueVectorType::const_iterator member_code;
   };

@@ -53,17 +53,17 @@ class StoredGridQueryHandler : public StoredQueryHandlerBase,
 
     std::vector<std::pair<std::string, FmiParameterName> > paramInfos;
 
-    unsigned int xdim;
+    unsigned int xdim = 0;
 
-    unsigned int ydim;
+    unsigned int ydim = 0;
 
-    float ll_lon;
+    float ll_lon = 0.0F;
 
-    float ll_lat;
+    float ll_lat = 0.0F;
 
-    float ur_lon;
+    float ur_lon = 0.0F;
 
-    float ur_lat;
+    float ur_lat = 0.0F;
   };
 
   using point_t = boost::geometry::model::point<float, 2, boost::geometry::cs::cartesian>;
@@ -103,13 +103,13 @@ class StoredGridQueryHandler : public StoredQueryHandlerBase,
     std::string producer_name;
     std::string model_path;
 
-    std::size_t first_data_ind;
-    std::size_t last_data_ind;
+    std::size_t first_data_ind = 0;
+    std::size_t last_data_ind = 0;
 
-    unsigned long scaleFactor;
-    unsigned long precision;
+    unsigned long scaleFactor = 0;
+    unsigned long precision = 0;
 
-    bool includeDebugData;
+    bool includeDebugData = false;
 
     Query(const std::shared_ptr<const StoredQueryConfig>& config);
     ~Query();

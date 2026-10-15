@@ -39,6 +39,8 @@ class StoredQueryMap final : private FileContentChecker
   StoredQueryMap(SmartMet::Spine::Reactor* theReactor, PluginImpl& plugin_impl);
 
   ~StoredQueryMap() override;
+  StoredQueryMap(const StoredQueryMap&) = delete;
+  StoredQueryMap& operator=(const StoredQueryMap&) = delete;
 
   void shutdown();
 
@@ -129,8 +131,8 @@ class StoredQueryMap final : private FileContentChecker
   {
     std::filesystem::path config_dir;
     std::filesystem::path template_dir;
-    Fmi::DirectoryMonitor::Watcher watcher;
-    int num_updates;
+    Fmi::DirectoryMonitor::Watcher watcher = 0;
+    int num_updates = 0;
   };
 
   std::map<Fmi::DirectoryMonitor::Watcher, ConfigDirInfo> config_dirs;

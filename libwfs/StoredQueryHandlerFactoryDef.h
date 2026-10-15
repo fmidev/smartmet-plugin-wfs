@@ -21,7 +21,7 @@ class StoredQueryHandlerFactoryDef
         (*)(SmartMet::Spine::Reactor *, StoredQueryConfig::Ptr, PluginImpl &, std::optional<std::string>);
 
  private:
-  unsigned char signature[20];
+  unsigned char signature[20]{};
   factory_t factory;
 
  public:

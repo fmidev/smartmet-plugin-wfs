@@ -160,7 +160,7 @@ SmartMet::Spine::Value StoredQueryParamDef::readValue(const std::string& value) 
 
       return result;
     }
-    catch (const boost::bad_lexical_cast& err)
+    catch (const boost::bad_lexical_cast&)
     {
       Fmi::Exception exception(
           BCP, "Invalid stored query parameter value in '" + value + "'!", nullptr);

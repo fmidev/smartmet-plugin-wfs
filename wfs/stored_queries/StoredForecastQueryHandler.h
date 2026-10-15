@@ -44,7 +44,7 @@ class StoredForecastQueryHandler : public StoredQueryHandlerBase,
     std::vector<SmartMet::Spine::Parameter> data_params;
     std::string keyword;
     double max_distance;
-    double max_np_distance;
+    double max_np_distance = 0.0;
     std::string missing_text;
     std::string language;
     std::shared_ptr<const std::locale> output_locale;

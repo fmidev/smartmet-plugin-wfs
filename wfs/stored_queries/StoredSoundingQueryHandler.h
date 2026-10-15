@@ -67,7 +67,7 @@ class StoredSoundingQueryHandler : public StoredQueryHandlerBase,
     Fmi::DateTime messageTime;
     Fmi::DateTime launchTime;
     Fmi::DateTime soundingEnd;
-    int soundingType;
+    int soundingType = 0;
   };
   using RadioSoundingMap = std::map<RadioSounding::Id, RadioSounding>;
 

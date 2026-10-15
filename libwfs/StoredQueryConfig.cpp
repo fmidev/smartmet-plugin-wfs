@@ -319,7 +319,7 @@ void SmartMet::Plugin::WFS::StoredQueryConfig::parse_config()
 	throw error;
       }
     }
-    catch (const libconfig::ConfigException& err)
+    catch (const libconfig::ConfigException&)
     {
       std::cerr << "Failed to parse stored query configuration file '" << get_file_name() << "'"
                 << std::endl;
@@ -561,7 +561,7 @@ bool SmartMet::Plugin::WFS::StoredQueryConfig::last_write_time_changed() const
   {
       return config_write_time() != config_last_write_time;
   }
-  catch (const Fmi::Exception& e)
+  catch (const Fmi::Exception&)
   {
     throw;
   }

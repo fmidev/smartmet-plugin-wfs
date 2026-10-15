@@ -285,7 +285,7 @@ StoredQueryParamRegistry::get_param_info() const
         } else {
             const auto* p_array = dynamic_cast<const ArrayParameterRec*>(p1);
             if (p_array) {
-                HandlerFactorySummary::SizeInfo size_info;
+                HandlerFactorySummary::SizeInfo size_info{};
                 size_info.min_size = p_array->min_size;
                 size_info.max_size = p_array->max_size;
                 size_info.step = p_array->step;

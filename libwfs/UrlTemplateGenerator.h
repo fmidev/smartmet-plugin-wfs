@@ -28,8 +28,8 @@ class UrlTemplateGenerator
   struct ParamRef
   {
     std::string name;
-    bool omit_empty;
-    bool separate_param;
+    bool omit_empty = false;
+    bool separate_param = false;
   };
 
   struct StringParam

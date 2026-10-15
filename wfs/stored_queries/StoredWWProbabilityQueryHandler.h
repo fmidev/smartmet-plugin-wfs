@@ -61,7 +61,7 @@ struct ProbabilityQueryParam
   OGRSpatialReference& sr;
   SmartMet::Spine::BoundingBox bbox;
   std::locale outputLocale;
-  bool nearestValid;
+  bool nearestValid = false;
   std::string tz_name;
   TS::TimeSeriesGenerator::LocalTimeList tlist;
   SmartMet::Spine::LocationPtr loc;

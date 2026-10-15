@@ -292,7 +292,7 @@ std::string ErrorResponseGenerator::format_message(CTPP::CDT& hash)
       auto exception_formatter = plugin_impl.get_exception_formatter();
       exception_formatter->process(hash, output, log_messages);
     }
-    catch (const std::exception& err)
+    catch (const std::exception&)
     {
       std::cerr << METHOD_NAME << ": failed to format error message. CTTP2 error messages are:"
                 << log_messages.str() << std::endl;

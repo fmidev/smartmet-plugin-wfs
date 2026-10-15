@@ -511,6 +511,8 @@ uint StoredGridForecastQueryHandler::processGridQuery(Query& wfsQuery,
           exception.addDetail(
               "or there are no producer list available in the grid engine's configuration file.");
           break;
+        default:
+          break;
       }
       throw exception;
     }

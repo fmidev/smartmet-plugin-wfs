@@ -53,7 +53,7 @@ class StoredObsQueryHandler : public StoredQueryHandlerBase,
   struct ParamIndexEntry
   {
 	/** Parameter index in obsengine response or -1 for special parameters generated separately */
-	int ind;
+	int ind = 0;
 	
 	/** Parameter name */
 	std::string name;
@@ -87,7 +87,7 @@ class StoredObsQueryHandler : public StoredQueryHandlerBase,
 
   struct GroupRec
   {
-    int group_id;
+    int group_id = 0;
     std::string feature_id;
     std::map<std::string, std::string> param_ids;
   };
@@ -97,8 +97,8 @@ class StoredObsQueryHandler : public StoredQueryHandlerBase,
    */
   struct SiteRec
   {
-    int group_id;
-    int ind_in_group;
+    int group_id = 0;
+    int ind_in_group = 0;
     std::vector<int> row_index_vect;
   };
 

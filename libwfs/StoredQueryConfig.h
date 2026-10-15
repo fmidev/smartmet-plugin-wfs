@@ -84,8 +84,8 @@ class StoredQueryConfig : public SmartMet::Spine::ConfigBase
     std::string name;
     SmartMet::Spine::MultiLanguageStringP title;
     SmartMet::Spine::MultiLanguageStringP abstract;
-    int min_occurs;
-    int max_occurs;
+    int min_occurs = 0;
+    int max_occurs = 0;
     std::string xml_type;
     StoredQueryParamDef param_def;
     std::optional<SmartMet::Spine::Value> lower_limit;
@@ -205,7 +205,7 @@ class StoredQueryConfig : public SmartMet::Spine::ConfigBase
   std::string query_id;
   std::time_t config_last_write_time;
 
-  int expires_seconds;  ///< For the expires entity-header field. After that the response is
+  int expires_seconds = 0;  ///< For the expires entity-header field. After that the response is
                         /// considered stale.
                         /**
                          *  @brief The name of factory method procedure for creating request handler object
@@ -228,10 +228,10 @@ class StoredQueryConfig : public SmartMet::Spine::ConfigBase
   std::map<std::string, std::string> case_map;
 
   std::vector<std::string> param_names;
-  bool disabled;
-  bool demo;
-  bool test;
-  int debug_level;
+  bool disabled = false;
+  bool demo = false;
+  bool test = false;
+  int debug_level = 0;
   const Hosts& hosts;
   const Config* plugin_config;
 };

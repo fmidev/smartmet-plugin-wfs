@@ -47,7 +47,7 @@ class WfsFeatureDef
   SmartMet::Spine::MultiLanguageStringP abstract;
   std::string default_crs_url;
   std::vector<std::string> other_crs_urls;
-  std::array<double, 4> bbox;
+  std::array<double, 4> bbox{};
   bool hidden;
 };
 

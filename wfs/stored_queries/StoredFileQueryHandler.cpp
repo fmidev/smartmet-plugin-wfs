@@ -54,7 +54,7 @@ bw::StoredFileQueryHandler::StoredFileQueryHandler(SmartMet::Spine::Reactor* rea
             bw::DataSetDefinition::create(*config, ds_list_item);
         ds_list.push_back(ds_def);
       }
-      catch (const std::exception& err)
+      catch (const std::exception&)
       {
         auto error = Fmi::Exception::Trace(BCP, "Operation failed"); // rethrows if boost::thread_interrupt catched
         error.disableStackTraceRecursive();

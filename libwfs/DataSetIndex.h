@@ -87,7 +87,7 @@ class DataSetDefinition : public std::enable_shared_from_this<DataSetDefinition>
   boost::basic_regex<char> file_regex;
   std::set<std::string> params;
   std::set<int> levels;
-  box_t bbox;
+  box_t bbox{};
   boost::basic_regex<char> origin_time_extract;
   boost::basic_regex<char> origin_time_match;
   std::string origin_time_replace;

@@ -99,13 +99,13 @@ struct ContourQueryResult
 // for example heavy snow areas at 12:00, 13:00, 14:00
 struct CoverageQueryResult : ContourQueryResult
 {
-  double lolimit;
-  double hilimit;
+  double lolimit = 0.0;
+  double hilimit = 0.0;
 };
 
 struct IsolineQueryResult : ContourQueryResult
 {
-  double isovalue;
+  double isovalue = 0.0;
 };
 
 using ContourQueryResultPtr = std::shared_ptr<ContourQueryResult>;

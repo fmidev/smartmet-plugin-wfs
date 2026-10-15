@@ -203,7 +203,7 @@ bw::ContourQueryResultSet bw::StoredContourQueryHandler::getContours_qEngine(
 
         geoms = contour_engine->contour(qhash, queryParameter.sr, *matrix, *coords, options);
       }
-      catch (const std::exception& e)
+      catch (const std::exception&)
       {
         continue;
       }
@@ -341,6 +341,8 @@ bw::ContourQueryResultSet bw::StoredContourQueryHandler::getContours_gridEngine(
               "The reason for this situation is usually that the given producer is unknown");
           exception.addDetail(
               "or there are no producer list available in the grid engine's configuration file.");
+          break;
+        default:
           break;
       }
       throw exception;

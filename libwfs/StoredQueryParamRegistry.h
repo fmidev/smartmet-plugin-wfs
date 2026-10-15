@@ -40,7 +40,7 @@ class StoredQueryParamRegistry : public StoredQueryConfig::Wrapper
   struct ScalarParameterRec : public ParamRecBase
   {
     std::shared_ptr<ScalarParameterTemplate> param_def;
-    bool required;
+    bool required = false;
 
      ~ScalarParameterRec() override;
   };
@@ -48,9 +48,9 @@ class StoredQueryParamRegistry : public StoredQueryConfig::Wrapper
   struct ArrayParameterRec : public ParamRecBase
   {
     std::shared_ptr<ArrayParameterTemplate> param_def;
-    std::size_t min_size;
-    std::size_t max_size;
-    std::size_t step;
+    std::size_t min_size = 0;
+    std::size_t max_size = 0;
+    std::size_t step = 0;
 
     ~ArrayParameterRec() override;
   };

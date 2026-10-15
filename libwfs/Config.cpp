@@ -173,7 +173,7 @@ std::vector<std::shared_ptr<WfsFeatureDef> > Config::read_features_config(
               new WfsFeatureDef(theCRSRegistry, languages.at(0), desc, desc->get_root()));
           result.push_back(feature_def);
         }
-        catch (const std::exception& err)
+        catch (const std::exception&)
         {
           std::cerr << SmartMet::Spine::log_time_str() << ": error reading feature description"
                     << " file '" << entry.string() << "'" << std::endl;
@@ -222,7 +222,7 @@ void Config::read_typename_config(std::map<std::string, std::string>& typename_s
         }
       }
     }
-    catch (const libconfig::ConfigException& err)
+    catch (const libconfig::ConfigException&)
     {
       std::cerr << "Failed to parse stored query configuration file '" << get_file_name() << "'"
                 << std::endl;

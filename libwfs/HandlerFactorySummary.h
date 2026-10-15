@@ -41,7 +41,7 @@ namespace WFS
         struct ParamInfo
         {
             std::string name;
-            bool mandatory;
+            bool mandatory = false;
             std::string type;
             std::string description;
             std::optional<SizeInfo> size_info;

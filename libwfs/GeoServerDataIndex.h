@@ -101,7 +101,7 @@ class GeoServerDataIndex
                  std::function<std::string(const std::string&)> >
       db_table_name_def;
   std::map<Fmi::DateTime, Item> data;
-  int debug_level;
+  int debug_level = 0;
 };
 
 }  // namespace WFS
