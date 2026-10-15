@@ -242,27 +242,6 @@ void handle_opt_param(const bw::RequestParameterMap& params,
   }
 }
 
-template <typename ValueType, typename DestType, typename Setter>
-void handle_array_param(const bw::RequestParameterMap& params,
-                        const std::string& name,
-                        DestType& dest,
-                        Setter setter)
-{
-  try
-  {
-    std::list<ValueType> tmp;
-    params.get<ValueType>(name, std::back_inserter(tmp));
-    for (auto it = tmp.begin(); it != tmp.end(); ++it)
-    {
-      (dest.*setter)(*it);
-    }
-  }
-  catch (...)
-  {
-    throw Fmi::Exception::Trace(BCP, "Operation failed!");
-  }
-}
-
 void dump_meta_query_options(const qe::MetaQueryOptions& opt)
 {
   try

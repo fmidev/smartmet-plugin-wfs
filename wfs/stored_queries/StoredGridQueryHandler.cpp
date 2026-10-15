@@ -345,47 +345,6 @@ void make_rectangle_path(NFmiSvgPath& thePath,
   }
 }
 
-template <typename ValueType, typename DestType>
-void handle_opt_param(const bw::RequestParameterMap& params,
-                      const std::string& name,
-                      DestType& dest,
-                      void (DestType::*setter)(const ValueType&))
-{
-  try
-  {
-    if (params.count(name))
-    {
-      ValueType value = params.get_single<ValueType>(name);
-      (dest.*setter)(value);
-    }
-  }
-  catch (...)
-  {
-    throw Fmi::Exception::Trace(BCP, "Operation failed!");
-  }
-}
-
-template <typename ValueType, typename DestType, typename Setter>
-void handle_array_param(const bw::RequestParameterMap& params,
-                        const std::string& name,
-                        DestType& dest,
-                        Setter setter)
-{
-  try
-  {
-    std::list<ValueType> tmp;
-    params.get<ValueType>(name, std::back_inserter(tmp));
-    for (auto it = tmp.begin(); it != tmp.end(); ++it)
-    {
-      (dest.*setter)(*it);
-    }
-  }
-  catch (...)
-  {
-    throw Fmi::Exception::Trace(BCP, "Operation failed!");
-  }
-}
-
 #if 0
 void dump_meta_query_options(const qe::MetaQueryOptions& opt)
 {
