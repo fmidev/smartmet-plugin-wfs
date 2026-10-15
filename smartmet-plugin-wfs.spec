@@ -3,7 +3,7 @@
 %define SPECNAME smartmet-plugin-%{DIRNAME}
 Summary: SmartMet WFS plugin
 Name: %{SPECNAME}
-Version: 26.10.13
+Version: 26.10.15
 Release: 1%{?dist}.fmi
 License: MIT
 Group: SmartMet/Plugins
@@ -39,44 +39,44 @@ BuildRequires: xqilla-devel
 BuildRequires: openssl-devel
 BuildRequires: bzip2-devel
 BuildRequires: zlib-devel
-BuildRequires: smartmet-library-timeseries-devel >= 26.10.11
-BuildRequires: smartmet-library-spine-devel >= 26.10.13
-BuildRequires: smartmet-library-gis-devel >= 26.10.11
-BuildRequires: smartmet-library-trax-devel >= 26.10.3
-BuildRequires: smartmet-library-locus-devel >= 26.10.3
-BuildRequires: smartmet-library-macgyver-devel >= 26.10.11
-BuildRequires: smartmet-engine-contour-devel >= 26.10.11
-BuildRequires: smartmet-engine-geonames-devel >= 26.10.11
-BuildRequires: smartmet-engine-gis-devel >= 26.9.26
-BuildRequires: smartmet-engine-grid-devel >= 26.10.13
-BuildRequires: smartmet-engine-querydata-devel >= 26.10.11
-BuildRequires: smartmet-library-grid-content-devel >= 26.10.13
-BuildRequires: smartmet-library-grid-files-devel >= 26.10.13
+BuildRequires: smartmet-library-timeseries-devel >= 26.10.15
+BuildRequires: smartmet-library-spine-devel >= 26.10.15
+BuildRequires: smartmet-library-gis-devel >= 26.10.15
+BuildRequires: smartmet-library-trax-devel >= 26.10.15
+BuildRequires: smartmet-library-locus-devel >= 26.10.15
+BuildRequires: smartmet-library-macgyver-devel >= 26.10.15
+BuildRequires: smartmet-engine-contour-devel >= 26.10.15
+BuildRequires: smartmet-engine-geonames-devel >= 26.10.15
+BuildRequires: smartmet-engine-gis-devel >= 26.10.15
+BuildRequires: smartmet-engine-grid-devel >= 26.10.15
+BuildRequires: smartmet-engine-querydata-devel >= 26.10.15
+BuildRequires: smartmet-library-grid-content-devel >= 26.10.15
+BuildRequires: smartmet-library-grid-files-devel >= 26.10.15
 %if %{with observation}
-BuildRequires: smartmet-engine-observation-devel >= 26.10.13
+BuildRequires: smartmet-engine-observation-devel >= 26.10.15
 %endif
 Requires: ctpp2
 Requires: %{smartmet_fmt}
 Requires: libcurl
 Requires: jsoncpp
 Requires: zlib
-Requires: smartmet-library-locus >= 26.10.3
-Requires: smartmet-library-macgyver >= 26.10.11
-Requires: smartmet-library-spine >= 26.10.13
-Requires: smartmet-library-timeseries >= 26.10.11
-Requires: smartmet-library-gis >= 26.10.11
-Requires: smartmet-library-trax >= 26.10.3
-Requires: smartmet-engine-contour >= 26.10.11
-Requires: smartmet-engine-geonames >= 26.10.11
-Requires: smartmet-engine-gis >= 26.9.26
-Requires: smartmet-engine-grid >= 26.10.13
-Requires: smartmet-library-grid-content >= 26.10.13
-Requires: smartmet-library-grid-files >= 26.10.13
+Requires: smartmet-library-locus >= 26.10.15
+Requires: smartmet-library-macgyver >= 26.10.15
+Requires: smartmet-library-spine >= 26.10.15
+Requires: smartmet-library-timeseries >= 26.10.15
+Requires: smartmet-library-gis >= 26.10.15
+Requires: smartmet-library-trax >= 26.10.15
+Requires: smartmet-engine-contour >= 26.10.15
+Requires: smartmet-engine-geonames >= 26.10.15
+Requires: smartmet-engine-gis >= 26.10.15
+Requires: smartmet-engine-grid >= 26.10.15
+Requires: smartmet-library-grid-content >= 26.10.15
+Requires: smartmet-library-grid-files >= 26.10.15
 %if %{with observation}
-Requires: smartmet-engine-observation >= 26.10.13
+Requires: smartmet-engine-observation >= 26.10.15
 %endif
-Requires: smartmet-engine-querydata >= 26.10.11
-Requires: smartmet-server >= 26.10.11
+Requires: smartmet-engine-querydata >= 26.10.15
+Requires: smartmet-server >= 26.10.15
 Requires: xerces-c
 Requires: xqilla
 Requires: zlib
@@ -117,19 +117,19 @@ Obsoletes: smartmet-brainstorm-wfs-debuginfo < 16.11.1
 #TestRequires: smartmet-test-db >= 26.5.8
 #TestRequires: smartmet-test-data >= 26.8.26
 #TestRequires: smartmet-utils-devel >= 26.9.3
-#TestRequires: smartmet-library-macgyver >= 26.10.11
-#TestRequires: smartmet-library-gis >= 26.10.11
-#TestRequires: smartmet-library-newbase >= 26.10.13
-#TestRequires: smartmet-library-spine-plugin-test >= 26.10.11
-#TestRequires: smartmet-engine-geonames >= 26.10.11
-#TestRequires: smartmet-engine-gis >= 26.9.26
-#TestRequires: smartmet-engine-querydata >= 26.10.11
+#TestRequires: smartmet-library-macgyver >= 26.10.15
+#TestRequires: smartmet-library-gis >= 26.10.15
+#TestRequires: smartmet-library-newbase >= 26.10.15
+#TestRequires: smartmet-library-spine-plugin-test >= 26.10.15
+#TestRequires: smartmet-engine-geonames >= 26.10.15
+#TestRequires: smartmet-engine-gis >= 26.10.15
+#TestRequires: smartmet-engine-querydata >= 26.10.15
 %if %{with observation}
-#TestRequires: smartmet-engine-observation >= 26.10.13
+#TestRequires: smartmet-engine-observation >= 26.10.15
 %endif
-#TestRequires: smartmet-engine-grid >= 26.10.13
+#TestRequires: smartmet-engine-grid >= 26.10.15
 #TestRequires: redis
-#TestRequires: smartmet-library-grid-files-test >= 26.10.11
+#TestRequires: smartmet-library-grid-files-test >= 26.10.15
 # Required by top level Makefile
 #TestRequires: jsoncpp-devel
 #TestRequires: libwebp13
@@ -139,10 +139,10 @@ SmartMet WFS plugin
 
 %package -n %{SPECNAME}-devel
 Summary: SmartMet WFS plugin development files
-Requires: smartmet-library-spine-devel >= 26.10.13
-Requires: smartmet-library-gis-devel >= 26.10.11
-Requires: smartmet-library-locus-devel >= 26.10.3
-Requires: smartmet-library-macgyver-devel >= 26.10.11
+Requires: smartmet-library-spine-devel >= 26.10.15
+Requires: smartmet-library-gis-devel >= 26.10.15
+Requires: smartmet-library-locus-devel >= 26.10.15
+Requires: smartmet-library-macgyver-devel >= 26.10.15
 Requires: %{SPECNAME} = %{version}-%{release}
 %description -n %{SPECNAME}-devel
 SmartMet WFS plugin development files (for building testsuite without rebuilding plugin)
@@ -176,9 +176,9 @@ rm -rf $RPM_BUILD_ROOT
 %{_includedir}/smartmet/plugin/wfs/request/*.h
 
 %changelog
-* Tue Oct 13 2026 Mika Heiskanen <mika.heiskanen@fmi.fi> - 26.10.13-1.fmi
+* Thu Oct 15 2026 Mika Heiskanen <mika.heiskanen@fmi.fi> - 26.10.15-1.fmi
 - Declare member functions and parameters const where nothing is modified (const correctness), no functional changes
-- Requires 26.10.13 versions of newbase, spine, grid-files, grid-content, engine-observation, engine-grid due to their ABI changes
+- Requires 26.10.15 versions of newbase, spine, grid-files, grid-content, engine-observation, engine-grid due to their ABI changes
 - Fixed mechanical clang-tidy findings (internal linkage, unused parameters, initialization, redundant code), no functional changes
 - Fixed clang-tidy style findings (loops, nested conditionals, dead code)
 - Fixed clang-tidy correctness findings (member initialization, rule of five, printf formats, dead stores)
