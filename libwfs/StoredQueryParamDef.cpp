@@ -59,7 +59,6 @@ void StoredQueryParamDef::parse_def(const std::string& desc)
                       bool_p     [bl::var(value_type) = BOOL] |
                       point_p    [bl::var(value_type) = POINT] |
                       bbox_p     [bl::var(value_type) = BBOX]);
-    ;
 
     qi_rule array_dim_p =
         qi::char_('[') >> qi::uint_[(bl::var(min_size) = bl::_1, bl::var(max_size) = bl::_1)] >>

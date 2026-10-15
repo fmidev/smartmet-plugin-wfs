@@ -36,7 +36,6 @@ std::pair<std::string, bool> to_opt_string(const XMLCh* src)
     }
 
     return std::make_pair<std::string, bool>("", false);
-    ;
   }
   catch (...)
   {
@@ -300,7 +299,7 @@ xercesc::DOMLSSerializer* create_dom_serializer()
 {
   try
   {
-      auto features = to_xmlch("LS");;
+      auto features = to_xmlch("LS");
 
     xercesc::DOMImplementationLS* impl = nullptr;
     xercesc::DOMImplementation* impl_base =

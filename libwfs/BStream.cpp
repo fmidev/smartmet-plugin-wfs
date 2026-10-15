@@ -541,10 +541,8 @@ Fmi::DateTime IBStream::get_ptime()
       {
         return Fmi::DateTime::POS_INFINITY;
       }
-      else
-      {
-        return Fmi::DateTime::NEG_INFINITY;
-      }
+
+      return Fmi::DateTime::NEG_INFINITY;
     }
     else
     {

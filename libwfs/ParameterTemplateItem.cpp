@@ -167,16 +167,14 @@ ParameterTemplateItem::get_value(const RequestParameterMap& req_param_map,
           << " supported for current parameter!";
       throw Fmi::Exception(BCP, msg.str());
     }
-    else
-    {
-      // Fail with parse error when both
-      //   1) the parameter is not found in WFS request
-      //   2) no default value is provided
-      Fmi::Exception exception(
-          BCP, "Mandatory parameter '" + *param_ref + "' not provided in WFS request!");
-      exception.addParameter(WFS_EXCEPTION_CODE, WFS_OPERATION_PARSING_FAILED);
-      throw exception;
-    }
+
+    // Fail with parse error when both
+    //   1) the parameter is not found in WFS request
+    //   2) no default value is provided
+    Fmi::Exception exception(
+        BCP, "Mandatory parameter '" + *param_ref + "' not provided in WFS request!");
+    exception.addParameter(WFS_EXCEPTION_CODE, WFS_OPERATION_PARSING_FAILED);
+    throw exception;
   }
   catch (...)
   {
@@ -203,7 +201,7 @@ bool ParameterTemplateItem::get_value(
       result = SmartMet::Spine::Value(*plain_text);
       return true;
     }
-    else if (param_ref)
+    if (param_ref)
     {
       const std::string& ref_name = *param_ref;
       auto value_vect = req_param_map.get_values(ref_name);

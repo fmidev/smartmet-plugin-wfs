@@ -691,7 +691,7 @@ using namespace SmartMet::Plugin::WFS;
 
 std::shared_ptr<SmartMet::Plugin::WFS::StoredQueryHandlerBase>
 wfs_stored_air_nuclide_handler_create(SmartMet::Spine::Reactor* reactor,
-                                      StoredQueryConfig::Ptr config,
+                                      const StoredQueryConfig::Ptr& config,
                                       PluginImpl& plugin_data,
                                       std::optional<std::string> template_file_name)
 {

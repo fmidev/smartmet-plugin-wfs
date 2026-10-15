@@ -174,7 +174,7 @@ class GetPropertyValue : public RequestBase
    *   @param is_schemalocation_set value changes to "true", when valid schema location has been
    * copied from query response to result tree.
    */
-  void extract_property(std::shared_ptr<xercesc::DOMDocument> result,
+  void extract_property(const std::shared_ptr<xercesc::DOMDocument>& result,
                         const std::string& response,
                         int& cumulative_num_returned,
                         int& cumulative_num_matched,

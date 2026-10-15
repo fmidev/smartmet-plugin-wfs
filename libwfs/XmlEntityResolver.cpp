@@ -209,10 +209,9 @@ try
       return true;
     }  // Not found and downloading schemas is not allowed
     return false;
-  } else {
-    result = it->second;
-    return true;
   }
+  result = it->second;
+  return true;
 } catch (...) {
     throw Fmi::Exception::Trace(BCP, "Operation failed!");
 }

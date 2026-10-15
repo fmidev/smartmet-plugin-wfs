@@ -326,7 +326,7 @@ using namespace SmartMet::Plugin::WFS;
 
 std::shared_ptr<SmartMet::Plugin::WFS::StoredQueryHandlerBase>
 wfs_stored_env_monitoring_network_handler_create(SmartMet::Spine::Reactor* reactor,
-                                                 StoredQueryConfig::Ptr config,
+                                                 const StoredQueryConfig::Ptr& config,
                                                  PluginImpl& plugin_data,
                                                  std::optional<std::string> template_file_name)
 {

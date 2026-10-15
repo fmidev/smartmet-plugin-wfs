@@ -428,9 +428,9 @@ namespace
 {
 using namespace SmartMet::Plugin::WFS;
 
-std::shared_ptr<SmartMet::Plugin::WFS::StoredQueryHandlerBase>
-wfs_stored_geoserver_handler_create(SmartMet::Spine::Reactor* reactor,
-                                    StoredQueryConfig::Ptr config,
+std::shared_ptr<SmartMet::Plugin::WFS::StoredQueryHandlerBase> wfs_stored_geoserver_handler_create(
+SmartMet::Spine::Reactor* reactor,
+                                    const StoredQueryConfig::Ptr& config,
                                     PluginImpl& plugin_data,
                                     std::optional<std::string> template_file_name)
 {

@@ -74,23 +74,21 @@ std::string bw::RequestBase::extract_request_name(const xercesc::DOMDocument& do
     {
       return name_info.first;
     }
+
+    if (name_info.second.empty())
+    {
+      std::ostringstream msg;
+      msg << "SmartMet::Plugin::WFS::Xml::RequestBase::extractRequestName():"
+          << " no namespace provided but " << WFS_NAMESPACE_URI << " expected";
+      throw Fmi::Exception(BCP, msg.str());
+    }
     else
     {
-      if (name_info.second.empty())
-      {
-        std::ostringstream msg;
-        msg << "SmartMet::Plugin::WFS::Xml::RequestBase::extractRequestName():"
-            << " no namespace provided but " << WFS_NAMESPACE_URI << " expected";
-        throw Fmi::Exception(BCP, msg.str());
-      }
-      else
-      {
-        std::ostringstream msg;
-        msg << "SmartMet::Plugin::WFS::Xml::RequestBase::extractRequestName():"
-            << " unexpected XML namespace " << name_info.second << " when " << WFS_NAMESPACE_URI
-            << " expected";
-        throw Fmi::Exception(BCP, msg.str());
-      }
+      std::ostringstream msg;
+      msg << "SmartMet::Plugin::WFS::Xml::RequestBase::extractRequestName():"
+          << " unexpected XML namespace " << name_info.second << " when " << WFS_NAMESPACE_URI
+          << " expected";
+      throw Fmi::Exception(BCP, msg.str());
     }
 
     return name_info.first;

@@ -196,7 +196,7 @@ bw::GeoServerDataIndex::GeoServerDataIndex(
 
 bw::GeoServerDataIndex::GeoServerDataIndex(
     GeoServerDB& db, std::function<std::string(const std::string&)> db_table_name_cb)
-    : db(db), db_table_name_def(db_table_name_cb), debug_level(0)
+    : db(db), db_table_name_def(db_table_name_cb)
 {
   try
   {
@@ -296,10 +296,8 @@ std::string bw::GeoServerDataIndex::get_db_table_name(const std::string& layer_n
         exception.addDetail(msg.str());
         throw exception;
       }
-      else
-      {
-        return pos->second;
-      }
+
+      return pos->second;
     }
     else
     {

@@ -144,9 +144,9 @@ namespace
 {
 std::shared_ptr<bw::StoredQueryHandlerBase> wfs_get_data_set_by_id_handler_create(
     SmartMet::Spine::Reactor* reactor,
-    bw::StoredQueryConfig::Ptr config,
+    const bw::StoredQueryConfig::Ptr& config,
     bw::PluginImpl& plugin_data,
-    std::optional<std::string> /* unused template_file_name */)
+    const std::optional<std::string>& /* unused template_file_name */)
 {
   try
   {

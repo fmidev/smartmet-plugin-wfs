@@ -78,7 +78,7 @@ SmartMet::Spine::Value ScalarParameterTemplate::get_value(
       // Empty array: treat as empty value
       return {};
     }
-    else if (arr.size() == 1)
+    if (arr.size() == 1)
     {
       return arr.at(0);
     }

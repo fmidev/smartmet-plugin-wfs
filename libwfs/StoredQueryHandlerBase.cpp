@@ -238,7 +238,7 @@ std::pair<std::string, std::string> StoredQueryHandlerBase::get_2D_coord(
 }
 
 void StoredQueryHandlerBase::set_2D_coord(
-    std::shared_ptr<SmartMet::Spine::CRSRegistry::Transformation> transformation,
+    const std::shared_ptr<SmartMet::Spine::CRSRegistry::Transformation>& transformation,
     double sx,
     double sy,
     CTPP::CDT& hash)

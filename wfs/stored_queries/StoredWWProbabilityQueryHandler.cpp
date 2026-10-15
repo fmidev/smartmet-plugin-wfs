@@ -624,7 +624,7 @@ using namespace SmartMet::Plugin::WFS;
 
 std::shared_ptr<SmartMet::Plugin::WFS::StoredQueryHandlerBase>
 wfs_winterweather_probabilities_query_handler_create(SmartMet::Spine::Reactor* reactor,
-                                                     StoredQueryConfig::Ptr config,
+                                                     const StoredQueryConfig::Ptr& config,
                                                      PluginImpl& pluginData,
                                                      std::optional<std::string> templateFileName)
 {

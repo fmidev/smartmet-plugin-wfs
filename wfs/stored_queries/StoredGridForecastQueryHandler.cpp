@@ -388,7 +388,6 @@ void StoredGridForecastQueryHandler::query(const StoredQuery& stored_query,
                 if (show_height)
                 {
                   group["stationList"][station_ind]["elev"] = query.result->get(ind_elev, i);
-                  ;
                 }
 
                 group["stationList"][station_ind]["iso2"] = country_code;
@@ -1123,7 +1122,7 @@ using namespace SmartMet::Plugin::WFS;
 
 std::shared_ptr<SmartMet::Plugin::WFS::StoredQueryHandlerBase> wfs_grid_forecast_handler_create(
     SmartMet::Spine::Reactor* reactor,
-    std::shared_ptr<StoredQueryConfig> config,
+    const std::shared_ptr<StoredQueryConfig>& config,
     PluginImpl& plugin_impl,
     std::optional<std::string> template_file_name)
 {

@@ -45,15 +45,13 @@ std::optional<GmlSRSInformationGroup> read_gml_srs_info_group(const xercesc::DOM
     {
       return result;
     }
-    else
-    {
-      Fmi::Exception exception(BCP, "Invalid attribute usage!");
-      exception.addDetail(
-          "Both attributes 'axisLabels' and 'uomLabels' or non of them must be specified.");
-      exception.addParameter(WFS_EXCEPTION_CODE, WFS_OPERATION_PROCESSING_FAILED);
-      exception.addParameter("XML", xml2string(&element));
-      throw exception;
-    }
+
+    Fmi::Exception exception(BCP, "Invalid attribute usage!");
+    exception.addDetail(
+        "Both attributes 'axisLabels' and 'uomLabels' or non of them must be specified.");
+    exception.addParameter(WFS_EXCEPTION_CODE, WFS_OPERATION_PROCESSING_FAILED);
+    exception.addParameter("XML", xml2string(&element));
+    throw exception;
   }
   catch (...)
   {

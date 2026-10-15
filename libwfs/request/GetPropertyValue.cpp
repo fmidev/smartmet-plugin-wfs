@@ -73,7 +73,6 @@ void GetPropertyValue::execute(std::ostream& output) const
     int num_matched = 0;
     bool is_timestamp_set = false;
     bool is_schemalocation_set = false;
-    ;
 
     if (!queries.empty())
     {
@@ -283,7 +282,7 @@ void GetPropertyValue::filter(const std::shared_ptr<xercesc::DOMDocument>& resul
   }
 }
 
-void GetPropertyValue::extract_property(std::shared_ptr<xercesc::DOMDocument> result,
+void GetPropertyValue::extract_property(const std::shared_ptr<xercesc::DOMDocument>& result,
                                         const std::string& response,
                                         int& cumulative_num_returned,
                                         int& cumulative_num_matched,

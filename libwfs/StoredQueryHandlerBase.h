@@ -147,7 +147,7 @@ protected:
       double Y);
 
   static void set_2D_coord(
-      std::shared_ptr<SmartMet::Spine::CRSRegistry::Transformation> transformation,
+      const std::shared_ptr<SmartMet::Spine::CRSRegistry::Transformation>& transformation,
       double X,
       double Y,
       CTPP::CDT& hash);

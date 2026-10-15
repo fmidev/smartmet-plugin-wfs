@@ -157,10 +157,8 @@ boost::tribool ArrayParameterTemplate::get_value(
     {
       return boost::indeterminate;
     }
-    else
-    {
-      return false;
-    }
+
+    return false;
   }
   catch (...)
   {

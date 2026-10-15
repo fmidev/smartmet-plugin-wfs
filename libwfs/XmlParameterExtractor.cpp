@@ -357,13 +357,11 @@ std::vector<SmartMet::Spine::Value> ParameterExtractor::extract_gml_pos(
           << " (only size 2 is supported)";
       throw Fmi::Exception(BCP, msg.str());
     }
-    else
-    {
-      std::ostringstream msg;
-      msg << "Exactly one instance of element {" << GML_NAMESPACE_URI << "}pos expected. Got '"
-          << xml2string(&elem) << "'";
-      throw Fmi::Exception(BCP, msg.str());
-    }
+
+    std::ostringstream msg;
+    msg << "Exactly one instance of element {" << GML_NAMESPACE_URI << "}pos expected. Got '"
+        << xml2string(&elem) << "'";
+    throw Fmi::Exception(BCP, msg.str());
   }
   catch (...)
   {
@@ -408,13 +406,11 @@ std::vector<SmartMet::Spine::Value> ParameterExtractor::extract_gml_envelope(
           << " (2 expected)";
       throw Fmi::Exception(BCP, msg.str());
     }
-    else
-    {
-      std::ostringstream msg;
-      msg << "Exactly one instance of element {" << GML_NAMESPACE_URI << "}Envelope expected. Got '"
-          << xml2string(&elem) << "'";
-      throw Fmi::Exception(BCP, msg.str());
-    }
+
+    std::ostringstream msg;
+    msg << "Exactly one instance of element {" << GML_NAMESPACE_URI << "}Envelope expected. Got '"
+        << xml2string(&elem) << "'";
+    throw Fmi::Exception(BCP, msg.str());
   }
   catch (...)
   {

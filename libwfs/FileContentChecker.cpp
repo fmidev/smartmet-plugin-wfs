@@ -48,12 +48,10 @@ bool FileContentChecker::check_file_hash(const std::string& fn)
         // SHA256 digest has not changed since last check: no need to reread
         return false;
       }
-      else
-      {
-        // File SHA256 digest has changed: should reread
-        it->second = digest;
-        return true;
-      }
+
+      // File SHA256 digest has changed: should reread
+      it->second = digest;
+      return true;
     } else {
       // File is too long: let's ignore it
       return false;

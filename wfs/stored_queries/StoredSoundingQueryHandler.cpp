@@ -954,7 +954,7 @@ using namespace SmartMet::Plugin::WFS;
 
 std::shared_ptr<SmartMet::Plugin::WFS::StoredQueryHandlerBase> wfsStoredSoundingHandlerCreate(
     SmartMet::Spine::Reactor* reactor,
-    StoredQueryConfig::Ptr config,
+    const StoredQueryConfig::Ptr& config,
     PluginImpl& pluginData,
     std::optional<std::string> templateFileName)
 {
