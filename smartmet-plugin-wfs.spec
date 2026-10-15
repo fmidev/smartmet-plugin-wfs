@@ -53,7 +53,7 @@ BuildRequires: smartmet-engine-querydata-devel >= 26.10.15
 BuildRequires: smartmet-library-grid-content-devel >= 26.10.15
 BuildRequires: smartmet-library-grid-files-devel >= 26.10.15
 %if %{with observation}
-BuildRequires: smartmet-engine-observation-devel >= 26.10.15
+BuildRequires: smartmet-engine-observation-devel >= 26.10.15-3
 %endif
 Requires: ctpp2
 Requires: %{smartmet_fmt}
@@ -73,7 +73,7 @@ Requires: smartmet-engine-grid >= 26.10.15
 Requires: smartmet-library-grid-content >= 26.10.15
 Requires: smartmet-library-grid-files >= 26.10.15
 %if %{with observation}
-Requires: smartmet-engine-observation >= 26.10.15
+Requires: smartmet-engine-observation >= 26.10.15-3
 %endif
 Requires: smartmet-engine-querydata >= 26.10.15
 Requires: smartmet-server >= 26.10.15
@@ -125,10 +125,10 @@ Obsoletes: smartmet-brainstorm-wfs-debuginfo < 16.11.1
 #TestRequires: smartmet-engine-gis >= 26.10.15
 #TestRequires: smartmet-engine-querydata >= 26.10.15
 %if %{with observation}
-#TestRequires: smartmet-engine-observation >= 26.10.15
+#TestRequires: smartmet-engine-observation >= 26.10.15-3
 %endif
 #TestRequires: smartmet-engine-grid >= 26.10.15
-#TestRequires: redis
+#TestRequires: valkey
 #TestRequires: smartmet-library-grid-files-test >= 26.10.15
 # Required by top level Makefile
 #TestRequires: jsoncpp-devel
