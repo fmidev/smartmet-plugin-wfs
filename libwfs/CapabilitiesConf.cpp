@@ -184,7 +184,6 @@ void CapabilitiesConf::parse(const std::string& default_language, libconfig::Set
 	  throw Exception::Trace(BCP, "Incorrect value of configuration entry outputFormats")
 	    .addDetail(item.str());
 	}
-	break;
       }
 
       for (const auto& item : fmts) {
