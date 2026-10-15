@@ -51,6 +51,7 @@ class StoredQueryParamDef
   void parse_def(const std::string& desc);
 
   virtual ~StoredQueryParamDef();
+  StoredQueryParamDef(const StoredQueryParamDef&) = default;
 
   ValueType getValueType() const { return value_type; }
   bool isArray() const { return is_array; }

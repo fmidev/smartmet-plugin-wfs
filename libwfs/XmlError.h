@@ -26,6 +26,7 @@ class XmlError : public std::runtime_error
   XmlError(const std::string& text, error_level_t error_level);
 
   ~XmlError() throw() override;
+  XmlError(const XmlError&) = default;
 
   const std::list<std::string>& get_messages() const { return messages; }
   error_level_t get_error_level() const { return error_level; }

@@ -42,6 +42,7 @@ class RequestParameterMap
 		      bool case_sensitive_params);
 
   virtual ~RequestParameterMap();
+  RequestParameterMap(const RequestParameterMap&) = default;
 
   std::multimap<std::string, SmartMet::Spine::Value> get_map(bool case_sensitive) const;
 
