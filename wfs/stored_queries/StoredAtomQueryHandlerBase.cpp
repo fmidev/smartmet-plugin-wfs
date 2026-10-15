@@ -21,7 +21,7 @@ bw::StoredAtomQueryHandlerBase::StoredAtomQueryHandlerBase(
     SmartMet::Spine::Reactor* reactor,
     const StoredQueryConfig::Ptr& config,
     PluginImpl& plugin_data,
-    std::optional<std::string> template_file_name)
+    const std::optional<std::string>& template_file_name)
 
     : bw::StoredQueryParamRegistry(config)
     , bw::SupportsExtraHandlerParams(config, true)
@@ -206,7 +206,7 @@ std::shared_ptr<SmartMet::Plugin::WFS::StoredQueryHandlerBase> wfs_stored_atom_h
     SmartMet::Spine::Reactor* reactor,
     const StoredQueryConfig::Ptr& config,
     PluginImpl& plugin_data,
-    std::optional<std::string> template_file_name)
+    const std::optional<std::string>& template_file_name)
 {
   try
   {

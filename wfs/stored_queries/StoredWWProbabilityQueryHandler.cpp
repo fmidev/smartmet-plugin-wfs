@@ -626,7 +626,7 @@ std::shared_ptr<SmartMet::Plugin::WFS::StoredQueryHandlerBase>
 wfs_winterweather_probabilities_query_handler_create(SmartMet::Spine::Reactor* reactor,
                                                      const StoredQueryConfig::Ptr& config,
                                                      PluginImpl& pluginData,
-                                                     std::optional<std::string> templateFileName)
+                                                     const std::optional<std::string>& templateFileName)
 {
   try
   {

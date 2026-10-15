@@ -34,7 +34,7 @@ bw::StoredContourQueryHandler::StoredContourQueryHandler(
     SmartMet::Spine::Reactor* reactor,
     const bw::StoredQueryConfig::Ptr& config,
     PluginImpl& plugin_data,
-    std::optional<std::string> template_file_name)
+    const std::optional<std::string>& template_file_name)
 
     : StoredQueryParamRegistry(config),
       SupportsExtraHandlerParams(config, false),

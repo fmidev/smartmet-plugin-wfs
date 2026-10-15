@@ -18,7 +18,7 @@ class StoredQueryHandlerFactoryDef
 {
  public:
   using factory_t = std::shared_ptr<StoredQueryHandlerBase>
-        (*)(SmartMet::Spine::Reactor *, StoredQueryConfig::Ptr, PluginImpl &, std::optional<std::string>);
+        (*)(SmartMet::Spine::Reactor *, const StoredQueryConfig::Ptr &, PluginImpl &, const std::optional<std::string> &);
 
  private:
   unsigned char signature[20]{};
@@ -34,7 +34,7 @@ class StoredQueryHandlerFactoryDef
       SmartMet::Spine::Reactor* reactor,
       const StoredQueryConfig::Ptr& config,
       PluginImpl& plugin_impl,
-      std::optional<std::string> template_file_name);
+      const std::optional<std::string>& template_file_name);
 
  private:
   static void create_signature(unsigned char* md);

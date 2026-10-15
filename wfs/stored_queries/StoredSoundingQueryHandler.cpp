@@ -956,7 +956,7 @@ std::shared_ptr<SmartMet::Plugin::WFS::StoredQueryHandlerBase> wfsStoredSounding
     SmartMet::Spine::Reactor* reactor,
     const StoredQueryConfig::Ptr& config,
     PluginImpl& pluginData,
-    std::optional<std::string> templateFileName)
+    const std::optional<std::string>& templateFileName)
 {
   try
   {

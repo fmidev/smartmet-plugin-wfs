@@ -14,7 +14,7 @@ bw::StoredIsolineQueryHandler::StoredIsolineQueryHandler(
     SmartMet::Spine::Reactor* reactor,
     const StoredQueryConfig::Ptr& config,
     PluginImpl& plugin_data,
-    std::optional<std::string> template_file_name)
+    const std::optional<std::string>& template_file_name)
 
     : StoredQueryParamRegistry(config),
       SupportsExtraHandlerParams(config, false),
@@ -156,7 +156,7 @@ std::shared_ptr<SmartMet::Plugin::WFS::StoredQueryHandlerBase> wfs_isoline_query
     SmartMet::Spine::Reactor* reactor,
     const StoredQueryConfig::Ptr& config,
     PluginImpl& plugin_data,
-    std::optional<std::string> template_file_name)
+    const std::optional<std::string>& template_file_name)
 {
   try
   {

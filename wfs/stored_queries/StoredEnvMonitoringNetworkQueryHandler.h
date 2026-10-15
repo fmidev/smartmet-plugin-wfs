@@ -25,7 +25,7 @@ class StoredEnvMonitoringNetworkQueryHandler : protected virtual RequiresGeoEngi
   StoredEnvMonitoringNetworkQueryHandler(SmartMet::Spine::Reactor* reactor,
                                          const StoredQueryConfig::Ptr& config,
                                          PluginImpl& plugin_impl,
-                                         std::optional<std::string> template_file_name);
+                                         const std::optional<std::string>& template_file_name);
   ~StoredEnvMonitoringNetworkQueryHandler() override;
 
   std::string get_handler_description() const override;

@@ -25,7 +25,7 @@ class StoredEnvMonitoringFacilityQueryHandler : public StoredQueryHandlerBase,
   StoredEnvMonitoringFacilityQueryHandler(SmartMet::Spine::Reactor* reactor,
                                           const StoredQueryConfig::Ptr& config,
                                           PluginImpl& plugin_impl,
-                                          std::optional<std::string> template_file_name);
+                                          const std::optional<std::string>& template_file_name);
   ~StoredEnvMonitoringFacilityQueryHandler() override;
 
   void query(const StoredQuery& query,

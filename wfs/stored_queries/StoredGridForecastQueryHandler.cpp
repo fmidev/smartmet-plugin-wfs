@@ -73,7 +73,7 @@ StoredGridForecastQueryHandler::StoredGridForecastQueryHandler(
     Spine::Reactor* reactor,
     const StoredQueryConfig::Ptr& config,
     PluginImpl& plugin_impl,
-    std::optional<std::string> template_file_name)
+    const std::optional<std::string>& template_file_name)
     :
 
       StoredQueryParamRegistry(config),
@@ -1124,7 +1124,7 @@ std::shared_ptr<SmartMet::Plugin::WFS::StoredQueryHandlerBase> wfs_grid_forecast
     SmartMet::Spine::Reactor* reactor,
     const std::shared_ptr<StoredQueryConfig>& config,
     PluginImpl& plugin_impl,
-    std::optional<std::string> template_file_name)
+    const std::optional<std::string>& template_file_name)
 {
   try
   {

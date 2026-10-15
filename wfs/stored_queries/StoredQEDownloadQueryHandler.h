@@ -43,7 +43,7 @@ class StoredQEDownloadQueryHandler : public StoredAtomQueryHandlerBase,
   StoredQEDownloadQueryHandler(SmartMet::Spine::Reactor* reactor,
                                const StoredQueryConfig::Ptr& config,
                                PluginImpl& plugin_impl,
-                               std::optional<std::string> template_file_name);
+                               const std::optional<std::string>& template_file_name);
 
   ~StoredQEDownloadQueryHandler() override;
 

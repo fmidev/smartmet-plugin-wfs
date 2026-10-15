@@ -92,7 +92,7 @@ StoredQEDownloadQueryHandler::StoredQEDownloadQueryHandler(
     SmartMet::Spine::Reactor* reactor,
     const StoredQueryConfig::Ptr& config,
     PluginImpl& plugin_data,
-    std::optional<std::string> template_file_name)
+    const std::optional<std::string>& template_file_name)
 
     : StoredQueryParamRegistry(config),
       SupportsExtraHandlerParams(config, false),
@@ -876,7 +876,7 @@ std::shared_ptr<SmartMet::Plugin::WFS::StoredQueryHandlerBase>
 wfs_stored_qe_download_handler_create(SmartMet::Spine::Reactor* reactor,
                                       const StoredQueryConfig::Ptr& config,
                                       PluginImpl& plugin_data,
-                                      std::optional<std::string> template_file_name)
+                                      const std::optional<std::string>& template_file_name)
 {
   try
   {

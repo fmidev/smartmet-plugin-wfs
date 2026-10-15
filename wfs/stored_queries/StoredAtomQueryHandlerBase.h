@@ -20,7 +20,7 @@ class StoredAtomQueryHandlerBase : public StoredQueryHandlerBase
   StoredAtomQueryHandlerBase(SmartMet::Spine::Reactor* reactor,
                              const StoredQueryConfig::Ptr& config,
                              PluginImpl& plugin_impl,
-                             std::optional<std::string> template_file_name);
+                             const std::optional<std::string>& template_file_name);
 
   ~StoredAtomQueryHandlerBase() override;
 

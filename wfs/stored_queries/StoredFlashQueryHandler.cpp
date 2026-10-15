@@ -34,7 +34,7 @@ const char* P_MULTIPOINTCOVERAGE_QUERY = "lightning_multipointcoverage.c2t";
 bw::StoredFlashQueryHandler::StoredFlashQueryHandler(SmartMet::Spine::Reactor* reactor,
                                                      const StoredQueryConfig::Ptr& config,
                                                      PluginImpl& plugin_data,
-                                                     std::optional<std::string> template_file_name)
+                                                     const std::optional<std::string>& template_file_name)
 
     : StoredQueryParamRegistry(config),
       SupportsExtraHandlerParams(config, false),
@@ -534,7 +534,7 @@ std::shared_ptr<SmartMet::Plugin::WFS::StoredQueryHandlerBase> wfs_flash_handler
     SmartMet::Spine::Reactor* reactor,
     const StoredQueryConfig::Ptr& config,
     PluginImpl& plugin_data,
-    std::optional<std::string> template_file_name)
+    const std::optional<std::string>& template_file_name)
 {
   try
   {

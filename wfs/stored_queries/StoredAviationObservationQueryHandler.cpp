@@ -30,7 +30,7 @@ bw::StoredAviationObservationQueryHandler::StoredAviationObservationQueryHandler
     SmartMet::Spine::Reactor* reactor,
     const StoredQueryConfig::Ptr& config,
     PluginImpl& plugin_data,
-    std::optional<std::string> template_file_name)
+    const std::optional<std::string>& template_file_name)
 
     : bw::StoredQueryParamRegistry(config),
       bw::SupportsExtraHandlerParams(config),
@@ -390,7 +390,7 @@ std::shared_ptr<SmartMet::Plugin::WFS::StoredQueryHandlerBase>
 wfs_stored_aviation_observation_handler_create(SmartMet::Spine::Reactor* reactor,
                                                const StoredQueryConfig::Ptr& config,
                                                PluginImpl& plugin_data,
-                                               std::optional<std::string> template_file_name)
+                                               const std::optional<std::string>& template_file_name)
 {
   try
   {

@@ -14,7 +14,7 @@ bw::StoredCoverageQueryHandler::StoredCoverageQueryHandler(
     SmartMet::Spine::Reactor* reactor,
     const bw::StoredQueryConfig::Ptr& config,
     PluginImpl& plugin_data,
-    std::optional<std::string> template_file_name)
+    const std::optional<std::string>& template_file_name)
 
     : StoredQueryParamRegistry(config),
       SupportsExtraHandlerParams(config, false),
@@ -190,7 +190,7 @@ std::shared_ptr<SmartMet::Plugin::WFS::StoredQueryHandlerBase> wfs_coverage_quer
     SmartMet::Spine::Reactor* reactor,
     const StoredQueryConfig::Ptr& config,
     PluginImpl& plugin_data,
-    std::optional<std::string> template_file_name)
+    const std::optional<std::string>& template_file_name)
 {
   auto* qh = new StoredCoverageQueryHandler(
       reactor, std::move(config), plugin_data, std::move(template_file_name));

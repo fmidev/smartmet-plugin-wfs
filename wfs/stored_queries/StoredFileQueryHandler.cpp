@@ -28,7 +28,7 @@ const char* P_END = "endTime";
 bw::StoredFileQueryHandler::StoredFileQueryHandler(SmartMet::Spine::Reactor* reactor,
                                                    const StoredQueryConfig::Ptr& config,
                                                    PluginImpl& plugin_data,
-                                                   std::optional<std::string> template_file_name)
+                                                   const std::optional<std::string>& template_file_name)
     : bw::StoredQueryParamRegistry(config),
       bw::SupportsExtraHandlerParams(config),
       bw::StoredAtomQueryHandlerBase(reactor, config, plugin_data, template_file_name)
@@ -219,7 +219,7 @@ std::shared_ptr<SmartMet::Plugin::WFS::StoredQueryHandlerBase> wfs_stored_file_h
     SmartMet::Spine::Reactor* reactor,
     const StoredQueryConfig::Ptr& config,
     PluginImpl& plugin_data,
-    std::optional<std::string> template_file_name)
+    const std::optional<std::string>& template_file_name)
 {
   try
   {

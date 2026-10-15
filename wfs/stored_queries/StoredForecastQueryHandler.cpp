@@ -45,7 +45,7 @@ bw::StoredForecastQueryHandler::StoredForecastQueryHandler(
     SmartMet::Spine::Reactor* reactor,
     const bw::StoredQueryConfig::Ptr& config,
     PluginImpl& plugin_data,
-    std::optional<std::string> template_file_name)
+    const std::optional<std::string>& template_file_name)
 
     : bw::StoredQueryParamRegistry(config),
       bw::SupportsExtraHandlerParams(config, false),
@@ -957,7 +957,7 @@ std::shared_ptr<SmartMet::Plugin::WFS::StoredQueryHandlerBase> wfs_forecast_hand
     SmartMet::Spine::Reactor* reactor,
     const StoredQueryConfig::Ptr& config,
     PluginImpl& plugin_impl,
-    std::optional<std::string> template_file_name)
+    const std::optional<std::string>& template_file_name)
 {
   try
   {

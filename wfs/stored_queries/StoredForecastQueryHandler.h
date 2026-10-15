@@ -85,7 +85,7 @@ class StoredForecastQueryHandler : public StoredQueryHandlerBase,
   StoredForecastQueryHandler(SmartMet::Spine::Reactor* reactor,
                              const StoredQueryConfig::Ptr& config,
                              PluginImpl& plugin_impl,
-                             std::optional<std::string> template_file_name);
+                             const std::optional<std::string>& template_file_name);
 
   ~StoredForecastQueryHandler() override;
 

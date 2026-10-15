@@ -71,7 +71,7 @@ const char* QENGINE_CRS = "EPSG::4326";
 StoredGridQueryHandler::StoredGridQueryHandler(SmartMet::Spine::Reactor* reactor,
                                                const StoredQueryConfig::Ptr& config,
                                                PluginImpl& plugin_data,
-                                               std::optional<std::string> template_file_name)
+                                               const std::optional<std::string>& template_file_name)
     : StoredQueryParamRegistry(config),
       SupportsExtraHandlerParams(config, false),
       RequiresGeoEngine(reactor),
@@ -1327,7 +1327,7 @@ std::shared_ptr<SmartMet::Plugin::WFS::StoredQueryHandlerBase> wfs_stored_grid_h
     SmartMet::Spine::Reactor* reactor,
     const StoredQueryConfig::Ptr& config,
     PluginImpl& plugin_data,
-    std::optional<std::string> template_file_name)
+    const std::optional<std::string>& template_file_name)
 {
   try
   {

@@ -16,7 +16,7 @@ namespace bw = SmartMet::Plugin::WFS;
 bw::StoredMastQueryHandler::StoredMastQueryHandler(SmartMet::Spine::Reactor* reactor,
                                                    const StoredQueryConfig::Ptr& config,
                                                    PluginImpl& plugin_data,
-                                                   std::optional<std::string> template_file_name)
+                                                   const std::optional<std::string>& template_file_name)
     : bw::StoredQueryParamRegistry(config),
       bw::SupportsExtraHandlerParams(config),
       bw::RequiresGeoEngine(reactor),
@@ -722,7 +722,7 @@ std::shared_ptr<SmartMet::Plugin::WFS::StoredQueryHandlerBase> wfs_stored_mast_h
     SmartMet::Spine::Reactor* reactor,
     const StoredQueryConfig::Ptr& config,
     PluginImpl& plugin_data,
-    std::optional<std::string> template_file_name)
+    const std::optional<std::string>& template_file_name)
 {
   try
   {

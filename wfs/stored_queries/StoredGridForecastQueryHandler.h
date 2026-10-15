@@ -37,7 +37,7 @@ class StoredGridForecastQueryHandler: public StoredQueryHandlerBase,
                     Spine::Reactor* reactor,
                     const std::shared_ptr<StoredQueryConfig>& config,
                     PluginImpl& plugin_impl,
-                    std::optional<std::string> template_file_name);
+                    const std::optional<std::string>& template_file_name);
 
         ~StoredGridForecastQueryHandler() override;
 
