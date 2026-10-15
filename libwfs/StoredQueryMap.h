@@ -55,7 +55,7 @@ class StoredQueryMap final : private FileContentChecker
 
   std::shared_ptr<StoredQueryHandlerBase> get_handler_by_name(const std::string& name) const;
 
-  virtual std::vector<std::string> get_return_type_names() const;
+  std::vector<std::string> get_return_type_names() const;
 
   bool is_reload_required(bool reset = false);
 
