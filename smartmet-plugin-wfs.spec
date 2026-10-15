@@ -128,7 +128,7 @@ Obsoletes: smartmet-brainstorm-wfs-debuginfo < 16.11.1
 #TestRequires: smartmet-engine-observation >= 26.10.3
 %endif
 #TestRequires: smartmet-engine-grid >= 26.10.3
-#TestRequires: redis
+#TestRequires: valkey
 #TestRequires: smartmet-library-grid-files-test >= 26.10.6
 # Required by top level Makefile
 #TestRequires: jsoncpp-devel
