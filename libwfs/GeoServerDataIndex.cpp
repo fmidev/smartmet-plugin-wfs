@@ -41,7 +41,7 @@ std::vector<double> get_coords(const OGRLineString* geom)
   }
 }
 
-static void check_geometry(OGRGeometry* geom, const std::string& location, const std::string& gml)
+void check_geometry(OGRGeometry* geom, const std::string& location, const std::string& gml)
 {
   try
   {
