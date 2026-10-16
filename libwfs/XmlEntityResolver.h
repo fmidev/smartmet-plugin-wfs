@@ -69,6 +69,8 @@ namespace SmartMet {
 
 	  bool get_schema(const std::string& remote_uri, std::string& result);
 
+	  bool select_download(const std::string& uri, std::map<std::string, Download>::iterator& it_d);
+
 	  std::string download(const std::string& uri) const;
 	};
 

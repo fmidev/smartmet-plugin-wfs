@@ -164,6 +164,30 @@ try
      throw Fmi::Exception::Trace(BCP, "Operation failed!");
    }
 
+/*
+ * Find or create the download state of the URI. Returns true if a new download
+ * attempt must be started. The mutex must be locked by the caller.
+ */
+bool EntityResolver::select_download(const std::string& uri,
+				     std::map<std::string, Download>::iterator& it_d)
+{
+  bool downloading = false;
+  it_d = download_map.find(uri);
+  if (it_d == download_map.end()) {
+    // URI encountered first time: try to download
+    downloading = true;
+    auto x = download_map.emplace(uri, Download());
+    assert (x.second); // Should not happen: the URI was not in download_map
+    it_d = x.first;
+  } else if (it_d->second.num_failed and it_d->second.num_failed < 100) {
+    unsigned inc = it_d->second.num_failed < 10 ? 10 : 600;
+    if (std::time(nullptr) > it_d->second.last_failed + inc) {
+      downloading = true;
+    }
+  }
+  return downloading;
+}
+
 bool EntityResolver::get_schema(const std::string& uri, std::string& result)
 try
 {
@@ -173,20 +197,7 @@ try
   it = cache.find(uri);
   if (it == cache.end()) {
     if (enable_download && download_allowed_in_thread) {
-      bool downloading = false;
-      it_d = download_map.find(uri);
-      if (it_d == download_map.end()) {
-	// URI encountered first time: try to download
-	downloading = true;
-	auto x = download_map.emplace(uri, Download());
-	assert (x.second); // Should not happen: the URI was not in download_map
-	it_d = x.first;
-      } else if (it_d->second.num_failed and it_d->second.num_failed < 100) {
-	unsigned inc = it_d->second.num_failed < 10 ? 10 : 600;
-	if (std::time(nullptr) > it_d->second.last_failed + inc) {
-	  downloading = true;
-	}
-      }
+      const bool downloading = select_download(uri, it_d);
 
       if (downloading) {
 	it_d->second.task = std::async(std::launch::async,
