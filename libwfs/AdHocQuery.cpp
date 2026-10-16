@@ -1145,6 +1145,32 @@ void bw::AdHocQuery::read_comparison_operation(const xercesc::DOMElement& elemen
   }
 }
 
+namespace
+{
+// Use starttime or endtime as the parameter name for the begin and end instants of a time period
+void set_time_period_param_name(const std::vector<std::string>& element_tree,
+                                std::string& param_name)
+{
+  auto tree_size = element_tree.size();
+  if (tree_size >= 5)
+  {
+    if ((element_tree[tree_size - 4] == "fes:during") &&
+        (element_tree[tree_size - 3] == "gml:timeperiod") &&
+        (element_tree[tree_size - 1] == "gml:timeinstant"))
+    {
+      if (element_tree[tree_size - 2] == "gml:begin")
+      {
+        param_name = "starttime";
+      }
+      else if (element_tree[tree_size - 2] == "gml:end")
+      {
+        param_name = "endtime";
+      }
+    }
+  }
+}
+}  // namespace
+
 void bw::AdHocQuery::read_query_parameter(const xercesc::DOMElement& element,
                                           const std::vector<std::string>& element_tree,
                                           const std::string& element_name,
@@ -1168,23 +1194,7 @@ void bw::AdHocQuery::read_query_parameter(const xercesc::DOMElement& element,
     {
       xml_type = "xsi:dateTime";
 
-      auto tree_size = element_tree.size();
-      if (tree_size >= 5)
-      {
-        if ((element_tree[tree_size - 4] == "fes:during") &&
-            (element_tree[tree_size - 3] == "gml:timeperiod") &&
-            (element_tree[tree_size - 1] == "gml:timeinstant"))
-        {
-          if (element_tree[tree_size - 2] == "gml:begin")
-          {
-            param_name = "starttime";
-          }
-          else if (element_tree[tree_size - 2] == "gml:end")
-          {
-            param_name = "endtime";
-          }
-        }
-      }
+      set_time_period_param_name(element_tree, param_name);
     }
 
     std::shared_ptr<const SmartMet::Plugin::WFS::StoredQueryConfig> config =
