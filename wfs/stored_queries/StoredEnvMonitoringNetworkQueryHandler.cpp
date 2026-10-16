@@ -1,4 +1,5 @@
 #ifndef WITHOUT_OBSERVATION
+#include "StoredQueryHandlerFactories.h"
 
 #include "stored_queries/StoredEnvMonitoringNetworkQueryHandler.h"
 #include "FeatureID.h"
@@ -344,12 +345,9 @@ wfs_stored_env_monitoring_network_handler_create(SmartMet::Spine::Reactor* react
 }
 }  // namespace
 
-namespace
-{
 SmartMet::Plugin::WFS::StoredQueryHandlerFactoryDef
     wfs_stored_env_monitoring_network_handler_factory(
         &wfs_stored_env_monitoring_network_handler_create);
-}  // namespace
 
 /**
 

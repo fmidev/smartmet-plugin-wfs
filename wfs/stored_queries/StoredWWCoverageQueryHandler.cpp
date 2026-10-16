@@ -1,4 +1,5 @@
 #include "stored_queries/StoredWWCoverageQueryHandler.h"
+#include "StoredQueryHandlerFactories.h"
 #include <gis/Box.h>
 #include <newbase/NFmiEnumConverter.h>
 #include <macgyver/Exception.h>
@@ -161,9 +162,6 @@ wfs_winterweather_coverage_query_handler_create(SmartMet::Spine::Reactor* reacto
 }
 }  // namespace
 
-namespace
-{
 SmartMet::Plugin::WFS::StoredQueryHandlerFactoryDef
     wfs_winterweather_coverage_query_handler_factory(
         &wfs_winterweather_coverage_query_handler_create);
-}  // namespace
