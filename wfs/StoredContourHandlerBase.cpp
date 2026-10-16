@@ -42,7 +42,7 @@ bw::StoredContourQueryHandler::StoredContourQueryHandler(
       RequiresContourEngine(reactor),
       RequiresQEngine(reactor),
       RequiresGeoEngine(reactor),
-      bw::StoredQueryHandlerBase(reactor, config, plugin_data, std::move(template_file_name)),
+      bw::StoredQueryHandlerBase(reactor, config, plugin_data, template_file_name),
       bw::SupportsBoundingBox(config, plugin_data.get_crs_registry(), false),
       bw::SupportsTimeParameters(config),
       bw::SupportsTimeZone(reactor, config)

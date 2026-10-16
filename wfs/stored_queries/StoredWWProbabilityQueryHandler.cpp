@@ -170,7 +170,7 @@ StoredWWProbabilityQueryHandler::StoredWWProbabilityQueryHandler(
       SupportsExtraHandlerParams(config, false),
       RequiresGeoEngine(reactor),
       RequiresQEngine(reactor),
-      StoredQueryHandlerBase(reactor, config, pluginData, std::move(templateFileName)),
+      StoredQueryHandlerBase(reactor, config, pluginData, templateFileName),
       SupportsLocationParameters(reactor, config, SUPPORT_KEYWORDS | INCLUDE_GEOIDS),
       SupportsBoundingBox(config, pluginData.get_crs_registry(), false),
       SupportsTimeParameters(config),

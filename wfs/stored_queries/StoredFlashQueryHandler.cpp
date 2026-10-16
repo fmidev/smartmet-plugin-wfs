@@ -40,7 +40,7 @@ bw::StoredFlashQueryHandler::StoredFlashQueryHandler(SmartMet::Spine::Reactor* r
       SupportsExtraHandlerParams(config, false),
       RequiresGeoEngine(reactor),
       RequiresObsEngine(reactor),
-      StoredQueryHandlerBase(reactor, config, plugin_data, std::move(template_file_name)),
+      StoredQueryHandlerBase(reactor, config, plugin_data, template_file_name),
       SupportsBoundingBox(config, plugin_data.get_crs_registry()),
       SupportsTimeZone(reactor, config),
 
@@ -538,8 +538,7 @@ std::shared_ptr<SmartMet::Plugin::WFS::StoredQueryHandlerBase> wfs_flash_handler
 {
   try
   {
-    auto* qh = new StoredFlashQueryHandler(
-        reactor, std::move(config), plugin_data, std::move(template_file_name));
+    auto* qh = new StoredFlashQueryHandler(reactor, config, plugin_data, template_file_name);
     std::shared_ptr<SmartMet::Plugin::WFS::StoredQueryHandlerBase> result(qh);
     return result;
   }

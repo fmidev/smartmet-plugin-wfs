@@ -5,7 +5,7 @@
 using Fmi::Exception;
 using SmartMet::Plugin::WFS::StoredQueryHandlerInitBase;
 
-StoredQueryHandlerInitBase::StoredQueryHandlerInitBase() {}
+StoredQueryHandlerInitBase::StoredQueryHandlerInitBase() = default;
 
 StoredQueryHandlerInitBase::~StoredQueryHandlerInitBase()
 = default;

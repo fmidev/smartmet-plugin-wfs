@@ -1,7 +1,8 @@
 #include "HandlerFactorySummary.h"
 #include "StoredQueryHandlerBase.h"
-#include <ostream>
 #include <json/value.h>
+#include <ostream>
+#include <utility>
 
 #include <macgyver/DebugTools.h>
 
@@ -129,10 +130,7 @@ namespace
     }
 }
 
-HandlerFactorySummary::HandlerFactorySummary(const std::string& prefix)
-    : prefix(prefix)
-{
-}
+HandlerFactorySummary::HandlerFactorySummary(std::string prefix) : prefix(std::move(prefix)) {}
 
 HandlerFactorySummary::HandlerFactorySummary(const HandlerFactorySummary& src)
     : prefix(src.prefix)

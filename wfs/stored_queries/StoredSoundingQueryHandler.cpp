@@ -32,7 +32,7 @@ StoredSoundingQueryHandler::StoredSoundingQueryHandler(
       SupportsExtraHandlerParams(config),
       RequiresGeoEngine(reactor),
       RequiresObsEngine(reactor),
-      StoredQueryHandlerBase(reactor, config, pluginData, std::move(templateFileName)),
+      StoredQueryHandlerBase(reactor, config, pluginData, templateFileName),
       SupportsLocationParameters(
           reactor, config, SUPPORT_KEYWORDS | INCLUDE_FMISIDS | INCLUDE_GEOIDS | INCLUDE_WMOS),
       SupportsBoundingBox(config, pluginData.get_crs_registry()),

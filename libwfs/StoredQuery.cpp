@@ -31,7 +31,7 @@ void check_param_min_occurs(int actual_count,
 
 bwx::ParameterExtractor bw::StoredQuery::param_extractor;
 
-bw::StoredQuery::StoredQuery() {}
+bw::StoredQuery::StoredQuery() = default;
 
 bw::StoredQuery::~StoredQuery() = default;
 

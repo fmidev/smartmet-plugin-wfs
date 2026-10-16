@@ -5,14 +5,15 @@
 #include <boost/format.hpp>
 #include <boost/lambda/lambda.hpp>
 #include <boost/spirit/include/qi.hpp>
-#include <macgyver/TypeName.h>
 #include <macgyver/Exception.h>
+#include <macgyver/TypeName.h>
 #include <algorithm>
 #include <cassert>
 #include <cstdio>
 #include <cstring>
 #include <sstream>
 #include <stdexcept>
+#include <utility>
 
 namespace ba = boost::algorithm;
 namespace bw = SmartMet::Plugin::WFS;
@@ -52,9 +53,9 @@ void encode(std::ostream& stream, const std::string& text)
 }
 }  // namespace
 
-bw::UrlTemplateGenerator::UrlTemplateGenerator(const std::string& url,
+bw::UrlTemplateGenerator::UrlTemplateGenerator(std::string url,
                                                const std::vector<std::string>& param_templates)
-    : url(url)
+    : url(std::move(url))
 {
   try
   {

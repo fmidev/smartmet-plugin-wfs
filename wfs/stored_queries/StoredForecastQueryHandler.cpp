@@ -51,7 +51,7 @@ bw::StoredForecastQueryHandler::StoredForecastQueryHandler(
       bw::SupportsExtraHandlerParams(config, false),
       bw::RequiresGeoEngine(reactor),
       bw::RequiresQEngine(reactor),
-      bw::StoredQueryHandlerBase(reactor, config, plugin_data, std::move(template_file_name)),
+      bw::StoredQueryHandlerBase(reactor, config, plugin_data, template_file_name),
       bw::SupportsLocationParameters(
           reactor,
           config,
@@ -961,8 +961,7 @@ std::shared_ptr<SmartMet::Plugin::WFS::StoredQueryHandlerBase> wfs_forecast_hand
 {
   try
   {
-    auto* qh = new StoredForecastQueryHandler(
-        reactor, std::move(config), plugin_impl, std::move(template_file_name));
+    auto* qh = new StoredForecastQueryHandler(reactor, config, plugin_impl, template_file_name);
     std::shared_ptr<SmartMet::Plugin::WFS::StoredQueryHandlerBase> result(qh);
     return result;
   }

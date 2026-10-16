@@ -14,6 +14,8 @@
 
 #include <engines/querydata/Engine.h>
 
+#include <utility>
+
 namespace SmartMet
 {
 namespace Plugin
@@ -25,8 +27,8 @@ struct AirportLocation
   std::string icao_code;
   SmartMet::Spine::LocationPtr loc;
 
-  AirportLocation(const std::string& icao, const SmartMet::Spine::LocationPtr& l)
-      : icao_code(icao), loc(l)
+  AirportLocation(std::string icao, SmartMet::Spine::LocationPtr l)
+      : icao_code(std::move(icao)), loc(std::move(l))
   {
   }
 };

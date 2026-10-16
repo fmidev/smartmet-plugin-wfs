@@ -6,11 +6,12 @@
 #include "XmlUtils.h"
 #include <boost/algorithm/string.hpp>
 #include <boost/regex.hpp>
+#include <fmt/format.h>
+#include <macgyver/Exception.h>
 #include <macgyver/StringConversion.h>
 #include <macgyver/TypeName.h>
-#include <macgyver/Exception.h>
-#include <fmt/format.h>
 #include <sstream>
+#include <utility>
 
 namespace bw = SmartMet::Plugin::WFS;
 namespace bwx = SmartMet::Plugin::WFS::Xml;
@@ -41,10 +42,9 @@ namespace {
 
 } // anonymous namespace
 
-bw::RequestBase::RequestBase(const std::string& language, const PluginImpl& plugin_impl)
-  : plugin_impl(plugin_impl)
-  , language(language)
-   
+bw::RequestBase::RequestBase(std::string language, const PluginImpl& plugin_impl)
+    : plugin_impl(plugin_impl), language(std::move(language))
+
 {
 }
 

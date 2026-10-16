@@ -80,7 +80,7 @@ StoredGridForecastQueryHandler::StoredGridForecastQueryHandler(
       SupportsExtraHandlerParams(config, false),
       RequiresGridEngine(reactor),
       RequiresGeoEngine(reactor),
-      StoredQueryHandlerBase(reactor, config, plugin_impl, std::move(template_file_name)),
+      StoredQueryHandlerBase(reactor, config, plugin_impl, template_file_name),
       SupportsLocationParameters(reactor, config, SUPPORT_KEYWORDS | INCLUDE_GEOIDS),
       SupportsTimeParameters(config),
       SupportsTimeZone(reactor, config),
@@ -1128,8 +1128,7 @@ std::shared_ptr<SmartMet::Plugin::WFS::StoredQueryHandlerBase> wfs_grid_forecast
 {
   try
   {
-    auto* qh = new StoredGridForecastQueryHandler(
-        reactor, std::move(config), plugin_impl, std::move(template_file_name));
+    auto* qh = new StoredGridForecastQueryHandler(reactor, config, plugin_impl, template_file_name);
     std::shared_ptr<SmartMet::Plugin::WFS::StoredQueryHandlerBase> result(qh);
     return result;
   }

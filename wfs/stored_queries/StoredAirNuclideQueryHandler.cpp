@@ -23,7 +23,7 @@ bw::StoredAirNuclideQueryHandler::StoredAirNuclideQueryHandler(
       bw::SupportsExtraHandlerParams(config),
       bw::RequiresGeoEngine(reactor),
       bw::RequiresObsEngine(reactor),
-      bw::StoredQueryHandlerBase(reactor, config, plugin_data, std::move(template_file_name)),
+      bw::StoredQueryHandlerBase(reactor, config, plugin_data, template_file_name),
       bw::SupportsLocationParameters(
           reactor, config, INCLUDE_FMISIDS | INCLUDE_GEOIDS | INCLUDE_WMOS | SUPPORT_KEYWORDS),
       bw::SupportsBoundingBox(config, plugin_data.get_crs_registry()),
@@ -697,8 +697,8 @@ wfs_stored_air_nuclide_handler_create(SmartMet::Spine::Reactor* reactor,
 {
   try
   {
-    auto* qh = new bw::StoredAirNuclideQueryHandler(
-        reactor, std::move(config), plugin_data, std::move(template_file_name));
+    auto* qh =
+        new bw::StoredAirNuclideQueryHandler(reactor, config, plugin_data, template_file_name);
     std::shared_ptr<SmartMet::Plugin::WFS::StoredQueryHandlerBase> instance(qh);
     return instance;
   }

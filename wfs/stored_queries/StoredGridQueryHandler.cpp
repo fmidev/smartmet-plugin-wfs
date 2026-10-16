@@ -76,7 +76,7 @@ StoredGridQueryHandler::StoredGridQueryHandler(SmartMet::Spine::Reactor* reactor
       SupportsExtraHandlerParams(config, false),
       RequiresGeoEngine(reactor),
       RequiresQEngine(reactor),
-      StoredQueryHandlerBase(reactor, config, plugin_data, std::move(template_file_name)),
+      StoredQueryHandlerBase(reactor, config, plugin_data, template_file_name),
       SupportsBoundingBox(config, plugin_data.get_crs_registry(), false),
       SupportsTimeParameters(config),
       debug_level(get_config()->get_debug_level())
@@ -1290,8 +1290,8 @@ std::shared_ptr<SmartMet::Plugin::WFS::StoredQueryHandlerBase> wfs_stored_grid_h
 {
   try
   {
-    StoredQueryHandlerBase* qh = new StoredGridQueryHandler(
-        reactor, std::move(config), plugin_data, std::move(template_file_name));
+    StoredQueryHandlerBase* qh =
+        new StoredGridQueryHandler(reactor, config, plugin_data, template_file_name);
     std::shared_ptr<SmartMet::Plugin::WFS::StoredQueryHandlerBase> result(qh);
     return result;
   }

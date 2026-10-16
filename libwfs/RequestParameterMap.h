@@ -1,15 +1,16 @@
 #pragma once
 
 #include <ctpp2/CDT.hpp>
-#include <macgyver/TypeName.h>
 #include <macgyver/Exception.h>
 #include <macgyver/StringConversion.h>
+#include <macgyver/TypeName.h>
 #include <spine/Value.h>
 #include <iterator>
 #include <limits>
 #include <map>
 #include <set>
 #include <stdexcept>
+#include <utility>
 
 namespace SmartMet
 {
@@ -24,9 +25,8 @@ class RequestParameterMap
     std::string real_name;
     SmartMet::Spine::Value value;
 
-    ParamInfo(const std::string& real_name_, const SmartMet::Spine::Value& value_)
-      : real_name(real_name_)
-      , value(value_)
+    ParamInfo(std::string real_name_, const SmartMet::Spine::Value& value_)
+        : real_name(std::move(real_name_)), value(value_)
     {
     }
   };
@@ -43,6 +43,7 @@ class RequestParameterMap
 
   virtual ~RequestParameterMap();
   RequestParameterMap(const RequestParameterMap&) = default;
+  RequestParameterMap& operator=(const RequestParameterMap&) = default;
 
   std::multimap<std::string, SmartMet::Spine::Value> get_map(bool case_sensitive) const;
 

@@ -38,7 +38,7 @@ class UrlTemplateGenerator
     std::string value;
   };
 
-  UrlTemplateGenerator(const std::string& url, const std::vector<std::string>& param_templates);
+  UrlTemplateGenerator(std::string url, const std::vector<std::string>& param_templates);
 
   virtual ~UrlTemplateGenerator();
 

@@ -98,7 +98,7 @@ StoredQEDownloadQueryHandler::StoredQEDownloadQueryHandler(
       SupportsExtraHandlerParams(config, false),
       RequiresGeoEngine(reactor),
       RequiresQEngine(reactor),
-      StoredAtomQueryHandlerBase(reactor, config, plugin_data, std::move(template_file_name)),
+      StoredAtomQueryHandlerBase(reactor, config, plugin_data, template_file_name),
       SupportsBoundingBox(config, plugin_data.get_crs_registry(), false),
       default_format("grib2"),
       debug_level(get_config()->get_debug_level())
@@ -859,8 +859,8 @@ wfs_stored_qe_download_handler_create(SmartMet::Spine::Reactor* reactor,
 {
   try
   {
-    StoredAtomQueryHandlerBase* qh = new StoredQEDownloadQueryHandler(
-        reactor, std::move(config), plugin_data, std::move(template_file_name));
+    StoredAtomQueryHandlerBase* qh =
+        new StoredQEDownloadQueryHandler(reactor, config, plugin_data, template_file_name);
     std::shared_ptr<SmartMet::Plugin::WFS::StoredQueryHandlerBase> result(qh);
     return result;
   }

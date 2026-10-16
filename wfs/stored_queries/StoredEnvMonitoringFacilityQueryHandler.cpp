@@ -47,7 +47,7 @@ bw::StoredEnvMonitoringFacilityQueryHandler::StoredEnvMonitoringFacilityQueryHan
       SupportsExtraHandlerParams(config),
       RequiresGeoEngine(reactor),
       RequiresObsEngine(reactor),
-      StoredQueryHandlerBase(reactor, config, plugin_data, std::move(template_file_name))
+      StoredQueryHandlerBase(reactor, config, plugin_data, template_file_name)
 {
   try
   {
@@ -874,9 +874,8 @@ wfs_stored_env_monitoring_facility_handler_create(SmartMet::Spine::Reactor* reac
 {
   try
   {
-    auto *qh =
-        new bw::StoredEnvMonitoringFacilityQueryHandler(
-            reactor, std::move(config), plugin_data, std::move(template_file_name));
+    auto* qh = new bw::StoredEnvMonitoringFacilityQueryHandler(
+        reactor, config, plugin_data, template_file_name);
     std::shared_ptr<SmartMet::Plugin::WFS::StoredQueryHandlerBase> instance(qh);
     return instance;
   }

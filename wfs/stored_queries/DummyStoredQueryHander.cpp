@@ -89,8 +89,7 @@ std::shared_ptr<SmartMet::Plugin::WFS::StoredQueryHandlerBase> dummy_handler_cre
 {
   try
   {
-    auto* qh = new DummyStoredQueryHandler(
-        reactor, std::move(config), plugin_data, std::move(template_file_name));
+    auto* qh = new DummyStoredQueryHandler(reactor, config, plugin_data, template_file_name);
     std::shared_ptr<SmartMet::Plugin::WFS::StoredQueryHandlerBase> result(qh);
     return result;
   }

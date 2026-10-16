@@ -32,9 +32,7 @@ class ParameterTemplateBase
   const std::string config_path;
 
  protected:
-  ParameterTemplateBase(StoredQueryConfig& config,
-                        const std::string& base_path,
-                        const std::string& config_path);
+  ParameterTemplateBase(StoredQueryConfig& config, std::string base_path, std::string config_path);
 
  public:
   static const char* HANDLER_PARAM_NAME;

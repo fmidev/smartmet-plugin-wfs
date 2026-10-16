@@ -56,7 +56,7 @@ namespace WFS
             std::map<std::string, StoredQueryInfo> stored_queries;
         };
 
-        HandlerFactorySummary(const std::string& prefix);
+        HandlerFactorySummary(std::string prefix);
         HandlerFactorySummary(const HandlerFactorySummary& src);
         HandlerFactorySummary operator = (const HandlerFactorySummary&);
 

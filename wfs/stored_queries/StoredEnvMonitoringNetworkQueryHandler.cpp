@@ -32,11 +32,11 @@ bw::StoredEnvMonitoringNetworkQueryHandler::StoredEnvMonitoringNetworkQueryHandl
     PluginImpl& plugin_data,
     const std::optional<std::string>& template_file_name)
 
-    : RequiresGeoEngine(reactor)
-    , RequiresObsEngine(reactor)
-    , StoredQueryParamRegistry(config)
-    , SupportsExtraHandlerParams(config)
-    , StoredQueryHandlerBase(reactor, config, plugin_data, std::move(template_file_name))
+    : RequiresGeoEngine(reactor),
+    RequiresObsEngine(reactor),
+    StoredQueryParamRegistry(config),
+    SupportsExtraHandlerParams(config),
+    StoredQueryHandlerBase(reactor, config, plugin_data, template_file_name)
 {
   try
   {
@@ -333,7 +333,7 @@ wfs_stored_env_monitoring_network_handler_create(SmartMet::Spine::Reactor* react
   try
   {
     auto* qh = new bw::StoredEnvMonitoringNetworkQueryHandler(
-        reactor, std::move(config), plugin_data, std::move(template_file_name));
+        reactor, config, plugin_data, template_file_name);
     std::shared_ptr<SmartMet::Plugin::WFS::StoredQueryHandlerBase> instance(qh);
     return instance;
   }

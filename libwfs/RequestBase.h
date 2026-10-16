@@ -35,7 +35,7 @@ class RequestBase
     LIST_STORED_QUERIES
   };
 
-  RequestBase(const std::string& language, const PluginImpl& plugin_impl);
+  RequestBase(std::string language, const PluginImpl& plugin_impl);
 
   virtual ~RequestBase();
 

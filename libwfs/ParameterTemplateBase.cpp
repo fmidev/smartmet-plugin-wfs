@@ -1,11 +1,12 @@
 #include "ParameterTemplateBase.h"
 #include "RequestParameterMap.h"
 #include "SupportsExtraHandlerParams.h"
-#include <macgyver/StringConversion.h>
 #include <macgyver/Exception.h>
+#include <macgyver/StringConversion.h>
 #include <sstream>
 #include <string>
 #include <typeinfo>
+#include <utility>
 
 namespace SmartMet
 {
@@ -16,9 +17,9 @@ namespace WFS
 const char* ParameterTemplateBase::HANDLER_PARAM_NAME = "handler_params";
 
 ParameterTemplateBase::ParameterTemplateBase(StoredQueryConfig& config,
-                                             const std::string& base_path,
-                                             const std::string& config_path)
-    : config(config), base_path(base_path), config_path(config_path)
+                                             std::string base_path,
+                                             std::string config_path)
+    : config(config), base_path(std::move(base_path)), config_path(std::move(config_path))
 {
 }
 

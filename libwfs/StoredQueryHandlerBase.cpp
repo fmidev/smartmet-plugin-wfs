@@ -28,7 +28,7 @@ StoredQueryHandlerBase::StoredQueryHandlerBase(SmartMet::Spine::Reactor* reactor
       reactor(reactor),
       config(config),
       plugin_impl(plugin_impl),
-      template_file(std::move(template_file_name))
+      template_file(template_file_name)
 {
   try
   {
@@ -245,7 +245,7 @@ void StoredQueryHandlerBase::set_2D_coord(
 {
   try
   {
-    auto xy = get_2D_coord(std::move(transformation), sx, sy);
+    auto xy = get_2D_coord(transformation, sx, sy);
     hash["x"] = xy.first;
     hash["y"] = xy.second;
   }
@@ -263,7 +263,7 @@ void StoredQueryHandlerBase::set_2D_coord(
 {
   try
   {
-    set_2D_coord(std::move(transformation), std::stod(sx), std::stod(sy), hash);
+    set_2D_coord(transformation, std::stod(sx), std::stod(sy), hash);
   }
   catch (...)
   {

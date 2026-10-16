@@ -33,7 +33,7 @@ bw::StoredGeoserverQueryHandler::StoredGeoserverQueryHandler(
 
     : bw::StoredQueryParamRegistry(config),
       bw::SupportsExtraHandlerParams(config),
-      bw::StoredAtomQueryHandlerBase(reactor, config, plugin_data, std::move(template_file_name)),
+      bw::StoredAtomQueryHandlerBase(reactor, config, plugin_data, template_file_name),
       bw::SupportsBoundingBox(config, plugin_data.get_crs_registry()),
       debug_level(get_config()->get_debug_level())
 {
@@ -436,8 +436,8 @@ SmartMet::Spine::Reactor* reactor,
 {
   try
   {
-    StoredAtomQueryHandlerBase* qh = new StoredGeoserverQueryHandler(
-        reactor, std::move(config), plugin_data, std::move(template_file_name));
+    StoredAtomQueryHandlerBase* qh =
+        new StoredGeoserverQueryHandler(reactor, config, plugin_data, template_file_name);
     std::shared_ptr<SmartMet::Plugin::WFS::StoredQueryHandlerBase> result(qh);
     return result;
   }

@@ -23,9 +23,9 @@ bw::StoredAtomQueryHandlerBase::StoredAtomQueryHandlerBase(
     PluginImpl& plugin_data,
     const std::optional<std::string>& template_file_name)
 
-    : bw::StoredQueryParamRegistry(config)
-    , bw::SupportsExtraHandlerParams(config, true)
-    , bw::StoredQueryHandlerBase(reactor, config, plugin_data, std::move(template_file_name))
+    : bw::StoredQueryParamRegistry(config),
+    bw::SupportsExtraHandlerParams(config, true),
+    bw::StoredQueryHandlerBase(reactor, config, plugin_data, template_file_name)
 {
   try
   {
@@ -210,8 +210,7 @@ std::shared_ptr<SmartMet::Plugin::WFS::StoredQueryHandlerBase> wfs_stored_atom_h
 {
   try
   {
-    auto* qh = new StoredAtomQueryHandlerBase(
-        reactor, std::move(config), plugin_data, std::move(template_file_name));
+    auto* qh = new StoredAtomQueryHandlerBase(reactor, config, plugin_data, template_file_name);
     std::shared_ptr<SmartMet::Plugin::WFS::StoredQueryHandlerBase> result(qh);
     return result;
   }

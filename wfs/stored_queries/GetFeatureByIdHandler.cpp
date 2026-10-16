@@ -86,8 +86,7 @@ std::shared_ptr<bw::StoredQueryHandlerBase> wfs_get_feature_by_id_handler_create
 {
   try
   {
-    bw::StoredQueryHandlerBase* qh =
-        new bw::GetFeatureByIdHandler(reactor, std::move(config), plugin_data);
+    bw::StoredQueryHandlerBase* qh = new bw::GetFeatureByIdHandler(reactor, config, plugin_data);
     std::shared_ptr<bw::StoredQueryHandlerBase> result(qh);
     return result;
   }

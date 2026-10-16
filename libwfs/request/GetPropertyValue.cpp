@@ -307,7 +307,7 @@ void GetPropertyValue::extract_property(const std::shared_ptr<xercesc::DOMDocume
 
       if (not max_members or (max_members and *max_members > 0))
       {
-        append_members(std::move(result),
+        append_members(result,
                        xpath_snapshot,
                        cumulative_num_returned,
                        max_members,
