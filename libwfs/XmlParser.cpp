@@ -22,8 +22,6 @@
 #include <stdexcept>
 #include <string>
 
-namespace fs = std::filesystem;
-
 namespace SmartMet
 {
 namespace Plugin

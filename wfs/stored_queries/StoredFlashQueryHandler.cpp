@@ -13,8 +13,6 @@
 #include <utility>
 
 namespace bw = SmartMet::Plugin::WFS;
-namespace pt = boost::posix_time;
-namespace bg = boost::gregorian;
 
 namespace
 {

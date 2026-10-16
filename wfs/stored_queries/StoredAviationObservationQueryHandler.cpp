@@ -15,7 +15,6 @@
 
 namespace bw = SmartMet::Plugin::WFS;
 namespace bo = SmartMet::Engine::Observation;
-namespace ba = boost::algorithm;
 
 namespace
 {

@@ -16,9 +16,7 @@
 
 namespace qi = boost::spirit::qi;
 namespace ns = boost::spirit::standard;
-namespace ba = boost::algorithm;
 namespace bl = boost::lambda;
-namespace p = boost::phoenix;
 
 using qi_rule = qi::rule<std::string::const_iterator, std::string
         (), ns::space_type>;

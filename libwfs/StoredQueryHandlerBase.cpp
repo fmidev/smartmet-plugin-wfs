@@ -11,8 +11,6 @@
 #include <stdexcept>
 #include <utility>
 
-namespace ba = boost::algorithm;
-
 namespace SmartMet
 {
 namespace Plugin

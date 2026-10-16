@@ -9,7 +9,6 @@
 #include <memory>
 #include <sstream>
 
-namespace ba = boost::algorithm;
 namespace bw = SmartMet::Plugin::WFS;
 
 using SmartMet::Spine::Value;

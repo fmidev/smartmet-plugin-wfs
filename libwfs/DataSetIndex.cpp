@@ -9,7 +9,6 @@
 #include <stdexcept>
 #include <vector>
 
-namespace ba = boost::algorithm;
 namespace bw = SmartMet::Plugin::WFS;
 namespace fs = std::filesystem;
 

@@ -14,8 +14,6 @@
 #include <tuple>
 #include <utility>
 
-namespace bo = SmartMet::Engine::Observation;
-
 namespace SmartMet
 {
 namespace Plugin

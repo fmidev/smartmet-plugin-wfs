@@ -28,7 +28,6 @@
 namespace bw = SmartMet::Plugin::WFS;
 namespace ba = boost::algorithm;
 namespace bl = boost::lambda;
-namespace bg = boost::geometry;
 namespace ph = boost::placeholders;
 
 using boost::format;

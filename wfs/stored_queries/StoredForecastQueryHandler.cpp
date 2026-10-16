@@ -24,7 +24,6 @@
 #include <utility>
 
 namespace bw = SmartMet::Plugin::WFS;
-namespace ba = boost::algorithm;
 using namespace SmartMet::Spine;
 
 using boost::format;

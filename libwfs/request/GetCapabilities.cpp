@@ -8,7 +8,6 @@
 #include <memory>
 
 namespace bw = SmartMet::Plugin::WFS;
-namespace bwx = SmartMet::Plugin::WFS::Xml;
 
 using SmartMet::Plugin::WFS::Request::GetCapabilities;
 

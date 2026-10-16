@@ -1,7 +1,6 @@
 #pragma once
 
 #include "StoredQueryConfig.h"
-#include <memory>
 #include <map>
 #include <memory>
 #include <string>

@@ -45,8 +45,6 @@ const StoredQueryConfig::ParamDesc& ParameterTemplateBase::get_param_desc(
 {
   try
   {
-    namespace ba = boost::algorithm;
-
     const auto* param_desc = config.get_param_desc(link_name);
     if (not param_desc)
     {

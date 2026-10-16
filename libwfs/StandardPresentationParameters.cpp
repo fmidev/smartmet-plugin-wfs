@@ -12,7 +12,6 @@
 
 namespace bw = SmartMet::Plugin::WFS;
 namespace bwx = SmartMet::Plugin::WFS::Xml;
-namespace ba = boost::algorithm;
 
 const char* bw::StandardPresentationParameters::DEFAULT_OUTPUT_FORMAT =
     "application/gml+xml; version=3.2";

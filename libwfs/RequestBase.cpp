@@ -16,8 +16,6 @@
 namespace bw = SmartMet::Plugin::WFS;
 namespace bwx = SmartMet::Plugin::WFS::Xml;
 
-namespace ba = boost::algorithm;
-
 namespace {
 
   boost::regex r_wfs_version("^2\\.0\\.[0-9]$");
@@ -272,8 +270,6 @@ void bw::RequestBase::check_output_format_attribute(const std::string& value, co
 {
   try
   {
-    namespace ba = boost::algorithm;
-
     const auto& fmts = plugin_impl.get_config().get_capabilities_config().get_supported_formats();
     std::string fmt = CapabilitiesConf::conv_output_format_str(value);
     if (fmts.count(fmt) == 0) {
@@ -292,7 +288,6 @@ void bw::RequestBase::check_output_format_attribute(const xercesc::DOMElement* r
 {
   try
   {
-    namespace ba = boost::algorithm;
     const auto& fmts = plugin_impl.get_config().get_capabilities_config().get_supported_formats();
     const auto attrInfo = bwx::get_attr(*root, WFS_NAMESPACE_URI, "outputFormat");
     if (attrInfo.second) {

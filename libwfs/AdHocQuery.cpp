@@ -18,7 +18,6 @@ XERCES_CPP_NAMESPACE_USE
 namespace ba = boost::algorithm;
 namespace bw = SmartMet::Plugin::WFS;
 namespace bwx = SmartMet::Plugin::WFS::Xml;
-namespace bl = boost::lambda;
 
 namespace
 {

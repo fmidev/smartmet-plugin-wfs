@@ -35,8 +35,6 @@
 #include <map>
 #include <utility>
 
-namespace ba = boost::algorithm;
-
 using boost::format;
 using boost::str;
 

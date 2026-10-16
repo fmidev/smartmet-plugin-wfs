@@ -14,9 +14,7 @@
 #include <sstream>
 #include <utility>
 
-namespace ba = boost::algorithm;
 namespace bw = SmartMet::Plugin::WFS;
-namespace pt = boost::posix_time;
 
 const char* bw::StoredGeoserverQueryHandler::P_BEGIN_TIME = "begin";
 const char* bw::StoredGeoserverQueryHandler::P_END_TIME = "end";

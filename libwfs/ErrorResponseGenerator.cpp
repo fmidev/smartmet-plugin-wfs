@@ -10,8 +10,6 @@
 
 using SmartMet::Plugin::WFS::ErrorResponseGenerator;
 
-namespace ba = boost::algorithm;
-
 ErrorResponseGenerator::ErrorResponseGenerator(const SmartMet::Plugin::WFS::PluginImpl& plugin_impl)
     : plugin_impl(plugin_impl)
 {

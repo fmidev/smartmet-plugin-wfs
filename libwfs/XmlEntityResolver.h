@@ -1,15 +1,14 @@
 #pragma once
 
-#include <future>
-#include <mutex>
 #include <boost/archive/text_iarchive.hpp>
 #include <boost/archive/text_oarchive.hpp>
-#include <optional>
-#include <boost/serialization/map.hpp>
 #include <boost/serialization/map.hpp>
 #include <curl/curl.h>
 #include <xercesc/sax/InputSource.hpp>
 #include <xercesc/util/XMLEntityResolver.hpp>
+#include <future>
+#include <mutex>
+#include <optional>
 
 namespace SmartMet {
   namespace Plugin {

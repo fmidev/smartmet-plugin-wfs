@@ -33,8 +33,6 @@
 #define P_LATEST "latest"
 #define P_LANGUAGE "language"
 
-namespace ba = boost::algorithm;
-namespace bl = boost::lambda;
 using namespace SmartMet::Spine;
 
 namespace SmartMet

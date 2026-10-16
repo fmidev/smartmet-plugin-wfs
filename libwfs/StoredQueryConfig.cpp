@@ -137,7 +137,6 @@ void SmartMet::Plugin::WFS::StoredQueryConfig::parse_config()
   try
   {
     using SmartMet::Spine::Value;
-    namespace ba = boost::algorithm;
 
     try
     {

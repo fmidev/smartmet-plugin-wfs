@@ -128,8 +128,6 @@ void get_latlon_boundary(const NFmiArea* area, OGRPolygon* result, int NP, doubl
 {
   try
   {
-    namespace bl = boost::lambda;
-
     const NFmiRect& area_rect = area->XYArea();
     const auto& area_type = typeid(*area);
 

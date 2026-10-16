@@ -10,7 +10,6 @@
 #include <utility>
 
 namespace bw = SmartMet::Plugin::WFS;
-namespace ba = boost::algorithm;
 
 bw::RequestFactory::RequestFactory(PluginImpl& plugin_impl) : plugin_impl(plugin_impl) {}
 

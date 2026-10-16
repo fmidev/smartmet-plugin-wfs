@@ -13,7 +13,6 @@
 #include <stdexcept>
 #include <utility>
 
-namespace ba = boost::algorithm;
 namespace bw = SmartMet::Plugin::WFS;
 
 namespace

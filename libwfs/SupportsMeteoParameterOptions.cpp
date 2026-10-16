@@ -7,7 +7,6 @@
 #include <macgyver/StringConversion.h>
 
 namespace bw = SmartMet::Plugin::WFS;
-namespace ba = boost::algorithm;
 
 bw::SupportsMeteoParameterOptions::SupportsMeteoParameterOptions(
     const std::shared_ptr<SmartMet::Plugin::WFS::StoredQueryConfig>& config)

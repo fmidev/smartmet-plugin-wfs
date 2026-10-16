@@ -37,10 +37,6 @@
 #include "stored_queries/StoredGridQueryHandler.h"
 
 namespace bw = SmartMet::Plugin::WFS;
-namespace ba = boost::algorithm;
-namespace bl = boost::lambda;
-namespace pt = boost::posix_time;
-namespace bg = boost::geometry;
 using namespace SmartMet::Spine;
 
 using boost::format;
@@ -48,8 +44,6 @@ using boost::str;
 using bw::StoredGridQueryHandler;
 using SmartMet::Spine::CaseInsensitiveLess;
 using SmartMet::Spine::str_iequal;
-
-namespace qe = SmartMet::Engine::Querydata;
 
 namespace
 {
@@ -1091,7 +1085,6 @@ void StoredGridQueryHandler::query(const StoredQuery& stored_query,
 {
   try
   {
-    namespace pt = boost::posix_time;
     using namespace SmartMet;
     using namespace SmartMet::Plugin::WFS;
 
