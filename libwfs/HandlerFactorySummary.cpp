@@ -240,6 +240,26 @@ void HandlerFactorySummary::write_html(
     }
 }
 
+namespace {
+    // Store the description of the parameter
+    template <typename Param>
+    void describe_param(Json::Value& p_out, const Param& param)
+    {
+        p_out["description"] = param.description;
+        p_out["type"] = param.type;
+        if (param.size_info) {
+            p_out["is_array"] = true;
+            p_out["mandatory"] = param.size_info->min_size >= 1;
+            p_out["min_size"] = param.size_info->min_size;
+            p_out["max_size"] = param.size_info->max_size;
+            p_out["step"] = param.size_info->step;
+        } else {
+            p_out["is_array"] = false;
+            p_out["mandatory"] = param.mandatory;
+        }
+    }
+}
+
 Json::Value HandlerFactorySummary::as_json(const std::optional<std::string>& name) const
 {
     try {
@@ -261,18 +281,7 @@ Json::Value HandlerFactorySummary::as_json(const std::optional<std::string>& nam
             for (const auto& p_item : f_info->params) {
                 const auto& param = p_item.second;
                 auto& p_out = params_out[param.name] = Json::objectValue;
-                p_out["description"] = param.description;
-                p_out["type"] = param.type;
-                if (param.size_info) {
-                    p_out["is_array"] = true;
-                    p_out["mandatory"] = param.size_info->min_size >= 1;
-                    p_out["min_size"] = param.size_info->min_size;
-                    p_out["max_size"] = param.size_info->max_size;
-                    p_out["step"] = param.size_info->step;
-                } else {
-                    p_out["is_array"] = false;
-                    p_out["mandatory"] = param.mandatory;
-                }
+                describe_param(p_out, param);
             }
 
             for (const auto& sq_item : f_info->stored_queries) {
