@@ -1,4 +1,5 @@
 #include "stored_queries/StoredWWProbabilityQueryHandler.h"
+#include "StoredQueryHandlerFactories.h"
 #include <gis/Box.h>
 #include <gis/OGR.h>
 #include <macgyver/TimeFormatter.h>
@@ -642,9 +643,6 @@ wfs_winterweather_probabilities_query_handler_create(SmartMet::Spine::Reactor* r
 }
 }  // namespace
 
-namespace
-{
 SmartMet::Plugin::WFS::StoredQueryHandlerFactoryDef
     wfs_winterweather_probabilities_query_handler_factory(
         &wfs_winterweather_probabilities_query_handler_create);
-}  // namespace

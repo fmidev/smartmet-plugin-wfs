@@ -18,9 +18,13 @@ extern SmartMet::Plugin::WFS::StoredQueryHandlerFactoryDef wfs_obs_handler_facto
 extern SmartMet::Plugin::WFS::StoredQueryHandlerFactoryDef wfs_stored_air_nuclide_handler_factory;
 extern SmartMet::Plugin::WFS::StoredQueryHandlerFactoryDef wfs_stored_atom_handler_base_factory;
 extern SmartMet::Plugin::WFS::StoredQueryHandlerFactoryDef wfs_stored_aviation_observation_handler_factory;
+extern SmartMet::Plugin::WFS::StoredQueryHandlerFactoryDef wfs_stored_env_monitoring_facility_handler_factory;
+extern SmartMet::Plugin::WFS::StoredQueryHandlerFactoryDef wfs_stored_env_monitoring_network_handler_factory;
 extern SmartMet::Plugin::WFS::StoredQueryHandlerFactoryDef wfs_stored_file_handler_factory;
 extern SmartMet::Plugin::WFS::StoredQueryHandlerFactoryDef wfs_stored_geoserver_handler_factory;
 extern SmartMet::Plugin::WFS::StoredQueryHandlerFactoryDef wfs_stored_grid_handler_factory;
 extern SmartMet::Plugin::WFS::StoredQueryHandlerFactoryDef wfs_stored_mast_handler_factory;
 extern SmartMet::Plugin::WFS::StoredQueryHandlerFactoryDef wfs_stored_qe_download_handler_factory;
 extern SmartMet::Plugin::WFS::StoredQueryHandlerFactoryDef wfs_stored_sounding_handler_factory;
+extern SmartMet::Plugin::WFS::StoredQueryHandlerFactoryDef wfs_winterweather_coverage_query_handler_factory;
+extern SmartMet::Plugin::WFS::StoredQueryHandlerFactoryDef wfs_winterweather_probabilities_query_handler_factory;
