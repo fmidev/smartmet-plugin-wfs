@@ -58,6 +58,21 @@ protected:
       std::vector<std::shared_ptr<RequestParameterMap> >& result) const override;
 
  private:
+  bool producer_selected(const SmartMet::Engine::Querydata::MetaData& meta_info) const;
+
+  bool model_time_selected(const SmartMet::Engine::Querydata::MetaData& meta_info,
+                           bool strict_interval_check,
+                           const Fmi::DateTime& start_time,
+                           const Fmi::DateTime& end_time) const;
+
+  bool add_area_info(RequestParameterMap& pm,
+                     const SmartMet::Engine::Querydata::MetaData& meta_info,
+                     bool have_bbox,
+                     const SmartMet::Spine::BoundingBox& requested_bbox,
+                     const std::string& method) const;
+
+  void add_format_and_crs(RequestParameterMap& pm, const RequestParameterMap& params) const;
+
   std::shared_ptr<OGRPolygon> get_model_boundary(
       const SmartMet::Engine::Querydata::MetaData& meta_info,
       const std::string& crs_name,

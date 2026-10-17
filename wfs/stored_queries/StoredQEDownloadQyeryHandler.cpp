@@ -339,6 +339,307 @@ std::string StoredQEDownloadQueryHandler::get_cache_key_qualifier(
   }
 }
 
+namespace
+{
+// Add the model metadata
+void add_model_info(bw::RequestParameterMap& pm, const qe::MetaData& meta_info)
+{
+  pm.add("_firstTime", meta_info.firstTime);
+  pm.add("_lastTime", meta_info.lastTime);
+  pm.add("_timeStep", meta_info.timeStep);
+  pm.add("_nTimeSteps", meta_info.nTimeSteps);
+  pm.add("_WKT", meta_info.WKT);
+  pm.add("_ullon", meta_info.ullon);
+  pm.add("_ullat", meta_info.ullat);
+  pm.add("_urlon", meta_info.urlon);
+  pm.add("_urlat", meta_info.urlat);
+  pm.add("_bllon", meta_info.bllon);
+  pm.add("_bllat", meta_info.bllat);
+  pm.add("_brlon", meta_info.brlon);
+  pm.add("_brlat", meta_info.brlat);
+  pm.add("_xNumber", meta_info.xNumber);
+  pm.add("_yNumber", meta_info.yNumber);
+  pm.add("_xResolution", meta_info.xResolution);
+  pm.add("_yResolution", meta_info.yResolution);
+  pm.add("_areaWidth", meta_info.areaWidth);
+  pm.add("_areaHeight", meta_info.areaHeight);
+  pm.add("_aspectRatio", meta_info.aspectRatio);
+
+  pm.extract_to(
+      "_level", meta_info.levels.begin(), meta_info.levels.end(), &qe::ModelLevel::value);
+
+  pm.extract_to("_parameters",
+                 meta_info.parameters.begin(),
+                 meta_info.parameters.end(),
+                 &qe::ModelParameter::name);
+}
+
+// Add the time interval of the data
+void add_time_info(bw::RequestParameterMap& pm,
+                   const qe::MetaQueryOptions& opt,
+                   const qe::MetaData& meta_info,
+                   const bw::RequestParameterMap& params,
+                   const Fmi::DateTime& start_time,
+                   const Fmi::DateTime& end_time)
+{
+  const auto first_time = opt.hasFirstTime() ? std::max(opt.getFirstTime(), meta_info.firstTime)
+                                             : meta_info.firstTime;
+
+  const auto last_time =
+      opt.hasLastTime() ? std::min(opt.getLastTime(), meta_info.lastTime) : meta_info.lastTime;
+
+  pm.add("firstTime", Fmi::to_iso_extended_string(first_time) + "Z");
+  pm.add("lastTime", Fmi::to_iso_extended_string(last_time) + "Z");
+
+  // Select exactly the time interval asked for.
+  const auto phenomenonBeginTime =
+      (params.count(P_BEGIN)) ? std::max(start_time, first_time) : first_time;
+  const auto phenomenonEndTime =
+      (params.count(P_END)) ? std::min(end_time, last_time) : last_time;
+  pm.add("phenomenonBeginTime", Fmi::to_iso_extended_string(phenomenonBeginTime) + "Z");
+  pm.add("phenomenonEndTime", Fmi::to_iso_extended_string(phenomenonEndTime) + "Z");
+
+}
+
+// Add the parameters and levels specified in request
+template <typename NameSet, typename LevelValueSet>
+void add_params_and_levels(bw::RequestParameterMap& pm,
+                           const qe::MetaData& meta_info,
+                           const NameSet& req_params,
+                           const NameSet& req_level_types,
+                           const LevelValueSet& req_level_values,
+                           const std::string& method)
+{
+  // Parameters specified in request
+  int num_empty_param_names = 0;
+  for (const auto & parameter : meta_info.parameters)
+  {
+    const std::string& name = parameter.name;
+    if (ba::trim_copy(name).empty())
+    {
+      num_empty_param_names++;
+    }
+    else if (req_params.empty() or req_params.count(name))
+    {
+      pm.add("param", name);
+    }
+  }
+
+  if (num_empty_param_names > 0)
+  {
+    using SmartMet::Engine::Querydata::ModelParameter;
+    std::ostringstream msg;
+    msg << SmartMet::Spine::log_time_str() << ": [WFS] [ERROR] " << method
+        << ": empty parameter name found in Querydata metadata."
+        << " producer='" << meta_info.producer << "',"
+        << " origintime='" << (Fmi::to_iso_extended_string(meta_info.originTime) + "Z'")
+        << " params=(";
+    for (const auto& param : meta_info.parameters)
+    {
+      msg << " '" << param.name << "'";
+    }
+    msg << ")\n";
+    std::cout << msg.str() << std::flush;
+  }
+
+  for (const auto & level : meta_info.levels)
+  {
+    if ((req_level_types.empty() or req_level_types.count(level.type)) and
+        (req_level_values.empty() or (req_level_values.count(level.value))))
+    {
+      pm.add("level", level.value);
+    }
+  }
+
+}
+}  // namespace
+
+bool StoredQEDownloadQueryHandler::producer_selected(const qe::MetaData& meta_info) const
+{
+  if (not producers.empty() and producers.count(meta_info.producer) == 0)
+  {
+    if (debug_level > 1)
+    {
+      std::ostringstream msg;
+      msg << SmartMet::Spine::log_time_str() << ": [WFS] [DEBUG] ["
+          << get_config()->get_query_id() << "] Skipping producer '" << meta_info.producer
+          << '\n';
+      std::cout << msg.str() << std::flush;
+    }
+    // Producer set specified and found producer does not belong to it
+    return false;
+  }
+
+  return true;
+}
+
+bool StoredQEDownloadQueryHandler::model_time_selected(const qe::MetaData& meta_info,
+                                                       bool strict_interval_check,
+                                                       const Fmi::DateTime& start_time,
+                                                       const Fmi::DateTime& end_time) const
+{
+  if (strict_interval_check)
+  {
+    // Entire interval must be provided in model for it to be selected
+    if (not start_time.is_not_a_date_time() and not end_time.is_not_a_date_time() and
+        ((meta_info.firstTime > start_time) or (meta_info.lastTime < end_time)))
+    {
+      if (debug_level > 1)
+      {
+        std::ostringstream msg;
+        msg << SmartMet::Spine::log_time_str() << ": [WFS] [DEBUG] ["
+            << get_config()->get_query_id() << "] Skipping model producer='"
+            << meta_info.producer << "'"
+            << " origintime='" << meta_info.originTime << "'"
+            << " firstTime='" << meta_info.firstTime << "'"
+            << " lastTime='" << meta_info.lastTime << "'"
+            << " strict_interval_check=true\n";
+        std::cout << msg.str() << std::flush;
+      }
+      return false;
+    }
+    if (start_time.is_not_a_date_time() and not end_time.is_not_a_date_time())
+    {
+    }
+    else
+    {
+      Fmi::Exception exception(
+          BCP, "Both or none of the parameters 'starttime' and 'endtime' must be specified!");
+      exception.addParameter(WFS_EXCEPTION_CODE, WFS_OPERATION_PROCESSING_FAILED);
+      throw exception;
+    }
+  }
+  else
+  {
+    // It is enough that intervals overlap
+    if ((not end_time.is_not_a_date_time() and (meta_info.firstTime > end_time)) or
+        (not start_time.is_not_a_date_time() and (meta_info.lastTime < start_time)))
+    {
+      if (debug_level > 1)
+      {
+        std::ostringstream msg;
+        msg << SmartMet::Spine::log_time_str() << ": [WFS] [DEBUG] ["
+            << get_config()->get_query_id() << "] Skipping model producer='"
+            << meta_info.producer << "'"
+            << " origintime='" << meta_info.originTime << "'"
+            << " firstTime='" << meta_info.firstTime << "'"
+            << " lastTime='" << meta_info.lastTime << "'"
+            << " strict_interval_check=false\n";
+        std::cout << msg.str() << std::flush;
+      }
+      return false;
+    }
+  }
+
+  return true;
+}
+
+bool StoredQEDownloadQueryHandler::add_area_info(bw::RequestParameterMap& pm,
+                                                 const qe::MetaData& meta_info,
+                                                 bool have_bbox,
+                                                 const SmartMet::Spine::BoundingBox& requested_bbox,
+                                                 const std::string& method) const
+{
+  auto model_boundary = get_model_boundary(meta_info, DATA_CRS_NAME, 20);
+  if (model_boundary)
+  {
+    add_bbox_info(&pm, "modelBBox", *model_boundary);
+  }
+
+  if (have_bbox)
+  {
+    auto geom = bbox_intersection(requested_bbox, meta_info);
+    if (not geom)
+    {
+      if (debug_level > 1)
+      {
+        std::ostringstream msg;
+        msg << SmartMet::Spine::log_time_str() << ": [WFS] [DEBUG] ["
+            << get_config()->get_query_id() << "] Skipping producer '" << meta_info.producer
+            << " bounding box to boox check\n";
+        std::cout << msg.str() << std::flush;
+      }
+
+      return false;
+    }
+
+    bool swap_coord = false;
+    crs_registry.get_attribute(requested_bbox.crs, "swapCoord", &swap_coord);
+    pm.add("requestedBBox", swap_coord ? requested_bbox.yMin : requested_bbox.xMin);
+    pm.add("requestedBBox", swap_coord ? requested_bbox.xMin : requested_bbox.yMin);
+    pm.add("requestedBBox", swap_coord ? requested_bbox.yMax : requested_bbox.xMax);
+    pm.add("requestedBBox", swap_coord ? requested_bbox.xMax : requested_bbox.yMax);
+
+    add_bbox_info(&pm, "calcBBox", *geom);
+
+    // FIXME: intersection may sometimes return OGRGeometryCollection
+    //        with more than 1 polygon. Currently add bounding box instead
+    //        of boundary for such cases.
+    add_boundary(&pm, "intersection", *geom);
+  }
+  else if (model_boundary)
+  {
+    add_bbox_info(&pm, "calcBBox", *model_boundary);
+    add_boundary(&pm, "intersection", *model_boundary);
+  }
+  else
+  {
+    std::ostringstream msg;
+    msg << SmartMet::Spine::log_time_str() << " [WFS] [WARNING] " << method
+        << ": failed to get model boundary (producer='" << meta_info.producer
+        << "' origin_time='" << meta_info.originTime << "'\n";
+    std::cout << msg.str() << std::flush;
+    return false;
+  }
+
+  return true;
+}
+
+void StoredQEDownloadQueryHandler::add_format_and_crs(bw::RequestParameterMap& pm,
+                                                      const bw::RequestParameterMap& params) const
+{
+  // Test requested format support.
+  auto req_format = params.get_optional<std::string>(P_FORMAT, default_format);
+  if (req_format.empty())
+    req_format = default_format;
+  Fmi::ascii_tolower(req_format);
+  if ((formats.find(req_format) == formats.end()))
+  {
+    std::ostringstream msg;
+    msg << " Supported formats:";
+    std::for_each(formats.begin(), formats.end(), bl::var(msg) << " '" << bl::_1 << "'");
+
+    Fmi::Exception exception(BCP, "The requeted format is not supported!");
+    exception.addDetail(msg.str());
+    exception.addParameter(WFS_EXCEPTION_CODE, WFS_INVALID_PARAMETER_VALUE);
+    exception.addParameter("Requested format", req_format);
+    throw exception.disableStackTrace();
+  }
+
+  pm.add("format", req_format);
+
+  // Units of different packaging formats might differ from timevaluepair format.
+  // The correct units must be select for the metaplugin links.
+  //
+  // FIXME!! Make alias lists for the units values
+  // For exammple, aliases of 'grib' are 'grib1','grib2'.
+  if ((req_format == "grib1") or (req_format == "grib2"))
+    pm.add("units", "grib");
+  else
+    pm.add("units", req_format);
+
+  int epsg = -1;
+  const auto crs = params.get_single<std::string>(P_PROJECTION);
+  if (not crs_registry.get_attribute(crs, "epsg", &epsg))
+  {
+    Fmi::Exception exception(BCP, "Failed to get EPSG code for CRS '" + crs + "'!");
+    exception.addParameter(WFS_EXCEPTION_CODE, WFS_OPERATION_PARSING_FAILED);
+    throw exception.disableStackTrace();
+  }
+  pm.add("crs", str(format("EPSG:%04d") % epsg));
+
+}
+
 void StoredQEDownloadQueryHandler::update_parameters(
     const bw::RequestParameterMap& params,
     int seq_id,
@@ -415,74 +716,15 @@ void StoredQEDownloadQueryHandler::update_parameters(
     bw::FeatureID feature_id(get_config()->get_query_id(), params.get_map(true), seq_id);
 
     const auto md_list = q_engine->getEngineMetadata(opt);
-    for (const auto & meta_info : md_list)
-    {
-      if (not producers.empty() and producers.count(meta_info.producer) == 0)
-      {
-        if (debug_level > 1)
-        {
-          std::ostringstream msg;
-          msg << SmartMet::Spine::log_time_str() << ": [WFS] [DEBUG] ["
-              << get_config()->get_query_id() << "] Skipping producer '" << meta_info.producer
-              << '\n';
-          std::cout << msg.str() << std::flush;
-        }
-        // Producer set specified and found producer does not belong to it
-        continue;
-      }
+    const std::string method = METHOD_NAME;
 
-      if (strict_interval_check)
-      {
-        // Entire interval must be provided in model for it to be selected
-        if (not start_time.is_not_a_date_time() and not end_time.is_not_a_date_time() and
-            ((meta_info.firstTime > start_time) or (meta_info.lastTime < end_time)))
-        {
-          if (debug_level > 1)
-          {
-            std::ostringstream msg;
-            msg << SmartMet::Spine::log_time_str() << ": [WFS] [DEBUG] ["
-                << get_config()->get_query_id() << "] Skipping model producer='"
-                << meta_info.producer << "'"
-                << " origintime='" << meta_info.originTime << "'"
-                << " firstTime='" << meta_info.firstTime << "'"
-                << " lastTime='" << meta_info.lastTime << "'"
-                << " strict_interval_check=true\n";
-            std::cout << msg.str() << std::flush;
-          }
-          continue;
-        }
-        if (start_time.is_not_a_date_time() and not end_time.is_not_a_date_time())
-        {
-        }
-        else
-        {
-          Fmi::Exception exception(
-              BCP, "Both or none of the parameters 'starttime' and 'endtime' must be specified!");
-          exception.addParameter(WFS_EXCEPTION_CODE, WFS_OPERATION_PROCESSING_FAILED);
-          throw exception;
-        }
-      }
-      else
-      {
-        // It is enough that intervals overlap
-        if ((not end_time.is_not_a_date_time() and (meta_info.firstTime > end_time)) or
-            (not start_time.is_not_a_date_time() and (meta_info.lastTime < start_time)))
-        {
-          if (debug_level > 1)
-          {
-            std::ostringstream msg;
-            msg << SmartMet::Spine::log_time_str() << ": [WFS] [DEBUG] ["
-                << get_config()->get_query_id() << "] Skipping model producer='"
-                << meta_info.producer << "'"
-                << " origintime='" << meta_info.originTime << "'"
-                << " firstTime='" << meta_info.firstTime << "'"
-                << " lastTime='" << meta_info.lastTime << "'"
-                << " strict_interval_check=false\n";
-            std::cout << msg.str() << std::flush;
-          }
-          continue;
-        }
-      }
+    for (const auto& meta_info : md_list)
+    {
+      if (not producer_selected(meta_info))
+        continue;
+
+      if (not model_time_selected(meta_info, strict_interval_check, start_time, end_time))
+        continue;
 
       std::shared_ptr<RequestParameterMap> pm(new RequestParameterMap(true));
 
@@ -494,88 +736,11 @@ void StoredQEDownloadQueryHandler::update_parameters(
         std::cout << msg.str() << std::flush;
       }
 
-      auto model_boundary = get_model_boundary(meta_info, DATA_CRS_NAME, 20);
-      if (model_boundary)
-      {
-        add_bbox_info(pm.get(), "modelBBox", *model_boundary);
-      }
-
-      if (have_bbox)
-      {
-        auto geom = bbox_intersection(requested_bbox, meta_info);
-        if (not geom)
-        {
-          if (debug_level > 1)
-          {
-            std::ostringstream msg;
-            msg << SmartMet::Spine::log_time_str() << ": [WFS] [DEBUG] ["
-                << get_config()->get_query_id() << "] Skipping producer '" << meta_info.producer
-                << " bounding box to boox check\n";
-            std::cout << msg.str() << std::flush;
-          }
-
-          continue;
-        }
-
-        bool swap_coord = false;
-        crs_registry.get_attribute(requested_bbox.crs, "swapCoord", &swap_coord);
-        pm->add("requestedBBox", swap_coord ? requested_bbox.yMin : requested_bbox.xMin);
-        pm->add("requestedBBox", swap_coord ? requested_bbox.xMin : requested_bbox.yMin);
-        pm->add("requestedBBox", swap_coord ? requested_bbox.yMax : requested_bbox.xMax);
-        pm->add("requestedBBox", swap_coord ? requested_bbox.xMax : requested_bbox.yMax);
-
-        add_bbox_info(pm.get(), "calcBBox", *geom);
-
-        // FIXME: intersection may sometimes return OGRGeometryCollection
-        //        with more than 1 polygon. Currently add bounding box instead
-        //        of boundary for such cases.
-        add_boundary(pm.get(), "intersection", *geom);
-      }
-      else if (model_boundary)
-      {
-        add_bbox_info(pm.get(), "calcBBox", *model_boundary);
-        add_boundary(pm.get(), "intersection", *model_boundary);
-      }
-      else
-      {
-        std::ostringstream msg;
-        msg << SmartMet::Spine::log_time_str() << " [WFS] [WARNING] " << METHOD_NAME
-            << ": failed to get model boundary (producer='" << meta_info.producer
-            << "' origin_time='" << meta_info.originTime << "'\n";
-        std::cout << msg.str() << std::flush;
+      if (not add_area_info(*pm, meta_info, have_bbox, requested_bbox, method))
         continue;
-      }
 
-#if 1
-      pm->add("_firstTime", meta_info.firstTime);
-      pm->add("_lastTime", meta_info.lastTime);
-      pm->add("_timeStep", meta_info.timeStep);
-      pm->add("_nTimeSteps", meta_info.nTimeSteps);
-      pm->add("_WKT", meta_info.WKT);
-      pm->add("_ullon", meta_info.ullon);
-      pm->add("_ullat", meta_info.ullat);
-      pm->add("_urlon", meta_info.urlon);
-      pm->add("_urlat", meta_info.urlat);
-      pm->add("_bllon", meta_info.bllon);
-      pm->add("_bllat", meta_info.bllat);
-      pm->add("_brlon", meta_info.brlon);
-      pm->add("_brlat", meta_info.brlat);
-      pm->add("_xNumber", meta_info.xNumber);
-      pm->add("_yNumber", meta_info.yNumber);
-      pm->add("_xResolution", meta_info.xResolution);
-      pm->add("_yResolution", meta_info.yResolution);
-      pm->add("_areaWidth", meta_info.areaWidth);
-      pm->add("_areaHeight", meta_info.areaHeight);
-      pm->add("_aspectRatio", meta_info.aspectRatio);
+      add_model_info(*pm, meta_info);
 
-      pm->extract_to(
-          "_level", meta_info.levels.begin(), meta_info.levels.end(), &qe::ModelLevel::value);
-
-      pm->extract_to("_parameters",
-                     meta_info.parameters.begin(),
-                     meta_info.parameters.end(),
-                     &qe::ModelParameter::name);
-#endif
       pm->add("producer", meta_info.producer);
       pm->add("originTime", Fmi::to_iso_extended_string(meta_info.originTime) + "Z");
 
@@ -585,103 +750,12 @@ void StoredQEDownloadQueryHandler::update_parameters(
       feature_id.add_param(P_ORIGIN_TIME, meta_info.originTime);
       pm->add("featureId", feature_id.get_id());
 
-      const auto first_time = opt.hasFirstTime() ? std::max(opt.getFirstTime(), meta_info.firstTime)
-                                                 : meta_info.firstTime;
+      add_time_info(*pm, opt, meta_info, params, start_time, end_time);
 
-      const auto last_time =
-          opt.hasLastTime() ? std::min(opt.getLastTime(), meta_info.lastTime) : meta_info.lastTime;
+      add_params_and_levels(
+          *pm, meta_info, req_params, req_level_types, req_level_values, method);
 
-      pm->add("firstTime", Fmi::to_iso_extended_string(first_time) + "Z");
-      pm->add("lastTime", Fmi::to_iso_extended_string(last_time) + "Z");
-
-      // Select exactly the time interval asked for.
-      const auto phenomenonBeginTime =
-          (params.count(P_BEGIN)) ? std::max(start_time, first_time) : first_time;
-      const auto phenomenonEndTime =
-          (params.count(P_END)) ? std::min(end_time, last_time) : last_time;
-      pm->add("phenomenonBeginTime", Fmi::to_iso_extended_string(phenomenonBeginTime) + "Z");
-      pm->add("phenomenonEndTime", Fmi::to_iso_extended_string(phenomenonEndTime) + "Z");
-
-      // Parameters specified in request
-      int num_empty_param_names = 0;
-      for (const auto & parameter : meta_info.parameters)
-      {
-        const std::string& name = parameter.name;
-        if (ba::trim_copy(name).empty())
-        {
-          num_empty_param_names++;
-        }
-        else if (req_params.empty() or req_params.count(name))
-        {
-          pm->add("param", name);
-        }
-      }
-
-      if (num_empty_param_names > 0)
-      {
-        using SmartMet::Engine::Querydata::ModelParameter;
-        std::ostringstream msg;
-        msg << SmartMet::Spine::log_time_str() << ": [WFS] [ERROR] " << METHOD_NAME
-            << ": empty parameter name found in Querydata metadata."
-            << " producer='" << meta_info.producer << "',"
-            << " origintime='" << (Fmi::to_iso_extended_string(meta_info.originTime) + "Z'")
-            << " params=(";
-        for (const auto& param : meta_info.parameters)
-        {
-          msg << " '" << param.name << "'";
-        }
-        msg << ")\n";
-        std::cout << msg.str() << std::flush;
-      }
-
-      for (const auto & level : meta_info.levels)
-      {
-        if ((req_level_types.empty() or req_level_types.count(level.type)) and
-            (req_level_values.empty() or (req_level_values.count(level.value))))
-        {
-          pm->add("level", level.value);
-        }
-      }
-
-      // Test requested format support.
-      auto req_format = params.get_optional<std::string>(P_FORMAT, default_format);
-      if (req_format.empty())
-        req_format = default_format;
-      Fmi::ascii_tolower(req_format);
-      if ((formats.find(req_format) == formats.end()))
-      {
-        std::ostringstream msg;
-        msg << " Supported formats:";
-        std::for_each(formats.begin(), formats.end(), bl::var(msg) << " '" << bl::_1 << "'");
-
-        Fmi::Exception exception(BCP, "The requeted format is not supported!");
-        exception.addDetail(msg.str());
-        exception.addParameter(WFS_EXCEPTION_CODE, WFS_INVALID_PARAMETER_VALUE);
-        exception.addParameter("Requested format", req_format);
-        throw exception.disableStackTrace();
-      }
-
-      pm->add("format", req_format);
-
-      // Units of different packaging formats might differ from timevaluepair format.
-      // The correct units must be select for the metaplugin links.
-      //
-      // FIXME!! Make alias lists for the units values
-      // For exammple, aliases of 'grib' are 'grib1','grib2'.
-      if ((req_format == "grib1") or (req_format == "grib2"))
-        pm->add("units", "grib");
-      else
-        pm->add("units", req_format);
-
-      int epsg = -1;
-      const auto crs = params.get_single<std::string>(P_PROJECTION);
-      if (not crs_registry.get_attribute(crs, "epsg", &epsg))
-      {
-        Fmi::Exception exception(BCP, "Failed to get EPSG code for CRS '" + crs + "'!");
-        exception.addParameter(WFS_EXCEPTION_CODE, WFS_OPERATION_PARSING_FAILED);
-        throw exception.disableStackTrace();
-      }
-      pm->add("crs", str(format("EPSG:%04d") % epsg));
+      add_format_and_crs(*pm, params);
 
       // FIXME: maybe some combined data also is required
 
