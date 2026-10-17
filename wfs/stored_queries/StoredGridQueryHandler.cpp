@@ -408,6 +408,133 @@ void dump_meta_query_options(const qe::MetaQueryOptions& opt)
 }
 #endif
 
+// Check that the model has a grid with an area
+void check_grid_model(SmartMet::Engine::Querydata::QImpl& model, const std::string& producer)
+{
+  if (model.isGrid())
+  {
+    const auto grid_info = model.grid();
+    auto* model_area = grid_info.Area();
+    if (!model_area)
+    {
+      Fmi::Exception exception(BCP,
+                               "Attempted to use producer with no Area specified: " + producer);
+      exception.addParameter(WFS_EXCEPTION_CODE, WFS_OPERATION_PROCESSING_FAILED);
+      throw exception;
+    }
+  }
+  else
+  {
+    Fmi::Exception exception(BCP,
+                             "Attempted to use producer which has no grid specified: " + producer);
+    exception.addParameter(WFS_EXCEPTION_CODE, WFS_OPERATION_PROCESSING_FAILED);
+    throw exception;
+  }
+}
+
+// Print the generated times (for debugging)
+void print_generated_times(const TS::TimeSeriesGenerator::LocalTimeList& tlist)
+{
+  std::cout << __FILE__ << "#" << __LINE__ << ": generated times:";
+  for (const auto& t : tlist)
+  {
+    std::cout << " '" << t << "'";
+  }
+  std::cout << std::endl;
+}
+
+// The precisions of the parameters
+std::map<std::string, int> get_param_precisions(
+    const std::map<std::string, SmartMet::Engine::Querydata::ModelParameter>& param_map,
+    const std::vector<SmartMet::Spine::Parameter>& data_params)
+{
+  const int default_prec = 6;
+  std::map<std::string, int> param_precision_map;
+  for (const SmartMet::Spine::Parameter& param : data_params)
+  {
+    const std::string& name = param.name();
+    auto pos = param_map.find(Fmi::ascii_tolower_copy(name));
+    if (pos == param_map.end())
+    {
+      param_precision_map[name] = default_prec;
+    }
+    else
+    {
+      param_precision_map[name] = pos->second.precision;
+    }
+  }
+  return param_precision_map;
+}
+
+// Set the corner coordinates of the grid
+template <typename Result>
+void set_grid_corners(Result& theResult,
+                      const std::vector<double>& locationVecLon,
+                      const std::vector<double>& locationVecLat)
+{
+  if (locationVecLon.size() > 1 && locationVecLat.size() > 1)
+  {
+    theResult.ll_lon = locationVecLon[0];
+    theResult.ur_lon = locationVecLon[locationVecLon.size() - 1];
+
+    theResult.ll_lat = locationVecLat[0];
+    theResult.ur_lat = locationVecLat[locationVecLat.size() - 1];
+  }
+  else
+  {
+    std::ostringstream msg;
+    msg << "Grid sizes of less than 2 are not supported";
+    Fmi::Exception exception(BCP, msg.str());
+    exception.addParameter(WFS_EXCEPTION_CODE, WFS_OPERATION_PROCESSING_FAILED);
+    throw exception;
+  }
+}
+
+// Add the metadata info of a parameter if not already in the vector
+void add_param_info(std::vector<std::pair<std::string, FmiParameterName> >& paramInfos,
+                    const SmartMet::Spine::Parameter& param)
+{
+  auto paramInfo = std::make_pair(param.name(), param.number());
+  if (std::find(paramInfos.begin(), paramInfos.end(), paramInfo) == paramInfos.end())
+  {
+    paramInfos.push_back(paramInfo);
+  }
+}
+
+// The formatted grid values of time step 'i'
+std::vector<std::string> format_grid_values(const TS::TimeSeriesGroup& val,
+                                            unsigned int i,
+                                            const StoredGridQueryHandler::Query& query)
+{
+  std::vector<std::string> thisXYGrid;
+  thisXYGrid.reserve(val.size());
+
+  for (const auto& locationIt : val)
+  {
+    auto tsValue = locationIt.timeseries[i].value;
+
+    if (std::get_if<TS::None>(&(tsValue)))
+    {
+      thisXYGrid.emplace_back(query.missing_text);
+    }
+    else
+    {
+      const double* ptr = std::get_if<double>(&tsValue);
+      if (ptr)
+      {
+        thisXYGrid.emplace_back(formatToScaledInteger(*ptr, query.scaleFactor, query.precision));
+      }
+      else
+      {
+        std::stringstream ss;
+        ss << tsValue;
+        thisXYGrid.emplace_back(ss.str());
+      }
+    }
+  }
+  return thisXYGrid;
+}
+
 }  // namespace
 
 std::pair<unsigned int, unsigned int> StoredGridQueryHandler::getDataIndexExtents(
@@ -744,6 +871,23 @@ void StoredGridQueryHandler::parse_params(const RequestParameterMap& param, Quer
   }
 }
 
+StoredGridQueryHandler::Result::ParamTimeSeries StoredGridQueryHandler::grid_time_series(
+    const TS::TimeSeriesGroup& val, const Query& query, unsigned int xdim) const
+{
+  Result::ParamTimeSeries result;
+
+  unsigned int timesteps(val.empty() ? 0 : val.begin()->timeseries.size());
+
+  for (unsigned int i = 0; i < timesteps; i++)
+  {
+    Result::Grid thisXYGrid = format_grid_values(val, i, query);
+
+    auto rearranged = rearrangeGrid(thisXYGrid, xdim);
+    result.emplace_back(rearranged);
+  }
+  return result;
+}
+
 StoredGridQueryHandler::Result StoredGridQueryHandler::extract_forecast(
     const RequestParameterMap& params, Query& query, const std::string& dataCrs) const
 {
@@ -780,25 +924,7 @@ StoredGridQueryHandler::Result StoredGridQueryHandler::extract_forecast(
     auto model =
         (query.origin_time ? q_engine->get(producer, *query.origin_time) : q_engine->get(producer));
 
-    if (model->isGrid())
-    {
-      const auto grid_info = model->grid();
-      auto* model_area = grid_info.Area();
-      if (!model_area)
-      {
-        Fmi::Exception exception(BCP,
-                                 "Attempted to use producer with no Area specified: " + producer);
-        exception.addParameter(WFS_EXCEPTION_CODE, WFS_OPERATION_PROCESSING_FAILED);
-        throw exception;
-      }
-    }
-    else
-    {
-      Fmi::Exception exception(
-          BCP, "Attempted to use producer which has no grid specified: " + producer);
-      exception.addParameter(WFS_EXCEPTION_CODE, WFS_OPERATION_PROCESSING_FAILED);
-      throw exception;
-    }
+    check_grid_model(*model, producer);
 
     if (debug_level > 0)
     {
@@ -819,31 +945,13 @@ StoredGridQueryHandler::Result StoredGridQueryHandler::extract_forecast(
     auto tlist = TS::TimeSeriesGenerator::generate(*query.toptions, tz);
 
     if (debug_level > 2)
-    {
-      std::cout << __FILE__ << "#" << __LINE__ << ": generated times:";
-      for (const auto& t : tlist)
-      {
-        std::cout << " '" << t << "'";
-      }
-      std::cout << std::endl;
-    }
+      print_generated_times(tlist);
 
-    const int default_prec = 6;
+    // Note: the precisions are not used, but get_model_parameters checks the model parameters
     const auto param_map = get_model_parameters(producer, model->originTime());
-    std::map<std::string, int> param_precision_map;
-    for (const Parameter& param : query.data_params)
-    {
-      const std::string& name = param.name();
-      auto pos = param_map.find(Fmi::ascii_tolower_copy(name));
-      if (pos == param_map.end())
-      {
-        param_precision_map[name] = default_prec;
-      }
-      else
-      {
-        param_precision_map[name] = pos->second.precision;
-      }
-    }
+    const std::map<std::string, int> param_precision_map =
+        get_param_precisions(param_map, query.data_params);
+    (void)param_precision_map;
 
     // Build NFmiSvgPath for Querydata
     NFmiIndexMask mask;
@@ -946,22 +1054,7 @@ StoredGridQueryHandler::Result StoredGridQueryHandler::extract_forecast(
       locationVecLat.push_back(item.lonlat.lat);
 
     // Set the corresponding geographical coordinates
-    if (locationVecLon.size() > 1 && locationVecLat.size() > 1)
-    {
-      theResult.ll_lon = locationVecLon[0];
-      theResult.ur_lon = locationVecLon[locationVecLon.size() - 1];
-
-      theResult.ll_lat = locationVecLat[0];
-      theResult.ur_lat = locationVecLat[locationVecLat.size() - 1];
-    }
-    else
-    {
-      std::ostringstream msg;
-      msg << "Grid sizes of less than 2 are not supported";
-      Fmi::Exception exception(BCP, msg.str());
-      exception.addParameter(WFS_EXCEPTION_CODE, WFS_OPERATION_PROCESSING_FAILED);
-      throw exception;
-    }
+    set_grid_corners(theResult, locationVecLon, locationVecLat);
 
     for (model->resetLevel(); model->nextLevel();)
     {
@@ -974,12 +1067,7 @@ StoredGridQueryHandler::Result StoredGridQueryHandler::extract_forecast(
         for (const Parameter& param : query.data_params)
         {
           // Get the metadata infos if not already in the vector
-          auto paramInfo = std::make_pair(param.name(), param.number());
-          if (std::find(theResult.paramInfos.begin(), theResult.paramInfos.end(), paramInfo) ==
-              theResult.paramInfos.end())
-          {
-            theResult.paramInfos.push_back(paramInfo);
-          }
+          add_param_info(theResult.paramInfos, param);
 
           using SmartMet::Spine::Parameter;
 
@@ -1004,43 +1092,7 @@ StoredGridQueryHandler::Result StoredGridQueryHandler::extract_forecast(
 
           val = makeSparseGrid(val, data_step, extents);
 
-          Result::ParamTimeSeries result;
-
-          unsigned int timesteps(val->empty() ? 0 : val->begin()->timeseries.size());
-
-          for (unsigned int i = 0; i < timesteps; i++)
-          {
-            Result::Grid thisXYGrid;
-            thisXYGrid.reserve(val->size());
-
-            for (auto & locationIt : *val)
-            {
-              auto tsValue = locationIt.timeseries[i].value;
-
-              if (std::get_if<TS::None>(&(tsValue)))
-              {
-                thisXYGrid.emplace_back(query.missing_text);
-              }
-              else
-              {
-                const double* ptr = std::get_if<double>(&tsValue);
-                if (ptr)
-                {
-                  thisXYGrid.emplace_back(
-                    formatToScaledInteger(*ptr, query.scaleFactor, query.precision));
-                }
-                else
-                {
-                  std::stringstream ss;
-                  ss << tsValue;
-                  thisXYGrid.emplace_back(ss.str());
-                }
-              }
-            }
-
-            auto rearranged = rearrangeGrid(thisXYGrid, resulting_extents.first);
-            result.emplace_back(rearranged);
-          }
+          Result::ParamTimeSeries result = grid_time_series(*val, query, resulting_extents.first);
           thisLevel.push_back(std::move(result));
         }
       }

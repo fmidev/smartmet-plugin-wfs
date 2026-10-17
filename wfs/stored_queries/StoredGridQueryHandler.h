@@ -151,6 +151,10 @@ class StoredGridQueryHandler : public StoredQueryHandlerBase,
 
   Result::Grid rearrangeGrid(const Result::Grid& inputGrid, int arrayWidth) const;
 
+  Result::ParamTimeSeries grid_time_series(const TS::TimeSeriesGroup& val,
+                                           const Query& query,
+                                           unsigned int xdim) const;
+
   std::pair<unsigned int, unsigned int> getDataIndexExtents(
       const TS::TimeSeriesGroupPtr& longitudes,
       const TS::TimeSeriesGroupPtr& latitudes,
