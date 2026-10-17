@@ -23,6 +23,28 @@ const char* bw::StoredGeoserverQueryHandler::P_WIDTH = "width";
 const char* bw::StoredGeoserverQueryHandler::P_HEIGHT = "height";
 const char* bw::StoredGeoserverQueryHandler::P_CRS = "crs";
 
+namespace
+{
+// Enclose scheme and table name within quotes. Scheme is assumed not to contain dot(s)
+std::string quote_db_table(const std::string& db_table)
+{
+  auto pos = db_table.find('.');
+  if ((pos != std::string::npos) && (pos > 0) && ((pos + 1) < db_table.length()))
+    return "\"" + db_table.substr(0, pos) + "\".\"" + db_table.substr(pos + 1) + "\"";
+  return db_table;
+}
+
+// The EPSG code of a CRS name such as 'EPSG::3067' or 'urn:ogc:def:crs:EPSG::3067'
+int parse_epsg_code(const std::string& crs_name)
+{
+  std::string s_crs = Fmi::ascii_tolower_copy(crs_name);
+  std::size_t pos = s_crs.rfind("epsg::");
+  if (pos != std::string::npos)
+    s_crs = s_crs.substr(pos + 6);
+  return Fmi::stoi(s_crs);
+}
+}  // namespace
+
 bw::StoredGeoserverQueryHandler::StoredGeoserverQueryHandler(
     SmartMet::Spine::Reactor* reactor,
     const StoredQueryConfig::Ptr& config,
@@ -75,40 +97,7 @@ bw::StoredGeoserverQueryHandler::StoredGeoserverQueryHandler(
     }
     else if (config->get_config().exists("layerMap"))
     {
-      auto& cfg_layer_map = config->get_mandatory_config_param<libconfig::Setting&>("layerMap");
-      config->assert_is_list(cfg_layer_map, 1);
-      const int len = cfg_layer_map.getLength();
-      layer_map = std::map<std::string, std::string>();
-      for (int i = 0; i < len; i++)
-      {
-        auto& cfg_item = cfg_layer_map[i];
-        config->assert_is_group(cfg_item);
-        std::vector<std::string> aliases;
-        const auto name = config->get_mandatory_config_param<std::string>(cfg_item, "name");
-        std::string db_table = cfg_item.exists("db_table")
-            ? config->get_mandatory_config_param<std::string>(cfg_item, "db_table")
-            : "mosaic." + name;
-
-        // Enclose scheme and table name within quotes. Scheme is assumed not to contain dot(s)
-        auto pos = db_table.find('.');
-        if ((pos != std::string::npos) && (pos > 0) && ((pos + 1) < db_table.length()))
-          db_table = "\"" + db_table.substr(0, pos) + "\".\"" + db_table.substr(pos + 1) + "\"";
-
-        config->get_config_array(cfg_item, "alias", aliases, 0);
-        if (not layer_map->insert(std::make_pair(name, db_table)).second)
-        {
-          throw Fmi::Exception(BCP, "Duplicate layer name '" + name + "'!");
-        }
-
-        for (const auto& alias : aliases)
-        {
-          const std::string alias_name = Fmi::ascii_tolower_copy(alias);
-          if (not layer_alias_map.insert(std::make_pair(alias_name, name)).second)
-          {
-            throw Fmi::Exception(BCP, "Duplicate layer alias '" + alias + "'!");
-          }
-        }
-      }
+      read_layer_map(*config);
     }
     else
     {
@@ -132,39 +121,79 @@ bw::StoredGeoserverQueryHandler::StoredGeoserverQueryHandler(
       }
     }
 
-    auto& layer_and_param_name_map =
-        config->get_mandatory_config_param<libconfig::Setting&>("layerParamNameMap");
-    config->assert_is_list(layer_and_param_name_map, 1);
-    const int lapnm_len = layer_and_param_name_map.getLength();
-    layer_param_name_map = std::map<std::string, std::string>();
-    for (int i = 0; i < lapnm_len; i++)
-    {
-      auto& item = layer_and_param_name_map[i];
-      config->assert_is_group(item);
-      const auto layer_name = config->get_mandatory_config_param<std::string>(item, "layer");
-      const auto parameter_name =
-          config->get_mandatory_config_param<std::string>(item, "param");
-      if (layer_param_name_map.find(layer_name) != layer_param_name_map.end())
-      {
-        throw Fmi::Exception(BCP, "Duplicate layer name '" + layer_name + "'!");
-      }
-      layer_param_name_map.insert(std::make_pair(Fmi::ascii_tolower_copy(layer_name),
-                                                 Fmi::ascii_tolower_copy(parameter_name)));
-
-      // Add missing layers to layerMap, using layer name as table name
-      if (!layer_db_table_name_format)
-      {
-        std::string db_table("mosaic." + layer_name);
-        auto pos = db_table.find('.');
-        if ((pos != std::string::npos) && (pos > 0) && ((pos + 1) < db_table.length()))
-          db_table = "\"" + db_table.substr(0, pos) + "\".\"" + db_table.substr(pos + 1) + "\"";
-        layer_map->insert(std::make_pair(layer_name, db_table));
-      }
-    }
+    read_layer_param_name_map(*config);
   }
   catch (...)
   {
     throw Fmi::Exception::Trace(BCP, "Operation failed!");
+  }
+}
+
+// Read the mapping of layer names to database table names
+void bw::StoredGeoserverQueryHandler::read_layer_map(StoredQueryConfig& config)
+{
+  auto& cfg_layer_map = config.get_mandatory_config_param<libconfig::Setting&>("layerMap");
+  config.assert_is_list(cfg_layer_map, 1);
+  const int len = cfg_layer_map.getLength();
+  layer_map = std::map<std::string, std::string>();
+  for (int i = 0; i < len; i++)
+  {
+    auto& cfg_item = cfg_layer_map[i];
+    config.assert_is_group(cfg_item);
+    std::vector<std::string> aliases;
+    const auto name = config.get_mandatory_config_param<std::string>(cfg_item, "name");
+    std::string db_table = cfg_item.exists("db_table")
+        ? config.get_mandatory_config_param<std::string>(cfg_item, "db_table")
+        : "mosaic." + name;
+
+    // Enclose scheme and table name within quotes. Scheme is assumed not to contain dot(s)
+    db_table = quote_db_table(db_table);
+
+    config.get_config_array(cfg_item, "alias", aliases, 0);
+    if (not layer_map->insert(std::make_pair(name, db_table)).second)
+    {
+      throw Fmi::Exception(BCP, "Duplicate layer name '" + name + "'!");
+    }
+
+    for (const auto& alias : aliases)
+    {
+      const std::string alias_name = Fmi::ascii_tolower_copy(alias);
+      if (not layer_alias_map.insert(std::make_pair(alias_name, name)).second)
+      {
+        throw Fmi::Exception(BCP, "Duplicate layer alias '" + alias + "'!");
+      }
+    }
+  }
+}
+
+// Read the mapping of layer names to parameter names
+void bw::StoredGeoserverQueryHandler::read_layer_param_name_map(StoredQueryConfig& config)
+{
+  auto& layer_and_param_name_map =
+      config.get_mandatory_config_param<libconfig::Setting&>("layerParamNameMap");
+  config.assert_is_list(layer_and_param_name_map, 1);
+  const int lapnm_len = layer_and_param_name_map.getLength();
+  layer_param_name_map = std::map<std::string, std::string>();
+  for (int i = 0; i < lapnm_len; i++)
+  {
+    auto& item = layer_and_param_name_map[i];
+    config.assert_is_group(item);
+    const auto layer_name = config.get_mandatory_config_param<std::string>(item, "layer");
+    const auto parameter_name =
+        config.get_mandatory_config_param<std::string>(item, "param");
+    if (layer_param_name_map.find(layer_name) != layer_param_name_map.end())
+    {
+      throw Fmi::Exception(BCP, "Duplicate layer name '" + layer_name + "'!");
+    }
+    layer_param_name_map.insert(std::make_pair(Fmi::ascii_tolower_copy(layer_name),
+                                               Fmi::ascii_tolower_copy(parameter_name)));
+
+    // Add missing layers to layerMap, using layer name as table name
+    if (!layer_db_table_name_format)
+    {
+      std::string db_table = quote_db_table("mosaic." + layer_name);
+      layer_map->insert(std::make_pair(layer_name, db_table));
+    }
   }
 }
 
@@ -189,36 +218,14 @@ void bw::StoredGeoserverQueryHandler::update_parameters(
 
     std::vector<std::string> layers;  //  = t_layers.get_string_array(params, this);
     const auto crs_name = params.get_single<std::string>(P_CRS);
-    std::string s_crs = Fmi::ascii_tolower_copy(crs_name);
-    std::size_t pos = s_crs.rfind("epsg::");
-    if (pos != std::string::npos)
-      s_crs = s_crs.substr(6);
-    int crs = Fmi::stoi(s_crs);
+    int crs = parse_epsg_code(crs_name);
     auto start_time = params.get_single<Fmi::DateTime>(P_BEGIN_TIME);
     auto end_time = params.get_single<Fmi::DateTime>(P_END_TIME);
     unsigned width = params.get_single<uint64_t>(P_WIDTH);
     unsigned height = params.get_single<uint64_t>(P_HEIGHT);
     const auto selected_name = params.get_optional<std::string>(P_SELECTED_NAME, "");
     params.get<std::string>(P_LAYERS, std::back_inserter(layers));
-    for (std::string& layer : layers)
-    {
-        // FIXME: cycle parameter modified below. Is it correct?
-      auto pos = layer_alias_map.find(Fmi::ascii_tolower_copy(layer));
-      if (pos != layer_alias_map.end())
-      {
-        layer = pos->second;
-      }
-
-      // Handling the case when not found
-      auto layerIt = layer_param_name_map.find(layer);
-      if (layerIt == layer_param_name_map.end() and pos == layer_alias_map.end())
-      {
-        Fmi::Exception exception(
-            BCP, "Parameter configuration for layer '" + layer + "' not found!");
-        exception.addParameter(WFS_EXCEPTION_CODE, WFS_OPERATION_PARSING_FAILED);
-        throw exception.disableStackTrace();
-      }
-    }
+    resolve_layer_aliases(layers);
 
     SmartMet::Spine::BoundingBox requested_bbox;
     if (not get_bounding_box(params, crs_name, &requested_bbox))
@@ -228,18 +235,7 @@ void bw::StoredGeoserverQueryHandler::update_parameters(
       throw exception.disableStackTrace();
     }
 
-    std::map<std::string, std::string> db_select_map;
-    for (const auto & db_filter_param_name : db_filter_param_names)
-    {
-      std::vector<SmartMet::Spine::Value> sel_param;
-      params.get<SmartMet::Spine::Value>(db_filter_param_name, std::back_inserter(sel_param), 1, 2);
-      if (sel_param.size() == 2)
-      {
-        const std::string& name = sel_param.at(0).get<std::string>();
-        const std::string& val = sel_param.at(1).get<std::string>();
-        db_select_map[name] = val;
-      }
-    }
+    const std::map<std::string, std::string> db_select_map = get_db_select_map(params);
 
     int bb_epsg = 3067;
     crs_registry.get_attribute(requested_bbox.crs, "epsg", &bb_epsg);
@@ -307,82 +303,8 @@ void bw::StoredGeoserverQueryHandler::update_parameters(
           feature_id.erase_param(P_SELECTED_NAME);
           feature_id.add_param(P_SELECTED_NAME, it2->name);
 
-          std::shared_ptr<RequestParameterMap> pm1(
-	       new RequestParameterMap(true));
-          pm1->add("epoch", Fmi::to_iso_extended_string(it1.second.epoch) + "Z");
-          pm1->add("name", it2->name);
-          pm1->add("layer", it2->layer);
-          pm1->add("origSrs", it2->orig_srs);
-          pm1->add("destSrs", it2->dest_srs);
-          pm1->add("featureId", feature_id.get_id());
-
-          // Axis labels
-          std::string orig_axis_labels = "Easting Northing";
-          std::string dest_axis_labels = "Easting Northing";
-          crs_registry.get_attribute(
-              "epsg::" + Fmi::to_string(it2->orig_srs), "axisLabels", &orig_axis_labels);
-          crs_registry.get_attribute(
-              "epsg::" + Fmi::to_string(it2->dest_srs), "axisLabels", &dest_axis_labels);
-
-          std::vector<std::string> orig_axisLabels_vect;
-          std::vector<std::string> dest_axisLabels_vect;
-          ba::split(orig_axisLabels_vect, orig_axis_labels, ba::is_any_of(" "));
-          ba::split(dest_axisLabels_vect, dest_axis_labels, ba::is_any_of(" "));
-
-          for (const std::string& label : orig_axisLabels_vect)
-            pm1->add("origSrsAxisLabels", label);
-          for (const std::string& label : dest_axisLabels_vect)
-            pm1->add("destSrsAxisLabels", label);
-
-          const auto orig_coords = it2->get_orig_coords();
-          for (double value : orig_coords)
-          {
-            pm1->add("origBoundary", value);
-          }
-
-          OGREnvelope envelope;
-
-          it2->orig_geom->getEnvelope(&envelope);
-          double c_env[4] = {envelope.MinX, envelope.MinY, envelope.MaxX, envelope.MaxY};
-          pm1->add("origEnvelope", c_env, c_env + 4);
-
-          if (it2->orig_srs_swapped)
-            pm1->add("origSrsSwapped", it2->orig_srs_swapped);
-          if (it2->dest_srs_swapped)
-            pm1->add("destSrsSwapped", it2->dest_srs_swapped);
-
-          pm1->add("corner", envelope.MinX);
-          pm1->add("corner", envelope.MinY);
-
-          const double xStep = (envelope.MaxX - envelope.MinX) / width;
-          const double yStep = (envelope.MaxY - envelope.MinY) / height;
-
-          pm1->add("xStep", xStep);
-          pm1->add("yStep", yStep);
-          pm1->add("width", width);
-          pm1->add("height", height);
-
-          const std::string param_name;
-          auto layerParamNameIt =
-              layer_param_name_map.find(it2->layer);
-          if (layerParamNameIt != layer_param_name_map.end())
-            pm1->add("layerParam", layerParamNameIt->second);
-
-          const auto dest_coords = it2->get_dest_coords();
-          for (double value : dest_coords)
-          {
-            char tmp[80];
-	    (void)snprintf(tmp, sizeof(tmp), "%.6f", value);
-            pm1->add("destBoundary", tmp);
-          }
-
-          pm1->add("origSrsDim", it2->orig_geom->getCoordinateDimension());
-          pm1->add("destSrsDim", it2->dest_geom->getCoordinateDimension());
-
-          for (const auto& map_item : it2->data_map)
-          {
-            pm1->add(std::string("db_") + map_item.first, map_item.second.to_string());
-          }
+          std::shared_ptr<RequestParameterMap> pm1 =
+              layer_parameters(it1.second.epoch, *it2, width, height, feature_id);
 
           result.push_back(pm1);
         }
@@ -393,6 +315,137 @@ void bw::StoredGeoserverQueryHandler::update_parameters(
   {
     throw Fmi::Exception::Trace(BCP, "Operation failed!");
   }
+}
+
+// Resolve layer aliases to layer names (in place) and check that the layers are known
+void bw::StoredGeoserverQueryHandler::resolve_layer_aliases(std::vector<std::string>& layers) const
+{
+  for (std::string& layer : layers)
+  {
+    // FIXME: cycle parameter modified below. Is it correct?
+    auto pos = layer_alias_map.find(Fmi::ascii_tolower_copy(layer));
+    if (pos != layer_alias_map.end())
+    {
+      layer = pos->second;
+    }
+
+    // Handling the case when not found
+    auto layerIt = layer_param_name_map.find(layer);
+    if (layerIt == layer_param_name_map.end() and pos == layer_alias_map.end())
+    {
+      Fmi::Exception exception(BCP, "Parameter configuration for layer '" + layer + "' not found!");
+      exception.addParameter(WFS_EXCEPTION_CODE, WFS_OPERATION_PARSING_FAILED);
+      throw exception.disableStackTrace();
+    }
+  }
+}
+
+// The database select parameters given in the request
+std::map<std::string, std::string> bw::StoredGeoserverQueryHandler::get_db_select_map(
+    const RequestParameterMap& params) const
+{
+  std::map<std::string, std::string> db_select_map;
+  for (const auto& db_filter_param_name : db_filter_param_names)
+  {
+    std::vector<SmartMet::Spine::Value> sel_param;
+    params.get<SmartMet::Spine::Value>(db_filter_param_name, std::back_inserter(sel_param), 1, 2);
+    if (sel_param.size() == 2)
+    {
+      const std::string& name = sel_param.at(0).get<std::string>();
+      const std::string& val = sel_param.at(1).get<std::string>();
+      db_select_map[name] = val;
+    }
+  }
+  return db_select_map;
+}
+
+// The output parameters of a layer
+std::shared_ptr<bw::RequestParameterMap> bw::StoredGeoserverQueryHandler::layer_parameters(
+    const Fmi::DateTime& epoch,
+    const GeoServerDataIndex::LayerRec& rec,
+    unsigned width,
+    unsigned height,
+    const FeatureID& feature_id) const
+{
+  namespace ba = boost::algorithm;
+
+  std::shared_ptr<RequestParameterMap> pm1(new RequestParameterMap(true));
+  pm1->add("epoch", Fmi::to_iso_extended_string(epoch) + "Z");
+  pm1->add("name", rec.name);
+  pm1->add("layer", rec.layer);
+  pm1->add("origSrs", rec.orig_srs);
+  pm1->add("destSrs", rec.dest_srs);
+  pm1->add("featureId", feature_id.get_id());
+
+  // Axis labels
+  std::string orig_axis_labels = "Easting Northing";
+  std::string dest_axis_labels = "Easting Northing";
+  crs_registry.get_attribute(
+      "epsg::" + Fmi::to_string(rec.orig_srs), "axisLabels", &orig_axis_labels);
+  crs_registry.get_attribute(
+      "epsg::" + Fmi::to_string(rec.dest_srs), "axisLabels", &dest_axis_labels);
+
+  std::vector<std::string> orig_axisLabels_vect;
+  std::vector<std::string> dest_axisLabels_vect;
+  ba::split(orig_axisLabels_vect, orig_axis_labels, ba::is_any_of(" "));
+  ba::split(dest_axisLabels_vect, dest_axis_labels, ba::is_any_of(" "));
+
+  for (const std::string& label : orig_axisLabels_vect)
+    pm1->add("origSrsAxisLabels", label);
+  for (const std::string& label : dest_axisLabels_vect)
+    pm1->add("destSrsAxisLabels", label);
+
+  const auto orig_coords = rec.get_orig_coords();
+  for (double value : orig_coords)
+  {
+    pm1->add("origBoundary", value);
+  }
+
+  OGREnvelope envelope;
+
+  rec.orig_geom->getEnvelope(&envelope);
+  double c_env[4] = {envelope.MinX, envelope.MinY, envelope.MaxX, envelope.MaxY};
+  pm1->add("origEnvelope", c_env, c_env + 4);
+
+  if (rec.orig_srs_swapped)
+    pm1->add("origSrsSwapped", rec.orig_srs_swapped);
+  if (rec.dest_srs_swapped)
+    pm1->add("destSrsSwapped", rec.dest_srs_swapped);
+
+  pm1->add("corner", envelope.MinX);
+  pm1->add("corner", envelope.MinY);
+
+  const double xStep = (envelope.MaxX - envelope.MinX) / width;
+  const double yStep = (envelope.MaxY - envelope.MinY) / height;
+
+  pm1->add("xStep", xStep);
+  pm1->add("yStep", yStep);
+  pm1->add("width", width);
+  pm1->add("height", height);
+
+  const std::string param_name;
+  auto layerParamNameIt =
+      layer_param_name_map.find(rec.layer);
+  if (layerParamNameIt != layer_param_name_map.end())
+    pm1->add("layerParam", layerParamNameIt->second);
+
+  const auto dest_coords = rec.get_dest_coords();
+  for (double value : dest_coords)
+  {
+    char tmp[80];
+	    (void)snprintf(tmp, sizeof(tmp), "%.6f", value);
+    pm1->add("destBoundary", tmp);
+  }
+
+  pm1->add("origSrsDim", rec.orig_geom->getCoordinateDimension());
+  pm1->add("destSrsDim", rec.dest_geom->getCoordinateDimension());
+
+  for (const auto& map_item : rec.data_map)
+  {
+    pm1->add(std::string("db_") + map_item.first, map_item.second.to_string());
+  }
+
+  return pm1;
 }
 
 bool bw::StoredGeoserverQueryHandler::eval_db_select_params(

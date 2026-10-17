@@ -31,6 +31,17 @@ class StoredGeoserverQueryHandler : public StoredAtomQueryHandlerBase, protected
       std::vector<std::shared_ptr<RequestParameterMap> > &result) const override;
 
  private:
+  void read_layer_map(StoredQueryConfig &config);
+  void read_layer_param_name_map(StoredQueryConfig &config);
+
+  void resolve_layer_aliases(std::vector<std::string> &layers) const;
+  std::map<std::string, std::string> get_db_select_map(const RequestParameterMap &params) const;
+  std::shared_ptr<RequestParameterMap> layer_parameters(const Fmi::DateTime &epoch,
+                                                        const GeoServerDataIndex::LayerRec &rec,
+                                                        unsigned width,
+                                                        unsigned height,
+                                                        const FeatureID &feature_id) const;
+
   /* FIXME: optimize to avoid need to read query paremeters again and again (if needed) */
   bool eval_db_select_params(const std::map<std::string, std::string> &select_params,
                              const GeoServerDataIndex::LayerRec &rec) const;
