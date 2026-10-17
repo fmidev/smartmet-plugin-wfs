@@ -99,6 +99,15 @@ class StoredQueryMap final : private FileContentChecker
   void handle_query_modify(const std::string& config_file_name,
                            const std::filesystem::path& template_dir);
 
+  /** Handle a change of a stored query configuration file */
+  void handle_config_file_change(const std::filesystem::path& fn,
+                                 Fmi::DirectoryMonitor::Change change,
+                                 const std::filesystem::path& template_dir,
+                                 bool initial_update);
+
+  /** Retry adding stored queries rejected earlier as duplicates */
+  void retry_duplicates(const std::filesystem::path& template_dir);
+
   void handle_query_ignore(const StoredQueryConfig& config, bool initial_update);
 
   void request_reload(const std::string& reason);

@@ -271,6 +271,56 @@ void bw::StoredQueryMap::add_handler(const StoredQueryConfig::Ptr& sqh_config,
   }
 }
 
+void bw::StoredQueryMap::handle_config_file_change(const std::filesystem::path& fn,
+                                                  Fmi::DirectoryMonitor::Change change,
+                                                  const std::filesystem::path& template_dir,
+                                                  bool initial_update)
+{
+  const std::string name = fn.string();
+
+  if ( ((change == Fmi::DirectoryMonitor::DELETE) or fs::is_regular_file(fn))
+       and not ba::starts_with(name, ".")
+       and not ba::starts_with(name, "#")
+       and ba::ends_with(name, ".conf"))
+    {
+      switch (change) {
+      case Fmi::DirectoryMonitor::DELETE:
+        handle_query_remove(name);
+        break;
+
+      case Fmi::DirectoryMonitor::CREATE:
+        handle_query_add(name, template_dir, initial_update, false);
+        break;
+
+      case Fmi::DirectoryMonitor::MODIFY:
+        handle_query_modify(name, template_dir);
+        break;
+
+      default:
+        if (change & (change - 1)) { // Is any 1-bit value in variable change?
+          throw Fmi::Exception::Trace(BCP, "INTERNAL ERROR: Unsupported change type "
+                                                  + std::to_string(int(change)));
+        }
+        break;
+      }
+    }
+}
+
+void bw::StoredQueryMap::retry_duplicates(const std::filesystem::path& template_dir)
+{
+  auto tmp = duplicate;
+  for (const auto& fn : tmp) {
+    try {
+      handle_query_add(fn, template_dir, false, true);
+    } catch (...) {
+      if (not Spine::Reactor::isShuttingDown()) {
+        auto err = Fmi::Exception::SquashTrace(BCP, "Operation failed!");
+        std::cout << err << std::endl;
+      }
+    }
+  }
+}
+
 void bw::StoredQueryMap::on_config_change(Fmi::DirectoryMonitor::Watcher watcher,
 					  const std::filesystem::path& path,
 					  const boost::regex& pattern,
@@ -300,36 +350,7 @@ void bw::StoredQueryMap::on_config_change(Fmi::DirectoryMonitor::Watcher watcher
 
     for (auto it = s->begin(); not reload_required and it != s->end(); ++it) {
       try {
-	const fs::path& fn = it->first;
-	const std::string name = fn.string();
-	Fmi::DirectoryMonitor::Change change = it->second;
-
-	if ( ((change == Fmi::DirectoryMonitor::DELETE) or fs::is_regular_file(fn))
-	     and not ba::starts_with(name, ".")
-	     and not ba::starts_with(name, "#")
-	     and ba::ends_with(name, ".conf"))
-	  {
-	    switch (change) {
-	    case Fmi::DirectoryMonitor::DELETE:
-	      handle_query_remove(name);
-	      break;
-
-	    case Fmi::DirectoryMonitor::CREATE:
-	      handle_query_add(name, template_dir, initial_update, false);
-	      break;
-
-	    case Fmi::DirectoryMonitor::MODIFY:
-	      handle_query_modify(name, template_dir);
-	      break;
-
-	    default:
-	      if (change & (change - 1)) { // Is any 1-bit value in variable change?
-		throw Fmi::Exception::Trace(BCP, "INTERNAL ERROR: Unsupported change type "
-							+ std::to_string(int(change)));
-	      }
-	      break;
-	    }
-	  }
+	handle_config_file_change(it->first, it->second, template_dir, initial_update);
 
 	config_dirs.at(watcher).num_updates++;
       } catch (...) {
@@ -345,17 +366,7 @@ void bw::StoredQueryMap::on_config_change(Fmi::DirectoryMonitor::Watcher watcher
     }
 
     if (not initial_update) {
-      auto tmp = duplicate;
-      for (const auto& fn : tmp) {
-	try {
-	  handle_query_add(fn, template_dir, initial_update, true);
-	} catch (...) {
-            if (not Spine::Reactor::isShuttingDown()) {
-                auto err = Fmi::Exception::SquashTrace(BCP, "Operation failed!");
-                std::cout << err << std::endl;
-            }
-	}
-      }
+      retry_duplicates(template_dir);
     }
 
     if (have_errors) {
