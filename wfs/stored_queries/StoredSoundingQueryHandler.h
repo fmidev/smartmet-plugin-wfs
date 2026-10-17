@@ -39,6 +39,8 @@ namespace Plugin
 {
 namespace WFS
 {
+class FeatureID;
+
 class StoredSoundingQueryHandler : public StoredQueryHandlerBase,
                                    protected virtual RequiresGeoEngine,
                                    protected virtual RequiresObsEngine,
@@ -121,6 +123,53 @@ class StoredSoundingQueryHandler : public StoredQueryHandlerBase,
   void checkMaxSoundings(const Fmi::DateTime& startTime,
                          const Fmi::DateTime& endTime,
                          const RadioSoundingMap& radioSoundingMap) const;
+
+  struct SoundingContext;
+
+  // The iterators to the level information of the sounding data
+  struct LevelIterators
+  {
+    ValueVectorConstIt levelTime;
+    ValueVectorConstIt altitude;
+    ValueVectorConstIt pressure;
+    ValueVectorConstIt longitude;
+    ValueVectorConstIt latitude;
+    ValueVectorConstIt significance;
+  };
+
+  INT_64 set_sounding_group(CTPP::CDT& group,
+                            const SoundingContext& ctx,
+                            int64_t soundingId,
+                            int64_t soundingType,
+                            FeatureID& featureId,
+                            std::string& currentStationId) const;
+
+  void set_sounding_station(CTPP::CDT& group,
+                            const SoundingContext& ctx,
+                            const std::string& currentStationId,
+                            long double& stationLatitude,
+                            long double& stationLongitude) const;
+
+  static void set_group_parameters(CTPP::CDT& group,
+                                   const SoundingContext& ctx,
+                                   const std::string& measurandIdStr,
+                                   int& paramListCount,
+                                   bool& showValue,
+                                   bool& showDataQuality);
+
+  void set_level_info(CTPP::CDT& row,
+                      const SoundingContext& ctx,
+                      SmartMet::Engine::Observation::QueryResult& dataContainer,
+                      const LevelIterators& its,
+                      INT_64 sEpoch,
+                      long double stationLatitude,
+                      long double stationLongitude,
+                      int paramcount) const;
+
+  int fill_sounding_data(CTPP::CDT& hash,
+                         SmartMet::Engine::Observation::QueryResult& dataContainer,
+                         const SoundingContext& ctx,
+                         FeatureID& featureId) const;
 
   double mMaxHours;
   uint64_t mMaxSoundings;

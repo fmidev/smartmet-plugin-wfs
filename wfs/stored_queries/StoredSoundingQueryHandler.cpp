@@ -82,6 +82,338 @@ std::string StoredSoundingQueryHandler::get_handler_description() const
   return "";
 }
 
+/**
+ *  @brief The common data for formatting the sounding data
+ */
+struct StoredSoundingQueryHandler::SoundingContext
+{
+  const SmartMet::Spine::Stations& stations;
+  const MeteoParameterMap& meteoParameterMap;
+  const RadioSoundingMap& radioSoundingMap;
+  const std::shared_ptr<SmartMet::Spine::CRSRegistry::Transformation>& transformation;
+  const std::string& language;
+  const std::string& missingValue;
+  const std::string& pressureParameterName;
+  std::string method;
+};
+
+namespace
+{
+// Throw an operation processing error with the given detail
+[[noreturn]] void throw_processing_error(const std::string& detail)
+{
+  Fmi::Exception exception(BCP, "Operation processsing failed");
+  exception.addParameter(WFS_EXCEPTION_CODE, WFS_OPERATION_PROCESSING_FAILED);
+  exception.addDetail(detail);
+  throw exception.disableStackTrace();
+}
+}  // namespace
+
+INT_64 StoredSoundingQueryHandler::set_sounding_group(CTPP::CDT& group,
+                                                      const SoundingContext& ctx,
+                                                      int64_t soundingId,
+                                                      int64_t soundingType,
+                                                      FeatureID& featureId,
+                                                      std::string& currentStationId) const
+{
+  auto rsIt = ctx.radioSoundingMap.find(soundingId);
+  if (rsIt == ctx.radioSoundingMap.end())
+  {
+    std::ostringstream msg;
+    msg << "Sounding metadata does not found for sounding id '" << soundingId << "'.";
+    throw_processing_error(msg.str());
+  }
+
+  const auto& missingValue = ctx.missingValue;
+  const auto ptime2str = [&missingValue](const Fmi::DateTime& t) -> std::string {
+    return t.is_special() ? missingValue : Fmi::date_time::to_iso_extended_string(t) + "Z";
+  };
+
+  currentStationId = rsIt->second.stationId;
+
+  const Fmi::DateTime epoch = rsIt->second.messageTime;
+  const auto dataMessageTimeStr = ptime2str(epoch);
+  static const long ref_jd = Fmi::Date(1970, 1, 1).julian_day();
+  long long jd = epoch.date().julian_day();
+  long seconds = epoch.time_of_day().total_seconds();
+  INT_64 sEpoch = 86400LL * (jd - ref_jd) + seconds;
+
+  const auto& launchTime = rsIt->second.launchTime;
+  group["phenomenonBeginTime"] = ptime2str(launchTime.is_special() ? epoch : launchTime);
+  const auto& soundingEnd = rsIt->second.soundingEnd;
+  group["phenomenonEndTime"] = ptime2str(soundingEnd.is_special() ? epoch : soundingEnd);
+  group["phenomenonTime"] = dataMessageTimeStr;
+  group["resultTime"] = dataMessageTimeStr;
+  group["soundingId"] = soundingId;
+  group["soundingType"] = soundingType;
+
+  featureId.erase_param(P_BEGIN_TIME);
+  featureId.erase_param(P_END_TIME);
+  featureId.erase_param(P_FMISIDS);
+  featureId.erase_param(P_SOUNDING_TYPE);
+  featureId.add_param(P_BEGIN_TIME, dataMessageTimeStr);
+  featureId.add_param(P_END_TIME, dataMessageTimeStr);
+  featureId.add_param(P_FMISIDS, currentStationId);
+  featureId.add_param(P_SOUNDING_TYPE, soundingType);
+
+  group["featureId"] = featureId.get_id();
+
+  return sEpoch;
+}
+
+void StoredSoundingQueryHandler::set_sounding_station(CTPP::CDT& group,
+                                                      const SoundingContext& ctx,
+                                                      const std::string& currentStationId,
+                                                      long double& stationLatitude,
+                                                      long double& stationLongitude) const
+{
+  const auto& stations = ctx.stations;
+  for (auto sit = stations.begin(); sit != stations.end(); ++sit)
+  {
+    if (Fmi::to_string(sit->fmisid) == currentStationId)
+    {
+      CTPP::CDT& station = group["station"];
+      station["fmisid"] = currentStationId;
+      std::string geoid = std::to_string(static_cast<long long int>(sit->geoid));
+      if (not geoid.empty() && sit->geoid > 0)
+        station["geoid"] = geoid;
+      std::string wmo = std::to_string(static_cast<long long int>(sit->wmo));
+      if (not wmo.empty() && sit->wmo > 0)
+        station["wmo"] = wmo;
+      auto station_formal_name = sit->station_formal_name(ctx.language);
+      if (not station_formal_name.empty())
+        station["name"] = station_formal_name;
+      if (not sit->region.empty())
+        station["region"] = sit->region;
+
+      stationLatitude = static_cast<long double>(sit->latitude);
+      stationLongitude = static_cast<long double>(sit->longitude);
+      set_2D_coord(ctx.transformation,
+                   std::to_string(stationLatitude),
+                   std::to_string(stationLongitude),
+                   station);
+      station["elevation"] = std::to_string(static_cast<long long int>(sit->elevation));
+    }
+    else if (std::next(sit, 0) == stations.end())
+    {
+      std::ostringstream msg;
+      msg << ctx.method << ": Cannot find station metadata for fmisid '" << currentStationId
+          << "'\n";
+      throw_processing_error(msg.str());
+    }
+  }
+}
+
+void StoredSoundingQueryHandler::set_group_parameters(CTPP::CDT& group,
+                                                      const SoundingContext& ctx,
+                                                      const std::string& measurandIdStr,
+                                                      int& paramListCount,
+                                                      bool& showValue,
+                                                      bool& showDataQuality)
+{
+  auto it = ctx.meteoParameterMap.find(measurandIdStr);
+  if (it == ctx.meteoParameterMap.end())
+  {
+    std::ostringstream msg;
+    msg << ctx.method << ": Cannot find parameter name for id '" << measurandIdStr << "'\n";
+    throw_processing_error(msg.str());
+  }
+
+  showValue = std::get<3>(it->second);
+  showDataQuality = std::get<4>(it->second);
+
+  // This should newer happen (.. but in case off coding error).
+  if (not showValue and not showDataQuality)
+  {
+    std::ostringstream msg;
+    msg << ctx.method << ": Cannot solve what to return by using parameter id '"
+        << measurandIdStr << "'\n";
+    throw_processing_error(msg.str());
+  }
+
+  if (showValue)
+  {
+    if (paramListCount == 0 && !ctx.pressureParameterName.empty())
+    {
+      CTPP::CDT& param = group["obsParamList"][paramListCount++];
+      param["name"] = ctx.pressureParameterName;
+    }
+    CTPP::CDT& param = group["obsParamList"][paramListCount++];
+    param["name"] = std::get<1>(it->second);
+  }
+  if (showDataQuality)
+  {
+    CTPP::CDT& param = group["obsParamList"][paramListCount++];
+    param["name"] = std::get<2>(it->second);
+    param["isQCParameter"] = "true";
+  }
+}
+
+void StoredSoundingQueryHandler::set_level_info(CTPP::CDT& row,
+                                                const SoundingContext& ctx,
+                                                SmartMet::Engine::Observation::QueryResult& dataContainer,
+                                                const LevelIterators& its,
+                                                INT_64 sEpoch,
+                                                long double stationLatitude,
+                                                long double stationLongitude,
+                                                int paramcount) const
+{
+  row["epochTime"] = sEpoch + dataContainer.castTo<int64_t>(its.levelTime);
+  row["altitude"] = SmartMet::Engine::Observation::QueryResult::toString(its.altitude, 1);
+  row["pressure"] = dataContainer.castTo<double>(its.pressure);
+  const double levelLat = stationLatitude + dataContainer.castTo<double>(its.latitude);
+  const double levelLon = stationLongitude + dataContainer.castTo<double>(its.longitude);
+  set_2D_coord(ctx.transformation, levelLat, levelLon, row);
+  uint32_t significance = dataContainer.castTo<uint32_t>(its.significance);
+  row["significance"] = significance;
+  std::bitset<18> sBitset(significance);
+  if (sBitset.any())
+  {
+    /*
+      1 Surface
+      2 Standard level
+      3 Tropopause level
+      4 Maximum wind level
+      5 Significant temperature level
+      6 Significant humidity level
+      7 Significant wind level
+      8 Beginning of missing temperature data
+      9 End of missing temperature data
+      10 Beginning of missing humidity data
+      11 End of missing humidity data
+      12 Beginning of missing wind data
+      13 End of missing wind data
+      14 the top ow wind sounding
+      15 a level determined by regional decision
+      18 all bits set to 1 indicate a missing value
+      all bits set to 0 indicate a level determined by national decisionor a level of
+      no significance that has been included when high resolution data are reported
+    */
+    row["bitset"] = sBitset.to_string();
+    sBitset >>= 11;
+    if (sBitset.any())
+      row["selectedLevel"] = 1;
+  }
+
+  if (!ctx.pressureParameterName.empty())
+  {
+    CTPP::CDT& rowData = row["data"][paramcount - 1];
+    rowData["value"] = dataContainer.castTo<double>(its.pressure);
+  }
+}
+
+int StoredSoundingQueryHandler::fill_sounding_data(CTPP::CDT& hash,
+                                                   SmartMet::Engine::Observation::QueryResult& dataContainer,
+                                                   const SoundingContext& ctx,
+                                                   FeatureID& featureId) const
+{
+  int numberMatched = 0;
+
+  auto dataSoundingIdItBegin = dataContainer.begin("SOUNDING_ID");
+  auto dataSoundingIdIt = dataContainer.begin("SOUNDING_ID");
+  auto dataSoundingIdItEnd = dataContainer.end("SOUNDING_ID");
+  auto dataMeasurandIdIt = dataContainer.begin("MEASURAND_ID");
+  LevelIterators its{dataContainer.begin("LEVEL_TIME"),
+                     dataContainer.begin("ALTITUDE"),
+                     dataContainer.begin("PRESSURE"),
+                     dataContainer.begin("LONGITUDE"),
+                     dataContainer.begin("LATITUDE"),
+                     dataContainer.begin("SIGNIFICANCE")};
+  auto dataQualityIt = dataContainer.begin("DATA_QUALITY");
+  auto dataValueIt = dataContainer.begin("DATA_VALUE");
+
+  std::string currentStationId;
+  std::string currentMeasId;
+  int dataId = 0;
+  int groupId = 0;
+  int paramcount = 0;
+  int paramListCount = 0;
+  bool showValue = false;
+  bool showDataQuality = false;
+  INT_64 sEpoch = 0;
+  int64_t currentSoundingId = 0;
+  long double stationLatitude = 0.0;
+  long double stationLongitude = 0.0;
+
+  for (; dataSoundingIdIt != dataSoundingIdItEnd; ++dataSoundingIdIt,
+                                                  ++dataMeasurandIdIt,
+                                                  ++its.levelTime,
+                                                  ++its.altitude,
+                                                  ++its.pressure,
+                                                  ++its.longitude,
+                                                  ++its.latitude,
+                                                  ++dataValueIt,
+                                                  ++dataQualityIt,
+                                                  ++its.significance)
+
+  {
+    std::string measurandIdStr =
+        SmartMet::Engine::Observation::QueryResult::toString(dataMeasurandIdIt, 0);
+    int64_t soundingId = dataContainer.castTo<int64_t>(dataSoundingIdIt);
+    int64_t soundingType = ctx.radioSoundingMap.at(soundingId).soundingType;
+
+    if ((dataSoundingIdIt == dataSoundingIdItBegin) or (currentSoundingId != soundingId))
+    {
+      currentSoundingId = soundingId;
+      groupId = numberMatched;
+      numberMatched++;
+      dataId = 0;
+
+      CTPP::CDT& group = hash["groups"][groupId];
+      sEpoch = set_sounding_group(
+          group, ctx, currentSoundingId, soundingType, featureId, currentStationId);
+
+      set_sounding_station(group, ctx, currentStationId, stationLatitude, stationLongitude);
+
+      paramcount = 0;
+      paramListCount = 0;
+    }
+
+    if (paramListCount == 0 or (currentMeasId != measurandIdStr))
+    {
+      currentMeasId = measurandIdStr;
+
+      set_group_parameters(hash["groups"][groupId],
+                           ctx,
+                           measurandIdStr,
+                           paramListCount,
+                           showValue,
+                           showDataQuality);
+
+      dataId = 0;
+      paramcount++;
+    }
+
+    if (paramcount < 1)
+    {
+      std::ostringstream msg;
+      msg << "Invalid parameter count '" << paramcount << "'.\n";
+      throw_processing_error(msg.str());
+    }
+
+    CTPP::CDT& row = hash["groups"][groupId]["obsReturnArray"][dataId];
+
+    if (paramcount == 1)
+      set_level_info(
+          row, ctx, dataContainer, its, sEpoch, stationLatitude, stationLongitude, paramcount);
+
+    CTPP::CDT& rowData = row["data"][paramcount + (ctx.pressureParameterName.empty() ? -1 : 0)];
+    if (showValue)
+    {
+      auto value = dataContainer.toString(dataValueIt, 1);
+      rowData["value"] = (value.empty() ? ctx.missingValue : value);
+    }
+    if (showDataQuality)
+    {
+      auto quality = dataContainer.toString(dataQualityIt, 0);
+      rowData["quality"] = (quality.empty() ? ctx.missingValue : quality);
+    }
+    dataId++;
+  }
+
+  return numberMatched;
+}
+
 void StoredSoundingQueryHandler::query(const StoredQuery& query,
                                        const std::string& language,
                                        const std::optional<std::string>& /*hostname*/,
@@ -197,271 +529,15 @@ void StoredSoundingQueryHandler::query(const StoredQuery& query,
 
       if (queryInitializationOK and dataContainer)
       {
-        auto dataSoundingIdItBegin = dataContainer->begin("SOUNDING_ID");
-        auto dataSoundingIdIt = dataContainer->begin("SOUNDING_ID");
-        auto dataSoundingIdItEnd = dataContainer->end("SOUNDING_ID");
-        auto dataMeasurandIdIt = dataContainer->begin("MEASURAND_ID");
-        auto dataLevelTimeIt = dataContainer->begin("LEVEL_TIME");
-        auto dataAltitudeIt = dataContainer->begin("ALTITUDE");
-        auto dataPressureIt = dataContainer->begin("PRESSURE");
-        auto dataLongitudeIt = dataContainer->begin("LONGITUDE");
-        auto dataLatitudeIt = dataContainer->begin("LATITUDE");
-        auto dataQualityIt = dataContainer->begin("DATA_QUALITY");
-        auto dataValueIt = dataContainer->begin("DATA_VALUE");
-        auto dataSignificanceIt = dataContainer->begin("SIGNIFICANCE");
-
-        std::string currentStationId;
-        std::string currentMeasId;
-        int dataId = 0;
-        int groupId = 0;
-        int paramcount = 0;
-        int paramListCount = 0;
-        bool showValue = false;
-        bool showDataQuality = false;
-        INT_64 sEpoch = 0;
-        int64_t currentSoundingId = 0;
-        long double stationLatitude = 0.0;
-        long double stationLongitude = 0.0;
-
-        for (; dataSoundingIdIt != dataSoundingIdItEnd; ++dataSoundingIdIt,
-                                                        ++dataMeasurandIdIt,
-                                                        ++dataLevelTimeIt,
-                                                        ++dataAltitudeIt,
-                                                        ++dataPressureIt,
-                                                        ++dataLongitudeIt,
-                                                        ++dataLatitudeIt,
-                                                        ++dataValueIt,
-                                                        ++dataQualityIt,
-                                                        ++dataSignificanceIt)
-
-        {
-          std::string measurandIdStr =
-              SmartMet::Engine::Observation::QueryResult::toString(dataMeasurandIdIt, 0);
-          int64_t soundingId = dataContainer->castTo<int64_t>(dataSoundingIdIt);
-          int64_t soundingType = radioSoundingMap.at(soundingId).soundingType;
-
-          if ((dataSoundingIdIt == dataSoundingIdItBegin) or (currentSoundingId != soundingId))
-          {
-            currentSoundingId = soundingId;
-            groupId = numberMatched;
-            numberMatched++;
-            dataId = 0;
-
-            auto rsIt = radioSoundingMap.find(currentSoundingId);
-            if (rsIt == radioSoundingMap.end())
-            {
-              std::ostringstream msg;
-              msg << "Sounding metadata does not found for sounding id '" << currentSoundingId
-                  << "'.";
-
-              Fmi::Exception exception(BCP, "Operation processsing failed");
-              exception.addParameter(WFS_EXCEPTION_CODE, WFS_OPERATION_PROCESSING_FAILED);
-              exception.addDetail(msg.str());
-              throw exception.disableStackTrace();
-            }
-
-            const auto ptime2str = [&missingValue](const Fmi::DateTime& t) -> std::string {
-              return t.is_special() ? missingValue
-                                    : Fmi::date_time::to_iso_extended_string(t) + "Z";
-            };
-
-            currentStationId = rsIt->second.stationId;
-
-            const Fmi::DateTime epoch = rsIt->second.messageTime;
-            const auto dataMessageTimeStr = ptime2str(epoch);
-            static const long ref_jd = Fmi::Date(1970, 1, 1).julian_day();
-            long long jd = epoch.date().julian_day();
-            long seconds = epoch.time_of_day().total_seconds();
-            sEpoch = 86400LL * (jd - ref_jd) + seconds;
-
-            CTPP::CDT& group = hash["groups"][groupId];
-            const auto& launchTime = rsIt->second.launchTime;
-            group["phenomenonBeginTime"] = ptime2str(launchTime.is_special() ? epoch : launchTime);
-            const auto& soundingEnd = rsIt->second.soundingEnd;
-            group["phenomenonEndTime"] = ptime2str(soundingEnd.is_special() ? epoch : soundingEnd);
-            group["phenomenonTime"] = dataMessageTimeStr;
-            group["resultTime"] = dataMessageTimeStr;
-            group["soundingId"] = soundingId;
-            group["soundingType"] = soundingType;
-
-            featureId.erase_param(P_BEGIN_TIME);
-            featureId.erase_param(P_END_TIME);
-            featureId.erase_param(P_FMISIDS);
-            featureId.erase_param(P_SOUNDING_TYPE);
-            featureId.add_param(P_BEGIN_TIME, dataMessageTimeStr);
-            featureId.add_param(P_END_TIME, dataMessageTimeStr);
-            featureId.add_param(P_FMISIDS, currentStationId);
-            featureId.add_param(P_SOUNDING_TYPE, soundingType);
-
-            group["featureId"] = featureId.get_id();
-
-            for (auto sit = stations.begin(); sit != stations.end(); ++sit)
-            {
-              if (Fmi::to_string(sit->fmisid) == currentStationId)
-              {
-                CTPP::CDT& station = group["station"];
-                station["fmisid"] = currentStationId;
-                std::string geoid = std::to_string(static_cast<long long int>(sit->geoid));
-                if (not geoid.empty() && sit->geoid > 0)
-                  station["geoid"] = geoid;
-                std::string wmo = std::to_string(static_cast<long long int>(sit->wmo));
-                if (not wmo.empty() && sit->wmo > 0)
-                  station["wmo"] = wmo;
-                auto station_formal_name = sit->station_formal_name(language);
-                if (not station_formal_name.empty())
-                  station["name"] = station_formal_name;
-                if (not sit->region.empty())
-                  station["region"] = sit->region;
-
-                stationLatitude = static_cast<long double>(sit->latitude);
-                stationLongitude = static_cast<long double>(sit->longitude);
-                set_2D_coord(transformation,
-                             std::to_string(stationLatitude),
-                             std::to_string(stationLongitude),
-                             station);
-                station["elevation"] = std::to_string(static_cast<long long int>(sit->elevation));
-              }
-              else if (std::next(sit, 0) == stations.end())
-              {
-                std::ostringstream msg;
-                msg << METHOD_NAME << ": Cannot find station metadata for fmisid '"
-                    << currentStationId << "'\n";
-                Fmi::Exception exception(BCP, "Operation processsing failed");
-                exception.addParameter(WFS_EXCEPTION_CODE, WFS_OPERATION_PROCESSING_FAILED);
-                exception.addDetail(msg.str());
-                throw exception.disableStackTrace();
-              }
-            }
-
-            paramcount = 0;
-            paramListCount = 0;
-          }
-
-          if (paramListCount == 0 or (currentMeasId != measurandIdStr))
-          {
-            currentMeasId = measurandIdStr;
-
-            auto it = meteoParameterMap.find(measurandIdStr);
-            if (it == meteoParameterMap.end())
-            {
-              std::ostringstream msg;
-              msg << METHOD_NAME << ": Cannot find parameter name for id '" << measurandIdStr
-                  << "'\n";
-              Fmi::Exception exception(BCP, "Operation processsing failed");
-              exception.addParameter(WFS_EXCEPTION_CODE, WFS_OPERATION_PROCESSING_FAILED);
-              exception.addDetail(msg.str());
-              throw exception.disableStackTrace();
-            }
-
-            showValue = std::get<3>(it->second);
-            showDataQuality = std::get<4>(it->second);
-
-            // This should newer happen (.. but in case off coding error).
-            if (not showValue and not showDataQuality)
-            {
-              std::ostringstream msg;
-              msg << METHOD_NAME << ": Cannot solve what to return by using parameter id '"
-                  << measurandIdStr << "'\n";
-              Fmi::Exception exception(BCP, "Operation processsing failed");
-              exception.addParameter(WFS_EXCEPTION_CODE, WFS_OPERATION_PROCESSING_FAILED);
-              exception.addDetail(msg.str());
-              throw exception.disableStackTrace();
-            }
-
-            if (showValue)
-            {
-              if (paramListCount == 0 && !pressureParameterName.empty())
-              {
-                CTPP::CDT& param = hash["groups"][groupId]["obsParamList"][paramListCount++];
-                param["name"] = pressureParameterName;
-              }
-              CTPP::CDT& param = hash["groups"][groupId]["obsParamList"][paramListCount++];
-              param["name"] = std::get<1>(it->second);
-            }
-            if (showDataQuality)
-            {
-              CTPP::CDT& param = hash["groups"][groupId]["obsParamList"][paramListCount++];
-              param["name"] = std::get<2>(it->second);
-              param["isQCParameter"] = "true";
-            }
-
-            dataId = 0;
-            paramcount++;
-          }
-
-          if (paramcount < 1)
-          {
-            std::ostringstream msg;
-            msg << "Invalid parameter count '" << paramcount << "'.\n";
-            Fmi::Exception exception(BCP, "Operation processsing failed");
-            exception.addParameter(WFS_EXCEPTION_CODE, WFS_OPERATION_PROCESSING_FAILED);
-            exception.addDetail(msg.str());
-            throw exception.disableStackTrace();
-          }
-
-          CTPP::CDT& row = hash["groups"][groupId]["obsReturnArray"][dataId];
-
-          if (paramcount == 1)
-          {
-            row["epochTime"] = sEpoch + dataContainer->castTo<int64_t>(dataLevelTimeIt);
-            row["altitude"] =
-                SmartMet::Engine::Observation::QueryResult::toString(dataAltitudeIt, 1);
-            row["pressure"] = dataContainer->castTo<double>(dataPressureIt);
-            const double levelLat = stationLatitude + dataContainer->castTo<double>(dataLatitudeIt);
-            const double levelLon =
-                stationLongitude + dataContainer->castTo<double>(dataLongitudeIt);
-            set_2D_coord(transformation, levelLat, levelLon, row);
-            uint32_t significance = dataContainer->castTo<uint32_t>(dataSignificanceIt);
-            row["significance"] = significance;
-            std::bitset<18> sBitset(significance);
-            if (sBitset.any())
-            {
-              /*
-                1 Surface
-                2 Standard level
-                3 Tropopause level
-                4 Maximum wind level
-                5 Significant temperature level
-                6 Significant humidity level
-                7 Significant wind level
-                8 Beginning of missing temperature data
-                9 End of missing temperature data
-                10 Beginning of missing humidity data
-                11 End of missing humidity data
-                12 Beginning of missing wind data
-                13 End of missing wind data
-                14 the top ow wind sounding
-                15 a level determined by regional decision
-                18 all bits set to 1 indicate a missing value
-                all bits set to 0 indicate a level determined by national decisionor a level of
-                no significance that has been included when high resolution data are reported
-              */
-              row["bitset"] = sBitset.to_string();
-              sBitset >>= 11;
-              if (sBitset.any())
-                row["selectedLevel"] = 1;
-            }
-
-            if (!pressureParameterName.empty())
-            {
-              CTPP::CDT& rowData = row["data"][paramcount - 1];
-              rowData["value"] = dataContainer->castTo<double>(dataPressureIt);
-            }
-          }
-
-          CTPP::CDT& rowData = row["data"][paramcount + (pressureParameterName.empty() ? -1 : 0)];
-          if (showValue)
-          {
-            auto value = dataContainer->toString(dataValueIt, 1);
-            rowData["value"] = (value.empty() ? missingValue : value);
-          }
-          if (showDataQuality)
-          {
-            auto quality = dataContainer->toString(dataQualityIt, 0);
-            rowData["quality"] = (quality.empty() ? missingValue : quality);
-          }
-          dataId++;
-        }
+        const SoundingContext ctx{stations,
+                                  meteoParameterMap,
+                                  radioSoundingMap,
+                                  transformation,
+                                  language,
+                                  missingValue,
+                                  pressureParameterName,
+                                  METHOD_NAME};
+        numberMatched = fill_sounding_data(hash, *dataContainer, ctx, featureId);
       }
 
       if (debugLevel > 2)
