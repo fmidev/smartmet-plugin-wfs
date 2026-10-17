@@ -364,6 +364,60 @@ bool bw::StoredQuery::get_xml_stored_query_id(const xercesc::DOMElement& query_r
   }
 }
 
+namespace
+{
+// Throw for a stored query parameter conflicting with an earlier one
+[[noreturn]] void throw_conflicting_param(const char* method,
+                                          const std::string& name,
+                                          const bw::StoredQueryConfig::ParamDesc* param_desc)
+{
+  std::string sep = " ";
+  std::ostringstream msg;
+  msg << method << ": stored query parameter '" << name << "' conflicts with";
+  for (const auto& it : param_desc->conflicts_with)
+  {
+    msg << sep << "'" << it << "'";
+    sep = ", ";
+  }
+  Fmi::Exception exception(BCP, msg.str());
+  exception.addParameter(WFS_EXCEPTION_CODE, WFS_OPERATION_PARSING_FAILED);
+  throw exception;
+}
+
+// Read and insert the value(s) of a KVP stored query parameter
+void insert_kvp_values(bw::RequestParameterMap& params,
+                       const std::string& param_name,
+                       const std::string& value_str,
+                       const bw::StoredQueryConfig::ParamDesc& param_desc)
+{
+  const bw::StoredQueryParamDef& param_def = param_desc.param_def;
+
+  if (param_def.isArray())
+  {
+    std::vector<std::string> parts;
+    ba::split(parts, value_str, ba::is_any_of(","));
+    // FIXME: unescape parts if needed (for example escaped ','
+    std::vector<SmartMet::Spine::Value> new_values = param_def.readValues(parts);
+    for (const auto& value : new_values)
+    {
+      value.check_limits(param_desc.lower_limit, param_desc.upper_limit);
+      params.insert_value(param_name, value);
+    }
+  }
+  else
+  {
+    SmartMet::Spine::Value value;
+    if (Fmi::ascii_tolower_copy(param_name) == "maxdistance")
+      value = SmartMet::Spine::Value(Fmi::DistanceParser::parse_meter(value_str));
+    else
+      value = param_def.readValue(value_str);
+
+    value.check_limits(param_desc.lower_limit, param_desc.upper_limit);
+    params.insert_value(param_name, value);
+  }
+}
+}  // namespace
+
 void bw::StoredQuery::extract_kvp_parameters(const SmartMet::Spine::HTTP::Request& request,
                                              const StoredQueryConfig& config,
                                              bw::StoredQuery& query)
@@ -391,19 +445,7 @@ void bw::StoredQuery::extract_kvp_parameters(const SmartMet::Spine::HTTP::Reques
       const auto* param_desc = config.get_param_desc(param_name);
 
       if (forbidden.count(param_name))
-      {
-        std::string sep = " ";
-        std::ostringstream msg;
-        msg << method << ": stored query parameter '" << item.first << "' conflicts with";
-        for (const auto & it : param_desc->conflicts_with)
-        {
-          msg << sep << "'" << it << "'";
-          sep = ", ";
-        }
-        Fmi::Exception exception(BCP, msg.str());
-        exception.addParameter(WFS_EXCEPTION_CODE, WFS_OPERATION_PARSING_FAILED);
-        throw exception;
-      }
+        throw_conflicting_param(method, item.first, param_desc);
 
       if (param_desc == nullptr)
       {
@@ -416,7 +458,6 @@ void bw::StoredQuery::extract_kvp_parameters(const SmartMet::Spine::HTTP::Reques
       }
       else
       {
-        const bw::StoredQueryParamDef& param_def = param_desc->param_def;
         // Parameter is not yet processed, therefore compare with count + 1
         check_param_max_occurs(param_name_set.count(param_name) + 1,
                                param_desc->max_occurs,
@@ -425,30 +466,7 @@ void bw::StoredQuery::extract_kvp_parameters(const SmartMet::Spine::HTTP::Reques
 
         try
         {
-          if (param_def.isArray())
-          {
-            std::vector<std::string> parts;
-            ba::split(parts, value_str, ba::is_any_of(","));
-            // FIXME: unescape parts if needed (for example escaped ','
-            std::vector<SmartMet::Spine::Value> new_values = param_def.readValues(parts);
-            for (const auto& value : new_values)
-            {
-              value.check_limits(param_desc->lower_limit, param_desc->upper_limit);
-              query.params->insert_value(param_name, value);
-            }
-          }
-          else
-          {
-            std::vector<SmartMet::Spine::Value> vect;
-            SmartMet::Spine::Value value;
-			if(Fmi::ascii_tolower_copy(param_name) == "maxdistance")
-			  value = SmartMet::Spine::Value(Fmi::DistanceParser::parse_meter(value_str));
-			else
-			  value = param_def.readValue(value_str);
-
-            value.check_limits(param_desc->lower_limit, param_desc->upper_limit);
-            query.params->insert_value(param_name, value);
-          }
+          insert_kvp_values(*query.params, param_name, value_str, *param_desc);
 
           for (const auto & it : param_desc->conflicts_with)
           {
