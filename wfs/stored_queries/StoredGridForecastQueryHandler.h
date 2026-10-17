@@ -69,6 +69,32 @@ class StoredGridForecastQueryHandler: public StoredQueryHandlerBase,
                     uint rowCount) const;
 
   private:
+    using TransformationPtr = std::shared_ptr<Spine::CRSRegistry::Transformation>;
+
+    void        set_group_info(CTPP::CDT& group, const Query& query, FeatureID& feature_id) const;
+    void        set_group_data(
+                    CTPP::CDT& group,
+                    const Query& query,
+                    const std::pair<std::multimap<int, std::string>::const_iterator,
+                                    std::multimap<int, std::string>::const_iterator>& site_range,
+                    const std::multimap<std::string, std::size_t>& result_map,
+                    const TransformationPtr& transformation,
+                    bool show_height) const;
+    Fmi::TimeZonePtr set_station_info(
+                    CTPP::CDT& station,
+                    const Query& query,
+                    std::size_t i,
+                    const std::string& geo_id,
+                    const TransformationPtr& transformation,
+                    bool show_height) const;
+    Fmi::DateTime set_row_data(
+                    CTPP::CDT& row_data,
+                    const Query& query,
+                    std::size_t i,
+                    const TransformationPtr& transformation,
+                    bool show_height,
+                    const Fmi::TimeZonePtr& tzp) const;
+
     Engine::Gis::GeometryStorage  itsGeometryStorage;
     Fmi::TimeZones                itsTimezones;
     std::vector<Spine::Parameter> common_params;

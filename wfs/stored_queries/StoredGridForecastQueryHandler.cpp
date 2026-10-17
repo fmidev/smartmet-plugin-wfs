@@ -203,6 +203,167 @@ void StoredGridForecastQueryHandler::init_handler()
   }
 }
 
+void StoredGridForecastQueryHandler::set_group_info(CTPP::CDT& group,
+                                                    const Query& query,
+                                                    FeatureID& feature_id) const
+{
+  if (query.origin_time)
+  {
+    const std::string origin_time_str =
+        Fmi::to_iso_extended_string(*query.origin_time) + "Z";
+    group["dataOriginTime"] = origin_time_str;
+    group["resultTime"] = origin_time_str;
+  }
+
+  for (std::size_t i = query.first_data_ind; i <= query.last_data_ind; i++)
+  {
+    const std::string& name = query.data_params.at(i).name();
+    feature_id.erase_param(P_PARAM);
+    feature_id.add_param(P_PARAM, name);
+    group["paramList"][i - query.first_data_ind]["name"] = name;
+    group["paramList"][i - query.first_data_ind]["featureId"] = feature_id.get_id();
+  }
+
+  group["metadata"]["boundingBox"]["lowerLeft"]["lat"] = query.bottom_left.Y();
+  group["metadata"]["boundingBox"]["lowerLeft"]["lon"] = query.bottom_left.X();
+
+  group["metadata"]["boundingBox"]["lowerRight"]["lat"] = query.bottom_right.Y();
+  group["metadata"]["boundingBox"]["lowerRight"]["lon"] = query.bottom_right.X();
+
+  group["metadata"]["boundingBox"]["upperLeft"]["lat"] = query.top_left.Y();
+  group["metadata"]["boundingBox"]["upperLeft"]["lon"] = query.top_left.X();
+
+  group["metadata"]["boundingBox"]["upperRight"]["lat"] = query.top_right.Y();
+  group["metadata"]["boundingBox"]["upperRight"]["lon"] = query.top_right.X();
+
+  group["producerName"] = query.producer_name;
+#ifdef ENABLE_MODEL_PATH
+  group["modelPath"] = query.model_path;
+#endif
+
+}
+
+void StoredGridForecastQueryHandler::set_group_data(
+    CTPP::CDT& group,
+    const Query& query,
+    const std::pair<std::multimap<int, std::string>::const_iterator,
+                    std::multimap<int, std::string>::const_iterator>& site_range,
+    const std::multimap<std::string, std::size_t>& result_map,
+    const TransformationPtr& transformation,
+    bool show_height) const
+{
+  std::size_t station_ind = 0;
+  std::size_t row_counter = 0;
+
+  Fmi::DateTime interval_begin = Fmi::DateTime::POS_INFINITY;
+  Fmi::DateTime interval_end = Fmi::DateTime::NEG_INFINITY;
+
+  for (auto site_iter = site_range.first; site_iter != site_range.second; ++site_iter)
+  {
+    const auto& geo_id = site_iter->second;
+    auto row_range = result_map.equal_range(geo_id);
+    Fmi::TimeZonePtr tzp;
+    for (auto row_iter = row_range.first; row_iter != row_range.second; ++row_iter)
+    {
+      std::size_t i = row_iter->second;
+      if (row_iter == row_range.first)
+      {
+        tzp = set_station_info(group["stationList"][station_ind],
+                               query,
+                               i,
+                               geo_id,
+                               transformation,
+                               show_height);
+        station_ind++;
+      }
+
+      CTPP::CDT& row_data = group["returnArray"][row_counter++];
+
+      Fmi::DateTime epoch =
+          set_row_data(row_data, query, i, transformation, show_height, tzp);
+
+      interval_begin = i == 0 ? epoch : std::min(interval_begin, epoch);
+      interval_end = i == 0 ? epoch : std::max(interval_end, epoch);
+    }
+  }
+
+  group["phenomenonStartTime"] = Fmi::to_iso_extended_string(interval_begin) + "Z";
+  group["phenomenonEndTime"] = Fmi::to_iso_extended_string(interval_end) + "Z";
+}
+
+Fmi::TimeZonePtr StoredGridForecastQueryHandler::set_station_info(
+    CTPP::CDT& station,
+    const Query& query,
+    std::size_t i,
+    const std::string& geo_id,
+    const TransformationPtr& transformation,
+    bool show_height) const
+{
+  const std::string name = query.result->get(ind_place, i);
+  const std::string country_code = query.result->get(ind_country_iso, i);
+  const std::string country = query.result->get(ind_country, i);
+  const std::string region = query.result->get(ind_region, i);
+  const std::string localtz = query.result->get(ind_localtz, i);
+  const double latitude = Fmi::stod(query.result->get(ind_lat, i));
+  const double longitude = Fmi::stod(query.result->get(ind_lon, i));
+  Fmi::TimeZonePtr tzp = get_tz_for_site(longitude, latitude, query.tz_name);
+  station["geoid"] = geo_id;
+  station["name"] = name;
+  set_2D_coord(
+      transformation, latitude, longitude, station);
+  if (show_height)
+  {
+    station["elev"] = query.result->get(ind_elev, i);
+  }
+
+  station["iso2"] = country_code;
+  station["country"] = country;
+  station["localtz"] = localtz;
+  if ((country_code == "FI") or (name != region))
+  {
+    station["region"] = region;
+  }
+
+
+  return tzp;
+}
+
+Fmi::DateTime StoredGridForecastQueryHandler::set_row_data(CTPP::CDT& row_data,
+                                                         const Query& query,
+                                                         std::size_t i,
+                                                         const TransformationPtr& transformation,
+                                                         bool show_height,
+                                                         const Fmi::TimeZonePtr& tzp) const
+{
+  static const long ref_jd = Fmi::Date(1970, 1, 1).julian_day();
+
+  set_2D_coord(transformation,
+               query.result->get(ind_lat, i),
+               query.result->get(ind_lon, i),
+               row_data);
+
+  if (show_height)
+  {
+    row_data["elev"] = query.result->get(ind_level, i);
+  }
+
+  Fmi::DateTime epoch = Fmi::TimeParser::parse_iso(query.result->get(ind_epoch, i));
+  long long jd = epoch.date().julian_day();
+  long seconds = epoch.time_of_day().total_seconds();
+  INT_64 s_epoch = 86400LL * (jd - ref_jd) + seconds;
+  row_data["epochTime"] = s_epoch;
+  row_data["epochTimeStr"] = format_local_time(epoch, tzp);
+
+  for (std::size_t k = query.first_data_ind; k <= query.last_data_ind; k++)
+  {
+    row_data["data"][k - query.first_data_ind] =
+        remove_trailing_0(query.result->get(k, i));
+  }
+
+
+  return epoch;
+}
+
 void StoredGridForecastQueryHandler::query(const StoredQuery& stored_query,
                                            const std::string& language,
                                            const std::optional<std::string>&  /*hostname*/,
@@ -210,8 +371,6 @@ void StoredGridForecastQueryHandler::query(const StoredQuery& stored_query,
 {
   try
   {
-    static const long ref_jd = Fmi::Date(1970, 1, 1).julian_day();
-
     int debug_level = get_config()->get_debug_level();
     if (debug_level > 0)
       stored_query.dump_query_info(std::cout);
@@ -305,8 +464,6 @@ void StoredGridForecastQueryHandler::query(const StoredQuery& stored_query,
 
         for (std::size_t group_id = 0; group_id < num_groups; group_id++)
         {
-          std::size_t station_ind = 0;
-          auto site_range = group_map.equal_range(group_id);
           CTPP::CDT& group = hash["groups"][group_id];
 
           FeatureID feature_id(get_config()->get_query_id(), params.get_map(true), sq_id);
@@ -322,115 +479,14 @@ void StoredGridForecastQueryHandler::query(const StoredQuery& stored_query,
           group["featureId"] = feature_id.get_id();
 
           group["groupId"] = str(format("%1%-%2%") % sq_id % (group_id + 1));
-          if (query.origin_time)
-          {
-            const std::string origin_time_str =
-                Fmi::to_iso_extended_string(*query.origin_time) + "Z";
-            group["dataOriginTime"] = origin_time_str;
-            group["resultTime"] = origin_time_str;
-          }
+          set_group_info(group, query, feature_id);
 
-          for (std::size_t i = query.first_data_ind; i <= query.last_data_ind; i++)
-          {
-            const std::string& name = query.data_params.at(i).name();
-            feature_id.erase_param(P_PARAM);
-            feature_id.add_param(P_PARAM, name);
-            group["paramList"][i - query.first_data_ind]["name"] = name;
-            group["paramList"][i - query.first_data_ind]["featureId"] = feature_id.get_id();
-          }
-
-          group["metadata"]["boundingBox"]["lowerLeft"]["lat"] = query.bottom_left.Y();
-          group["metadata"]["boundingBox"]["lowerLeft"]["lon"] = query.bottom_left.X();
-
-          group["metadata"]["boundingBox"]["lowerRight"]["lat"] = query.bottom_right.Y();
-          group["metadata"]["boundingBox"]["lowerRight"]["lon"] = query.bottom_right.X();
-
-          group["metadata"]["boundingBox"]["upperLeft"]["lat"] = query.top_left.Y();
-          group["metadata"]["boundingBox"]["upperLeft"]["lon"] = query.top_left.X();
-
-          group["metadata"]["boundingBox"]["upperRight"]["lat"] = query.top_right.Y();
-          group["metadata"]["boundingBox"]["upperRight"]["lon"] = query.top_right.X();
-
-          group["producerName"] = query.producer_name;
-#ifdef ENABLE_MODEL_PATH
-          group["modelPath"] = query.model_path;
-#endif
-
-          std::size_t row_counter = 0;
-
-          Fmi::DateTime interval_begin = Fmi::DateTime::POS_INFINITY;
-          Fmi::DateTime interval_end = Fmi::DateTime::NEG_INFINITY;
-
-          for (auto site_iter = site_range.first; site_iter != site_range.second; ++site_iter)
-          {
-            const auto& geo_id = site_iter->second;
-            auto row_range = result_map.equal_range(geo_id);
-            Fmi::TimeZonePtr tzp;
-            for (auto row_iter = row_range.first; row_iter != row_range.second; ++row_iter)
-            {
-              std::size_t i = row_iter->second;
-              if (row_iter == row_range.first)
-              {
-                const std::string name = query.result->get(ind_place, i);
-                const std::string country_code = query.result->get(ind_country_iso, i);
-                const std::string country = query.result->get(ind_country, i);
-                const std::string region = query.result->get(ind_region, i);
-                const std::string localtz = query.result->get(ind_localtz, i);
-                const double latitude = Fmi::stod(query.result->get(ind_lat, i));
-                const double longitude = Fmi::stod(query.result->get(ind_lon, i));
-                tzp = get_tz_for_site(longitude, latitude, query.tz_name);
-                group["stationList"][station_ind]["geoid"] = geo_id;
-                group["stationList"][station_ind]["name"] = name;
-                set_2D_coord(
-                    transformation, latitude, longitude, group["stationList"][station_ind]);
-                if (show_height)
-                {
-                  group["stationList"][station_ind]["elev"] = query.result->get(ind_elev, i);
-                }
-
-                group["stationList"][station_ind]["iso2"] = country_code;
-                group["stationList"][station_ind]["country"] = country;
-                group["stationList"][station_ind]["localtz"] = localtz;
-                if ((country_code == "FI") or (name != region))
-                {
-                  group["stationList"][station_ind]["region"] = region;
-                }
-
-                station_ind++;
-              }
-
-              CTPP::CDT& row_data = group["returnArray"][row_counter++];
-
-              set_2D_coord(transformation,
-                           query.result->get(ind_lat, i),
-                           query.result->get(ind_lon, i),
-                           row_data);
-
-              if (show_height)
-              {
-                row_data["elev"] = query.result->get(ind_level, i);
-              }
-
-              Fmi::DateTime epoch = Fmi::TimeParser::parse_iso(query.result->get(ind_epoch, i));
-              long long jd = epoch.date().julian_day();
-              long seconds = epoch.time_of_day().total_seconds();
-              INT_64 s_epoch = 86400LL * (jd - ref_jd) + seconds;
-              row_data["epochTime"] = s_epoch;
-              row_data["epochTimeStr"] = format_local_time(epoch, tzp);
-
-              for (std::size_t k = query.first_data_ind; k <= query.last_data_ind; k++)
-              {
-                row_data["data"][k - query.first_data_ind] =
-                    remove_trailing_0(query.result->get(k, i));
-              }
-
-              interval_begin = i == 0 ? epoch : std::min(interval_begin, epoch);
-              interval_end = i == 0 ? epoch : std::max(interval_end, epoch);
-            }
-          }
-
-          group["phenomenonStartTime"] = Fmi::to_iso_extended_string(interval_begin) + "Z";
-          group["phenomenonEndTime"] = Fmi::to_iso_extended_string(interval_end) + "Z";
+          set_group_data(group,
+                         query,
+                         group_map.equal_range(group_id),
+                         result_map,
+                         transformation,
+                         show_height);
         }
 
         // printf("BBOX %f,%f  %f,%f  %f,%f  %f,%f\n", query.top_left.X(), query.top_left.Y(),
