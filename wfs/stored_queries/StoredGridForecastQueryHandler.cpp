@@ -948,6 +948,119 @@ void StoredGridForecastQueryHandler::set_origin_time_and_area(Query& wfsQuery,
   }
 }
 
+namespace
+{
+// Add the level attributes of a grid query
+void add_level_attributes(T::AttributeList& attributeList, const Query& wfsQuery)
+{
+  if (!wfsQuery.levels.empty())
+  {
+    std::string levels = toString(wfsQuery.levels, ',');
+    attributeList.addAttribute("levels", levels);
+  }
+
+  if (strcasecmp(wfsQuery.level_type.c_str(), "pressure") == 0)
+  {
+    attributeList.addAttribute("levelId", "2");
+  }
+
+  if (strcasecmp(wfsQuery.level_type.c_str(), "hybrid") == 0)
+  {
+    attributeList.addAttribute("levelId", "3");
+  }
+
+  if (!wfsQuery.level_heights.empty())
+  {
+    std::string heights = toString(wfsQuery.level_heights, ',');
+    attributeList.addAttribute("heights", heights);
+  }
+
+  if (!wfsQuery.level_type.empty())
+    attributeList.addAttribute("levelId", wfsQuery.level_type);
+
+}
+
+// Add the time attributes of a grid query
+void add_time_attributes(T::AttributeList& attributeList,
+                         const TS::TimeSeriesGeneratorOptions& toptions)
+{
+  attributeList.addAttribute("starttime", to_iso_string(toptions.startTime));
+
+  attributeList.addAttribute("endtime", to_iso_string(toptions.endTime));
+
+  if (toptions.timeSteps)
+    attributeList.addAttribute("timesteps", std::to_string(*toptions.timeSteps));
+
+  if (toptions.timeStep)
+    attributeList.addAttribute("timestep", std::to_string(*toptions.timeStep));
+
+}
+}  // namespace
+
+std::string StoredGridForecastQueryHandler::producer_list(const Query& wfsQuery) const
+{
+  std::string producerList;
+  for (auto & model : wfsQuery.models)
+  {
+    std::string mappingName = grid_engine->getProducerName(model);
+
+    std::vector<std::string> nameList;
+    grid_engine->getProducerNameList(mappingName, nameList);
+    for (auto & n : nameList)
+    {
+      if (!producerList.empty())
+        producerList += ",";
+      producerList += n;
+    }
+  }
+  return producerList;
+}
+
+std::string StoredGridForecastQueryHandler::grid_param_list(const Query& wfsQuery) const
+{
+  std::string paramList;
+
+  for (auto param = wfsQuery.data_params.begin(); param != wfsQuery.data_params.end(); ++param)
+  {
+    if (param != wfsQuery.data_params.begin())
+      paramList += ",";
+
+    std::string paramName = param->name();
+    std::string interpolationMethod;
+    auto pos = paramName.find(".raw");
+    if (pos != std::string::npos)
+    {
+      interpolationMethod = std::to_string(T::AreaInterpolationMethod::Linear);
+      paramName.erase(pos, 4);
+    }
+
+    std::string name = paramName;
+
+    for (auto producerName : wfsQuery.models)
+    {
+      producerName = grid_engine->getProducerName(producerName);
+      Engine::Grid::ParameterDetails_vec parameters;
+
+      std::string key = producerName + ";" + paramName;
+
+      grid_engine->getParameterDetails(producerName, paramName, parameters);
+
+      size_t len = parameters.size();
+      if (len > 0 && strcasecmp(parameters[0].mProducerName.c_str(), key.c_str()) != 0)
+        name = paramName + ":" + parameters[0].mProducerName + ":" + parameters[0].mGeometryId +
+               ":" + parameters[0].mLevelId + ":" + parameters[0].mLevel + ":" +
+               parameters[0].mForecastType + ":" + parameters[0].mForecastNumber +
+               "::" + interpolationMethod;
+      else
+        name = paramName;
+    }
+
+    paramList += name;
+  }
+
+  return paramList;
+}
+
 Table_sptr StoredGridForecastQueryHandler::extract_forecast(Query& wfsQuery) const
 {
   try
@@ -992,48 +1105,9 @@ Table_sptr StoredGridForecastQueryHandler::extract_forecast(Query& wfsQuery) con
 
       uint sz = wfsQuery.models.size();
       if (sz > 0)
-      {
-        std::string producerList;
-        for (auto & model : wfsQuery.models)
-        {
-          std::string mappingName = grid_engine->getProducerName(model);
+        attributeList.addAttribute("producer", producer_list(wfsQuery));
 
-          std::vector<std::string> nameList;
-          grid_engine->getProducerNameList(mappingName, nameList);
-          for (auto & n : nameList)
-          {
-            if (!producerList.empty())
-              producerList += ",";
-            producerList += n;
-          }
-        }
-        attributeList.addAttribute("producer", producerList);
-      }
-
-      if (!wfsQuery.levels.empty())
-      {
-        std::string levels = toString(wfsQuery.levels, ',');
-        attributeList.addAttribute("levels", levels);
-      }
-
-      if (strcasecmp(wfsQuery.level_type.c_str(), "pressure") == 0)
-      {
-        attributeList.addAttribute("levelId", "2");
-      }
-
-      if (strcasecmp(wfsQuery.level_type.c_str(), "hybrid") == 0)
-      {
-        attributeList.addAttribute("levelId", "3");
-      }
-
-      if (!wfsQuery.level_heights.empty())
-      {
-        std::string heights = toString(wfsQuery.level_heights, ',');
-        attributeList.addAttribute("heights", heights);
-      }
-
-      if (!wfsQuery.level_type.empty())
-        attributeList.addAttribute("levelId", wfsQuery.level_type);
+      add_level_attributes(attributeList, wfsQuery);
 
       std::string timezoneName = loc->timezone;
       if (wfsQuery.tz_name != "localtime")
@@ -1041,55 +1115,9 @@ Table_sptr StoredGridForecastQueryHandler::extract_forecast(Query& wfsQuery) con
 
       attributeList.addAttribute("timezone", timezoneName);
 
-      attributeList.addAttribute("starttime", to_iso_string(wfsQuery.toptions->startTime));
+      add_time_attributes(attributeList, *wfsQuery.toptions);
 
-      attributeList.addAttribute("endtime", to_iso_string(wfsQuery.toptions->endTime));
-
-      if (wfsQuery.toptions->timeSteps)
-        attributeList.addAttribute("timesteps", std::to_string(*wfsQuery.toptions->timeSteps));
-
-      if (wfsQuery.toptions->timeStep)
-        attributeList.addAttribute("timestep", std::to_string(*wfsQuery.toptions->timeStep));
-
-      std::string paramList;
-
-      for (auto param = wfsQuery.data_params.begin(); param != wfsQuery.data_params.end(); ++param)
-      {
-        if (param != wfsQuery.data_params.begin())
-          paramList += ",";
-
-        std::string paramName = param->name();
-        std::string interpolationMethod;
-        auto pos = paramName.find(".raw");
-        if (pos != std::string::npos)
-        {
-          interpolationMethod = std::to_string(T::AreaInterpolationMethod::Linear);
-          paramName.erase(pos, 4);
-        }
-
-        std::string name = paramName;
-
-        for (auto producerName : wfsQuery.models)
-        {
-          producerName = grid_engine->getProducerName(producerName);
-          Engine::Grid::ParameterDetails_vec parameters;
-
-          std::string key = producerName + ";" + paramName;
-
-          grid_engine->getParameterDetails(producerName, paramName, parameters);
-
-          size_t len = parameters.size();
-          if (len > 0 && strcasecmp(parameters[0].mProducerName.c_str(), key.c_str()) != 0)
-            name = paramName + ":" + parameters[0].mProducerName + ":" + parameters[0].mGeometryId +
-                   ":" + parameters[0].mLevelId + ":" + parameters[0].mLevel + ":" +
-                   parameters[0].mForecastType + ":" + parameters[0].mForecastNumber +
-                   "::" + interpolationMethod;
-          else
-            name = paramName;
-        }
-
-        paramList += name;
-      }
+      std::string paramList = grid_param_list(wfsQuery);
 
       attributeList.addAttribute("param", paramList);
 

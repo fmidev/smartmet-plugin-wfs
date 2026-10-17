@@ -98,6 +98,8 @@ class StoredGridForecastQueryHandler: public StoredQueryHandlerBase,
                     uint t,
                     std::string& name) const;
     std::string default_producer_name(QueryServer::Query& gridQuery) const;
+    std::string producer_list(const Query& wfsQuery) const;
+    std::string grid_param_list(const Query& wfsQuery) const;
     bool        find_origin_time(const SpecialValueContext& ctx, uint t, std::string& value) const;
     std::string multi_match_value(
                     const QueryServer::QueryParameter& param,
