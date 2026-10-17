@@ -153,6 +153,27 @@ class PluginImpl
              const SmartMet::Spine::HTTP::Request& req,
              RequestResult& result);
 
+  void query_post(const std::string& req_language,
+                  const std::string& language,
+                  const SmartMet::Spine::HTTP::Request& req,
+                  const std::string& hostname,
+                  const std::string& protocol,
+                  RequestResult& result);
+
+  void execute_request(RequestBase& request,
+                       const SmartMet::Spine::HTTP::Request& req,
+                       const std::string& hostname,
+                       const std::string& protocol,
+                       const std::optional<std::string>& fmi_apikey,
+                       RequestResult& result) const;
+
+  std::shared_ptr<xercesc::DOMDocument> parse_xml_request(const std::string& content,
+                                                          const std::string& req_language) const;
+
+  [[noreturn]] void throw_xml_request_error(const Xml::XmlError& orig_err,
+                                            const Xml::Parser::RootElemInfo& root_info,
+                                            const std::string& req_language) const;
+
   RequestBaseP parse_kvp_get_capabilities_request(
       const std::string& language, const SmartMet::Spine::HTTP::Request& request) const;
 

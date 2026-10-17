@@ -522,6 +522,155 @@ RequestBaseP PluginImpl::parse_xml_describe_stored_queries_request(
   }
 }
 
+void PluginImpl::execute_request(RequestBase& request,
+                                 const SmartMet::Spine::HTTP::Request& req,
+                                 const std::string& hostname,
+                                 const std::string& protocol,
+                                 const std::optional<std::string>& fmi_apikey,
+                                 RequestResult& result) const
+{
+  const std::string fmi_apikey_prefix = "/fmi-apikey/";
+
+  request.set_hostname(hostname);
+  request.set_protocol(protocol);
+  if (fmi_apikey && Spine::FmiApiKey::shouldReturnApiKey(req))
+  {
+    request.set_fmi_apikey_prefix(fmi_apikey_prefix);
+    request.set_fmi_apikey(*fmi_apikey);
+  }
+  result.may_validate_xml = request.may_validate_xml();
+  request.execute(result.output);
+  result.expires_seconds = request.get_response_expires_seconds();
+  if (request.get_http_status())
+    result.status = request.get_http_status();
+}
+
+void PluginImpl::throw_xml_request_error(const Xml::XmlError& orig_err,
+                                         const Xml::Parser::RootElemInfo& root_info,
+                                         const std::string& req_language) const
+{
+  const std::list<std::string>& messages = orig_err.get_messages();
+
+  if ((orig_err.get_error_level() != Xml::XmlError::FATAL_ERROR) and
+      (!root_info.nqname.empty()) and (root_info.ns_uri == WFS_NAMESPACE_URI) and
+      request_factory->check_request_name(root_info.nqname))
+  {
+    if (root_info.attr_map.count("service") == 0)
+    {
+      Fmi::Exception exception(BCP, "Missing the 'service' attribute!", nullptr);
+      exception.addDetails(messages);
+      if (exception.getExceptionByParameterName(WFS_EXCEPTION_CODE) == nullptr)
+        exception.addParameter(WFS_EXCEPTION_CODE, WFS_MISSING_PARAMETER_VALUE);
+      exception.addParameter(WFS_LOCATION, "service");
+      exception.addParameter(WFS_LANGUAGE, req_language);
+      throw exception;
+    }
+    if (root_info.attr_map.at("service") != "WFS")
+    {
+      Fmi::Exception exception(
+          BCP, "Incorrect value for the 'service' attribute!", nullptr);
+      exception.addDetails(messages);
+      if (exception.getExceptionByParameterName(WFS_EXCEPTION_CODE) == nullptr)
+        exception.addParameter(WFS_EXCEPTION_CODE, WFS_INVALID_PARAMETER_VALUE);
+      exception.addParameter(WFS_LOCATION, "service");
+      exception.addParameter(WFS_LANGUAGE, req_language);
+      exception.addParameter("Attribute value", root_info.attr_map.at("service"));
+      exception.addParameter("Expected value", "WFS");
+      throw exception;
+    }
+
+    if (root_info.attr_map.count("version") == 0)
+    {
+      Fmi::Exception exception(BCP, "Missing the 'version' attribute!", nullptr);
+      exception.addDetails(messages);
+      if (exception.getExceptionByParameterName(WFS_EXCEPTION_CODE) == nullptr)
+        exception.addParameter(WFS_EXCEPTION_CODE, WFS_MISSING_PARAMETER_VALUE);
+      exception.addParameter(WFS_LOCATION, "version");
+      exception.addParameter(WFS_LANGUAGE, req_language);
+      throw exception;
+    }
+    if (root_info.attr_map.at("version") != "2.0.0")
+    {
+      Fmi::Exception exception(
+          BCP, "Incorrect value for the 'version' attribute!", nullptr);
+      exception.addDetails(messages);
+      if (exception.getExceptionByParameterName(WFS_EXCEPTION_CODE) == nullptr)
+        exception.addParameter(WFS_EXCEPTION_CODE, WFS_INVALID_PARAMETER_VALUE);
+      exception.addParameter(WFS_LOCATION, "version");
+      exception.addParameter(WFS_LANGUAGE, req_language);
+      exception.addParameter("Attribute value", root_info.attr_map.at("version"));
+      exception.addParameter("Expected value", "2.0.0");
+      throw exception;
+    }
+  }
+
+  Fmi::Exception exception(BCP, "Parsing of the incoming XML request failed", nullptr);
+  exception.addDetails(messages);
+  if (exception.getExceptionByParameterName(WFS_EXCEPTION_CODE) == nullptr)
+    exception.addParameter(WFS_EXCEPTION_CODE, WFS_OPERATION_PARSING_FAILED);
+  exception.addParameter(WFS_LANGUAGE, req_language);
+  throw exception;
+}
+
+std::shared_ptr<xercesc::DOMDocument> PluginImpl::parse_xml_request(
+    const std::string& content, const std::string& req_language) const
+{
+  if (content.empty())
+  {
+    Fmi::Exception exception(BCP, "No request content available!");
+    exception.addParameter(WFS_EXCEPTION_CODE, WFS_OPERATION_PARSING_FAILED);
+    throw exception;
+  }
+
+  std::shared_ptr<xercesc::DOMDocument> xml_doc;
+  Xml::Parser::RootElemInfo root_info;
+  try
+  {
+    Xml::Parser::root_element_cb_t root_element_cb = (bl::var(root_info) = bl::_1);
+    xml_doc = xml_parser->get()->parse_string(content, "WFS", root_element_cb);
+  }
+  catch (const Xml::XmlError& orig_err)
+  {
+    throw_xml_request_error(orig_err, root_info, req_language);
+  }
+  return xml_doc;
+}
+
+void PluginImpl::query_post(const std::string& req_language,
+                            const std::string& language,
+                            const SmartMet::Spine::HTTP::Request& req,
+                            const std::string& hostname,
+                            const std::string& protocol,
+                            PluginImpl::RequestResult& result)
+{
+  const std::string content_type = get_mandatory_header(req, "Content-Type");
+
+  auto fmi_apikey = get_fmi_apikey(req);
+
+  if (content_type == "application/x-www-form-urlencoded")
+  {
+    std::shared_ptr<RequestBase> request = request_factory->parse_kvp(language, req);
+    execute_request(*request, req, hostname, protocol, fmi_apikey, result);
+  }
+  else if (content_type == "text/xml")
+  {
+    const std::string& content = req.getContent();
+    std::shared_ptr<xercesc::DOMDocument> xml_doc = parse_xml_request(content, req_language);
+
+    std::shared_ptr<RequestBase> request = request_factory->parse_xml(language, *xml_doc);
+    execute_request(*request, req, hostname, protocol, fmi_apikey, result);
+  }
+  else
+  {
+    Fmi::Exception exception(BCP, "Unsupported content type!");
+    if (exception.getExceptionByParameterName(WFS_EXCEPTION_CODE) == nullptr)
+      exception.addParameter(WFS_EXCEPTION_CODE, WFS_OPERATION_PARSING_FAILED);
+    exception.addParameter(WFS_LANGUAGE, req_language);
+    exception.addParameter("Requested content type", content_type);
+    throw exception;
+  }
+}
+
 /**
  *  @brief Perform actual WFS request and generate the response
  */
@@ -547,156 +696,19 @@ void PluginImpl::query(const std::string& req_language,
     else
       protocol = get_fallback_protocol();
 
-    const std::string fmi_apikey_prefix = "/fmi-apikey/";
-
     std::string language =
         req_language.empty() ? *get_config().get_languages().begin() : req_language;
 
     if (method == SmartMet::Spine::HTTP::RequestMethod::GET)
     {
       std::shared_ptr<RequestBase> request = request_factory->parse_kvp(language, req);
-      request->set_hostname(hostname);
-      request->set_protocol(protocol);
       auto fmi_apikey = get_fmi_apikey(req);
-      if (fmi_apikey && Spine::FmiApiKey::shouldReturnApiKey(req))
-      {
-        request->set_fmi_apikey_prefix(fmi_apikey_prefix);
-        request->set_fmi_apikey(*fmi_apikey);
-      }
-      result.may_validate_xml = request->may_validate_xml();
-      request->execute(result.output);
-      result.expires_seconds = request->get_response_expires_seconds();
-      if (request->get_http_status())
-        result.status = request->get_http_status();
+      execute_request(*request, req, hostname, protocol, fmi_apikey, result);
     }
 
     else if (method == SmartMet::Spine::HTTP::RequestMethod::POST)
     {
-      const std::string content_type = get_mandatory_header(req, "Content-Type");
-
-      auto fmi_apikey = get_fmi_apikey(req);
-
-      if (content_type == "application/x-www-form-urlencoded")
-      {
-        std::shared_ptr<RequestBase> request = request_factory->parse_kvp(language, req);
-        request->set_hostname(hostname);
-        request->set_protocol(protocol);
-        if (fmi_apikey && Spine::FmiApiKey::shouldReturnApiKey(req))
-        {
-          request->set_fmi_apikey_prefix(fmi_apikey_prefix);
-          request->set_fmi_apikey(*fmi_apikey);
-        }
-        result.may_validate_xml = request->may_validate_xml();
-        request->execute(result.output);
-        result.expires_seconds = request->get_response_expires_seconds();
-        if (request->get_http_status())
-          result.status = request->get_http_status();
-      }
-      else if (content_type == "text/xml")
-      {
-        const std::string& content = req.getContent();
-        if (content.empty())
-        {
-          Fmi::Exception exception(BCP, "No request content available!");
-          exception.addParameter(WFS_EXCEPTION_CODE, WFS_OPERATION_PARSING_FAILED);
-          throw exception;
-        }
-
-        std::shared_ptr<xercesc::DOMDocument> xml_doc;
-        Xml::Parser::RootElemInfo root_info;
-        try
-        {
-          Xml::Parser::root_element_cb_t root_element_cb = (bl::var(root_info) = bl::_1);
-          xml_doc = xml_parser->get()->parse_string(content, "WFS", root_element_cb);
-        }
-        catch (const Xml::XmlError& orig_err)
-        {
-          const std::list<std::string>& messages = orig_err.get_messages();
-
-          if ((orig_err.get_error_level() != Xml::XmlError::FATAL_ERROR) and
-              (!root_info.nqname.empty()) and (root_info.ns_uri == WFS_NAMESPACE_URI) and
-              request_factory->check_request_name(root_info.nqname))
-          {
-            if (root_info.attr_map.count("service") == 0)
-            {
-              Fmi::Exception exception(BCP, "Missing the 'service' attribute!", nullptr);
-              exception.addDetails(messages);
-              if (exception.getExceptionByParameterName(WFS_EXCEPTION_CODE) == nullptr)
-                exception.addParameter(WFS_EXCEPTION_CODE, WFS_MISSING_PARAMETER_VALUE);
-              exception.addParameter(WFS_LOCATION, "service");
-              exception.addParameter(WFS_LANGUAGE, req_language);
-              throw exception;
-            }
-            if (root_info.attr_map.at("service") != "WFS")
-            {
-              Fmi::Exception exception(
-                  BCP, "Incorrect value for the 'service' attribute!", nullptr);
-              exception.addDetails(messages);
-              if (exception.getExceptionByParameterName(WFS_EXCEPTION_CODE) == nullptr)
-                exception.addParameter(WFS_EXCEPTION_CODE, WFS_INVALID_PARAMETER_VALUE);
-              exception.addParameter(WFS_LOCATION, "service");
-              exception.addParameter(WFS_LANGUAGE, req_language);
-              exception.addParameter("Attribute value", root_info.attr_map.at("service"));
-              exception.addParameter("Expected value", "WFS");
-              throw exception;
-            }
-
-            if (root_info.attr_map.count("version") == 0)
-            {
-              Fmi::Exception exception(BCP, "Missing the 'version' attribute!", nullptr);
-              exception.addDetails(messages);
-              if (exception.getExceptionByParameterName(WFS_EXCEPTION_CODE) == nullptr)
-                exception.addParameter(WFS_EXCEPTION_CODE, WFS_MISSING_PARAMETER_VALUE);
-              exception.addParameter(WFS_LOCATION, "version");
-              exception.addParameter(WFS_LANGUAGE, req_language);
-              throw exception;
-            }
-            if (root_info.attr_map.at("version") != "2.0.0")
-            {
-              Fmi::Exception exception(
-                  BCP, "Incorrect value for the 'version' attribute!", nullptr);
-              exception.addDetails(messages);
-              if (exception.getExceptionByParameterName(WFS_EXCEPTION_CODE) == nullptr)
-                exception.addParameter(WFS_EXCEPTION_CODE, WFS_INVALID_PARAMETER_VALUE);
-              exception.addParameter(WFS_LOCATION, "version");
-              exception.addParameter(WFS_LANGUAGE, req_language);
-              exception.addParameter("Attribute value", root_info.attr_map.at("version"));
-              exception.addParameter("Expected value", "2.0.0");
-              throw exception;
-            }
-          }
-
-          Fmi::Exception exception(BCP, "Parsing of the incoming XML request failed", nullptr);
-          exception.addDetails(messages);
-          if (exception.getExceptionByParameterName(WFS_EXCEPTION_CODE) == nullptr)
-            exception.addParameter(WFS_EXCEPTION_CODE, WFS_OPERATION_PARSING_FAILED);
-          exception.addParameter(WFS_LANGUAGE, req_language);
-          throw exception;
-        }
-
-        std::shared_ptr<RequestBase> request = request_factory->parse_xml(language, *xml_doc);
-        request->set_hostname(hostname);
-        request->set_protocol(protocol);
-        if (fmi_apikey && Spine::FmiApiKey::shouldReturnApiKey(req))
-        {
-          request->set_fmi_apikey_prefix(fmi_apikey_prefix);
-          request->set_fmi_apikey(*fmi_apikey);
-        }
-        result.may_validate_xml = request->may_validate_xml();
-        request->execute(result.output);
-        result.expires_seconds = request->get_response_expires_seconds();
-        if (request->get_http_status())
-          result.status = request->get_http_status();
-      }
-      else
-      {
-        Fmi::Exception exception(BCP, "Unsupported content type!");
-        if (exception.getExceptionByParameterName(WFS_EXCEPTION_CODE) == nullptr)
-          exception.addParameter(WFS_EXCEPTION_CODE, WFS_OPERATION_PARSING_FAILED);
-        exception.addParameter(WFS_LANGUAGE, req_language);
-        exception.addParameter("Requested content type", content_type);
-        throw exception;
-      }
+      query_post(req_language, language, req, hostname, protocol, result);
     }
     else
     {
