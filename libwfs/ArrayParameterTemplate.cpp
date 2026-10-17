@@ -348,6 +348,47 @@ std::vector<SmartMet::Spine::BoundingBox> ArrayParameterTemplate::get_bbox_array
   }
 }
 
+namespace
+{
+// Verify the template item referring to request parameter 'param' and add its size to the
+// calculated array sizes
+void add_param_ref_size(const ParameterTemplateItem& item,
+                        const StoredQueryConfig::ParamDesc& param,
+                        std::size_t& calc_min_size,
+                        std::size_t& calc_max_size)
+{
+  if (param.isArray())
+  {
+    if (item.param_ind && *item.param_ind >= param.param_def.getMaxSize())
+    {
+      // The requested index is above max. possible size of parameter array
+      const std::string msg = fmt::format("The array index {} is out of the range 0..{}",
+                                          *item.param_ind,
+                                          param.param_def.getMaxSize());
+      throw Fmi::Exception(BCP, msg);
+    }
+  }
+
+  if (item.param_ind)
+  {
+    calc_min_size++;
+    calc_max_size++;
+  }
+  else if (param.isArray() /* and not item.param_ind */)
+  {
+    // Minimal size check is skipped later if parameter
+    // template refers to entire optional request array parameter
+    calc_min_size += param.param_def.getMinSize();
+    calc_max_size += param.param_def.getMaxSize();
+  }
+  else
+  {
+    calc_min_size++;
+    calc_max_size++;
+  }
+}
+}  // namespace
+
 void ArrayParameterTemplate::init(bool silent)
 {
   try
@@ -415,36 +456,8 @@ void ArrayParameterTemplate::init(bool silent)
         // entire array are permitted in in this case
         if (not item.weak and item.param_ref)
         {
-            const StoredQueryConfig::ParamDesc& param = get_param_desc(*item.param_ref);
-
-            if (param.isArray())
-            {
-                if (item.param_ind && *item.param_ind >= param.param_def.getMaxSize())
-                {
-                    // The requested index is above max. possible size of parameter array
-                    const std::string msg = fmt::format("The array index {} is out of the range 0..{}",
-                                                        *item.param_ind, param.param_def.getMaxSize());
-                    throw Fmi::Exception(BCP, msg);
-                }
-            }
-
-            if (item.param_ind)
-            {
-                calc_min_size++;
-                calc_max_size++;
-            }
-            else if (param.isArray() /* and not item.param_ind */)
-            {
-                // Minimal size check is skipped later if parameter
-                // template refers to entire optional request array parameter
-                calc_min_size += param.param_def.getMinSize();
-                calc_max_size += param.param_def.getMaxSize();
-            }
-            else
-            {
-                calc_min_size++;
-                calc_max_size++;
-            }
+            add_param_ref_size(
+                item, get_param_desc(*item.param_ref), calc_min_size, calc_max_size);
         }
         else if (item.plain_text)
         {
