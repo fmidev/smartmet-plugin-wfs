@@ -85,6 +85,20 @@ class StoredObsQueryHandler : public StoredQueryHandlerBase,
                       SmartMet::Engine::Observation::Settings& query_params,
                       std::vector<ExtParamIndexEntry>& parameter_index) const;
 
+  static void add_qc_parameter(const std::string& name,
+                               SmartMet::Engine::Observation::Settings& query_params,
+                               ExtParamIndexEntry& entry);
+
+  bool add_meteo_parameter(const std::string& name,
+                           bool add_qc,
+                           SmartMet::Engine::Observation::Settings& query_params,
+                           std::vector<ExtParamIndexEntry>& parameter_index) const;
+
+  void add_special_parameter(const std::string& name,
+                             const std::string& l_name,
+                             SmartMet::Engine::Observation::Settings& query_params,
+                             std::vector<ExtParamIndexEntry>& parameter_index) const;
+
   struct GroupRec
   {
     int group_id = 0;

@@ -791,6 +791,115 @@ int StoredObsQueryHandler::lookup_initial_parameter(const std::string& name) con
   return -1;
 }
 
+void StoredObsQueryHandler::add_qc_parameter(const std::string& name,
+                                             SmartMet::Engine::Observation::Settings& query_params,
+                                             ExtParamIndexEntry& entry)
+{
+  using SmartMet::TimeSeries::makeParameter;
+
+  const std::string qc_name = "qc_" + name;
+  ParamIndexEntry qc_entry;
+  qc_entry.ind = query_params.parameters.size();
+  qc_entry.name = qc_name;
+  entry.qc = qc_entry;
+  SmartMet::Spine::Parameter param = makeParameter(qc_name);
+  query_params.parameters.push_back(param);
+}
+
+bool StoredObsQueryHandler::add_meteo_parameter(
+    const std::string& name,
+    bool add_qc,
+    SmartMet::Engine::Observation::Settings& query_params,
+    std::vector<ExtParamIndexEntry>& parameter_index) const
+{
+  using SmartMet::TimeSeries::makeParameter;
+
+  bool have_meteo_param = false;
+  ExtParamIndexEntry entry;
+  entry.p.ind = query_params.parameters.size();
+  entry.p.name = name;
+  SmartMet::Spine::Parameter param = makeParameter(name);
+  bool sensor_parameter_exists = false;
+  if (not SmartMet::TimeSeries::special(param))
+  {
+    have_meteo_param = true;
+    auto parameter_option = get_meteo_parameter_options(name);
+    if ((parameter_option->sensor_first != 1) || (parameter_option->sensor_last != 1))
+    {
+      for (unsigned short index = parameter_option->sensor_first;
+           index < parameter_option->sensor_last + 1;
+           index += parameter_option->sensor_step)
+      {
+        if (index < parameter_option->sensor_last + 1)
+        {
+          param = makeParameter(name);
+          param.setSensorNumber(index);
+          entry.p.ind = query_params.parameters.size();
+          entry.p.sensor_name = (entry.p.name + "(:" + Fmi::to_string(index) + ")");
+          query_params.parameters.push_back(param);
+          if (add_qc)
+            add_qc_parameter(name, query_params, entry);
+
+          sensor_parameter_exists = true;
+          parameter_index.push_back(entry);
+        }
+      }
+    }
+  }
+
+  // If there is no sensors defined, add default parameter
+  if (!sensor_parameter_exists)
+  {
+    query_params.parameters.push_back(param);
+
+    if (add_qc)
+      add_qc_parameter(name, query_params, entry);
+
+    parameter_index.push_back(entry);
+  }
+
+  return have_meteo_param;
+}
+
+void StoredObsQueryHandler::add_special_parameter(
+    const std::string& name,
+    const std::string& l_name,
+    SmartMet::Engine::Observation::Settings& query_params,
+    std::vector<ExtParamIndexEntry>& parameter_index) const
+{
+  using SmartMet::TimeSeries::is_location_parameter;
+  using SmartMet::TimeSeries::is_time_parameter;
+  using SmartMet::TimeSeries::makeParameter;
+
+  int ind = lookup_initial_parameter(l_name);
+  if (ind >= 0)
+  {
+    ExtParamIndexEntry entry;
+    entry.p.ind = ind;
+    entry.p.name = name;
+    parameter_index.push_back(entry);
+  }
+  else
+  {
+    if (is_location_parameter(name) or is_time_parameter(name))
+    {
+      ExtParamIndexEntry entry;
+      entry.p.ind = -1;
+      entry.p.name = name;
+      parameter_index.push_back(entry);
+    }
+    else
+    {
+      ExtParamIndexEntry entry;
+      entry.p.ind = query_params.parameters.size();
+      entry.p.name = name;
+      SmartMet::Spine::Parameter param = makeParameter(name);
+      query_params.parameters.push_back(param);
+      parameter_index.push_back(entry);
+    }
+  }
+}
+
 bool StoredObsQueryHandler::add_parameters(const RequestParameterMap& params,
                                            const std::vector<std::string>& param_names,
                                            SmartMet::Engine::Observation::Settings& query_params,
@@ -831,94 +940,15 @@ bool StoredObsQueryHandler::add_parameters(const RequestParameterMap& params,
       if (obs_engine->isParameter(name, query_params.stationtype))
       {
         // Normal parameter
-        ExtParamIndexEntry entry;
-        entry.p.ind = query_params.parameters.size();
-        entry.p.name = name;
-        SmartMet::Spine::Parameter param = makeParameter(name);
-        bool sensor_parameter_exists = false;
-        if (not SmartMet::TimeSeries::special(param))
-        {
+        if (add_meteo_parameter(name,
+                                not have_explicit_qc_params and support_quality_info,
+                                query_params,
+                                parameter_index))
           have_meteo_param = true;
-          auto parameter_option = get_meteo_parameter_options(name);
-          if ((parameter_option->sensor_first != 1) || (parameter_option->sensor_last != 1))
-          {
-            for (unsigned short index = parameter_option->sensor_first;
-                 index < parameter_option->sensor_last + 1;
-                 index += parameter_option->sensor_step)
-            {
-              if (index < parameter_option->sensor_last + 1)
-              {
-                param = makeParameter(name);
-                param.setSensorNumber(index);
-                entry.p.ind = query_params.parameters.size();
-                entry.p.sensor_name = (entry.p.name + "(:" + Fmi::to_string(index) + ")");
-                query_params.parameters.push_back(param);
-                if (not have_explicit_qc_params and support_quality_info)
-                {
-                  const std::string qc_name = "qc_" + name;
-                  ParamIndexEntry qc_entry;
-                  qc_entry.ind = query_params.parameters.size();
-                  qc_entry.name = qc_name;
-                  entry.qc = qc_entry;
-                  SmartMet::Spine::Parameter param = makeParameter(qc_name);
-                  query_params.parameters.push_back(param);
-                }
-
-                sensor_parameter_exists = true;
-                parameter_index.push_back(entry);
-              }
-            }
-          }
-        }
-
-        // If there is no sensors defined, add default parameter
-        if (!sensor_parameter_exists)
-        {
-          query_params.parameters.push_back(param);
-
-          if (not have_explicit_qc_params and support_quality_info)
-          {
-            const std::string qc_name = "qc_" + name;
-            ParamIndexEntry qc_entry;
-            qc_entry.ind = query_params.parameters.size();
-            qc_entry.name = qc_name;
-            entry.qc = qc_entry;
-            SmartMet::Spine::Parameter param = makeParameter(qc_name);
-            query_params.parameters.push_back(param);
-          }
-
-          parameter_index.push_back(entry);
-        }
       }
       else if (is_special_parameter(name))
       {
-        int ind = lookup_initial_parameter(l_name);
-        if (ind >= 0)
-        {
-          ExtParamIndexEntry entry;
-          entry.p.ind = ind;
-          entry.p.name = name;
-          parameter_index.push_back(entry);
-        }
-        else
-        {
-          if (is_location_parameter(name) or is_time_parameter(name))
-          {
-            ExtParamIndexEntry entry;
-            entry.p.ind = -1;
-            entry.p.name = name;
-            parameter_index.push_back(entry);
-          }
-          else
-          {
-            ExtParamIndexEntry entry;
-            entry.p.ind = query_params.parameters.size();
-            entry.p.name = name;
-            SmartMet::Spine::Parameter param = makeParameter(name);
-            query_params.parameters.push_back(param);
-            parameter_index.push_back(entry);
-          }
-        }
+        add_special_parameter(name, l_name, query_params, parameter_index);
       }
       else
       {
