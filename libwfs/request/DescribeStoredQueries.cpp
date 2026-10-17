@@ -22,6 +22,96 @@ struct XmlNamespeceDef
   std::string prefix;
   std::optional<std::string> loc;
 };
+
+// Is any of the features of the return types hidden?
+bool has_hidden_feature(const bw::WfsCapabilities& capabilities,
+                        const std::vector<std::string>& return_types)
+{
+  for (const auto& name : return_types)
+  {
+    const auto* feature = capabilities.find_feature(name);
+    if (feature && feature->is_hidden())
+      return true;
+  }
+  return false;
+}
+
+// Set the descriptions of the stored query parameters
+void set_param_descriptions(CTPP::CDT& sq,
+                            const bw::StoredQueryConfig& config,
+                            const std::string& language)
+{
+  const int N = config.get_num_param_desc();
+  for (int k = 0; k < N; k++)
+  {
+    sq["params"][k]["name"] = config.get_param_name(k);
+    sq["params"][k]["title"] = config.get_param_title(k, language);
+    sq["params"][k]["abstract"] = config.get_param_abstract(k, language);
+    sq["params"][k]["type"] = config.get_param_xml_type(k);
+  }
+}
+
+// Set the namespace definitions of the return types. Returns the mapping from namespaces
+// to their prefixes.
+std::map<std::string, std::string> set_namespace_defs(CTPP::CDT& sq,
+                                                      const bw::WfsCapabilities& capabilities,
+                                                      const std::vector<std::string>& return_types)
+{
+  bool have_ns_loc = false;
+  std::map<std::string, std::string> ns_map;
+  for (const auto& name : return_types)
+  {
+    const auto* feature = capabilities.find_feature(name);
+    if (!feature)
+    {
+      Fmi::Exception exception(BCP, "INTERNAL ERROR: feature '" + name + "' not found!");
+      exception.addParameter(WFS_EXCEPTION_CODE, WFS_OPERATION_PROCESSING_FAILED);
+      throw exception;
+    }
+
+    const std::string ns = feature->get_xml_namespace();
+    if (ns_map.count(ns) == 0)
+    {
+      const int ind = ns_map.size();
+      const std::string& prefix = ns_map[ns] = str(format("wfs_%03u") % (1 + ind));
+      CTPP::CDT& ns_def = sq["namespaceDef"][ind];
+      ns_def["prefix"] = prefix;
+      ns_def["namespace"] = ns;
+      const auto ns_loc = feature->get_xml_namespace_loc();
+      if (ns_loc)
+      {
+        ns_def["nsLoc"] = *ns_loc;
+        have_ns_loc = true;
+      }
+    }
+  }
+
+  if (have_ns_loc)
+  {
+    sq["haveNamespaceLoc"] = 1;
+  }
+
+  return ns_map;
+}
+
+// Set the prefixed return type names
+void set_return_types(CTPP::CDT& sq,
+                      const bw::WfsCapabilities& capabilities,
+                      const std::vector<std::string>& return_types,
+                      const std::map<std::string, std::string>& ns_map)
+{
+  for (std::size_t k = 0; k < return_types.size(); k++)
+  {
+    const std::string& name = return_types[k];
+    CTPP::CDT& return_type = sq["returnTypes"][k];
+    const auto* feature = capabilities.find_feature(name);
+    // No need to check for nullptr as it is done in earlier loop
+    const std::string& xml_type = feature->get_xml_type();
+    const std::string& ns = feature->get_xml_namespace();
+    const std::string& prefix = ns_map.at(ns);
+    return_type["name"] = prefix + ":" + xml_type;
+  }
+}
 }  // namespace
 
 bw::Request::DescribeStoredQueries::DescribeStoredQueries(const std::string& language,
@@ -91,20 +181,11 @@ void bw::Request::DescribeStoredQueries::execute(std::ostream& output) const
       {
         const std::vector<std::string> return_types = handler->get_return_types();
 
-	// If all descriptions required then skip those at least one feature type is hidden.
-	bool skip_this_id = false;
-	if (show_all) {
-	  for (const auto & name : return_types)
-	    {
-	      const auto* feature = plugin_impl.get_capabilities().find_feature(name);
-	      if (feature->is_hidden()) {
-		skip_this_id = true;
-	      }
-	    }
-	}
-	if (skip_this_id) {
-	  continue;
-	}
+        // If all descriptions required then skip those at least one feature type is hidden.
+        if (show_all and has_hidden_feature(plugin_impl.get_capabilities(), return_types))
+        {
+          continue;
+        }
 
 	CTPP::CDT& sq = hash["storedQueryList"][cnt++];
 
@@ -113,64 +194,13 @@ void bw::Request::DescribeStoredQueries::execute(std::ostream& output) const
         sq["title"] = config->get_title(language);
         sq["abstract"] = config->get_abstract(language);
 
-        const int N = config->get_num_param_desc();
-        for (int k = 0; k < N; k++)
-        {
-          sq["params"][k]["name"] = config->get_param_name(k);
-          sq["params"][k]["title"] = config->get_param_title(k, language);
-          sq["params"][k]["abstract"] = config->get_param_abstract(k, language);
-          sq["params"][k]["type"] = config->get_param_xml_type(k);
-        }
+        set_param_descriptions(sq, *config, language);
 
-        bool have_ns_loc = false;
-        std::map<std::string, std::string> ns_map;
-        for (const auto & name : return_types)
-        {
-          const auto* feature = plugin_impl.get_capabilities().find_feature(name);
-          if (feature)
-          {
-            const std::string ns = feature->get_xml_namespace();
-            if (ns_map.count(ns) == 0)
-            {
-              const int ind = ns_map.size();
-              const std::string& prefix = ns_map[ns] = str(format("wfs_%03u") % (1 + ind));
-              CTPP::CDT& ns_def = sq["namespaceDef"][ind];
-              ns_def["prefix"] = prefix;
-              ns_def["namespace"] = ns;
-              const auto ns_loc = feature->get_xml_namespace_loc();
-              if (ns_loc)
-              {
-                ns_def["nsLoc"] = *ns_loc;
-                have_ns_loc = true;
-              }
-            }
-          }
-          else
-          {
-            std::ostringstream msg;
-            Fmi::Exception exception(
-                BCP, "INTERNAL ERROR: feature '" + name + "' not found!");
-            exception.addParameter(WFS_EXCEPTION_CODE, WFS_OPERATION_PROCESSING_FAILED);
-            throw exception;
-          }
-        }
+        const auto& capabilities = plugin_impl.get_capabilities();
+        const std::map<std::string, std::string> ns_map =
+            set_namespace_defs(sq, capabilities, return_types);
 
-        if (have_ns_loc)
-        {
-          sq["haveNamespaceLoc"] = 1;
-        }
-
-        for (std::size_t k = 0; k < return_types.size(); k++)
-        {
-          const std::string& name = return_types[k];
-          CTPP::CDT& return_type = sq["returnTypes"][k];
-          const auto* feature = plugin_impl.get_capabilities().find_feature(name);
-          // No need to check for nullptr as it is done in earlier loop
-          const std::string& xml_type = feature->get_xml_type();
-          const std::string& ns = feature->get_xml_namespace();
-          const std::string& prefix = ns_map.at(ns);
-          return_type["name"] = prefix + ":" + xml_type;
-        }
+        set_return_types(sq, capabilities, return_types, ns_map);
       }
     }
 
