@@ -14,6 +14,15 @@
 
 namespace SmartMet
 {
+namespace Engine
+{
+namespace Observation
+{
+class VerifiableMessageQuery;
+class VerifiableMessageQueryParams;
+}  // namespace Observation
+}  // namespace Engine
+
 namespace Plugin
 {
 namespace WFS
@@ -45,6 +54,18 @@ class StoredAviationObservationQueryHandler : public StoredQueryHandlerBase,
   std::string get_handler_description() const override;
 
  private:
+  void add_requested_icao_codes(
+      std::map<std::string, SmartMet::Spine::LocationPtr>& validIcaoCodes,
+      const std::vector<std::string>& icaoCodeVector,
+      const Locus::QueryOptions& nameSearchOptions) const;
+
+  void make_message_query(
+      SmartMet::Engine::Observation::VerifiableMessageQuery& verifiableMessageQuery,
+      SmartMet::Engine::Observation::VerifiableMessageQueryParams& queryParams,
+      const std::map<std::string, SmartMet::Spine::LocationPtr>& validIcaoCodes,
+      const RequestParameterMap& params,
+      bool returnOnlyLatest) const;
+
   virtual void update_parameters(
       const RequestParameterMap& request_params,
       int seq_id,

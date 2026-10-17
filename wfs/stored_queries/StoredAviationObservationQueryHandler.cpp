@@ -23,6 +23,99 @@ const char* P_BEGIN_TIME = "beginTime";
 const char* P_END_TIME = "endTime";
 const char* P_STATION_TYPE = "stationType";
 const char* P_RETURN_ONLY_LATEST = "returnOnlyLatest";
+
+using IcaoLocationMap = std::map<std::string, SmartMet::Spine::LocationPtr>;
+
+// Add the locations inside the bounding box
+void add_locations_in_bbox(IcaoLocationMap& validIcaoCodes,
+                           const SmartMet::Spine::LocationList& locations,
+                           const SmartMet::Spine::BoundingBox& queryBBox)
+{
+  for (const auto& it : locations)
+  {
+    if (queryBBox.xMin <= it->longitude and queryBBox.xMax >= it->longitude and
+        queryBBox.yMin <= it->latitude and queryBBox.yMax >= it->latitude)
+    {
+      // Do not add duplicates.
+      if (validIcaoCodes.find(it->name) == validIcaoCodes.end())
+        validIcaoCodes.insert(std::make_pair(it->name, it));
+    }
+  }
+}
+
+// Add the requested locations which are allowed stations (airports)
+void add_airport_locations(
+    IcaoLocationMap& validIcaoCodes,
+    const std::list<std::pair<std::string, SmartMet::Spine::LocationPtr> >& validLocations,
+    const SmartMet::Spine::LocationList& locationsByStationType)
+{
+  for (const auto& validLocation : validLocations)
+  {
+    auto locIt = locationsByStationType.begin();
+    for (; locIt != locationsByStationType.end(); ++locIt)
+    {
+      if ((*locIt)->geoid == validLocation.second->geoid)
+        break;
+    }
+
+    // Add only allowed stations, ones.
+    if (locIt != locationsByStationType.end() and
+        validIcaoCodes.find((*locIt)->name) == validIcaoCodes.end())
+    {
+      validIcaoCodes.insert(std::make_pair((*locIt)->name, *locIt));
+    }
+  }
+}
+
+// Fill the IWXXM messages, returns the number of messages
+int fill_iwxxm_content(CTPP::CDT& group,
+                       const std::vector<std::string>& iwxxmContentVector,
+                       std::vector<unsigned int>& messagePositions)
+{
+  int i = 0;
+  for (auto it = iwxxmContentVector.begin(); it != iwxxmContentVector.end(); ++it)
+  {
+    if ((*it).size() > 1)
+    {
+      messagePositions.push_back(it - iwxxmContentVector.begin());
+      group["contentList"][i++]["iwxxm"] = *it;
+    }
+  }
+
+  return messagePositions.size();
+}
+
+// Define airport bounding box from the positions of the stations having a message
+void set_stations_bbox(SmartMet::Spine::BoundingBox& bbox,
+                       const std::vector<unsigned int>& messagePositions,
+                       const std::vector<std::string>& stationIdVector,
+                       const IcaoLocationMap& validIcaoCodes)
+{
+  bool initBBox = true;
+  for (unsigned int messagePosition : messagePositions)
+  {
+    auto icaoLocation = validIcaoCodes.find(stationIdVector.at(messagePosition));
+
+    if (icaoLocation == validIcaoCodes.end())
+      continue;
+
+    if (initBBox)
+    {
+      initBBox = false;
+      bbox.xMin = (*icaoLocation).second->longitude;
+      bbox.xMax = (*icaoLocation).second->longitude;
+      bbox.yMin = (*icaoLocation).second->latitude;
+      bbox.yMax = (*icaoLocation).second->latitude;
+    }
+    else
+    {
+      bbox.xMin = std::min(bbox.xMin, (*icaoLocation).second->longitude);
+      bbox.xMax = std::max(bbox.xMax, (*icaoLocation).second->longitude);
+      bbox.yMin = std::min(bbox.yMin, (*icaoLocation).second->latitude);
+      bbox.yMax = std::max(bbox.yMax, (*icaoLocation).second->latitude);
+    }
+  }
+}
 }  // namespace
 
 bw::StoredAviationObservationQueryHandler::StoredAviationObservationQueryHandler(
@@ -83,6 +176,83 @@ bw::StoredAviationObservationQueryHandler::~StoredAviationObservationQueryHandle
 std::string bw::StoredAviationObservationQueryHandler::get_handler_description() const
 {
     return "Observation data: Aviation";
+}
+
+void bw::StoredAviationObservationQueryHandler::add_requested_icao_codes(
+    std::map<std::string, SmartMet::Spine::LocationPtr>& validIcaoCodes,
+    const std::vector<std::string>& icaoCodeVector,
+    const Locus::QueryOptions& nameSearchOptions) const
+{
+  for (const auto& it : icaoCodeVector)
+  {
+    // Check that the icao code length is 4 characters.
+    if ((it.end() - it.begin()) != 4)
+      continue;
+
+    SmartMet::Spine::LocationList locationList = geo_engine->nameSearch(nameSearchOptions, it);
+
+    // ICAO code is uniq so the first one must be the one.
+    if (locationList.empty() or locationList.front()->name != it)
+    {
+      std::ostringstream msg;
+      msg << "ICAO code '" << it << "' not found.";
+      Fmi::Exception exception(BCP, msg.str());
+      exception.addParameter(WFS_EXCEPTION_CODE, WFS_INVALID_PARAMETER_VALUE);
+      throw exception.disableStackTrace();
+    }
+
+    // Do not add dublicates.
+    if (validIcaoCodes.find(locationList.front()->name) == validIcaoCodes.end())
+      validIcaoCodes.insert(std::make_pair(locationList.front()->name, locationList.front()));
+  }
+}
+
+void bw::StoredAviationObservationQueryHandler::make_message_query(
+    SmartMet::Engine::Observation::VerifiableMessageQuery& verifiableMessageQuery,
+    SmartMet::Engine::Observation::VerifiableMessageQueryParams& queryParams,
+    const std::map<std::string, SmartMet::Spine::LocationPtr>& validIcaoCodes,
+    const RequestParameterMap& params,
+    bool returnOnlyLatest) const
+{
+  // Special case where only the latest message will be returned inside a time range.
+  if (returnOnlyLatest)
+    queryParams.setReturnOnlyLatest();
+
+  // The column names in the db to fetch.
+  const std::list<std::string> selectNameList = {
+      "STATION_ID", "MESSAGE_TIME", "IWXXM_CONTENT"};
+  try
+  {
+    for (const auto& validIcaoCode : validIcaoCodes)
+      queryParams.addStationId(validIcaoCode.first);
+
+    for (const auto & it : selectNameList)
+    {
+      if (!queryParams.addSelectName(it))
+        std::cerr << "SmartMet::Plugin::WFS::query : Add of the select name '" << it
+                  << "' failed\n";
+    }
+
+    const auto startTime = params.get_single<Fmi::DateTime>(P_BEGIN_TIME);
+    const auto endTime = params.get_single<Fmi::DateTime>(P_END_TIME);
+
+    if (m_sqRestrictions)
+      check_time_interval(startTime, endTime, m_maxHours);
+
+    queryParams.setTimeRange(startTime, endTime);
+
+    verifiableMessageQuery.setQueryParams(&queryParams);
+
+    obs_engine->makeQuery(&verifiableMessageQuery);
+  }
+  catch (...)
+  {
+    Fmi::Exception exception(BCP, "Operation processing failed!", nullptr);
+    if (exception.getExceptionByParameterName(WFS_EXCEPTION_CODE) == nullptr)
+      exception.addParameter(WFS_EXCEPTION_CODE, WFS_OPERATION_PROCESSING_FAILED);
+    throw exception;
+  }
+
 }
 
 void bw::StoredAviationObservationQueryHandler::query(const StoredQuery& query,
@@ -150,60 +320,14 @@ void bw::StoredAviationObservationQueryHandler::query(const StoredQuery& query,
         *queryBBox = transform_bounding_box(requestedBBox, DATA_CRS_NAME);
 
         // Select the locations inside the bounding box.
-        for (auto & it : locationsByStationType)
-        {
-          if (queryBBox->xMin <= it->longitude and queryBBox->xMax >= it->longitude and
-              queryBBox->yMin <= it->latitude and queryBBox->yMax >= it->latitude)
-          {
-            // Do not add duplicates.
-            if (validIcaoCodes.find(it->name) == validIcaoCodes.end())
-              validIcaoCodes.insert(std::make_pair(it->name, it));
-          }
-        }
+        add_locations_in_bbox(validIcaoCodes, locationsByStationType, *queryBBox);
       }
 
       // Validity of ICAO code(s)
-      for (const auto & it : icaoCodeVector)
-      {
-        // Check that the icao code length is 4 characters.
-        if ((it.end() - it.begin()) != 4)
-          continue;
-
-        SmartMet::Spine::LocationList locationList =
-            geo_engine->nameSearch(nameSearchOptions, it);
-
-        // ICAO code is uniq so the first one must be the one.
-        if (locationList.empty() or locationList.front()->name != it)
-        {
-          std::ostringstream msg;
-          msg << "ICAO code '" << it << "' not found.";
-          Fmi::Exception exception(BCP, msg.str());
-          exception.addParameter(WFS_EXCEPTION_CODE, WFS_INVALID_PARAMETER_VALUE);
-          throw exception.disableStackTrace();
-        }
-
-        // Do not add dublicates.
-        if (validIcaoCodes.find(locationList.front()->name) == validIcaoCodes.end())
-          validIcaoCodes.insert(std::make_pair(locationList.front()->name, locationList.front()));
-      }
+      add_requested_icao_codes(validIcaoCodes, icaoCodeVector, nameSearchOptions);
 
       // Check that the valid location is an airport.
-      for (auto & validLocation : validLocations)
-      {
-        auto locIt = locationsByStationType.begin();
-        for (; locIt != locationsByStationType.end(); ++locIt)
-        {
-          if ((*locIt)->geoid == validLocation.second->geoid)
-            break;
-        }
-
-        // Add only allowed stations, ones.
-        if (locIt != locationsByStationType.end() and
-            validIcaoCodes.find((*locIt)->name) == validIcaoCodes.end())
-        {
-          validIcaoCodes.insert(std::make_pair((*locIt)->name, *locIt));
-        }
-      }
+      add_airport_locations(validIcaoCodes, validLocations, locationsByStationType);
 
       SmartMet::Spine::BoundingBox bbox;
       bbox.crs = crs;
@@ -231,44 +355,8 @@ void bw::StoredAviationObservationQueryHandler::query(const StoredQuery& query,
         bo::VerifiableMessageQueryParams queryParams(registryConfig);
         bo::VerifiableMessageQuery verifiableMessageQuery;
 
-        // Special case where only the latest message will be returned inside a time range.
-        if (returnOnlyLatest)
-          queryParams.setReturnOnlyLatest();
-
-        // The column names in the db to fetch.
-        const std::list<std::string> selectNameList = {
-            "STATION_ID", "MESSAGE_TIME", "IWXXM_CONTENT"};
-        try
-        {
-          for (auto & validIcaoCode : validIcaoCodes)
-            queryParams.addStationId(validIcaoCode.first);
-
-          for (const auto & it : selectNameList)
-          {
-            if (!queryParams.addSelectName(it))
-              std::cerr << "SmartMet::Plugin::WFS::query : Add of the select name '" << it
-                        << "' failed\n";
-          }
-
-          const auto startTime = params.get_single<Fmi::DateTime>(P_BEGIN_TIME);
-          const auto endTime = params.get_single<Fmi::DateTime>(P_END_TIME);
-
-          if (m_sqRestrictions)
-            check_time_interval(startTime, endTime, m_maxHours);
-
-          queryParams.setTimeRange(startTime, endTime);
-
-          verifiableMessageQuery.setQueryParams(&queryParams);
-
-          obs_engine->makeQuery(&verifiableMessageQuery);
-        }
-        catch (...)
-        {
-          Fmi::Exception exception(BCP, "Operation processing failed!", nullptr);
-          if (exception.getExceptionByParameterName(WFS_EXCEPTION_CODE) == nullptr)
-            exception.addParameter(WFS_EXCEPTION_CODE, WFS_OPERATION_PROCESSING_FAILED);
-          throw exception;
-        }
+        make_message_query(
+            verifiableMessageQuery, queryParams, validIcaoCodes, params, returnOnlyLatest);
 
         std::shared_ptr<bo::QueryResult> resultContainer =
             verifiableMessageQuery.getQueryResultContainer();
@@ -280,49 +368,13 @@ void bw::StoredAviationObservationQueryHandler::query(const StoredQuery& query,
         CTPP::CDT& group = hash["groups"][0];
         if (!iwxxmContentVector.empty())
         {
-          int i = 0;
-          for (auto it = iwxxmContentVector.begin();
-               it != iwxxmContentVector.end();
-               ++it)
-          {
-            if ((*it).size() > 1)
-            {
-              messagePositions.push_back(it - iwxxmContentVector.begin());
-              group["contentList"][i++]["iwxxm"] = *it;
-            }
-          }
-
-          numMatched = messagePositions.size();
+          numMatched = fill_iwxxm_content(group, iwxxmContentVector, messagePositions);
 
           // Define airport bounding box. If some IWXXM is found
           // the station position is included.
           std::vector<std::string> stationIdVector;
           resultContainer->getValueVectorData("STATION_ID", stationIdVector);
-          bool initBBox = true;
-          for (unsigned int & messagePosition : messagePositions)
-          {
-            auto icaoLocation =
-                validIcaoCodes.find(stationIdVector.at(messagePosition));
-
-            if (icaoLocation == validIcaoCodes.end())
-              continue;
-
-            if (initBBox)
-            {
-              initBBox = false;
-              bbox.xMin = (*icaoLocation).second->longitude;
-              bbox.xMax = (*icaoLocation).second->longitude;
-              bbox.yMin = (*icaoLocation).second->latitude;
-              bbox.yMax = (*icaoLocation).second->latitude;
-            }
-            else
-            {
-              bbox.xMin = std::min(bbox.xMin, (*icaoLocation).second->longitude);
-              bbox.xMax = std::max(bbox.xMax, (*icaoLocation).second->longitude);
-              bbox.yMin = std::min(bbox.yMin, (*icaoLocation).second->latitude);
-              bbox.yMax = std::max(bbox.yMax, (*icaoLocation).second->latitude);
-            }
-          }
+          set_stations_bbox(bbox, messagePositions, stationIdVector, validIcaoCodes);
 
           bool swap_coord = false;
           crs_registry.get_attribute(bbox.crs, "swapCoord", &swap_coord);
