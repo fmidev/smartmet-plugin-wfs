@@ -82,6 +82,166 @@ std::string bw::StoredEnvMonitoringFacilityQueryHandler::get_handler_description
     return "";
 }
 
+namespace
+{
+// A network whose member codes are output
+struct NetworkCode
+{
+  const char* network_id;
+  const char* name;
+  bool active;
+};
+
+const NetworkCode network_codes[] = {{"10", "lpnn", false},
+                                     {"20", "wmo", true},
+                                     {"30", "livi", false},
+                                     {"40", "icao", true},
+                                     {"45", "awsmetar", false},
+                                     {"51", "syke", false},
+                                     {"60", "nordlist", false},
+                                     {"62", "airquality", false},
+                                     {"70", "radar", true},
+                                     {"90", "image", false}};
+}  // namespace
+
+bool bw::StoredEnvMonitoringFacilityQueryHandler::set_bounded_by(CTPP::CDT& hash) const
+{
+  auto& crs_registry = get_plugin_impl().get_crs_registry();
+
+  // Stations are bounded by..
+  const std::string boundedByCRS = "EPSG:4258";
+  bool bbShowHeight = false;
+  std::string bbProjUri;
+  std::string bbProjEpochUri;
+  std::string bbAxisLabels;
+  crs_registry.get_attribute(boundedByCRS, "showHeight", &bbShowHeight);
+  crs_registry.get_attribute(boundedByCRS, "projUri", &bbProjUri);
+  crs_registry.get_attribute(boundedByCRS, "projEpochUri", &bbProjEpochUri);
+  crs_registry.get_attribute(boundedByCRS, "axisLabels", &bbAxisLabels);
+
+  hash["bbProjUri"] = bbProjUri;
+  hash["bbProjEpoch_uri"] = bbProjEpochUri;
+  hash["bbAxisLabels"] = bbAxisLabels;
+  hash["bbProjSrsDim"] = (bbShowHeight ? 3 : 2);
+
+  // FIXME!! Use output CRS requested
+  hash["axisLabels"] = bbAxisLabels;
+  hash["projUri"] = bbProjUri;
+  hash["projSrsDim"] = (bbShowHeight ? 3 : 2);
+
+  return bbShowHeight;
+}
+
+void bw::StoredEnvMonitoringFacilityQueryHandler::set_station_data(
+    CTPP::CDT& station,
+    const std::string& fmisid,
+    const StationData& data,
+    const std::string& inspireNamespace)
+{
+  station["fmisid"] = fmisid;
+  station["mobile"] = (bo::QueryResult::toString(data.stationary) == "N" ? "true" : "false");
+  station["beginPosition"] = bo::QueryResult::toString(data.station_start);
+  station["endPosition"] = bo::QueryResult::toString(data.station_end);
+  station["name"] = bo::QueryResult::toString(data.station_name);
+  station["opActivityPeriods"][0]["beginPosition"] = bo::QueryResult::toString(data.station_start);
+  station["opActivityPeriods"][0]["endPosition"] = bo::QueryResult::toString(data.station_end);
+  station["inspireNamespace"] = inspireNamespace;
+  station["country-ISO-3166-Numeric"] = bo::QueryResult::toString(data.country_id, 0);
+}
+
+void bw::StoredEnvMonitoringFacilityQueryHandler::set_geonames_data(
+    CTPP::CDT& station,
+    const std::string& fmisid,
+    const StationData& data,
+    const Locus::QueryOptions& opts,
+    const std::string& lang) const
+{
+  // Data from Geonames
+  SmartMet::Spine::LocationList locList = geo_engine->nameSearch(opts, fmisid);
+  if (not locList.empty())
+  {
+    const SmartMet::Spine::LocationPtr& stationLocPtr = locList.front();
+    if (stationLocPtr->geoid != 0)
+      station["geoid"] = Fmi::to_string(stationLocPtr->geoid);
+    if (not stationLocPtr->area.empty())
+      station["region"] = stationLocPtr->area;
+    if (not stationLocPtr->country.empty())
+      station["country"] = stationLocPtr->country;
+  }
+
+  // Geonames does not support country name search by using ISO-3166 Numeric value.
+  // So here we do special handling for the stations in Finland and Sweden.
+  std::string tmpCountryName;
+  const std::string countryId = bo::QueryResult::toString(data.country_id);
+  if (countryId == "246")
+    tmpCountryName = geo_engine->countryName("FI", lang);
+  else if (countryId == "752")
+    tmpCountryName = geo_engine->countryName("SE", lang);
+
+  if (not tmpCountryName.empty())
+    station["country"] = tmpCountryName;
+}
+
+void bw::StoredEnvMonitoringFacilityQueryHandler::set_observing_capabilities(
+    CTPP::CDT& station, const StationCapabilityData& capabilities)
+{
+  CTPP::CDT& capabilityCDT = station["observingCapabilities"];
+  int ocId = 0;
+  MediaMonitored mediaMonitored;
+
+  for (const auto& capability : capabilities)
+  {
+    capabilityCDT[ocId]["measurandId"] = bo::QueryResult::toString(capability.measurand_id);
+    capabilityCDT[ocId]["measurandCode"] = bo::QueryResult::toString(capability.measurand_code);
+    capabilityCDT[ocId]["measurandName"] = bo::QueryResult::toString(capability.measurand_name);
+    capabilityCDT[ocId]["measurandAggregatePeriod"] =
+        bo::QueryResult::toString(capability.aggregate_period);
+    std::string aggregate_function = bo::QueryResult::toString(capability.aggregate_function);
+    if (not aggregate_function.empty())
+      capabilityCDT[ocId]["measurandAggregateFunction"] = aggregate_function;
+    capabilityCDT[ocId]["beginPosition"] = bo::QueryResult::toString(capability.earliest_data);
+    capabilityCDT[ocId]["endPosition"] = bo::QueryResult::toString(capability.latest_data);
+    ++ocId;
+
+    // mediaMonitored object discards the invalid values.
+    mediaMonitored.add(bo::QueryResult::toString(capability.measurand_layer));
+  }
+
+  int mediaValueIndex = 0;
+  for (const auto& it : mediaMonitored)
+    station["mediaMonitored"][mediaValueIndex++] = it;
+}
+
+void bw::StoredEnvMonitoringFacilityQueryHandler::set_network_memberships(
+    CTPP::CDT& station, const NetworkMembershipVector& memberships)
+{
+  for (const auto& it : memberships)
+  {
+    const std::string networkMemberCodeStr = bo::QueryResult::toString(it.member_code);
+    const std::string networkIdStr = bo::QueryResult::toString(it.network_id, 0);
+    for (const auto& code : network_codes)
+    {
+      if (code.active and networkIdStr == code.network_id)
+      {
+        station[code.name] = networkMemberCodeStr;
+        break;
+      }
+    }
+  }
+}
+
+void bw::StoredEnvMonitoringFacilityQueryHandler::set_station_groups(
+    CTPP::CDT& station, const StationGroupVector& groups)
+{
+  int64_t groupCounter = 0;
+  for (const auto& it : groups)
+  {
+    station["networks"][groupCounter]["id"] = bo::QueryResult::toString(it.group_id, 0);
+    station["networks"][groupCounter]["name"] = bo::QueryResult::toString(it.group_name);
+    groupCounter++;
+  }
+}
+
 void bw::StoredEnvMonitoringFacilityQueryHandler::query(const StoredQuery &query,
                                                         const std::string &language,
 							const std::optional<std::string> & /*hostname*/,
@@ -107,17 +267,6 @@ void bw::StoredEnvMonitoringFacilityQueryHandler::query(const StoredQuery &query
 
     if (m_debugLevel > 0)
       query.dump_query_info(std::cout);
-
-    bool LPNN_active = false;
-    bool WMO_active = true;
-    bool LIVI_active = false;
-    bool ICAO_active = true;
-    bool AWSMETAR_active = false;
-    bool SYKE_active = false;
-    bool NORDLIST_active = false;
-    bool AIRQUALITY_active = false;
-    bool RADAR_active = true;
-    bool IMAGE_active = false;
 
     // Get valid stations
     bo::MastQuery validStationsQuery;
@@ -168,28 +317,8 @@ void bw::StoredEnvMonitoringFacilityQueryHandler::query(const StoredQuery &query
 
     if (not validStations.empty())
     {
-      auto &crs_registry = get_plugin_impl().get_crs_registry();
-
       // Stations are bounded by..
-      const std::string boundedByCRS = "EPSG:4258";
-      bool bbShowHeight = false;
-      std::string bbProjUri;
-      std::string bbProjEpochUri;
-      std::string bbAxisLabels;
-      crs_registry.get_attribute(boundedByCRS, "showHeight", &bbShowHeight);
-      crs_registry.get_attribute(boundedByCRS, "projUri", &bbProjUri);
-      crs_registry.get_attribute(boundedByCRS, "projEpochUri", &bbProjEpochUri);
-      crs_registry.get_attribute(boundedByCRS, "axisLabels", &bbAxisLabels);
-
-      hash["bbProjUri"] = bbProjUri;
-      hash["bbProjEpoch_uri"] = bbProjEpochUri;
-      hash["bbAxisLabels"] = bbAxisLabels;
-      hash["bbProjSrsDim"] = (bbShowHeight ? 3 : 2);
-
-      // FIXME!! Use output CRS requested
-      hash["axisLabels"] = bbAxisLabels;
-      hash["projUri"] = bbProjUri;
-      hash["projSrsDim"] = (bbShowHeight ? 3 : 2);
+      const bool bbShowHeight = set_bounded_by(hash);
 
       // Filling the network and station data
       std::string lang = language;
@@ -202,7 +331,7 @@ void bw::StoredEnvMonitoringFacilityQueryHandler::query(const StoredQuery &query
       opts.SetFeatures("SYNOP,STUK");
       opts.SetResultLimit(1);
 
-      for (auto & validStation : validStations)
+      for (auto& validStation : validStations)
       {
         auto scmIt = stationCapabilityMap.find(validStation.first);
         auto stationGroupMapIt = stationGroupMap.find(validStation.first);
@@ -211,142 +340,35 @@ void bw::StoredEnvMonitoringFacilityQueryHandler::query(const StoredQuery &query
         if (stationGroupMapIt == stationGroupMap.end())
           continue;
 
+        CTPP::CDT& station = hash["stations"][stationCounter];
+
         featureId.add_param(P_STATION_ID, validStation.first);
-        hash["stations"][stationCounter]["featureId"] = featureId.get_id();
+        station["featureId"] = featureId.get_id();
         featureId.erase_param(P_STATION_ID);
 
         // Station data
-        hash["stations"][stationCounter]["fmisid"] = validStation.first;
-        hash["stations"][stationCounter]["mobile"] =
-            (bo::QueryResult::toString(validStation.second.stationary) == "N" ? "true" : "false");
-        hash["stations"][stationCounter]["beginPosition"] =
-            bo::QueryResult::toString(validStation.second.station_start);
-        hash["stations"][stationCounter]["endPosition"] =
-            bo::QueryResult::toString(validStation.second.station_end);
-        hash["stations"][stationCounter]["name"] =
-            bo::QueryResult::toString(validStation.second.station_name);
-        hash["stations"][stationCounter]["opActivityPeriods"][0]["beginPosition"] =
-            bo::QueryResult::toString(validStation.second.station_start);
-        hash["stations"][stationCounter]["opActivityPeriods"][0]["endPosition"] =
-            bo::QueryResult::toString(validStation.second.station_end);
-        hash["stations"][stationCounter]["inspireNamespace"] = inspireNamespace;
-        hash["stations"][stationCounter]["country-ISO-3166-Numeric"] =
-            bo::QueryResult::toString(validStation.second.country_id, 0);
-
-        std::string countryName;
+        set_station_data(station, validStation.first, validStation.second, inspireNamespace);
 
         // Data from Geonames
-        SmartMet::Spine::LocationList locList = geo_engine->nameSearch(opts, validStation.first);
-        if (not locList.empty())
-        {
-          const SmartMet::Spine::LocationPtr& stationLocPtr = locList.front();
-          if (stationLocPtr->geoid != 0)
-            hash["stations"][stationCounter]["geoid"] = Fmi::to_string(stationLocPtr->geoid);
-          if (not stationLocPtr->area.empty())
-            hash["stations"][stationCounter]["region"] = stationLocPtr->area;
-          if (not stationLocPtr->country.empty())
-            hash["stations"][stationCounter]["country"] = stationLocPtr->country;
-        }
-
-        // Geonames does not support country name search by using ISO-3166 Numeric value.
-        // So here we do special handling for the stations in Finland and Sweden.
-        std::string tmpCountryName;
-        const std::string countryId = bo::QueryResult::toString(validStation.second.country_id);
-        if (countryId == "246")
-          tmpCountryName = geo_engine->countryName("FI", lang);
-        else if (countryId == "752")
-          tmpCountryName = geo_engine->countryName("SE", lang);
-
-        if (not tmpCountryName.empty())
-          hash["stations"][stationCounter]["country"] = tmpCountryName;
+        set_geonames_data(station, validStation.first, validStation.second, opts, lang);
 
         std::string pos = bo::QueryResult::toString(validStation.second.latitude, 6) + " " +
                           bo::QueryResult::toString(validStation.second.longitude, 6);
-        hash["stations"][stationCounter]["position"] = pos;
+        station["position"] = pos;
         if (bbShowHeight)
-          hash["stations"][stationCounter]["elevation"] =
-              bo::QueryResult::toString(validStation.second.elevation, 0);
+          station["elevation"] = bo::QueryResult::toString(validStation.second.elevation, 0);
 
         // Capability data from Observation
         if (scmIt != stationCapabilityMap.end())
-        {
-          CTPP::CDT &capabilityCDT = hash["stations"][stationCounter]["observingCapabilities"];
-          auto scmDataIt = scmIt->second.begin();
-          int ocId = 0;
-          MediaMonitored mediaMonitored;
-
-          for (; scmDataIt != scmIt->second.end(); ++scmDataIt)
-          {
-            capabilityCDT[ocId]["measurandId"] = bo::QueryResult::toString(scmDataIt->measurand_id);
-            capabilityCDT[ocId]["measurandCode"] =
-                bo::QueryResult::toString(scmDataIt->measurand_code);
-            capabilityCDT[ocId]["measurandName"] =
-                bo::QueryResult::toString(scmDataIt->measurand_name);
-            capabilityCDT[ocId]["measurandAggregatePeriod"] =
-                bo::QueryResult::toString(scmDataIt->aggregate_period);
-            std::string aggregate_function =
-                bo::QueryResult::toString(scmDataIt->aggregate_function);
-            if (not aggregate_function.empty())
-              capabilityCDT[ocId]["measurandAggregateFunction"] = aggregate_function;
-            capabilityCDT[ocId]["beginPosition"] =
-                bo::QueryResult::toString(scmDataIt->earliest_data);
-            capabilityCDT[ocId]["endPosition"] = bo::QueryResult::toString(scmDataIt->latest_data);
-            ++ocId;
-
-            // mediaMonitored object discards the invalid values.
-            mediaMonitored.add(bo::QueryResult::toString(scmDataIt->measurand_layer));
-          }
-
-          int mediaValueIndex = 0;
-          for (const auto & it : mediaMonitored)
-            hash["stations"][stationCounter]["mediaMonitored"][mediaValueIndex++] = it;
-        }
+          set_observing_capabilities(station, scmIt->second);
 
         // Some of the stations are in member groups.
-        auto networkMemberShipMapIt =
-            networkMemberShipMap.find(validStation.first);
+        auto networkMemberShipMapIt = networkMemberShipMap.find(validStation.first);
         if (networkMemberShipMapIt != networkMemberShipMap.end())
-        {
-          for (const auto & it : (*networkMemberShipMapIt).second)
-          {
-            const std::string networkMemberCodeStr = bo::QueryResult::toString(it.member_code);
-            const std::string networkIdStr = bo::QueryResult::toString(it.network_id, 0);
-            if (LPNN_active and networkIdStr == "10")
-              hash["stations"][stationCounter]["lpnn"] = networkMemberCodeStr;
-            else if (WMO_active and networkIdStr == "20")
-              hash["stations"][stationCounter]["wmo"] = networkMemberCodeStr;
-            else if (LIVI_active and networkIdStr == "30")
-              hash["stations"][stationCounter]["livi"] = networkMemberCodeStr;
-            else if (ICAO_active and networkIdStr == "40")
-              hash["stations"][stationCounter]["icao"] = networkMemberCodeStr;
-            else if (AWSMETAR_active and networkIdStr == "45")
-              hash["stations"][stationCounter]["awsmetar"] = networkMemberCodeStr;
-            else if (SYKE_active and networkIdStr == "51")
-              hash["stations"][stationCounter]["syke"] = networkMemberCodeStr;
-            else if (NORDLIST_active and networkIdStr == "60")
-              hash["stations"][stationCounter]["nordlist"] = networkMemberCodeStr;
-            else if (AIRQUALITY_active and networkIdStr == "62")
-              hash["stations"][stationCounter]["airquality"] = networkMemberCodeStr;
-            else if (RADAR_active and networkIdStr == "70")
-              hash["stations"][stationCounter]["radar"] = networkMemberCodeStr;
-            else if (IMAGE_active and networkIdStr == "90")
-              hash["stations"][stationCounter]["image"] = networkMemberCodeStr;
-          }
-        }
+          set_network_memberships(station, networkMemberShipMapIt->second);
 
         // Every station is part of a station group.
-        if (stationGroupMapIt != stationGroupMap.end())
-        {
-          int64_t groupCounter = 0;
-          for (const auto & it : (*stationGroupMapIt).second)
-          {
-            hash["stations"][stationCounter]["networks"][groupCounter]["id"] =
-                bo::QueryResult::toString(it.group_id, 0);
-            hash["stations"][stationCounter]["networks"][groupCounter]["name"] =
-                bo::QueryResult::toString(it.group_name);
-            groupCounter++;
-          }
-        }
+        set_station_groups(station, stationGroupMapIt->second);
 
         // Count of the stations
         stationCounter++;

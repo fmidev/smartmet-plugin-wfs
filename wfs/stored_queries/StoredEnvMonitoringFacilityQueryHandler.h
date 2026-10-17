@@ -105,6 +105,22 @@ class StoredEnvMonitoringFacilityQueryHandler : public StoredQueryHandlerBase,
                                        const RequestParameterMap& params,
                                        const StationDataMap& validStations) const;
 
+  bool set_bounded_by(CTPP::CDT& hash) const;
+  static void set_station_data(CTPP::CDT& station,
+                               const std::string& fmisid,
+                               const StationData& data,
+                               const std::string& inspireNamespace);
+  void set_geonames_data(CTPP::CDT& station,
+                         const std::string& fmisid,
+                         const StationData& data,
+                         const Locus::QueryOptions& opts,
+                         const std::string& lang) const;
+  static void set_observing_capabilities(CTPP::CDT& station,
+                                         const StationCapabilityData& capabilities);
+  static void set_network_memberships(CTPP::CDT& station,
+                                      const NetworkMembershipVector& memberships);
+  static void set_station_groups(CTPP::CDT& station, const StationGroupVector& groups);
+
   std::string m_missingText;
   int m_debugLevel;
 };
