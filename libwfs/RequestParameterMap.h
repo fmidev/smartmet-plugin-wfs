@@ -104,6 +104,12 @@ class RequestParameterMap
   bool is_case_sensitive() const { return case_sensitive_params; }
 
 private:
+  /**
+   *   @brief Substitute the parameter reference '${[?*]name}' at 'src' (in 'input') to 'result'.
+   *          Returns the position after the reference.
+   */
+  const char* subst_ref(const char* src, const std::string& input, std::ostream& result) const;
+
   bool case_sensitive_params;
 };
 

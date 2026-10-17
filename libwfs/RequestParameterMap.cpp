@@ -195,6 +195,106 @@ std::string bw::RequestParameterMap::as_string() const
   }
 }
 
+namespace
+{
+// Write the value(s) of parameter reference 'ref_name' (in 'input')
+void write_ref_values(std::ostream& result,
+                      const std::vector<SmartMet::Spine::Value>& data,
+                      const std::string& ref_name,
+                      const std::string& input,
+                      bool is_array,
+                      bool is_optional)
+{
+  if (is_array)
+  {
+    std::string sep;
+    for (const auto& it : data)
+    {
+      result << sep << it.to_string();
+      sep = ",";
+    }
+  }
+  else
+  {
+    if (data.size() > 1)
+    {
+      std::ostringstream msg;
+      msg << "Too many (" << data.size() << ") values of"
+          << " '" << ref_name << "' in '" << input << "'";
+      throw Fmi::Exception(BCP, msg.str());
+    }
+
+    if (not is_optional and data.empty())
+    {
+      std::ostringstream msg;
+      msg << ": mandatory value of '" << ref_name << "' missing"
+          << " in '" << input << "'";
+      throw Fmi::Exception(BCP, msg.str());
+    }
+
+    if (not data.empty())
+    {
+      result << data.begin()->to_string();
+    }
+  }
+}
+}  // namespace
+
+const char* bw::RequestParameterMap::subst_ref(const char* src,
+                                               const std::string& input,
+                                               std::ostream& result) const
+{
+  bool is_optional = false;
+  bool is_array = false;
+
+  if (src[1] != '{')
+  {
+    throw Fmi::Exception(BCP, "Missing '{' after '$' in '" + input + "'!");
+  }
+
+  src += 2;
+
+  if (*src == '?')
+  {
+    is_optional = true;
+    src++;
+  }
+  else if (*src == '*')
+  {
+    is_array = true;
+    src++;
+  }
+
+  const char* name = src;
+  while (std::isalnum(*src) or *src == '_')
+  {
+    src++;
+  }
+
+  if (*src != '}')
+  {
+    throw Fmi::Exception(
+        BCP, "Invalid parameter name after '${' or closing '}' missing in '" + input + "'!");
+  }
+
+  const std::string ref_name(name, src);
+  src++;
+
+  std::vector<SmartMet::Spine::Value> data;
+  auto range = params.equal_range(
+	    case_sensitive_params ? ref_name : Fmi::ascii_tolower_copy(ref_name));
+
+  std::transform(
+      range.first,
+      range.second,
+      std::back_inserter(data),
+      [](const ParamMapType::value_type& x) { return x.second.value; });
+
+  write_ref_values(result, data, ref_name, input, is_array, is_optional);
+
+  return src;
+}
+
 std::string bw::RequestParameterMap::subst(const std::string& input) const
 {
   try
@@ -217,84 +317,7 @@ std::string bw::RequestParameterMap::subst(const std::string& input) const
       }
       else if (src[0] == '$')
       {
-        bool is_optional = false;
-        bool is_array = false;
-
-        if (src[1] != '{')
-        {
-          throw Fmi::Exception(BCP, "Missing '{' after '$' in '" + input + "'!");
-        }
-
-        src += 2;
-
-        if (*src == '?')
-        {
-          is_optional = true;
-          src++;
-        }
-        else if (*src == '*')
-        {
-          is_array = true;
-          src++;
-        }
-
-        const char* name = src;
-        while (std::isalnum(*src) or *src == '_')
-        {
-          src++;
-        }
-
-        if (*src != '}')
-        {
-          throw Fmi::Exception(
-              BCP, "Invalid parameter name after '${' or closing '}' missing in '" + input + "'!");
-        }
-
-        const std::string ref_name(name, src);
-        src++;
-
-        std::vector<SmartMet::Spine::Value> data;
-        auto range = params.equal_range(
-	    case_sensitive_params ? ref_name : Fmi::ascii_tolower_copy(ref_name));
-
-        std::transform(
-            range.first,
-            range.second,
-            std::back_inserter(data),
-            [](const ParamMapType::value_type& x) { return x.second.value; });
-
-        if (is_array)
-        {
-          std::string sep;
-          for (auto & it : data)
-          {
-            result << sep << it.to_string();
-            sep = ",";
-          }
-        }
-        else
-        {
-          if (data.size() > 1)
-          {
-            std::ostringstream msg;
-            msg << "Too many (" << data.size() << ") values of"
-                << " '" << ref_name << "' in '" << input << "'";
-            throw Fmi::Exception(BCP, msg.str());
-          }
-
-          if (not is_optional and data.empty())
-          {
-            std::ostringstream msg;
-            msg << ": mandatory value of '" << ref_name << "' missing"
-                << " in '" << input << "'";
-            throw Fmi::Exception(BCP, msg.str());
-          }
-
-          if (not data.empty())
-          {
-            result << data.begin()->to_string();
-          }
-        }
+        src = subst_ref(src, input, result);
       }
       else
       {
