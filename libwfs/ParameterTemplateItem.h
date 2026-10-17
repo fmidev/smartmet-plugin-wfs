@@ -97,6 +97,23 @@ struct ParameterTemplateItem
       bool allow_array = false) const;
 
  private:
+  bool get_absent_ref_value(
+      std::variant<SmartMet::Spine::Value, std::vector<SmartMet::Spine::Value> >& result,
+      const RequestParameterMap& req_param_map,
+      const SupportsExtraHandlerParams* extra_params,
+      bool allow_array) const;
+
+  bool get_indexed_ref_value(
+      std::variant<SmartMet::Spine::Value, std::vector<SmartMet::Spine::Value> >& result,
+      const std::vector<SmartMet::Spine::Value>& value_vect,
+      const RequestParameterMap& req_param_map,
+      const SupportsExtraHandlerParams* extra_params) const;
+
+  bool get_ref_values(
+      std::variant<SmartMet::Spine::Value, std::vector<SmartMet::Spine::Value> >& result,
+      const std::vector<SmartMet::Spine::Value>& value_vect,
+      bool allow_array) const;
+
   bool handle_redirection(
       std::variant<SmartMet::Spine::Value, std::vector<SmartMet::Spine::Value> >& result,
       const RequestParameterMap& req_param_map,

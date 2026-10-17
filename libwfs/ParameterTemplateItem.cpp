@@ -206,99 +206,10 @@ bool ParameterTemplateItem::get_value(
       const std::string& ref_name = *param_ref;
       auto value_vect = req_param_map.get_values(ref_name);
       if (value_vect.empty())
-      {
-        if (default_value)
-        {
-          // Return the default value as the string when both:
-          //   1) the parameter is not found in WFS request
-          //   2) the default value is provided
-          result = SmartMet::Spine::Value(*default_value);
-          return true;
-        }
-        else if (redirect_name)
-        {
-          return handle_redirection(result, req_param_map, extra_params, *redirect_name);
-        }
-        else
-        {
-          if (allow_array)
-          {
-            result = value_vect;
-            return true;
-          }
-          else
-          {
-            return false;
-          }
-        }
-      }
-      else
-      {
-        if (param_ind)
-        {
-          if (*param_ind >= value_vect.size())
-          {
-            // Provided index is out of range
-            if (default_value)
-            {
-              // Provided index is out of range and default value present
-              result = SmartMet::Spine::Value(*default_value);
-              return true;
-            }
-            else if (redirect_name)
-            {
-              // Provided index is out of range and redirection present
-              return handle_redirection(result, req_param_map, extra_params, *redirect_name);
-            }
-            else
-            {
-              // Fail with parse error when both
-              //   1) the index of parameter is provided
-              //   2) it is out of range (for actually provided array)
-              // NOTE: this error should not normally happen and it most
-              //       likely indicates configuration problem
-              std::ostringstream msg;
-              msg << ": The index " << *param_ind << " for parameter '" << *param_ref
-                  << "' is out of range 0.." << (value_vect.size() - 1);
-              Fmi::Exception exception(BCP, msg.str());
-              exception.addParameter(WFS_EXCEPTION_CODE, WFS_OPERATION_PARSING_FAILED);
-              throw exception;
-            }
-          }
-          else
-          {
-            // SmartMet::Spine::Value found in the array: return it
-            result = value_vect.at(*param_ind);
-            return true;
-          }
-        }
-        else
-        {
-          if (value_vect.size() == 1)
-          {
-            // Return single element when only one is present
-            result = *value_vect.begin();
-            return true;
-          }
-          else if (allow_array)
-          {
-            // Return entire array if that is allowed and size
-            // of the array is different from 1
-            result = value_vect;
-            return true;
-          }
-          else
-          {
-            // Array found, but it is not permitted to return an array
-            // NOTE: this error should not normally happen and it most
-            //       likely indicates configuration problem
-            Fmi::Exception exception(BCP,
-                                     "Cannot return an array (parameter '" + *param_ref + "')");
-            exception.addParameter(WFS_EXCEPTION_CODE, WFS_OPERATION_PARSING_FAILED);
-            throw exception;
-          }
-        }
-      }
+        return get_absent_ref_value(result, req_param_map, extra_params, allow_array);
+      if (param_ind)
+        return get_indexed_ref_value(result, value_vect, req_param_map, extra_params);
+      return get_ref_values(result, value_vect, allow_array);
     }
     else
     {
@@ -311,6 +222,98 @@ bool ParameterTemplateItem::get_value(
   {
     throw Fmi::Exception::Trace(BCP, "Operation failed!");
   }
+}
+
+bool ParameterTemplateItem::get_absent_ref_value(
+    std::variant<SmartMet::Spine::Value, std::vector<SmartMet::Spine::Value> >& result,
+    const RequestParameterMap& req_param_map,
+    const SupportsExtraHandlerParams* extra_params,
+    bool allow_array) const
+{
+  if (default_value)
+  {
+    // Return the default value as the string when both:
+    //   1) the parameter is not found in WFS request
+    //   2) the default value is provided
+    result = SmartMet::Spine::Value(*default_value);
+    return true;
+  }
+  if (redirect_name)
+  {
+    return handle_redirection(result, req_param_map, extra_params, *redirect_name);
+  }
+  if (allow_array)
+  {
+    result = std::vector<SmartMet::Spine::Value>();
+    return true;
+  }
+  return false;
+}
+
+bool ParameterTemplateItem::get_indexed_ref_value(
+    std::variant<SmartMet::Spine::Value, std::vector<SmartMet::Spine::Value> >& result,
+    const std::vector<SmartMet::Spine::Value>& value_vect,
+    const RequestParameterMap& req_param_map,
+    const SupportsExtraHandlerParams* extra_params) const
+{
+  if (*param_ind < value_vect.size())
+  {
+    // SmartMet::Spine::Value found in the array: return it
+    result = value_vect.at(*param_ind);
+    return true;
+  }
+
+  // Provided index is out of range
+  if (default_value)
+  {
+    // Provided index is out of range and default value present
+    result = SmartMet::Spine::Value(*default_value);
+    return true;
+  }
+  if (redirect_name)
+  {
+    // Provided index is out of range and redirection present
+    return handle_redirection(result, req_param_map, extra_params, *redirect_name);
+  }
+
+  // Fail with parse error when both
+  //   1) the index of parameter is provided
+  //   2) it is out of range (for actually provided array)
+  // NOTE: this error should not normally happen and it most
+  //       likely indicates configuration problem
+  std::ostringstream msg;
+  msg << ": The index " << *param_ind << " for parameter '" << *param_ref
+      << "' is out of range 0.." << (value_vect.size() - 1);
+  Fmi::Exception exception(BCP, msg.str());
+  exception.addParameter(WFS_EXCEPTION_CODE, WFS_OPERATION_PARSING_FAILED);
+  throw exception;
+}
+
+bool ParameterTemplateItem::get_ref_values(
+    std::variant<SmartMet::Spine::Value, std::vector<SmartMet::Spine::Value> >& result,
+    const std::vector<SmartMet::Spine::Value>& value_vect,
+    bool allow_array) const
+{
+  if (value_vect.size() == 1)
+  {
+    // Return single element when only one is present
+    result = *value_vect.begin();
+    return true;
+  }
+  if (allow_array)
+  {
+    // Return entire array if that is allowed and size
+    // of the array is different from 1
+    result = value_vect;
+    return true;
+  }
+
+  // Array found, but it is not permitted to return an array
+  // NOTE: this error should not normally happen and it most
+  //       likely indicates configuration problem
+  Fmi::Exception exception(BCP, "Cannot return an array (parameter '" + *param_ref + "')");
+  exception.addParameter(WFS_EXCEPTION_CODE, WFS_OPERATION_PARSING_FAILED);
+  throw exception;
 }
 
 bool ParameterTemplateItem::handle_redirection(
