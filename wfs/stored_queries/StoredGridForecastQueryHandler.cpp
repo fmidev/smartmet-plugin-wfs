@@ -517,6 +517,165 @@ void StoredGridForecastQueryHandler::query(const StoredQuery& stored_query,
   }
 }
 
+namespace
+{
+// Throw the error of a failed grid query
+[[noreturn]] void throw_query_server_error(int result)
+{
+  Fmi::Exception exception(BCP, "The query server returns an error message!");
+  exception.addParameter("Result", std::to_string(result));
+  exception.addParameter("Message", QueryServer::getResultString(result));
+
+  switch (result)
+  {
+    case QueryServer::Result::NO_PRODUCERS_FOUND:
+      exception.addDetail(
+          "The reason for this situation is usually that the given producer is unknown");
+      exception.addDetail(
+          "or there are no producer list available in the grid engine's configuration file.");
+      break;
+    default:
+      break;
+  }
+  throw exception;
+}
+
+// The maximum number of values the parameter has in a single timestep
+uint max_values_per_timestep(const QueryServer::QueryParameter& param)
+{
+  uint vLen = 0;
+  if (!param.mValueList.empty())
+  {
+    // ### Going through all timesteps.
+
+    uint timestepCount = param.mValueList.size();
+    for (uint x = 0; x < timestepCount; x++)
+    {
+      uint vv = param.mValueList[x]->mValueList.getLength();
+      vLen = std::max(vv, vLen);
+    }
+  }
+  return vLen;
+}
+
+// Set value 'v' of a parameter at time 'values' to the output. Only parameters which have a
+// single value in the timestep are output.
+void set_grid_value(const Query& wfsQuery,
+                    QueryServer::ParameterValues& values,
+                    const QueryServer::QueryParameter& param,
+                    uint v,
+                    uint vLen,
+                    uint col,
+                    uint row,
+                    const Table_sptr& output)
+{
+  T::GridValue val;
+  if (values.mValueList.getGridValueByIndex(v, val) &&
+      (val.mValue != ParamValueMissing || !val.mValueString.empty()))
+  {
+    if (!val.mValueString.empty())
+    {
+      // The parameter value is a string
+      if (vLen == 1)
+      {
+        // The parameter has only single value in the timestep
+        output->set(col, row, val.mValueString);
+      }
+      else
+      {
+        // The parameter has multiple values in the same timestep
+      }
+    }
+    else
+    {
+      // The parameter value is numeric
+      if (vLen == 1)
+      {
+        // The parameter has only single value in the timestep
+
+        int precision = 6;
+        if (param.mPrecision >= 0)
+          precision = param.mPrecision;
+
+        std::string ss = wfsQuery.value_formatter->format(val.mValue, precision);
+        output->set(col, row, ss);
+        // output->set(col, row, std::to_string(val->mValue));
+      }
+      else
+      {
+        // The parameter has multiple values in the same timestep
+      }
+    }
+  }
+  else
+  {
+    // The parameter value is missing
+    if (vLen == 1)
+    {
+      // The parameter has only single value in the timestep
+      output->set(col, row, wfsQuery.missing_text);
+    }
+    else
+    {
+      // The parameter has multiple values in the same timestep
+    }
+  }
+}
+
+// Set the values of a parameter the query returned values for
+void set_data_values(const Query& wfsQuery,
+                     QueryServer::QueryParameter& param,
+                     uint vLen,
+                     uint tLen,
+                     uint col,
+                     uint rows,
+                     const Table_sptr& output,
+                     uint& lastRow,
+                     T::GenerationId& generationId,
+                     uint& geometryId)
+{
+  for (uint v = 0; v < vLen; v++)
+  {
+    for (uint t = 0; t < tLen; t++)
+    {
+      if (generationId == 0)
+        generationId = param.mValueList[t]->mGenerationId;
+
+      uint row = rows + t;
+      lastRow = std::max(row, lastRow);
+
+      if (!wfsQuery.have_model_area)
+      {
+        if (geometryId == 0 && param.mValueList[t]->mGeometryId != 0)
+          geometryId = param.mValueList[t]->mGeometryId;
+      }
+
+      set_grid_value(wfsQuery, *param.mValueList[t], param, v, vLen, col, row, output);
+    }
+  }
+}
+
+// The level of the first parameter having a level at time index 't'
+int level_value_at(QueryServer::Query& gridQuery, int pLen, uint t)
+{
+  int idx = 0;
+
+  int levelValue = 0;
+  while (idx < pLen && levelValue == 0)
+  {
+    if (gridQuery.mQueryParameterList[idx].mValueList[t]->mParameterLevel > 0)
+    {
+      levelValue = gridQuery.mQueryParameterList[idx].mValueList[t]->mParameterLevel;
+      if (gridQuery.mQueryParameterList[idx].mValueList[t]->mParameterLevelId == 2)
+        levelValue = levelValue / 100;
+    }
+
+    idx++;
+  }
+  return levelValue;
+}
+}  // namespace
+
 uint StoredGridForecastQueryHandler::processGridQuery(Query& wfsQuery,
                                                       const std::string& tag,
                                                       const Spine::LocationPtr& loc,
@@ -551,24 +710,7 @@ uint StoredGridForecastQueryHandler::processGridQuery(Query& wfsQuery,
 
     int result = grid_engine->executeQuery(gridQuery);
     if (result != 0)
-    {
-      Fmi::Exception exception(BCP, "The query server returns an error message!");
-      exception.addParameter("Result", std::to_string(result));
-      exception.addParameter("Message", QueryServer::getResultString(result));
-
-      switch (result)
-      {
-        case QueryServer::Result::NO_PRODUCERS_FOUND:
-          exception.addDetail(
-              "The reason for this situation is usually that the given producer is unknown");
-          exception.addDetail(
-              "or there are no producer list available in the grid engine's configuration file.");
-          break;
-        default:
-          break;
-      }
-      throw exception;
-    }
+      throw_query_server_error(result);
 
     // Going through all parameters
 
@@ -577,21 +719,10 @@ uint StoredGridForecastQueryHandler::processGridQuery(Query& wfsQuery,
     {
       // Counting the number of values that the parameter can have in single timestep.
 
-      uint vLen = 0;
-      if ((int)gridQuery.mQueryParameterList.size() > p &&
-          !gridQuery.mQueryParameterList[p].mValueList.empty())
-      {
-        // ### Going through all timesteps.
+      auto& param = gridQuery.mQueryParameterList[p];
+      uint vLen = max_values_per_timestep(param);
 
-        uint timestepCount = gridQuery.mQueryParameterList[p].mValueList.size();
-        for (uint x = 0; x < timestepCount; x++)
-        {
-          uint vv = gridQuery.mQueryParameterList[p].mValueList[x]->mValueList.getLength();
-          vLen = std::max(vv, vLen);
-        }
-      }
-
-      uint rLen = (uint)gridQuery.mQueryParameterList[p].mValueList.size();
+      uint rLen = (uint)param.mValueList.size();
       uint tLen = (uint)gridQuery.mForecastTimeList.size();
 
       uint col = p;
@@ -601,77 +732,8 @@ uint StoredGridForecastQueryHandler::processGridQuery(Query& wfsQuery,
       {
         // The query has returned at least some values for the parameter.
 
-        for (uint v = 0; v < vLen; v++)
-        {
-          for (uint t = 0; t < tLen; t++)
-          {
-            if (generationId == 0)
-              generationId = gridQuery.mQueryParameterList[p].mValueList[t]->mGenerationId;
-
-            uint row = rows + t;
-            lastRow = std::max(row, lastRow);
-
-            if (!wfsQuery.have_model_area)
-            {
-              if (geometryId == 0 &&
-                  gridQuery.mQueryParameterList[p].mValueList[t]->mGeometryId != 0)
-                geometryId = gridQuery.mQueryParameterList[p].mValueList[t]->mGeometryId;
-            }
-
-            T::GridValue val;
-            if (gridQuery.mQueryParameterList[p].mValueList[t]->mValueList.getGridValueByIndex(
-                    v, val) &&
-                (val.mValue != ParamValueMissing || !val.mValueString.empty()))
-            {
-              if (!val.mValueString.empty())
-              {
-                // The parameter value is a string
-                if (vLen == 1)
-                {
-                  // The parameter has only single value in the timestep
-                  output->set(col, row, val.mValueString);
-                }
-                else
-                {
-                  // The parameter has multiple values in the same timestep
-                }
-              }
-              else
-              {
-                // The parameter value is numeric
-                if (vLen == 1)
-                {
-                  // The parameter has only single value in the timestep
-
-                  int precision = 6;
-                  if (gridQuery.mQueryParameterList[p].mPrecision >= 0)
-                    precision = gridQuery.mQueryParameterList[p].mPrecision;
-
-                  std::string ss = wfsQuery.value_formatter->format(val.mValue, precision);
-                  output->set(col, row, ss);
-                  // output->set(col, row, std::to_string(val->mValue));
-                }
-                else
-                {
-                  // The parameter has multiple values in the same timestep
-                }
-              }
-            }
-            else
-            {
-              // The parameter value is missing
-              if (vLen == 1)
-              {
-                // The parameter has only single value in the timestep
-                output->set(col, row, wfsQuery.missing_text);
-              }
-              else
-              {
-                // The parameter has multiple values in the same timestep
-              }
-            }
-          }
-        }
+        set_data_values(
+            wfsQuery, param, vLen, tLen, col, rows, output, lastRow, generationId, geometryId);
       }
       else
       {
@@ -679,199 +741,210 @@ uint StoredGridForecastQueryHandler::processGridQuery(Query& wfsQuery,
         // is not a data parameter. It is most likely "a special parameter" that is based on the
         // given query location, time, level, etc.
 
-        std::string paramValue;
-        uint tLen = (uint)gridQuery.mForecastTimeList.size();
-        uint t = 0;
-        for (auto ft = gridQuery.mForecastTimeList.begin(); ft != gridQuery.mForecastTimeList.end();
-             ++ft)
-        {
-          uint row = rows + t;
-          lastRow = std::max(row, lastRow);
-
-          Fmi::DateTime utcTime = Fmi::date_time::from_time_t(*ft);
-          Fmi::LocalDateTime queryTime(utcTime, tz);
-          // Fmi::LocalDateTime queryTime(Fmi::TimeParser::parse_iso(*ft), tz);
-          if (additionalParameters.getParameterValueByLocation(
-                  gridQuery.mQueryParameterList[p].mParam,
-                  tag,
-                  loc,
-                  country,
-                  gridQuery.mQueryParameterList[p].mPrecision,
-                  paramValue))
-          {
-            output->set(col, row, paramValue);
-          }
-          else if (additionalParameters.getParameterValueByLocationAndTime(
-                       gridQuery.mQueryParameterList[p].mParam,
-                       tag,
-                       loc,
-                       queryTime,
-                       tz,
-                       gridQuery.mQueryParameterList[p].mPrecision,
-                       paramValue))
-          {
-            output->set(col, row, paramValue);
-          }
-          else if (gridQuery.mQueryParameterList[p].mParam == "level")
-          {
-            int idx = 0;
-
-            int levelValue = 0;
-            while (idx < pLen && levelValue == 0)
-            {
-              if (gridQuery.mQueryParameterList[idx].mValueList[t]->mParameterLevel > 0)
-              {
-                levelValue = gridQuery.mQueryParameterList[idx].mValueList[t]->mParameterLevel;
-                if (gridQuery.mQueryParameterList[idx].mValueList[t]->mParameterLevelId == 2)
-                  levelValue = levelValue / 100;
-              }
-
-              idx++;
-            }
-
-            output->set(col, row, std::to_string(levelValue));
-          }
-          else if (gridQuery.mQueryParameterList[p].mParam == "model" ||
-                   gridQuery.mQueryParameterList[p].mParam == "producer")
-          {
-            int idx = 0;
-            while (idx < pLen)
-            {
-              if (gridQuery.mQueryParameterList[idx].mValueList[t]->mProducerId > 0)
-              {
-                T::ProducerInfo info;
-                if (grid_engine->getProducerInfoById(
-                        gridQuery.mQueryParameterList[idx].mValueList[t]->mProducerId, info))
-                {
-                  output->set(col, row, info.mName);
-                  idx = pLen + 10;
-                }
-              }
-              idx++;
-            }
-
-            if (idx == pLen)
-            {
-              std::string producer = "Unknown";
-              if (gridQuery.mProducerNameList.size() == 1)
-              {
-                std::vector<std::string> pnameList;
-                grid_engine->getProducerNameList(gridQuery.mProducerNameList[0], pnameList);
-                if (!pnameList.empty())
-                  producer = pnameList[0];
-              }
-
-              output->set(col, row, producer);
-            }
-          }
-          else if (gridQuery.mQueryParameterList[p].mParam == "origintime")
-          {
-            int idx = 0;
-            while (idx < pLen)
-            {
-              if (gridQuery.mQueryParameterList[idx].mValueList[t]->mGenerationId > 0)
-              {
-                T::GenerationInfo info;
-                if (grid_engine->getGenerationInfoById(
-                        gridQuery.mQueryParameterList[idx].mValueList[t]->mGenerationId, info))
-                {
-                  Fmi::LocalDateTime origTime(
-                      Fmi::TimeParser::parse_iso(info.mAnalysisTime), tz);
-                  output->set(col, row, wfsQuery.time_formatter->format(origTime));
-                  idx = pLen + 10;
-                }
-              }
-              idx++;
-            }
-            if (idx == pLen)
-            {
-              output->set(col, row, std::string("Unknown"));
-            }
-          }
-          else if (rLen > tLen)
-          {
-            // It seems that there are more values available for each time step than expected.
-            // This usually happens if the requested parameter definition does not contain enough
-            // information in order to identify an unique parameter. For example, if the parameter
-            // definition does not contain level information then the result is that we get
-            // values from several levels.
-
-            char tmp[10000];
-            std::set<std::string> pList;
-
-            for (uint r = 0; r < rLen; r++)
-            {
-              if (gridQuery.mQueryParameterList[p].mValueList[r]->mForecastTimeUTC == *ft)
-              {
-                std::string producerName;
-                T::ProducerInfo producer;
-                if (grid_engine->getProducerInfoById(
-                        gridQuery.mQueryParameterList[p].mValueList[r]->mProducerId, producer))
-                  producerName = producer.mName;
-
-                (void)snprintf(tmp, sizeof(tmp),
-                        "%s:%d:%d:%d:%d:%s",
-                        gridQuery.mQueryParameterList[p].mValueList[r]->mParameterKey.c_str(),
-                        (int)gridQuery.mQueryParameterList[p].mValueList[r]->mParameterLevelId,
-                        (int)gridQuery.mQueryParameterList[p].mValueList[r]->mParameterLevel,
-                        (int)gridQuery.mQueryParameterList[p].mValueList[r]->mForecastType,
-                        (int)gridQuery.mQueryParameterList[p].mValueList[r]->mForecastNumber,
-                        producerName.c_str());
-
-                if (pList.find(std::string(tmp)) == pList.end())
-                  pList.insert(std::string(tmp));
-              }
-            }
-            std::string multiMatch = "### MULTI-MATCH ### ";
-            for (const auto & p : pList)
-              multiMatch += p + " ";
-
-            output->set(col, row, multiMatch);
-          }
-          else if (!SmartMet::AdditionalParameters::isAdditionalParameter(
-                       gridQuery.mQueryParameterList[p].mParam.c_str()))
-          {
-            // This is a normal data parameter, but the query has not return any values for it.
-            output->set(col, row, wfsQuery.missing_text);
-          }
-
-          t++;
-        }
+        SpecialValueContext ctx{
+            wfsQuery, tag, loc, country, gridQuery, output, additionalParameters, tz, pLen};
+        set_special_values(ctx, p, rLen, col, rows, lastRow);
       }
     }
 
-    if (generationId > 0)
-    {
-      T::GenerationInfo info;
-      if (grid_engine->getGenerationInfoById(generationId, info))
-      {
-        wfsQuery.origin_time.reset(new Fmi::DateTime(Fmi::TimeParser::parse_iso(info.mAnalysisTime)));
-      }
-    }
-
-    if (geometryId > 0)
-    {
-      T::Coordinate topLeft;
-      T::Coordinate topRight;
-      T::Coordinate bottomLeft;
-      T::Coordinate bottomRight;
-
-      if (Identification::gridDef.getGridLatLonAreaByGeometryId(
-              geometryId, topLeft, topRight, bottomLeft, bottomRight))
-      {
-        wfsQuery.have_model_area = true;
-        wfsQuery.top_left.Set(topLeft.x(), topLeft.y());
-        wfsQuery.top_right.Set(topRight.x(), topRight.y());
-        wfsQuery.bottom_left.Set(bottomLeft.x(), bottomLeft.y());
-        wfsQuery.bottom_right.Set(bottomRight.x(), bottomRight.y());
-      }
-    }
+    set_origin_time_and_area(wfsQuery, generationId, geometryId);
 
     return lastRow + 1;
   }
   catch (...)
   {
     throw Fmi::Exception(BCP, "Operation failed!", nullptr);
+  }
+}
+
+void StoredGridForecastQueryHandler::set_special_values(
+    const SpecialValueContext& ctx, int p, uint rLen, uint col, uint rows, uint& lastRow) const
+{
+  auto& gridQuery = ctx.gridQuery;
+  const auto& output = ctx.output;
+  const auto& param = gridQuery.mQueryParameterList[p];
+
+  std::string paramValue;
+  uint tLen = (uint)gridQuery.mForecastTimeList.size();
+  uint t = 0;
+  for (auto ft = gridQuery.mForecastTimeList.begin(); ft != gridQuery.mForecastTimeList.end(); ++ft)
+  {
+    uint row = rows + t;
+    lastRow = std::max(row, lastRow);
+
+    Fmi::DateTime utcTime = Fmi::date_time::from_time_t(*ft);
+    Fmi::LocalDateTime queryTime(utcTime, ctx.tz);
+    // Fmi::LocalDateTime queryTime(Fmi::TimeParser::parse_iso(*ft), tz);
+    if (ctx.additionalParameters.getParameterValueByLocation(
+            param.mParam, ctx.tag, ctx.loc, ctx.country, param.mPrecision, paramValue))
+    {
+      output->set(col, row, paramValue);
+    }
+    else if (ctx.additionalParameters.getParameterValueByLocationAndTime(
+                 param.mParam, ctx.tag, ctx.loc, queryTime, ctx.tz, param.mPrecision, paramValue))
+    {
+      output->set(col, row, paramValue);
+    }
+    else if (param.mParam == "level")
+    {
+      output->set(col, row, std::to_string(level_value_at(gridQuery, ctx.pLen, t)));
+    }
+    else if (param.mParam == "model" || param.mParam == "producer")
+    {
+      std::string producer;
+      if (!find_producer_name(gridQuery, ctx.pLen, t, producer))
+        producer = default_producer_name(gridQuery);
+      output->set(col, row, producer);
+    }
+    else if (param.mParam == "origintime")
+    {
+      std::string origin_time;
+      if (!find_origin_time(ctx, t, origin_time))
+        origin_time = "Unknown";
+      output->set(col, row, origin_time);
+    }
+    else if (rLen > tLen)
+    {
+      // It seems that there are more values available for each time step than expected.
+      // This usually happens if the requested parameter definition does not contain enough
+      // information in order to identify an unique parameter. For example, if the parameter
+      // definition does not contain level information then the result is that we get
+      // values from several levels.
+
+      output->set(col, row, multi_match_value(param, rLen, *ft));
+    }
+    else if (!SmartMet::AdditionalParameters::isAdditionalParameter(param.mParam.c_str()))
+    {
+      // This is a normal data parameter, but the query has not return any values for it.
+      output->set(col, row, ctx.wfsQuery.missing_text);
+    }
+
+    t++;
+  }
+}
+
+bool StoredGridForecastQueryHandler::find_producer_name(QueryServer::Query& gridQuery,
+                                                        int pLen,
+                                                        uint t,
+                                                        std::string& name) const
+{
+  for (int idx = 0; idx < pLen; idx++)
+  {
+    if (gridQuery.mQueryParameterList[idx].mValueList[t]->mProducerId > 0)
+    {
+      T::ProducerInfo info;
+      if (grid_engine->getProducerInfoById(
+              gridQuery.mQueryParameterList[idx].mValueList[t]->mProducerId, info))
+      {
+        name = info.mName;
+        return true;
+      }
+    }
+  }
+  return false;
+}
+
+std::string StoredGridForecastQueryHandler::default_producer_name(
+    QueryServer::Query& gridQuery) const
+{
+  std::string producer = "Unknown";
+  if (gridQuery.mProducerNameList.size() == 1)
+  {
+    std::vector<std::string> pnameList;
+    grid_engine->getProducerNameList(gridQuery.mProducerNameList[0], pnameList);
+    if (!pnameList.empty())
+      producer = pnameList[0];
+  }
+  return producer;
+}
+
+bool StoredGridForecastQueryHandler::find_origin_time(const SpecialValueContext& ctx,
+                                                      uint t,
+                                                      std::string& value) const
+{
+  auto& gridQuery = ctx.gridQuery;
+  for (int idx = 0; idx < ctx.pLen; idx++)
+  {
+    if (gridQuery.mQueryParameterList[idx].mValueList[t]->mGenerationId > 0)
+    {
+      T::GenerationInfo info;
+      if (grid_engine->getGenerationInfoById(
+              gridQuery.mQueryParameterList[idx].mValueList[t]->mGenerationId, info))
+      {
+        Fmi::LocalDateTime origTime(Fmi::TimeParser::parse_iso(info.mAnalysisTime), ctx.tz);
+        value = ctx.wfsQuery.time_formatter->format(origTime);
+        return true;
+      }
+    }
+  }
+  return false;
+}
+
+std::string StoredGridForecastQueryHandler::multi_match_value(
+    const QueryServer::QueryParameter& param, uint rLen, time_t forecastTime) const
+{
+  char tmp[10000];
+  std::set<std::string> pList;
+
+  for (uint r = 0; r < rLen; r++)
+  {
+    if (param.mValueList[r]->mForecastTimeUTC == forecastTime)
+    {
+      std::string producerName;
+      T::ProducerInfo producer;
+      if (grid_engine->getProducerInfoById(param.mValueList[r]->mProducerId, producer))
+        producerName = producer.mName;
+
+      (void)snprintf(tmp,
+                     sizeof(tmp),
+                     "%s:%d:%d:%d:%d:%s",
+                     param.mValueList[r]->mParameterKey.c_str(),
+                     (int)param.mValueList[r]->mParameterLevelId,
+                     (int)param.mValueList[r]->mParameterLevel,
+                     (int)param.mValueList[r]->mForecastType,
+                     (int)param.mValueList[r]->mForecastNumber,
+                     producerName.c_str());
+
+      if (pList.find(std::string(tmp)) == pList.end())
+        pList.insert(std::string(tmp));
+    }
+  }
+  std::string multiMatch = "### MULTI-MATCH ### ";
+  for (const auto& p : pList)
+    multiMatch += p + " ";
+
+  return multiMatch;
+}
+
+void StoredGridForecastQueryHandler::set_origin_time_and_area(Query& wfsQuery,
+                                                              T::GenerationId generationId,
+                                                              uint geometryId) const
+{
+  if (generationId > 0)
+  {
+    T::GenerationInfo info;
+    if (grid_engine->getGenerationInfoById(generationId, info))
+    {
+      wfsQuery.origin_time.reset(new Fmi::DateTime(Fmi::TimeParser::parse_iso(info.mAnalysisTime)));
+    }
+  }
+
+  if (geometryId > 0)
+  {
+    T::Coordinate topLeft;
+    T::Coordinate topRight;
+    T::Coordinate bottomLeft;
+    T::Coordinate bottomRight;
+
+    if (Identification::gridDef.getGridLatLonAreaByGeometryId(
+            geometryId, topLeft, topRight, bottomLeft, bottomRight))
+    {
+      wfsQuery.have_model_area = true;
+      wfsQuery.top_left.Set(topLeft.x(), topLeft.y());
+      wfsQuery.top_right.Set(topRight.x(), topRight.y());
+      wfsQuery.bottom_left.Set(bottomLeft.x(), bottomLeft.y());
+      wfsQuery.bottom_right.Set(bottomRight.x(), bottomRight.y());
+    }
   }
 }
 

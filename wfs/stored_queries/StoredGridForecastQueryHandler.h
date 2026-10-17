@@ -71,6 +71,43 @@ class StoredGridForecastQueryHandler: public StoredQueryHandlerBase,
   private:
     using TransformationPtr = std::shared_ptr<Spine::CRSRegistry::Transformation>;
 
+    // The common data for the special parameter values of a grid query
+    struct SpecialValueContext
+    {
+      Query& wfsQuery;
+      const std::string& tag;
+      const Spine::LocationPtr& loc;
+      const std::string& country;
+      QueryServer::Query& gridQuery;
+      const Table_sptr& output;
+      AdditionalParameters& additionalParameters;
+      const Fmi::TimeZonePtr& tz;
+      int pLen;
+    };
+
+    void        set_special_values(
+                    const SpecialValueContext& ctx,
+                    int p,
+                    uint rLen,
+                    uint col,
+                    uint rows,
+                    uint& lastRow) const;
+    bool        find_producer_name(
+                    QueryServer::Query& gridQuery,
+                    int pLen,
+                    uint t,
+                    std::string& name) const;
+    std::string default_producer_name(QueryServer::Query& gridQuery) const;
+    bool        find_origin_time(const SpecialValueContext& ctx, uint t, std::string& value) const;
+    std::string multi_match_value(
+                    const QueryServer::QueryParameter& param,
+                    uint rLen,
+                    time_t forecastTime) const;
+    void        set_origin_time_and_area(
+                    Query& wfsQuery,
+                    T::GenerationId generationId,
+                    uint geometryId) const;
+
     void        set_group_info(CTPP::CDT& group, const Query& query, FeatureID& feature_id) const;
     void        set_group_data(
                     CTPP::CDT& group,
