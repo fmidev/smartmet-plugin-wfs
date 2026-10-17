@@ -16,6 +16,7 @@
 #include <engines/geonames/Engine.h>
 #include <engines/observation/Engine.h>
 #include <engines/observation/MastQueryParams.h>
+#include <engines/observation/QueryResult.h>
 
 namespace ba = boost::algorithm;
 namespace bl = boost::lambda;
@@ -38,6 +39,8 @@ namespace Plugin
 {
 namespace WFS
 {
+class FeatureID;
+
 class StoredAirNuclideQueryHandler : public StoredQueryHandlerBase,
                                      protected virtual RequiresGeoEngine,
                                      protected virtual RequiresObsEngine,
@@ -61,6 +64,39 @@ class StoredAirNuclideQueryHandler : public StoredQueryHandlerBase,
   std::string get_handler_description() const override;
 
  private:
+  using StationMap = std::map<std::string, SmartMet::Spine::Station>;
+  using NuclideNameMap = std::map<std::string, std::string>;
+  struct AnalysisContext;
+
+  StationMap find_stations(
+      const RequestParameterMap& params,
+      const std::string& crs,
+      const std::string& stationType,
+      double maxDistance,
+      uint64_t numberOfStations,
+      const Fmi::DateTime& startTime,
+      const Fmi::DateTime& endTime,
+      const std::list<std::pair<std::string, SmartMet::Spine::LocationPtr> >& locations_list,
+      const std::string& langCode) const;
+
+  NuclideNameMap get_nuclide_names(const std::vector<std::string>& nuclideCodes,
+                                   const std::string& langCode,
+                                   bool queryInitializationOK) const;
+
+  static void add_analysis_ids(SmartMet::Engine::Observation::MastQueryParams& dataQueryParams,
+                               SmartMet::Engine::Observation::QueryResult& profileContainer,
+                               bool latest,
+                               bool queryInitializationOK);
+
+  void set_group_station(CTPP::CDT& group,
+                         const SmartMet::Spine::Station& station,
+                         const AnalysisContext& ctx) const;
+
+  int fill_analyses(CTPP::CDT& hash,
+                    SmartMet::Engine::Observation::QueryResult& dataContainer,
+                    const AnalysisContext& ctx,
+                    FeatureID& feature_id) const;
+
   std::string prepare_nuclide(const std::string& nuclide) const;
   std::shared_ptr<SmartMet::Engine::Observation::DBRegistryConfig> dbRegistryConfig(
       const std::string& configName) const;
