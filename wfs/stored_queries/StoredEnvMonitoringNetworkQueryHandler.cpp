@@ -25,6 +25,67 @@ const char* P_STATION_NAME = "stationName";
 const char* P_MISSING_TEXT = "missingText";
 const char* P_INSPIRE_NAMESPACE = "inspireNamespace";
 const char* P_AUTHORITY_DOMAIN = "authorityDomain";
+
+// Fill the group and station data to 'hash'. Returns the number of groups.
+int fill_networks(bo::QueryResult& resultContainer,
+                  CTPP::CDT& hash,
+                  bw::FeatureID& featureId,
+                  const std::string& inspireNamespace)
+{
+  int groupCount = 0;
+
+  auto groupIdIt =
+      resultContainer.begin("GROUP_ID");
+  auto groupIdItEnd =
+      resultContainer.end("GROUP_ID");
+  auto groupCodeIt =
+      resultContainer.begin("GROUP_CODE");
+  auto groupNameIt =
+      resultContainer.begin("GROUP_NAME");
+  auto groupDescIt =
+      resultContainer.begin("GROUP_DESC");
+
+  size_t groupNameVectorSize = resultContainer.size("GROUP_NAME");
+  size_t groupIdVectorSize = groupIdItEnd - groupIdIt;
+  std::string groupIdOld;
+
+  if (groupIdVectorSize == groupNameVectorSize)
+  {
+    // Filling the group and station data
+    int groupCounter = 0;
+    for (; groupIdIt != groupIdItEnd; ++groupIdIt, ++groupCodeIt, ++groupNameIt, ++groupDescIt)
+    {
+      const std::string groupId = bo::QueryResult::toString(groupIdIt);
+      if (groupIdOld != groupId)
+      {
+        groupCount++;
+        groupCounter++;
+        hash["networks"][groupCounter - 1]["id"] = groupId;
+        const std::string groupCode = bo::QueryResult::toString(groupCodeIt);
+        if (not groupCode.empty())
+          hash["networks"][groupCounter - 1]["code"] = groupCode;
+        hash["networks"][groupCounter - 1]["name"] = bo::QueryResult::toString(groupNameIt);
+        hash["networks"][groupCounter - 1]["description"] =
+            bo::QueryResult::toString(groupDescIt);
+        hash["networks"][groupCounter - 1]["inspireNamespace"] = inspireNamespace;
+
+        featureId.add_param(P_GROUP_ID, groupId);
+        hash["networks"][groupCounter - 1]["featureId"] = featureId.get_id();
+        featureId.erase_param(P_GROUP_ID);
+      }
+      groupIdOld = groupId;
+    }
+  }
+  else
+  {
+    std::ostringstream msg;
+    msg << "warning: bw::StoredEnvMonitoringNetworkQueryHandler::query - varying size data "
+           "vectors!\n";
+    std::cerr << msg.str();
+  }
+
+  return groupCount;
+}
 }  // namespace
 
 bw::StoredEnvMonitoringNetworkQueryHandler::StoredEnvMonitoringNetworkQueryHandler(
@@ -210,57 +271,7 @@ void bw::StoredEnvMonitoringNetworkQueryHandler::query(const StoredQuery& query,
     int groupCount = 0;
 
     if (resultContainer)
-    {
-      auto groupIdIt =
-          resultContainer->begin("GROUP_ID");
-      auto groupIdItEnd =
-          resultContainer->end("GROUP_ID");
-      auto groupCodeIt =
-          resultContainer->begin("GROUP_CODE");
-      auto groupNameIt =
-          resultContainer->begin("GROUP_NAME");
-      auto groupDescIt =
-          resultContainer->begin("GROUP_DESC");
-
-      size_t groupNameVectorSize = resultContainer->size("GROUP_NAME");
-      size_t groupIdVectorSize = groupIdItEnd - groupIdIt;
-      std::string groupIdOld;
-
-      if (groupIdVectorSize == groupNameVectorSize)
-      {
-        // Filling the group and station data
-        int groupCounter = 0;
-        for (; groupIdIt != groupIdItEnd; ++groupIdIt, ++groupCodeIt, ++groupNameIt, ++groupDescIt)
-        {
-          const std::string groupId = bo::QueryResult::toString(groupIdIt);
-          if (groupIdOld != groupId)
-          {
-            groupCount++;
-            groupCounter++;
-            hash["networks"][groupCounter - 1]["id"] = groupId;
-            const std::string groupCode = bo::QueryResult::toString(groupCodeIt);
-            if (not groupCode.empty())
-              hash["networks"][groupCounter - 1]["code"] = groupCode;
-            hash["networks"][groupCounter - 1]["name"] = bo::QueryResult::toString(groupNameIt);
-            hash["networks"][groupCounter - 1]["description"] =
-                bo::QueryResult::toString(groupDescIt);
-            hash["networks"][groupCounter - 1]["inspireNamespace"] = inspireNamespace;
-
-            featureId.add_param(P_GROUP_ID, groupId);
-            hash["networks"][groupCounter - 1]["featureId"] = featureId.get_id();
-            featureId.erase_param(P_GROUP_ID);
-          }
-          groupIdOld = groupId;
-        }
-      }
-      else
-      {
-        std::ostringstream msg;
-        msg << "warning: bw::StoredEnvMonitoringNetworkQueryHandler::query - varying size data "
-               "vectors!\n";
-        std::cerr << msg.str();
-      }
-    }
+      groupCount = fill_networks(*resultContainer, hash, featureId, inspireNamespace);
 
     const std::string networksMatched = boost::to_string(groupCount);
     hash["networksMatched"] = networksMatched;
