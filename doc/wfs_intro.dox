@@ -9,7 +9,8 @@ Following WFS requests are available:
 - @b ListStoredQueries
 - @b DescribeStoredQueries
 - @b DescribeFeatureType
-- @b GetFeature (stored queries only, AdHoc queries are not supported)
-- @b GetPropertyValue (stored queries only, AdHoc queries are not supported)
+- @b GetFeature (stored queries, and ad hoc queries whose feature type names are mapped to stored
+  queries with the plugin configuration entry @b typename-storedquery-mapping)
+- @b GetPropertyValue (as GetFeature)
 
 */

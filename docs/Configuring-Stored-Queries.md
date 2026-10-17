@@ -140,12 +140,6 @@ handler_params :
   endTime = "${endtime: after 3 hours}";
   timeStep = "${timestep:180}";
   producer = "ecmwf_maailma_pinta";
-  maxDistance = 50000.0;
-  places = [];
-  latlons = [];
-  geoids = [];
-  keyword_overwritable = false;
-  keyword = "";
   boundingBox = "${bbox:-180,-90,180,90}";
   originTime = "${origintime}";
   startStep="${}";
@@ -172,19 +166,19 @@ Name                                    | Type           | Description
 ----------------------------------------|----------------|--------------
 [disabled](#disabled)                   | boolean        | Do not load this stored query in use when SmartMet Server is started. The default value is `false`
 [hidden](#hidden)                       | boolean        | Exclude this stored query from the responses of _ListStoredQueries_ and _DescribeStoredQueries_ requests. The default is `false`
-[demo](#demo)                           | boolean        | Stored query is used for demo purposes. The default value is "false"
-[test](#test)                           | boolean        | This attribute can be used for specifying that the query is used for testing purposes. The default value is "false"
-[debugLevel](#debugLevel)               | integer        | This attribute specifies how much debug information is printed into the output. A bigger value means more. The default value is "0"
-[id](#id)                               | string         | The unique identifier (id) of the stored query. The identifier must match the configuration filename (without the suffix)
-[constructor_name](#constructor_name)   | string         | The symbolic name of the object factory that is used for creating the query handler object
-[title](#title)                         | object         | The title of the stored query. The title can be expressed in several languages
-[abstract](#abstract)                   | object         | A more detailed description of the stored query. The description can be written in several languages
+[demo](#demo)                           | boolean        | Stored query is used for demo purposes. Demo queries are loaded only if `enableDemoQueries` is enabled in the plugin configuration. The default value is "false"
+[test](#test)                           | boolean        | This attribute can be used for specifying that the query is used for testing purposes. Test queries are loaded only if `enableTestQueries` is enabled in the plugin configuration. The default value is "false"
+[debugLevel](#debugLevel)               | integer        | This attribute specifies how much debug information is printed into the server log. A bigger value means more. The default value is "0"
+[id](#id)                               | string         | The unique identifier (id) of the stored query. Mandatory
+[constructor_name](#constructor_name)   | string         | The symbolic name of the object factory that is used for creating the query handler object. Mandatory
+[title](#title)                         | object         | The title of the stored query. The title can be expressed in several languages. Mandatory
+[abstract](#abstract)                   | object         | A more detailed description of the stored query. The description can be written in several languages. Mandatory
 [template](#template)                   | string         | A [CTPP](http://ctpp.havoc.ru/en/)  template used by the stored query handler
 [defaultLanguage](#defaultLanguage)     | string         | The default language to be used in descriptions. Notice that this attribute is mandatory if string translations are required. The default value is "eng"
-[expiresSeconds](#expiresSeconds)       | integer        | The query expiration time in seconds. The query should return a response within this time. If there are multiple stored queries in the request then the smallest value is used. The default value is "60"
-[parameters](#parameters)               | _Param[]_      | Allow which fields and values are valid in the WFS query string.
-[named_params](#named_params)           | _NamedParam[]_ | ???
-[returnTypeNames](#returnTypeNames)     | string[]       | An array of XML types this stored query may return
+[expiresSeconds](#expiresSeconds)       | integer        | The expiration time of the response in seconds, used for the `Expires` and `Cache-Control` headers of the response. If there are multiple stored queries in the request then the smallest value is used. The default value is "60"
+[parameters](#parameters)               | _Param[]_      | Allow which fields and values are valid in the WFS query string. Mandatory (the list may be empty)
+[named_params](#named_params)           | _NamedParam[]_ | Named values which can be referred to in `handler_params`
+[returnTypeNames](#returnTypeNames)     | string[]       | An array of XML types this stored query may return. Mandatory
 [handler_params](#handler_params)       | _HandlerParam_ | Defines how to map the WFS request parameters and named parameters to the stored query parameters. The content depends on and is documented for each `constructor_name` setting separately
 
 ### disabled
@@ -197,35 +191,35 @@ Exclude this stored query from the responses of _ListStoredQueries_ and _Describ
 
 ### demo
 
-Stored query is used for demo purposes. The default value is `false`
+Stored query is used for demo purposes. Demo queries are loaded only if `enableDemoQueries` is enabled in the plugin configuration. The default value is `false`
 
 ### test
 
-This attribute can be used for specifying that the query is used for testing purposes. The default value is "false"
+This attribute can be used for specifying that the query is used for testing purposes. Test queries are loaded only if `enableTestQueries` is enabled in the plugin configuration. The default value is "false"
 
 ### debugLevel
 
-This attribute specifies how much debug information is printed into the output. A bigger value means more. The default value is `0`
+This attribute specifies how much debug information is printed into the server log. A bigger value means more. The default value is `0`
 
 ### id
 
-The unique identifier (id) of the stored query
+The unique identifier (id) of the stored query. The identifier does not need to match the configuration file name. If several configuration files define the same identifier, only the first one loaded is used and the others are ignored with a warning.
 
 ### constructor_name
 
-This attribute defines what data source the SmartMet Server should use, how the data is accessed, how it is processed and how is it formatted in the response. The provided value must be external symbol name in WFS plugin, which defines entry point for stored query handlers factory. There is a protection against specifying incorrect values
+This attribute defines what data source the SmartMet Server should use, how the data is accessed, how it is processed and how is it formatted in the response. The provided value must be the name of an exported stored query handler factory object of the WFS plugin: the plugin looks the symbol up by this name with `dlsym()` and verifies its signature before using it, so an incorrect value is reported as an error when the stored query is loaded.
 Also what for each constructor_name there can be additional top level attributes and unique 'handler_params' attributes.
 See details for each `constructor_name` on page [Configuring Query Handler for a Stored Query](Configuring-Query-Handler-for-a-Stored-Query.md).
 
-Actual information about parameters supported in handler_params section used by different constructors can be found using WFS admin request:
+Actual information about parameters supported in handler_params section used by different constructors can be found using the server administration request `wfs:constructors`:
 
-* /wfs/admin?request=constructors[&format=(json|html)]
+* /admin?what=wfs:constructors[&format=(json|html)][&handler=NAME]
 
 Some notes about this feature:
 
 * Default format is HTML.
 * Only information about constructors, that are used in at least one stored query is available through this service
-* /wfs/admin requests are not advertised to frontend and as result are available only directly from backend
+* the request is served at the admin URI of the server (`/admin` above)
 
 _Setting's name refers to things in the program's source code.
 It may have a meaning for C++ developers, but it is lacking when viewed as the end user creating new stored queries._
@@ -244,7 +238,9 @@ wfs_obs_handler_factory                                | Observation data (gener
 wfs_flash_handler_factory                              | Observation data: Lightning
 wfs_stored_aviation_observation_handler_factory        | Observation data: Aviation
 wfs_stored_mast_handler_factory                        | Observation data: Multi-sensor
+wfs_stored_sounding_handler_factory                    | Observation data: Soundings
 wfs_forecast_handler_factory                           | Forecast data (general)
+wfs_grid_forecast_handler_factory                      | Forecast data (general) from the grid engine
 wfs_stored_qe_download_handler_factory                 | Forecast data: download when data source is QEngine
 wfs_stored_file_handler_factory                        | Forecast data: download in querydata format
 wfs_stored_grid_handler_factory                        | Forecast data: download in grid format (grib1, grib2, NetCDF)
@@ -253,9 +249,13 @@ wfs_isoline_query_handler_factory                      | Forecast data: areas as
 wfs_coverage_query_handler_factory                     | Forecast data: areas as GML isobars
 wfs_winterweather_coverage_query_handler_factory       | Forecast data: winter weather conditions of the given geographical area returned as GML isobars
 wfs_stored_air_nuclide_handler_factory                 | Air radionuclide activity concentration data
+wfs_stored_env_monitoring_network_handler_factory      | Environmental monitoring networks (INSPIRE EF)
+wfs_stored_env_monitoring_facility_handler_factory     | Environmental monitoring facilities, i.e. stations (INSPIRE EF)
 wfs_stored_geoserver_handler_factory                   | Geographical data downloading
 wfs_get_data_set_by_id_handler_factory                 | Predefined data sets
 wfs_get_feature_by_id_handler_factory                  | The mandatory implementation of the "GetFeatureById" stored query defined in the WFS 2.0 standard
+wfs_stored_atom_handler_base_factory                   | Download links generated from `url_template` only (for testing)
+wfs_dummy_handler_factory                              | Simple stored query handler for testing purposes only
 
 ### title
 
@@ -278,7 +278,7 @@ Specifying different tamplate changes response output format. For example:
 As result different response format is provided. Additionallty value of parameter `returnTypeNames` must correspond to used template
 
 Possible values are filenames with extension `.c2t` present in directory
-`/etc/smartmet/plugins/wfs/templates`.
+`storedQueryTemplateDir` of the plugin configuration (by default `/usr/share/smartmet/wfs`, where the RPM package installs them).
 
 Available values and their description (templates provided by WFS plugin):
 
@@ -327,9 +327,9 @@ hash_dump.c2t                                            | | For testing only (r
 hash_dump_html.c2t                                       | | For testing only (raw dump of CTPP2 hash for debugging purposes - HTML format)
 QEDownloadDemo.c2t                                       | | For testing only
 
-One can get actual information about actually used templates and corresponding return types using WFS internal admin request
+One can get actual information about actually used templates and corresponding return types using the server administration request
 
-* /wfs/admin?request=constructor
+* /admin?what=wfs:constructors
 
 Response provides links to actually used constructors, corresponding stored queries and templates etc.
 
@@ -339,9 +339,9 @@ The default language to be used in descriptions. Notice that this attribute is m
 
 ### expiresSeconds
 
-The query expiration time in seconds. The default value is `60`
+The expiration time of the response in seconds. The default value is `60`
 
-The query should return a response within this time. If there are multiple stored queries in the request then the smallest value is used.
+The value is used for the `Expires` and `Cache-Control: max-age` headers of the response. If there are multiple stored queries in the request then the smallest value is used.
 
 ### parameters
 
@@ -353,16 +353,16 @@ The following table contains a list of attributes that are supported by the _Par
 
 Name            | Type                 |  Description
 ----------------|----------------------|-------------------
-`name`          | string               | Field in the WFS query string eg. the parameter. The name comparison is case insensitive
-`title`         | object               | Translated, human readable names for the parameter
-`abstract`      | object               | Translated, detailed descriptions of the parameter, including default value and/or limits.
-`xmlType`       | string               | Namespaced data type of the parameter used when the request is in the XML format. _See table below for allowed values_
-`type`          | string               | Defines how the parameter in handled by the plugin. Can be defined as an array or a single values.
-`minOccurs`     | unsigned integer     | The minimum number of the occurrences that are required for the parameter _[What occurrences and where?]_. The default value is `0`
-`maxOccurs`     | unsigned integer     | The maximum number of the occurrences that are required for the parameter [Again, what and where?]. The default value is `1`
-`lowerLimit`    | as specified by type | The lowest value allowed for the parameter. If the value in the request is lower than the specified value then the parameter value is rejected
-`upperLimit`    | as specified by type | The highest value allowed for the parameter. If the value in the request is higher than the specified value then the parameter value is rejected
-`conflictsWith` | string[]             | ~~The minimum number of the occurrences that are required for the parameter. The default value is "0"~~ [ed. This can't be right]
+`name`          | string               | Field in the WFS query string eg. the parameter. The name comparison is case insensitive unless `case_sensitive_params` is enabled in the plugin configuration. Mandatory
+`title`         | object               | Translated, human readable names for the parameter. Mandatory
+`abstract`      | object               | Translated, detailed descriptions of the parameter, including default value and/or limits. Mandatory
+`xmlType`       | string               | Namespaced data type of the parameter used when the request is in the XML format. _See table below for allowed values_. Mandatory
+`type`          | string               | Defines how the parameter in handled by the plugin. Can be defined as an array or a single values. Mandatory
+`minOccurs`     | unsigned integer     | The minimum number of times the parameter must be given in the request. A value greater than 0 makes the parameter mandatory. The default value is `0`
+`maxOccurs`     | unsigned integer     | The maximum number of times the parameter may be given in the request. The default value is `1`
+`lowerLimit`    | as specified by type | The lowest value allowed for the parameter. If the value in the request is lower than the specified value then the parameter value is rejected. Not supported for `string` and `bool` parameters
+`upperLimit`    | as specified by type | The highest value allowed for the parameter. If the value in the request is higher than the specified value then the parameter value is rejected. Not supported for `string` and `bool` parameters
+`conflictsWith` | string[]             | Names of the parameters that cannot be given in the same request with this parameter. A parameter cannot conflict with itself, the named parameters must exist, and two mandatory parameters (`minOccurs` > 0) cannot conflict with each other
 
 #### xmlType
 
@@ -428,7 +428,7 @@ Value     | Description
 `bbox`    | Bounding box area
 `bool`    | Boolean
 `double`  | Double
-`int`     | Integer
+`int`     | Integer (`integer` is also accepted)
 `point`   | Location as (x, y, crs)
 `string`  | String
 `time`    | Date and time related things
@@ -438,27 +438,27 @@ Same as previous, but as a fixed size array
 
 Value          | Description
 ---------------|------------
-`bbox[size]`   | ???
-`bool[size]`   | ???
-`double[size]` | ???
-`int[size]`    | ???
-`point[size]`  | ???
-`string[size]` | ???
-`time[size]`   | ???
-`uint[size]`   | ???
+`bbox[size]`   | An array of exactly _size_ `bbox` values
+`bool[size]`   | An array of exactly _size_ `bool` values
+`double[size]` | An array of exactly _size_ `double` values
+`int[size]`    | An array of exactly _size_ `int` values
+`point[size]`  | An array of exactly _size_ `point` values
+`string[size]` | An array of exactly _size_ `string` values
+`time[size]`   | An array of exactly _size_ `time` values
+`uint[size]`   | An array of exactly _size_ `uint` values
 
 Same as previous, but as a variable sized array
 
 Value                      | Description
 ---------------------------|------------
-`bbox[minsize..maxsize]`   | ???
-`bool[minsize..maxsize]`   | ???
-`double[minsize..maxsize]` | ???
-`int[minsize..maxsize]`    | ???
-`point[minsize..maxsize]`  | ???
-`string[minsize..maxsize]` | ???
-`time[minsize..maxsize]`   | ???
-`uint[minsize..maxsize]`   | ???
+`bbox[minsize..maxsize]`   | An array of _minsize_ to _maxsize_ `bbox` values
+`bool[minsize..maxsize]`   | An array of _minsize_ to _maxsize_ `bool` values
+`double[minsize..maxsize]` | An array of _minsize_ to _maxsize_ `double` values
+`int[minsize..maxsize]`    | An array of _minsize_ to _maxsize_ `int` values
+`point[minsize..maxsize]`  | An array of _minsize_ to _maxsize_ `point` values
+`string[minsize..maxsize]` | An array of _minsize_ to _maxsize_ `string` values
+`time[minsize..maxsize]`   | An array of _minsize_ to _maxsize_ `time` values
+`uint[minsize..maxsize]`   | An array of _minsize_ to _maxsize_ `uint` values
 
 ### named_params
 
@@ -495,11 +495,10 @@ The _NamedParam_ structure contains the following attributes:
 
 Name             | Type             | Description
 -----------------|------------------|-------------
-`name`           | string           | The name of the parameter
-`def`            | scalar\|scalar[] | The definition of the value of scalar parameter or of array parameter items
-`min_size`       | integer          | The lower permitted size of the array. The default value is "0"
-`max_size`       | integer          | The upper permitted size of the array
-`allow_optional` | boolean          | This attribute specifies whether the parameter is optional
+`name`           | string           | The name of the parameter. Mandatory
+`def`            | scalar\|scalar[] | The definition of the value of scalar parameter or of array parameter items. Mandatory
+`min_size`       | integer          | The lower permitted size of the array. Used only if `def` is an array. The default value is "0"
+`max_size`       | integer          | The upper permitted size of the array. Used only if `def` is an array. The default is unlimited
 `register`       | boolean          | This attribute specifies whether the parameter is registered as a query handler parameter that  are usually defined in the _HandlerParam_ structure). Current implementation registers it as a string parameter and it is required to map to query string parameters if such mapping is being used. No other types are currently supported. The default value is `false`
 
 ### returnTypeNames

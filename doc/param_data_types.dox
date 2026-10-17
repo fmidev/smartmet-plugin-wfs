@@ -19,7 +19,7 @@ Following data types of scalar values are supported:
 - @subpage WFS_PARAM_TYPE_POINT
 - @subpage WFS_PARAM_TYPE_BBOX
 
-C++ class BrainStorm::Value implements these data types and supported
+C++ class SmartMet::Spine::Value implements these data types and supported
 conversion between them
 
 Only limited set of implicit conversions between value types are supported:

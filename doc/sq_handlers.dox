@@ -4,9 +4,13 @@
 
 
 Stored query handlers are implemented as C++ classes derived from
-base class BrainStorm::Wfs::StoredQueryHandlerBase and optionally also
+base class SmartMet::Plugin::WFS::StoredQueryHandlerBase and optionally also
 from one or more of classes implementing
 @ref WFS_SQ_PARAM_GROUPS "stored query handler parameter groups".
+
+The handler factory named by the stored query configuration entry @b constructor_name
+is looked up at run time with dlsym(), so the factory objects must have external linkage
+(see wfs/stored_queries/StoredQueryHandlerFactories.h).
 
 Following stored query handlers are currently available:
 
@@ -20,5 +24,9 @@ Following stored query handlers are currently available:
 - @subpage WFS_SQ_FILE_QUERY_HANDLER "File download handler"
 - @subpage WFS_SQ_AVIATION_OBSERVATION_QUERY_HANDLER "Aviation observations handler"
 - @subpage WFS_SQ_MAST_QUERY_HANDLER "Mast profile observation handler"
+- @subpage WFS_SQ_AIR_NUCLIDE_QUERY_HANDLER "Air Radionuclide activity concentration data handler"
+- @subpage WFS_SQ_GRID_FORECAST_QUERY_HANDLER "Grid engine forecast data query handler"
+- @subpage WFS_SQ_ENV_MONITORING_NETWORK_QUERY_HANDLER "Environmental monitoring network handler"
+- @subpage WFS_SQ_ENV_MONITORING_FACILITY_QUERY_HANDLER "Environmental monitoring facility handler"
 
 */

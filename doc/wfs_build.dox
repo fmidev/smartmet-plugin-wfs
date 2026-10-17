@@ -13,8 +13,8 @@ Some notes:
 - C++ file dependencies are updated automatically at build process. Therefore running make depend is
   not required (empty target is kept for compatibility reasons). The C++ file dependency tracking
   differs from one used for other Brainstorm components
-- One may want to run <b>make check</b> to perform provided unit tests
-- One may want to run <b>make test</b> to perform plugin tests
+- One may want to run <b>make test</b> to perform plugin tests (see also <b>make test-sqlite</b>,
+  <b>make test-postgresql</b>, <b>make test-oracle</b> and <b>make test-grid</b>)
 
 @section WFS_PLUGIN_BUILD_PREFIX Using different installation prefix
 
@@ -56,9 +56,8 @@ in the examples below that the provided installation prefix is <b>~/smartmet</b>
       One can also use symbolic links to installed files there instead of building these packages
 - all required Brainstorm components must be built and installed using the same prefix. For example:
   @verbatim
-  cd brainstorm/spine
+  cd spine
   make clean
-  make depend
   make -j5 release PREFIX=~/smartmet
   make install PREFIX=~/smartmet
   @endverbatim
@@ -67,7 +66,6 @@ in the examples below that the provided installation prefix is <b>~/smartmet</b>
 - One must specify environment variable @b LD_LIBRARY_PATH when running Brainstorm and also when
   executing brainstorm tests. For example
   @verbatim
-  LD_LIBRARY_PATH=~/smartmet/lib64 make -C brainstorm/plugins/wfs check PREFIX=~/smartmet
   LD_LIBRARY_PATH=~/smartmet/lib64 make -C brainstorm/plugins/wfs test PREFIX=~/smartmet
   @endverbatim
 */

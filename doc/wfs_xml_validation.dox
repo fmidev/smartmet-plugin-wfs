@@ -34,7 +34,7 @@ Therefore 2 other ways are being used:
 
 @section WFS_PLUGIN_XML_VALIDATION_GEN Regenerating XML validation related files
 
-Tools for regenerating XML validation related files are located in subdirectory @b tools of WFS
+Tools for regenerating XML validation related files are located in subdirectory @b tools/xml of WFS
 plugin sources. Running
 @verbatim
 make
@@ -47,14 +47,14 @@ in that directory performs generation of
 
 Proxy may be needed in some servers to run the test. For example
 @verbatim
-http_proxy=http://wwwproxy.fmi.fi:8080 make
+http_proxy=http://proxy.example.com:8080 make
 @endverbatim
 
 User can define a target server into a file
 @verbatim
-$HOME/.brainstorm
+$HOME/.brainstormrc
 @endverbatim
-The defined server or default server (data.fmi.fi) might demand to use a user specific fmi-apikey 
+The defined server or default server (127.0.0.1:8080, set in PerformQueries.sh) might demand to use a user specific fmi-apikey 
 for downloading the XML documents. Then the key should also be defined into the file. Example 
 of the file is shown below
 @verbatim
@@ -72,12 +72,12 @@ GIT repository when regenerated.
 @subsection WFS_PLUGIN_XML_VALIDATION_GEN_SRC Sources for generating XML validation related files
 
 Sources for generating XML validation related files are located in subdirectories of
-directory <b>tools/xml_samples</b>:
+directory <b>tools/xml/xml_samples</b>:
 - @b extra - additional samples to be added (currently only SOAP format request example even SOAP
     format requests are not supported)
 - @b request - sample requests for generating sample responses
 - @b response - generated sample responses
 
-One may need to edit script <b>tools/xml_samples/PerformQueries.sh</b> to specify server to use
+One may need to edit script <b>tools/xml/xml_samples/PerformQueries.sh</b> to specify server to use
 
 */

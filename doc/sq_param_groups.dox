@@ -5,7 +5,7 @@
 There are several common stored query parameter groups that are handled by separate C++ base classes.
 Developer should derive own stored query handler group from the base classes of
 implementing required parameter groups additionally to deriving from
-stored query handler base class BrainStorm::Wfs::StoredQueryHandlerBase
+stored query handler base class SmartMet::Plugin::WFS::StoredQueryHandlerBase
 
 - @subpage WFS_SQ_TIME_PARAMS
 - @subpage WFS_SQ_TIME_ZONE
@@ -13,5 +13,6 @@ stored query handler base class BrainStorm::Wfs::StoredQueryHandlerBase
 - @subpage WFS_SQ_PARAM_BBOX
 - @subpage WFS_SQ_NAMED_PARAMS
 - @subpage WFS_SQ_QUALITY_PARAMS
+- @subpage WFS_SQ_METEO_PARAM_OPTIONS
 
 */

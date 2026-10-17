@@ -37,7 +37,7 @@ Test inputs live as `kvp/*.kvp` (GET parameters) and `xml/*.xml` (POST bodies), 
 - `wfs.so` — shared plugin loaded by SmartMet Server (links the static lib + `wfs/` sources)
 - `cnf/templates/*.c2t` — compiled CTPP2 templates (from `*.template` sources)
 
-The shared object is checked at build time for unresolved symbols, excluding `SmartMet::Engine::` and `SmartMet::T::` references (resolved at runtime by the server).
+The shared object is checked at build time for unresolved symbols, excluding `SmartMet::Engine::`, `SmartMet::T::` and `SmartMet::QueryServer::` references (resolved at runtime by the server).
 
 ## Code layout
 
@@ -52,17 +52,19 @@ The shared object is checked at build time for unresolved symbols, excluding `Sm
 
 **`wfs/`** — concrete plugin implementation:
 - `Plugin` — entry point class (registered with SmartMet Server)
-- `stored_queries/` — concrete handler implementations, each pairing with a `.conf` in `cnf/` or `test/`
+- `stored_queries/` — concrete handler implementations, configured by stored query `.conf` files (examples in `cnf/` and `test/*/stored_queries/`)
 
 **`cnf/`** — configuration and templates:
 - `templates/` — CTPP2 templates for XML responses (compiled to `.c2t` at build time)
 - `features/` — feature type definitions (name, namespace, CRS, bbox)
-- `crs/` — coordinate reference system definitions
-- `opendata_stored_queries/` — production stored query configurations
+- `opendata_stored_queries_github/` — example stored query configurations
+- `capabilities*.conf`, `XMLGrammarPool.dump`, `XMLSchemas.cache` — service metadata and XML validation data
+
+Coordinate reference systems come from the GIS engine's CRS registry (the tests use `test/crs/`).
 
 ## Architecture: request flow
 
-1. HTTP request hits `Plugin::requestHandler()` which delegates to `PluginImpl::realRequestHandler()`
+1. HTTP request hits `Plugin::requestHandler()` (or the language specific handler `<url>/<language>`), which delegates via `Plugin::realRequestHandler()` (selects the data `source`) to `PluginImpl::realRequestHandler()`
 2. `RequestFactory` parses the request (KVP or XML) and creates the appropriate request object
 3. For `GetFeature` (the main data request), the stored query ID routes to a handler from `StoredQueryMap`
 4. The handler queries SmartMet engines, populates a `CTPP::CDT` hash, and renders XML via a compiled template
@@ -75,7 +77,9 @@ Handlers inherit from `StoredQueryHandlerBase` plus mixin classes for engine acc
 - **Engine mixins**: `RequiresQEngine`, `RequiresObsEngine`, `RequiresGeoEngine`, `RequiresGridEngine`, `RequiresContourEngine`
 - **Parameter mixins**: `SupportsTimeParameters`, `SupportsLocationParameters`, `SupportsBoundingBox`, `SupportsMeteoParameterOptions`, `SupportsTimeZone`, `SupportsQualityParameters`
 
-Each handler has a companion `.conf` file defining its stored query ID, constructor name, CTPP2 template, parameters with types/defaults, and handler-specific settings.
+Each stored query has a `.conf` file defining its stored query ID, constructor name, CTPP2 template, parameters with types/defaults, and handler-specific settings.
+
+The `constructor_name` names a `StoredQueryHandlerFactoryDef` object which is looked up at runtime with `dlsym()` (`StoredQueryHandlerFactoryDef::construct`). The factory objects must therefore have external linkage: declare each one in `wfs/stored_queries/StoredQueryHandlerFactories.h`, and do not move them into anonymous namespaces or make them `static`.
 
 ## Key dependencies
 
@@ -87,7 +91,7 @@ Each handler has a companion `.conf` file defining its stored query ID, construc
 
 ## Testing details
 
-Tests use a fixed timestamp (`lockedTimestamp: "2012-12-12T12:12:12Z"`) for reproducibility. The `smartmet-plugin-test` harness starts a SmartMet Server instance, sends requests, and diffs responses against expected XML output.
+Tests use a fixed timestamp (`lockedTimeStamp = "2012-12-12T12:12:12Z"` in the test `wfs.conf`) for reproducibility. The `smartmet-plugin-test` harness starts a SmartMet Server instance, sends requests, and diffs responses against expected XML output.
 
 To add a test: create a `.kvp` file in `test/<dir>/kvp/<RequestType>/` or `.xml` in `test/<dir>/xml/<RequestType>/`, and place the expected response in `test/<dir>/output/<RequestType>/` with the corresponding `.kvp.get` or `.xml.post` suffix.
 

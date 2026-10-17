@@ -25,6 +25,7 @@
         - @ref WFS_SQ_LOCATION_PARAMS
         - @ref WFS_SQ_NAMED_PARAMS
         - @ref WFS_SQ_QUALITY_PARAMS
+        - @ref WFS_SQ_METEO_PARAM_OPTIONS
     - @subpage WFS_SQ_PARAM_TYPES
         - @ref WFS_PARAM_TYPE_BOOL
         - @ref WFS_PARAM_TYPE_INT
@@ -48,6 +49,9 @@
         - @ref WFS_SQ_AVIATION_OBSERVATION_QUERY_HANDLER "Aviation observations handler"
         - @ref WFS_SQ_MAST_QUERY_HANDLER "Mast profile observation handler"
         - @ref WFS_SQ_AIR_NUCLIDE_QUERY_HANDLER "Air Radionuclide activity concentration data handler"
+        - @ref WFS_SQ_GRID_FORECAST_QUERY_HANDLER "Grid engine forecast data query handler"
+        - @ref WFS_SQ_ENV_MONITORING_NETWORK_QUERY_HANDLER "Environmental monitoring network handler"
+        - @ref WFS_SQ_ENV_MONITORING_FACILITY_QUERY_HANDLER "Environmental monitoring facility handler"
 - @subpage WFS_PLUGIN_BUILD
     - @ref WFS_PLUGIN_BUILD_PREFIX
 - @subpage WFS_PLUGIN_XML_VALIDATION
