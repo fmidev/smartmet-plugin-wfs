@@ -77,6 +77,115 @@ bw::SupportsTimeParameters::SupportsTimeParameters(const bw::StoredQueryConfig::
 
 bw::SupportsTimeParameters::~SupportsTimeParameters() = default;
 
+namespace
+{
+// Use the given fixed hours
+void add_fixed_hours(TS::TimeSeriesGeneratorOptions& options, const std::vector<unsigned>& hours)
+{
+  options.mode = TS::TimeSeriesGeneratorOptions::FixedTimes;
+  for (int64_t hour : hours)
+  {
+    if ((hour >= 0) and (hour <= 23))
+    {
+      options.timeList.insert(hour * 100);
+    }
+    else
+    {
+      Fmi::Exception exception(BCP, "Invalid hour value!");
+      exception.addParameter(WFS_EXCEPTION_CODE, WFS_OPERATION_PARSING_FAILED);
+      exception.addParameter("Requested hour", std::to_string(hour));
+      throw exception;
+    }
+  }
+}
+
+// Use the given fixed times (HHMM)
+void add_fixed_times(TS::TimeSeriesGeneratorOptions& options, const std::vector<unsigned>& times)
+{
+  options.mode = TS::TimeSeriesGeneratorOptions::FixedTimes;
+  for (int64_t tm : times)
+  {
+    int h = tm / 100;
+    int m = tm % 100;
+    if ((h >= 0) and (h <= 23) and (m >= 0) and (m <= 59))
+    {
+      options.timeList.insert(tm);
+    }
+    else
+    {
+      Fmi::Exception exception(BCP, "Invalid time value!");
+      exception.addParameter(WFS_EXCEPTION_CODE, WFS_OPERATION_PARSING_FAILED);
+      exception.addParameter("Requested time", std::to_string(tm));
+      throw exception;
+    }
+  }
+}
+
+// Use the given time step (minutes)
+void set_time_step(TS::TimeSeriesGeneratorOptions& options, uint64_t time_step, int debug_level)
+{
+  if (options.mode != TS::TimeSeriesGeneratorOptions::TimeSteps)
+  {
+    Fmi::Exception exception(BCP, "Cannot use timestep option in this time mode!");
+    exception.addParameter(WFS_EXCEPTION_CODE, WFS_OPERATION_PARSING_FAILED);
+    throw exception;
+  }
+
+  if (time_step == 0)
+  {
+    options.mode = TS::TimeSeriesGeneratorOptions::DataTimes;
+  }
+  else if (1440 % time_step != 0)
+  {
+    Fmi::Exception exception(BCP, "Invalid time step value!");
+    exception.addParameter(WFS_EXCEPTION_CODE, WFS_OPERATION_PARSING_FAILED);
+    exception.addParameter("Time step", std::to_string(time_step));
+    throw exception;
+  }
+  else
+  {
+    options.timeStep = time_step;
+    if (debug_level > 3)
+      std::cout << __FILE__ << "#" << __LINE__ << ": timestep=" << options.timeStep
+                << std::endl;
+  }
+}
+
+// Use the given number of time steps
+void set_num_steps(TS::TimeSeriesGeneratorOptions& options, uint64_t num_steps)
+{
+  if ((num_steps > 0) and
+      (num_steps <= static_cast<uint64_t>(std::numeric_limits<int>::max())))
+  {
+    options.timeSteps = num_steps;
+  }
+  else
+  {
+    Fmi::Exception exception(BCP, "Invalid number of time steps!");
+    exception.addParameter(WFS_EXCEPTION_CODE, WFS_OPERATION_PARSING_FAILED);
+    exception.addParameter("Time steps", std::to_string(num_steps));
+    throw exception;
+  }
+}
+
+// Move the start time forward by the given number of time steps
+void add_start_step(TS::TimeSeriesGeneratorOptions& options, uint64_t start_step, int debug_level)
+{
+  if (start_step > 10000)
+  {
+    Fmi::Exception exception(BCP, "Invalid start step value!");
+    exception.addParameter(WFS_EXCEPTION_CODE, WFS_OPERATION_PARSING_FAILED);
+    exception.addParameter("Start step", std::to_string(start_step));
+    throw exception;
+  }
+
+  options.startTime += Fmi::Minutes(start_step * *options.timeStep);
+  if (debug_level > 2)
+    std::cout << __FILE__ << "#" << __LINE__
+              << ": startTime=" << Fmi::date_time::to_simple_string(options.startTime) << std::endl;
+}
+}  // namespace
+
 std::shared_ptr<TS::TimeSeriesGeneratorOptions>
 bw::SupportsTimeParameters::get_time_generator_options(const RequestParameterMap &param) const
 {
@@ -91,93 +200,20 @@ bw::SupportsTimeParameters::get_time_generator_options(const RequestParameterMap
     std::vector<unsigned> hours;
     param.get<uint64_t>(P_HOURS, std::back_inserter(hours));
     if (not hours.empty())
-    {
-      options->mode = TS::TimeSeriesGeneratorOptions::FixedTimes;
-      for (int64_t hour : hours)
-      {
-        if ((hour >= 0) and (hour <= 23))
-        {
-          options->timeList.insert(hour * 100);
-        }
-        else
-        {
-          Fmi::Exception exception(BCP, "Invalid hour value!");
-          exception.addParameter(WFS_EXCEPTION_CODE, WFS_OPERATION_PARSING_FAILED);
-          exception.addParameter("Requested hour", std::to_string(hour));
-          throw exception;
-        }
-      }
-    }
+      add_fixed_hours(*options, hours);
 
     std::vector<unsigned> times;
     param.get<uint64_t>(P_TIMES, std::back_inserter(times));
     if (not times.empty())
-    {
-      options->mode = TS::TimeSeriesGeneratorOptions::FixedTimes;
-      for (int64_t tm : times)
-      {
-        int h = tm / 100;
-        int m = tm % 100;
-        if ((h >= 0) and (h <= 23) and (m >= 0) and (m <= 59))
-        {
-          options->timeList.insert(tm);
-        }
-        else
-        {
-          Fmi::Exception exception(BCP, "Invalid time value!");
-          exception.addParameter(WFS_EXCEPTION_CODE, WFS_OPERATION_PARSING_FAILED);
-          exception.addParameter("Requested time", std::to_string(tm));
-          throw exception;
-        }
-      }
-    }
+      add_fixed_times(*options, times);
 
     std::optional<uint64_t> time_step = param.get_optional<uint64_t>(P_TIME_STEP);
     if (time_step)
-    {
-      if (options->mode != TS::TimeSeriesGeneratorOptions::TimeSteps)
-      {
-        Fmi::Exception exception(BCP, "Cannot use timestep option in this time mode!");
-        exception.addParameter(WFS_EXCEPTION_CODE, WFS_OPERATION_PARSING_FAILED);
-        throw exception;
-      }
-
-      if (*time_step == 0)
-      {
-        options->mode = TS::TimeSeriesGeneratorOptions::DataTimes;
-      }
-      else if (1440 % *time_step != 0)
-      {
-        Fmi::Exception exception(BCP, "Invalid time step value!");
-        exception.addParameter(WFS_EXCEPTION_CODE, WFS_OPERATION_PARSING_FAILED);
-        exception.addParameter("Time step", std::to_string(*time_step));
-        throw exception;
-      }
-      else
-      {
-        options->timeStep = *time_step;
-        if (debug_level > 3)
-          std::cout << __FILE__ << "#" << __LINE__ << ": timestep=" << options->timeStep
-                    << std::endl;
-      }
-    }
+      set_time_step(*options, *time_step, debug_level);
 
     std::optional<uint64_t> num_steps = param.get_optional<uint64_t>(P_NUM_STEPS);
     if (num_steps)
-    {
-      if ((*num_steps > 0) and
-          (*num_steps <= static_cast<uint64_t>(std::numeric_limits<int>::max())))
-      {
-        options->timeSteps = num_steps;
-      }
-      else
-      {
-        Fmi::Exception exception(BCP, "Invalid number of time steps!");
-        exception.addParameter(WFS_EXCEPTION_CODE, WFS_OPERATION_PARSING_FAILED);
-        exception.addParameter("Time steps", std::to_string(*num_steps));
-        throw exception;
-      }
-    }
+      set_num_steps(*options, *num_steps);
 
     if (not options->timeStep)
     {
@@ -196,20 +232,7 @@ bw::SupportsTimeParameters::get_time_generator_options(const RequestParameterMap
 
     std::optional<uint64_t> start_step = param.get_optional<uint64_t>(P_START_STEP);
     if (start_step)
-    {
-      if (*start_step > 10000)
-      {
-        Fmi::Exception exception(BCP, "Invalid start step value!");
-        exception.addParameter(WFS_EXCEPTION_CODE, WFS_OPERATION_PARSING_FAILED);
-        exception.addParameter("Start step", std::to_string(*start_step));
-        throw exception;
-      }
-
-      options->startTime += Fmi::Minutes(*start_step * *options->timeStep);
-      if (debug_level > 2)
-        std::cout << __FILE__ << "#" << __LINE__
-                  << ": startTime=" << Fmi::date_time::to_simple_string(options->startTime) << std::endl;
-    }
+      add_start_step(*options, *start_step, debug_level);
 
     if (param.count(P_END_TIME))
     {
