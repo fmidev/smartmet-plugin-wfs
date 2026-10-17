@@ -262,6 +262,27 @@ class AdHocQuery : public StoredQuery
 					bool case_sensitive_params);
 
   /**
+   *   @brief Combines the parameters of the queries of two or more OR-elements inside an
+   *          AND-element.
+   */
+  static void combine_or_queries(std::vector<std::shared_ptr<QueryBase>>& queries,
+                                 const std::vector<unsigned int>& or_query_indexes,
+                                 const AdHocQuery* and_query,
+                                 bool case_sensitive_params);
+
+  /**
+   *   @brief Reads a query parameter or comparison operation of a filter element to 'query'
+   *          (or to 'upper_level_and_query' if not inside an OR-element).
+   */
+  static void read_filter_parameter(const xercesc::DOMElement& element,
+                                    const std::vector<std::string>& element_tree,
+                                    const std::string& element_name,
+                                    std::multiset<std::string>& param_name_set,
+                                    std::set<std::string>& forbidden,
+                                    AdHocQuery* query,
+                                    AdHocQuery* upper_level_and_query);
+
+  /**
    *   @brief Reads comparison definitions from XML query.
    *
    *   @param element Current element in XML query.

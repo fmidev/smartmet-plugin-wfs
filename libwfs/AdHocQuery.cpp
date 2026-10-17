@@ -33,6 +33,133 @@ void check_param_max_occurs(int actual_count,
                                    int max_occurs,
                                    const std::string& location,
                                    const std::string& param_name);
+
+// The KVP parameters of an ad hoc query
+struct KvpQueryParams
+{
+  std::optional<std::string> request;
+  std::optional<std::string> bbox;
+  std::optional<std::string> resource_id;
+  std::optional<std::string> filter;
+  std::optional<std::string> filter_language;
+  std::vector<std::string> property_names;
+  std::vector<std::string> type_names;
+  std::vector<std::string> aliases;
+};
+
+// Read the KVP parameters of an ad hoc query
+KvpQueryParams read_kvp_query_params(const SmartMet::Spine::HTTP::Request& http_request)
+{
+  KvpQueryParams kvp;
+
+  const auto& params = http_request.getParameterMap();
+
+  for (const auto& item : params)
+  {
+    const std::string& param_name = Fmi::ascii_toupper_copy(item.first);
+
+    if (param_name == "REQUEST")
+      kvp.request = item.second;
+    else if (param_name == "BBOX")
+      kvp.bbox = item.second;
+    else if (param_name == "RESOURCEID")
+      kvp.resource_id = item.second;
+    else if (param_name == "FILTER")
+      kvp.filter = item.second;
+    else if (param_name == "FILTER_LANGUAGE")
+      kvp.filter_language = item.second;
+    else if (param_name == "PROPERTYNAME")
+      ba::split(kvp.property_names, item.second, ba::is_any_of(","));
+    else if (param_name == "TYPENAMES")
+      ba::split(kvp.type_names, item.second, ba::is_any_of(","));
+    else if (param_name == "ALIASES")
+      ba::split(kvp.aliases, item.second, ba::is_any_of(","));
+  }
+
+  return kvp;
+}
+
+// Matching mode of a comparison operation
+enum MatchActionType
+{
+  ALL,
+  ANY,
+  ONE
+};
+
+// Read value of attribute matchCase
+bool read_match_case(const xercesc::DOMElement& element)
+{
+  auto attr_match_case = bwx::get_attr(element, FES_NAMESPACE_URI, "matchCase");
+  return !(attr_match_case.second && attr_match_case.first == "false");
+}
+
+// Read value of attribute matchAction
+MatchActionType read_match_action(const xercesc::DOMElement& element)
+{
+  auto attr_match_action = bwx::get_attr(element, FES_NAMESPACE_URI, "matchAction");
+  if (attr_match_action.second)
+  {
+    if (attr_match_action.first == "All")
+      return ALL;
+    if (attr_match_action.first == "One")
+      return ONE;
+  }
+  return ANY;
+}
+
+// Read the value of a fes:Literal element to 'limit_value', quoting string values
+// (lower case unless 'match_case'). Returns true for string values.
+bool read_literal(const SmartMet::Spine::Value& value, bool match_case, std::string& limit_value)
+{
+  limit_value = value.get_string();
+
+  // Check if limit_value is a string.
+  char* pEnd = nullptr;
+  (void)std::strtod(limit_value.c_str(), &pEnd);
+  if (pEnd != nullptr)
+  {
+    if ((strlen(pEnd) > 0) || (limit_value == "NaN"))
+    {
+      // Should value be changed to lower case value?
+      if (not match_case)
+      {
+        limit_value = Fmi::ascii_tolower_copy(limit_value);
+      }
+
+      limit_value = "'" + limit_value + "'";
+      return true;
+    }
+  }
+  return false;
+}
+
+// Choose filtering expression syntax according to requested match action.
+std::string match_filter_expression(MatchActionType match_action,
+                                    const std::string& reference,
+                                    const std::string& operation,
+                                    const std::string& limit_value)
+{
+  if (match_action == ALL)
+  {
+    // Filtering expression is of type: //wfs:member[every $x in descendant::REFERENCE satisfies
+    // $x
+    // = VALUE].
+
+    return "every $x in " + reference + " satisfies $x " + operation + " " + limit_value;
+  }
+  if (match_action == ONE)
+  {
+    // Filtering expression is of type: //wfs:member[count(descendant::REFERENCE[. = VALUE]) = 1].
+
+    return "count(" + reference + "[. " + operation + " " + limit_value + "]) = 1";
+  }
+
+  // match_action == ANY
+  // Filtering expression is of type: //wfs:member[descendant::REFERENCE = VALUE].
+
+  return reference + " " + operation + " " + limit_value;
+}
 }  // namespace
 
 bw::AdHocQuery::AdHocQuery() = default;
@@ -51,69 +178,15 @@ void bw::AdHocQuery::create_from_kvp(const std::string& language,
 {
   try
   {
-    std::optional<std::string> request;
-    std::optional<std::string> bbox;
-    std::optional<std::string> resource_id;
-    std::optional<std::string> filter;
-    std::optional<std::string> filter_language;
-    std::vector<std::string> property_names;
-    std::vector<std::string> type_names;
-    std::vector<std::string> aliases;
-
-    const auto& params = http_request.getParameterMap();
-
-    for (const auto& item : params)
-    {
-      const std::string& param_name = Fmi::ascii_toupper_copy(item.first);
-
-      if (param_name == "REQUEST")
-      {
-        request = item.second;
-        continue;
-      }
-
-      if (param_name == "BBOX")
-      {
-        bbox = item.second;
-        continue;
-      }
-
-      if (param_name == "RESOURCEID")
-      {
-        resource_id = item.second;
-        continue;
-      }
-
-      if (param_name == "FILTER")
-      {
-        filter = item.second;
-        continue;
-      }
-
-      if (param_name == "FILTER_LANGUAGE")
-      {
-        filter_language = item.second;
-        continue;
-      }
-
-      if (param_name == "PROPERTYNAME")
-      {
-        ba::split(property_names, item.second, ba::is_any_of(","));
-        continue;
-      }
-
-      if (param_name == "TYPENAMES")
-      {
-        ba::split(type_names, item.second, ba::is_any_of(","));
-        continue;
-      }
-
-      if (param_name == "ALIASES")
-      {
-        ba::split(aliases, item.second, ba::is_any_of(","));
-        continue;
-      }
-    }
+    const KvpQueryParams kvp = read_kvp_query_params(http_request);
+    const auto& request = kvp.request;
+    const auto& bbox = kvp.bbox;
+    const auto& resource_id = kvp.resource_id;
+    const auto& filter = kvp.filter;
+    const auto& filter_language = kvp.filter_language;
+    const auto& property_names = kvp.property_names;
+    const auto& type_names = kvp.type_names;
+    const auto& aliases = kvp.aliases;
 
     // Sanity check: not a request
     if (not request)
@@ -822,21 +895,13 @@ void bw::AdHocQuery::extract_filter_elements(const xercesc::DOMElement& root_ele
       }
       else  // Read parameter values / comparison operations from XML.
       {
-        // Check if we need to write this parameter to the common AND-element query.
-        if ((upper_level_and_query != nullptr) && (element_tree.back() != "fes:or"))
-        {
-          query = upper_level_and_query;
-        }
-
-        if (is_comparison_operation(element_name))
-        {
-          read_comparison_operation(*element, element_name, query);
-        }
-        else  // is_query_parameter
-        {
-          read_query_parameter(
-              *element, element_tree, element_name, param_name_set, forbidden, query);
-        }
+        read_filter_parameter(*element,
+                              element_tree,
+                              element_name,
+                              param_name_set,
+                              forbidden,
+                              query,
+                              upper_level_and_query);
       }
     }
   }
@@ -844,6 +909,107 @@ void bw::AdHocQuery::extract_filter_elements(const xercesc::DOMElement& root_ele
   {
     throw Fmi::Exception::Trace(BCP, "Operation failed!");
   }
+}
+
+void bw::AdHocQuery::read_filter_parameter(const xercesc::DOMElement& element,
+                                           const std::vector<std::string>& element_tree,
+                                           const std::string& element_name,
+                                           std::multiset<std::string>& param_name_set,
+                                           std::set<std::string>& forbidden,
+                                           AdHocQuery* query,
+                                           AdHocQuery* upper_level_and_query)
+{
+  // Check if we need to write this parameter to the common AND-element query.
+  if ((upper_level_and_query != nullptr) && (element_tree.back() != "fes:or"))
+  {
+    query = upper_level_and_query;
+  }
+
+  if (is_comparison_operation(element_name))
+  {
+    read_comparison_operation(element, element_name, query);
+  }
+  else  // is_query_parameter
+  {
+    read_query_parameter(element, element_tree, element_name, param_name_set, forbidden, query);
+  }
+}
+
+void bw::AdHocQuery::combine_or_queries(std::vector<std::shared_ptr<QueryBase>>& queries,
+                                        const std::vector<unsigned int>& or_query_indexes,
+                                        const AdHocQuery* and_query,
+                                        bool case_sensitive_params)
+{
+  // Now we need to combine the parameters of the query objects created for these OR-elements.
+
+  // Memorize the number of queries as it increases when we create new queries with combined
+  // parameters.
+  unsigned int queries_size_1 = queries.size();
+  unsigned int queries_size_2 = 0;
+
+  // Loop through the query object sets created for parameters for inside each OR-element.
+  // For example the following structure has yielded the following query sets:
+  //                                       Query:        Query set:
+  // <fes:And>
+  //    <fes:Or>
+  //        <fes:BBOX> </fes:BBOX>      => queries[0] => or_query_indexes[0] = 0
+  //        <fes:BBOX> </fes:BBOX>      => queries[1]
+  //    </fes:Or>
+  //    <fes:Or>
+  //        <fes:During> </fes:During>  => queries[3] => or_query_indexes[1] = 3
+  //        <fes:During> </fes:During>  => queries[4]
+  //    </fes:Or>
+  // </fes:And>
+  //
+  for (unsigned int or_set = 0; or_set < or_query_indexes.size();
+       or_set = (or_set == 0) ? or_set + 2 : or_set + 1)
+  {
+    // Memorize the number of queries as it increases when we create new queries with combined
+    // parameters.
+    queries_size_2 = queries.size();
+
+    // Index is the index of the first query of the next set or if this is the last set
+    // then it is the index of last query (which existed before combining).
+    auto last_index_1 = (or_set < (or_query_indexes.size() - 1)) ? or_query_indexes[or_set + 1]
+                                                                 : queries_size_1;
+
+    // Loop through the queries belonging to this set.
+    for (auto index_1 = or_query_indexes[or_set]; index_1 < last_index_1; index_1++)
+    {
+      // Get pointer to query in the current set.
+      const AdHocQuery* or_query_1 = &dynamic_cast<AdHocQuery&>(*queries[index_1]);
+
+      // If the set is 0 then the queries in this set are combined with the queries in set 1,
+      // otherwise they are combined
+      // with the combined queries resulting from last round (locating between indexes
+      // queries_size_1..queries_size_2).
+      auto first_index_2 = (or_set == 0) ? or_query_indexes[1] : queries_size_1;
+      auto last_index_2 = ((or_set == 0) && (or_query_indexes.size() > 2))
+                              ? or_query_indexes[or_set + 2]
+                              : queries_size_2;
+
+      // Loop through the queries belonging to the next set.
+      for (auto index_2 = first_index_2; index_2 < last_index_2; index_2++)
+      {
+        // Get pointer to query of the next set.
+        const AdHocQuery* or_query_2 = &dynamic_cast<AdHocQuery&>(*queries[index_2]);
+
+        // Create a new query for containing the combined parameters.
+        bw::AdHocQuery::create_query(and_query->handler, queries, case_sensitive_params);
+        AdHocQuery* combined_query = &dynamic_cast<AdHocQuery&>(*queries.back());
+
+        // Copy parameters.
+        copy_params(or_query_1, combined_query);
+        copy_params(or_query_2, combined_query);
+      }
+    }
+
+    // Delete the combined queries resulting from the previous round,
+    queries.erase(queries.begin() + queries_size_1, queries.begin() + queries_size_2);
+  }
+
+  // Erase the OR-element queries which existed before combining queries.
+  queries.erase(queries.begin() + or_query_indexes[0], queries.begin() + queries_size_1);
 }
 
 void bw::AdHocQuery::handle_end_of_and_element(std::vector<std::shared_ptr<QueryBase>>& queries,
@@ -857,76 +1023,7 @@ void bw::AdHocQuery::handle_end_of_and_element(std::vector<std::shared_ptr<Query
     // Was there at least two OR-elements inside this AND-element?
     if (or_query_indexes.size() >= 2)
     {
-      // Now we need to combine the parameters of the query objects created for these OR-elements.
-
-      // Memorize the number of queries as it increases when we create new queries with combined
-      // parameters.
-      unsigned int queries_size_1 = queries.size();
-      unsigned int queries_size_2 = 0;
-
-      // Loop through the query object sets created for parameters for inside each OR-element.
-      // For example the following structure has yielded the following query sets:
-      //                                       Query:        Query set:
-      // <fes:And>
-      //    <fes:Or>
-      //        <fes:BBOX> </fes:BBOX>      => queries[0] => or_query_indexes[0] = 0
-      //        <fes:BBOX> </fes:BBOX>      => queries[1]
-      //    </fes:Or>
-      //    <fes:Or>
-      //        <fes:During> </fes:During>  => queries[3] => or_query_indexes[1] = 3
-      //        <fes:During> </fes:During>  => queries[4]
-      //    </fes:Or>
-      // </fes:And>
-      //
-      for (unsigned int or_set = 0; or_set < or_query_indexes.size();
-           or_set = (or_set == 0) ? or_set + 2 : or_set + 1)
-      {
-        // Memorize the number of queries as it increases when we create new queries with combined
-        // parameters.
-        queries_size_2 = queries.size();
-
-        // Index is the index of the first query of the next set or if this is the last set
-        // then it is the index of last query (which existed before combining).
-        auto last_index_1 = (or_set < (or_query_indexes.size() - 1)) ? or_query_indexes[or_set + 1]
-                                                                     : queries_size_1;
-
-        // Loop through the queries belonging to this set.
-        for (auto index_1 = or_query_indexes[or_set]; index_1 < last_index_1; index_1++)
-        {
-          // Get pointer to query in the current set.
-          const AdHocQuery* or_query_1 = &dynamic_cast<AdHocQuery&>(*queries[index_1]);
-
-          // If the set is 0 then the queries in this set are combined with the queries in set 1,
-          // otherwise they are combined
-          // with the combined queries resulting from last round (locating between indexes
-          // queries_size_1..queries_size_2).
-          auto first_index_2 = (or_set == 0) ? or_query_indexes[1] : queries_size_1;
-          auto last_index_2 = ((or_set == 0) && (or_query_indexes.size() > 2))
-                                  ? or_query_indexes[or_set + 2]
-                                  : queries_size_2;
-
-          // Loop through the queries belonging to the next set.
-          for (auto index_2 = first_index_2; index_2 < last_index_2; index_2++)
-          {
-            // Get pointer to query of the next set.
-            const AdHocQuery* or_query_2 = &dynamic_cast<AdHocQuery&>(*queries[index_2]);
-
-            // Create a new query for containing the combined parameters.
-            bw::AdHocQuery::create_query(and_query->handler, queries, case_sensitive_params);
-            AdHocQuery* combined_query = &dynamic_cast<AdHocQuery&>(*queries.back());
-
-            // Copy parameters.
-            copy_params(or_query_1, combined_query);
-            copy_params(or_query_2, combined_query);
-          }
-        }
-
-        // Delete the combined queries resulting from the previous round,
-        queries.erase(queries.begin() + queries_size_1, queries.begin() + queries_size_2);
-      }
-
-      // Erase the OR-element queries which existed before combining queries.
-      queries.erase(queries.begin() + or_query_indexes[0], queries.begin() + queries_size_1);
+      combine_or_queries(queries, or_query_indexes, and_query, case_sensitive_params);
     }
 
     // Clear the list of query set indexes.
@@ -978,41 +1075,12 @@ void bw::AdHocQuery::read_comparison_operation(const xercesc::DOMElement& elemen
     bool is_value_string = false;
     bool is_reference_attribute = false;
     bool is_2nd_reference_attribute = false;
-    bool match_case = true;
-    enum MatchActionType
-    {
-      ALL,
-      ANY,
-      ONE
-    } match_action = ANY;
 
     // Read value of attribute matchCase.
-    auto attr_match_case = bwx::get_attr(element, FES_NAMESPACE_URI, "matchCase");
-    if (attr_match_case.second)
-    {
-      if (attr_match_case.first == "false")
-      {
-        match_case = false;
-      }
-    }
+    const bool match_case = read_match_case(element);
 
     // Read value of attribute matchAction.
-    auto attr_match_action = bwx::get_attr(element, FES_NAMESPACE_URI, "matchAction");
-    if (attr_match_action.second)
-    {
-      if (attr_match_action.first == "All")
-      {
-        match_action = ALL;
-      }
-      else if (attr_match_action.first == "Any")
-      {
-        match_action = ANY;
-      }
-      else if (attr_match_action.first == "One")
-      {
-        match_action = ONE;
-      }
-    }
+    const MatchActionType match_action = read_match_action(element);
 
     // Get the comparison operation related to the current filter element.
     get_comparison_operation(element_name, operation);
@@ -1048,26 +1116,8 @@ void bw::AdHocQuery::read_comparison_operation(const xercesc::DOMElement& elemen
       }
       else if (child_name == "fes:literal")
       {
-        limit_value = values[0].get_string();
-
-        // Check if limit_value is a string.
-        char* pEnd = nullptr;
-        (void)std::strtod(limit_value.c_str(), &pEnd);
-        if (pEnd != nullptr)
-        {
-          if ((strlen(pEnd) > 0) || (limit_value == "NaN"))
-          {
-            is_value_string = true;
-
-            // Should value be changed to lower case value?
-            if (not match_case)
-            {
-              limit_value = Fmi::ascii_tolower_copy(limit_value);
-            }
-
-            limit_value = "'" + limit_value + "'";
-          }
-        }
+        if (read_literal(values[0], match_case, limit_value))
+          is_value_string = true;
       }
     }
 
@@ -1104,26 +1154,7 @@ void bw::AdHocQuery::read_comparison_operation(const xercesc::DOMElement& elemen
     }
 
     // Choose filtering expression syntax according to requested match action.
-    if (match_action == ALL)
-    {
-      // Filtering expression is of type: //wfs:member[every $x in descendant::REFERENCE satisfies
-      // $x
-      // = VALUE].
-
-      new_filter = "every $x in " + reference + " satisfies $x " + operation + " " + limit_value;
-    }
-    else if (match_action == ONE)
-    {
-      // Filtering expression is of type: //wfs:member[count(descendant::REFERENCE[. = VALUE]) = 1].
-
-      new_filter = "count(" + reference + "[. " + operation + " " + limit_value + "]) = 1";
-    }
-    else  // match_action == ANY
-    {
-      // Filtering expression is of type: //wfs:member[descendant::REFERENCE = VALUE].
-
-      new_filter = reference + " " + operation + " " + limit_value;
-    }
+    new_filter = match_filter_expression(match_action, reference, operation, limit_value);
 
     // Is this the first expression for this query?
     if (query->filter_expression.empty())
