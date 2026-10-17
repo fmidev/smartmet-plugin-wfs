@@ -79,6 +79,11 @@ class StoredContourQueryHandler : public StoredQueryHandlerBase,
   FmiParameterName id;
 
  private:
+  void add_clipped_contours(ContourQueryResultSet& ret,
+                            const std::vector<OGRGeometryPtr>& geoms,
+                            const Fmi::DateTime& utcTime,
+                            const ContourQueryParameter& queryParameter) const;
+
   std::string formatCoordinates(const OGRGeometry* geom,
                                 bool latLonOrder,
                                 unsigned int precision) const;

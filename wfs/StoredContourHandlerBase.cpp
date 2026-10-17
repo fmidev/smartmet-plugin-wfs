@@ -28,6 +28,242 @@ const char* P_SMOOTHING_SIZE = "smoothing_size";
 const char* P_IMAGE_DIR = "imageDir";
 const char* P_IMAGE_FILE = "imageFile";
 
+// Set the isoline values or isoband limits of a grid query parameter
+void set_contour_values(SmartMet::QueryServer::QueryParameter& param,
+                        const SmartMet::Engine::Contour::Options& options)
+{
+  if (!options.isovalues.empty())
+  {
+    param.mType = SmartMet::QueryServer::QueryParameter::Type::Isoline;
+    param.mLocationType = SmartMet::QueryServer::QueryParameter::LocationType::Geometry;
+
+    for (const double& isovalue : options.isovalues)
+      param.mContourLowValues.push_back(isovalue);
+  }
+  else
+  {
+    param.mType = SmartMet::QueryServer::QueryParameter::Type::Isoband;
+    param.mLocationType = SmartMet::QueryServer::QueryParameter::LocationType::Geometry;
+
+    for (const auto& limit : options.limits)
+    {
+      if (limit.lolimit && limit.hilimit)
+      {
+        param.mContourLowValues.push_back(*(limit.lolimit));
+        param.mContourHighValues.push_back(*(limit.hilimit));
+      }
+    }
+  }
+}
+
+// Throw the error of a failed grid query
+[[noreturn]] void throw_query_server_error(int result)
+{
+  Fmi::Exception exception(BCP, "The query server returns an error message!");
+  exception.addParameter("Result", std::to_string(result));
+  exception.addParameter("Message", SmartMet::QueryServer::getResultString(result));
+
+  switch (result)
+  {
+    case SmartMet::QueryServer::Result::NO_PRODUCERS_FOUND:
+      exception.addDetail(
+          "The reason for this situation is usually that the given producer is unknown");
+      exception.addDetail(
+          "or there are no producer list available in the grid engine's configuration file.");
+      break;
+    default:
+      break;
+  }
+  throw exception;
+}
+
+// Create the geometries of WKB contours
+std::vector<OGRGeometryPtr> wkb_geometries(SmartMet::T::ByteData_vec& valueData)
+{
+  std::vector<OGRGeometryPtr> geoms;
+  for (auto& wkb : valueData)
+  {
+    auto* cwkb = reinterpret_cast<unsigned char*>(wkb.data());
+
+    OGRGeometry* geom = nullptr;
+    /*OGRErr err =*/OGRGeometryFactory::createFromWkb(cwkb, nullptr, &geom, wkb.size());
+    if (geom != nullptr)
+    {
+      auto geomPtr = OGRGeometryPtr(geom);
+      geoms.push_back(geomPtr);
+    }
+  }
+  return geoms;
+}
+
+// Paint the WKB contours into an image file (for debugging purposes)
+void paint_contour_image(unsigned char type,
+                         SmartMet::T::ByteData_vec& valueData,
+                         const std::string& filename)
+{
+  int width = 3600;   // atoi(query.mAttributeList.getAttributeValue("grid.width"));
+  int height = 1800;  // atoi(query.mAttributeList.getAttributeValue("grid.height"));
+
+  if (width > 0 && height > 0)
+  {
+    double mp = 10;
+    SmartMet::ImagePaint imagePaint(width, height, 0xFFFFFFFF, 0x000000, 0xFFFF00, false, true);
+
+    // ### Painting contours into the image:
+
+    if (type == SmartMet::QueryServer::QueryParameter::Type::Isoband)
+    {
+      if (!valueData.empty())
+      {
+        uint c = 250;
+        uint step = 250 / valueData.size();
+
+        for (auto & it : valueData)
+        {
+          uint col = (c << 16) + (c << 8) + c;
+          imagePaint.setFillColor(col);
+          imagePaint.paintWkb(mp, mp, 180, 90, it);
+          c = c - step;
+        }
+      }
+    }
+    else
+    {
+      imagePaint.setDrawColor(0x000000);
+      imagePaint.paintWkb(mp, mp, 180, 90, valueData);
+    }
+
+    // ### Saving the image and releasing the image data:
+
+    imagePaint.saveJpgImage(filename.c_str());
+  }
+}
+
+
+// Add the parameter attributes of a grid query
+void add_grid_param_attributes(SmartMet::T::AttributeList& attributeList,
+                               const SmartMet::Engine::Grid::ParameterDetails_vec& parameters,
+                               const std::string& producer,
+                               const std::string& name,
+                               const std::string& key)
+{
+  std::string prod;
+  std::string geomId;
+  std::string level;
+  std::string levelId;
+  std::string forecastType;
+  std::string forecastNumber;
+
+  size_t len = parameters.size();
+  if (len > 0 && strcasecmp(parameters[0].mProducerName.c_str(), key.c_str()) != 0)
+  {
+    for (size_t t = 0; t < len; t++)
+    {
+      if (parameters[t].mLevelId > "")
+        levelId = parameters[t].mLevelId;
+
+      if (parameters[t].mLevel > "")
+        level = parameters[t].mLevel;
+
+      if (parameters[t].mForecastType > "")
+        forecastType = parameters[t].mForecastType;
+
+      if (parameters[t].mForecastNumber > "")
+        forecastNumber = parameters[t].mForecastNumber;
+
+      if (parameters[t].mGeometryId > "")
+      {
+        prod = parameters[t].mProducerName;
+        geomId = parameters[t].mGeometryId;
+      }
+    }
+    std::string param = name + ":" + prod + ":" + geomId + ":" + levelId + ":" + level + ":" +
+                        forecastType + ":" + forecastNumber;
+    attributeList.addAttribute("param", param);
+  }
+  else
+  {
+    attributeList.addAttribute("producer", producer);
+    attributeList.addAttribute("param", name);
+  }
+}
+
+// Add the time attributes of a grid query
+void add_time_attributes(SmartMet::T::AttributeList& attributeList,
+                         const TS::TimeSeriesGeneratorOptions& tOptions)
+{
+  if (tOptions.startTimeData)
+    attributeList.addAttribute("startTime", "data");
+  else
+    attributeList.addAttribute("startTime", Fmi::to_iso_string(tOptions.startTime));
+
+  if (tOptions.endTimeData)
+    attributeList.addAttribute("endTime", "data");
+  else
+    attributeList.addAttribute("endTime", Fmi::to_iso_string(tOptions.endTime));
+
+  if (tOptions.timeSteps)
+    attributeList.addAttribute("timesteps", std::to_string(*tOptions.timeSteps));
+
+  if (tOptions.timeStep)
+    attributeList.addAttribute("timestep", std::to_string(*tOptions.timeStep));
+}
+
+// Read the 'limits' parameter of a coverage query
+void read_coverage_limits(const bw::RequestParameterMap& sq_params,
+                          bw::CoverageQueryParameter& qParam)
+{
+  std::vector<double> limits;
+  sq_params.get<double>(P_LIMITS, std::back_inserter(limits), 0, 998, 2);
+  if (limits.size() & 1)
+  {
+    Fmi::Exception exception(BCP, "Invalid list of doubles in parameter 'limits'!");
+    exception.addParameter(WFS_EXCEPTION_CODE, WFS_OPERATION_PARSING_FAILED);
+    throw exception;
+  }
+  for (std::size_t i = 0; i < limits.size(); i += 2)
+  {
+    const double& lower = limits[i];
+    const double& upper = limits[i + 1];
+    qParam.limits.emplace_back(lower, upper);
+  }
+}
+
+// Add the smoothing attributes of a grid query (if smoothing is requested)
+void add_smoothing_attributes(SmartMet::T::AttributeList& attributeList,
+                              const bw::RequestParameterMap& sq_params)
+{
+  auto smoothing = sq_params.get_optional<bool>(P_SMOOTHING, false);
+  if (smoothing)
+  {
+    auto smoothing_degree = sq_params.get_optional<uint64_t>(P_SMOOTHING_DEGREE, 2);
+    auto smoothing_size = sq_params.get_optional<uint64_t>(P_SMOOTHING_SIZE, 2);
+
+    if (smoothing_degree)
+      attributeList.addAttribute("contour.smoothingDegree", std::to_string(smoothing_degree));
+
+    if (smoothing_size)
+      attributeList.addAttribute("contour.smoothingSize", std::to_string(smoothing_size));
+  }
+}
+
+// The analysis and modification times of the last grid query result having an analysis time
+void get_analysis_times(SmartMet::QueryServer::Query& gridQuery,
+                        std::string& analysisTimeStr,
+                        std::string& modificationTimeStr)
+{
+  for (auto& param : gridQuery.mQueryParameterList)
+  {
+    for (auto& val : param.mValueList)
+    {
+      if (val->mAnalysisTime > " ")
+      {
+        analysisTimeStr = val->mAnalysisTime;
+        modificationTimeStr = SmartMet::utcTimeFromTimeT(val->mModificationTime);
+      }
+    }
+  }
+}
 }  // anonymous namespace
 
 bw::StoredContourQueryHandler::StoredContourQueryHandler(
@@ -266,6 +502,29 @@ bw::ContourQueryResultSet bw::StoredContourQueryHandler::getContours_qEngine(
   }
 }
 
+void bw::StoredContourQueryHandler::add_clipped_contours(
+    ContourQueryResultSet& ret,
+    const std::vector<OGRGeometryPtr>& geoms,
+    const Fmi::DateTime& utcTime,
+    const ContourQueryParameter& queryParameter) const
+{
+  // clip the geometry into bounding box
+  Fmi::Box bbox(queryParameter.bbox.xMin,
+                queryParameter.bbox.yMin,
+                queryParameter.bbox.xMax,
+                queryParameter.bbox.yMax,
+                0,
+                0);
+
+  ContourQueryResultPtr cgr(new ContourQueryResult());
+  for (auto geom : geoms)
+  {
+    clipGeometry(geom, bbox);
+    cgr->area_geoms.emplace_back(utcTime, geom);
+  }
+  ret.push_back(cgr);
+}
+
 bw::ContourQueryResultSet bw::StoredContourQueryHandler::getContours_gridEngine(
     const ContourQueryParameter& queryParameter) const
 {
@@ -298,55 +557,15 @@ bw::ContourQueryResultSet bw::StoredContourQueryHandler::getContours_gridEngine(
     Fmi::DateTime utctime;
     SmartMet::Engine::Contour::Options options(getContourEngineOptions(utctime, queryParameter));
 
-    for (auto & param : queryParameter.gridQuery.mQueryParameterList)
-    {
-      if (!options.isovalues.empty())
-      {
-        param.mType = QueryServer::QueryParameter::Type::Isoline;
-        param.mLocationType = QueryServer::QueryParameter::LocationType::Geometry;
-
-        for (double & isovalue : options.isovalues)
-          param.mContourLowValues.push_back(isovalue);
-      }
-      else
-      {
-        param.mType = QueryServer::QueryParameter::Type::Isoband;
-        param.mLocationType = QueryServer::QueryParameter::LocationType::Geometry;
-
-        for (auto & limit : options.limits)
-        {
-          if (limit.lolimit && limit.hilimit)
-          {
-            param.mContourLowValues.push_back(*(limit.lolimit));
-            param.mContourHighValues.push_back(*(limit.hilimit));
-          }
-        }
-      }
-    }
+    for (auto& param : queryParameter.gridQuery.mQueryParameterList)
+      set_contour_values(param, options);
 
     queryParameter.gridQuery.mAttributeList.setAttribute(
         "contour.coordinateType", std::to_string(T::CoordinateTypeValue::LATLON_COORDINATES));
 
     int result = grid_engine->executeQuery(queryParameter.gridQuery);
     if (result != 0)
-    {
-      Fmi::Exception exception(BCP, "The query server returns an error message!");
-      exception.addParameter("Result", std::to_string(result));
-      exception.addParameter("Message", QueryServer::getResultString(result));
-
-      switch (result)
-      {
-        case QueryServer::Result::NO_PRODUCERS_FOUND:
-          exception.addDetail(
-              "The reason for this situation is usually that the given producer is unknown");
-          exception.addDetail(
-              "or there are no producer list available in the grid engine's configuration file.");
-          break;
-        default:
-          break;
-      }
-      throw exception;
-    }
+      throw_query_server_error(result);
 
     T::Attribute* imageDir =
         queryParameter.gridQuery.mAttributeList.getAttribute("contour.imageDir");
@@ -365,18 +584,7 @@ bw::ContourQueryResultSet bw::StoredContourQueryHandler::getContours_gridEngine(
 
         if (!(*val)->mValueData.empty())
         {
-          for (auto & wkb : (*val)->mValueData)
-          {
-            auto* cwkb = reinterpret_cast<unsigned char*>(wkb.data());
-
-            OGRGeometry* geom = nullptr;
-            /*OGRErr err =*/OGRGeometryFactory::createFromWkb(cwkb, nullptr, &geom, wkb.size());
-            if (geom != nullptr)
-            {
-              auto geomPtr = OGRGeometryPtr(geom);
-              geoms.push_back(geomPtr);
-            }
-          }
+          geoms = wkb_geometries((*val)->mValueData);
 
           if (imageDir != nullptr && imageDir->mValue > " " && imageFile != nullptr &&
               imageFile->mValue > " ")
@@ -384,65 +592,14 @@ bw::ContourQueryResultSet bw::StoredContourQueryHandler::getContours_gridEngine(
             // Contours can be painted and saved as images. This functionality
             // is usually used for debugging purposes.
 
-            int width = 3600;   // atoi(query.mAttributeList.getAttributeValue("grid.width"));
-            int height = 1800;  // atoi(query.mAttributeList.getAttributeValue("grid.height"));
-
-            if (width > 0 && height > 0)
-            {
-              double mp = 10;
-              ImagePaint imagePaint(width, height, 0xFFFFFFFF, 0x000000, 0xFFFF00, false, true);
-
-              // ### Painting contours into the image:
-
-              if (param->mType == QueryServer::QueryParameter::Type::Isoband)
-              {
-                if (!(*val)->mValueData.empty())
-                {
-                  uint c = 250;
-                  uint step = 250 / (*val)->mValueData.size();
-
-                  for (auto & it : (*val)->mValueData)
-                  {
-                    uint col = (c << 16) + (c << 8) + c;
-                    imagePaint.setFillColor(col);
-                    imagePaint.paintWkb(mp, mp, 180, 90, it);
-                    c = c - step;
-                  }
-                }
-              }
-              else
-              {
-                imagePaint.setDrawColor(0x000000);
-                imagePaint.paintWkb(mp, mp, 180, 90, (*val)->mValueData);
-              }
-
-              // ### Saving the image and releasing the image data:
-
-              std::string filename = imageDir->mValue + "/" + imageFile->mValue;
-
-              imagePaint.saveJpgImage(filename.c_str());
-            }
+            paint_contour_image(param->mType,
+                                (*val)->mValueData,
+                                imageDir->mValue + "/" + imageFile->mValue);
           }
         }
 
         if (!geoms.empty())
-        {
-          // clip the geometry into bounding box
-          Fmi::Box bbox(queryParameter.bbox.xMin,
-                        queryParameter.bbox.yMin,
-                        queryParameter.bbox.xMax,
-                        queryParameter.bbox.yMax,
-                        0,
-                        0);
-
-          ContourQueryResultPtr cgr(new ContourQueryResult());
-          for (auto geom : geoms)
-          {
-            clipGeometry(geom, bbox);
-            cgr->area_geoms.emplace_back(utcTime, geom);
-          }
-          ret.push_back(cgr);
-        }
+          add_clipped_contours(ret, geoms, utcTime, queryParameter);
       }
     }
 
@@ -583,22 +740,7 @@ void bw::StoredContourQueryHandler::query_qEngine(const StoredQuery& stored_quer
     std::shared_ptr<ContourQueryParameter> query_param = getQueryParameter(parameter, q, sr);
     auto* qParam = dynamic_cast<CoverageQueryParameter*>(query_param.get());
     if (qParam)
-    {
-      std::vector<double> limits;
-      sq_params.get<double>(P_LIMITS, std::back_inserter(limits), 0, 998, 2);
-      if (limits.size() & 1)
-      {
-        Fmi::Exception exception(BCP, "Invalid list of doubles in parameter 'limits'!");
-        exception.addParameter(WFS_EXCEPTION_CODE, WFS_OPERATION_PARSING_FAILED);
-        throw exception;
-      }
-      for (std::size_t i = 0; i < limits.size(); i += 2)
-      {
-        const double& lower = limits[i];
-        const double& upper = limits[i + 1];
-        qParam->limits.emplace_back(lower, upper);
-      }
-    }
+      read_coverage_limits(sq_params, *qParam);
 
     query_param->smoothing = sq_params.get_optional<bool>(P_SMOOTHING, false);
     query_param->smoothing_degree = sq_params.get_optional<uint64_t>(P_SMOOTHING_DEGREE, 2);
@@ -696,64 +838,12 @@ void bw::StoredContourQueryHandler::query_gridEngine(const StoredQuery& stored_q
 
     grid_engine->getParameterDetails(producer, pName, parameters);
 
-    std::string prod;
-    std::string geomId;
-    std::string level;
-    std::string levelId;
-    std::string forecastType;
-    std::string forecastNumber;
-
-    size_t len = parameters.size();
-    if (len > 0 && strcasecmp(parameters[0].mProducerName.c_str(), key.c_str()) != 0)
-    {
-      for (size_t t = 0; t < len; t++)
-      {
-        if (parameters[t].mLevelId > "")
-          levelId = parameters[t].mLevelId;
-
-        if (parameters[t].mLevel > "")
-          level = parameters[t].mLevel;
-
-        if (parameters[t].mForecastType > "")
-          forecastType = parameters[t].mForecastType;
-
-        if (parameters[t].mForecastNumber > "")
-          forecastNumber = parameters[t].mForecastNumber;
-
-        if (parameters[t].mGeometryId > "")
-        {
-          prod = parameters[t].mProducerName;
-          geomId = parameters[t].mGeometryId;
-        }
-      }
-      std::string param = name + ":" + prod + ":" + geomId + ":" + levelId + ":" + level + ":" +
-                          forecastType + ":" + forecastNumber;
-      attributeList.addAttribute("param", param);
-    }
-    else
-    {
-      attributeList.addAttribute("producer", producer);
-      attributeList.addAttribute("param", name);
-    }
+    add_grid_param_attributes(attributeList, parameters, producer, name, key);
 
     std::shared_ptr<TS::TimeSeriesGeneratorOptions> tOptions =
         get_time_generator_options(sq_params);
 
-    if (tOptions->startTimeData)
-      attributeList.addAttribute("startTime", "data");
-    else
-      attributeList.addAttribute("startTime", Fmi::to_iso_string(tOptions->startTime));
-
-    if (tOptions->endTimeData)
-      attributeList.addAttribute("endTime", "data");
-    else
-      attributeList.addAttribute("endTime", Fmi::to_iso_string(tOptions->endTime));
-
-    if (tOptions->timeSteps)
-      attributeList.addAttribute("timesteps", std::to_string(*tOptions->timeSteps));
-
-    if (tOptions->timeStep)
-      attributeList.addAttribute("timestep", std::to_string(*tOptions->timeStep));
+    add_time_attributes(attributeList, *tOptions);
 
     attributeList.addAttribute("timezone", "UTC");
 
@@ -763,22 +853,7 @@ void bw::StoredContourQueryHandler::query_gridEngine(const StoredQuery& stored_q
 
     auto* qParam = dynamic_cast<CoverageQueryParameter*>(query_param.get());
     if (qParam)
-    {
-      std::vector<double> limits;
-      sq_params.get<double>(P_LIMITS, std::back_inserter(limits), 0, 998, 2);
-      if (limits.size() & 1)
-      {
-        Fmi::Exception exception(BCP, "Invalid list of doubles in parameter 'limits'!");
-        exception.addParameter(WFS_EXCEPTION_CODE, WFS_OPERATION_PARSING_FAILED);
-        throw exception;
-      }
-      for (std::size_t i = 0; i < limits.size(); i += 2)
-      {
-        const double& lower = limits[i];
-        const double& upper = limits[i + 1];
-        qParam->limits.emplace_back(lower, upper);
-      }
-    }
+      read_coverage_limits(sq_params, *qParam);
 
     query_param->smoothing = sq_params.get_optional<bool>(P_SMOOTHING, false);
     query_param->smoothing_degree = sq_params.get_optional<uint64_t>(P_SMOOTHING_DEGREE, 2);
@@ -799,20 +874,7 @@ void bw::StoredContourQueryHandler::query_gridEngine(const StoredQuery& stored_q
     // attributeList.print(std::cout,0,0);
     queryConfigurator.configure(query_param->gridQuery, attributeList);
 
-    auto smoothing = sq_params.get_optional<bool>(P_SMOOTHING, false);
-    if (smoothing)
-    {
-      auto smoothing_degree = sq_params.get_optional<uint64_t>(P_SMOOTHING_DEGREE, 2);
-      auto smoothing_size = sq_params.get_optional<uint64_t>(P_SMOOTHING_SIZE, 2);
-
-      if (smoothing_degree)
-        query_param->gridQuery.mAttributeList.addAttribute("contour.smoothingDegree",
-                                                           std::to_string(smoothing_degree));
-
-      if (smoothing_size)
-        query_param->gridQuery.mAttributeList.addAttribute("contour.smoothingSize",
-                                                           std::to_string(smoothing_size));
-    }
+    add_smoothing_attributes(query_param->gridQuery.mAttributeList, sq_params);
 
     /*
         T::Coordinate_vec coordinates;
@@ -850,17 +912,7 @@ void bw::StoredContourQueryHandler::query_gridEngine(const StoredQuery& stored_q
     std::string analysisTimeStr;
     std::string modificationTimeStr;
 
-    for (auto & param : query_param->gridQuery.mQueryParameterList)
-    {
-      for (auto & val : param.mValueList)
-      {
-        if (val->mAnalysisTime > " ")
-        {
-          analysisTimeStr = val->mAnalysisTime;
-          modificationTimeStr = utcTimeFromTimeT(val->mModificationTime);
-        }
-      }
-    }
+    get_analysis_times(query_param->gridQuery, analysisTimeStr, modificationTimeStr);
 
     CTPP::CDT hash;
     Fmi::DateTime origintime;
