@@ -199,6 +199,8 @@ class StoredQueryConfig : public SmartMet::Spine::ConfigBase
 
  private:
   void parse_config();
+  ParamDesc parse_param_desc(libconfig::Setting& c_item);
+  bool check_param_conflicts(const std::string& method);
 
   std::string locale_name;
   std::shared_ptr<std::locale> locale;

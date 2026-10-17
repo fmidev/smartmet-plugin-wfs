@@ -132,6 +132,118 @@ void SmartMet::Plugin::WFS::StoredQueryConfig::warn_about_unused_params(
   }
 }
 
+// Parse the description of a stored query parameter
+SmartMet::Plugin::WFS::StoredQueryConfig::ParamDesc
+SmartMet::Plugin::WFS::StoredQueryConfig::parse_param_desc(libconfig::Setting& c_item)
+{
+  ParamDesc item;
+  assert_is_group(c_item);
+  item.name = get_mandatory_config_param<std::string>(c_item, "name");
+  if (plugin_config == nullptr || !plugin_config->use_case_sensitive_params())
+  {
+    const std::string lc_name = Fmi::ascii_tolower_copy(item.name);
+    if (not case_map.emplace(lc_name, item.name).second)
+    {
+      throw Fmi::Exception(BCP,
+                           "Query parameter nane conflict: " + item.name +
+                               " conflicts with " + case_map.at(lc_name));
+    }
+  }
+  item.xml_type = get_mandatory_config_param<std::string>(c_item, "xmlType");
+  auto& s1 = get_mandatory_config_param<libconfig::Setting&>(c_item, "title");
+  item.title = SmartMet::Spine::MultiLanguageString::create(default_language, s1);
+  auto& s2 = get_mandatory_config_param<libconfig::Setting&>(c_item, "abstract");
+  item.abstract = SmartMet::Spine::MultiLanguageString::create(default_language, s2);
+  item.min_occurs = get_optional_config_param<int>(c_item, "minOccurs", 0);
+  item.max_occurs = get_optional_config_param<int>(c_item, "maxOccurs", 1);
+
+  auto type_def = get_mandatory_config_param<std::string>(c_item, "type");
+  item.param_def.parse_def(type_def);
+
+  if (c_item.exists("lowerLimit"))
+  {
+    const SmartMet::Spine::Value tmp =
+        SmartMet::Spine::Value::from_config(c_item["lowerLimit"]);
+    item.lower_limit = item.param_def.convValue(tmp);
+  }
+
+  if (c_item.exists("upperLimit"))
+  {
+    const SmartMet::Spine::Value tmp =
+        SmartMet::Spine::Value::from_config(c_item["upperLimit"]);
+    item.upper_limit = item.param_def.convValue(tmp);
+  }
+
+  std::vector<std::string> conflict_vect;
+  get_config_array(c_item, "conflictsWith", conflict_vect);
+  std::copy(conflict_vect.begin(),
+            conflict_vect.end(),
+            std::inserter(item.conflicts_with, item.conflicts_with.begin()));
+
+  const auto vtype = item.param_def.getValueType();
+  if ((item.upper_limit or item.lower_limit) and
+      ((vtype == StoredQueryParamDef::UNDEFINED) or
+       (vtype == StoredQueryParamDef::STRING) or (vtype == StoredQueryParamDef::BOOL)))
+  {
+    std::ostringstream msg;
+    msg << "Specifying parameter limits not supported"
+        << " for parameter '" << item.name << "' in:\n";
+    dump_setting(msg, c_item, 16);
+    throw Fmi::Exception(BCP, msg.str());
+  }
+
+  return item;
+}
+
+// Check for internal conflicts in parameter specification. Returns true if errors were found.
+bool SmartMet::Plugin::WFS::StoredQueryConfig::check_param_conflicts(const std::string& method)
+{
+  bool have_error = false;
+  for (auto map_iter = param_map.begin(); map_iter != param_map.end(); ++map_iter)
+  {
+    const std::string& name = map_iter->first;
+    const ParamDesc& desc = map_iter->second;
+
+    std::vector<std::string> conflict_names;
+    for (auto it = desc.conflicts_with.begin(); it != desc.conflicts_with.end(); ++it)
+    {
+      const std::string n2 = Fmi::ascii_tolower_copy(*it);
+      if (n2 == name)
+      {
+        std::ostringstream msg;
+        msg << method << ": stored query parameter '" << desc.name
+            << "' cannot conflict with itself" << '\n';
+        std::cerr << msg.str() << std::flush;
+        have_error = true;
+      }
+
+      if (param_map.count(n2) == 0)
+      {
+        std::ostringstream msg;
+        msg << method << ": stored query parameter '" << desc.name
+            << "' conflicts with non-existing parameter '" << *it << "'" << '\n';
+        std::cerr << msg.str() << std::flush;
+        have_error = true;
+        continue;
+      }
+
+      ParamDesc& desc2 = param_map.at(n2);
+      if ((desc.min_occurs > 0) and (desc2.min_occurs > 0))
+      {
+        std::ostringstream msg;
+        msg << method << ": mandatory configuration parameters '" << desc.name << "' and '"
+            << desc2.name << "' marked as conflicting" << '\n';
+        std::cerr << msg.str() << std::flush;
+        have_error = true;
+      }
+
+      desc2.conflicts_with.insert(desc.name);
+    }
+  }
+
+  return have_error;
+}
+
 void SmartMet::Plugin::WFS::StoredQueryConfig::parse_config()
 {
   try
@@ -188,60 +300,7 @@ void SmartMet::Plugin::WFS::StoredQueryConfig::parse_config()
         libconfig::Setting& c_item = c_param_desc[i];
         try
         {
-          assert_is_group(c_param_desc[i]);
-          item.name = get_mandatory_config_param<std::string>(c_item, "name");
-          if (plugin_config == nullptr || !plugin_config->use_case_sensitive_params())
-          {
-            const std::string lc_name = Fmi::ascii_tolower_copy(item.name);
-            if (not case_map.emplace(lc_name, item.name).second)
-            {
-              throw Fmi::Exception(BCP,
-                                   "Query parameter nane conflict: " + item.name +
-                                       " conflicts with " + case_map.at(lc_name));
-            }
-          }
-          item.xml_type = get_mandatory_config_param<std::string>(c_item, "xmlType");
-          auto& s1 = get_mandatory_config_param<libconfig::Setting&>(c_item, "title");
-          item.title = SmartMet::Spine::MultiLanguageString::create(default_language, s1);
-          auto& s2 = get_mandatory_config_param<libconfig::Setting&>(c_item, "abstract");
-          item.abstract = SmartMet::Spine::MultiLanguageString::create(default_language, s2);
-          item.min_occurs = get_optional_config_param<int>(c_item, "minOccurs", 0);
-          item.max_occurs = get_optional_config_param<int>(c_item, "maxOccurs", 1);
-
-          auto type_def = get_mandatory_config_param<std::string>(c_item, "type");
-          item.param_def.parse_def(type_def);
-
-          if (c_item.exists("lowerLimit"))
-          {
-            const SmartMet::Spine::Value tmp =
-                SmartMet::Spine::Value::from_config(c_item["lowerLimit"]);
-            item.lower_limit = item.param_def.convValue(tmp);
-          }
-
-          if (c_item.exists("upperLimit"))
-          {
-            const SmartMet::Spine::Value tmp =
-                SmartMet::Spine::Value::from_config(c_item["upperLimit"]);
-            item.upper_limit = item.param_def.convValue(tmp);
-          }
-
-          std::vector<std::string> conflict_vect;
-          get_config_array(c_item, "conflictsWith", conflict_vect);
-          std::copy(conflict_vect.begin(),
-                    conflict_vect.end(),
-                    std::inserter(item.conflicts_with, item.conflicts_with.begin()));
-
-          const auto vtype = item.param_def.getValueType();
-          if ((item.upper_limit or item.lower_limit) and
-              ((vtype == StoredQueryParamDef::UNDEFINED) or
-               (vtype == StoredQueryParamDef::STRING) or (vtype == StoredQueryParamDef::BOOL)))
-          {
-            std::ostringstream msg;
-            msg << "Specifying parameter limits not supported"
-                << " for parameter '" << item.name << "' in:\n";
-            dump_setting(msg, c_item, 16);
-            throw Fmi::Exception(BCP, msg.str());
-          }
+          item = parse_param_desc(c_item);
 
           if (!param_map.insert(std::make_pair(item.name, item)).second)
           {
@@ -267,47 +326,7 @@ void SmartMet::Plugin::WFS::StoredQueryConfig::parse_config()
       }
 
       // Check for internal conflicts in parameter specification
-      bool have_error = false;
-      for (auto map_iter = param_map.begin(); map_iter != param_map.end(); ++map_iter)
-      {
-        const std::string& name = map_iter->first;
-        const ParamDesc& desc = map_iter->second;
-
-        std::vector<std::string> conflict_names;
-        for (auto it = desc.conflicts_with.begin(); it != desc.conflicts_with.end(); ++it)
-        {
-          const std::string n2 = Fmi::ascii_tolower_copy(*it);
-          if (n2 == name)
-          {
-            std::ostringstream msg;
-            msg << METHOD_NAME << ": stored query parameter '" << desc.name
-                << "' cannot conflict with itself" << '\n';
-            std::cerr << msg.str() << std::flush;
-            have_error = true;
-          }
-
-          if (param_map.count(n2) == 0)
-          {
-            std::ostringstream msg;
-            msg << METHOD_NAME << ": stored query parameter '" << desc.name
-                << "' conflicts with non-existing parameter '" << *it << "'" << '\n';
-            std::cerr << msg.str() << std::flush;
-            have_error = true;
-          }
-
-          ParamDesc& desc2 = param_map.at(n2);
-          if ((desc.min_occurs > 0) and (desc2.min_occurs > 0))
-          {
-            std::ostringstream msg;
-            msg << METHOD_NAME << ": mandatory configuration parameters '" << desc.name << "' and '"
-                << desc2.name << "' marked as conflicting" << '\n';
-            std::cerr << msg.str() << std::flush;
-            have_error = true;
-          }
-
-          desc2.conflicts_with.insert(desc.name);
-        }
-      }
+      bool have_error = check_param_conflicts(METHOD_NAME);
 
       if (have_error)
       {
