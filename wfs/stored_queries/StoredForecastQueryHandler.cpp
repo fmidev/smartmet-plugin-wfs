@@ -170,8 +170,6 @@ void bw::StoredForecastQueryHandler::query(const StoredQuery& stored_query,
     using namespace SmartMet;
     using namespace SmartMet::Plugin::WFS;
 
-    static const long ref_jd = Fmi::Date(1970, 1, 1).julian_day();
-
     int debug_level = get_config()->get_debug_level();
     if (debug_level > 0)
       stored_query.dump_query_info(std::cout);
@@ -265,8 +263,6 @@ void bw::StoredForecastQueryHandler::query(const StoredQuery& stored_query,
 
         for (std::size_t group_id = 0; group_id < num_groups; group_id++)
         {
-          std::size_t station_ind = 0;
-          auto site_range = group_map.equal_range(group_id);
           CTPP::CDT& group = hash["groups"][group_id];
 
           FeatureID feature_id(get_config()->get_query_id(), params.get_map(true), sq_id);
@@ -282,121 +278,14 @@ void bw::StoredForecastQueryHandler::query(const StoredQuery& stored_query,
           group["featureId"] = feature_id.get_id();
 
           group["groupId"] = str(format("%1%-%2%") % sq_id % (group_id + 1));
-          if (query.origin_time)
-          {
-            const std::string origin_time_str =
-                Fmi::to_iso_extended_string(*query.origin_time) + "Z";
-            group["dataOriginTime"] = origin_time_str;
-          }
+          set_group_info(group, query, feature_id);
 
-          if (query.modification_time != Fmi::DateTime::NOT_A_DATE_TIME)
-          {
-            const std::string modification_time_str =
-                Fmi::to_iso_extended_string(query.modification_time) + "Z";
-            group["resultTime"] = modification_time_str;
-          }
-
-          for (std::size_t i = query.first_data_ind; i <= query.last_data_ind; i++)
-          {
-            const std::string& name = query.data_params.at(i).name();
-            feature_id.erase_param(P_PARAM);
-            feature_id.add_param(P_PARAM, name);
-            group["paramList"][i - query.first_data_ind]["name"] = name;
-            group["paramList"][i - query.first_data_ind]["featureId"] = feature_id.get_id();
-          }
-
-          group["metadata"]["boundingBox"]["lowerLeft"]["lat"] = query.bottom_left.Y();
-          group["metadata"]["boundingBox"]["lowerLeft"]["lon"] = query.bottom_left.X();
-
-          group["metadata"]["boundingBox"]["lowerRight"]["lat"] = query.bottom_right.Y();
-          group["metadata"]["boundingBox"]["lowerRight"]["lon"] = query.bottom_right.X();
-
-          group["metadata"]["boundingBox"]["upperLeft"]["lat"] = query.top_left.Y();
-          group["metadata"]["boundingBox"]["upperLeft"]["lon"] = query.top_left.X();
-
-          group["metadata"]["boundingBox"]["upperRight"]["lat"] = query.top_right.Y();
-          group["metadata"]["boundingBox"]["upperRight"]["lon"] = query.top_right.X();
-
-          group["producerName"] = query.producer_name;
-#ifdef ENABLE_MODEL_PATH
-          group["modelPath"] = query.model_path;
-#endif
-
-          std::size_t row_counter = 0;
-
-          Fmi::DateTime interval_begin = Fmi::DateTime::POS_INFINITY;
-          Fmi::DateTime interval_end = Fmi::DateTime::NEG_INFINITY;
-
-          for (auto site_iter = site_range.first; site_iter != site_range.second; ++site_iter)
-          {
-            const auto& geo_id = site_iter->second;
-            auto row_range = result_map.equal_range(geo_id);
-            Fmi::TimeZonePtr tzp;
-            for (auto row_iter = row_range.first; row_iter != row_range.second; ++row_iter)
-            {
-              std::size_t i = row_iter->second;
-              if (row_iter == row_range.first)
-              {
-                const std::string name = query.result->get(ind_place, i);
-                const std::string country_code = query.result->get(ind_country_iso, i);
-                const std::string country = query.result->get(ind_country, i);
-                const std::string region = query.result->get(ind_region, i);
-                const std::string localtz = query.result->get(ind_localtz, i);
-                const double latitude = Fmi::stod(query.result->get(ind_lat, i));
-                const double longitude = Fmi::stod(query.result->get(ind_lon, i));
-                tzp = get_tz_for_site(longitude, latitude, query.tz_name);
-                group["stationList"][station_ind]["geoid"] = geo_id;
-                group["stationList"][station_ind]["name"] = name;
-                set_2D_coord(
-                    transformation, latitude, longitude, group["stationList"][station_ind]);
-                if (show_height)
-                {
-                  group["stationList"][station_ind]["elev"] = query.result->get(ind_elev, i);
-                }
-
-                group["stationList"][station_ind]["iso2"] = country_code;
-                group["stationList"][station_ind]["country"] = country;
-                group["stationList"][station_ind]["localtz"] = localtz;
-                if ((country_code == "FI") or (name != region))
-                {
-                  group["stationList"][station_ind]["region"] = region;
-                }
-
-                station_ind++;
-              }
-
-              CTPP::CDT& row_data = group["returnArray"][row_counter++];
-
-              set_2D_coord(transformation,
-                           query.result->get(ind_lat, i),
-                           query.result->get(ind_lon, i),
-                           row_data);
-
-              if (show_height)
-              {
-                row_data["elev"] = query.result->get(ind_level, i);
-              }
-
-              Fmi::DateTime epoch = Fmi::TimeParser::parse_iso(query.result->get(ind_epoch, i));
-              long long jd = epoch.date().julian_day();
-              long seconds = epoch.time_of_day().total_seconds();
-              INT_64 s_epoch = 86400LL * (jd - ref_jd) + seconds;
-              row_data["epochTime"] = s_epoch;
-              row_data["epochTimeStr"] = format_local_time(epoch, tzp);
-
-              for (std::size_t k = query.first_data_ind; k <= query.last_data_ind; k++)
-              {
-                row_data["data"][k - query.first_data_ind] =
-                    remove_trailing_0(query.result->get(k, i));
-              }
-
-              interval_begin = i == 0 ? epoch : std::min(interval_begin, epoch);
-              interval_end = i == 0 ? epoch : std::max(interval_end, epoch);
-            }
-          }
-
-          group["phenomenonStartTime"] = Fmi::to_iso_extended_string(interval_begin) + "Z";
-          group["phenomenonEndTime"] = Fmi::to_iso_extended_string(interval_end) + "Z";
+          set_group_data(group,
+                         query,
+                         group_map.equal_range(group_id),
+                         result_map,
+                         transformation,
+                         show_height);
         }
 
         format_output(hash, output, stored_query.get_use_debug_format());
@@ -422,6 +311,172 @@ void bw::StoredForecastQueryHandler::query(const StoredQuery& stored_query,
   }
 }
 
+void bw::StoredForecastQueryHandler::set_group_data(
+    CTPP::CDT& group,
+    const Query& query,
+    const std::pair<std::multimap<int, std::string>::const_iterator,
+                    std::multimap<int, std::string>::const_iterator>& site_range,
+    const std::multimap<std::string, std::size_t>& result_map,
+    const TransformationPtr& transformation,
+    bool show_height) const
+{
+  std::size_t station_ind = 0;
+  std::size_t row_counter = 0;
+
+  Fmi::DateTime interval_begin = Fmi::DateTime::POS_INFINITY;
+  Fmi::DateTime interval_end = Fmi::DateTime::NEG_INFINITY;
+
+  for (auto site_iter = site_range.first; site_iter != site_range.second; ++site_iter)
+  {
+    const auto& geo_id = site_iter->second;
+    auto row_range = result_map.equal_range(geo_id);
+    Fmi::TimeZonePtr tzp;
+    for (auto row_iter = row_range.first; row_iter != row_range.second; ++row_iter)
+    {
+      std::size_t i = row_iter->second;
+      if (row_iter == row_range.first)
+      {
+        tzp = set_station_info(group["stationList"][station_ind],
+                               query,
+                               i,
+                               geo_id,
+                               transformation,
+                               show_height);
+        station_ind++;
+      }
+
+      CTPP::CDT& row_data = group["returnArray"][row_counter++];
+      Fmi::DateTime epoch =
+          set_row_data(row_data, query, i, transformation, show_height, tzp);
+
+      interval_begin = i == 0 ? epoch : std::min(interval_begin, epoch);
+      interval_end = i == 0 ? epoch : std::max(interval_end, epoch);
+    }
+  }
+
+  group["phenomenonStartTime"] = Fmi::to_iso_extended_string(interval_begin) + "Z";
+  group["phenomenonEndTime"] = Fmi::to_iso_extended_string(interval_end) + "Z";
+}
+
+void bw::StoredForecastQueryHandler::set_group_info(CTPP::CDT& group,
+                                                    const Query& query,
+                                                    FeatureID& feature_id) const
+{
+  if (query.origin_time)
+  {
+    const std::string origin_time_str =
+        Fmi::to_iso_extended_string(*query.origin_time) + "Z";
+    group["dataOriginTime"] = origin_time_str;
+  }
+
+  if (query.modification_time != Fmi::DateTime::NOT_A_DATE_TIME)
+  {
+    const std::string modification_time_str =
+        Fmi::to_iso_extended_string(query.modification_time) + "Z";
+    group["resultTime"] = modification_time_str;
+  }
+
+  for (std::size_t i = query.first_data_ind; i <= query.last_data_ind; i++)
+  {
+    const std::string& name = query.data_params.at(i).name();
+    feature_id.erase_param(P_PARAM);
+    feature_id.add_param(P_PARAM, name);
+    group["paramList"][i - query.first_data_ind]["name"] = name;
+    group["paramList"][i - query.first_data_ind]["featureId"] = feature_id.get_id();
+  }
+
+  group["metadata"]["boundingBox"]["lowerLeft"]["lat"] = query.bottom_left.Y();
+  group["metadata"]["boundingBox"]["lowerLeft"]["lon"] = query.bottom_left.X();
+
+  group["metadata"]["boundingBox"]["lowerRight"]["lat"] = query.bottom_right.Y();
+  group["metadata"]["boundingBox"]["lowerRight"]["lon"] = query.bottom_right.X();
+
+  group["metadata"]["boundingBox"]["upperLeft"]["lat"] = query.top_left.Y();
+  group["metadata"]["boundingBox"]["upperLeft"]["lon"] = query.top_left.X();
+
+  group["metadata"]["boundingBox"]["upperRight"]["lat"] = query.top_right.Y();
+  group["metadata"]["boundingBox"]["upperRight"]["lon"] = query.top_right.X();
+
+  group["producerName"] = query.producer_name;
+#ifdef ENABLE_MODEL_PATH
+  group["modelPath"] = query.model_path;
+#endif
+
+}
+
+Fmi::TimeZonePtr bw::StoredForecastQueryHandler::set_station_info(
+    CTPP::CDT& station,
+    const Query& query,
+    std::size_t i,
+    const std::string& geo_id,
+    const TransformationPtr& transformation,
+    bool show_height) const
+{
+  const std::string name = query.result->get(ind_place, i);
+  const std::string country_code = query.result->get(ind_country_iso, i);
+  const std::string country = query.result->get(ind_country, i);
+  const std::string region = query.result->get(ind_region, i);
+  const std::string localtz = query.result->get(ind_localtz, i);
+  const double latitude = Fmi::stod(query.result->get(ind_lat, i));
+  const double longitude = Fmi::stod(query.result->get(ind_lon, i));
+  Fmi::TimeZonePtr tzp = get_tz_for_site(longitude, latitude, query.tz_name);
+  station["geoid"] = geo_id;
+  station["name"] = name;
+  set_2D_coord(
+      transformation, latitude, longitude, station);
+  if (show_height)
+  {
+    station["elev"] = query.result->get(ind_elev, i);
+  }
+
+  station["iso2"] = country_code;
+  station["country"] = country;
+  station["localtz"] = localtz;
+  if ((country_code == "FI") or (name != region))
+  {
+    station["region"] = region;
+  }
+
+
+  return tzp;
+}
+
+Fmi::DateTime bw::StoredForecastQueryHandler::set_row_data(CTPP::CDT& row_data,
+                                                         const Query& query,
+                                                         std::size_t i,
+                                                         const TransformationPtr& transformation,
+                                                         bool show_height,
+                                                         const Fmi::TimeZonePtr& tzp) const
+{
+  static const long ref_jd = Fmi::Date(1970, 1, 1).julian_day();
+
+  set_2D_coord(transformation,
+               query.result->get(ind_lat, i),
+               query.result->get(ind_lon, i),
+               row_data);
+
+  if (show_height)
+  {
+    row_data["elev"] = query.result->get(ind_level, i);
+  }
+
+  Fmi::DateTime epoch = Fmi::TimeParser::parse_iso(query.result->get(ind_epoch, i));
+  long long jd = epoch.date().julian_day();
+  long seconds = epoch.time_of_day().total_seconds();
+  INT_64 s_epoch = 86400LL * (jd - ref_jd) + seconds;
+  row_data["epochTime"] = s_epoch;
+  row_data["epochTimeStr"] = format_local_time(epoch, tzp);
+
+  for (std::size_t k = query.first_data_ind; k <= query.last_data_ind; k++)
+  {
+    row_data["data"][k - query.first_data_ind] =
+        remove_trailing_0(query.result->get(k, i));
+  }
+
+
+  return epoch;
+}
+
 namespace
 {
 struct StationRec
@@ -433,6 +488,180 @@ struct StationRec
   std::string elev;
 };
 }  // namespace
+
+namespace
+{
+using ForecastQuery = bw::StoredForecastQueryHandler::Query;
+
+// Set the corner points of the model area (if the data has an area)
+void set_model_area(ForecastQuery& query, SmartMet::Engine::Querydata::QImpl& q)
+{
+  query.have_model_area = false;
+
+  if (q.isArea())
+  {
+    const NFmiArea& area = q.area();
+    query.have_model_area = true;
+    query.top_left = area.TopLeftLatLon();
+    query.top_right = area.TopRightLatLon();
+    query.bottom_left = area.BottomLeftLatLon();
+    query.bottom_right = area.BottomRightLatLon();
+  }
+}
+
+// Print the generated times (for debugging)
+void print_generated_times(const TS::TimeSeriesGenerator::LocalTimeList& tlist)
+{
+  std::cout << __FILE__ << "#" << __LINE__ << ": generated times:";
+  for (const auto& t : tlist)
+  {
+    std::cout << " '" << t << "'";
+  }
+  std::cout << std::endl;
+}
+
+// Check that the requested levels or heights are supported
+void check_level_options(const ForecastQuery& query, SmartMet::Engine::Querydata::QImpl& q)
+{
+  if (not query.level_heights.empty() and q.levelType() != FmiLevelType::kFmiHybridLevel)
+  {
+    Fmi::Exception exception(BCP,
+                             "Only hybrid data supports data fetching from an arbitrary height.");
+    exception.addParameter(WFS_EXCEPTION_CODE, WFS_OPERATION_PROCESSING_FAILED);
+    throw exception.disableStackTrace();
+  }
+
+  if (not query.levels.empty() and not query.level_heights.empty())
+  {
+    Fmi::Exception exception(BCP,
+                             "Fetching data from a level and an arbitrary height is not "
+                             "supported in a same request.");
+    exception.addParameter(WFS_EXCEPTION_CODE, WFS_OPERATION_PROCESSING_FAILED);
+    throw exception.disableStackTrace();
+  }
+}
+
+// The common data for setting the values of the result rows of one location
+struct RowContext
+{
+  const ForecastQuery& query;
+  const std::map<std::string, int>& param_precision_map;
+  const SmartMet::Engine::Querydata::Producer& producer;
+  const SmartMet::Spine::Location& loc;
+  const std::string& country;
+  const std::string& place;
+  const std::string& zone;
+  SmartMet::Spine::Table& table;
+  std::ostringstream& ss;
+};
+
+// Set the parameter values of a result row, 'get_value' gets the value for the options
+template <typename ValueGetter>
+void set_row_values(const RowContext& ctx, int row, ValueGetter get_value)
+{
+  using SmartMet::Spine::Parameter;
+
+  const ForecastQuery& query = ctx.query;
+
+  int column = 0;
+  for (const Parameter& param : query.data_params)
+  {
+    int prec = ctx.param_precision_map.at(param.name());
+
+    const std::string timestring;
+
+    SmartMet::Engine::Querydata::ParameterOptions qengine_param(param,
+                                                                ctx.producer,
+                                                                ctx.loc,
+                                                                ctx.country,
+                                                                ctx.place,
+                                                                *query.time_formatter,
+                                                                timestring,
+                                                                query.language,
+                                                                *query.output_locale,
+                                                                ctx.zone,
+                                                                query.find_nearest_valid_point,
+                                                                query.max_np_distance / 1000.0,
+                                                                query.lastpoint);
+    TS::Value val = get_value(qengine_param);
+
+    ctx.ss.str("");
+    TS::OStreamVisitor osv(ctx.ss, *query.value_formatter, prec);
+    val.apply_visitor(osv);
+
+    ctx.table.set(column, row, ctx.ss.str());
+
+    ++column;
+  }
+}
+
+// Set the result rows of one location for all requested heights or levels and times. Returns
+// the index of the next row.
+int set_location_rows(const RowContext& ctx,
+                      int row,
+                      SmartMet::Engine::Querydata::QImpl& q,
+                      const TS::TimeSeriesGenerator::LocalTimeList& tlist)
+{
+  const ForecastQuery& query = ctx.query;
+
+  for (const auto& level_height : query.level_heights)
+  {
+    for (const Fmi::LocalDateTime& dt : tlist)
+    {
+      set_row_values(ctx,
+                     row,
+                     [&](const SmartMet::Engine::Querydata::ParameterOptions& qengine_param)
+                     { return q.valueAtHeight(qengine_param, dt, level_height); });
+      ++row;
+    }
+  }
+
+  for (q.resetLevel(); q.nextLevel() and query.level_heights.empty();)
+  {
+    if (query.levels.empty() || query.levels.count(static_cast<int>(q.levelValue())) > 0)
+    {
+      for (const Fmi::LocalDateTime& d : tlist)
+      {
+        set_row_values(ctx,
+                       row,
+                       [&](const SmartMet::Engine::Querydata::ParameterOptions& qengine_param)
+                       { return q.value(qengine_param, d); });
+        ++row;
+      }
+    }
+  }
+  return row;
+}
+}  // namespace
+
+std::map<std::string, int> bw::StoredForecastQueryHandler::get_param_precisions(
+    const std::string& producer,
+    const Fmi::DateTime& origin_time,
+    const std::vector<SmartMet::Spine::Parameter>& data_params) const
+{
+  const int default_prec = 6;
+  const auto param_map = get_model_parameters(producer, origin_time);
+  std::map<std::string, int> param_precision_map;
+  for (const SmartMet::Spine::Parameter& param : data_params)
+  {
+    const std::string& name = param.name();
+    auto pos = param_map.find(Fmi::ascii_tolower_copy(name));
+    if (pos == param_map.end())
+    {
+      param_precision_map[name] = default_prec;
+    }
+    else
+    {
+      param_precision_map[name] = pos->second.precision;
+    }
+
+    if (have_meteo_param_options(name))
+    {
+      param_precision_map[name] = get_meteo_parameter_options(name)->precision;
+    }
+  }
+  return param_precision_map;
+}
 
 std::shared_ptr<SmartMet::Spine::Table> bw::StoredForecastQueryHandler::extract_forecast(
     Query& query) const
@@ -504,17 +733,7 @@ std::shared_ptr<SmartMet::Spine::Table> bw::StoredForecastQueryHandler::extract_
         }
       }
 
-      query.have_model_area = false;
-
-      if (q->isArea())
-      {
-        const NFmiArea& area = q->area();
-        query.have_model_area = true;
-        query.top_left = area.TopLeftLatLon();
-        query.top_right = area.TopRightLatLon();
-        query.bottom_left = area.BottomLeftLatLon();
-        query.bottom_right = area.BottomRightLatLon();
-      }
+      set_model_area(query, *q);
 
       if (debug_level > 0 and not query.have_model_area)
       {
@@ -556,53 +775,12 @@ std::shared_ptr<SmartMet::Spine::Table> bw::StoredForecastQueryHandler::extract_
       auto tlist = TS::TimeSeriesGenerator::generate(*query.toptions, tz);
 
       if (debug_level > 2)
-      {
-        std::cout << __FILE__ << "#" << __LINE__ << ": generated times:";
-        for (const auto& t : tlist)
-        {
-          std::cout << " '" << t << "'";
-        }
-        std::cout << std::endl;
-      }
+        print_generated_times(tlist);
 
-      const int default_prec = 6;
-      const auto param_map = get_model_parameters(producer, q->originTime());
-      std::map<std::string, int> param_precision_map;
-      for (const Parameter& param : query.data_params)
-      {
-        const std::string& name = param.name();
-        auto pos = param_map.find(Fmi::ascii_tolower_copy(name));
-        if (pos == param_map.end())
-        {
-          param_precision_map[name] = default_prec;
-        }
-        else
-        {
-          param_precision_map[name] = pos->second.precision;
-        }
+      const std::map<std::string, int> param_precision_map =
+          get_param_precisions(producer, q->originTime(), query.data_params);
 
-        if (have_meteo_param_options(name))
-        {
-          param_precision_map[name] = get_meteo_parameter_options(name)->precision;
-        }
-      }
-
-      if (not query.level_heights.empty() and q->levelType() != FmiLevelType::kFmiHybridLevel)
-      {
-        Fmi::Exception exception(
-            BCP, "Only hybrid data supports data fetching from an arbitrary height.");
-        exception.addParameter(WFS_EXCEPTION_CODE, WFS_OPERATION_PROCESSING_FAILED);
-        throw exception.disableStackTrace();
-      }
-
-      if (not query.levels.empty() and not query.level_heights.empty())
-      {
-        Fmi::Exception exception(BCP,
-                                 "Fetching data from a level and an arbitrary height is not "
-                                 "supported in a same request.");
-        exception.addParameter(WFS_EXCEPTION_CODE, WFS_OPERATION_PROCESSING_FAILED);
-        throw exception.disableStackTrace();
-      }
+      check_level_options(query, *q);
 
       /*
       if (query.levels.empty() and query.level_heights.empty())
@@ -615,92 +793,10 @@ std::shared_ptr<SmartMet::Spine::Table> bw::StoredForecastQueryHandler::extract_
 
       // Fetch data from an arbitrary height.
       std::ostringstream ss;
-      for (const auto& level_height : query.level_heights)
-      {
-        for (const Fmi::LocalDateTime& dt : tlist)
-        {
-          using SmartMet::Spine::Parameter;
+      const RowContext ctx{
+          query, param_precision_map, producer, *loc, country, place, zone, *ennusteet, ss};
 
-          int column = 0;
-          for (const Parameter& param : query.data_params)
-          {
-            int prec = param_precision_map.at(param.name());
-
-            const std::string timestring;
-
-            SmartMet::Engine::Querydata::ParameterOptions qengine_param(
-                param,
-                producer,
-                *loc,
-                country,
-                place,
-                *query.time_formatter,
-                timestring,
-                query.language,
-                *query.output_locale,
-                zone,
-                query.find_nearest_valid_point,
-                query.max_np_distance / 1000.0,
-                query.lastpoint);
-            TS::Value val = q->valueAtHeight(qengine_param, dt, level_height);
-
-            ss.str("");
-            TS::OStreamVisitor osv(ss, *query.value_formatter, prec);
-            val.apply_visitor(osv);
-
-            ennusteet->set(column, row, ss.str());
-
-            ++column;
-          }
-
-          ++row;
-        }
-      }
-
-      for (q->resetLevel(); q->nextLevel() and query.level_heights.empty();)
-      {
-        if (query.levels.empty() || query.levels.count(static_cast<int>(q->levelValue())) > 0)
-        {
-          for (const Fmi::LocalDateTime& d : tlist)
-          {
-            using SmartMet::Spine::Parameter;
-
-            int column = 0;
-            for (const Parameter& param : query.data_params)
-            {
-              int prec = param_precision_map.at(param.name());
-
-              const std::string timestring;
-
-              SmartMet::Engine::Querydata::ParameterOptions qengine_param(
-                  param,
-                  producer,
-                  *loc,
-                  country,
-                  place,
-                  *query.time_formatter,
-                  timestring,
-                  query.language,
-                  *query.output_locale,
-                  zone,
-                  query.find_nearest_valid_point,
-                  query.max_np_distance / 1000.0,
-                  query.lastpoint);
-              TS::Value val = q->value(qengine_param, d);
-
-              ss.str("");
-              TS::OStreamVisitor osv(ss, *query.value_formatter, prec);
-              val.apply_visitor(osv);
-
-              ennusteet->set(column, row, ss.str());
-
-              ++column;
-            }
-
-            ++row;
-          }
-        }
-      }
+      row = set_location_rows(ctx, row, *q, tlist);
     }
 
     return ennusteet;

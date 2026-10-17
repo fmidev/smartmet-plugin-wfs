@@ -25,6 +25,8 @@ namespace Plugin
 {
 namespace WFS
 {
+class FeatureID;
+
 class StoredForecastQueryHandler : public StoredQueryHandlerBase,
                                    protected virtual RequiresGeoEngine,
                                    protected virtual RequiresQEngine,
@@ -97,7 +99,35 @@ class StoredForecastQueryHandler : public StoredQueryHandlerBase,
                      std::ostream& output) const override;
 
  private:
+  using TransformationPtr = std::shared_ptr<SmartMet::Spine::CRSRegistry::Transformation>;
+
+  void set_group_info(CTPP::CDT& group, const Query& query, FeatureID& feature_id) const;
+  void set_group_data(CTPP::CDT& group,
+                      const Query& query,
+                      const std::pair<std::multimap<int, std::string>::const_iterator,
+                                      std::multimap<int, std::string>::const_iterator>& site_range,
+                      const std::multimap<std::string, std::size_t>& result_map,
+                      const TransformationPtr& transformation,
+                      bool show_height) const;
+  Fmi::TimeZonePtr set_station_info(CTPP::CDT& station,
+                                    const Query& query,
+                                    std::size_t i,
+                                    const std::string& geo_id,
+                                    const TransformationPtr& transformation,
+                                    bool show_height) const;
+  Fmi::DateTime set_row_data(CTPP::CDT& row_data,
+                             const Query& query,
+                             std::size_t i,
+                             const TransformationPtr& transformation,
+                             bool show_height,
+                             const Fmi::TimeZonePtr& tzp) const;
+
   std::shared_ptr<SmartMet::Spine::Table> extract_forecast(Query& query) const;
+
+  std::map<std::string, int> get_param_precisions(
+      const std::string& producer,
+      const Fmi::DateTime& origin_time,
+      const std::vector<SmartMet::Spine::Parameter>& data_params) const;
 
   SmartMet::Engine::Querydata::Producer select_producer(const SmartMet::Spine::Location& loc,
                                                         const Query& query) const;
