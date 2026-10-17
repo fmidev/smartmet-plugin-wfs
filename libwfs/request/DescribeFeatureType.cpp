@@ -29,6 +29,61 @@ bw::RequestBase::RequestType bw::Request::DescribeFeatureType::get_type() const
   return DESCRIBE_FEATURE_TYPE;
 }
 
+namespace
+{
+using NamespaceMap = std::map<std::string, std::optional<std::string> >;
+
+// Add the namespace of the first used feature of type 'name' in namespace 'ns' ("*" for any).
+// Returns false if there is no such feature.
+template <typename Features, typename Names>
+bool add_type_namespace(const Features& features,
+                        const Names& used_names,
+                        const std::string& ns,
+                        const std::string& name,
+                        NamespaceMap& namespaces)
+{
+  for (auto it = used_names.begin(); it != used_names.end(); ++it)
+  {
+    auto feature = features.at(*it);
+    const std::string& item_ns = feature->get_xml_namespace();
+    std::optional<std::string> loc = feature->get_xml_namespace_loc();
+    if ((name == feature->get_xml_type()) and ((ns == "*") or (ns == item_ns)))
+    {
+      namespaces.insert(std::make_pair(item_ns, loc));
+      return true;
+    }
+  }
+  return false;
+}
+
+// Set the target namespace (the first one) and the other namespaces to 'hash'
+void set_namespaces(CTPP::CDT& hash, const NamespaceMap& namespaces)
+{
+  int ind = 0;
+  for (const auto& it : namespaces)
+  {
+    const std::string& name = it.first;
+    const std::optional<std::string>& loc = it.second;
+    if (ind == 0)
+    {
+      hash["target_namespace"] = name;
+      hash["target_prefix"] = "wfsns001";
+      hash["target_location"] = loc ? *loc : name;
+    }
+    else
+    {
+      hash["ns_list"][ind - 1]["namespace"] = name;
+      if (loc)
+      {
+        hash["ns_list"][ind - 1]["location"] = *loc;
+      }
+    }
+
+    ind++;
+  }
+}
+}  // namespace
+
 void bw::Request::DescribeFeatureType::execute(std::ostream& output) const
 {
   try
@@ -55,22 +110,11 @@ void bw::Request::DescribeFeatureType::execute(std::ostream& output) const
     {
         for (const auto& item : type_names)
       {
-        bool found = false;
         const std::string& name = item.second;
         const std::string& ns = item.first;
         // FIXME: optimize loop if needed
         const auto& used_names = plugin_impl.get_capabilities().get_used_features();
-        for (auto it = used_names.begin(); not found and it != used_names.end(); ++it)
-        {
-          auto feature = features.at(*it);
-          const std::string& item_ns = feature->get_xml_namespace();
-          std::optional<std::string> loc = feature->get_xml_namespace_loc();
-          if ((name == feature->get_xml_type()) and ((ns == "*") or (ns == item_ns)))
-          {
-            namespaces.insert(std::make_pair(item_ns, loc));
-            found = true;
-          }
-        }
+        bool found = add_type_namespace(features, used_names, ns, name, namespaces);
 
         if (not found)
         {
@@ -92,28 +136,7 @@ void bw::Request::DescribeFeatureType::execute(std::ostream& output) const
     auto protocol = get_protocol();
     hash["protocol"] = (protocol ? *protocol : plugin_impl.get_fallback_protocol()) + "://";
 
-    int ind = 0;
-    for (auto & it : namespaces)
-    {
-      const std::string& name = it.first;
-      const std::optional<std::string>& loc = it.second;
-      if (ind == 0)
-      {
-        hash["target_namespace"] = name;
-        hash["target_prefix"] = "wfsns001";
-        hash["target_location"] = loc ? *loc : name;
-      }
-      else
-      {
-        hash["ns_list"][ind - 1]["namespace"] = name;
-        if (loc)
-        {
-          hash["ns_list"][ind - 1]["location"] = *loc;
-        }
-      }
-
-      ind++;
-    }
+    set_namespaces(hash, namespaces);
 
     std::ostringstream log_messages;
     try
