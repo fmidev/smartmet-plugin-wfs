@@ -82,6 +82,485 @@ std::string bw::StoredMastQueryHandler::get_handler_description() const
   return "Observation data: Multi-sensor";
 }
 
+namespace
+{
+// Print the found locations (for debugging)
+void print_locations(
+    const std::list<std::pair<std::string, SmartMet::Spine::LocationPtr> >& locations_list)
+{
+  for (const auto& id : locations_list)
+    std::cerr << "Found location: name: " << id.first << " geoid: " << id.second->geoid << "\n";
+}
+
+// Check the time step, only 24 hours allowed
+void check_time_step(uint64_t timestep)
+{
+  if (1440 < timestep)
+  {
+    Fmi::Exception exception(BCP, "Invalid time step value!");
+    exception.addDetail("Maximum timestep value is 1440 minutes.");
+    exception.addParameter(WFS_EXCEPTION_CODE, WFS_INVALID_PARAMETER_VALUE);
+    exception.addParameter("Timestep", std::to_string(timestep));
+    throw exception.disableStackTrace();
+  }
+}
+
+// Check that there are not too many time epochs in the time interval
+void check_max_epochs(const Fmi::DateTime& startTime,
+                      const Fmi::DateTime& endTime,
+                      uint64_t maxEpochs,
+                      uint64_t ts1)
+{
+  if (startTime + Fmi::Minutes(maxEpochs * ts1) < endTime)
+  {
+    Fmi::Exception exception(BCP, "Too many time epochs in the time interval!");
+    exception.addDetail("Use shorter time interval or larger time step.");
+    exception.addParameter(WFS_EXCEPTION_CODE, WFS_OPERATION_PROCESSING_FAILED);
+    exception.addParameter("Start time", Fmi::date_time::to_simple_string(startTime));
+    exception.addParameter("End time", Fmi::date_time::to_simple_string(endTime));
+    throw exception.disableStackTrace();
+  }
+}
+
+// Add the producer, station and measurand identities
+template <typename ParamMap>
+void add_profile_operations(SmartMet::Engine::Observation::MastQueryParams& stationQueryParams,
+                            const std::vector<uint64_t>& producerIdVector,
+                            const SmartMet::Spine::Stations& stations,
+                            const ParamMap& meteoParameterMap)
+{
+  // Producer identities
+  for (const auto& producerId : producerIdVector)
+    stationQueryParams.addOperation(
+        "OR_GROUP_producer_id", "PRODUCER_ID", "PropertyIsEqualTo", producerId);
+
+  // Station identities
+  for (const auto& station : stations)
+    stationQueryParams.addOperation(
+        "OR_GROUP_station_id", "STATION_ID", "PropertyIsEqualTo", station.fmisid);
+
+  // Measurand identities
+  for (const auto& item : meteoParameterMap)
+    stationQueryParams.addOperation(
+        "OR_GROUP_measurand_code", "MEASURAND_ID", "PropertyIsEqualTo", std::get<0>(item.second));
+}
+
+// Add the observation identities
+void add_observation_ids(SmartMet::Engine::Observation::MastQueryParams& dataQueryParams,
+                         SmartMet::Engine::Observation::QueryResult& profileContainer)
+{
+  auto observationIdIt = profileContainer.begin("OBSERVATION_ID");
+  auto observationIdItEnd = profileContainer.end("OBSERVATION_ID");
+
+  for (; observationIdIt != observationIdItEnd; ++observationIdIt)
+    dataQueryParams.addOperation(
+        "OR_GROUP_observation_id", "OBSERVATION_ID", "PropertyIsEqualTo", *observationIdIt);
+}
+
+// Throw if parameter 'name' (a quality code parameter if 'isQCParameter') has already been
+// given in the meteo parameter map item 'item' (using another name)
+template <typename ParamTuple>
+void check_duplicate_meteo_parameter(const ParamTuple& item,
+                                     const std::string& name,
+                                     bool isQCParameter)
+{
+  if ((std::get<3>(item) and not isQCParameter) or (std::get<4>(item) and isQCParameter))
+  {
+    const std::string& errParamName = (isQCParameter ? std::get<2>(item) : std::get<1>(item));
+
+    std::ostringstream msg;
+    msg << "Parameter '" << name << "' is already given by using '" << errParamName
+        << "' name.";
+    Fmi::Exception exception(BCP, msg.str());
+    exception.addParameter(WFS_EXCEPTION_CODE, WFS_INVALID_PARAMETER_VALUE);
+    throw exception;
+  }
+}
+
+// Update the values of the meteo parameter map item 'item'
+template <typename ParamTuple>
+void update_meteo_parameter(ParamTuple& item, const std::string& name, bool isQCParameter)
+{
+  if (isQCParameter)
+  {
+    std::get<2>(item) = name;
+    std::get<4>(item) = true;
+  }
+  else
+  {
+    std::get<1>(item) = name;
+    std::get<3>(item) = true;
+  }
+}
+}  // namespace
+
+/**
+ *  @brief The common data for formatting the results
+ */
+struct bw::StoredMastQueryHandler::MastContext
+{
+  const SmartMet::Spine::Stations& stations;
+  const MastParameterMap& meteoParameterMap;
+  const std::shared_ptr<SmartMet::Spine::CRSRegistry::Transformation>& transformation;
+  bool show_height;
+  const std::string& language;
+  std::string method;
+};
+
+SmartMet::Spine::Stations bw::StoredMastQueryHandler::find_stations(
+    const RequestParameterMap& params,
+    const std::string& crs,
+    const std::string& stationType,
+    double maxDistance,
+    uint64_t numberOfStations,
+    const std::list<std::pair<std::string, SmartMet::Spine::LocationPtr> >& locations_list,
+    const std::string& langCode) const
+{
+  const char* DATA_CRS_NAME = "urn:ogc:def:crs:EPSG::4326";
+
+  // Get all the information needed in a OBsEngine station search.
+  SmartMet::Engine::Observation::Settings stationSearchSettings;
+  stationSearchSettings.allplaces = false;
+  stationSearchSettings.numberofstations = numberOfStations;
+  stationSearchSettings.stationtype = stationType;
+  stationSearchSettings.maxdistance = maxDistance;
+
+  SmartMet::Engine::Observation::StationSettings stationSettings;
+
+  // Include valid locations.
+  for (const auto& item : locations_list)
+  {
+    stationSettings.nearest_station_settings.emplace_back(item.second->longitude,
+                                                          item.second->latitude,
+                                                          maxDistance,
+                                                          1,
+                                                          item.first,
+                                                          item.second->fmisid);
+  }
+
+  // Bounding box search options.
+  SmartMet::Spine::BoundingBox requested_bbox;
+  bool have_bbox = get_bounding_box(params, crs, &requested_bbox);
+  if (have_bbox)
+  {
+    std::unique_ptr<SmartMet::Spine::BoundingBox> query_bbox;
+    query_bbox.reset(new SmartMet::Spine::BoundingBox);
+    *query_bbox =
+        bw::SupportsBoundingBox::transform_bounding_box(requested_bbox, DATA_CRS_NAME);
+    SmartMet::Engine::Observation::Settings bboxSettings;
+    stationSettings.bounding_box_settings["minx"] = query_bbox->xMin;
+    stationSettings.bounding_box_settings["miny"] = query_bbox->yMin;
+    stationSettings.bounding_box_settings["maxx"] = query_bbox->xMax;
+    stationSettings.bounding_box_settings["maxy"] = query_bbox->yMax;
+  }
+
+  stationSearchSettings.taggedFMISIDs =
+      obs_engine->translateToFMISID(stationSearchSettings, stationSettings);
+
+  // Search stations based on location settings.
+  // The result does not contain duplicates.
+  SmartMet::Spine::Stations stationCandidates;
+  obs_engine->getStations(stationCandidates, stationSearchSettings);
+
+  // Get information from GeoEngien. Elevation is required.
+  SmartMet::Spine::Stations stations;
+  for (const auto& stationCandidate : stationCandidates)
+  {
+    stations.push_back(stationCandidate);
+
+    SmartMet::Spine::LocationPtr geoLoc =
+        geo_engine->idSearch(stationCandidate.geoid, langCode);
+    if (geoLoc)
+    {
+      stations.back().country = geoLoc->country;
+      stations.back().elevation = geoLoc->elevation;
+    }
+  }
+
+
+  return stations;
+}
+
+bw::StoredMastQueryHandler::MastParameterMap bw::StoredMastQueryHandler::get_meteo_parameters(
+    const RequestParameterMap& params, const std::string& stationType) const
+{
+  // Meteo parameters
+  std::vector<std::string> meteoParametersVector;
+  params.get<std::string>(P_METEO_PARAMETERS, std::back_inserter(meteoParametersVector));
+  if (meteoParametersVector.empty())
+  {
+    Fmi::Exception exception(BCP, "Operation processing failed!");
+    exception.addDetail("At least one meteo parameter has to be given.");
+    exception.addParameter(WFS_EXCEPTION_CODE, WFS_OPERATION_PROCESSING_FAILED);
+    throw exception.disableStackTrace();
+  }
+
+  // Do not allow QC parameters if it is not enabled in a stored query.
+  auto qc_param_name_ref = SupportsQualityParameters::firstQCParameter(meteoParametersVector);
+  if (not m_supportQCParameters && qc_param_name_ref != meteoParametersVector.end())
+  {
+    Fmi::Exception exception(BCP, "Invalid parameter value!");
+    exception.addDetail("Quality code parameter '" + *qc_param_name_ref +
+                        "' is not allowed in this query.");
+    exception.addParameter(WFS_EXCEPTION_CODE, WFS_INVALID_PARAMETER_VALUE);
+    throw exception.disableStackTrace();
+  }
+
+  // In case if someone is trying to use quality info support.
+  if (SupportsQualityParameters::supportQualityInfo(params))
+  {
+    std::ostringstream msg;
+    msg << "Quality info support is not implemented. "
+        << "Stored query '" << StoredQueryHandlerBase::get_query_name()
+        << "' is trying to use it.\n";
+    std::cerr << msg.str();
+  }
+
+  // Gluing requested parameter name and parameter identities together.
+  // Parameter names are needed in the result document.
+  // map: id, (id, paramName, paramQCName, showValue, showQualityCode)
+  MastParameterMap meteoParameterMap;
+  for (const std::string& name : meteoParametersVector)
+  {
+    const uint64_t paramId = obs_engine->getParameterId(name, stationType);
+    if (paramId == 0)
+    {
+      Fmi::Exception exception(BCP, "Unknown parameter in the query!");
+      exception.addParameter(WFS_EXCEPTION_CODE, WFS_INVALID_PARAMETER_VALUE);
+      exception.addParameter("Unknown parameter", name);
+      throw exception.disableStackTrace();
+    }
+
+    bool isQCParameter = SupportsQualityParameters::isQCParameter(name);
+
+    // Is the parameter a duplicate.
+    const std::string paramIdStr = Fmi::to_string(paramId);
+    auto paramIdIt = meteoParameterMap.find(paramIdStr);
+    if (paramIdIt != meteoParameterMap.end())
+    {
+      // Check if the parameter is already inserted.
+      check_duplicate_meteo_parameter(paramIdIt->second, name, isQCParameter);
+
+      // Update values of a tuple item.
+      update_meteo_parameter(paramIdIt->second, name, isQCParameter);
+    }
+    else
+    {
+      // Initial map item
+      meteoParameterMap.insert(std::make_pair(paramIdStr,
+                                              std::make_tuple(paramId,
+                                                              (isQCParameter ? "" : name),
+                                                              (isQCParameter ? name : ""),
+                                                              (not isQCParameter),
+                                                              (isQCParameter))));
+    }
+  }
+
+
+  return meteoParameterMap;
+}
+
+void bw::StoredMastQueryHandler::set_station_info(CTPP::CDT& station_cdt,
+                                                  const MastContext& ctx,
+                                                  const std::string& fmisidStr,
+                                                  double& bottomHeight) const
+{
+  std::string station_geoid;
+  std::string station_wmo;
+  std::string station_name;
+  std::string station_region;
+  std::string station_latitude;
+  std::string station_longitude;
+  std::string station_elevation;
+
+  for (const auto& station : ctx.stations)
+  {
+    if (Fmi::to_string(station.fmisid) == fmisidStr)
+    {
+      station_geoid = std::to_string(static_cast<long long int>(station.geoid));
+      station_wmo = std::to_string(static_cast<long long int>(station.wmo));
+      station_name = station.station_formal_name(ctx.language);
+      station_region = station.region;
+      station_latitude = std::to_string(static_cast<long double>(station.latitude));
+      station_longitude = std::to_string(static_cast<long double>(station.longitude));
+      station_elevation = std::to_string(static_cast<long long int>(station.elevation));
+      bottomHeight = station.elevation;
+    }
+  }
+
+  station_cdt["fmisid"] = fmisidStr;
+  if (not station_geoid.empty() && station_geoid != "0")
+    station_cdt["geoid"] = station_geoid;
+  if (not station_wmo.empty() && station_wmo != "0" && station_wmo != "NaN")
+    station_cdt["wmo"] = station_wmo;
+  if (not station_name.empty())
+    station_cdt["name"] = station_name;
+  if (not station_region.empty())
+    station_cdt["region"] = station_region;
+
+  set_2D_coord(ctx.transformation,
+               station_latitude,
+               station_longitude,
+               station_cdt);
+  station_cdt["elevation"] = station_elevation;
+
+  if (ctx.show_height)
+    station_cdt["height"] = station_elevation;
+
+}
+
+void bw::StoredMastQueryHandler::set_group_parameters(CTPP::CDT& group,
+                                                      FeatureID& feature_id,
+                                                      const MastContext& ctx,
+                                                      const std::string& measurandIdStr,
+                                                      bool& showValue,
+                                                      bool& showDataQuality)
+{
+  auto it = ctx.meteoParameterMap.find(measurandIdStr);
+  if (it != ctx.meteoParameterMap.end())
+  {
+    showValue = std::get<3>(it->second);
+    showDataQuality = std::get<4>(it->second);
+    int paramcount = 0;
+    if (showValue)
+    {
+      const std::string paramName = std::get<1>(it->second);
+      group["obsParamList"][paramcount]["name"] = paramName;
+      feature_id.add_param(P_METEO_PARAMETERS, paramName);
+      paramcount++;
+    }
+    if (showDataQuality)
+    {
+      const std::string paramName = std::get<2>(it->second);
+      group["obsParamList"][paramcount]["name"] = paramName;
+      group["obsParamList"][paramcount]["isQCParameter"] = "true";
+      feature_id.add_param(P_METEO_PARAMETERS, paramName);
+      paramcount++;
+    }
+
+    // This should newer happen (.. but in case off coding error).
+    if (not showValue and not showDataQuality)
+    {
+      std::ostringstream msg;
+      msg << "Cannot solve what to return by using parameter id '" << measurandIdStr
+          << "'";
+      Fmi::Exception exception(BCP, msg.str());
+      exception.addParameter(WFS_EXCEPTION_CODE, WFS_OPERATION_PROCESSING_FAILED);
+      throw exception;
+    }
+    group["featureId"] = feature_id.get_id();
+  }
+  else
+  {
+    std::ostringstream msg;
+    msg << ctx.method << ": Cannot find parameter name for id '" << measurandIdStr
+        << "'\n";
+
+    std::cerr << msg.str();
+  }
+
+}
+
+int bw::StoredMastQueryHandler::fill_mast_data(CTPP::CDT& hash,
+                                               SmartMet::Engine::Observation::QueryResult& dataContainer,
+                                               const MastContext& ctx,
+                                               FeatureID& feature_id) const
+{
+  namespace bo = SmartMet::Engine::Observation;
+
+  int numberMatched = 0;
+  auto dataFmisidIt = dataContainer.begin("STATION_ID");
+  auto dataFmisidItEnd = dataContainer.end("STATION_ID");
+  auto dataMeasurandIdIt = dataContainer.begin("MEASURAND_ID");
+  auto dataTimeIt = dataContainer.begin("DATA_TIME");
+  auto dataLevelIt = dataContainer.begin("DATA_LEVEL");
+  auto dataValueIt = dataContainer.begin("DATA_VALUE");
+  auto dataQualityIt = dataContainer.begin("DATA_QUALITY");
+
+  std::string currentFmisid = "FooBarFmisid";
+  std::string currentMeasurandId = "FooBarMeasurandId";
+  std::string currentDataTime = "FooBarTime";
+  int dataId = 0;
+  int groupId = 0;
+  double bottomHeight = 0.0;
+  double deltaHeight = 0.0;
+  bool showValue = false;
+  bool showDataQuality = false;
+  for (; dataFmisidIt != dataFmisidItEnd; ++dataFmisidIt,
+                                          ++dataMeasurandIdIt,
+                                          ++dataTimeIt,
+                                          ++dataLevelIt,
+                                          ++dataValueIt,
+                                          ++dataQualityIt)
+  {
+    std::string fmisidStr = bo::QueryResult::toString(dataFmisidIt, 0);
+    std::string measurandIdStr = bo::QueryResult::toString(dataMeasurandIdIt, 0);
+    std::string dataTimeStr = bo::QueryResult::toString(dataTimeIt);
+    std::string dataLevelStr = bo::QueryResult::toString(dataLevelIt, 1);
+    std::string dataValueStr = bo::QueryResult::toString(dataValueIt, 1);
+    std::string dataQualityStr = bo::QueryResult::toString(dataQualityIt, 0);
+    deltaHeight = std::any_cast<double>(*dataLevelIt);
+
+    if (currentFmisid != fmisidStr or currentMeasurandId != measurandIdStr or
+        currentDataTime != dataTimeStr)
+    {
+      currentFmisid = fmisidStr;
+      currentMeasurandId = measurandIdStr;
+      currentDataTime = dataTimeStr;
+
+      numberMatched++;
+      groupId = numberMatched - 1;
+
+      // Setting the station id for the feature id.
+      feature_id.erase_param(P_FMISIDS);
+      feature_id.add_param(P_FMISIDS, fmisidStr);
+
+      // Only one station per member group.
+      feature_id.erase_param(P_NUM_OF_STATIONS);
+      feature_id.add_param(P_NUM_OF_STATIONS, "1");
+
+      set_station_info(hash["groups"][groupId]["station"], ctx, fmisidStr, bottomHeight);
+
+      // Setting time the correct values for the feature id.
+      // One member group contains only one time position.
+      feature_id.erase_param(P_TIME_STEP);
+      feature_id.add_param(P_TIME_STEP, "1");
+      feature_id.erase_param(P_BEGIN_TIME);
+      feature_id.add_param(P_BEGIN_TIME, dataTimeStr);
+      feature_id.erase_param(P_END_TIME);
+      feature_id.add_param(P_END_TIME, dataTimeStr);
+
+      hash["groups"][groupId]["phenomenonTime"] = dataTimeStr;
+      hash["groups"][groupId]["resultTime"] = dataTimeStr;
+
+      // Deleting the requested meteoparameters from feature id
+      // so we can add the parameters used in the member group.
+      feature_id.erase_param(P_METEO_PARAMETERS);
+      set_group_parameters(hash["groups"][groupId],
+                           feature_id,
+                           ctx,
+                           measurandIdStr,
+                           showValue,
+                           showDataQuality);
+
+      dataId = 0;
+    }
+
+    hash["groups"][groupId]["data"][dataId]["time"] = dataTimeStr;
+    hash["groups"][groupId]["data"][dataId]["level"] = dataLevelStr;
+    if (showValue)
+      hash["groups"][groupId]["data"][dataId]["value"] = dataValueStr;
+    if (showDataQuality)
+      hash["groups"][groupId]["data"][dataId]["quality"] = dataQualityStr;
+    hash["groups"][groupId]["topHeight"] =
+        std::to_string(static_cast<long long int>(bottomHeight + deltaHeight));
+
+    dataId++;
+  }
+
+  return numberMatched;
+}
+
 void bw::StoredMastQueryHandler::query(const StoredQuery& query,
                                        const std::string& language,
                                        const std::optional<std::string>& /*hostname*/,
@@ -128,73 +607,14 @@ void bw::StoredMastQueryHandler::query(const StoredQuery& query,
 
       const int debug_level = get_config()->get_debug_level();
       if (debug_level > 2)
-      {
-        for (const auto& id : locations_list)
-          std::cerr << "Found location: name: " << id.first << " geoid: " << id.second->geoid
-                    << "\n";
-      }
-
-      // Get all the information needed in a OBsEngine station search.
-      SmartMet::Engine::Observation::Settings stationSearchSettings;
-      stationSearchSettings.allplaces = false;
-      stationSearchSettings.numberofstations = numberOfStations;
-      stationSearchSettings.stationtype = stationType;
-      stationSearchSettings.maxdistance = maxDistance;
-
-      SmartMet::Engine::Observation::StationSettings stationSettings;
-
-      // Include valid locations.
-      for (const auto& item : locations_list)
-      {
-        stationSettings.nearest_station_settings.emplace_back(item.second->longitude,
-                                                              item.second->latitude,
-                                                              maxDistance,
-                                                              1,
-                                                              item.first,
-                                                              item.second->fmisid);
-      }
-
-      // Bounding box search options.
-      SmartMet::Spine::BoundingBox requested_bbox;
-      bool have_bbox = get_bounding_box(params, crs, &requested_bbox);
-      if (have_bbox)
-      {
-        std::unique_ptr<SmartMet::Spine::BoundingBox> query_bbox;
-        query_bbox.reset(new SmartMet::Spine::BoundingBox);
-        *query_bbox =
-            bw::SupportsBoundingBox::transform_bounding_box(requested_bbox, DATA_CRS_NAME);
-        SmartMet::Engine::Observation::Settings bboxSettings;
-        stationSettings.bounding_box_settings["minx"] = query_bbox->xMin;
-        stationSettings.bounding_box_settings["miny"] = query_bbox->yMin;
-        stationSettings.bounding_box_settings["maxx"] = query_bbox->xMax;
-        stationSettings.bounding_box_settings["maxy"] = query_bbox->yMax;
-      }
-
-      stationSearchSettings.taggedFMISIDs =
-          obs_engine->translateToFMISID(stationSearchSettings, stationSettings);
-
-      // Search stations based on location settings.
-      // The result does not contain duplicates.
-      SmartMet::Spine::Stations stationCandidates;
-      obs_engine->getStations(stationCandidates, stationSearchSettings);
+        print_locations(locations_list);
 
       std::string langCode = language;
       SupportsLocationParameters::engOrFinToEnOrFi(langCode);
 
       // Get information from GeoEngien. Elevation is required.
-      SmartMet::Spine::Stations stations;
-      for (const auto& stationCandidate : stationCandidates)
-      {
-        stations.push_back(stationCandidate);
-
-        SmartMet::Spine::LocationPtr geoLoc =
-            geo_engine->idSearch(stationCandidate.geoid, langCode);
-        if (geoLoc)
-        {
-          stations.back().country = geoLoc->country;
-          stations.back().elevation = geoLoc->elevation;
-        }
-      }
+      const SmartMet::Spine::Stations stations = find_stations(
+          params, crs, stationType, maxDistance, numberOfStations, locations_list, langCode);
 
       if (stations.empty())
         queryInitializationOK = false;
@@ -212,102 +632,7 @@ void bw::StoredMastQueryHandler::query(const StoredQuery& query,
       }
 
       // Meteo parameters
-      std::vector<std::string> meteoParametersVector;
-      params.get<std::string>(P_METEO_PARAMETERS, std::back_inserter(meteoParametersVector));
-      if (meteoParametersVector.empty())
-      {
-        Fmi::Exception exception(BCP, "Operation processing failed!");
-        exception.addDetail("At least one meteo parameter has to be given.");
-        exception.addParameter(WFS_EXCEPTION_CODE, WFS_OPERATION_PROCESSING_FAILED);
-        throw exception.disableStackTrace();
-      }
-
-      // Do not allow QC parameters if it is not enabled in a stored query.
-      auto qc_param_name_ref = SupportsQualityParameters::firstQCParameter(meteoParametersVector);
-      if (not m_supportQCParameters && qc_param_name_ref != meteoParametersVector.end())
-      {
-        Fmi::Exception exception(BCP, "Invalid parameter value!");
-        exception.addDetail("Quality code parameter '" + *qc_param_name_ref +
-                            "' is not allowed in this query.");
-        exception.addParameter(WFS_EXCEPTION_CODE, WFS_INVALID_PARAMETER_VALUE);
-        throw exception.disableStackTrace();
-      }
-
-      // In case if someone is trying to use quality info support.
-      if (SupportsQualityParameters::supportQualityInfo(params))
-      {
-        std::ostringstream msg;
-        msg << "Quality info support is not implemented. "
-            << "Stored query '" << StoredQueryHandlerBase::get_query_name()
-            << "' is trying to use it.\n";
-        std::cerr << msg.str();
-      }
-
-      // Gluing requested parameter name and parameter identities together.
-      // Parameter names are needed in the result document.
-      // map: id, (id, paramName, paramQCName, showValue, showQualityCode)
-      using MeteoParameterMap =
-          std::map<std::string, std::tuple<uint64_t, std::string, std::string, bool, bool>>;
-      MeteoParameterMap meteoParameterMap;
-      for (const std::string& name : meteoParametersVector)
-      {
-        const uint64_t paramId = obs_engine->getParameterId(name, stationType);
-        if (paramId == 0)
-        {
-          Fmi::Exception exception(BCP, "Unknown parameter in the query!");
-          exception.addParameter(WFS_EXCEPTION_CODE, WFS_INVALID_PARAMETER_VALUE);
-          exception.addParameter("Unknown parameter", name);
-          throw exception.disableStackTrace();
-        }
-
-        bool isQCParameter = SupportsQualityParameters::isQCParameter(name);
-
-        // Is the parameter a duplicate.
-        const std::string paramIdStr = Fmi::to_string(paramId);
-        auto paramIdIt = meteoParameterMap.find(paramIdStr);
-        if (paramIdIt != meteoParameterMap.end())
-        {
-          // Check if the parameter is already inserted.
-          if ((std::get<3>(paramIdIt->second) and not isQCParameter) or
-              (std::get<4>(paramIdIt->second) and isQCParameter))
-          {
-            std::string errParamName;
-            if (isQCParameter)
-              errParamName = std::get<3>(paramIdIt->second);
-            else
-              errParamName = std::get<2>(paramIdIt->second);
-
-            std::ostringstream msg;
-            msg << "Parameter '" << name << "' is already given by using '" << errParamName
-                << "' name.";
-            Fmi::Exception exception(BCP, msg.str());
-            exception.addParameter(WFS_EXCEPTION_CODE, WFS_INVALID_PARAMETER_VALUE);
-            throw exception;
-          }
-
-          // Update values of a tuple item.
-          if (isQCParameter)
-          {
-            std::get<2>(paramIdIt->second) = name;
-            std::get<4>(paramIdIt->second) = true;
-          }
-          else
-          {
-            std::get<1>(paramIdIt->second) = name;
-            std::get<3>(paramIdIt->second) = true;
-          }
-        }
-        else
-        {
-          // Initial map item
-          meteoParameterMap.insert(std::make_pair(paramIdStr,
-                                                  std::make_tuple(paramId,
-                                                                  (isQCParameter ? "" : name),
-                                                                  (isQCParameter ? name : ""),
-                                                                  (not isQCParameter),
-                                                                  (isQCParameter))));
-        }
-      }
+      const MastParameterMap meteoParameterMap = get_meteo_parameters(params, stationType);
 
       // Time range restriction to get data.
       auto startTime = params.get_single<Fmi::DateTime>(P_BEGIN_TIME);
@@ -318,26 +643,12 @@ void bw::StoredMastQueryHandler::query(const StoredQuery& query,
         check_time_interval(startTime, endTime, m_maxHours);
 
       // Only 24 hours allowed
-      if (1440 < timestep)
-      {
-        Fmi::Exception exception(BCP, "Invalid time step value!");
-        exception.addDetail("Maximum timestep value is 1440 minutes.");
-        exception.addParameter(WFS_EXCEPTION_CODE, WFS_INVALID_PARAMETER_VALUE);
-        exception.addParameter("Timestep", std::to_string(timestep));
-        throw exception.disableStackTrace();
-      }
+      check_time_step(timestep);
 
       // Assume timestep 1 minutes when value is 0.
       uint64_t ts1 = (timestep > 0) ? timestep : 1;
-      if (m_sqRestrictions and startTime + Fmi::Minutes(maxEpochs * ts1) < endTime)
-      {
-        Fmi::Exception exception(BCP, "Too many time epochs in the time interval!");
-        exception.addDetail("Use shorter time interval or larger time step.");
-        exception.addParameter(WFS_EXCEPTION_CODE, WFS_OPERATION_PROCESSING_FAILED);
-        exception.addParameter("Start time", Fmi::date_time::to_simple_string(startTime));
-        exception.addParameter("End time", Fmi::date_time::to_simple_string(endTime));
-        throw exception.disableStackTrace();
-      }
+      if (m_sqRestrictions)
+        check_max_epochs(startTime, endTime, maxEpochs, ts1);
 
       //
       // Observation ID search
@@ -358,26 +669,9 @@ void bw::StoredMastQueryHandler::query(const StoredQuery& query,
       // Join on MEASURANDS_V1 view by using MEASURAND_ID.
       stationQueryParams.addJoinOnConfig(dbRegistryConfig("MEASURANDS_V1"), "MEASURAND_ID");
 
-      // Producer identities
-      for (auto it = producerIdVector.begin();
-           queryInitializationOK && it != producerIdVector.end();
-           ++it)
-        stationQueryParams.addOperation(
-            "OR_GROUP_producer_id", "PRODUCER_ID", "PropertyIsEqualTo", *it);
-
-      // Station identities
-      for (auto it = stations.begin(); queryInitializationOK && it != stations.end(); ++it)
-        stationQueryParams.addOperation(
-            "OR_GROUP_station_id", "STATION_ID", "PropertyIsEqualTo", (*it).fmisid);
-
-      // Measurand identities
-      for (auto it = meteoParameterMap.begin();
-           queryInitializationOK && it != meteoParameterMap.end();
-           ++it)
-        stationQueryParams.addOperation("OR_GROUP_measurand_code",
-                                        "MEASURAND_ID",
-                                        "PropertyIsEqualTo",
-                                        std::get<0>(it->second));
+      // Producer, station and measurand identities
+      if (queryInitializationOK)
+        add_profile_operations(stationQueryParams, producerIdVector, stations, meteoParameterMap);
 
       // Measurand period
       std::string measurandPeriod = "instant";
@@ -420,12 +714,8 @@ void bw::StoredMastQueryHandler::query(const StoredQuery& query,
         dataQueryParams.addOrderBy("MEASURAND_ID", "ASC");
         dataQueryParams.addOrderBy("DATA_LEVEL", "ASC");
 
-        auto observationIdIt = profileContainer->begin("OBSERVATION_ID");
-        auto observationIdItEnd = profileContainer->end("OBSERVATION_ID");
-
-        for (; queryInitializationOK && observationIdIt != observationIdItEnd; ++observationIdIt)
-          dataQueryParams.addOperation(
-              "OR_GROUP_observation_id", "OBSERVATION_ID", "PropertyIsEqualTo", *observationIdIt);
+        if (queryInitializationOK)
+          add_observation_ids(dataQueryParams, *profileContainer);
 
         dataQueryParams.addOperation(
             "OR_GROUP_data_begin_time", "DATA_TIME", "PropertyIsGreaterThanOrEqualTo", startTime);
@@ -478,170 +768,9 @@ void bw::StoredMastQueryHandler::query(const StoredQuery& query,
       int numberMatched = 0;
       if (queryInitializationOK and profileContainer and dataContainer)
       {
-        auto dataFmisidIt = dataContainer->begin("STATION_ID");
-        auto dataFmisidItEnd = dataContainer->end("STATION_ID");
-        auto dataMeasurandIdIt = dataContainer->begin("MEASURAND_ID");
-        auto dataTimeIt = dataContainer->begin("DATA_TIME");
-        auto dataLevelIt = dataContainer->begin("DATA_LEVEL");
-        auto dataValueIt = dataContainer->begin("DATA_VALUE");
-        auto dataQualityIt = dataContainer->begin("DATA_QUALITY");
-
-        std::string currentFmisid = "FooBarFmisid";
-        std::string currentMeasurandId = "FooBarMeasurandId";
-        std::string currentDataTime = "FooBarTime";
-        int dataId = 0;
-        int groupId = 0;
-        double bottomHeight = 0.0;
-        double deltaHeight = 0.0;
-        bool showValue = false;
-        bool showDataQuality = false;
-        for (; dataFmisidIt != dataFmisidItEnd; ++dataFmisidIt,
-                                                ++dataMeasurandIdIt,
-                                                ++dataTimeIt,
-                                                ++dataLevelIt,
-                                                ++dataValueIt,
-                                                ++dataQualityIt)
-        {
-          std::string fmisidStr = bo::QueryResult::toString(dataFmisidIt, 0);
-          std::string measurandIdStr = bo::QueryResult::toString(dataMeasurandIdIt, 0);
-          std::string dataTimeStr = bo::QueryResult::toString(dataTimeIt);
-          std::string dataLevelStr = bo::QueryResult::toString(dataLevelIt, 1);
-          std::string dataValueStr = bo::QueryResult::toString(dataValueIt, 1);
-          std::string dataQualityStr = bo::QueryResult::toString(dataQualityIt, 0);
-          deltaHeight = std::any_cast<double>(*dataLevelIt);
-
-          if (currentFmisid != fmisidStr or currentMeasurandId != measurandIdStr or
-              currentDataTime != dataTimeStr)
-          {
-            currentFmisid = fmisidStr;
-            currentMeasurandId = measurandIdStr;
-            currentDataTime = dataTimeStr;
-
-            numberMatched++;
-            groupId = numberMatched - 1;
-
-            std::string station_geoid;
-            std::string station_wmo;
-            std::string station_name;
-            std::string station_region;
-            std::string station_latitude;
-            std::string station_longitude;
-            std::string station_elevation;
-
-            for (const auto& station : stations)
-            {
-              if (Fmi::to_string(station.fmisid) == fmisidStr)
-              {
-                station_geoid = std::to_string(static_cast<long long int>(station.geoid));
-                station_wmo = std::to_string(static_cast<long long int>(station.wmo));
-                station_name = station.station_formal_name(language);
-                station_region = station.region;
-                station_latitude = std::to_string(static_cast<long double>(station.latitude));
-                station_longitude = std::to_string(static_cast<long double>(station.longitude));
-                station_elevation = std::to_string(static_cast<long long int>(station.elevation));
-                bottomHeight = station.elevation;
-              }
-            }
-
-            // Setting the station id for the feature id.
-            feature_id.erase_param(P_FMISIDS);
-            feature_id.add_param(P_FMISIDS, fmisidStr);
-
-            // Only one station per member group.
-            feature_id.erase_param(P_NUM_OF_STATIONS);
-            feature_id.add_param(P_NUM_OF_STATIONS, "1");
-
-            hash["groups"][groupId]["station"]["fmisid"] = fmisidStr;
-            if (not station_geoid.empty() && station_geoid != "0")
-              hash["groups"][groupId]["station"]["geoid"] = station_geoid;
-            if (not station_wmo.empty() && station_wmo != "0" && station_wmo != "NaN")
-              hash["groups"][groupId]["station"]["wmo"] = station_wmo;
-            if (not station_name.empty())
-              hash["groups"][groupId]["station"]["name"] = station_name;
-            if (not station_region.empty())
-              hash["groups"][groupId]["station"]["region"] = station_region;
-
-            set_2D_coord(transformation,
-                         station_latitude,
-                         station_longitude,
-                         hash["groups"][groupId]["station"]);
-            hash["groups"][groupId]["station"]["elevation"] = station_elevation;
-
-            if (show_height)
-              hash["groups"][groupId]["station"]["height"] = station_elevation;
-
-            // Setting time the correct values for the feature id.
-            // One member group contains only one time position.
-            feature_id.erase_param(P_TIME_STEP);
-            feature_id.add_param(P_TIME_STEP, "1");
-            feature_id.erase_param(P_BEGIN_TIME);
-            feature_id.add_param(P_BEGIN_TIME, dataTimeStr);
-            feature_id.erase_param(P_END_TIME);
-            feature_id.add_param(P_END_TIME, dataTimeStr);
-
-            hash["groups"][groupId]["phenomenonTime"] = dataTimeStr;
-            hash["groups"][groupId]["resultTime"] = dataTimeStr;
-
-            // Deleting the requested meteoparameters from feature id
-            // so we can add the parameters used in the member group.
-            feature_id.erase_param(P_METEO_PARAMETERS);
-            auto it = meteoParameterMap.find(measurandIdStr);
-            if (it != meteoParameterMap.end())
-            {
-              showValue = std::get<3>(it->second);
-              showDataQuality = std::get<4>(it->second);
-              int paramcount = 0;
-              if (showValue)
-              {
-                const std::string paramName = std::get<1>(it->second);
-                hash["groups"][groupId]["obsParamList"][paramcount]["name"] = paramName;
-                feature_id.add_param(P_METEO_PARAMETERS, paramName);
-                paramcount++;
-              }
-              if (showDataQuality)
-              {
-                const std::string paramName = std::get<2>(it->second);
-                hash["groups"][groupId]["obsParamList"][paramcount]["name"] = paramName;
-                hash["groups"][groupId]["obsParamList"][paramcount]["isQCParameter"] = "true";
-                feature_id.add_param(P_METEO_PARAMETERS, paramName);
-                paramcount++;
-              }
-
-              // This should newer happen (.. but in case off coding error).
-              if (not showValue and not showDataQuality)
-              {
-                std::ostringstream msg;
-                msg << "Cannot solve what to return by using parameter id '" << measurandIdStr
-                    << "'";
-                Fmi::Exception exception(BCP, msg.str());
-                exception.addParameter(WFS_EXCEPTION_CODE, WFS_OPERATION_PROCESSING_FAILED);
-                throw exception;
-              }
-              hash["groups"][groupId]["featureId"] = feature_id.get_id();
-            }
-            else
-            {
-              std::ostringstream msg;
-              msg << METHOD_NAME << ": Cannot find parameter name for id '" << measurandIdStr
-                  << "'\n";
-
-              std::cerr << msg.str();
-            }
-
-            dataId = 0;
-          }
-
-          hash["groups"][groupId]["data"][dataId]["time"] = dataTimeStr;
-          hash["groups"][groupId]["data"][dataId]["level"] = dataLevelStr;
-          if (showValue)
-            hash["groups"][groupId]["data"][dataId]["value"] = dataValueStr;
-          if (showDataQuality)
-            hash["groups"][groupId]["data"][dataId]["quality"] = dataQualityStr;
-          hash["groups"][groupId]["topHeight"] =
-              std::to_string(static_cast<long long int>(bottomHeight + deltaHeight));
-
-          dataId++;
-        }
+        const MastContext ctx{
+            stations, meteoParameterMap, transformation, show_height, language, METHOD_NAME};
+        numberMatched = fill_mast_data(hash, *dataContainer, ctx, feature_id);
       }
 
       hash["numberMatched"] = numberMatched;
