@@ -109,7 +109,242 @@ Fmi::DateTime round_time(const Fmi::DateTime& t0, unsigned step, int offset = 0)
     throw Fmi::Exception::Trace(BCP, "Operation failed!");
   }
 }
+
+// Is the template a simple query template (or a multipoint coverage template)?
+bool is_simple_template(const std::optional<std::string>& template_file)
+{
+  if (!template_file)
+    throw Fmi::Exception(BCP, "No template name given to stored flash query");
+  if (boost::algorithm::ends_with(*template_file, P_SIMPLE_QUERY))
+    return true;
+  if (boost::algorithm::ends_with(*template_file, P_MULTIPOINTCOVERAGE_QUERY))
+    return false;
+  throw Fmi::Exception(BCP, "Unknown template for stored flash query")
+      .addParameter("template", *template_file);
+}
+
+// Add the requested parameters
+void add_flash_parameters(const std::vector<std::string>& param_names,
+                          SmartMet::Engine::Observation::Settings& query_params,
+                          int& first_param,
+                          int& last_param,
+                          bool& have_meteo_param)
+{
+  for (const std::string& name : param_names)
+  {
+    SmartMet::Spine::Parameter param = SmartMet::TimeSeries::makeParameter(name);
+    query_params.parameters.push_back(param);
+    int ind = query_params.parameters.size() - 1;
+    if (first_param == 0)
+      first_param = ind;
+    last_param = ind;
+    if (!SmartMet::TimeSeries::special(param))
+      have_meteo_param = true;
+  }
+}
+
+// The bounding box metadata
+CTPP::CDT bbox_metadata(const SmartMet::Spine::BoundingBox& requested_bbox,
+                        bool bb_swap_coord,
+                        const std::string& bb_proj_uri)
+{
+  CTPP::CDT p_bb;
+  double x_ll = bb_swap_coord ? requested_bbox.yMin : requested_bbox.xMin;
+  double y_ll = bb_swap_coord ? requested_bbox.xMin : requested_bbox.yMin;
+  double x_ur = bb_swap_coord ? requested_bbox.yMax : requested_bbox.xMax;
+  double y_ur = bb_swap_coord ? requested_bbox.xMax : requested_bbox.yMax;
+
+  p_bb["lowerLeft"]["x"] = x_ll;
+  p_bb["lowerLeft"]["y"] = y_ll;
+
+  p_bb["lowerRight"]["x"] = x_ur;
+  p_bb["lowerRight"]["y"] = y_ll;
+
+  p_bb["upperLeft"]["x"] = x_ll;
+  p_bb["upperLeft"]["y"] = y_ur;
+
+  p_bb["upperRight"]["x"] = x_ur;
+  p_bb["upperRight"]["y"] = y_ur;
+
+  p_bb["projUri"] = bb_proj_uri;
+  p_bb["srsDim"] = 2;
+
+  return p_bb;
+}
 }  // namespace
+
+/**
+ *  @brief The common data for generating the result rows
+ */
+struct bw::StoredFlashQueryHandler::FlashRowContext
+{
+  const TS::TimeSeriesVector& result;
+  const SmartMet::Engine::Observation::Settings& query_params;
+  const std::shared_ptr<SmartMet::Spine::CRSRegistry::Transformation>& to_bbox_transform;
+  const SmartMet::Spine::BoundingBox& requested_bbox;
+  bool bb_swap_coord;
+  int debug_level;
+  const std::shared_ptr<SmartMet::Spine::CRSRegistry::Transformation>& transformation;
+  const Fmi::TimeZonePtr& tzp;
+  bool is_simple_query;
+  int first_param;
+  int last_param;
+  int projSrsDim;
+  const std::string& proj_uri;
+  const std::vector<std::string>& param_names;
+  Fmi::ValueFormatter& value_formatter;
+};
+
+/**
+ *  @brief The generated result rows
+ */
+struct bw::StoredFlashQueryHandler::FlashRows
+{
+  std::size_t used_rows = 0;
+  std::size_t num_skipped = 0;
+  std::size_t num_rows = 0;
+
+  // generated multipoint mode coordinates and values
+  std::string multipoint_position_rows;  // lat lon epoch
+  std::string multipoint_data_rows;      // param1 param2 ...
+
+  // generated simple query xml
+  std::string simple_rows;  // xml block 1, xml block 2 ...
+};
+
+bool bw::StoredFlashQueryHandler::outside_bbox(const FlashRowContext& ctx, double lon, double lat)
+{
+  try
+  {
+    NFmiPoint p1(lon, lat);
+    NFmiPoint p2 = ctx.to_bbox_transform->transform(p1);
+
+    double x = ctx.bb_swap_coord ? p2.Y() : p2.X();
+    double y = ctx.bb_swap_coord ? p2.X() : p2.Y();
+
+    const auto& requested_bbox = ctx.requested_bbox;
+    if ((x < requested_bbox.xMin) or (x > requested_bbox.xMax) or (y < requested_bbox.yMin) or
+        (y > requested_bbox.yMax))
+    {
+      if (ctx.debug_level > 3)
+      {
+        std::ostringstream msg;
+        msg << SmartMet::Spine::log_time_str() << ": [WFS] [DEBUG] Event (" << p1.X() << " "
+            << p1.Y() << ") ==> (" << p2.X() << " " << p2.Y()
+            << ") skipped due to bounding box check\n";
+        std::cout << msg.str() << std::flush;
+      }
+      return true;
+    }
+  }
+  catch (...)
+  {
+    // Ignore errors while extra bounding box checks.
+    // Use unused exception object to ensure that possible boost::thread_interrupted is rethrown
+    (void)Fmi::Exception::Trace(BCP, "Ignore exception");
+  }
+  return false;
+}
+
+std::string bw::StoredFlashQueryHandler::format_flash_value(const TS::TimeSeries& data_vect,
+                                                            std::size_t i,
+                                                            const FlashRowContext& ctx)
+{
+  std::string value;
+  if (i >= data_vect.size())
+  {
+    value = ctx.query_params.missingtext;
+  }
+  else if (const int* ptr = std::get_if<int>(&data_vect[i].value))
+    value = Fmi::to_string(*ptr);
+  else if (const double* ptr = std::get_if<double>(&data_vect[i].value))
+  {
+    auto tmp = *ptr;
+    if (static_cast<int>(tmp) != tmp)
+      value = ctx.value_formatter.format(tmp, 1);
+    else
+      value = Fmi::to_string(tmp);
+  }
+  else
+    value = ctx.query_params.missingtext;
+  return value;
+}
+
+void bw::StoredFlashQueryHandler::generate_rows(const FlashRowContext& ctx, FlashRows& rows) const
+{
+  static const long ref_jd = Fmi::Date(1970, 1, 1).julian_day();
+
+  const auto& result = ctx.result;
+  rows.num_rows = result[1].size();
+
+  for (std::size_t i = 0; i < rows.num_rows; i++)
+  {
+    // I have no clue why the ordering is this, this changed code
+    // does the same as the original (sx = lat, sy = lon) - Mika
+
+    double lon = std::get<double>(result[lat_ind][i].value);
+    double lat = std::get<double>(result[lon_ind][i].value);
+
+    if (ctx.to_bbox_transform && outside_bbox(ctx, lon, lat))
+    {
+      rows.num_skipped++;
+      continue;
+    }
+
+    auto str_xy = get_2D_coord(ctx.transformation, lon, lat);
+
+    const Fmi::DateTime epoch = result[lon_ind][i].time.utc_time();
+    long long jd = epoch.date().julian_day();
+    long seconds = epoch.time_of_day().total_seconds();
+    INT_64 s_epoch = 86400LL * (jd - ref_jd) + seconds;
+    auto stroke_time_str = format_local_time(epoch, ctx.tzp);
+
+    ++rows.used_rows;
+
+    if (!ctx.is_simple_query)
+    {
+      rows.multipoint_position_rows +=
+          str_xy.first + ' ' + str_xy.second + ' ' + Fmi::to_string(s_epoch) + '\n';
+    }
+
+    for (int k = ctx.first_param; k <= ctx.last_param; k++)
+    {
+      std::string value = format_flash_value(result[k], i, ctx);
+
+      if (!ctx.is_simple_query)
+      {
+        rows.multipoint_data_rows += remove_trailing_0(value);
+        rows.multipoint_data_rows += (k < ctx.last_param ? ' ' : '\n');
+      }
+      else
+      {
+        std::string fmt = R"(
+<wfs:member>
+ <BsWfs:BsWfsElement gml:id="BsWfsElement.{0}.{1}">
+  <BsWfs:Location>
+   <gml:Point gml:id="BsWfsElementP.{0}.{1}" srsDimension="{2}" srsName="{3}">
+    <gml:pos>{4} {5}</gml:pos>
+   </gml:Point>
+  </BsWfs:Location>
+  <BsWfs:Time>{6}</BsWfs:Time>
+  <BsWfs:ParameterName>{7}</BsWfs:ParameterName>
+  <BsWfs:ParameterValue>{8}</BsWfs:ParameterValue>
+ </BsWfs:BsWfsElement>
+</wfs:member>)";
+        rows.simple_rows += fmt::format(fmt::runtime(fmt),
+                                   rows.used_rows,
+                                   k - ctx.first_param + 1,
+                                   ctx.projSrsDim,
+                                   ctx.proj_uri,
+                                   str_xy.first,
+                                   str_xy.second,
+                                   stroke_time_str,
+                                   ctx.param_names.at(k - ctx.first_param),
+                                   value);
+      }
+    }
+  }
+}
 
 void bw::StoredFlashQueryHandler::query(const StoredQuery& query,
                                         const std::string& language,
@@ -129,17 +364,7 @@ void bw::StoredFlashQueryHandler::query(const StoredQuery& query,
     // Determine how to generated the content rows from the template name, a C++ loop
     // is much faster than CTPP2
 
-    bool is_simple_query = false;
-
-    if (!template_file)
-      throw Fmi::Exception(BCP, "No template name given to stored flash query");
-    if (boost::algorithm::ends_with(*template_file, P_SIMPLE_QUERY))
-      is_simple_query = true;
-    else if (boost::algorithm::ends_with(*template_file, P_MULTIPOINTCOVERAGE_QUERY))
-      is_simple_query = false;
-    else
-      throw Fmi::Exception(BCP, "Unknown template for stored flash query")
-          .addParameter("template", *template_file);
+    const bool is_simple_query = is_simple_template(template_file);
 
     const auto& params = query.get_param_map();
 
@@ -187,17 +412,7 @@ void bw::StoredFlashQueryHandler::query(const StoredQuery& query,
       params.get<std::string>(P_PARAM, std::back_inserter(param_names));
       int first_param = 0;
       int last_param = 0;
-      for (const std::string& name : param_names)
-      {
-        SmartMet::Spine::Parameter param = SmartMet::TimeSeries::makeParameter(name);
-        query_params.parameters.push_back(param);
-        int ind = query_params.parameters.size() - 1;
-        if (first_param == 0)
-          first_param = ind;
-        last_param = ind;
-        if (!TimeSeries::special(param))
-          have_meteo_param = true;
-      }
+      add_flash_parameters(param_names, query_params, first_param, last_param, have_meteo_param);
 
       query_params.allplaces = false;
       query_params.stationtype = station_type;
@@ -324,160 +539,36 @@ void bw::StoredFlashQueryHandler::query(const StoredQuery& query,
       {
         // FIXME: missä projektion pitäisi käyttää täälä. Todennäköisesti alkuperainen
         //        bbox projektio olisi parempi
-        CTPP::CDT p_bb;
-        double x_ll = bb_swap_coord ? requested_bbox.yMin : requested_bbox.xMin;
-        double y_ll = bb_swap_coord ? requested_bbox.xMin : requested_bbox.yMin;
-        double x_ur = bb_swap_coord ? requested_bbox.yMax : requested_bbox.xMax;
-        double y_ur = bb_swap_coord ? requested_bbox.xMax : requested_bbox.yMax;
-
-        p_bb["lowerLeft"]["x"] = x_ll;
-        p_bb["lowerLeft"]["y"] = y_ll;
-
-        p_bb["lowerRight"]["x"] = x_ur;
-        p_bb["lowerRight"]["y"] = y_ll;
-
-        p_bb["upperLeft"]["x"] = x_ll;
-        p_bb["upperLeft"]["y"] = y_ur;
-
-        p_bb["upperRight"]["x"] = x_ur;
-        p_bb["upperRight"]["y"] = y_ur;
-
-        p_bb["projUri"] = bb_proj_uri;
-        p_bb["srsDim"] = 2;
-
-        hash["metadata"]["boundingBox"] = p_bb;
+        hash["metadata"]["boundingBox"] = bbox_metadata(requested_bbox, bb_swap_coord, bb_proj_uri);
       }
 
-      std::size_t used_rows = 0;
-      std::size_t num_skipped = 0;
-      std::size_t num_rows = 0;
-
-      // generated multipoint mode coordinates and values
-      std::string multipoint_position_rows;  // lat lon epoch
-      std::string multipoint_data_rows;      // param1 param2 ...
-
-      // generated simple query xml
-      std::string simple_rows;  // xml block 1, xml block 2 ...
-
+      FlashRows rows;
       if (result_ptr && !result_ptr->empty())
       {
-        static const long ref_jd = Fmi::Date(1970, 1, 1).julian_day();
-
-        const auto& result = *result_ptr;
-        num_rows = result[1].size();
-
-        for (std::size_t i = 0; i < num_rows; i++)
-        {
-          // I have no clue why the ordering is this, this changed code
-          // does the same as the original (sx = lat, sy = lon) - Mika
-
-          double lon = std::get<double>(result[lat_ind][i].value);
-          double lat = std::get<double>(result[lon_ind][i].value);
-
-          if (to_bbox_transform)
-          {
-            try
-            {
-              NFmiPoint p1(lon, lat);
-              NFmiPoint p2 = to_bbox_transform->transform(p1);
-
-              double x = bb_swap_coord ? p2.Y() : p2.X();
-              double y = bb_swap_coord ? p2.X() : p2.Y();
-
-              if ((x < requested_bbox.xMin) or (x > requested_bbox.xMax) or
-                  (y < requested_bbox.yMin) or (y > requested_bbox.yMax))
-              {
-                if (debug_level > 3)
-                {
-                  std::ostringstream msg;
-                  msg << SmartMet::Spine::log_time_str() << ": [WFS] [DEBUG] Event (" << p1.X()
-                      << " " << p1.Y() << ") ==> (" << p2.X() << " " << p2.Y()
-                      << ") skipped due to bounding box check\n";
-                  std::cout << msg.str() << std::flush;
-                }
-                num_skipped++;
-                continue;
-              }
-            }
-            catch (...)
-            {
-              // Ignore errors while extra bounding box checks.
-              // Use unused exception object to ensure that possible boost::thread_interrupted is rethrown
-              (void) Fmi::Exception::Trace(BCP, "Ignore exception");
-            }
-          }
-
-          auto str_xy = get_2D_coord(transformation, lon, lat);
-
-          const Fmi::DateTime epoch = result[lon_ind][i].time.utc_time();
-          long long jd = epoch.date().julian_day();
-          long seconds = epoch.time_of_day().total_seconds();
-          INT_64 s_epoch = 86400LL * (jd - ref_jd) + seconds;
-          auto stroke_time_str = format_local_time(epoch, tzp);
-
-          ++used_rows;
-
-          if (!is_simple_query)
-          {
-            multipoint_position_rows +=
-                str_xy.first + ' ' + str_xy.second + ' ' + Fmi::to_string(s_epoch) + '\n';
-          }
-
-          for (int k = first_param; k <= last_param; k++)
-          {
-            std::string value;
-            const auto& data_vect = result[k];
-            if (i >= data_vect.size())
-            {
-              value = query_params.missingtext;
-            }
-            else if (const int* ptr = std::get_if<int>(&data_vect[i].value))
-              value = Fmi::to_string(*ptr);
-            else if (const double* ptr = std::get_if<double>(&data_vect[i].value))
-            {
-              auto tmp = *ptr;
-              if (static_cast<int>(tmp) != tmp)
-                value = value_formatter->format(tmp, 1);
-              else
-                value = Fmi::to_string(tmp);
-            }
-            else
-              value = query_params.missingtext;
-
-            if (!is_simple_query)
-            {
-              multipoint_data_rows += remove_trailing_0(value);
-              multipoint_data_rows += (k < last_param ? ' ' : '\n');
-            }
-            else
-            {
-              std::string fmt = R"(
-<wfs:member>
- <BsWfs:BsWfsElement gml:id="BsWfsElement.{0}.{1}">
-  <BsWfs:Location>
-   <gml:Point gml:id="BsWfsElementP.{0}.{1}" srsDimension="{2}" srsName="{3}">
-    <gml:pos>{4} {5}</gml:pos>
-   </gml:Point>
-  </BsWfs:Location>
-  <BsWfs:Time>{6}</BsWfs:Time>
-  <BsWfs:ParameterName>{7}</BsWfs:ParameterName>
-  <BsWfs:ParameterValue>{8}</BsWfs:ParameterValue>
- </BsWfs:BsWfsElement>
-</wfs:member>)";
-              simple_rows += fmt::format(fmt::runtime(fmt),
-                                         used_rows,
-                                         k - first_param + 1,
-                                         projSrsDim,
-                                         proj_uri,
-                                         str_xy.first,
-                                         str_xy.second,
-                                         stroke_time_str,
-                                         param_names.at(k - first_param),
-                                         value);
-            }
-          }
-        }
+        const FlashRowContext ctx{*result_ptr,
+                                  query_params,
+                                  to_bbox_transform,
+                                  requested_bbox,
+                                  bb_swap_coord,
+                                  debug_level,
+                                  transformation,
+                                  tzp,
+                                  is_simple_query,
+                                  first_param,
+                                  last_param,
+                                  projSrsDim,
+                                  proj_uri,
+                                  param_names,
+                                  *value_formatter};
+        generate_rows(ctx, rows);
       }
+
+      const std::size_t used_rows = rows.used_rows;
+      const std::size_t num_skipped = rows.num_skipped;
+      const std::size_t num_rows = rows.num_rows;
+      const std::string& multipoint_position_rows = rows.multipoint_position_rows;
+      const std::string& multipoint_data_rows = rows.multipoint_data_rows;
+      const std::string& simple_rows = rows.simple_rows;
 
       if (debug_level > 1 and num_skipped)
       {

@@ -41,6 +41,15 @@ class StoredFlashQueryHandler : public StoredQueryHandlerBase,
                      std::ostream &output) const override;
 
  private:
+  struct FlashRowContext;
+  struct FlashRows;
+
+  static bool outside_bbox(const FlashRowContext& ctx, double lon, double lat);
+  static std::string format_flash_value(const TS::TimeSeries& data_vect,
+                                        std::size_t i,
+                                        const FlashRowContext& ctx);
+  void generate_rows(const FlashRowContext& ctx, FlashRows& rows) const;
+
   std::vector<SmartMet::Spine::Parameter> bs_param;
   int stroke_time_ind;
   int lon_ind;
