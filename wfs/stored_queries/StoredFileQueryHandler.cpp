@@ -99,6 +99,25 @@ std::set<ValueType> common_items(const std::set<ValueType>& A, const std::set<Va
     throw Fmi::Exception::Trace(BCP, "Operation failed!");
   }
 }
+
+/*
+ * Set 'common' to the items of 'all' which are in 'selected', or to all
+ * items if none are selected. Returns false if there are no common items.
+ */
+template <typename ValueType>
+bool select_common_items(const std::set<ValueType>& selected,
+                         const std::set<ValueType>& all,
+                         std::set<ValueType>& common)
+{
+  if (selected.empty())
+  {
+    common = all;
+    return true;
+  }
+
+  common = common_items(selected, all);
+  return !common.empty();
+}
 }  // namespace
 
 void bw::StoredFileQueryHandler::update_parameters(
@@ -138,28 +157,12 @@ void bw::StoredFileQueryHandler::update_parameters(
         continue;
 
       // Skip if no common levels found
-      if (not level_set.empty())
-      {
-        common_levels = common_items(level_set, ds_def.get_levels());
-        if (common_levels.empty())
-          continue;
-      }
-      else
-      {
-        common_levels = ds_def.get_levels();
-      }
+      if (not select_common_items(level_set, ds_def.get_levels(), common_levels))
+        continue;
 
       // Skip if no common parameters found
-      if (not param_set.empty())
-      {
-        common_params = common_items(param_set, ds_def.get_params());
-        if (common_params.empty())
-          continue;
-      }
-      else
-      {
-        common_params = ds_def.get_params();
-      }
+      if (not select_common_items(param_set, ds_def.get_params(), common_params))
+        continue;
 
       if (not bbox.empty())
       {
