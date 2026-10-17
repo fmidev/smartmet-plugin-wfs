@@ -3,8 +3,8 @@
 %define SPECNAME smartmet-plugin-%{DIRNAME}
 Summary: SmartMet WFS plugin
 Name: %{SPECNAME}
-Version: 26.10.16
-Release: 3%{?dist}.fmi
+Version: 26.10.17
+Release: 1%{?dist}.fmi
 License: MIT
 Group: SmartMet/Plugins
 URL: https://github.com/fmidev/smartmet-plugin-wfs
@@ -61,22 +61,22 @@ Requires: libcurl
 Requires: jsoncpp
 Requires: zlib
 Requires: smartmet-library-locus >= 26.10.16
-Requires: smartmet-library-macgyver >= 26.10.16
-Requires: smartmet-library-spine >= 26.10.16
+Requires: smartmet-library-macgyver >= 26.10.17
+Requires: smartmet-library-spine >= 26.10.17
 Requires: smartmet-library-timeseries >= 26.10.16
-Requires: smartmet-library-gis >= 26.10.16
-Requires: smartmet-library-trax >= 26.10.16
-Requires: smartmet-engine-contour >= 26.10.16
-Requires: smartmet-engine-geonames >= 26.10.16
-Requires: smartmet-engine-gis >= 26.10.16
-Requires: smartmet-engine-grid >= 26.10.16
-Requires: smartmet-library-grid-content >= 26.10.16
-Requires: smartmet-library-grid-files >= 26.10.16
+Requires: smartmet-library-gis >= 26.10.17
+Requires: smartmet-library-trax >= 26.10.17
+Requires: smartmet-engine-contour >= 26.10.17
+Requires: smartmet-engine-geonames >= 26.10.17
+Requires: smartmet-engine-gis >= 26.10.17
+Requires: smartmet-engine-grid >= 26.10.17
+Requires: smartmet-library-grid-content >= 26.10.17
+Requires: smartmet-library-grid-files >= 26.10.17
 %if %{with observation}
-Requires: smartmet-engine-observation >= 26.10.16
+Requires: smartmet-engine-observation >= 26.10.17
 %endif
-Requires: smartmet-engine-querydata >= 26.10.16
-Requires: smartmet-server >= 26.10.16
+Requires: smartmet-engine-querydata >= 26.10.17
+Requires: smartmet-server >= 26.10.17
 Requires: xerces-c
 Requires: xqilla
 Requires: zlib
@@ -117,17 +117,17 @@ Obsoletes: smartmet-brainstorm-wfs-debuginfo < 16.11.1
 #TestRequires: smartmet-test-db >= 26.5.8
 #TestRequires: smartmet-test-data >= 26.8.26
 #TestRequires: smartmet-utils-devel >= 26.9.3
-#TestRequires: smartmet-library-macgyver >= 26.10.16
-#TestRequires: smartmet-library-gis >= 26.10.16
-#TestRequires: smartmet-library-newbase >= 26.10.16
+#TestRequires: smartmet-library-macgyver >= 26.10.17
+#TestRequires: smartmet-library-gis >= 26.10.17
+#TestRequires: smartmet-library-newbase >= 26.10.17
 #TestRequires: smartmet-library-spine-plugin-test >= 26.10.16
-#TestRequires: smartmet-engine-geonames >= 26.10.16
-#TestRequires: smartmet-engine-gis >= 26.10.16
-#TestRequires: smartmet-engine-querydata >= 26.10.16
+#TestRequires: smartmet-engine-geonames >= 26.10.17
+#TestRequires: smartmet-engine-gis >= 26.10.17
+#TestRequires: smartmet-engine-querydata >= 26.10.17
 %if %{with observation}
-#TestRequires: smartmet-engine-observation >= 26.10.16
+#TestRequires: smartmet-engine-observation >= 26.10.17
 %endif
-#TestRequires: smartmet-engine-grid >= 26.10.16
+#TestRequires: smartmet-engine-grid >= 26.10.17
 #TestRequires: valkey
 #TestRequires: smartmet-library-grid-files-test >= 26.10.16
 # Required by top level Makefile
@@ -176,6 +176,9 @@ rm -rf $RPM_BUILD_ROOT
 %{_includedir}/smartmet/plugin/wfs/request/*.h
 
 %changelog
+* Sat Oct 17 2026 Mika Heiskanen <mika.heiskanen@fmi.fi> - 26.10.17-1.fmi
+- Split functions with a cognitive complexity above 25 into smaller helpers, no functional changes
+
 * Fri Oct 16 2026 Mika Heiskanen <mika.heiskanen@fmi.fi> - 26.10.16-3.fmi
 - Merged the 26.10.16-2 GitHub master hotfix (stored query handler factory linkage)
 
