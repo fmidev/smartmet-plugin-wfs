@@ -219,6 +219,78 @@ void bw::Request::GetFeature::execute_single_query(std::ostream& ost) const
   }
 }
 
+namespace
+{
+// Import the root element of a query response and its members which are within the requested
+// index range start_index..end_index (members of all queries are counted by 'member_ind')
+void import_response_members(xercesc::DOMDocument& xml_doc,
+                             xercesc::DOMElement& root,
+                             xercesc::DOMElement* query_response_root,
+                             bwx::XPathSnapshot& xps,
+                             std::size_t num_members,
+                             std::size_t start_index,
+                             std::size_t end_index,
+                             std::size_t& member_ind,
+                             std::size_t& num_matched)
+{
+  using namespace xercesc;
+
+  std::size_t curr_num_returned = 0;
+  auto* qr_member = bwx::append_child_element(root, WFS_NAMESPACE_URI, "wfs:member");
+  // Import root element of query response without child elements
+  auto* fc_node = xml_doc.importNode(query_response_root, false);
+  auto* fc_elem = &dynamic_cast<DOMElement&>(*fc_node);
+  qr_member->appendChild(fc_elem);
+
+  // Import required query response members
+  for (std::size_t i = 0; i < num_members; i++)
+  {
+    num_matched++;
+    if ((member_ind >= start_index) and (member_ind <= end_index))
+    {
+      curr_num_returned++;
+      auto* imported_member = xml_doc.importNode(xps.get_item(i), true);
+      fc_elem->appendChild(imported_member);
+    }
+    member_ind++;
+  }
+
+  bwx::set_attr(*fc_elem, "numberReturned", str(format("%1%") % curr_num_returned));
+}
+
+// Read the time stamp attribute of a query response (if any)
+void read_time_stamp(const xercesc::DOMElement& query_response_root,
+                     const XMLCh* a_timeStamp,
+                     std::optional<std::string>& time_stamp)
+{
+  if (query_response_root.hasAttribute(a_timeStamp))
+  {
+    const XMLCh* tmp1 = query_response_root.getAttribute(a_timeStamp);
+    if (tmp1)
+      time_stamp = bwx::to_string(tmp1);
+  }
+}
+
+// Select the members of a query response
+void select_response_members(const std::shared_ptr<bw::QueryBase>& query,
+                             bwx::XPathSnapshot& xps,
+                             const std::string& prefix)
+{
+  // If query is ad hoc query then perform filtering.
+  if (query->get_type() == bw::QueryBase::QUERY)
+  {
+    bw::AdHocQuery::filter(query, xps);
+  }
+  else  // Query is a stored query.
+  {
+    // Generate XPATH query to select response members.
+    std::ostringstream expr;
+    expr << "/" << prefix << "FeatureCollection/" << prefix << "member";
+    xps.xpath_query(expr.str());
+  }
+}
+}  // namespace
+
 void bw::Request::GetFeature::execute_multiple_queries(std::ostream& ost) const
 {
   try
@@ -268,25 +340,9 @@ void bw::Request::GetFeature::execute_multiple_queries(std::ostream& ost) const
           // std::cout << "### wfs::FeatureCollection" << std::endl;
 
           // ### wfs:FeatureCollection
-          if (query_response_root->hasAttribute(a_timeStamp.get()))
-          {
-            const XMLCh* tmp1 = query_response_root->getAttribute(a_timeStamp.get());
-            if (tmp1)
-              time_stamp = bwx::to_string(tmp1);
-          }
+          read_time_stamp(*query_response_root, a_timeStamp.get(), time_stamp);
 
-          // If query is ad hoc query then perform filtering.
-          if (queries[i]->get_type() == QueryBase::QUERY)
-          {
-            bw::AdHocQuery::filter(queries[i], xps);
-          }
-          else  // Query is a stored query.
-          {
-            // Generate XPATH query to select response members.
-            std::ostringstream expr;
-            expr << "/" << prefix << "FeatureCollection/" << prefix << "member";
-            xps.xpath_query(expr.str());
-          }
+          select_response_members(queries[i], xps, prefix);
 
           // Get number of members
           std::size_t num_members = xps.size();
@@ -304,27 +360,15 @@ void bw::Request::GetFeature::execute_multiple_queries(std::ostream& ost) const
           }
           else
           {
-            std::size_t curr_num_returned = 0;
-            auto* qr_member = bwx::append_child_element(*root, WFS_NAMESPACE_URI, "wfs:member");
-            // Import root element of query response without child elements
-            auto* fc_node = xml_doc_p->importNode(query_response_root, false);
-            auto* fc_elem = &dynamic_cast<DOMElement&>(*fc_node);
-            qr_member->appendChild(fc_elem);
-
-            // Import required query response members
-            for (std::size_t i = 0; i < num_members; i++)
-            {
-              num_matched++;
-              if ((member_ind >= start_index) and (member_ind <= end_index))
-              {
-                curr_num_returned++;
-                auto* imported_member = xml_doc_p->importNode(xps.get_item(i), true);
-                fc_elem->appendChild(imported_member);
-              }
-              member_ind++;
-            }
-
-            bwx::set_attr(*fc_elem, "numberReturned", str(format("%1%") % curr_num_returned));
+            import_response_members(*xml_doc_p,
+                                    *root,
+                                    query_response_root,
+                                    xps,
+                                    num_members,
+                                    start_index,
+                                    end_index,
+                                    member_ind,
+                                    num_matched);
           }
         }
         else
