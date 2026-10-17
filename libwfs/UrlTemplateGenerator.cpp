@@ -51,6 +51,120 @@ void encode(std::ostream& stream, const std::string& text)
     throw Fmi::Exception::Trace(BCP, "Operation failed!");
   }
 }
+
+// Substitute the value(s) of the parameter reference '${name}' at 'src' (in 'param_str') to
+// 'result'. Returns the position after the reference.
+const char* substitute_param_ref(
+    const char* src,
+    const std::string& param_str,
+    const std::function<std::vector<std::string>(const std::string&)>& param_getter_cb,
+    bool allow_list,
+    std::ostream& result)
+{
+  if (src[1] != '{')
+  {
+    std::ostringstream msg;
+    msg << "bw::UrlTemplateGenerator::eval_string_param"
+        << ": missing '{' after '$' in '" << param_str << "'";
+    throw Fmi::Exception(BCP, msg.str());
+  }
+
+  src += 2;
+  const char* name = src;
+  while (std::isalnum(*src) or *src == '_')
+  {
+    src++;
+  }
+
+  if (*src != '}')
+  {
+    std::ostringstream msg;
+    msg << "bw::UrlTemplateGenerator::eval_string_param"
+        << ": invalid parameter name after '${' or closing '}' missing in '" << param_str
+        << "'";
+    throw Fmi::Exception(BCP, msg.str());
+  }
+
+  const std::string ref_name(name, src);
+  src++;
+
+  const auto values = param_getter_cb(ref_name);
+  const int N = values.size();
+
+  if (not allow_list and N > 1)
+  {
+    std::ostringstream msg;
+    msg << "bw::UrlTemplateGenerator::eval_string_param: scalar value expected when"
+        << " substituting value of 'ref_name' (got";
+    for (int i = 0; i < N; i++)
+      msg << " '" << values[i] << "'";
+    msg << ")";
+    throw Fmi::Exception(BCP, msg.str());
+  }
+
+  for (int i = 0; i < N; i++)
+  {
+    if (i > 0)
+      result << ',';
+    result << values[i];
+  }
+
+  return src;
+}
+
+// The separator to use before the first query parameter added to 'url'
+std::string first_param_separator(const std::string& url)
+{
+  if ((!url.empty()) and (*url.rbegin() != '?'))
+  {
+    if (strchr(url.c_str(), '?') != nullptr)
+    {
+      return *url.rbegin() != '&' ? "&" : "";
+    }
+    return "?";
+  }
+  return "";
+}
+
+// Append the values of a parameter reference either as separate parameters or as a list
+template <typename ParamRef>
+void append_param_ref(std::ostream& result,
+                      const ParamRef& ref,
+                      const std::vector<std::string>& value_vect,
+                      std::string& sep)
+{
+  if (ref.separate_param)
+  {
+    for (const auto& item : value_vect)
+    {
+      result << sep;
+      encode(result, ref.name);
+      result << '=';
+      encode(result, item);
+      sep = "&";
+    }
+  }
+  else if (not(ref.omit_empty and value_vect.empty()))
+  {
+    char sep2[2] = {0, 0};
+    result << sep;
+    encode(result, ref.name);
+    result << '=';
+    for (const auto& item : value_vect)
+    {
+      if (std::strchr(item.c_str(), ',') != nullptr)
+      {
+        Fmi::Exception exception(BCP, "List items are not permitted to contain ',' characters!");
+        exception.addParameter("Item", item);
+        throw exception;
+      }
+      result << sep2;
+      encode(result, item);
+      sep2[0] = ',';
+    }
+    sep = "&";
+  }
+}
 }  // namespace
 
 bw::UrlTemplateGenerator::UrlTemplateGenerator(std::string url,
@@ -82,17 +196,7 @@ std::string bw::UrlTemplateGenerator::generate(
 
     if (!params.empty())
     {
-      if ((!url.empty()) and (*url.rbegin() != '?'))
-      {
-        if (strchr(url.c_str(), '?') != nullptr)
-        {
-          sep = *url.rbegin() != '&' ? "&" : "";
-        }
-        else
-        {
-          sep = "?";
-        }
-      }
+      sep = first_param_separator(url);
 
       for (const auto& param : params)
       {
@@ -100,38 +204,7 @@ std::string bw::UrlTemplateGenerator::generate(
         {
           const auto& ref = *ptr;
           const auto value_vect = param_getter_cb(ref.name);
-          if (ref.separate_param)
-          {
-              for (const auto& item : value_vect)
-            {
-              result << sep;
-              encode(result, ref.name);
-              result << '=';
-              encode(result, item);
-              sep = "&";
-            }
-          }
-          else if (not(ref.omit_empty and value_vect.empty()))
-          {
-            char sep2[2] = {0, 0};
-            result << sep;
-            encode(result, ref.name);
-            result << '=';
-            for (const auto& item : value_vect)
-            {
-              if (std::strchr(item.c_str(), ',') != nullptr)
-              {
-                Fmi::Exception exception(
-                    BCP, "List items are not permitted to contain ',' characters!");
-                exception.addParameter("Item", item);
-                throw exception;
-              }
-              result << sep2;
-              encode(result, item);
-              sep2[0] = ',';
-            }
-            sep = "&";
-          }
+          append_param_ref(result, ref, value_vect, sep);
         }
         else if (const auto* ptr = std::get_if<StringParam>(&param))
         {
@@ -252,53 +325,7 @@ std::string bw::UrlTemplateGenerator::eval_string_param(
       }
       else if (src[0] == '$')
       {
-        if (src[1] != '{')
-        {
-          std::ostringstream msg;
-          msg << "bw::UrlTemplateGenerator::eval_string_param"
-              << ": missing '{' after '$' in '" << param_str << "'";
-          throw Fmi::Exception(BCP, msg.str());
-        }
-
-        src += 2;
-        const char* name = src;
-        while (std::isalnum(*src) or *src == '_')
-        {
-          src++;
-        }
-
-        if (*src != '}')
-        {
-          std::ostringstream msg;
-          msg << "bw::UrlTemplateGenerator::eval_string_param"
-              << ": invalid parameter name after '${' or closing '}' missing in '" << param_str
-              << "'";
-          throw Fmi::Exception(BCP, msg.str());
-        }
-
-        const std::string ref_name(name, src);
-        src++;
-
-        const auto values = param_getter_cb(ref_name);
-        const int N = values.size();
-
-        if (not allow_list and N > 1)
-        {
-          std::ostringstream msg;
-          msg << "bw::UrlTemplateGenerator::eval_string_param: scalar value expected when"
-              << " substituting value of 'ref_name' (got";
-          for (int i = 0; i < N; i++)
-            msg << " '" << values[i] << "'";
-          msg << ")";
-          throw Fmi::Exception(BCP, msg.str());
-        }
-
-        for (int i = 0; i < N; i++)
-        {
-          if (i > 0)
-            result << ',';
-          result << values[i];
-        }
+        src = substitute_param_ref(src, param_str, param_getter_cb, allow_list, result);
       }
       else
       {
