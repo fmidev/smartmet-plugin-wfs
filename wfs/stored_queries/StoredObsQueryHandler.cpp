@@ -137,6 +137,515 @@ std::string StoredObsQueryHandler::get_handler_description() const
   return "Observation data (general, no lightning, aviation or multi-sensor)";
 }
 
+namespace
+{
+// If 'data_source'-field exists extend it so that for every meteo.parameter a corresponding
+// '*data_source'-field is added, for example, Temperature -> Temperature_data_source
+void add_data_source_params(RequestParameterMap& params)
+{
+  std::set<std::string> keys = params.get_keys();
+  for (const auto& k : keys)
+  {
+    if (k == "meteoParameters")
+    {
+      std::vector<SmartMet::Spine::Value> values = params.get_values(k);
+      std::vector<std::string> mparams;
+      bool dataSourceFound = false;
+      for (const auto& v : values)
+      {
+        std::string val = v.to_string();
+        if (val == "data_source")
+        {
+          dataSourceFound = true;
+        }
+        else
+        {
+          mparams.push_back(val);
+        }
+      }
+      if (dataSourceFound && !mparams.empty())
+      {
+        params.remove("meteoParameters");
+        for (const auto& p : mparams)
+        {
+          std::string fieldname = p + "_data_source";
+          params.add("meteoParameters", p);
+          params.add("meteoParameters", fieldname);
+        }
+      }
+      break;
+    }
+  }
+}
+
+// Throw for a too long time interval or too many epochs
+[[noreturn]] void throw_time_interval_error(const char* message,
+                                            const char* detail,
+                                            const SmartMet::Engine::Observation::Settings& query_params,
+                                            const char* code)
+{
+  Fmi::Exception exception(BCP, message);
+  if (detail)
+    exception.addDetail(detail);
+  exception.addParameter(WFS_EXCEPTION_CODE, code);
+  exception.addParameter("Start time", Fmi::date_time::to_simple_string(query_params.starttime));
+  exception.addParameter("End time", Fmi::date_time::to_simple_string(query_params.endtime));
+  throw exception.disableStackTrace();
+}
+}  // namespace
+
+/**
+ *   @brief The common data for formatting the results of a query
+ */
+struct StoredObsQueryHandler::ResultContext
+{
+  const TS::TimeSeriesVector& result;
+  TS::StringVisitor& sv;
+  Fmi::ValueFormatter& fmt;
+  const SmartMet::Engine::Observation::Settings& query_params;
+  const std::shared_ptr<SmartMet::Spine::CRSRegistry::Transformation>& transformation;
+  bool show_height;
+  const std::string& tz_name;
+  const std::string& curr_lang;
+  const std::vector<ExtParamIndexEntry>& param_index;
+  Fmi::DateTime now;
+  Fmi::TimeFormatter& tfmt;
+  std::unique_ptr<std::locale>& curr_locale;
+  std::map<std::string, SmartMet::Spine::LocationPtr>& sites;
+};
+
+void StoredObsQueryHandler::set_location_settings(
+    const RequestParameterMap& params,
+    const SmartMet::Engine::Observation::Settings& query_params,
+    const std::string& curr_lang,
+    SmartMet::Engine::Observation::StationSettings& stationSettings) const
+{
+  if (query_params.stationtype != ICEBUOY_PRODUCER &&
+      query_params.stationtype != COPERNICUS_PRODUCER)
+  {
+    std::list<std::pair<std::string, SmartMet::Spine::LocationPtr> > locations_list;
+    get_location_options(params, curr_lang, &locations_list);
+
+    for (const auto& item : locations_list)
+    {
+      stationSettings.nearest_station_settings.emplace_back(item.second->longitude,
+                                                            item.second->latitude,
+                                                            query_params.maxdistance,
+                                                            query_params.numberofstations,
+                                                            item.first,
+                                                            item.second->fmisid);
+    }
+  }
+
+  params.get<int64_t>(P_GEOIDS, std::back_inserter(stationSettings.geoid_settings.geoids));
+  if (!stationSettings.geoid_settings.geoids.empty())
+  {
+    stationSettings.geoid_settings.maxdistance = query_params.maxdistance;
+    stationSettings.geoid_settings.numberofstations = query_params.numberofstations;
+    stationSettings.geoid_settings.language = curr_lang;
+  }
+}
+
+bool StoredObsQueryHandler::set_bounding_box(
+    const RequestParameterMap& params,
+    const std::string& crs,
+    int debug_level,
+    SmartMet::Engine::Observation::Settings& query_params,
+    SmartMet::Engine::Observation::StationSettings& stationSettings) const
+{
+  const char* DATA_CRS_NAME = "urn:ogc:def:crs:EPSG::4326";
+
+  using SmartMet::Spine::BoundingBox;
+  BoundingBox requested_bbox;
+  bool have_bbox = get_bounding_box(params, crs, &requested_bbox);
+  std::unique_ptr<BoundingBox> query_bbox;
+  if (have_bbox)
+  {
+    query_bbox.reset(new BoundingBox);
+    *query_bbox = transform_bounding_box(requested_bbox, DATA_CRS_NAME);
+    stationSettings.bounding_box_settings["minx"] = query_bbox->xMin;
+    stationSettings.bounding_box_settings["miny"] = query_bbox->yMin;
+    stationSettings.bounding_box_settings["maxx"] = query_bbox->xMax;
+    stationSettings.bounding_box_settings["maxy"] = query_bbox->yMax;
+
+    query_params.boundingBox["minx"] = query_bbox->xMin;
+    query_params.boundingBox["miny"] = query_bbox->yMin;
+    query_params.boundingBox["maxx"] = query_bbox->xMax;
+    query_params.boundingBox["maxy"] = query_bbox->yMax;
+
+    if (debug_level > 0)
+    {
+      std::ostringstream msg;
+      msg << SmartMet::Spine::log_time_str() << ": [WFS] [DEBUG] Original bounding box: ("
+          << requested_bbox.xMin << " " << requested_bbox.yMin << " " << requested_bbox.xMax
+          << " " << requested_bbox.yMax << " " << requested_bbox.crs << ")\n";
+      msg << "                                   "
+          << " Converted bounding box: (" << query_bbox->xMin << " " << query_bbox->yMin << " "
+          << query_bbox->xMax << " " << query_bbox->yMax << " " << query_bbox->crs << ")\n";
+      std::cout << msg.str() << std::flush;
+    }
+  }
+  return have_bbox;
+}
+
+void StoredObsQueryHandler::check_query_limits(
+    const RequestParameterMap& params,
+    const SmartMet::Engine::Observation::Settings& query_params,
+    uint64_t timestep,
+    bool have_bbox) const
+{
+  if (query_params.starttime > query_params.endtime)
+  {
+    throw_time_interval_error(
+        "Invalid time interval!", nullptr, query_params, WFS_OPERATION_PARSING_FAILED);
+  }
+
+  // Avoid an attempt to dump too much data.
+  unsigned maxEpochs = params.get_single<uint64_t>(P_MAX_EPOCHS);
+  unsigned ts1 = (timestep ? timestep : 60);
+  if (sq_restrictions and
+      query_params.starttime + Fmi::Minutes(maxEpochs * ts1) < query_params.endtime)
+  {
+    throw_time_interval_error("Too many time epochs in the time interval!",
+                              "Use shorter time interval or larger time step.",
+                              query_params,
+                              WFS_OPERATION_PROCESSING_FAILED);
+  }
+
+  if (sq_restrictions and max_station_count > 0 and have_bbox)
+  {
+    Stations stations;
+    obs_engine->getStationsByBoundingBox(stations, query_params);
+    if (stations.size() > max_station_count)
+    {
+      Fmi::Exception exception(
+          BCP, "Too many stations (" + std::to_string(stations.size()) + ") in the bounding box!");
+      exception.addDetail("No more than " + std::to_string(max_station_count) + " is allowed.");
+      exception.addParameter(WFS_EXCEPTION_CODE, WFS_OPERATION_PROCESSING_FAILED);
+      throw exception.disableStackTrace();
+    }
+  }
+}
+
+void StoredObsQueryHandler::index_sites(const TS::TimeSeriesVector& result,
+                                        TS::StringVisitor& sv,
+                                        std::map<std::string, SiteRec>& site_map) const
+{
+  const TS::TimeSeries& ts_fmisid = result.at(fmisid_ind);
+  for (std::size_t i = 0; i < ts_fmisid.size(); i++)
+  {
+    // Fmisids are doubles for some reason, fix this!!!!
+    sv.setPrecision(0);
+    const std::string fmisid = ts_fmisid[i].value.apply_visitor(sv);
+    site_map[fmisid].row_index_vect.push_back(i);
+  }
+}
+
+void StoredObsQueryHandler::assign_groups(std::map<std::string, SiteRec>& site_map,
+                                          std::map<int, GroupRec>& group_map,
+                                          FeatureID& feature_id,
+                                          const std::vector<std::string>& param_names) const
+{
+  if (separate_groups)
+  {
+    // Assign group IDs to stations for separate groups requested
+    int group_cnt = 0;
+    for (auto& item : site_map)
+    {
+      const std::string& fmisid = item.first;
+      const int group_id = group_cnt++;
+      item.second.group_id = group_id;
+      item.second.ind_in_group = 0;
+
+      const char* place_params[] = {
+          P_WMOS, P_LPNNS, P_FMISIDS, P_PLACES, P_LATLONS, P_GEOIDS, P_KEYWORD, P_BOUNDING_BOX};
+      for (auto& place_param : place_params)
+      {
+        feature_id.erase_param(place_param);
+      }
+      feature_id.add_param(P_FMISIDS, fmisid);
+      group_map[group_id].feature_id = feature_id.get_id();
+
+      for (const std::string& param_name : param_names)
+      {
+        feature_id.erase_param(P_METEO_PARAMETERS);
+        feature_id.add_param(P_METEO_PARAMETERS, param_name);
+        group_map[group_id].param_ids[param_name] = feature_id.get_id();
+      }
+    }
+  }
+  else
+  {
+    const int group_id = 0;
+    int ind_in_group = 0;
+    for (auto& item : site_map)
+    {
+      item.second.group_id = group_id;
+      item.second.ind_in_group = ind_in_group++;
+    }
+
+    group_map[group_id].feature_id = feature_id.get_id();
+
+    for (const std::string& param_name : param_names)
+    {
+      feature_id.erase_param(P_METEO_PARAMETERS);
+      feature_id.add_param(P_METEO_PARAMETERS, param_name);
+      group_map[group_id].param_ids[param_name] = feature_id.get_id();
+    }
+  }
+}
+
+SmartMet::Spine::LocationPtr StoredObsQueryHandler::find_geoid_location(
+    const std::string& geoid, const std::string& curr_lang, std::string& region) const
+{
+  SmartMet::Spine::LocationPtr geoLoc;
+  try
+  {
+    const long geoid_long = Fmi::stol(geoid);
+    std::string langCode = curr_lang;
+    SupportsLocationParameters::engOrFinToEnOrFi(langCode);
+    geoLoc = geo_engine->idSearch(geoid_long, langCode);
+    region = (geoLoc ? geoLoc->area : "");
+  }
+  catch (...)
+  {
+    (void)Fmi::Exception::Trace(BCP, "Ignore exceptions here");
+  }
+  return geoLoc;
+}
+
+void StoredObsQueryHandler::set_station_list(CTPP::CDT& hash,
+                                             const ResultContext& ctx,
+                                             const std::map<std::string, SiteRec>& site_map) const
+{
+  const TS::TimeSeries& ts_lat = ctx.result.at(lat_ind);
+  const TS::TimeSeries& ts_lon = ctx.result.at(lon_ind);
+  const TS::TimeSeries& ts_height = ctx.result.at(height_ind);
+  const TS::TimeSeries& ts_name = ctx.result.at(name_ind);
+  const TS::TimeSeries& ts_dist = ctx.result.at(dist_ind);
+  const TS::TimeSeries& ts_direction = ctx.result.at(direction_ind);
+  const TS::TimeSeries& ts_geoid = ctx.result.at(geoid_ind);
+  const TS::TimeSeries& ts_wmo = ctx.result.at(wmo_ind);
+  const std::string& missingtext = ctx.query_params.missingtext;
+  auto& sv = ctx.sv;
+
+  for (const auto& it1 : site_map)
+  {
+    const std::string& fmisid = it1.first;
+    const int group_id = it1.second.group_id;
+    const int ind = it1.second.ind_in_group;
+    const int row_1 = it1.second.row_index_vect.at(0);
+
+    CTPP::CDT& group = hash["groups"][group_id];
+    CTPP::CDT& station = group["obsStationList"][ind];
+
+    station["fmisid"] = fmisid;
+
+    sv.setPrecision(5);
+    const std::string lat = ts_lat[row_1].value.apply_visitor(sv);
+    const std::string lon = ts_lon[row_1].value.apply_visitor(sv);
+
+    sv.setPrecision(1);
+    const std::string height = ts_height[row_1].value.apply_visitor(sv);
+    const std::string name = ts_name[row_1].value.apply_visitor(sv);
+    const std::string distance = ts_dist[row_1].value.apply_visitor(sv);
+    const std::string bearing = ts_direction[row_1].value.apply_visitor(sv);
+    const std::string geoid = ts_geoid[row_1].value.apply_visitor(sv);
+    const std::string wmo = ts_wmo[row_1].value.apply_visitor(sv);
+
+    if (not lat.empty() and not lon.empty())
+      set_2D_coord(ctx.transformation, lat, lon, station);
+    else
+      throw Fmi::Exception(BCP, "wfs: Internal LatLon query error.");
+
+    // Region solving
+    std::string region;
+    if (not geoid.empty())
+      ctx.sites[geoid] = find_geoid_location(geoid, ctx.curr_lang, region);
+
+    if (ctx.show_height)
+      station["height"] = (height.empty() ? missingtext : height);
+    station["distance"] = (distance.empty() ? missingtext : distance);
+    station["bearing"] =
+        ((distance.empty() or bearing.empty() or (distance == missingtext)) ? missingtext
+                                                                            : bearing);
+    station["name"] = name;
+
+    if (not region.empty())
+      station["region"] = region;
+
+    if (not wmo.empty() && wmo != "0" && wmo != "NaN")
+      station["wmo"] = wmo;
+
+    (geoid.empty() or geoid == "-1") ? station["geoid"] = missingtext : station["geoid"] = geoid;
+  }
+}
+
+void StoredObsQueryHandler::set_group_info(CTPP::CDT& group,
+                                           const ResultContext& ctx,
+                                           const GroupRec& group_rec,
+                                           const std::string& crs,
+                                           bool support_quality_info) const
+{
+  const auto& query_params = ctx.query_params;
+
+  // Time values of a group.
+  group["obsPhenomenonStartTime"] = Fmi::to_iso_extended_string(query_params.starttime) + "Z";
+  group["obsPhenomenonEndTime"] = Fmi::to_iso_extended_string(query_params.endtime) + "Z";
+  group["obsResultTime"] = Fmi::to_iso_extended_string(query_params.endtime) + "Z";
+
+  group["featureId"] = group_rec.feature_id;
+  group["crs"] = crs;
+  if (ctx.tz_name != "UTC")
+    group["timezone"] = ctx.tz_name;
+  group["timestep"] = query_params.timestep;
+  if (support_quality_info)
+    group["qualityInfo"] = "on";
+
+  for (std::size_t k = 0; k < ctx.param_index.size(); k++)
+  {
+    const auto& entry = ctx.param_index[k];
+    const std::string& name = entry.p.name;
+    group["obsParamList"][k]["name"] = (entry.p.sensor_name ? *entry.p.sensor_name : entry.p.name);
+    group["obsParamList"][k]["featureId"] = group_rec.param_ids.at(name);
+
+    // Mark QC parameters
+    if (SupportsQualityParameters::isQCParameter(name))
+    {
+      group["obsParamList"][k]["isQCParameter"] = "true";
+    }
+  }
+}
+
+void StoredObsQueryHandler::set_site_observations(CTPP::CDT& group,
+                                                  int& ind,
+                                                  const ResultContext& ctx,
+                                                  const SiteRec& site) const
+{
+  static const long ref_jd = Fmi::Date(1970, 1, 1).julian_day();
+
+  const TS::TimeSeries& ts_lat = ctx.result.at(lat_ind);
+  const TS::TimeSeries& ts_lon = ctx.result.at(lon_ind);
+  const TS::TimeSeries& ts_height = ctx.result.at(height_ind);
+  const TS::TimeSeries& ts_geoid = ctx.result.at(geoid_ind);
+  auto& sv = ctx.sv;
+
+  const int row_1 = site.row_index_vect.at(0);
+
+  bool first = true;
+  Fmi::TimeZonePtr tzp;
+
+  const TS::TimeSeries& ts_epoch = ctx.result.at(initial_bs_param.size());
+  for (int row_num : site.row_index_vect)
+  {
+    sv.setPrecision(5);
+    // Use first row instead of row_num for static parameter values
+    // SHOULD FIX Delfoi instead!
+    const std::string latitude = ts_lat[row_1].value.apply_visitor(sv);
+    const std::string longitude = ts_lon[row_1].value.apply_visitor(sv);
+    const std::string geoid = ts_geoid[row_1].value.apply_visitor(sv);
+
+    if (first)
+    {
+      tzp = get_tz_for_site(std::stod(longitude), std::stod(latitude), ctx.tz_name);
+    }
+
+    CTPP::CDT obs_rec;
+    set_2D_coord(ctx.transformation, latitude, longitude, obs_rec);
+
+    if (ctx.show_height)
+    {
+      sv.setPrecision(1);
+      const std::string height = ts_height[row_num].value.apply_visitor(sv);
+      obs_rec["height"] = (height.empty() ? ctx.query_params.missingtext : height);
+    }
+
+    const auto ldt = ts_epoch.at(row_num).time;
+    Fmi::DateTime epoch = ldt.utc_time();
+    // Cannot use pt::time_difference::total_seconds() directly as it returns long and
+    // could overflow.
+    long long jd = epoch.date().julian_day();
+    long seconds = epoch.time_of_day().total_seconds();
+    INT_64 s_epoch = 86400LL * (jd - ref_jd) + seconds;
+    obs_rec["epochTime"] = s_epoch;
+    obs_rec["epochTimeStr"] = format_local_time(epoch, tzp);
+
+    for (std::size_t k = 0; k < ctx.param_index.size(); k++)
+      set_observation_value(obs_rec["data"][k], ctx, ctx.param_index[k], row_num, geoid, ldt);
+
+    group["obsReturnArray"][ind++] = obs_rec;
+  }
+}
+
+void StoredObsQueryHandler::set_observation_value(CTPP::CDT& data,
+                                                  const ResultContext& ctx,
+                                                  const ExtParamIndexEntry& entry,
+                                                  int row_num,
+                                                  const std::string& geoid,
+                                                  const Fmi::LocalDateTime& ldt) const
+{
+  const std::string& name = entry.p.name;
+  const int ind = entry.p.ind;
+  auto& sv = ctx.sv;
+
+  if (ind >= 0)
+  {
+    const TS::TimeSeries& ts_k = ctx.result.at(ind);
+    const uint precision = get_meteo_parameter_options(name)->precision;
+    sv.setPrecision(precision);
+    const std::string value = ts_k[row_num].value.apply_visitor(sv);
+    data["value"] = value;
+    if (entry.qc)
+    {
+      const int qc_ind = entry.qc->ind;
+      std::stringstream qc_value;
+      const TS::TimeSeries& ts_qc_k = ctx.result.at(qc_ind);
+      sv.setPrecision(0);
+      const std::string value_qc = ts_qc_k[row_num].value.apply_visitor(sv);
+      data["qcValue"] = value_qc;
+    }
+    return;
+  }
+
+  const auto& geoLoc = ctx.sites.at(geoid);
+  if (!geoLoc)
+  {
+    data["value"] = ctx.query_params.missingtext;
+    return;
+  }
+
+  if (SmartMet::TimeSeries::is_location_parameter(name))
+  {
+    const std::string val = SmartMet::TimeSeries::location_parameter(
+        geoLoc, name, ctx.fmt, ctx.tz_name, get_meteo_parameter_options(name)->precision);
+    data["value"] = val;
+  }
+  else if (SmartMet::TimeSeries::is_time_parameter(name))
+  {
+    const std::string timestring = "Not supported";
+    if (not ctx.curr_locale)
+    {
+      ctx.curr_locale.reset(new std::locale(ctx.query_params.localename.c_str()));
+    }
+    const auto val = SmartMet::TimeSeries::time_parameter(name,
+                                                          ldt,
+                                                          ctx.now,
+                                                          *geoLoc,
+                                                          ctx.tz_name,
+                                                          geo_engine->getTimeZones(),
+                                                          *ctx.curr_locale,
+                                                          ctx.tfmt,
+                                                          timestring);
+    std::ostringstream val_str;
+    val_str << val;
+    data["value"] = val_str.str();
+  }
+  else
+  {
+    assert(0 /* Not supposed to be here */);
+  }
+}
+
 void StoredObsQueryHandler::query(const StoredQuery& query,
                                   const std::string& language,
                                   const std::optional<std::string>& /*hostname*/,
@@ -158,39 +667,7 @@ void StoredObsQueryHandler::query(const StoredQuery& query,
     // for example, Temperature -> Temperature_data_source
     auto params = query.get_param_map();
 
-    std::set<std::string> keys = params.get_keys();
-    for (const auto& k : keys)
-    {
-      if (k == "meteoParameters")
-      {
-        std::vector<SmartMet::Spine::Value> values = params.get_values(k);
-        std::vector<std::string> mparams;
-        bool dataSourceFound = false;
-        for (const auto& v : values)
-        {
-          std::string val = v.to_string();
-          if (val == "data_source")
-          {
-            dataSourceFound = true;
-          }
-          else
-          {
-            mparams.push_back(val);
-          }
-        }
-        if (dataSourceFound && !mparams.empty())
-        {
-          params.remove("meteoParameters");
-          for (const auto& p : mparams)
-          {
-            std::string fieldname = p + "_data_source";
-            params.add("meteoParameters", p);
-            params.add("meteoParameters", fieldname);
-          }
-        }
-        break;
-      }
-    }
+    add_data_source_params(params);
 
     try
     {
@@ -280,99 +757,11 @@ void StoredObsQueryHandler::query(const StoredQuery& query,
 
       params.get<int64_t>(P_FMISIDS, std::back_inserter(stationSettings.fmisids));
 
-      if (query_params.stationtype != ICEBUOY_PRODUCER &&
-          query_params.stationtype != COPERNICUS_PRODUCER)
-      {
-        std::list<std::pair<std::string, SmartMet::Spine::LocationPtr> > locations_list;
-        get_location_options(params, curr_lang, &locations_list);
+      set_location_settings(params, query_params, curr_lang, stationSettings);
 
-        for (const auto& item : locations_list)
-        {
-          stationSettings.nearest_station_settings.emplace_back(item.second->longitude,
-                                                                item.second->latitude,
-                                                                query_params.maxdistance,
-                                                                query_params.numberofstations,
-                                                                item.first,
-                                                                item.second->fmisid);
-        }
-      }
+      bool have_bbox = set_bounding_box(params, crs, debug_level, query_params, stationSettings);
 
-      params.get<int64_t>(P_GEOIDS, std::back_inserter(stationSettings.geoid_settings.geoids));
-      if (!stationSettings.geoid_settings.geoids.empty())
-      {
-        stationSettings.geoid_settings.maxdistance = query_params.maxdistance;
-        stationSettings.geoid_settings.numberofstations = query_params.numberofstations;
-        stationSettings.geoid_settings.language = curr_lang;
-      }
-
-      using SmartMet::Spine::BoundingBox;
-      BoundingBox requested_bbox;
-      bool have_bbox = get_bounding_box(params, crs, &requested_bbox);
-      std::unique_ptr<BoundingBox> query_bbox;
-      if (have_bbox)
-      {
-        query_bbox.reset(new BoundingBox);
-        *query_bbox = transform_bounding_box(requested_bbox, DATA_CRS_NAME);
-        stationSettings.bounding_box_settings["minx"] = query_bbox->xMin;
-        stationSettings.bounding_box_settings["miny"] = query_bbox->yMin;
-        stationSettings.bounding_box_settings["maxx"] = query_bbox->xMax;
-        stationSettings.bounding_box_settings["maxy"] = query_bbox->yMax;
-
-        query_params.boundingBox["minx"] = query_bbox->xMin;
-        query_params.boundingBox["miny"] = query_bbox->yMin;
-        query_params.boundingBox["maxx"] = query_bbox->xMax;
-        query_params.boundingBox["maxy"] = query_bbox->yMax;
-
-        if (debug_level > 0)
-        {
-          std::ostringstream msg;
-          msg << SmartMet::Spine::log_time_str() << ": [WFS] [DEBUG] Original bounding box: ("
-              << requested_bbox.xMin << " " << requested_bbox.yMin << " " << requested_bbox.xMax
-              << " " << requested_bbox.yMax << " " << requested_bbox.crs << ")\n";
-          msg << "                                   "
-              << " Converted bounding box: (" << query_bbox->xMin << " " << query_bbox->yMin << " "
-              << query_bbox->xMax << " " << query_bbox->yMax << " " << query_bbox->crs << ")\n";
-          std::cout << msg.str() << std::flush;
-        }
-      }
-
-      if (query_params.starttime > query_params.endtime)
-      {
-        Fmi::Exception exception(BCP, "Invalid time interval!");
-        exception.addParameter(WFS_EXCEPTION_CODE, WFS_OPERATION_PARSING_FAILED);
-        exception.addParameter("Start time", Fmi::date_time::to_simple_string(query_params.starttime));
-        exception.addParameter("End time", Fmi::date_time::to_simple_string(query_params.endtime));
-        throw exception.disableStackTrace();
-      }
-
-      // Avoid an attempt to dump too much data.
-      unsigned maxEpochs = params.get_single<uint64_t>(P_MAX_EPOCHS);
-      unsigned ts1 = (timestep ? timestep : 60);
-      if (sq_restrictions and
-          query_params.starttime + Fmi::Minutes(maxEpochs * ts1) < query_params.endtime)
-      {
-        Fmi::Exception exception(BCP, "Too many time epochs in the time interval!");
-        exception.addDetail("Use shorter time interval or larger time step.");
-        exception.addParameter(WFS_EXCEPTION_CODE, WFS_OPERATION_PROCESSING_FAILED);
-        exception.addParameter("Start time", Fmi::date_time::to_simple_string(query_params.starttime));
-        exception.addParameter("End time", Fmi::date_time::to_simple_string(query_params.endtime));
-        throw exception.disableStackTrace();
-      }
-
-      if (sq_restrictions and max_station_count > 0 and have_bbox)
-      {
-        Stations stations;
-        obs_engine->getStationsByBoundingBox(stations, query_params);
-        if (stations.size() > max_station_count)
-        {
-          Fmi::Exception exception(
-              BCP,
-              "Too many stations (" + std::to_string(stations.size()) + ") in the bounding box!");
-          exception.addDetail("No more than " + std::to_string(max_station_count) + " is allowed.");
-          exception.addParameter(WFS_EXCEPTION_CODE, WFS_OPERATION_PROCESSING_FAILED);
-          throw exception.disableStackTrace();
-        }
-      }
+      check_query_limits(params, query_params, timestep, have_bbox);
 
       /*******************************************
        *  Finally perform the query              *
@@ -398,16 +787,7 @@ void StoredObsQueryHandler::query(const StoredQuery& query,
       TS::StringVisitor sv(fmt, 3);
 
       if (not emptyResult)
-      {
-        const TS::TimeSeries& ts_fmisid = obsengine_result->at(fmisid_ind);
-        for (std::size_t i = 0; i < ts_fmisid.size(); i++)
-        {
-          // Fmisids are doubles for some reason, fix this!!!!
-          sv.setPrecision(0);
-          const std::string fmisid = ts_fmisid[i].value.apply_visitor(sv);
-          site_map[fmisid].row_index_vect.push_back(i);
-        }
-      }
+        index_sites(*obsengine_result, sv, site_map);
 
       // Get the sequence number of query in the request
       int sq_id = query.get_query_id();
@@ -418,53 +798,7 @@ void StoredObsQueryHandler::query(const StoredQuery& query,
 
       FeatureID feature_id(get_config()->get_query_id(), params.get_map(true), sq_id);
 
-      if (separate_groups)
-      {
-        // Assign group IDs to stations for separate groups requested
-        int group_cnt = 0;
-        for (auto& item : site_map)
-        {
-          const std::string& fmisid = item.first;
-          const int group_id = group_cnt++;
-          item.second.group_id = group_id;
-          item.second.ind_in_group = 0;
-
-          const char* place_params[] = {
-              P_WMOS, P_LPNNS, P_FMISIDS, P_PLACES, P_LATLONS, P_GEOIDS, P_KEYWORD, P_BOUNDING_BOX};
-          for (auto& place_param : place_params)
-          {
-            feature_id.erase_param(place_param);
-          }
-          feature_id.add_param(P_FMISIDS, fmisid);
-          group_map[group_id].feature_id = feature_id.get_id();
-
-          for (const std::string& param_name : param_names)
-          {
-            feature_id.erase_param(P_METEO_PARAMETERS);
-            feature_id.add_param(P_METEO_PARAMETERS, param_name);
-            group_map[group_id].param_ids[param_name] = feature_id.get_id();
-          }
-        }
-      }
-      else
-      {
-        const int group_id = 0;
-        int ind_in_group = 0;
-        for (auto& item : site_map)
-        {
-          item.second.group_id = group_id;
-          item.second.ind_in_group = ind_in_group++;
-        }
-
-        group_map[group_id].feature_id = feature_id.get_id();
-
-        for (const std::string& param_name : param_names)
-        {
-          feature_id.erase_param(P_METEO_PARAMETERS);
-          feature_id.add_param(P_METEO_PARAMETERS, param_name);
-          group_map[group_id].param_ids[param_name] = feature_id.get_id();
-        }
-      }
+      assign_groups(site_map, group_map, feature_id, param_names);
 
       hash["responseTimestamp"] = Fmi::to_iso_extended_string(now) + "Z";
       hash["numMatched"] = num_groups;
@@ -488,121 +822,27 @@ void StoredObsQueryHandler::query(const StoredQuery& query,
 
       if (not emptyResult)
       {
-        const TS::TimeSeries& ts_lat = obsengine_result->at(lat_ind);
-        const TS::TimeSeries& ts_lon = obsengine_result->at(lon_ind);
-        const TS::TimeSeries& ts_height = obsengine_result->at(height_ind);
-        const TS::TimeSeries& ts_name = obsengine_result->at(name_ind);
-        const TS::TimeSeries& ts_dist = obsengine_result->at(dist_ind);
-        const TS::TimeSeries& ts_direction = obsengine_result->at(direction_ind);
-        const TS::TimeSeries& ts_geoid = obsengine_result->at(geoid_ind);
-        const TS::TimeSeries& ts_wmo = obsengine_result->at(wmo_ind);
-
         std::map<std::string, SmartMet::Spine::LocationPtr> sites;
+        const ResultContext ctx{*obsengine_result,
+                                sv,
+                                fmt,
+                                query_params,
+                                transformation,
+                                show_height,
+                                tz_name,
+                                curr_lang,
+                                param_index,
+                                now,
+                                *tfmt,
+                                curr_locale,
+                                sites};
 
-        for (const auto& it1 : site_map)
-        {
-          const std::string& fmisid = it1.first;
-          const int group_id = it1.second.group_id;
-          const int ind = it1.second.ind_in_group;
-          const int row_1 = it1.second.row_index_vect.at(0);
-
-          CTPP::CDT& group = hash["groups"][group_id];
-
-          group["obsStationList"][ind]["fmisid"] = fmisid;
-
-          sv.setPrecision(5);
-          const std::string lat = ts_lat[row_1].value.apply_visitor(sv);
-          const std::string lon = ts_lon[row_1].value.apply_visitor(sv);
-
-          sv.setPrecision(1);
-          const std::string height = ts_height[row_1].value.apply_visitor(sv);
-          const std::string name = ts_name[row_1].value.apply_visitor(sv);
-          const std::string distance = ts_dist[row_1].value.apply_visitor(sv);
-          const std::string bearing = ts_direction[row_1].value.apply_visitor(sv);
-          const std::string geoid = ts_geoid[row_1].value.apply_visitor(sv);
-          const std::string wmo = ts_wmo[row_1].value.apply_visitor(sv);
-
-          if (not lat.empty() and not lon.empty())
-            set_2D_coord(transformation, lat, lon, group["obsStationList"][ind]);
-          else
-            throw Fmi::Exception(BCP, "wfs: Internal LatLon query error.");
-
-          // Region solving
-          std::string region;
-          SmartMet::Spine::LocationPtr geoLoc;
-          if (not geoid.empty())
-          {
-            try
-            {
-              const long geoid_long = Fmi::stol(geoid);
-              std::string langCode = curr_lang;
-              SupportsLocationParameters::engOrFinToEnOrFi(langCode);
-              geoLoc = geo_engine->idSearch(geoid_long, langCode);
-              region = (geoLoc ? geoLoc->area : "");
-            }
-            catch (...)
-            {
-              (void) Fmi::Exception::Trace(BCP, "Ignore exceptions here");
-            }
-
-            sites[geoid] = geoLoc;
-          }
-
-          if (show_height)
-            group["obsStationList"][ind]["height"] =
-                (height.empty() ? query_params.missingtext : height);
-          group["obsStationList"][ind]["distance"] =
-              (distance.empty() ? query_params.missingtext : distance);
-          group["obsStationList"][ind]["bearing"] =
-              ((distance.empty() or bearing.empty() or (distance == query_params.missingtext))
-                   ? query_params.missingtext
-                   : bearing);
-          group["obsStationList"][ind]["name"] = name;
-
-          if (not region.empty())
-            group["obsStationList"][ind]["region"] = region;
-
-          if (not wmo.empty() && wmo != "0" && wmo != "NaN")
-            group["obsStationList"][ind]["wmo"] = wmo;
-
-          (geoid.empty() or geoid == "-1")
-              ? group["obsStationList"][ind]["geoid"] = query_params.missingtext
-              : group["obsStationList"][ind]["geoid"] = geoid;
-        }
+        set_station_list(hash, ctx, site_map);
 
         for (int group_id = 0; group_id < num_groups; group_id++)
         {
-          int ind = 0;
           CTPP::CDT& group = hash["groups"][group_id];
-
-          // Time values of a group.
-          group["obsPhenomenonStartTime"] =
-              Fmi::to_iso_extended_string(query_params.starttime) + "Z";
-          group["obsPhenomenonEndTime"] = Fmi::to_iso_extended_string(query_params.endtime) + "Z";
-          group["obsResultTime"] = Fmi::to_iso_extended_string(query_params.endtime) + "Z";
-
-          group["featureId"] = group_map.at(group_id).feature_id;
-          group["crs"] = crs;
-          if (tz_name != "UTC")
-            group["timezone"] = tz_name;
-          group["timestep"] = query_params.timestep;
-          if (support_quality_info)
-            group["qualityInfo"] = "on";
-
-          for (std::size_t k = 0; k < param_index.size(); k++)
-          {
-            const auto& entry = param_index[k];
-            const std::string& name = entry.p.name;
-            group["obsParamList"][k]["name"] =
-                (entry.p.sensor_name ? *entry.p.sensor_name : entry.p.name);
-            group["obsParamList"][k]["featureId"] = group_map.at(group_id).param_ids.at(name);
-
-            // Mark QC parameters
-            if (SupportsQualityParameters::isQCParameter(name))
-            {
-              group["obsParamList"][k]["isQCParameter"] = "true";
-            }
-          }
+          set_group_info(group, ctx, group_map.at(group_id), crs, support_quality_info);
 
           // Reference id of om:phenomenonTime and om:resultTime in
           // a group (a station). The first parameter in a list
@@ -612,125 +852,11 @@ void StoredObsQueryHandler::query(const StoredQuery& query,
           group["groupId"] = group_id_str;
           group["groupNum"] = group_id + 1;
 
+          int ind = 0;
           for (const auto& it1 : site_map)
           {
-            const int row_1 = it1.second.row_index_vect.at(0);
-
             if (it1.second.group_id == group_id)
-            {
-              bool first = true;
-              Fmi::TimeZonePtr tzp;
-
-              const TS::TimeSeries& ts_epoch = obsengine_result->at(initial_bs_param.size());
-              for (int row_num : it1.second.row_index_vect)
-              {
-                static const long ref_jd = Fmi::Date(1970, 1, 1).julian_day();
-
-                sv.setPrecision(5);
-                // Use first row instead of row_num for static parameter values
-                // SHOULD FIX Delfoi instead!
-                const std::string latitude = ts_lat[row_1].value.apply_visitor(sv);
-                const std::string longitude = ts_lon[row_1].value.apply_visitor(sv);
-                const std::string geoid = ts_geoid[row_1].value.apply_visitor(sv);
-
-                if (first)
-                {
-                  tzp = get_tz_for_site(std::stod(longitude), std::stod(latitude), tz_name);
-                }
-
-                CTPP::CDT obs_rec;
-                set_2D_coord(transformation, latitude, longitude, obs_rec);
-
-                if (show_height)
-                {
-                  sv.setPrecision(1);
-                  const std::string height = ts_height[row_num].value.apply_visitor(sv);
-                  obs_rec["height"] = (height.empty() ? query_params.missingtext : height);
-                }
-
-                const auto ldt = ts_epoch.at(row_num).time;
-                Fmi::DateTime epoch = ldt.utc_time();
-                // Cannot use pt::time_difference::total_seconds() directly as it returns long and
-                // could overflow.
-                long long jd = epoch.date().julian_day();
-                long seconds = epoch.time_of_day().total_seconds();
-                INT_64 s_epoch = 86400LL * (jd - ref_jd) + seconds;
-                obs_rec["epochTime"] = s_epoch;
-                obs_rec["epochTimeStr"] = format_local_time(epoch, tzp);
-
-                for (std::size_t k = 0; k < param_index.size(); k++)
-                {
-                  const auto& entry = param_index[k];
-                  const std::string& name = entry.p.name;
-                  const int ind = entry.p.ind;
-                  if (ind >= 0)
-                  {
-                    const TS::TimeSeries& ts_k = obsengine_result->at(ind);
-                    const uint precision = get_meteo_parameter_options(name)->precision;
-                    sv.setPrecision(precision);
-                    const std::string value = ts_k[row_num].value.apply_visitor(sv);
-                    obs_rec["data"][k]["value"] = value;
-                    if (entry.qc)
-                    {
-                      const int qc_ind = entry.qc->ind;
-                      std::stringstream qc_value;
-                      const TS::TimeSeries& ts_qc_k = obsengine_result->at(qc_ind);
-                      sv.setPrecision(0);
-                      const std::string value_qc = ts_qc_k[row_num].value.apply_visitor(sv);
-                      obs_rec["data"][k]["qcValue"] = value_qc;
-                    }
-                  }
-                  else
-                  {
-                    const auto& geoLoc = sites.at(geoid);
-                    if (geoLoc)
-                    {
-                      if (SmartMet::TimeSeries::is_location_parameter(name))
-                      {
-                        const std::string val = SmartMet::TimeSeries::location_parameter(
-                            geoLoc,
-                            name,
-                            fmt,
-                            tz_name,
-                            get_meteo_parameter_options(name)->precision);
-                        obs_rec["data"][k]["value"] = val;
-                      }
-                      else if (SmartMet::TimeSeries::is_time_parameter(name))
-                      {
-                        const std::string timestring = "Not supported";
-                        if (not curr_locale)
-                        {
-                          curr_locale.reset(new std::locale(query_params.localename.c_str()));
-                        }
-                        const auto val =
-                            SmartMet::TimeSeries::time_parameter(name,
-                                                                 ldt,
-                                                                 now,
-                                                                 *geoLoc,
-                                                                 tz_name,
-                                                                 geo_engine->getTimeZones(),
-                                                                 *curr_locale,
-                                                                 *tfmt,
-                                                                 timestring);
-                        std::ostringstream val_str;
-                        val_str << val;
-                        obs_rec["data"][k]["value"] = val_str.str();
-                      }
-                      else
-                      {
-                        assert(0 /* Not supposed to be here */);
-                      }
-                    }
-                    else
-                    {
-                      obs_rec["data"][k]["value"] = query_params.missingtext;
-                    }
-                  }
-                }
-
-                group["obsReturnArray"][ind++] = obs_rec;
-              }
-            }
+              set_site_observations(group, ind, ctx, it1.second);
           }
         }
       }

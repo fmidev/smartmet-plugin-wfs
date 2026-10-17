@@ -20,6 +20,8 @@ namespace Plugin
 {
 namespace WFS
 {
+class FeatureID;
+
 
 //  FIXME: why SupportsLocationparameters and SupportsTimeParameters are not used
 
@@ -115,6 +117,59 @@ class StoredObsQueryHandler : public StoredQueryHandlerBase,
     int ind_in_group = 0;
     std::vector<int> row_index_vect;
   };
+
+  struct ResultContext;
+
+  void set_location_settings(const RequestParameterMap& params,
+                             const SmartMet::Engine::Observation::Settings& query_params,
+                             const std::string& curr_lang,
+                             SmartMet::Engine::Observation::StationSettings& stationSettings) const;
+
+  bool set_bounding_box(const RequestParameterMap& params,
+                        const std::string& crs,
+                        int debug_level,
+                        SmartMet::Engine::Observation::Settings& query_params,
+                        SmartMet::Engine::Observation::StationSettings& stationSettings) const;
+
+  void check_query_limits(const RequestParameterMap& params,
+                          const SmartMet::Engine::Observation::Settings& query_params,
+                          uint64_t timestep,
+                          bool have_bbox) const;
+
+  void index_sites(const TS::TimeSeriesVector& result,
+                   TS::StringVisitor& sv,
+                   std::map<std::string, SiteRec>& site_map) const;
+
+  void assign_groups(std::map<std::string, SiteRec>& site_map,
+                     std::map<int, GroupRec>& group_map,
+                     FeatureID& feature_id,
+                     const std::vector<std::string>& param_names) const;
+
+  SmartMet::Spine::LocationPtr find_geoid_location(const std::string& geoid,
+                                                   const std::string& curr_lang,
+                                                   std::string& region) const;
+
+  void set_station_list(CTPP::CDT& hash,
+                        const ResultContext& ctx,
+                        const std::map<std::string, SiteRec>& site_map) const;
+
+  void set_group_info(CTPP::CDT& group,
+                      const ResultContext& ctx,
+                      const GroupRec& group_rec,
+                      const std::string& crs,
+                      bool support_quality_info) const;
+
+  void set_site_observations(CTPP::CDT& group,
+                             int& ind,
+                             const ResultContext& ctx,
+                             const SiteRec& site) const;
+
+  void set_observation_value(CTPP::CDT& data,
+                             const ResultContext& ctx,
+                             const ExtParamIndexEntry& entry,
+                             int row_num,
+                             const std::string& geoid,
+                             const Fmi::LocalDateTime& ldt) const;
 
   /**
    *   @brief The vector of initial parameters which are queried always
