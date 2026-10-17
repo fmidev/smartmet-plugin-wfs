@@ -31,7 +31,156 @@ enum TypeInd
   P_BBOX,
   P_BOOL
 };
+
+// Add the value of a scalar parameter of type 'type_ind'
+void add_scalar_value(bw::RequestParameterMap& result,
+                      const std::string& name,
+                      int type_ind,
+                      const Value& value)
+{
+  switch (type_ind)
+  {
+    case P_INT:
+      result.add(name, value.get_int());
+      break;
+
+    case P_UINT:
+      result.add(name, value.get_uint());
+      break;
+
+    case P_DOUBLE:
+    {
+      if (Fmi::ascii_tolower_copy(name) == "maxdistance")
+      {
+        try
+        {
+          result.add(name, value.get_double());
+        }
+        catch (...)
+        {
+          std::string maxdistance = value.get_string();
+          result.add(name, Fmi::DistanceParser::parse_meter(maxdistance));
+        }
+      }
+      else
+      {
+        result.add(name, value.get_double());
+      }
+    }
+      break;
+
+    case P_STRING:
+      result.add(name, value.get_string());
+      break;
+
+    case P_TIME:
+      result.add(name, value.get_ptime(true));
+      break;
+
+    case P_POINT:
+      result.add(name, value.get_point());
+      break;
+
+    case P_BBOX:
+      result.add(name, value.get_bbox());
+      break;
+
+    case P_BOOL:
+      result.add(name, value.get_bool());
+      break;
+
+    default:
+      // Not supposed to happen
+      throw Fmi::Exception(BCP,
+                                       "INTERNAL ERROR at line " + Fmi::to_string(__LINE__));
+  }
 }
+
+// Check the number of the values of an array parameter
+void check_value_count(const std::string& name,
+                       std::size_t n_values,
+                       std::size_t min_size,
+                       std::size_t max_size,
+                       std::size_t step)
+{
+  if (n_values < min_size or n_values > max_size)
+  {
+    std::ostringstream msg;
+    msg << "Number of the values '" << n_values << "' for the parameter '" << name
+        << "' is out of the range [" << min_size << ".." << max_size << "]!";
+    throw Fmi::Exception(BCP, msg.str());
+  }
+  if (step > 1 and ((n_values - min_size) % step != 0))
+  {
+    int cnt = 1 + (max_size - min_size) / step;
+    std::ostringstream msg;
+    msg << "Number of the values '" << n_values << "' for the parameter '" << name
+        << "' is invalid!";
+    switch (cnt)
+    {
+      case 1:
+        msg << " (" << min_size << " values expected)";
+        break;
+
+      case 2:
+      case 3:
+      case 4:
+      case 5:
+        msg << " (";
+        for (int i = 0; i < cnt; i++)
+        {
+          if (i > 0)
+            msg << (i == cnt - 1 ? " or " : ", ");
+          msg << min_size + i * step;
+        }
+        msg << " values expected)";
+        break;
+
+      default:
+        msg << " (" << min_size << ", " << min_size + step << ",... , "
+            << min_size + (cnt - 1) * step << " values expected)";
+        break;
+    }
+
+    throw Fmi::Exception(BCP, msg.str());
+  }
+}
+
+// Add a value of an array parameter of type 'type_ind'
+void add_array_value(bw::RequestParameterMap& result,
+                     const std::string& name,
+                     int type_ind,
+                     const Value& value)
+{
+  switch (type_ind)
+  {
+    case P_INT:
+      result.add(name, value.get_int());
+      break;
+
+    case P_UINT:
+      result.add(name, value.get_uint());
+      break;
+
+    case P_DOUBLE:
+      result.add(name, value.get_double());
+      break;
+
+    case P_STRING:
+      result.add(name, value.get_string());
+      break;
+
+    case P_TIME:
+      result.add(name, value.get_ptime(true));
+      break;
+
+    default:
+      // Not supposed to happen
+      throw Fmi::Exception(
+          BCP, "INTERNAL ERROR at line " + Fmi::to_string(__LINE__));
+  }
+}
+}  // namespace
 
 StoredQueryParamRegistry::StoredQueryParamRegistry(StoredQueryConfig::Ptr config)
     : bw::StoredQueryConfig::Wrapper(std::move(config))
@@ -88,139 +237,18 @@ std::shared_ptr<bw::RequestParameterMap> StoredQueryParamRegistry::resolve_handl
           continue;
         }
 
-        switch (type_ind)
-        {
-          case P_INT:
-            result->add(name, value.get_int());
-            break;
-
-          case P_UINT:
-            result->add(name, value.get_uint());
-            break;
-
-          case P_DOUBLE:
-  			{
-			  if(Fmi::ascii_tolower_copy(name) == "maxdistance")
-				{
-				  try
-					{
-					  result->add(name, value.get_double());
-					}
-				  catch(...)
-					{
-					  std::string maxdistance = value.get_string();
-					  result->add(name, Fmi::DistanceParser::parse_meter(maxdistance));
-					}
-				}
-			  else
-				{
-				  result->add(name, value.get_double());
-				}
-			}
-            break;
-
-          case P_STRING:
-            result->add(name, value.get_string());
-            break;
-
-          case P_TIME:
-            result->add(name, value.get_ptime(true));
-            break;
-
-          case P_POINT:
-            result->add(name, value.get_point());
-            break;
-
-          case P_BBOX:
-            result->add(name, value.get_bbox());
-            break;
-
-          case P_BOOL:
-            result->add(name, value.get_bool());
-            break;
-
-          default:
-            // Not supposed to happen
-            throw Fmi::Exception(BCP,
-                                             "INTERNAL ERROR at line " + Fmi::to_string(__LINE__));
-        }
+        add_scalar_value(*result, name, type_ind, value);
       }
       else if (typeid(item_ref) == typeid(ArrayParameterRec))
       {
         const ArrayParameterRec& rec = dynamic_cast<ArrayParameterRec&>(item_ref);
 
         std::vector<SmartMet::Spine::Value> values = rec.param_def->get_value(src, extra_params);
-        if (values.size() < rec.min_size or values.size() > rec.max_size)
-        {
-          std::ostringstream msg;
-          msg << "Number of the values '" << values.size() << "' for the parameter '" << name
-              << "' is out of the range [" << rec.min_size << ".." << rec.max_size << "]!";
-          throw Fmi::Exception(BCP, msg.str());
-        }
-        if (rec.step > 1 and ((values.size() - rec.min_size) % rec.step != 0))
-        {
-          int cnt = 1 + (rec.max_size - rec.min_size) / rec.step;
-          std::ostringstream msg;
-          msg << "Number of the values '" << values.size() << "' for the parameter '" << name
-              << "' is invalid!";
-          switch (cnt)
-          {
-            case 1:
-              msg << " (" << rec.min_size << " values expected)";
-              break;
-
-            case 2:
-            case 3:
-            case 4:
-            case 5:
-              msg << " (";
-              for (int i = 0; i < cnt; i++)
-              {
-                if (i > 0)
-                  msg << (i == cnt - 1 ? " or " : ", ");
-                msg << rec.min_size + i * rec.step;
-              }
-              msg << " values expected)";
-              break;
-
-            default:
-              msg << " (" << rec.min_size << ", " << rec.min_size + rec.step << ",... , "
-                  << rec.min_size + (cnt - 1) * rec.step << " values expected)";
-              break;
-          }
-
-          throw Fmi::Exception(BCP, msg.str());
-        }
+        check_value_count(name, values.size(), rec.min_size, rec.max_size, rec.step);
 
         for (const SmartMet::Spine::Value& value : values)
         {
-          switch (type_ind)
-          {
-            case P_INT:
-              result->add(name, value.get_int());
-              break;
-
-            case P_UINT:
-              result->add(name, value.get_uint());
-              break;
-
-            case P_DOUBLE:
-              result->add(name, value.get_double());
-              break;
-
-            case P_STRING:
-              result->add(name, value.get_string());
-              break;
-
-            case P_TIME:
-              result->add(name, value.get_ptime(true));
-              break;
-
-            default:
-              // Not supposed to happen
-              throw Fmi::Exception(
-                  BCP, "INTERNAL ERROR at line " + Fmi::to_string(__LINE__));
-          }
+          add_array_value(*result, name, type_ind, value);
         }
       }
       else
