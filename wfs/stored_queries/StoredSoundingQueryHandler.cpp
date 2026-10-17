@@ -546,6 +546,45 @@ std::string StoredSoundingQueryHandler::solveCrs(const RequestParameterMap& para
   return (requestedCrs.empty() ? DATA_CRS_NAME : requestedCrs);
 }
 
+namespace
+{
+// Throw if parameter 'name' (a quality code parameter if 'isQCParameter') has already been
+// given in the meteo parameter map item 'item' (using another name)
+template <typename ParamTuple>
+void check_duplicate_meteo_parameter(const ParamTuple& item,
+                                     const std::string& name,
+                                     bool isQCParameter)
+{
+  if ((std::get<3>(item) and not isQCParameter) or (std::get<4>(item) and isQCParameter))
+  {
+    const std::string& errParamName = (isQCParameter ? std::get<2>(item) : std::get<1>(item));
+    std::ostringstream msg;
+    msg << "Parameter '" << name << "' is already given by using '" << errParamName
+        << "' name.";
+    Fmi::Exception exception(BCP, "Invalid parameter value");
+    exception.addParameter(WFS_EXCEPTION_CODE, WFS_INVALID_PARAMETER_VALUE);
+    exception.addDetail(msg.str());
+    throw exception;
+  }
+}
+
+// Update the values of the meteo parameter map item 'item'
+template <typename ParamTuple>
+void update_meteo_parameter(ParamTuple& item, const std::string& name, bool isQCParameter)
+{
+  if (isQCParameter)
+  {
+    std::get<2>(item) = name;
+    std::get<4>(item) = true;
+  }
+  else
+  {
+    std::get<1>(item) = name;
+    std::get<3>(item) = true;
+  }
+}
+}  // namespace
+
 void StoredSoundingQueryHandler::validateAndPopulateMeteoParametersToMap(
     const RequestParameterMap& params,
     MeteoParameterMap& meteoParameterMap,
@@ -614,34 +653,10 @@ void StoredSoundingQueryHandler::validateAndPopulateMeteoParametersToMap(
     if (paramIdIt != meteoParameterMap.end())
     {
       // Check if the parameter is already inserted.
-      if ((std::get<3>(paramIdIt->second) and not isQCParameter) or
-          (std::get<4>(paramIdIt->second) and isQCParameter))
-      {
-        std::string errParamName;
-        if (isQCParameter)
-          errParamName = std::get<3>(paramIdIt->second);
-        else
-          errParamName = std::get<2>(paramIdIt->second);
-        std::ostringstream msg;
-        msg << "Parameter '" << name << "' is already given by using '" << errParamName
-            << "' name.";
-        Fmi::Exception exception(BCP, "Invalid parameter value");
-        exception.addParameter(WFS_EXCEPTION_CODE, WFS_INVALID_PARAMETER_VALUE);
-        exception.addDetail(msg.str());
-        throw exception;
-      }
+      check_duplicate_meteo_parameter(paramIdIt->second, name, isQCParameter);
 
       // Update values of a tuple item.
-      if (isQCParameter)
-      {
-        std::get<2>(paramIdIt->second) = name;
-        std::get<4>(paramIdIt->second) = true;
-      }
-      else
-      {
-        std::get<1>(paramIdIt->second) = name;
-        std::get<3>(paramIdIt->second) = true;
-      }
+      update_meteo_parameter(paramIdIt->second, name, isQCParameter);
     }
     else
     {
