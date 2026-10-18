@@ -1268,7 +1268,7 @@
 					"step" : 1,
 					"type" : "string"
 				},
-				"pressureRages" : 
+				"pressureRanges" : 
 				{
 					"description" : "",
 					"is_array" : true,

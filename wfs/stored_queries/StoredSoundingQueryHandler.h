@@ -31,7 +31,9 @@ const std::string P_LATEST = "latest";
 const std::string P_SOUNDING_TYPE = "soundingType";
 const std::string P_PUBLICITY = "publicity";
 const std::string P_ALTITUDE_RANGES = "altitudeRanges";
-const std::string P_PRESSURE_RANGES = "pressureRages";
+const std::string P_PRESSURE_RANGES = "pressureRanges";
+// The old misspelt name of pressureRanges, still accepted in the configuration
+const std::string P_PRESSURE_RANGES_OLD = "pressureRages";
 
 namespace SmartMet
 {
@@ -175,6 +177,7 @@ class StoredSoundingQueryHandler : public StoredQueryHandlerBase,
   uint64_t mMaxSoundings;
   bool mSqRestrictions;
   bool mSupportQCParameters;
+  std::string mPressureRangesParam;  // P_PRESSURE_RANGES or P_PRESSURE_RANGES_OLD
 };
 }  // namespace WFS
 }  // namespace Plugin

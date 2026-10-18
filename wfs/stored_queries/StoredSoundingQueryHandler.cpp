@@ -67,7 +67,13 @@ StoredSoundingQueryHandler::StoredSoundingQueryHandler(
 
   register_array_param<double>(P_ALTITUDE_RANGES, "", 0, 2, 2);
 
-  register_array_param<double>(P_PRESSURE_RANGES, "", 0, 2, 2);
+  // Accept the old misspelt name if the configuration uses it instead of the correct one
+  mPressureRangesParam = P_PRESSURE_RANGES;
+  if (!config->find_setting(config->get_root(), "handler_params." + P_PRESSURE_RANGES, false) &&
+      config->find_setting(config->get_root(), "handler_params." + P_PRESSURE_RANGES_OLD, false))
+    mPressureRangesParam = P_PRESSURE_RANGES_OLD;
+
+  register_array_param<double>(mPressureRangesParam, "", 0, 2, 2);
 
   mMaxHours = config->get_optional_config_param<double>("maxHours", 7.0 * 24.0);
   mSqRestrictions = pluginData.get_config().getSQRestrictions();
@@ -947,7 +953,7 @@ void StoredSoundingQueryHandler::makeSoundingDataQuery(const RequestParameterMap
 
   // Handle pressure max-min
   std::vector<double> pressureRanges;
-  params.get<double>(P_PRESSURE_RANGES, std::back_inserter(pressureRanges), 0, 2, 2);
+  params.get<double>(mPressureRangesParam, std::back_inserter(pressureRanges), 0, 2, 2);
   if (pressureRanges.size() & 1)
   {
     Fmi::Exception exception(BCP, "Invalid pressureRange list!");

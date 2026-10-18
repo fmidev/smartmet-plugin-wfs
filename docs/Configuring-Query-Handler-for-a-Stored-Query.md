@@ -251,7 +251,7 @@ HandlerParam structure
 |soundingType|integer[]|The sounding types to return (types 1, 2 and 3 are supported).|
 |publicity|integer[]|The publicity flags of the soundings to return. At least one is required.|
 |altitudeRanges|double[]|Altitude ranges as (min, max) pairs restricting the returned levels.|
-|pressureRages|double[]|Pressure ranges as (min, max) pairs restricting the returned levels. Note the spelling of the name.|
+|pressureRanges|double[]|Pressure ranges as (min, max) pairs restricting the returned levels. The old misspelt name `pressureRages` is also accepted.|
 |crs|string|The coordinate projection used in the response. |
 |missingText|string|The value that is returned when the value of the requested field is missing.|
 |qualityInfo|boolean|The quality code information of the measured values will be included into the response if the parameter value is true.|
