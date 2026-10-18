@@ -180,6 +180,7 @@ rm -rf $RPM_BUILD_ROOT
 - Split functions with a cognitive complexity above 25 into smaller helpers, no functional changes
 - The sounding handler parameter pressureRages is now spelt pressureRanges; the old name is still accepted
 - The description of the grid forecast handler no longer claims it downloads grids
+- The description of qualityInfo asks for true, not "on", which is not a valid value
 
 * Fri Oct 16 2026 Mika Heiskanen <mika.heiskanen@fmi.fi> - 26.10.16-3.fmi
 - Merged the 26.10.16-2 GitHub master hotfix (stored query handler factory linkage)

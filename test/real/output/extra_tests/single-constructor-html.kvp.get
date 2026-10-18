@@ -25,7 +25,7 @@
 <tr><td>missingText</td><td>yes</td><td>Scalar</td><td>string</td><td> </td><td> </td><td> </td><td>value that is returned when the value of the requested field is missing.</td></tr>
 <tr><td>numOfStations</td><td>yes</td><td>Scalar</td><td>unsigned long</td><td> </td><td> </td><td> </td><td>The maximum number of the observation stations returned around the given geographical location (inside the radius of "maxDistance")</td></tr>
 <tr><td>places</td><td>no</td><td>Array</td><td>string</td><td>0</td><td>65535</td><td>1</td><td>The geographical location(s) expressed by an array of location names.</td></tr>
-<tr><td>qualityInfo</td><td>yes</td><td>Scalar</td><td>bool</td><td> </td><td> </td><td> </td><td>quality code information of the measured values will be included in the response if the parameter value is "on".</td></tr>
+<tr><td>qualityInfo</td><td>yes</td><td>Scalar</td><td>bool</td><td> </td><td> </td><td> </td><td>quality code information of the measured values will be included in the response if the parameter value is true.</td></tr>
 <tr><td>startStep</td><td>no</td><td>Scalar</td><td>unsigned long</td><td> </td><td> </td><td> </td><td>The index number of the first selected time step since the start time.</td></tr>
 <tr><td>stationType</td><td>yes</td><td>Scalar</td><td>string</td><td> </td><td> </td><td> </td><td>The type of the observation station (defined in the ObsEngine configuration)</td></tr>
 <tr><td>timeStep</td><td>no</td><td>Scalar</td><td>unsigned long</td><td> </td><td> </td><td> </td><td>The time interval between the requested records expressed in minutes.</td></tr>

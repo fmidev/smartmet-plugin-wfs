@@ -17,7 +17,7 @@ bw::SupportsQualityParameters::SupportsQualityParameters(
       register_scalar_param<bool>(
           P_QUALITY_INFO,
           "quality code information of the measured values will be included in the response"
-          " if the parameter value is \"on\"."
+          " if the parameter value is true."
           );
   }
   catch (...)

@@ -781,7 +781,7 @@
 				},
 				"qualityInfo" : 
 				{
-					"description" : "quality code information of the measured values will be included in the response if the parameter value is \"on\".",
+					"description" : "quality code information of the measured values will be included in the response if the parameter value is true.",
 					"is_array" : false,
 					"mandatory" : true,
 					"type" : "bool"
@@ -1472,7 +1472,7 @@
 				},
 				"qualityInfo" : 
 				{
-					"description" : "quality code information of the measured values will be included in the response if the parameter value is \"on\".",
+					"description" : "quality code information of the measured values will be included in the response if the parameter value is true.",
 					"is_array" : false,
 					"mandatory" : true,
 					"type" : "bool"
@@ -1975,7 +1975,7 @@
 				},
 				"qualityInfo" : 
 				{
-					"description" : "quality code information of the measured values will be included in the response if the parameter value is \"on\".",
+					"description" : "quality code information of the measured values will be included in the response if the parameter value is true.",
 					"is_array" : false,
 					"mandatory" : true,
 					"type" : "bool"
@@ -2360,7 +2360,7 @@
 				},
 				"qualityInfo" : 
 				{
-					"description" : "quality code information of the measured values will be included in the response if the parameter value is \"on\".",
+					"description" : "quality code information of the measured values will be included in the response if the parameter value is true.",
 					"is_array" : false,
 					"mandatory" : true,
 					"type" : "bool"
