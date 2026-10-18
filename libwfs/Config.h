@@ -64,7 +64,6 @@ class Config : public SmartMet::Spine::ConfigBase
   const std::string& get_geoserver_conn_string() const { return geoserver_conn_str; }
   const std::vector<std::string>& get_languages() const { return languages; }
   int getCacheSize() const { return cache_size; }
-  int getCacheTimeConstant() const { return cache_time_constant; }
   bool silenceInitWarnings() const { return silence_init_warnings; }
   const std::string& get_default_locale() const { return default_locale; }
   bool use_case_sensitive_params() const { return enable_case_sensitive_params; }
@@ -90,7 +89,6 @@ class Config : public SmartMet::Spine::ConfigBase
   std::string httpProxy;
   std::string noProxy;
   int cache_size;
-  int cache_time_constant;
   int default_expires_seconds;
   std::vector<std::string> languages;
   std::filesystem::path template_directory;

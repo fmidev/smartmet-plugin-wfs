@@ -61,7 +61,6 @@ storedQueryTemplateDir = "/usr/share/smartmet/wfs";
 xmlGrammarPoolDump = "/usr/share/smartmet/wfs/XMLGrammarPool.dump";
 serializedXmlSchemas = "/usr/share/smartmet/wfs/XMLSchemas.cache";
 cacheSize = 1000;
-cacheTimeConstant = 60;
 validateXmlOutput = false;
 enableDemoQueries = false;
 featuresDir = "/etc/smartmet/plugins/wfs/features";
@@ -131,7 +130,7 @@ Plugin's configuration file
 | `geoserverConnStr`              | string   | optional   | String which describes database connection to Geoserver. Format is the following: "dbname=THE_DATABASE user=THE_USER password=THE_PASSWORD host=THE_HOST" (note: actual user password and database host name for use). Default value "" means - no connection |
 | `cacheSize`                     | integer  | optional   | The number of query responses to keep in memory for faster response. The default value is 100.|
 | `defaultExpiresSeconds`         | integer  | optional   | Specifies default expires seconds for the Expires header field of a requests response. This value is override by a value defined in a request configuration e.g. stored query configuration. The value is supposed to use if no other value is available. Some requests use this as a default value, so the value should be select wisely.  Default value is 60 seconds.|
-| `cacheTimeConstant`             | integer  | optional   | The query response cache time constant as seconds. The default value is 60. The value is read but currently not used.|
+| `cacheTimeConstant`             | integer  | obsolete   | Not used. The setting is still accepted, but ignored.|
 | `locale`                        | string   | optional   | The locale to use. WFS plugin tries to find locale from system when not specified. |
 | `silence_init_warnings`         | boolean  | optional   | Specifies whether to hide warning and lover priority messages from stored query initialization. The default value is false - do not hide. |
 | `case_sensitive_params`         | boolean  | optional   | Specifies whether to treate parameter names submitted to stored query as case sensitive. The default value is false. |

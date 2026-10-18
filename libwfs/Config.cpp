@@ -57,7 +57,6 @@ Config::Config(const string& configfile)
     geoserver_conn_str = get_optional_config_param<std::string>("geoserverConnStr", "");
     default_locale = get_optional_config_param<std::string>("locale", guess_default_locale());
     cache_size = get_optional_config_param<int>("cacheSize", 100);
-    cache_time_constant = get_optional_config_param<int>("cacheTimeConstant", 60);
     default_expires_seconds = get_optional_config_param<int>("defaultExpiresSeconds", 60);
     validate_output = get_optional_config_param<bool>("validateXmlOutput", false);
     fail_on_validate_errors = get_optional_config_param<bool>("failOnValidateErrors", false);
@@ -391,8 +390,8 @@ accepted.
 <tr>
 <td>cacheTimeConstant</td>
 <td>integer</td>
-<td>optional (default 60)</td>
-<td>Specifies stored queries response cache time constant</td>
+<td>obsolete</td>
+<td>Not used. The setting is still accepted, but ignored.</td>
 </tr>
 
 <tr>
