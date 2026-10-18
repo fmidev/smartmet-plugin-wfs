@@ -441,7 +441,7 @@
 		},
 		"wfs_grid_forecast_handler_factory" : 
 		{
-			"description" : "Forecast data: download in grid format (grib1, grib2, NetCDF)",
+			"description" : "Forecast data (general) from the grid engine",
 			"parameters" : 
 			{
 				"beginTime" : 

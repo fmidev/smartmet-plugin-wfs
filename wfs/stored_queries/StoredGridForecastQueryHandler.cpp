@@ -165,7 +165,7 @@ StoredGridForecastQueryHandler::~StoredGridForecastQueryHandler() = default;
 
 std::string StoredGridForecastQueryHandler::get_handler_description() const
 {
-    return "Forecast data: download in grid format (grib1, grib2, NetCDF)";
+    return "Forecast data (general) from the grid engine";
 }
 
 std::string StoredGridForecastQueryHandler::get_cache_key_qualifier(

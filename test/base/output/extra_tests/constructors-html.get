@@ -17,7 +17,7 @@
 <tr><td><a href="/admin?what=wfs:constructors&format=html&handler=wfs_get_feature_by_id_handler_factory">wfs_get_feature_by_id_handler_factory</a></td>
 <td>The mandatory implementation of the "GetFeatureById" stored query defined in the WFS 2.0 standard</td></tr>
 <tr><td><a href="/admin?what=wfs:constructors&format=html&handler=wfs_grid_forecast_handler_factory">wfs_grid_forecast_handler_factory</a></td>
-<td>Forecast data: download in grid format (grib1, grib2, NetCDF)</td></tr>
+<td>Forecast data (general) from the grid engine</td></tr>
 <tr><td><a href="/admin?what=wfs:constructors&format=html&handler=wfs_isoline_query_handler_factory">wfs_isoline_query_handler_factory</a></td>
 <td>Forecast data: areas as GML isolines</td></tr>
 <tr><td><a href="/admin?what=wfs:constructors&format=html&handler=wfs_obs_handler_factory">wfs_obs_handler_factory</a></td>
