@@ -1086,14 +1086,6 @@ and must be specified on top level of stored query configuration file when prese
 </tr>
 
 <tr>
-  <td>maxHours</td>
-  <td>double</td>
-  <td>optional</td>
-  <td>Specifies maximal permitted time interval in hours. The default value is 168 hours (7
-days)</td>
-</tr>
-
-<tr>
   <td>producers</td>
   <td>array of string</td>
   <td>optional (default empty array)</td>

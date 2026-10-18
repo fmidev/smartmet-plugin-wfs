@@ -583,7 +583,7 @@ Additionally to parameters from these groups the following parameters are also i
 
 </table>
 
-@section WFS_SQ_QE_DOWNLOAD_HANDLER_CONFIG_ENTRIES Additional configuration entries
+@section WFS_SQ_GEOSERVER_DOWNLOAD_HANDLER_CONFIG_ENTRIES Additional configuration entries
 
 This section describes this stored query handler configuration parameters which does not map to
 stored query parameters
@@ -648,7 +648,7 @@ Used additional configuration data types:
   '<b>mosaic.\%1\%</b> of @b layerDbTableNameFormat is being used
 
 
-@section WFS_SQ_QE_DOWNLOAD_HANDLER_DB_FILTER Filtering data by additional database fields
+@section WFS_SQ_GEOSERVER_DOWNLOAD_HANDLER_DB_FILTER Filtering data by additional database fields
 
 One can define optional filtering by additionl database parameter by
 - specifying filter named parameter names in the configuration array @b dbSelectParams

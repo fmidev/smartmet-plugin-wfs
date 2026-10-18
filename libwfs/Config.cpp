@@ -353,9 +353,9 @@ accepted.
 </tr>
 
 <tr>
-<td>@b storedQueryTemplateDir</td>
+<td>storedQueryTemplateDir</td>
 <td>string</td>
-<td>mandatory</td>
+<td>optional (default @b /usr/share/smartmet/wfs )</td>
 <td>Specifies directory where to look for CTPP2 format template files if their absolute
     path is not explicitly specified. Using relative path like <i>../plugins/wfs/cnf/templates</i>
     is accepted. </td>
@@ -370,14 +370,15 @@ accepted.
 </tr>
 
 <tr>
-<td>@b geoServerConnString</td>
+<td>geoserverConnStr</td>
 <td>string</td>
-<td>mandatory</td>
-<td>Describes how to connect to GeoServer (PostGIS). The format of this string is
+<td>optional (default empty)</td>
+<td>Describes how to connect to the GeoServer database (PostGIS) used by the GeoServer
+    stored queries. No connection is made if the value is empty. The format of this string is
     @verbatim
     dbname=... user=... password=... host=...
-    @endverbatim</td>
-    One must of course substitute actual parameter values in this string
+    @endverbatim
+    One must of course substitute actual parameter values in this string</td>
 </tr>
 
 <tr>
@@ -444,15 +445,6 @@ accepted.
 <td>Specifies for which hosts HTTP/HTTPS proxy is not used. Ignored unless XML output validation
     is enabled (@b validateXmlOutput). One can also use environment variables for
     specifying proxy server (see <b>man curl</b> for more info).</td>
-</tr>
-
-<tr>
-<td>httpProxy</td>
-<td>string</td>
-<td>optional (default empty)</td>
-<td>Specifies HTTP proxy to use. Only used or XML schema download when XML output validation
-   is enabled. Schemas required for validating XML format HTTP requests must be provided in
-   XML grammar pool (request validation is always enabled)</td>
 </tr>
 
 <tr>
@@ -597,23 +589,14 @@ effect may
 </tr>
 
 <tr>
-<td>admin</td>
-<td>config group</td>
-<td>optional</td>
-<td>Specifies authentication settings (and possibly other parameters in the future) for performing
-administrative operations. Currently only such operation is WFS plugin configuration reloading.
-This group consists of parameters:
-- admin - admin user name (optional, default is 'admin')
-- password - password (mandatory)
-</tr>
-
-<tr>
 <td>hosts</td>
-<td>config group</td>
+<td>list of config groups</td>
 <td>optional</td>
-<td>Specifies host names to use in output documents. Currently only host for WMS downloads is
-supported This group consist of following parameters:
+<td>Specifies host specific settings for the download links in output documents. Each group
+consists of the following parameters:
+- server - the requested host name (mandatory)
 - wms - name of host for WMS downloads (default wms.fmi.fi)
+- keep_apikey - whether to keep the API key in the generated links (default true)</td>
 </tr>
 
 </table>
@@ -624,8 +607,9 @@ supported This group consist of following parameters:
 
 @page WFS_PLUGIN_CONFIG_CRS_DEF Coordinate projection descriptions for WFS plugin
 
-Coordinate projection description must be provided in libconfig format. The following configuration
-entries
+The WFS plugin does not read coordinate projection descriptions itself. They are files in the
+directory given by the GIS engine setting @b crsDefinitionDir, read by SmartMet::Spine::CRSRegistry.
+Each description must be provided in libconfig format. The following configuration entries
 are supported
 
 <table border="1">
