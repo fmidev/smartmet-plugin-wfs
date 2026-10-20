@@ -50,8 +50,8 @@ BuildRequires: smartmet-engine-geonames-devel >= 26.10.16
 BuildRequires: smartmet-engine-gis-devel >= 26.10.16
 BuildRequires: smartmet-engine-grid-devel >= 26.10.16
 BuildRequires: smartmet-engine-querydata-devel >= 26.10.16
-BuildRequires: smartmet-library-grid-content-devel >= 26.10.16
-BuildRequires: smartmet-library-grid-files-devel >= 26.10.16
+BuildRequires: smartmet-library-grid-content-devel >= 26.10.20
+BuildRequires: smartmet-library-grid-files-devel >= 26.10.20
 %if %{with observation}
 BuildRequires: smartmet-engine-observation-devel >= 26.10.16
 %endif
@@ -70,8 +70,8 @@ Requires: smartmet-engine-contour >= 26.10.17
 Requires: smartmet-engine-geonames >= 26.10.17
 Requires: smartmet-engine-gis >= 26.10.17
 Requires: smartmet-engine-grid >= 26.10.17
-Requires: smartmet-library-grid-content >= 26.10.17
-Requires: smartmet-library-grid-files >= 26.10.17
+Requires: smartmet-library-grid-content >= 26.10.20
+Requires: smartmet-library-grid-files >= 26.10.20
 %if %{with observation}
 Requires: smartmet-engine-observation >= 26.10.17
 %endif
@@ -129,7 +129,7 @@ Obsoletes: smartmet-brainstorm-wfs-debuginfo < 16.11.1
 %endif
 #TestRequires: smartmet-engine-grid >= 26.10.17
 #TestRequires: valkey
-#TestRequires: smartmet-library-grid-files-test >= 26.10.16
+#TestRequires: smartmet-library-grid-files-test >= 26.10.20
 # Required by top level Makefile
 #TestRequires: jsoncpp-devel
 #TestRequires: libwebp13
