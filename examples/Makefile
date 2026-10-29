@@ -3,7 +3,7 @@ TOP = $(shell pwd)/..
 
 REQUIRES = gdal libpqxx configpp ctpp2 xerces-c
 
-include $(shell echo $${PREFIX-/usr})/share/smartmet/devel/makefile.inc
+include $(or $(PREFIX),$(shell smartbuildcfg --prefix))/share/smartmet/devel/makefile.inc
 
 ARFLAGS = -r
 DEFINES = -DUNIX -D_REENTRANT

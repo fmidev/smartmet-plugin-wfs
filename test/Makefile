@@ -4,7 +4,7 @@ TOP = $(TEST_TOP)/..
 
 TEST_DIRECTORIES = base real
 
-include $(shell echo $${PREFIX-/usr})/share/smartmet/devel/makefile.inc
+include $(or $(PREFIX),$(shell smartbuildcfg --prefix))/share/smartmet/devel/makefile.inc
 
 TEST_DB_DIR := $(shell pwd)/tmp-geonames-db
 

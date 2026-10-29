@@ -5,7 +5,7 @@ TOP = $(shell pwd)
 
 REQUIRES = gdal jsoncpp configpp libpqxx xerces-c libcurl
 
-include $(shell echo $${PREFIX-/usr})/share/smartmet/devel/makefile.inc
+include $(or $(PREFIX),$(shell smartbuildcfg --prefix))/share/smartmet/devel/makefile.inc
 
 FLAGS += -Wno-variadic-macros
 

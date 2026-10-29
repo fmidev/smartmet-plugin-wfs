@@ -1,4 +1,4 @@
-include $(shell echo $${PREFIX-/usr})/share/smartmet/devel/makefile.inc
+include $(or $(PREFIX),$(shell smartbuildcfg --prefix))/share/smartmet/devel/makefile.inc
 
 # Examples (default: run smartmet-plugin-test directly)
 #    TEST_RUNNER="gdb --args"

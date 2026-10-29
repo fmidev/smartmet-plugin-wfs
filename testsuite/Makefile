@@ -5,7 +5,7 @@ TOP = $(shell pwd)/..
 OPTIMIZE = -O0
 REQUIRES = gdal jsoncpp libpqxx configpp ctpp2 xerces-c libcurl
 
-include $(shell echo $${PREFIX-/usr})/share/smartmet/devel/makefile.inc
+include $(or $(PREFIX),$(shell smartbuildcfg --prefix))/share/smartmet/devel/makefile.inc
 
 DEFINES = -DUNIX -D_REENTRANT
 
