@@ -1,3 +1,5 @@
+#include <cctype>
+#include <cstring>
 #include "PluginImpl.h"
 #include "ErrorResponseGenerator.h"
 #include "HandlerFactorySummary.h"
@@ -531,9 +533,23 @@ void PluginImpl::execute_request(RequestBase& request,
 {
   const std::string fmi_apikey_prefix = "/fmi-apikey/";
 
-  request.set_hostname(hostname);
-  request.set_protocol(protocol);
-  if (fmi_apikey && Spine::FmiApiKey::shouldReturnApiKey(req))
+  // These request-derived values are written into XML/URL output. Restrict them to
+  // safe character sets so they cannot break out of an attribute or inject elements
+  // (reflected XML/XHTML injection); fall back to the configured values otherwise.
+  const auto is_valid = [](const std::string& s, const char* extra) {
+    if (s.empty())
+      return false;
+    for (const char c : s)
+      if (std::isalnum(static_cast<unsigned char>(c)) == 0 &&
+          std::strchr(extra, c) == nullptr)
+        return false;
+    return true;
+  };
+
+  request.set_hostname(is_valid(hostname, ".-:[]") ? hostname : get_fallback_hostname());
+  request.set_protocol((protocol == "http" || protocol == "https") ? protocol
+                                                                   : get_fallback_protocol());
+  if (fmi_apikey && is_valid(*fmi_apikey, "-_") && Spine::FmiApiKey::shouldReturnApiKey(req))
   {
     request.set_fmi_apikey_prefix(fmi_apikey_prefix);
     request.set_fmi_apikey(*fmi_apikey);
