@@ -1,7 +1,9 @@
 #pragma once
 
-#include <boost/geometry.hpp>
+#include <boost/geometry/core/cs.hpp>
 #include <boost/geometry/geometries/box.hpp>
+#include <boost/geometry/geometries/point.hpp>
+#include <boost/geometry/geometries/ring.hpp>
 #include <boost/geometry/geometries/point_xy.hpp>
 #include <boost/regex.hpp>
 #include <macgyver/DateTime.h>

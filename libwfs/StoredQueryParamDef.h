@@ -1,10 +1,7 @@
 #pragma once
 
 #include "WfsException.h"
-#include <boost/algorithm/string.hpp>
-#include <boost/bind/bind.hpp>
 #include <macgyver/DateTime.h>
-#include <boost/spirit/include/qi.hpp>
 #include <macgyver/TypeName.h>
 #include <spine/Value.h>
 #include <algorithm>

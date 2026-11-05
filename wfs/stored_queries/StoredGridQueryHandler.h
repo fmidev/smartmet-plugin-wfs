@@ -1,7 +1,10 @@
 #pragma once
 
 #include <macgyver/DateTime.h>
-#include <boost/geometry/geometry.hpp>
+#include <boost/geometry/core/cs.hpp>
+#include <boost/geometry/geometries/point.hpp>
+#include <boost/geometry/geometries/box.hpp>
+#include <boost/geometry/geometries/ring.hpp>
 #include <memory>
 #include <ogr_geometry.h>
 

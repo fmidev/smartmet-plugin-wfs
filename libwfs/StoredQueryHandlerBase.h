@@ -18,7 +18,6 @@
 
 #include <optional>
 #include <memory>
-#include <boost/thread.hpp>
 
 namespace Fmi
 {

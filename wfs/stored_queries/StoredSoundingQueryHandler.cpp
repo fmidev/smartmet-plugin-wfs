@@ -11,6 +11,7 @@
 #include <spine/CRSRegistry.h>
 #include <spine/Convenience.h>
 
+#include <bitset>
 #include <tuple>
 #include <utility>
 

@@ -1,4 +1,5 @@
 #include "DataSetIndex.h"
+#include <boost/geometry/algorithms/intersects.hpp>
 #include <boost/algorithm/string.hpp>
 #include <boost/regex.hpp>
 #include <macgyver/Exception.h>

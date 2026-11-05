@@ -5,6 +5,7 @@
 #include "FeatureID.h"
 #include "StoredQueryHandlerFactoryDef.h"
 #include <boost/format.hpp>
+#include <boost/spirit/include/qi.hpp>
 #include <utility>
 #include <engines/observation/DBRegistry.h>
 #include <engines/observation/MastQuery.h>

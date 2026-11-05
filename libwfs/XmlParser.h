@@ -4,10 +4,11 @@
 #include "XmlErrorHandler.h"
 #include <boost/function.hpp>
 #include <memory>
-#include <boost/thread.hpp>
+#include <boost/thread/tss.hpp>
 #include <xercesc/parsers/XercesDOMParser.hpp>
 #include <xercesc/util/SecurityManager.hpp>
 #include <list>
+#include <map>
 #include <ostream>
 #include <stdexcept>
 #include <string>
