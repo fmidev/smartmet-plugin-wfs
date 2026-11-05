@@ -139,7 +139,7 @@ SmartMet WFS plugin
 
 %package -n %{SPECNAME}-devel
 Summary: SmartMet WFS plugin development files
-Requires: smartmet-library-spine-devel >= 26.10.16
+Requires: smartmet-library-spine-devel >= 26.11.4
 Requires: smartmet-library-gis-devel >= 26.11.4
 Requires: smartmet-library-locus-devel >= 26.10.16
 Requires: smartmet-library-macgyver-devel >= 26.11.3
