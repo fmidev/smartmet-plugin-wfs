@@ -4,6 +4,7 @@
 #include "WfsException.h"
 #include "XPathSnapshot.h"
 #include "XmlUtils.h"
+#include <boost/algorithm/string.hpp>
 #include <boost/lambda/lambda.hpp>
 #include <fmt/format.h>
 #include <macgyver/Exception.h>
