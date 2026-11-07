@@ -27,7 +27,7 @@ class ErrorResponseGenerator
 
   struct ErrorResponse
   {
-    SmartMet::Spine::HTTP::Status status;
+    SmartMet::Spine::HTTP::Status status = SmartMet::Spine::HTTP::not_a_status;
     std::string response;
     std::string log_message;
     std::string wfs_err_code;

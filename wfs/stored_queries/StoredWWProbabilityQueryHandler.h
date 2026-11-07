@@ -38,9 +38,9 @@ using AirportLocationList = std::list<AirportLocation>;
 struct ProbabilityConfigParam
 {
   std::string precipitationType;
-  FmiParameterName idLight;
-  FmiParameterName idModerate;
-  FmiParameterName idHeavy;
+  FmiParameterName idLight = kFmiBadParameter;
+  FmiParameterName idModerate = kFmiBadParameter;
+  FmiParameterName idHeavy = kFmiBadParameter;
 };
 
 using ProbabilityConfigParamVector = std::vector<ProbabilityConfigParam>;
