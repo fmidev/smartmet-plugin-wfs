@@ -4,7 +4,7 @@
 Summary: SmartMet WFS plugin
 Name: %{SPECNAME}
 Version: 26.11.7
-Release: 1%{?dist}.fmi
+Release: 2%{?dist}.fmi
 License: MIT
 Group: SmartMet/Plugins
 URL: https://github.com/fmidev/smartmet-plugin-wfs
@@ -39,7 +39,7 @@ BuildRequires: xqilla-devel
 BuildRequires: openssl-devel
 BuildRequires: bzip2-devel
 BuildRequires: zlib-devel
-BuildRequires: smartmet-library-timeseries-devel >= 26.11.4
+BuildRequires: smartmet-library-timeseries-devel >= 26.11.7-2
 BuildRequires: smartmet-library-spine-devel >= 26.11.4
 BuildRequires: smartmet-library-gis-devel >= 26.10.16
 BuildRequires: smartmet-library-trax-devel >= 26.10.16
@@ -63,7 +63,7 @@ Requires: zlib
 Requires: smartmet-library-locus >= 26.10.16
 Requires: smartmet-library-macgyver >= 26.11.6
 Requires: smartmet-library-spine >= 26.11.4
-Requires: smartmet-library-timeseries >= 26.11.4
+Requires: smartmet-library-timeseries >= 26.11.7-2
 Requires: smartmet-library-gis >= 26.10.17
 Requires: smartmet-library-trax >= 26.10.17
 Requires: smartmet-engine-contour >= 26.10.17
@@ -176,6 +176,11 @@ rm -rf $RPM_BUILD_ROOT
 %{_includedir}/smartmet/plugin/wfs/request/*.h
 
 %changelog
+* Sat Nov 7 2026 Mika Heiskanen <mika.heiskanen@fmi.fi> - 26.11.7-2.fmi
+- New maxTimes setting limits generated time steps
+- New maxStoredQueries setting limits stored queries in one request
+- Do not cache responses larger than 10 MB
+
 * Sat Nov 7 2026 Mika Heiskanen <mika.heiskanen@fmi.fi> - 26.11.7-1.fmi
 - Initialize member variables that some constructors left uninitialized
 

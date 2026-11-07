@@ -554,8 +554,8 @@ void StoredWWProbabilityQueryHandler::query(const StoredQuery& query,
     // get data in UTC
     const std::string zone = "UTC";
     auto tz = geo_engine->getTimeZones().time_zone_from_string(zone);
-	TS::TimeSeriesGenerator::LocalTimeList tlist =
-        TS::TimeSeriesGenerator::generate(*pTimeOptions, tz);
+    TS::TimeSeriesGenerator::LocalTimeList tlist = TS::TimeSeriesGenerator::generate(
+        *pTimeOptions, tz, get_plugin_impl().get_config().getMaxTimes());
 
     ProbabilityQueryResultSet query_results;
     // iterate locations

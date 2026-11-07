@@ -32,6 +32,9 @@ using SmartMet::Plugin::WFS::Request::GetPropertyValue;
 
 namespace
 {
+// Larger query responses are not cached, the cache size is a number of responses
+const std::size_t max_cached_response_size = 10 * 1024 * 1024;
+
 void decrease(std::optional<int>& value)
 {
   if (value and *value > 0)
@@ -609,12 +612,13 @@ bool GetPropertyValue::collect_query_responses(std::vector<std::string>& query_r
       {
         std::ostringstream result_stream;
         query_ptr->execute(result_stream, get_language(), get_hostname());
-        const std::string cache_key = query_ptr->get_cache_key();
-        query_cache.insert(cache_key, result_stream.str());
+        const std::string result = result_stream.str();
 
-        // FIXME: should we restrict caching on too large responses?
+        // Do not cache too large responses, the cache size is a number of responses
+        if (result.size() <= max_cached_response_size)
+          query_cache.insert(query_ptr->get_cache_key(), result);
 
-        add_query_responses(query_responses, result_stream.str());
+        add_query_responses(query_responses, result);
         some_succeeded = true;
       }
     }

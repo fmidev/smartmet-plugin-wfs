@@ -752,7 +752,8 @@ void bw::StoredContourQueryHandler::query_qEngine(const StoredQuery& stored_quer
     // get data in UTC
     const std::string zone = "UTC";
     auto tz = geo_engine->getTimeZones().time_zone_from_string(zone);
-    query_param->tlist = TS::TimeSeriesGenerator::generate(*pTimeOptions, tz);
+    query_param->tlist = TS::TimeSeriesGenerator::generate(
+        *pTimeOptions, tz, get_plugin_impl().get_config().getMaxTimes());
     query_param->tz_name = get_tz_name(sq_params);
 
     CTPP::CDT hash;
@@ -863,7 +864,8 @@ void bw::StoredContourQueryHandler::query_gridEngine(const StoredQuery& stored_q
         get_time_generator_options(sq_params);
     const std::string zone = "UTC";
     auto tz = geo_engine->getTimeZones().time_zone_from_string(zone);
-    query_param->tlist = TS::TimeSeriesGenerator::generate(*pTimeOptions, tz);
+    query_param->tlist = TS::TimeSeriesGenerator::generate(
+        *pTimeOptions, tz, get_plugin_impl().get_config().getMaxTimes());
     query_param->tz_name = get_tz_name(sq_params);
     get_bounding_box(sq_params, requestedCRS, &(query_param->bbox));
 

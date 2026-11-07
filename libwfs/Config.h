@@ -64,6 +64,8 @@ class Config : public SmartMet::Spine::ConfigBase
   const std::string& get_geoserver_conn_string() const { return geoserver_conn_str; }
   const std::vector<std::string>& get_languages() const { return languages; }
   int getCacheSize() const { return cache_size; }
+  std::size_t getMaxTimes() const { return max_times; }
+  std::size_t getMaxStoredQueries() const { return max_stored_queries; }
   bool silenceInitWarnings() const { return silence_init_warnings; }
   const std::string& get_default_locale() const { return default_locale; }
   bool use_case_sensitive_params() const { return enable_case_sensitive_params; }
@@ -89,6 +91,8 @@ class Config : public SmartMet::Spine::ConfigBase
   std::string httpProxy;
   std::string noProxy;
   int cache_size;
+  std::size_t max_times = 50000;        // max generated time steps per query, 0 = no limit
+  std::size_t max_stored_queries = 20;  // max queries in one POST request, 0 = no limit
   int default_expires_seconds;
   std::vector<std::string> languages;
   std::filesystem::path template_directory;

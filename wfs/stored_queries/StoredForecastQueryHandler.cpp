@@ -772,7 +772,8 @@ std::shared_ptr<SmartMet::Spine::Table> bw::StoredForecastQueryHandler::extract_
       }
 
       auto tz = geo_engine->getTimeZones().time_zone_from_string(zone);
-      auto tlist = TS::TimeSeriesGenerator::generate(*query.toptions, tz);
+      auto tlist = TS::TimeSeriesGenerator::generate(
+          *query.toptions, tz, get_plugin_impl().get_config().getMaxTimes());
 
       if (debug_level > 2)
         print_generated_times(tlist);

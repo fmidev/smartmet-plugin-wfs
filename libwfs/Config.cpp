@@ -57,6 +57,8 @@ Config::Config(const string& configfile)
     geoserver_conn_str = get_optional_config_param<std::string>("geoserverConnStr", "");
     default_locale = get_optional_config_param<std::string>("locale", guess_default_locale());
     cache_size = get_optional_config_param<int>("cacheSize", 100);
+    max_times = std::max(0, get_optional_config_param<int>("maxTimes", 50000));
+    max_stored_queries = std::max(0, get_optional_config_param<int>("maxStoredQueries", 20));
     default_expires_seconds = get_optional_config_param<int>("defaultExpiresSeconds", 60);
     validate_output = get_optional_config_param<bool>("validateXmlOutput", false);
     fail_on_validate_errors = get_optional_config_param<bool>("failOnValidateErrors", false);

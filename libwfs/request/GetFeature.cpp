@@ -26,6 +26,12 @@ namespace bwx = SmartMet::Plugin::WFS::Xml;
 using boost::format;
 using boost::str;
 
+namespace
+{
+// Larger query responses are not cached, the cache size is a number of responses
+const std::size_t max_cached_response_size = 10 * 1024 * 1024;
+}  // namespace
+
 bw::Request::GetFeature::GetFeature(const std::string& language,
                                     PluginImpl& plugin_impl)
 
@@ -518,12 +524,14 @@ bool bw::Request::GetFeature::collect_query_responses(std::vector<std::string>& 
         try
         {
           query_ptr->execute(result_stream, get_language(), get_hostname());
-          const std::string cache_key = query_ptr->get_cache_key();
-          query_cache.insert(cache_key, result_stream.str());
+          const std::string result = result_stream.str();
 
-          // FIXME: should we restrict caching on too large responses?
+          // Do not cache too large responses, the cache size is a number of responses
+          if (result.size() <= max_cached_response_size)
+            query_cache.insert(query_ptr->get_cache_key(), result);
+
           std::ostringstream tmp;
-          substitute_all(result_stream.str(), tmp);
+          substitute_all(result, tmp);
           query_responses.push_back(tmp.str());
           some_succeeded = true;
         }
@@ -678,6 +686,17 @@ std::shared_ptr<bw::Request::GetFeature> bw::Request::GetFeature::create_from_xm
     allowed_children.insert("StoredQuery");
 
     auto children = bwx::get_child_elements(*root, WFS_NAMESPACE_URI, "*");
+
+    const auto max_queries = plugin_impl.get_config().getMaxStoredQueries();
+    if (max_queries > 0 && children.size() > max_queries)
+    {
+      Fmi::Exception exception(BCP, "Too many queries in the request!");
+      exception.addParameter(WFS_EXCEPTION_CODE, WFS_OPERATION_PARSING_FAILED);
+      exception.addParameter("Queries", std::to_string(children.size()));
+      exception.addParameter("Maximum", std::to_string(max_queries));
+      throw exception;
+    }
+
     for (const xercesc::DOMElement* child : children)
     {
       const std::string name =
