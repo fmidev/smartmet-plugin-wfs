@@ -7,6 +7,7 @@
 #include <boost/thread/tss.hpp>
 #include <xercesc/parsers/XercesDOMParser.hpp>
 #include <xercesc/util/SecurityManager.hpp>
+#include <functional>
 #include <list>
 #include <map>
 #include <ostream>
