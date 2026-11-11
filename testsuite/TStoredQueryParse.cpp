@@ -456,7 +456,7 @@ BOOST_AUTO_TEST_CASE(test_kvp_mandatory_array_parameter_of_fixed_length_1)
   BOOST_CHECK_CLOSE(v.at(1).get_double(), 6.25, 1e-10);
 }
 
-BOOST_AUTO_TEST_CASE(test_kvp_repeatable_array_parameter_of_fixed_length_ommited)
+BOOST_AUTO_TEST_CASE(test_kvp_repeatable_array_parameter_of_fixed_length_omitted)
 {
   BOOST_TEST_MESSAGE(
       "+ [Testing KVP request: repeatable array parameter of fixed length (omitted)]");

@@ -93,7 +93,7 @@ class PluginImpl
 
   QueryResponseCache& get_query_cache() { return *query_cache; }
 
-  std::shared_ptr<Fmi::TemplateFormatter> get_get_capabilities_formater() const
+  std::shared_ptr<Fmi::TemplateFormatter> get_get_capabilities_formatter() const
   {
     return itsTemplateFactory.get(getCapabilitiesFormatterPath);
   }

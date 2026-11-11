@@ -541,7 +541,7 @@ BOOST_AUTO_TEST_CASE(array_size_detection_error_3)
                       Fmi::Exception);
 }
 
-BOOST_AUTO_TEST_CASE(array_with_min_len_0_ommitted_in_config)
+BOOST_AUTO_TEST_CASE(array_with_min_len_0_omitted_in_config)
 {
   using namespace SmartMet;
   using namespace SmartMet::Plugin::WFS;
@@ -560,7 +560,7 @@ BOOST_AUTO_TEST_CASE(array_with_min_len_0_ommitted_in_config)
   BOOST_CHECK_EQUAL(0, int(pt->get_items().size()));
 }
 
-BOOST_AUTO_TEST_CASE(array_with_min_len_1_ommitted_in_config)
+BOOST_AUTO_TEST_CASE(array_with_min_len_1_omitted_in_config)
 {
   using namespace SmartMet;
   using namespace SmartMet::Plugin::WFS;

@@ -221,9 +221,9 @@ class MyEntityResolver : public xercesc::XMLEntityResolver
     {
       const std::string &url = it->first;
       const std::string &content = it->second;
-      const std::string editted_url = ba::replace_first_copy(url, "://", "/");
+      const std::string edited_url = ba::replace_first_copy(url, "://", "/");
       fs::path fn = dir;
-      fn /= editted_url;
+      fn /= edited_url;
       if (fn.filename().native() == ".")
       {
         std::string n1 = fn.parent_path().filename().native() + ".xsd";

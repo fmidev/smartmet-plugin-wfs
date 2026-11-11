@@ -100,8 +100,8 @@ void SmartMet::Plugin::WFS::StoredQueryConfig::warn_about_unused_params(
 
     if (handler)
     {
-      std::set<std::string> registred_params = handler->get_handler_param_names();
-      if (registred_params.empty())
+      std::set<std::string> registered_params = handler->get_handler_param_names();
+      if (registered_params.empty())
         return;
 
       auto& cfg_param_group = get_mandatory_config_param<libconfig::Setting&>(
@@ -113,7 +113,7 @@ void SmartMet::Plugin::WFS::StoredQueryConfig::warn_about_unused_params(
       {
         libconfig::Setting& item = cfg_param_group[i];
         const char* c_name = item.getName();
-        if (c_name and registred_params.count(c_name) == 0)
+        if (c_name and registered_params.count(c_name) == 0)
         {
           std::ostringstream msg;
           msg << SmartMet::Spine::log_time_str()
