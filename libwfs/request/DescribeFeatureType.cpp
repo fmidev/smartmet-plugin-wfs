@@ -147,7 +147,7 @@ void bw::Request::DescribeFeatureType::execute(std::ostream& output) const
     {
       std::ostringstream msg;
       msg << "Template formatter exception '" << Fmi::current_exception_type()
-          << "' catched: " << log_messages.str();
+          << "' caught: " << log_messages.str();
       Fmi::Exception exception(BCP, msg.str());
       exception.addParameter(WFS_EXCEPTION_CODE, WFS_OPERATION_PROCESSING_FAILED);
       throw exception;

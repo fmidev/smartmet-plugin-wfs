@@ -201,7 +201,7 @@ void bw::StoredAviationObservationQueryHandler::add_requested_icao_codes(
       throw exception.disableStackTrace();
     }
 
-    // Do not add dublicates.
+    // Do not add duplicates.
     if (validIcaoCodes.find(locationList.front()->name) == validIcaoCodes.end())
       validIcaoCodes.insert(std::make_pair(locationList.front()->name, locationList.front()));
   }
@@ -558,7 +558,7 @@ and must be specified on top level of stored query configuration file when prese
   <td>returnOnlyLatest</td>
   <td>bool</td>
   <td>optional</td>
-  <td>If the paramer value is true only the latest message will be returned
+  <td>If the parameter value is true only the latest message will be returned
       from the station in a given time interval (starttime,endtime).
       The default value is false.</td>
 </tr>

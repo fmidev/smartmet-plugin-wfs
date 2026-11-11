@@ -42,7 +42,7 @@ class StoredGeoserverQueryHandler : public StoredAtomQueryHandlerBase, protected
                                                         unsigned height,
                                                         const FeatureID &feature_id) const;
 
-  /* FIXME: optimize to avoid need to read query paremeters again and again (if needed) */
+  /* FIXME: optimize to avoid need to read query parameters again and again (if needed) */
   bool eval_db_select_params(const std::map<std::string, std::string> &select_params,
                              const GeoServerDataIndex::LayerRec &rec) const;
 

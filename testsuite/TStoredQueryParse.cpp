@@ -90,7 +90,7 @@ namespace
 void output_exception_info(const std::exception& err)
 {
   std::cerr << "C++ exception of type " << Fmi::get_type_name(&err)
-            << " catched: " << err.what() << std::endl;
+            << " caught: " << err.what() << std::endl;
 }
 }  // namespace
 
@@ -249,7 +249,7 @@ BOOST_AUTO_TEST_CASE(test_kvp_single_scalar_parameter)
 
 BOOST_AUTO_TEST_CASE(test_kvp_repeatable_scalar_parameter_1)
 {
-  BOOST_TEST_MESSAGE("+ [Testing KVP request: repeatable scalar parameter (ommited)]");
+  BOOST_TEST_MESSAGE("+ [Testing KVP request: repeatable scalar parameter (omitted)]");
 
   auto raw_config = Test::TestConfig::create("foo::bar");
   raw_config->add_param("p1", "xxx", "string").min_occurs(0).max_occurs(99);
@@ -459,7 +459,7 @@ BOOST_AUTO_TEST_CASE(test_kvp_mandatory_array_parameter_of_fixed_length_1)
 BOOST_AUTO_TEST_CASE(test_kvp_repeatable_array_parameter_of_fixed_length_ommited)
 {
   BOOST_TEST_MESSAGE(
-      "+ [Testing KVP request: repeatable array parameter of fixed length (ommited)]");
+      "+ [Testing KVP request: repeatable array parameter of fixed length (omitted)]");
 
   auto raw_config = Test::TestConfig::create("foo::bar");
   raw_config->add_param("p1", "xxx", "double[2]").min_occurs(0).max_occurs(999);

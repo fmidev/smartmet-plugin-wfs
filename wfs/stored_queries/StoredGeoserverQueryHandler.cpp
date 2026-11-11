@@ -457,7 +457,7 @@ bool bw::StoredGeoserverQueryHandler::eval_db_select_params(
     bool ok = true;
     for (auto it = select_params.begin(); ok and it != select_params.end(); ++it)
     {
-      // FIXME: handle type of param[1] instead of asuming std::string
+      // FIXME: handle type of param[1] instead of assuming std::string
       const std::string& column_name = it->first;
       const std::string& column_value = it->second;
       auto map_iter = rec.data_map.find(column_name);

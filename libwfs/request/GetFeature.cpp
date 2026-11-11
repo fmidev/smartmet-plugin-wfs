@@ -172,7 +172,7 @@ void bw::Request::GetFeature::execute_single_query(std::ostream& ost) const
       result_dom_doc->appendChild(result_dom_doc->importNode(root, false));
       // FIXME: should we copy attributes or that just happens?
       // ?????: it seems that attributes are justr copied and there is no need to
-      //        do anyhing more with that
+      //        do anything more with that
 
       // If query is ad hoc query then perform filtering.
       if (queries[0]->get_type() == QueryBase::QUERY)
@@ -444,7 +444,7 @@ std::shared_ptr<xercesc::DOMDocument> bw::Request::GetFeature::create_hits_only_
     if (not use_default_format)
     {
       std::ostringstream msg;
-      msg << "The 'startIndex' and 'count' paremeters are supported only with"
+      msg << "The 'startIndex' and 'count' parameters are supported only with"
           << " the default output format '" << StandardPresentationParameters::DEFAULT_OUTPUT_FORMAT
           << "'!";
       Fmi::Exception exception(BCP, msg.str());

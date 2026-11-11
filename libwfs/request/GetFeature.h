@@ -55,7 +55,7 @@ class GetFeature : public RequestBase
    *   @param query_responses A vector where to put the response strings
    *   @param handle_errors Specifies whether to handle C++ exceptions or simply rethrow
    *   @retval true at least one query succeeded
-   *   @retval false none of queries suceeded
+   *   @retval false none of queries succeeded
    */
   bool collect_query_responses(std::vector<std::string>& query_responses,
                                bool handle_errors = true) const;

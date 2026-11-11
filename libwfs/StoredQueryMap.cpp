@@ -199,7 +199,7 @@ std::vector<std::string> bw::StoredQueryMap::get_return_type_names() const
     for (const auto& handler_map_item : handler_map)
     {
       // NOTE: Cannot call StoredQueryHandlerBase::get_return_type_names() here to
-      //       avoid recursion as hander itself may call StoredQueryMap::get_return_type_names().
+      //       avoid recursion as handler itself may call StoredQueryMap::get_return_type_names().
       //       One must take types from stored queries configuration instead.
       const std::vector<std::string> return_types =
           handler_map_item.second->get_config()->get_return_type_names();

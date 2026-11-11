@@ -109,7 +109,7 @@ namespace
 // Throw an operation processing error with the given detail
 [[noreturn]] void throw_processing_error(const std::string& detail)
 {
-  Fmi::Exception exception(BCP, "Operation processsing failed");
+  Fmi::Exception exception(BCP, "Operation processing failed");
   exception.addParameter(WFS_EXCEPTION_CODE, WFS_OPERATION_PROCESSING_FAILED);
   exception.addDetail(detail);
   throw exception.disableStackTrace();

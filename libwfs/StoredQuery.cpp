@@ -665,7 +665,7 @@ void check_param_max_occurs(int actual_count,
       {
         msg << max_occurs << " times";
       }
-      msg << " (found " << actual_count << " occurances)";
+      msg << " (found " << actual_count << " occurrences)";
 
       Fmi::Exception exception(BCP, msg.str());
       exception.addParameter(WFS_EXCEPTION_CODE, WFS_OPERATION_PARSING_FAILED);

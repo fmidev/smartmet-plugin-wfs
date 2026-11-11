@@ -47,7 +47,7 @@ class RequestBase
    *
    *   The expire value is meant to use in the Expires header
    *   of a response (e.g. the max-age cache-control directive).
-   *   For new reques types defaultExpiresSeconds can be used from
+   *   For new request types defaultExpiresSeconds can be used from
    *   the main configuration.
    *   @return Seconds as an integer.
    */
@@ -59,7 +59,7 @@ class RequestBase
   virtual RequestType get_type() const = 0;
 
   /**
-   *   @brief Query language string provided in contructor
+   *   @brief Query language string provided in constructor
    */
   const std::string& get_language() const { return language; }
   /**

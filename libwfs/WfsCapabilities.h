@@ -53,7 +53,7 @@ class WfsCapabilities
   std::set<std::string> used_features;
 
   /**
-   *  @brief Registred data sets
+   *  @brief Registered data sets
    */
   std::map<std::string, std::string> data_set_map;
 

@@ -31,7 +31,7 @@ namespace
 void output_exception_info(const std::exception& err)
 {
   std::cerr << "C++ exception of type " << Fmi::get_type_name(&err)
-            << " catched: " << err.what() << std::endl;
+            << " caught: " << err.what() << std::endl;
 }
 }
 

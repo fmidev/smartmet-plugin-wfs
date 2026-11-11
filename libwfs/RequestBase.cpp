@@ -206,7 +206,7 @@ void bw::RequestBase::check_request_name(const SmartMet::Spine::HTTP::Request& h
     {
       std::ostringstream msg;
       msg << "SmartMet::Plugin::WFS::RequestBase::check_request_name(): [INTERNAL ERROR]:"
-          << " conflicting reqest name '" << actual_name << "' in HTTP request ('" << name
+          << " conflicting request name '" << actual_name << "' in HTTP request ('" << name
           << "' expected)";
       throw Fmi::Exception(BCP, msg.str());
     }
@@ -227,7 +227,7 @@ void bw::RequestBase::check_request_name(const xercesc::DOMDocument& document,
     {
       std::ostringstream msg;
       msg << "SmartMet::Plugin::WFS::RequestBase::check_request_name(): [INTERNAL ERROR]:"
-          << " conflicting reqest name '" << actual_name << "' in XML document ('" << name
+          << " conflicting request name '" << actual_name << "' in XML document ('" << name
           << "' expected)";
       throw Fmi::Exception(BCP, msg.str());
     }

@@ -892,7 +892,7 @@ void StoredObsQueryHandler::check_parameter_names(const RequestParameterMap& par
           .addParameter(WFS_EXCEPTION_CODE, WFS_INVALID_PARAMETER_VALUE);
     }
 
-    // FIXME: handle possible conflict case when QC paremeter explicit specification is allowed
+    // FIXME: handle possible conflict case when QC parameter explicit specification is allowed
     //        and sama QC parameter may also be added automatically
 
     if ((not m_support_qc_parameters or not support_quality_info) and

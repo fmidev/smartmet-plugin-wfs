@@ -196,7 +196,7 @@ to
 SmartMet::Plugin::WFS::StoredQueryHandlerBase adds bounding box support to handler. Bounding box
 support
 is
-implemented separately from other @ref WFS_SQ_LOCATION_PARAMS as it may be needed separatelly and
+implemented separately from other @ref WFS_SQ_LOCATION_PARAMS as it may be needed separately and
 also
 @ref WFS_SQ_LOCATION_PARAMS may be needed without bounding box support.
 
@@ -226,7 +226,7 @@ stored query parameter or constant.
 Bounding box can be specified in one of two possible ways (the second one is for XML requests only):
 - string in format <b>MinX,MinY,MaxX,MaxY[,CRS]</b>, where
     - MinX and MinY is coordinates of left lower corner of the box
-    - MaxX and MaxY is coordiantes of upper right cornet of the box
+    - MaxX and MaxY is coordinates of upper right cornet of the box
     - optional value @b CRS specifies the projection name (for example <b>EPSG:3067</b>). The
 default
       is empty string. In that case stored query handler is required to interpret it correctly.

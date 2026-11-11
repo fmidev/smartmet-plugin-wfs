@@ -789,7 +789,7 @@ bw::StoredAirNuclideQueryHandler::dbRegistryConfig(const std::string& configName
     {
       Fmi::Exception exception(BCP, "Database registry configuration is not available!");
       exception.addParameter(WFS_EXCEPTION_CODE, WFS_OPERATION_PROCESSING_FAILED);
-      exception.addParameter("Configration name", configName);
+      exception.addParameter("Configuration name", configName);
       throw exception;
     }
 

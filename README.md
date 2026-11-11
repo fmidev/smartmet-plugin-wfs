@@ -27,7 +27,7 @@ Another way to send a request is to use an HTTP POST message so that the actual 
 The basic steps needed to use the WFS interface are:
 
 * List stored queries provided by the WFS interface
-* List which parameters (eg. query string fileds) the stored query supports
+* List which parameters (eg. query string fields) the stored query supports
 * Fetch data using the stored query and parameters
 
 To make a WFS request through the interface define the _request type_ in the query string field `request`.
@@ -40,7 +40,7 @@ Most notable request are:
 
 * _GetCapabilities_ (show what can be done with the interface)
 * _ListStoredQueries_ (what queries can be performed with GetFeature)
-* _DescribeStoredQueries_ (what parameters are availble in a stored query/queries)
+* _DescribeStoredQueries_ (what parameters are available in a stored query/queries)
 * _GetFeature_ (to perform the selected stored query)
 
 ```text

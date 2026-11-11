@@ -155,7 +155,7 @@ void bw::Request::DescribeStoredQueries::execute(std::ostream& output) const
   try
   {
     // FIXME: how to get the language from the request? XML schema does not seem to provide
-    //        a possibilty.
+    //        a possibility.
     const std::string language = get_language();
 
     const auto& stored_query_map = plugin_impl.get_stored_query_map();
@@ -213,7 +213,7 @@ void bw::Request::DescribeStoredQueries::execute(std::ostream& output) const
     }
     catch (const std::exception&)
     {
-      Fmi::Exception exception(BCP, "Template formater exception!");
+      Fmi::Exception exception(BCP, "Template formatter exception!");
       exception.addDetail(log_messages.str());
       if (exception.getExceptionByParameterName(WFS_EXCEPTION_CODE) == nullptr)
         exception.addParameter(WFS_EXCEPTION_CODE, WFS_OPERATION_PROCESSING_FAILED);

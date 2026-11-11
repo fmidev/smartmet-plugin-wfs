@@ -704,7 +704,7 @@ void bw::StoredContourQueryHandler::query_qEngine(const StoredQuery& stored_quer
 {
   try
   {
-    // 1) query geometries from countour engine; iterate timesteps
+    // 1) query geometries from contour engine; iterate timesteps
     // 2) if bounding box given, clip the polygons
     // 3) generate output xml
 
@@ -1143,7 +1143,7 @@ void bw::StoredContourQueryHandler::parseQueryResults(
 {
   try
   {
-    // create targer spatial reference to get precision and coordinate order
+    // create target spatial reference to get precision and coordinate order
     OGRSpatialReference targetSRS;
     targetSRS.SetAxisMappingStrategy(OAMS_TRADITIONAL_GIS_ORDER);
     std::string targetURN("urn:ogc:def:crs:" + requestedCRS);

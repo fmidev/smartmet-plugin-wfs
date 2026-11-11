@@ -268,7 +268,7 @@ void StoredWWProbabilityQueryHandler::parseQueryResults(
 {
   try
   {
-    // create targer spatial reference to get precision and coordinate order
+    // create target spatial reference to get precision and coordinate order
     OGRSpatialReference targetSRS;
     targetSRS.SetAxisMappingStrategy(OAMS_TRADITIONAL_GIS_ORDER);
     std::string targetURN("urn:ogc:def:crs:" + requestedCRS);

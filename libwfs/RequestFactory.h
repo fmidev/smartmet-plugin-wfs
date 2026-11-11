@@ -19,7 +19,7 @@ namespace WFS
   class PluginImpl;
 
 /**
- *   @brief Factory class for creating apropriate WFS request objects from
+ *   @brief Factory class for creating appropriate WFS request objects from
  *          KVP and XML format WFS requests
  */
 class RequestFactory

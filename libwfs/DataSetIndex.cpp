@@ -340,7 +340,7 @@ This configuration data type describes file set available for download
 
 <tr>
   <td>params</td>
-  <td>array of strig</td>
+  <td>array of string</td>
   <td>mandatory</td>
   <td>The parameters included in the files</td>
 </tr>

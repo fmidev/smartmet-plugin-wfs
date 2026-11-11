@@ -75,12 +75,12 @@ void log_exception(const char* file, int line)
   }
   catch (const std::exception& err)
   {
-    std::cerr << "C++ exception of type '" << Fmi::current_exception_type() << "' catched at "
+    std::cerr << "C++ exception of type '" << Fmi::current_exception_type() << "' caught at "
               << file << '#' << line << ": " << err.what() << std::endl;
   }
   catch (...)
   {
-    std::cerr << "C++ exception of type '" << Fmi::current_exception_type() << "' catched  at "
+    std::cerr << "C++ exception of type '" << Fmi::current_exception_type() << "' caught  at "
               << file << '#' << line << std::endl;
   }
 }

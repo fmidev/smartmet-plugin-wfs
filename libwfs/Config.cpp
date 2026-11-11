@@ -656,7 +656,7 @@ are supported
 <td>integer</td>
 <td>optional</td>
 <td>Provides projection EPSG number together with default values for parameters
-    @b regex and @b projUri. The projection is registred in this case to GDAL using
+    @b regex and @b projUri. The projection is registered in this case to GDAL using
     EPSG code</td>
 </tr>
 

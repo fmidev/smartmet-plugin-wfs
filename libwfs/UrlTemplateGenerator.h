@@ -18,7 +18,7 @@ namespace WFS
  *   - <b>foo=bar</b> - constant parameter which is copied into URL parameters
  *   - <b>${foo}</b> - reference to external parameter. The parameter is added to
  *      URL parameters even if empty. Comma separated list used in case of an array
- *   - <b>${?foo}</b> - same as <b>${foo}</b> but parameter is ommited from URL
+ *   - <b>${?foo}</b> - same as <b>${foo}</b> but parameter is omitted from URL
  *      parameters if empty
  *   - <b>${*foo}</b> - separate URL parameter generated for each array element
  */

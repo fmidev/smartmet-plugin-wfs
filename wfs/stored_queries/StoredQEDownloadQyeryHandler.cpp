@@ -609,7 +609,7 @@ void StoredQEDownloadQueryHandler::add_format_and_crs(bw::RequestParameterMap& p
     msg << " Supported formats:";
     std::for_each(formats.begin(), formats.end(), bl::var(msg) << " '" << bl::_1 << "'");
 
-    Fmi::Exception exception(BCP, "The requeted format is not supported!");
+    Fmi::Exception exception(BCP, "The requested format is not supported!");
     exception.addDetail(msg.str());
     exception.addParameter(WFS_EXCEPTION_CODE, WFS_INVALID_PARAMETER_VALUE);
     exception.addParameter("Requested format", req_format);

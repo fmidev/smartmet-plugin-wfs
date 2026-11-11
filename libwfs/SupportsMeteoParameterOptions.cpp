@@ -301,9 +301,9 @@ parameters for meteorological parameters.
 
 </table>
 
-Developer can change the default values by using methods with prefix setDefault. It is recommented
+Developer can change the default values by using methods with prefix setDefault. It is recommended
 to
-inheret a handler class from the class in constructor so that the options from the configuration
+inherit a handler class from the class in constructor so that the options from the configuration
 will be generater only ones. The default values can be changed on the runtime.
 
 

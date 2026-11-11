@@ -379,7 +379,7 @@ examples of parameter template item, but there are more combinations possible
 ${}
 @endverbatim
 </td>
-<td>Ommitted query parameter. Note that this cannot be used for stored query parameters which are
+<td>Omitted query parameter. Note that this cannot be used for stored query parameters which are
 queries
     unconditionally</td>
 </tr>
@@ -434,11 +434,11 @@ default value
 
 </table>
 
-The presence and corectness (type, range check if specified) of parameter is verified when parsing
+The presence and correctness (type, range check if specified) of parameter is verified when parsing
 stored
 query request for all examples given in the table above.
 
-It is possible to avoid check at query parsing time by replacing '$' in maping to stored query
+It is possible to avoid check at query parsing time by replacing '$' in mapping to stored query
 parameter with '\%'.
 That is intended to be used in cases when stored query handler translates the parameters provided in
 query to

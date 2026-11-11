@@ -104,7 +104,7 @@ const bw::ParameterTemplateBase& bw::SupportsExtraHandlerParams::get_param(
       std::ostringstream msg;
       if (handler_params.empty())
       {
-        msg << " No parameters defined at configuaration path '" << path << "'.";
+        msg << " No parameters defined at configuration path '" << path << "'.";
       }
       else
       {

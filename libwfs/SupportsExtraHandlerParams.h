@@ -21,7 +21,7 @@ class ParameterTemplateBase;
  *         can be added from configuration.
  *
  *  Stored query handler itself must have support for this feature
- *  to be usefull for anything but redirecting parameter query to another
+ *  to be useful for anything but redirecting parameter query to another
  *  handler parameter when primary parameter is not specified
  */
 class SupportsExtraHandlerParams : virtual protected StoredQueryParamRegistry

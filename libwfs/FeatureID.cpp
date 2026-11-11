@@ -117,7 +117,7 @@ std::shared_ptr<FeatureID> FeatureID::create_from_id(const std::string& id)
       const std::string stored_query_id = input.get_string();
       // Sequence ID is here only to provide a way to make FeatureID unique
       // in case of several identical stored queries in the same request
-      // There is no need to actualy store it here
+      // There is no need to actually store it here
       input.get_unsigned();
       const std::multimap<std::string, SmartMet::Spine::Value> params = input.get_value_map();
 

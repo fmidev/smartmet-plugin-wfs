@@ -56,7 +56,7 @@ bw::StoredFileQueryHandler::StoredFileQueryHandler(SmartMet::Spine::Reactor* rea
       }
       catch (const std::exception&)
       {
-        auto error = Fmi::Exception::Trace(BCP, "Operation failed"); // rethrows if boost::thread_interrupt catched
+        auto error = Fmi::Exception::Trace(BCP, "Operation failed"); // rethrows if boost::thread_interrupt caught
         error.disableStackTraceRecursive();
         error.addParameter("storedquery_id", config->get_query_id());
         if (template_file_name)
@@ -168,7 +168,7 @@ void bw::StoredFileQueryHandler::update_parameters(
       {
         if (bbox.size() != 4)
         {
-          // Should really be catched earlier and not be here
+          // Should really be caught earlier and not be here
           throw Fmi::Exception(
               BCP, "INTERNAL ERROR: wrong bbox specification in '" + params.as_string() + "'!")
               .disableStackTrace();

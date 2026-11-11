@@ -145,7 +145,7 @@ SmartMet::Plugin::WFS::StoredQueryConfig::parse_param_desc(libconfig::Setting& c
     if (not case_map.emplace(lc_name, item.name).second)
     {
       throw Fmi::Exception(BCP,
-                           "Query parameter nane conflict: " + item.name +
+                           "Query parameter name conflict: " + item.name +
                                " conflicts with " + case_map.at(lc_name));
     }
   }
@@ -653,7 +653,7 @@ ListStoredQueries
   <td>boolean</td>
   <td>optional (default @b false)</td>
   <td>Describes stored query as demo query. Demo queries are disabled by default unless explicitly
-globaly
+globally
       enabled by @ref WFS_PLUGIN_CONFIG entry @b enableDemoQueries. A message about demo
       query being disabled is generated when demo queries are globally disabled </td>
 </tr>
@@ -746,7 +746,7 @@ Some
   <td>named_params</td>
   <td>list of @ref WFS_SQ_NAMED_PARAM_DEF "cfgNamedParamDef"</td>
   <td>usually optional</td>
-  <td>Additional stored query handler parameters. These parameters are added from confiuration file.
+  <td>Additional stored query handler parameters. These parameters are added from configuration file.
       Not all stored query handler classes can use these additional named  parameters directly.
       Named parameters can however be used as default values for handler built-in parameters.
       Additionally named parameters are exported to CTPP2 hash used to for template
@@ -1060,7 +1060,7 @@ formats are accepted:
 - <b>type[size1..size2]</b> - array of type @b type and size from @b size1 to @b size2
 
 Mentioned array sizes are for each occurrence of the stored query parameter. The number of
-occurrences is limitted by
+occurrences is limited by
 the values of entries @b minOccurs and @b maxOccurs.
 
 Following data types are supported:
@@ -1073,7 +1073,7 @@ Following data types are supported:
 - @b point
 - @b bbox
 
-Limitted conversions between types are supported:
+Limited conversions between types are supported:
 - conversion from strings to other types (required to handle default values of parameters)
 - conversions between integer types
 - conversions from integer types to double
@@ -1087,7 +1087,7 @@ Parameter is considered as an array if at least one of the following is true:
 The supported time formats are (checked in this order)
 - Special relative time specification
 - XML <a href="http://www.schemacentral.com/sc/xsd/t-xsd_dateTime.html">dateTime</a> format.
-Ommitting seconds
+Omitting seconds
   is supported even if seconds are required by standard
 - ones supported by Fmi::TimeParser like YYYY-MM-SSTHH:MM:SSZ
 
@@ -1158,7 +1158,7 @@ entry is used:
 - to extract parameter value or values when reading XML format query
 
 Fully qualified name must be specified (namespace prefix must be provided according to ones used
-DescribeStoredQueries CTTP2 tempalte
+DescribeStoredQueries CTTP2 template
 
 Following types are supported:
 - xsi:byte

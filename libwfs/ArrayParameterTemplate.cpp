@@ -552,7 +552,7 @@ handler_params = (
 );
 @endverbatim
 
-Several examples of mappping stored query handler parameters are provided in the table below:
+Several examples of mapping stored query handler parameters are provided in the table below:
 
 <table border="1">
 
@@ -611,7 +611,7 @@ paramFoo = ["${foo[3]}", "${foo[2]}", "${foo[1]}", "${foo[0]}"];
 <td>
 Maps stored query handler parameter @b paramFoo to stored query parameter @b foo reordering array
 members.
-Note that there is no implemented way to do the same with an arrya of unknwon before length
+Note that there is no implemented way to do the same with an array of unknown before length
 </td>
 </tr>
 

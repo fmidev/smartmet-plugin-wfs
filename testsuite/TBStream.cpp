@@ -26,7 +26,7 @@ using SmartMet::Plugin::WFS::OBStream;
 
 BOOST_AUTO_TEST_CASE(test_writing_and_reading_bits_1)
 {
-  BOOST_TEST_MESSAGE("+[Test writting and reading bits (fits in 1 byte)]");
+  BOOST_TEST_MESSAGE("+[Test writing and reading bits (fits in 1 byte)]");
 
   OBStream out;
   out.put_bit(1);
@@ -53,7 +53,7 @@ BOOST_AUTO_TEST_CASE(test_writing_and_reading_bits_1)
 
 BOOST_AUTO_TEST_CASE(test_writing_and_reading_bits_2)
 {
-  BOOST_TEST_MESSAGE("+[Test writting and reading bits (more that 1 byte)]");
+  BOOST_TEST_MESSAGE("+[Test writing and reading bits (more that 1 byte)]");
 
   OBStream out;
   out.put_bit(1);
@@ -88,7 +88,7 @@ BOOST_AUTO_TEST_CASE(test_writing_and_reading_bits_2)
 
 BOOST_AUTO_TEST_CASE(test_writing_and_reading_bits_3)
 {
-  BOOST_TEST_MESSAGE("+[Test writting and reading unsigned integer values]");
+  BOOST_TEST_MESSAGE("+[Test writing and reading unsigned integer values]");
   OBStream out;
   out.put_bit(0);
   out.put_bits(0x0BU, 4);
@@ -114,7 +114,7 @@ BOOST_AUTO_TEST_CASE(test_writing_and_reading_bits_3)
 
 BOOST_AUTO_TEST_CASE(test_writing_and_reading_unsigned_int)
 {
-  BOOST_TEST_MESSAGE("+[Test writting and reading unsigned int values]");
+  BOOST_TEST_MESSAGE("+[Test writing and reading unsigned int values]");
   OBStream out;
   out.put_unsigned(15);
   out.put_unsigned(0);
@@ -148,7 +148,7 @@ BOOST_AUTO_TEST_CASE(test_writing_and_reading_unsigned_int)
 
 BOOST_AUTO_TEST_CASE(test_writing_and_reading_signed_int)
 {
-  BOOST_TEST_MESSAGE("+[Test writting and reading signed integer values]");
+  BOOST_TEST_MESSAGE("+[Test writing and reading signed integer values]");
   OBStream out;
   out.put_int(15);
   out.put_int(0);
@@ -174,7 +174,7 @@ BOOST_AUTO_TEST_CASE(test_writing_and_reading_signed_int)
 
 BOOST_AUTO_TEST_CASE(test_writing_and_reading_double_values)
 {
-  BOOST_TEST_MESSAGE("+[Test writting and reading floating point values]");
+  BOOST_TEST_MESSAGE("+[Test writing and reading floating point values]");
   OBStream out;
   out.put_double(M_PI);
   out.put_double(12.0);
@@ -194,7 +194,7 @@ BOOST_AUTO_TEST_CASE(test_writing_and_reading_strings)
 {
   const char *s1 = "Tämä on esimerkki";
   const char *s2 = "Vielä yksi esimerkki";
-  BOOST_TEST_MESSAGE("+[Test writting and reading floating point values]");
+  BOOST_TEST_MESSAGE("+[Test writing and reading floating point values]");
   OBStream out;
   out.put_string(s1);
   out.put_string(s2);
@@ -209,7 +209,7 @@ BOOST_AUTO_TEST_CASE(test_writing_and_reading_strings)
 
 BOOST_AUTO_TEST_CASE(test_writing_and_reading_ptime_values)
 {
-  BOOST_TEST_MESSAGE("+[Test writting and reading Fmi::DateTime values]");
+  BOOST_TEST_MESSAGE("+[Test writing and reading Fmi::DateTime values]");
 
   const Fmi::DateTime t1 = Fmi::DateTime(Fmi::Date(2013, 03, 26));
   const Fmi::DateTime t2 = Fmi::DateTime::from_string("2013-03-26 09:22:12");
@@ -228,7 +228,7 @@ BOOST_AUTO_TEST_CASE(test_writing_and_reading_ptime_values)
 
 BOOST_AUTO_TEST_CASE(test_writing_and_reading_ptime_special_values)
 {
-  BOOST_TEST_MESSAGE("+[Test writting and reading Fmi::DateTime values]");
+  BOOST_TEST_MESSAGE("+[Test writing and reading Fmi::DateTime values]");
 
   const Fmi::DateTime t1 = Fmi::DateTime::NOT_A_DATE_TIME;
   const Fmi::DateTime t2 = Fmi::DateTime::POS_INFINITY;
@@ -279,7 +279,7 @@ BOOST_AUTO_TEST_CASE(test_writing_and_reading_value_map)
 {
   using SmartMet::Spine::Value;
 
-  BOOST_TEST_MESSAGE("+[Test writting and reading value map]");
+  BOOST_TEST_MESSAGE("+[Test writing and reading value map]");
 
   std::multimap<std::string, Value> data;
   data.insert(std::make_pair("A", Value(2.0)));

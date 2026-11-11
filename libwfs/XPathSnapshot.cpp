@@ -233,7 +233,7 @@ void XPathSnapshot::assert_have_document() const
   {
     if (not document)
     {
-      throw Fmi::Exception(BCP, "INTERNAL ERROR: one must parse XML doccument first!");
+      throw Fmi::Exception(BCP, "INTERNAL ERROR: one must parse XML document first!");
     }
   }
   catch (...)

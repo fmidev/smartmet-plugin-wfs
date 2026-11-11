@@ -40,7 +40,7 @@ class SupportsQualityParameters : protected virtual SupportsExtraHandlerParams,
   /** \brief Find first parameter name with "qc_" prefix.
    *  \param[in] parameters Parameter vector from which parameter with "qc_" prefix were seatched.
    *  \return Vector element that has parameter with "qc_" prefix or
-   *          if such a prameter is not found end of the input vector is returned.
+   *          if such a parameter is not found end of the input vector is returned.
    */
   std::vector<std::string>::const_iterator firstQCParameter(
       const std::vector<std::string>& parameters) const;

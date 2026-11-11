@@ -239,7 +239,7 @@ bw::SupportsTimeParameters::get_time_generator_options(const RequestParameterMap
       if (!!options->timeSteps)
       {
         Fmi::Exception exception(
-            BCP, "Cannot specify the time steps count and the end time simultaneusly!");
+            BCP, "Cannot specify the time steps count and the end time simultaneously!");
         exception.addParameter(WFS_EXCEPTION_CODE, WFS_OPERATION_PARSING_FAILED);
         throw exception;
       }

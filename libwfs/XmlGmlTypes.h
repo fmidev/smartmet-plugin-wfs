@@ -16,7 +16,7 @@ namespace WFS
 namespace Xml
 {
 /**
-      @brief Data of gml::SRSInformationGroup attrubute group
+      @brief Data of gml::SRSInformationGroup attribute group
 
               @verbatim
   <attributeGroup name="SRSInformationGroup">

@@ -108,7 +108,7 @@ inline DataSetDefinition::box_t mkbox(double x1, double y1, double x2, double y2
 
 BOOST_AUTO_TEST_CASE(test_query_files)
 {
-  BOOST_TEST_MESSAGE("+ [Testing quering files by time interval]");
+  BOOST_TEST_MESSAGE("+ [Testing querying files by time interval]");
   auto raw_config = create_config();
   ConfigBase config(raw_config, "Test");
   auto ds_def = DataSetDefinition::create(config, raw_config->getRoot());

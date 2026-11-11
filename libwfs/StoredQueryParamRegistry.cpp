@@ -233,7 +233,7 @@ std::shared_ptr<bw::RequestParameterMap> StoredQueryParamRegistry::resolve_handl
         }
         else if (not rec.param_def->get_value(value, src, extra_params))
         {
-          // Optional scalar parameter ommited.
+          // Optional scalar parameter omitted.
           continue;
         }
 

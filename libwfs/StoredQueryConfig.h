@@ -48,7 +48,7 @@ class StoredQueryHandlerBase;
  *                fi = "Yksinkohtaisempi selitys WFS testkyselystä";
  *                lv = "Pilnīgāks WFS testa pieprasījuma apraksts"; }
  *
- *   parametrs = (
+ *   parameters = (
  *      {
  *         name = "foo";
  *         title = { en = "Parameter foo"; }

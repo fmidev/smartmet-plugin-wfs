@@ -148,7 +148,7 @@ echo "get feature filter: $INPUTFILE to $OUTPUTFILE"
 -v //*:name \
 -v //*:airTemperature
 
-# NOTE: Previuous filtering loses namespaces, so using qualified namespaces usually does not work.
+# NOTE: Previous filtering loses namespaces, so using qualified namespaces usually does not work.
 #-v /wfs:member\
 #/avi:VerifiableMessage\
 #/avi:message\

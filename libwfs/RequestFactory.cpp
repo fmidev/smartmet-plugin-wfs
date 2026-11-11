@@ -30,7 +30,7 @@ bw::RequestFactory& bw::RequestFactory::register_request_type(const std::string&
     if (unimplemented_requests.count(lname) > 0)
     {
       throw Fmi::Exception(
-          BCP, "WFS request '" + name + "' already registred as unimplemented!");
+          BCP, "WFS request '" + name + "' already registered as unimplemented!");
     }
 
     if (not type_map.insert(std::make_pair(lname, rec)).second)
@@ -61,7 +61,7 @@ bw::RequestFactory& bw::RequestFactory::register_unimplemented_request_type(cons
     if (type_map.count(lname) > 0)
     {
       throw Fmi::Exception(
-          BCP, "Implementation of WFS request '" + name + "' is already registred!");
+          BCP, "Implementation of WFS request '" + name + "' is already registered!");
     }
 
     request_names.insert(name);

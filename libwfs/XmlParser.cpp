@@ -330,7 +330,7 @@ std::shared_ptr<xercesc::DOMDocument> str2xmldom(const std::string &src,
       throw Fmi::Exception::Trace(BCP, "XML error!");
     }
 
-    // Verify that parse suceeded and throw XmlError otherwise
+    // Verify that parse succeeded and throw XmlError otherwise
     error_handler.check_errors("XML parser failed");
 
     std::shared_ptr<xercesc::DOMDocument> result(parser.adoptDocument());
