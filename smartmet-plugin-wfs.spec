@@ -40,7 +40,7 @@ BuildRequires: openssl-devel
 BuildRequires: bzip2-devel
 BuildRequires: zlib-devel
 BuildRequires: smartmet-library-timeseries-devel >= 26.11.7-2
-BuildRequires: smartmet-library-spine-devel >= 26.11.4
+BuildRequires: smartmet-library-spine-devel >= 26.11.11
 BuildRequires: smartmet-library-gis-devel >= 26.10.16
 BuildRequires: smartmet-library-trax-devel >= 26.10.16
 BuildRequires: smartmet-library-locus-devel >= 26.10.16
@@ -62,7 +62,7 @@ Requires: jsoncpp
 Requires: zlib
 Requires: smartmet-library-locus >= 26.10.16
 Requires: smartmet-library-macgyver >= 26.11.6
-Requires: smartmet-library-spine >= 26.11.4
+Requires: smartmet-library-spine >= 26.11.11
 Requires: smartmet-library-timeseries >= 26.11.7-2
 Requires: smartmet-library-gis >= 26.10.17
 Requires: smartmet-library-trax >= 26.10.17
@@ -120,7 +120,7 @@ Obsoletes: smartmet-brainstorm-wfs-debuginfo < 16.11.1
 #TestRequires: smartmet-library-macgyver >= 26.11.6
 #TestRequires: smartmet-library-gis >= 26.10.17
 #TestRequires: smartmet-library-newbase >= 26.10.17
-#TestRequires: smartmet-library-spine-plugin-test >= 26.11.4
+#TestRequires: smartmet-library-spine-plugin-test >= 26.11.11
 #TestRequires: smartmet-engine-geonames >= 26.10.17
 #TestRequires: smartmet-engine-gis >= 26.10.17
 #TestRequires: smartmet-engine-querydata >= 26.11.5
@@ -139,7 +139,7 @@ SmartMet WFS plugin
 
 %package -n %{SPECNAME}-devel
 Summary: SmartMet WFS plugin development files
-Requires: smartmet-library-spine-devel >= 26.11.4
+Requires: smartmet-library-spine-devel >= 26.11.11
 Requires: smartmet-library-gis-devel >= 26.11.4
 Requires: smartmet-library-locus-devel >= 26.10.16
 Requires: smartmet-library-macgyver-devel >= 26.11.6

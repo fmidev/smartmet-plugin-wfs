@@ -75,9 +75,9 @@ void Plugin::init()
         const std::string url = new_impl->get_config().defaultUrl() + "/" + language;
         if (!itsReactor->addContentHandler(
                 this,
-                url,
-                std::bind(&Plugin::realRequestHandler, this, p::_1, language, p::_2, p::_3),
-                content_types))
+                Spine::Reactor::HandlerOptions(url).addSupportedPostContentTypes(content_types.begin(),
+                                                                       content_types.end()),
+                std::bind(&Plugin::realRequestHandler, this, p::_1, language, p::_2, p::_3)))
         {
           std::ostringstream msg;
           msg << "Failed to register WFS content handler for language '" << language << "'";
@@ -95,9 +95,9 @@ void Plugin::init()
 
     if (!itsReactor->addContentHandler(
             this,
-            plugin_impl.load()->get_config().defaultUrl(),
-            std::bind(&Plugin::realRequestHandler, this, p::_1, "", p::_2, p::_3),
-            content_types))
+            Spine::Reactor::HandlerOptions(plugin_impl.load()->get_config().defaultUrl())
+                .addSupportedPostContentTypes(content_types.begin(), content_types.end()),
+            std::bind(&Plugin::realRequestHandler, this, p::_1, "", p::_2, p::_3)))
     {
       throw Fmi::Exception(
           BCP, "Failed to register WFS content handler for default language");
