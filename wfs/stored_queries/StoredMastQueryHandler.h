@@ -11,7 +11,6 @@
 #include "SupportsLocationParameters.h"
 #include "SupportsQualityParameters.h"
 #include <boost/algorithm/string.hpp>
-#include <boost/date_time/posix_time/posix_time.hpp>
 #include <boost/lambda/lambda.hpp>
 #include <engines/observation/DBRegistryConfig.h>
 #include <spine/Location.h>

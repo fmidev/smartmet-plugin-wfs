@@ -16,7 +16,6 @@
 #include "SupportsTimeParameters.h"
 #include "WfsConvenience.h"
 #include "WfsException.h"
-#include <boost/date_time/posix_time/posix_time.hpp>
 #include <boost/format.hpp>
 #include <ctpp2/CDT.hpp>
 #include <engines/geonames/Engine.h>

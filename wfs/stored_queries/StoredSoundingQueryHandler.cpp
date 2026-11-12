@@ -11,7 +11,6 @@
 #include "SupportsExtraHandlerParams.h"
 #include "WfsConvenience.h"
 #include "WfsException.h"
-#include <boost/date_time/posix_time/posix_time.hpp>
 #include <engines/observation/DBRegistry.h>
 #include <engines/observation/Engine.h>
 #include <engines/observation/MastQuery.h>

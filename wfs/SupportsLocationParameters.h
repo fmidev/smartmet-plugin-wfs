@@ -4,7 +4,6 @@
 #include "RequiresGeoEngine.h"
 #include "StoredQueryParamRegistry.h"
 #include "SupportsExtraHandlerParams.h"
-#include <boost/date_time/posix_time/posix_time.hpp>
 #include <spine/Location.h>
 #include <list>
 #include <memory>

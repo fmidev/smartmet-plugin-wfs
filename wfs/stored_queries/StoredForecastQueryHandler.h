@@ -9,7 +9,6 @@
 #include "SupportsMeteoParameterOptions.h"
 #include "SupportsTimeParameters.h"
 #include "SupportsTimeZone.h"
-#include <boost/date_time/posix_time/posix_time.hpp>
 #include <engines/querydata/MetaData.h>
 #include <engines/querydata/Producer.h>
 #include <macgyver/DateTime.h>

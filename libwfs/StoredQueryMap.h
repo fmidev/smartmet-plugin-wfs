@@ -2,7 +2,6 @@
 
 #include "FileContentChecker.h"
 #include "HandlerFactorySummary.h"
-#include <boost/asio.hpp>
 #include <macgyver/DirectoryMonitor.h>
 #include <atomic>
 #include <condition_variable>

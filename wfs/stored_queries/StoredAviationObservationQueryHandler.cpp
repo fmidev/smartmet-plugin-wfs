@@ -11,7 +11,6 @@
 #include "WfsConvenience.h"
 #include "WfsException.h"
 #include <boost/algorithm/hex.hpp>
-#include <boost/date_time/posix_time/posix_time.hpp>
 #include <ctpp2/CDT.hpp>
 #include <engines/geonames/Engine.h>
 #include <engines/observation/DBRegistry.h>

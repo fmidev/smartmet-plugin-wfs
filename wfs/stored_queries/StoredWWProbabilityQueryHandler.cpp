@@ -9,7 +9,6 @@
 #include "StoredQueryParamRegistry.h"
 #include "SupportsExtraHandlerParams.h"
 #include "WfsException.h"
-#include <boost/date_time/posix_time/posix_time.hpp>
 #include <boost/range/adaptor/map.hpp>
 #include <boost/range/algorithm/copy.hpp>
 #include <ctpp2/CDT.hpp>
