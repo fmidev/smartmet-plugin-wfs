@@ -1,6 +1,7 @@
 #pragma once
 
 #include "ArrayParameterTemplate.h"
+#include "FeatureID.h"
 #include "GeoServerDataIndex.h"
 #include "ScalarParameterTemplate.h"
 #include "SupportsBoundingBox.h"

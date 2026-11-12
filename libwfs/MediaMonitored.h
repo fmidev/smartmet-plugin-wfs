@@ -2,6 +2,7 @@
 
 #include <macgyver/StringConversion.h>
 #include <memory>
+#include <set>
 #include <string>
 
 namespace SmartMet
