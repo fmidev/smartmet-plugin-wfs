@@ -1,9 +1,9 @@
 #pragma once
 
-#include "ArrayParameterTemplate.h"
+#include "ArrayParameterTemplate.h"   // IWYU pragma: keep (make_shared in templates)
 #include "HandlerFactorySummary.h"
 #include "RequestParameterMap.h"
-#include "ScalarParameterTemplate.h"
+#include "ScalarParameterTemplate.h"  // IWYU pragma: keep (make_shared in templates)
 #include "StoredQueryConfig.h"
 #include <memory>
 #include <variant>

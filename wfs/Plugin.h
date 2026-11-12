@@ -8,6 +8,7 @@
 
 #include "Config.h"
 #include "PluginImpl.h"
+#include "XmlEnvInit.h"
 #include <boost/utility.hpp>
 #include <ctpp2/CDT.hpp>
 #include <macgyver/AtomicSharedPtr.h>

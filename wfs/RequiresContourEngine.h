@@ -1,6 +1,7 @@
 #pragma once
 
 #include "StoredQueryHandlerInitBase.h"
+#include <engines/contour/Engine.h>
 #include <spine/Reactor.h>
 
 namespace SmartMet
