@@ -1,8 +1,19 @@
 #pragma once
 
-#include "ParameterTemplateBase.h"
+#include "StoredQueryConfig.h"
 #include "StoredQueryHandlerBase.h"
-#include "SupportsExtraHandlerParams.h"
+#include <iosfwd>
+#include <optional>
+#include <string>
+
+namespace SmartMet::Plugin::WFS
+{
+class PluginImpl;
+}  // namespace SmartMet::Plugin::WFS
+namespace SmartMet::Spine
+{
+class Reactor;
+}  // namespace SmartMet::Spine
 
 namespace SmartMet
 {

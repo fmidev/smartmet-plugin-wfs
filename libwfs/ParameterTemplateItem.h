@@ -1,11 +1,13 @@
 #pragma once
 
-#include "StoredQueryConfig.h"
 #include "WfsConvenience.h"
-#include <optional>
-#include <memory>
-#include <variant>
 #include <spine/Value.h>
+#include <cstddef>
+#include <memory>
+#include <optional>
+#include <string>
+#include <variant>
+#include <vector>
 
 namespace SmartMet
 {

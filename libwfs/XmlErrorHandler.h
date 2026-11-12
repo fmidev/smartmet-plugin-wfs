@@ -2,9 +2,13 @@
 
 #include "XmlError.h"
 #include <xercesc/sax/ErrorHandler.hpp>
-#include <xercesc/sax/SAXParseException.hpp>
 #include <list>
 #include <string>
+
+namespace xercesc_3_2
+{
+class SAXParseException;
+}  // namespace xercesc_3_2
 
 namespace SmartMet
 {

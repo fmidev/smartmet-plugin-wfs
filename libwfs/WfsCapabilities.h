@@ -1,7 +1,9 @@
 #pragma once
 
 #include "WfsFeatureDef.h"
+#include <spine/Thread.h>
 #include <map>
+#include <memory>
 #include <set>
 #include <string>
 

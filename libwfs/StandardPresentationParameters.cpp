@@ -4,11 +4,13 @@
 #include "WfsException.h"
 #include "XmlUtils.h"
 #include <boost/algorithm/string.hpp>
-#include <macgyver/TypeName.h>
-#include <spine/Convenience.h>
 #include <macgyver/Exception.h>
-#include <limits>
-#include <sstream>
+#include <macgyver/StringConversion.h>
+#include <spine/HTTP.h>
+#include <algorithm>
+#include <optional>
+#include <utility>
+#include <vector>
 
 namespace bw = SmartMet::Plugin::WFS;
 namespace bwx = SmartMet::Plugin::WFS::Xml;

@@ -1,12 +1,31 @@
 #include "stored_queries/StoredIsolineQueryHandler.h"
+#include "RequiresContourEngine.h"
+#include "RequiresGeoEngine.h"
+#include "RequiresGridEngine.h"
+#include "RequiresQEngine.h"
 #include "StoredQueryHandlerFactories.h"
-#include <gis/Box.h>
-#include <newbase/NFmiEnumConverter.h>
-
-#include <boost/algorithm/string/replace.hpp>
+#include "StoredQueryHandlerFactoryDef.h"
+#include "StoredQueryParamRegistry.h"
+#include "SupportsExtraHandlerParams.h"
+#include <ctpp2/CDT.hpp>
+#include <engines/contour/Options.h>
+#include <gis/OGR.h>
+#include <macgyver/Exception.h>
+#include <spine/Parameter.h>
 #include <algorithm>
-#include <iomanip>
-#include <utility>
+#include <cstddef>
+#include <memory>
+#include <ogr_geometry.h>
+
+namespace SmartMet::Plugin::WFS
+{
+class PluginImpl;
+class StoredQueryHandlerBase;
+}  // namespace SmartMet::Plugin::WFS
+namespace SmartMet::Spine
+{
+class Reactor;
+}  // namespace SmartMet::Spine
 
 namespace bw = SmartMet::Plugin::WFS;
 

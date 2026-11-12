@@ -1,15 +1,25 @@
 #include "StoredQueryHandlerBase.h"
+#include "Config.h"
+#include "PluginImpl.h"
+#include "WfsCapabilities.h"
 #include "WfsException.h"
-#include <boost/algorithm/string.hpp>
+#include <ctpp2/CDT.hpp>
 #include <fmt/format.h>
+#include <macgyver/Exception.h>
 #include <macgyver/TypeName.h>
 #include <newbase/NFmiPoint.h>
 #include <spine/Convenience.h>
-#include <macgyver/Exception.h>
-#include <spine/Value.h>
+#include <algorithm>
+#include <cmath>
+#include <filesystem>
+#include <iostream>
 #include <sstream>
-#include <stdexcept>
 #include <utility>
+
+namespace SmartMet::Spine
+{
+class Reactor;
+}  // namespace SmartMet::Spine
 
 namespace SmartMet
 {

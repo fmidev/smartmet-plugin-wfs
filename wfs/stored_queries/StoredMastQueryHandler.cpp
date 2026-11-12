@@ -1,15 +1,42 @@
 #ifndef WITHOUT_OBSERVATION
 #include "stored_queries/StoredMastQueryHandler.h"
-#include "StoredQueryHandlerFactories.h"
+#include "Config.h"
 #include "FeatureID.h"
+#include "PluginImpl.h"
+#include "QueryBase.h"
+#include "StoredQuery.h"
+#include "StoredQueryHandlerFactories.h"
 #include "StoredQueryHandlerFactoryDef.h"
+#include "StoredQueryParamRegistry.h"
+#include "SupportsExtraHandlerParams.h"
+#include "WfsConvenience.h"
+#include "WfsException.h"
+#include <ctpp2/CDT.hpp>
+#include <engines/geonames/Engine.h>
 #include <engines/observation/DBRegistry.h>
-#include <macgyver/StringConversion.h>
+#include <engines/observation/Engine.h>
 #include <engines/observation/MastQuery.h>
+#include <engines/observation/MastQueryParams.h>
+#include <engines/observation/QueryResult.h>
+#include <engines/observation/Settings.h>
+#include <engines/observation/StationSettings.h>
+#include <macgyver/DateTime.h>
 #include <macgyver/Exception.h>
-#include <spine/Convenience.h>
+#include <macgyver/StringConversion.h>
+#include <macgyver/TypeName.h>
+#include <spine/CRSRegistry.h>
+#include <spine/Value.h>
+#include <any>
+#include <iostream>
+#include <iterator>
+#include <sstream>
 #include <tuple>
 #include <utility>
+
+namespace SmartMet::Spine
+{
+class Reactor;
+}  // namespace SmartMet::Spine
 
 namespace bw = SmartMet::Plugin::WFS;
 

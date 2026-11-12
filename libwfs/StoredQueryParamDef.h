@@ -1,14 +1,8 @@
 #pragma once
 
-#include "WfsException.h"
-#include <macgyver/DateTime.h>
-#include <macgyver/TypeName.h>
 #include <spine/Value.h>
-#include <algorithm>
 #include <ostream>
-#include <stdexcept>
 #include <string>
-#include <typeinfo>
 #include <vector>
 
 namespace SmartMet

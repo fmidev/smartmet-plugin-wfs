@@ -1,11 +1,27 @@
 #pragma once
 
-#include "ArrayParameterTemplate.h"
-#include "FeatureID.h"
 #include "GeoServerDataIndex.h"
-#include "ScalarParameterTemplate.h"
+#include "RequestParameterMap.h"
+#include "StoredQueryConfig.h"
 #include "SupportsBoundingBox.h"
 #include "stored_queries/StoredAtomQueryHandlerBase.h"
+#include <macgyver/DateTime.h>
+#include <map>
+#include <memory>
+#include <optional>
+#include <set>
+#include <string>
+#include <vector>
+
+namespace SmartMet::Plugin::WFS
+{
+class FeatureID;
+class PluginImpl;
+}  // namespace SmartMet::Plugin::WFS
+namespace SmartMet::Spine
+{
+class Reactor;
+}  // namespace SmartMet::Spine
 
 namespace SmartMet
 {

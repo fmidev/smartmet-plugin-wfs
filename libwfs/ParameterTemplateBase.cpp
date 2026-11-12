@@ -1,11 +1,11 @@
 #include "ParameterTemplateBase.h"
-#include "RequestParameterMap.h"
-#include "SupportsExtraHandlerParams.h"
+#include "WfsException.h"
+#include <boost/date_time/posix_time/posix_time.hpp>
 #include <macgyver/Exception.h>
-#include <macgyver/StringConversion.h>
+#include <macgyver/TypeName.h>
+#include <libconfig.h++>
 #include <sstream>
 #include <string>
-#include <typeinfo>
 #include <utility>
 
 namespace SmartMet

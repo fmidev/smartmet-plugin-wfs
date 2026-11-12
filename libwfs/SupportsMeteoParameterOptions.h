@@ -1,10 +1,14 @@
 #pragma once
 
-#include "StoredQueryConfig.h"
+#include <cstddef>
 #include <map>
 #include <memory>
 #include <string>
-#include <vector>
+
+namespace SmartMet::Plugin::WFS
+{
+class StoredQueryConfig;
+}  // namespace SmartMet::Plugin::WFS
 
 namespace SmartMet
 {

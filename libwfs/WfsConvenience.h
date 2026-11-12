@@ -1,20 +1,18 @@
 #pragma once
 
-#include <macgyver/DateTime.h>
 #include <boost/lexical_cast.hpp>
-#include <optional>
-#include <newbase/NFmiParameterName.h>
+#include <macgyver/DateTime.h>
 #include <macgyver/Exception.h>
+#include <newbase/NFmiParameterName.h>
 #include <spine/HTTP.h>
 #include <spine/Parameter.h>
-#include <spine/Reactor.h>
-#include <spine/SmartMet.h>
 #include <spine/Value.h>
-#include <iostream>
-#include <libconfig.h++>
+#include <cstddef>
 #include <limits>
-#include <stdexcept>
+#include <optional>
+#include <sstream>
 #include <string>
+#include <variant>
 #include <vector>
 
 // FIXME: update compiler versions for which we need __attribute__((__may_alias__)) as needed.

@@ -1,13 +1,31 @@
 #include "stored_queries/StoredWWCoverageQueryHandler.h"
+#include "RequiresContourEngine.h"
+#include "RequiresGeoEngine.h"
+#include "RequiresGridEngine.h"
+#include "RequiresQEngine.h"
+#include "StoredCoverageQueryHandler.h"
 #include "StoredQueryHandlerFactories.h"
-#include <gis/Box.h>
-#include <newbase/NFmiEnumConverter.h>
+#include "StoredQueryHandlerFactoryDef.h"
+#include "StoredQueryParamRegistry.h"
+#include "SupportsExtraHandlerParams.h"
+#include "WfsException.h"
+#include <ctpp2/CDT.hpp>
+#include <engines/contour/Options.h>
 #include <macgyver/Exception.h>
-
-#include <boost/algorithm/string/replace.hpp>
 #include <algorithm>
-#include <iomanip>
-#include <utility>
+#include <cfloat>
+#include <cstddef>
+#include <memory>
+
+namespace SmartMet::Plugin::WFS
+{
+class PluginImpl;
+class StoredQueryHandlerBase;
+}  // namespace SmartMet::Plugin::WFS
+namespace SmartMet::Spine
+{
+class Reactor;
+}  // namespace SmartMet::Spine
 
 namespace bw = SmartMet::Plugin::WFS;
 

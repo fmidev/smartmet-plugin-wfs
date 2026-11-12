@@ -1,10 +1,9 @@
 #include "FeatureID.h"
 #include "BStream.h"
-#include <boost/shared_array.hpp>
 #include <macgyver/Base64.h>
-#include <macgyver/StringConversion.h>
-#include <openssl/sha.h>
 #include <macgyver/Exception.h>
+#include <openssl/sha.h>
+#include <cstdint>
 #include <cstring>
 #include <sstream>
 #include <utility>

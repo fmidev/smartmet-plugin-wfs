@@ -3,12 +3,17 @@
 #include <boost/archive/text_iarchive.hpp>
 #include <boost/archive/text_oarchive.hpp>
 #include <boost/serialization/map.hpp>
-#include <curl/curl.h>
-#include <xercesc/sax/InputSource.hpp>
 #include <xercesc/util/XMLEntityResolver.hpp>
+#include <ctime>
 #include <future>
+#include <map>
 #include <mutex>
-#include <optional>
+#include <string>
+
+namespace xercesc_3_2
+{
+class InputSource;
+}  // namespace xercesc_3_2
 
 namespace SmartMet {
   namespace Plugin {

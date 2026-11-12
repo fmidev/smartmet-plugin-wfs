@@ -1,12 +1,10 @@
 #include "RequestFactory.h"
 #include "PluginImpl.h"
+#include "WfsCapabilities.h"
 #include "WfsException.h"
-#include <boost/algorithm/string.hpp>
-#include <macgyver/StringConversion.h>
-#include <macgyver/TypeName.h>
 #include <macgyver/Exception.h>
-#include <sstream>
-#include <stdexcept>
+#include <macgyver/StringConversion.h>
+#include <optional>
 #include <utility>
 
 namespace bw = SmartMet::Plugin::WFS;

@@ -1,8 +1,31 @@
-#include <utility>
-#include "StoredQueryHandlerFactories.h"
-
-#include "StoredQueryHandlerFactoryDef.h"
 #include "DummyStoredQueryHandler.h"
+#include "RequestParameterMap.h"
+#include "StoredQuery.h"
+#include "StoredQueryConfig.h"
+#include "StoredQueryHandlerBase.h"
+#include "StoredQueryHandlerFactories.h"
+#include "StoredQueryHandlerFactoryDef.h"
+#include "StoredQueryParamRegistry.h"
+#include "SupportsExtraHandlerParams.h"
+#include <json/writer.h>
+#include <macgyver/Exception.h>
+#include <spine/Value.h>
+#include <cstddef>
+#include <memory>
+#include <optional>
+#include <ostream>
+#include <set>
+#include <string>
+#include <vector>
+
+namespace SmartMet::Plugin::WFS
+{
+class PluginImpl;
+}  // namespace SmartMet::Plugin::WFS
+namespace SmartMet::Spine
+{
+class Reactor;
+}  // namespace SmartMet::Spine
 
 namespace bw = SmartMet::Plugin::WFS;
 

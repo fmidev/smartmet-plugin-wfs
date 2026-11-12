@@ -1,21 +1,23 @@
 #pragma once
 
-#include "PluginImpl.h"
-#include "StoredQueryConfig.h"
-#include "StoredQueryHandlerBase.h"
-#include "StoredQueryHandlerFactoryDef.h"
-#include "SupportsBoundingBox.h"
-#include "SupportsExtraHandlerParams.h"
-#include "SupportsTimeParameters.h"
-#include "SupportsTimeZone.h"
-
-#include <engines/contour/Engine.h>
-#include <engines/querydata/Engine.h>
+#include <engines/contour/Options.h>
+#include <engines/querydata/Q.h>
+#include <gis/Types.h>
 #include <grid-content/queryServer/definition/Query.h>
-
-#include <gis/OGR.h>
-
+#include <macgyver/DateTime.h>
+#include <spine/Value.h>
+#include <timeseries/TimeSeriesGenerator.h>
+#include <timeseries/TimeSeriesInclude.h>
+#include <memory>
+#include <string>
 #include <utility>
+#include <vector>
+
+class OGRSpatialReference;
+namespace SmartMet::Spine
+{
+class Parameter;
+}  // namespace SmartMet::Spine
 
 namespace SmartMet
 {

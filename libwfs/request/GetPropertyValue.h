@@ -1,12 +1,31 @@
 #pragma once
 
 #include "PluginImpl.h"
-#include "QueryBase.h"
 #include "RequestBase.h"
 #include "StandardPresentationParameters.h"
-#include "StoredQueryMap.h"
-#include "XPathSnapshot.h"
 #include <xercesc/dom/DOMDocument.hpp>
+#include <iosfwd>
+#include <memory>
+#include <optional>
+#include <string>
+#include <vector>
+
+namespace SmartMet::Plugin::WFS::Xml
+{
+class XPathSnapshot;
+}  // namespace SmartMet::Plugin::WFS::Xml
+namespace SmartMet::Plugin::WFS
+{
+class QueryBase;
+}  // namespace SmartMet::Plugin::WFS
+namespace SmartMet::Spine::HTTP
+{
+class Request;
+}  // namespace SmartMet::Spine::HTTP
+namespace xercesc_3_2
+{
+class DOMElement;
+}  // namespace xercesc_3_2
 
 namespace SmartMet
 {

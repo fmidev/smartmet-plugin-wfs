@@ -1,10 +1,22 @@
 #pragma once
 
+#include "RequestParameterMap.h"
 #include "RequiresGeoEngine.h"
-#include "StoredQueryConfig.h"
 #include "StoredQueryParamRegistry.h"
 #include "SupportsExtraHandlerParams.h"
+#include <macgyver/DateTime.h>
 #include <macgyver/LocalDateTime.h>
+#include <memory>
+#include <string>
+
+namespace SmartMet::Plugin::WFS
+{
+class StoredQueryConfig;
+}  // namespace SmartMet::Plugin::WFS
+namespace SmartMet::Spine
+{
+class Reactor;
+}  // namespace SmartMet::Spine
 
 namespace SmartMet
 {

@@ -1,10 +1,10 @@
 #pragma once
 
-#include <ogr_geometry.h>
-#include <newbase/NFmiArea.h>
 #include <newbase/NFmiPoint.h>
-#include <newbase/NFmiRect.h>
 #include <vector>
+
+class NFmiArea;
+class OGRPolygon;
 
 namespace SmartMet
 {

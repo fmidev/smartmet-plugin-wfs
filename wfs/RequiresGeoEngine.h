@@ -1,8 +1,11 @@
 #pragma once
 
 #include "StoredQueryHandlerInitBase.h"
-#include <spine/Reactor.h>
 #include <engines/geonames/Engine.h>
+#include <spine/Reactor.h>
+#include <functional>
+#include <memory>
+#include <string>
 
 namespace SmartMet
 {

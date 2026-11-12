@@ -1,10 +1,15 @@
 #pragma once
 
-#include <variant>
 #include <ctpp2/CDT.hpp>
-#include <macgyver/Exception.h>
 #include <spine/HTTP.h>
 #include <exception>
+#include <string>
+#include <variant>
+
+namespace Fmi
+{
+class Exception;
+}  // namespace Fmi
 
 namespace SmartMet
 {

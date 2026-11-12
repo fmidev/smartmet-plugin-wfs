@@ -1,16 +1,25 @@
 #pragma once
 
-#include <ctpp2/CDT.hpp>
 #include <macgyver/Exception.h>
 #include <macgyver/StringConversion.h>
 #include <macgyver/TypeName.h>
 #include <spine/Value.h>
+#include <cstddef>
 #include <iterator>
 #include <limits>
 #include <map>
+#include <optional>
 #include <set>
-#include <stdexcept>
+#include <sstream>
+#include <string>
+#include <typeinfo>
 #include <utility>
+#include <vector>
+
+namespace CTPP
+{
+class CDT;
+}  // namespace CTPP
 
 namespace SmartMet
 {

@@ -1,40 +1,80 @@
-#include <algorithm>
+#include "stored_queries/StoredGridQueryHandler.h"
+#include "Config.h"
+#include "PluginImpl.h"
+#include "QueryBase.h"
+#include "RequestParameterMap.h"
+#include "RequiresGeoEngine.h"
+#include "RequiresQEngine.h"
+#include "StoredQuery.h"
+#include "StoredQueryConfig.h"
+#include "StoredQueryHandlerBase.h"
 #include "StoredQueryHandlerFactories.h"
-#include <iomanip>
-#include <list>
-#include <string>
-
-#include <boost/algorithm/string.hpp>
-#include <boost/bind/bind.hpp>
+#include "StoredQueryHandlerFactoryDef.h"
+#include "StoredQueryParamRegistry.h"
+#include "SupportsBoundingBox.h"
+#include "SupportsExtraHandlerParams.h"
+#include "SupportsTimeParameters.h"
+#include "WfsConvenience.h"
+#include "WfsException.h"
+#include <boost/date_time/posix_time/posix_time.hpp>
 #include <boost/format.hpp>
-#include <boost/lambda/lambda.hpp>
-#include <boost/shared_array.hpp>
-#include <utility>
-
-#include <cpl_error.h>
-
+#include <ctpp2/CDT.hpp>
+#include <engines/geonames/Engine.h>
+#include <engines/querydata/Engine.h>
+#include <engines/querydata/MetaData.h>
+#include <engines/querydata/MetaQueryOptions.h>
+#include <engines/querydata/ParameterOptions.h>
+#include <engines/querydata/Producer.h>
+#include <engines/querydata/Q.h>
+#include <macgyver/DateTime.h>
+#include <macgyver/Exception.h>
+#include <macgyver/LocalDateTime.h>
+#include <macgyver/StringConversion.h>
+#include <macgyver/TimeFormatter.h>
+#include <macgyver/TimeZones.h>
+#include <macgyver/ValueFormatter.h>
+#include <newbase/NFmiGrid.h>
 #include <newbase/NFmiIndexMask.h>
 #include <newbase/NFmiIndexMaskTools.h>
+#include <newbase/NFmiLevel.h>
+#include <newbase/NFmiMetTime.h>
+#include <newbase/NFmiParameterName.h>
 #include <newbase/NFmiPoint.h>
-#include <newbase/NFmiQueryData.h>
 #include <newbase/NFmiSvgPath.h>
-#include <newbase/NFmiSvgTools.h>
-#include <cmath>
-
-#include <macgyver/Exception.h>
-#include <macgyver/StringConversion.h>
-#include <macgyver/TypeName.h>
-
-#include <engines/gis/GdalUtils.h>
-#include <engines/querydata/MetaQueryOptions.h>
 #include <spine/Convenience.h>
+#include <spine/Location.h>
+#include <spine/LonLat.h>
+#include <spine/Parameter.h>
+#include <spine/Value.h>
 #include <timeseries/ParameterFactory.h>
+#include <timeseries/TimeSeries.h>
+#include <timeseries/TimeSeriesGenerator.h>
+#include <timeseries/TimeSeriesGeneratorOptions.h>
+#include <timeseries/TimeSeriesInclude.h>
+#include <timeseries/TimeSeriesOutput.h>
+#include <timeseries/TimeSeriesTypes.h>
+#include <algorithm>
+#include <cmath>
+#include <cstddef>
+#include <cstdint>
+#include <iomanip>
+#include <iostream>
+#include <iterator>
+#include <list>
+#include <map>
+#include <memory>
+#include <optional>
+#include <set>
+#include <sstream>
+#include <string>
+#include <utility>
+#include <variant>
+#include <vector>
 
-#include "AreaUtils.h"
-#include "FeatureID.h"
-#include "StoredQueryHandlerFactoryDef.h"
-#include "WfsConvenience.h"
-#include "stored_queries/StoredGridQueryHandler.h"
+namespace SmartMet::Spine
+{
+class Reactor;
+}  // namespace SmartMet::Spine
 
 namespace bw = SmartMet::Plugin::WFS;
 using namespace SmartMet::Spine;

@@ -1,10 +1,22 @@
 #pragma once
 
 #include "PluginImpl.h"
-#include "QueryBase.h"
 #include "RequestBase.h"
 #include "StandardPresentationParameters.h"
 #include <xercesc/dom/DOMDocument.hpp>
+#include <iosfwd>
+#include <memory>
+#include <string>
+#include <vector>
+
+namespace SmartMet::Plugin::WFS
+{
+class QueryBase;
+}  // namespace SmartMet::Plugin::WFS
+namespace SmartMet::Spine::HTTP
+{
+class Request;
+}  // namespace SmartMet::Spine::HTTP
 
 namespace SmartMet
 {

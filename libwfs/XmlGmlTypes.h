@@ -1,9 +1,8 @@
 #pragma once
 
 #include "WfsConvenience.h"
-#include <optional>
-#include <memory>
 #include <xercesc/dom/DOMElement.hpp>
+#include <optional>
 #include <string>
 #include <vector>
 

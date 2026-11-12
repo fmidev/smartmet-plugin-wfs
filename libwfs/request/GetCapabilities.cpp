@@ -1,11 +1,25 @@
 #include "request/GetCapabilities.h"
-#include "WfsConst.h"
+#include "CapabilitiesConf.h"
+#include "Config.h"
+#include "PluginImpl.h"
+#include "QueryBase.h"
+#include "WfsCapabilities.h"
 #include "WfsException.h"
-#include "XmlUtils.h"
-#include <boost/algorithm/string.hpp>
+#include "WfsFeatureDef.h"
 #include <ctpp2/CDT.hpp>
-#include <macgyver/TypeName.h>
+#include <macgyver/Exception.h>
+#include <macgyver/TemplateFormatter.h>
+#include <spine/HTTP.h>
+#include <algorithm>
+#include <cassert>
+#include <cstddef>
+#include <exception>
+#include <iterator>
+#include <map>
 #include <memory>
+#include <sstream>
+#include <utility>
+#include <vector>
 
 namespace bw = SmartMet::Plugin::WFS;
 

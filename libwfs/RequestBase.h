@@ -2,8 +2,15 @@
 
 #include <spine/HTTP.h>
 #include <xercesc/dom/DOMDocument.hpp>
-#include <xercesc/dom/DOMElement.hpp>
+#include <iosfwd>
+#include <memory>
+#include <optional>
 #include <string>
+
+namespace xercesc_3_2
+{
+class DOMElement;
+}  // namespace xercesc_3_2
 
 namespace SmartMet
 {

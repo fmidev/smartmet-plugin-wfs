@@ -1,12 +1,23 @@
 #pragma once
 
-#include "ParameterTemplateBase.h"
+#include "RequestParameterMap.h"
+#include "StoredQueryConfig.h"
 #include "StoredQueryHandlerBase.h"
-#include "SupportsExtraHandlerParams.h"
-#include "UrlTemplateGenerator.h"
+#include <iosfwd>
 #include <memory>
-#include <map>
+#include <optional>
+#include <string>
 #include <vector>
+
+namespace SmartMet::Plugin::WFS
+{
+class PluginImpl;
+class UrlTemplateGenerator;
+}  // namespace SmartMet::Plugin::WFS
+namespace SmartMet::Spine
+{
+class Reactor;
+}  // namespace SmartMet::Spine
 
 namespace SmartMet
 {

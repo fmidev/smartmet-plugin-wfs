@@ -1,12 +1,16 @@
 #pragma once
 
-#include "ParameterTemplateBase.h"
 #include "RequestParameterMap.h"
 #include "StoredQueryConfig.h"
 #include "StoredQueryParamRegistry.h"
-#include <memory>
-#include <ctpp2/CDT.hpp>
 #include <map>
+#include <memory>
+#include <string>
+
+namespace CTPP
+{
+class CDT;
+}  // namespace CTPP
 
 namespace SmartMet
 {

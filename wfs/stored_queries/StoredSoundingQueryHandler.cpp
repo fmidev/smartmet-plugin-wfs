@@ -1,19 +1,45 @@
 #ifndef WITHOUT_OBSERVATION
 #include "stored_queries/StoredSoundingQueryHandler.h"
-#include "StoredQueryHandlerFactories.h"
+#include "Config.h"
 #include "FeatureID.h"
+#include "PluginImpl.h"
+#include "QueryBase.h"
+#include "StoredQuery.h"
+#include "StoredQueryHandlerFactories.h"
 #include "StoredQueryHandlerFactoryDef.h"
-#include <engines/gis/Engine.h>
+#include "StoredQueryParamRegistry.h"
+#include "SupportsExtraHandlerParams.h"
+#include "WfsConvenience.h"
+#include "WfsException.h"
+#include <boost/date_time/posix_time/posix_time.hpp>
+#include <engines/observation/DBRegistry.h>
+#include <engines/observation/Engine.h>
 #include <engines/observation/MastQuery.h>
+#include <engines/observation/MastQueryParams.h>
+#include <engines/observation/Settings.h>
+#include <engines/observation/StationSettings.h>
 #include <macgyver/DateTime.h>
 #include <macgyver/Exception.h>
-#include <macgyver/TimeParser.h>
+#include <macgyver/StringConversion.h>
+#include <macgyver/TypeName.h>
 #include <spine/CRSRegistry.h>
-#include <spine/Convenience.h>
-
+#include <spine/Location.h>
+#include <spine/Value.h>
+#include <any>
 #include <bitset>
+#include <cstddef>
+#include <iostream>
+#include <iterator>
+#include <list>
+#include <set>
+#include <sstream>
 #include <tuple>
 #include <utility>
+
+namespace SmartMet::Spine
+{
+class Reactor;
+}  // namespace SmartMet::Spine
 
 namespace SmartMet
 {

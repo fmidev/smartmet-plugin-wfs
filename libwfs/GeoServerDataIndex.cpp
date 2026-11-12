@@ -1,14 +1,20 @@
 #include "GeoServerDataIndex.h"
-#include <macgyver/DateTime.h>
+#include "GeoServerDB.h"
+#include <boost/format.hpp>
 #include <boost/regex.hpp>
 #include <gis/OGR.h>
+#include <macgyver/DateTime.h>
+#include <macgyver/Exception.h>
 #include <macgyver/StringConversion.h>
 #include <macgyver/TypeName.h>
 #include <spine/Convenience.h>
-#include <macgyver/Exception.h>
+#include <algorithm>
 #include <functional>
 #include <iostream>
+#include <ogr_geometry.h>
+#include <pqxx/pqxx>
 #include <sstream>
+#include <utility>
 
 namespace bw = SmartMet::Plugin::WFS;
 

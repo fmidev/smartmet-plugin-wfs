@@ -1,12 +1,19 @@
 #pragma once
 
 #include "StoredQueryConfig.h"
-#include "WfsConvenience.h"
 #include <boost/logic/tribool.hpp>
-#include <optional>
-#include <memory>
+#include <string>
 #include <variant>
-#include <spine/Value.h>
+#include <vector>
+
+namespace SmartMet::Spine
+{
+class Value;
+}  // namespace SmartMet::Spine
+namespace libconfig
+{
+class Setting;
+}  // namespace libconfig
 
 namespace SmartMet
 {

@@ -1,28 +1,39 @@
 #pragma once
 
-#include "SupportsBoundingBox.h"
-#include "stored_queries/StoredAtomQueryHandlerBase.h"
+#include "RequestParameterMap.h"
 #include "RequiresGeoEngine.h"
 #include "RequiresQEngine.h"
+#include "StoredQueryConfig.h"
+#include "SupportsBoundingBox.h"
+#include "stored_queries/StoredAtomQueryHandlerBase.h"
 #include <boost/geometry/core/cs.hpp>
-#include <boost/geometry/geometries/point.hpp>
 #include <boost/geometry/geometries/box.hpp>
+#include <boost/geometry/geometries/point.hpp>
 #include <boost/geometry/geometries/ring.hpp>
+#include <macgyver/DateTime.h>
 #include <memory>
 #include <ogr_geometry.h>
+#include <optional>
+#include <set>
+#include <string>
+
+namespace SmartMet::Plugin::WFS
+{
+class PluginImpl;
+}  // namespace SmartMet::Plugin::WFS
+namespace SmartMet::Spine
+{
+class Reactor;
+struct BoundingBox;
+}  // namespace SmartMet::Spine
 
 namespace SmartMet
 {
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
 namespace Engine
 {
-namespace Geonames
-{
-class Engine;
-}
 namespace Querydata
 {
-class Engine;
 struct MetaData;
 }  // namespace Querydata
 }  // namespace Engine

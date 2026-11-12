@@ -1,11 +1,19 @@
 #pragma once
 
-#include <set>
-#include <spine/ConfigBase.h>
 #include <spine/MultiLanguageString.h>
 #include <spine/MultiLanguageStringArray.h>
-#include <libconfig.h++>
-#include <ctpp2/CDT.hpp>
+#include <memory>
+#include <set>
+#include <string>
+
+namespace CTPP
+{
+class CDT;
+}  // namespace CTPP
+namespace libconfig
+{
+class Setting;
+}  // namespace libconfig
 
 namespace SmartMet
 {

@@ -1,22 +1,35 @@
 #include "request/GetPropertyValue.h"
 #include "AdHocQuery.h"
+#include "Config.h"
+#include "QueryBase.h"
+#include "StoredQuery.h"
 #include "WfsConst.h"
 #include "WfsException.h"
 #include "XPathSnapshot.h"
-#include "XmlDomErrorHandler.h"
+#include "XmlError.h"
 #include "XmlUtils.h"
 #include <boost/format.hpp>
+#include <macgyver/Exception.h>
 #include <macgyver/StringConversion.h>
 #include <macgyver/TypeName.h>
+#include <spine/HTTP.h>
 #include <xercesc/dom/DOM.hpp>
-#include <xercesc/dom/DOMException.hpp>
-#include <xercesc/dom/DOMXPathNSResolver.hpp>
-#include <xercesc/dom/DOMXPathResult.hpp>
-#include <xercesc/framework/MemBufInputSource.hpp>
-#include <xercesc/util/Janitor.hpp>
 #include <xqilla/xqilla-dom3.hpp>
 #include <algorithm>
+#include <cassert>
+#include <cstddef>
+#include <iostream>
+#include <list>
+#include <set>
+#include <sstream>
+#include <strings.h>
 #include <utility>
+
+namespace SmartMet::Plugin::WFS
+{
+class StoredQueryMap;
+class TypeNameStoredQueryMap;
+}  // namespace SmartMet::Plugin::WFS
 
 #define SCHEMA_LOCATION "schemaLocation"
 #define TIMESTAMP "timeStamp"

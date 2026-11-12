@@ -1,18 +1,30 @@
 #pragma once
 
-#include "Config.h"
-#include "StoredQueryParamDef.h"
 #include "StoredQueryConfigWrapper.h"
-#include <optional>
-#include <ctpp2/CDT.hpp>
+#include "StoredQueryParamDef.h"
 #include <spine/ConfigBase.h>
 #include <spine/MultiLanguageString.h>
-#include <libconfig.h++>
+#include <spine/Value.h>
+#include <ctime>
+#include <locale>
 #include <map>
+#include <memory>
+#include <optional>
 #include <ostream>
 #include <set>
 #include <string>
 #include <vector>
+
+namespace SmartMet::Plugin::WFS
+{
+class Config;
+class Hosts;
+}  // namespace SmartMet::Plugin::WFS
+namespace libconfig
+{
+class Config;
+class Setting;
+}  // namespace libconfig
 
 namespace SmartMet
 {

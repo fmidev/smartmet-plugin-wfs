@@ -7,10 +7,9 @@
 #include "TypeNameStoredQueryMap.h"
 #include "WfsException.h"
 #include <boost/algorithm/string.hpp>
-#include <macgyver/StringConversion.h>
 #include <macgyver/Exception.h>
-#include <sstream>
-#include <stdexcept>
+#include <macgyver/StringConversion.h>
+#include <utility>
 
 namespace ba = boost::algorithm;
 namespace bw = SmartMet::Plugin::WFS;

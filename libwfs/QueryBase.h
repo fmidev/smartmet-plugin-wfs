@@ -1,6 +1,6 @@
 #pragma once
 
-#include "StandardPresentationParameters.h"
+#include <optional>
 #include <ostream>
 #include <string>
 

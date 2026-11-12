@@ -2,11 +2,10 @@
 #include "WfsException.h"
 #include <boost/algorithm/string.hpp>
 #include <macgyver/DateTime.h>
-#include <boost/lambda/lambda.hpp>
-#include <boost/spirit/include/qi.hpp>
-#include <macgyver/TimeParser.h>
 #include <macgyver/Exception.h>
 #include <cctype>
+#include <cmath>
+#include <locale>
 #include <sstream>
 
 namespace SmartMet

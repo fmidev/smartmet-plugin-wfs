@@ -2,18 +2,52 @@
 
 #ifndef WITHOUT_OBSERVATION
 
-#include "ArrayParameterTemplate.h"
-#include "ScalarParameterTemplate.h"
+#include "RequestParameterMap.h"
+#include "RequiresGeoEngine.h"
+#include "RequiresObsEngine.h"
+#include "StoredQueryConfig.h"
 #include "StoredQueryHandlerBase.h"
 #include "SupportsBoundingBox.h"
-#include "SupportsExtraHandlerParams.h"
 #include "SupportsLocationParameters.h"
 #include "SupportsMeteoParameterOptions.h"
 #include "SupportsQualityParameters.h"
-#include "SupportsTimeZone.h"
-#include "RequiresGeoEngine.h"
 #include "SupportsTimeParameters.h"
-#include "RequiresObsEngine.h"
+#include "SupportsTimeZone.h"
+#include <macgyver/LocalDateTime.h>
+#include <spine/Location.h>
+#include <spine/Parameter.h>
+#include <timeseries/TimeSeries.h>
+#include <timeseries/TimeSeriesInclude.h>
+#include <cstddef>
+#include <cstdint>
+#include <iosfwd>
+#include <map>
+#include <optional>
+#include <string>
+#include <vector>
+
+namespace CTPP
+{
+class CDT;
+}  // namespace CTPP
+namespace SmartMet::Engine::Observation
+{
+class Settings;
+struct StationSettings;
+}  // namespace SmartMet::Engine::Observation
+namespace SmartMet::Plugin::WFS
+{
+class PluginImpl;
+}  // namespace SmartMet::Plugin::WFS
+namespace SmartMet::Spine
+{
+class Reactor;
+}  // namespace SmartMet::Spine
+namespace SmartMet::TimeSeries
+{
+class StringVisitor;
+}  // namespace SmartMet::TimeSeries
+
 namespace SmartMet
 {
 namespace Plugin

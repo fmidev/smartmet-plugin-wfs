@@ -1,6 +1,23 @@
 #include "ScalarParameterTemplate.h"
+#include "StoredQueryConfig.h"
+#include "WfsConvenience.h"
 #include <macgyver/Exception.h>
+#include <macgyver/TypeName.h>
 #include <spine/Value.h>
+#include <iostream>
+#include <map>
+#include <sstream>
+#include <variant>
+#include <vector>
+
+namespace SmartMet::Plugin::WFS
+{
+class RequestParameterMap;
+}  // namespace SmartMet::Plugin::WFS
+namespace libconfig
+{
+class Setting;
+}  // namespace libconfig
 
 namespace
 {

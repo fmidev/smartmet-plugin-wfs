@@ -1,13 +1,30 @@
 #include "request/DescribeFeatureType.h"
+#include "Config.h"
+#include "PluginImpl.h"
+#include "WfsCapabilities.h"
 #include "WfsConst.h"
 #include "WfsException.h"
+#include "WfsFeatureDef.h"
 #include "XmlUtils.h"
 #include <boost/algorithm/string.hpp>
-#include <boost/format.hpp>
 #include <ctpp2/CDT.hpp>
+#include <macgyver/Exception.h>
+#include <macgyver/TemplateFormatter.h>
 #include <macgyver/TypeName.h>
+#include <spine/HTTP.h>
+#include <cassert>
+#include <cstddef>
+#include <exception>
+#include <map>
 #include <memory>
+#include <optional>
+#include <set>
 #include <sstream>
+
+namespace xercesc_3_2
+{
+class DOMElement;
+}  // namespace xercesc_3_2
 
 namespace bw = SmartMet::Plugin::WFS;
 namespace bwx = SmartMet::Plugin::WFS::Xml;

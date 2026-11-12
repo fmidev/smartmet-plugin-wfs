@@ -3,8 +3,10 @@
 #include "PluginImpl.h"
 #include "StoredQueryConfig.h"
 #include "StoredQueryHandlerBase.h"
-#include <optional>
+#include <spine/Reactor.h>
 #include <memory>
+#include <optional>
+#include <string>
 
 namespace SmartMet
 {
@@ -12,7 +14,6 @@ namespace Plugin
 {
 namespace WFS
 {
-class PluginImpl;
 
 class StoredQueryHandlerFactoryDef
 {

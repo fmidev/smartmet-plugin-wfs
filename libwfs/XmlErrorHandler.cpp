@@ -3,7 +3,9 @@
 #include "XmlUtils.h"
 #include <boost/format.hpp>
 #include <macgyver/Exception.h>
+#include <xercesc/sax/SAXParseException.hpp>
 #include <sstream>
+#include <utility>
 
 namespace bwx = SmartMet::Plugin::WFS::Xml;
 

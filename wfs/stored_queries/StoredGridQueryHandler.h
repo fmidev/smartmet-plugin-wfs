@@ -1,39 +1,57 @@
 #pragma once
 
-#include <macgyver/DateTime.h>
-#include <boost/geometry/core/cs.hpp>
-#include <boost/geometry/geometries/point.hpp>
-#include <boost/geometry/geometries/box.hpp>
-#include <boost/geometry/geometries/ring.hpp>
-#include <memory>
-#include <ogr_geometry.h>
-
-#include <engines/geonames/Engine.h>
-#include <engines/querydata/Engine.h>
-#include <timeseries/TimeSeriesInclude.h>
-
 #include "RequestParameterMap.h"
 #include "RequiresGeoEngine.h"
 #include "RequiresQEngine.h"
+#include "StoredQueryConfig.h"
+#include "StoredQueryHandlerBase.h"
 #include "SupportsBoundingBox.h"
 #include "SupportsTimeParameters.h"
-#include "stored_queries/StoredAtomQueryHandlerBase.h"
+#include <boost/geometry/geometries/box.hpp>
+#include <boost/geometry/geometries/point.hpp>
+#include <boost/geometry/geometries/ring.hpp>
+#include <engines/querydata/MetaData.h>
+#include <engines/querydata/Producer.h>
+#include <macgyver/DateTime.h>
+#include <newbase/NFmiParameterName.h>
+#include <newbase/NFmiPoint.h>
+#include <spine/Location.h>
+#include <spine/Parameter.h>
+#include <spine/Value.h>
+#include <timeseries/TimeSeries.h>
+#include <timeseries/TimeSeriesInclude.h>
+#include <cstddef>
+#include <iosfwd>
+#include <list>
+#include <locale>
+#include <map>
+#include <memory>
+#include <optional>
+#include <set>
+#include <string>
+#include <utility>
+#include <vector>
+
+namespace Fmi
+{
+class TimeFormatter;
+class ValueFormatter;
+}  // namespace Fmi
+namespace SmartMet::Plugin::WFS
+{
+class PluginImpl;
+}  // namespace SmartMet::Plugin::WFS
+namespace SmartMet::Spine
+{
+class Reactor;
+}  // namespace SmartMet::Spine
+namespace SmartMet::TimeSeries
+{
+struct TimeSeriesGeneratorOptions;
+}  // namespace SmartMet::TimeSeries
 
 namespace SmartMet
 {
-#ifndef DOXYGEN_SHOULD_SKIP_THIS
-namespace Engine
-{
-namespace Geonames
-{
-class Engine;
-}
-namespace Querydata
-{
-class Engine;
-}
-}  // namespace Engine
-#endif
 
 namespace Plugin
 {

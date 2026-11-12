@@ -3,12 +3,10 @@
 #include "WfsException.h"
 #include "XmlUtils.h"
 #include <boost/algorithm/string.hpp>
-#include <boost/optional/optional_io.hpp>
-#include <macgyver/TypeName.h>
 #include <macgyver/Exception.h>
-#include <xercesc/dom/DOMNodeList.hpp>
-#include <xercesc/util/Janitor.hpp>
-#include <map>
+#include <macgyver/Optional.h>
+#include <sstream>
+#include <utility>
 
 namespace ba = boost::algorithm;
 

@@ -1,10 +1,9 @@
 #include "WfsCapabilities.h"
-#include <macgyver/TypeName.h>
-#include <spine/Convenience.h>
 #include <macgyver/Exception.h>
+#include <spine/Convenience.h>
 #include <iostream>
 #include <sstream>
-#include <stdexcept>
+#include <utility>
 
 namespace bw = SmartMet::Plugin::WFS;
 using namespace SmartMet::Spine;

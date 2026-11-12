@@ -4,19 +4,36 @@
  */
 // ======================================================================
 
-#include "WfsConst.h"
-#include "WfsException.h"
+#include "Config.h"
+#include "PluginImpl.h"
+#include <boost/algorithm/string.hpp>
+#include <engines/gis/Engine.h>
 #include <json/json.h>
-#include <spine/Convenience.h>
+#include <macgyver/AtomicSharedPtr.h>
+#include <macgyver/CacheStats.h>
 #include <macgyver/Exception.h>
 #include <macgyver/ThreadName.h>
+#include <spine/ContentHandlerMap.h>
+#include <spine/Convenience.h>
+#include <spine/HTTP.h>
 #include <spine/Reactor.h>
 #include <spine/SmartMet.h>
+#include <spine/SmartMetPlugin.h>
 #include <Plugin.h>
+#include <atomic>
+#include <chrono>
+#include <condition_variable>
 #include <functional>
+#include <iostream>
+#include <memory>
+#include <mutex>
+#include <optional>
+#include <set>
 #include <sstream>
+#include <stdexcept>
+#include <string>
 #include <thread>
-#include <boost/algorithm/string.hpp>
+#include <vector>
 
 namespace p = std::placeholders;
 namespace ba = boost::algorithm;

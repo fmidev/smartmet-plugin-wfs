@@ -1,8 +1,10 @@
 #include "RequiresQEngine.h"
 #include <boost/algorithm/string/join.hpp>
+#include <engines/querydata/MetaData.h>
 #include <engines/querydata/MetaQueryOptions.h>
 #include <macgyver/Exception.h>
 #include <macgyver/StringConversion.h>
+#include <list>
 #include <set>
 
 namespace ba = boost::algorithm;

@@ -2,16 +2,32 @@
 
 #ifndef WITHOUT_OBSERVATION
 
-#include "ArrayParameterTemplate.h"
-#include "ScalarParameterTemplate.h"
-#include "StoredQueryHandlerBase.h"
-#include "SupportsBoundingBox.h"
-#include "SupportsExtraHandlerParams.h"
-#include "SupportsTimeZone.h"
 #include "RequiresGeoEngine.h"
 #include "RequiresObsEngine.h"
-#include <engines/geonames/Engine.h>
-#include <engines/observation/Engine.h>
+#include "StoredQueryConfig.h"
+#include "StoredQueryHandlerBase.h"
+#include "SupportsBoundingBox.h"
+#include "SupportsTimeZone.h"
+#include <spine/Parameter.h>
+#include <timeseries/TimeSeriesInclude.h>
+#include <cstddef>
+#include <iosfwd>
+#include <optional>
+#include <string>
+#include <vector>
+
+namespace SmartMet::Plugin::WFS
+{
+class PluginImpl;
+}  // namespace SmartMet::Plugin::WFS
+namespace SmartMet::Spine
+{
+class Reactor;
+}  // namespace SmartMet::Spine
+namespace SmartMet::TimeSeries
+{
+class TimeSeries;
+}  // namespace SmartMet::TimeSeries
 
 namespace SmartMet
 {

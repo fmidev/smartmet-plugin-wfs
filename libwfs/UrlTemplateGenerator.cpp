@@ -2,17 +2,14 @@
 #include <boost/algorithm/hex.hpp>
 #include <boost/algorithm/string.hpp>
 #include <boost/bind/bind.hpp>
-#include <boost/format.hpp>
 #include <boost/lambda/lambda.hpp>
 #include <boost/spirit/include/qi.hpp>
 #include <macgyver/Exception.h>
-#include <macgyver/TypeName.h>
 #include <algorithm>
 #include <cassert>
-#include <cstdio>
+#include <cctype>
 #include <cstring>
 #include <sstream>
-#include <stdexcept>
 #include <utility>
 
 namespace ba = boost::algorithm;

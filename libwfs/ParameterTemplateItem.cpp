@@ -1,14 +1,19 @@
 #include "ParameterTemplateItem.h"
+#include "ParameterTemplateBase.h"
 #include "RequestParameterMap.h"
 #include "SupportsExtraHandlerParams.h"
 #include "WfsException.h"
 #include <boost/algorithm/string.hpp>
+#include <boost/bimap.hpp>
 #include <boost/lambda/lambda.hpp>
+#include <boost/logic/tribool.hpp>
 #include <boost/spirit/include/qi.hpp>
 #include <macgyver/Exception.h>
 #include <spine/Value.h>
+#include <iostream>
 #include <memory>
 #include <sstream>
+#include <typeinfo>
 
 namespace
 {

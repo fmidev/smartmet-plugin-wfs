@@ -1,8 +1,11 @@
 #include "WfsFeatureDef.h"
 #include <boost/bind/bind.hpp>
-#include <boost/ref.hpp>
 #include <macgyver/Exception.h>
+#include <spine/CRSRegistry.h>
+#include <spine/ConfigBase.h>
 #include <algorithm>
+#include <iterator>
+#include <libconfig.h++>
 
 namespace bw = SmartMet::Plugin::WFS;
 namespace ph = boost::placeholders;

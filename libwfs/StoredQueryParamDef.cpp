@@ -1,18 +1,15 @@
 #include "StoredQueryParamDef.h"
 #include "WfsConvenience.h"
 #include "WfsException.h"
-#include <boost/algorithm/string.hpp>
+#include <boost/bind/bind.hpp>
+#include <boost/date_time/posix_time/posix_time.hpp>
 #include <boost/lambda/lambda.hpp>
 #include <boost/spirit/include/qi.hpp>
-#include <macgyver/TimeParser.h>
-#include <macgyver/TypeName.h>
-#include <macgyver/StringConversion.h>
 #include <macgyver/Exception.h>
+#include <macgyver/StringConversion.h>
 #include <algorithm>
+#include <iterator>
 #include <sstream>
-#include <stdexcept>
-
-#include <iostream>
 
 namespace qi = boost::spirit::qi;
 namespace ns = boost::spirit::standard;

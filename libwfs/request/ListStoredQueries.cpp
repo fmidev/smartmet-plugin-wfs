@@ -1,7 +1,25 @@
 #include "request/ListStoredQueries.h"
-#include "WfsConvenience.h"
-#include "XmlUtils.h"
+#include "Config.h"
+#include "PluginImpl.h"
+#include "QueryBase.h"
+#include "StoredQueryHandlerBase.h"
+#include "StoredQueryMap.h"
+#include "WfsCapabilities.h"
+#include "WfsException.h"
+#include "WfsFeatureDef.h"
 #include <ctpp2/CDT.hpp>
+#include <macgyver/Exception.h>
+#include <macgyver/TemplateFormatter.h>
+#include <algorithm>
+#include <cstddef>
+#include <optional>
+#include <sstream>
+#include <vector>
+
+namespace SmartMet::Spine::HTTP
+{
+class Request;
+}  // namespace SmartMet::Spine::HTTP
 
 namespace bw = SmartMet::Plugin::WFS;
 

@@ -2,15 +2,33 @@
 
 #ifndef WITHOUT_OBSERVATION
 
-#include "StoredQueryHandlerBase.h"
-#include "SupportsBoundingBox.h"
-#include "SupportsExtraHandlerParams.h"
-#include "SupportsLocationParameters.h"
-#include "SupportsTimeZone.h"
+#include "RequestParameterMap.h"
 #include "RequiresGeoEngine.h"
 #include "RequiresObsEngine.h"
-#include <engines/geonames/Engine.h>
-#include <engines/observation/Engine.h>
+#include "StoredQueryConfig.h"
+#include "StoredQueryHandlerBase.h"
+#include "SupportsBoundingBox.h"
+#include "SupportsLocationParameters.h"
+#include <spine/Location.h>
+#include <iosfwd>
+#include <map>
+#include <memory>
+#include <optional>
+#include <string>
+#include <vector>
+
+namespace Locus
+{
+class QueryOptions;
+}  // namespace Locus
+namespace SmartMet::Plugin::WFS
+{
+class PluginImpl;
+}  // namespace SmartMet::Plugin::WFS
+namespace SmartMet::Spine
+{
+class Reactor;
+}  // namespace SmartMet::Spine
 
 namespace SmartMet
 {

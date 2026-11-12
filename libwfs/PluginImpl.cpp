@@ -1,10 +1,15 @@
-#include <cctype>
-#include <cstring>
 #include "PluginImpl.h"
 #include "ErrorResponseGenerator.h"
 #include "HandlerFactorySummary.h"
+#include "RequestFactory.h"
+#include "StoredQueryMap.h"
+#include "TypeNameStoredQueryMap.h"
+#include "WfsCapabilities.h"
 #include "WfsConst.h"
+#include "WfsConvenience.h"
+#include "WfsException.h"
 #include "XmlEntityResolver.h"
+#include "XmlError.h"
 #include "XmlParser.h"
 #include "request/DescribeFeatureType.h"
 #include "request/DescribeStoredQueries.h"
@@ -20,12 +25,28 @@
 #include <macgyver/DateTime.h>
 #include <macgyver/Exception.h>
 #include <macgyver/StringConversion.h>
+#include <macgyver/TimeFormatter.h>
 #include <macgyver/TimeParser.h>
-#include <spine/CRSRegistry.h>
 #include <spine/Convenience.h>
 #include <spine/FmiApiKey.h>
+#include <spine/HTTP.h>
 #include <spine/HostInfo.h>
+#include <cctype>
+#include <cstring>
+#include <iostream>
+#include <libconfig.h++>
+#include <list>
+#include <map>
 #include <memory>
+#include <sstream>
+#include <utility>
+#include <variant>
+
+namespace SmartMet::Spine
+{
+class CRSRegistry;
+class Reactor;
+}  // namespace SmartMet::Spine
 
 using namespace SmartMet::Plugin::WFS;
 namespace ba = boost::algorithm;

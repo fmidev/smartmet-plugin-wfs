@@ -1,27 +1,53 @@
 #include "stored_queries/StoredForecastQueryHandler.h"
-#include "StoredQueryHandlerFactories.h"
+#include "Config.h"
 #include "FeatureID.h"
+#include "PluginImpl.h"
+#include "QueryBase.h"
+#include "StoredQuery.h"
+#include "StoredQueryHandlerFactories.h"
 #include "StoredQueryHandlerFactoryDef.h"
+#include "StoredQueryParamRegistry.h"
+#include "SupportsExtraHandlerParams.h"
 #include "WfsConvenience.h"
-#include <boost/algorithm/string.hpp>
+#include "WfsException.h"
 #include <boost/format.hpp>
+#include <ctpp2/CDT.hpp>
+#include <engines/geonames/Engine.h>
+#include <engines/querydata/Engine.h>
 #include <engines/querydata/MetaQueryOptions.h>
+#include <engines/querydata/ParameterOptions.h>
+#include <engines/querydata/Q.h>
 #include <macgyver/Exception.h>
 #include <macgyver/StringConversion.h>
 #include <macgyver/TimeFormatter.h>
 #include <macgyver/TimeParser.h>
+#include <macgyver/TimeZones.h>
 #include <macgyver/TypeName.h>
+#include <macgyver/ValueFormatter.h>
+#include <newbase/NFmiArea.h>
+#include <newbase/NFmiLevelType.h>
+#include <newbase/NFmiMetTime.h>
+#include <newbase/NFmiParameterName.h>
 #include <newbase/NFmiPoint.h>
-#include <newbase/NFmiQueryData.h>
-#include <spine/Convenience.h>
 #include <spine/Table.h>
-#include <spine/Value.h>
 #include <timeseries/ParameterFactory.h>
-#include <limits>
+#include <timeseries/TimeSeries.h>
+#include <timeseries/TimeSeriesGenerator.h>
+#include <timeseries/TimeSeriesGeneratorOptions.h>
+#include <timeseries/TimeSeriesOutput.h>
+#include <algorithm>
+#include <cstdint>
+#include <iostream>
 #include <locale>
 #include <map>
 #include <memory>
+#include <sstream>
 #include <utility>
+
+namespace SmartMet::Spine
+{
+class Reactor;
+}  // namespace SmartMet::Spine
 
 namespace bw = SmartMet::Plugin::WFS;
 using namespace SmartMet::Spine;

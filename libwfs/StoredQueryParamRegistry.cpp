@@ -2,15 +2,19 @@
 #include "ArrayParameterTemplate.h"
 #include "HandlerFactorySummary.h"
 #include "ScalarParameterTemplate.h"
-#include "SupportsExtraHandlerParams.h"
+#include <boost/bind/bind.hpp>
+#include <macgyver/DateTime.h>
 #include <macgyver/DistanceParser.h>
+#include <macgyver/Exception.h>
 #include <macgyver/StringConversion.h>
 #include <macgyver/TypeName.h>
-#include <macgyver/Exception.h>
+#include <spine/Value.h>
 #include <algorithm>
+#include <iterator>
+#include <optional>
 #include <sstream>
-#include <boost/bind/bind.hpp>
 #include <utility>
+#include <vector>
 
 namespace bw = SmartMet::Plugin::WFS;
 namespace ph = boost::placeholders;

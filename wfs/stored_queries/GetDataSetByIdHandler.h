@@ -1,10 +1,20 @@
 #pragma once
 
-#include "PluginImpl.h"
 #include "StoredQueryConfig.h"
 #include "StoredQueryHandlerBase.h"
-#include "StoredQueryHandlerFactoryDef.h"
+#include <iosfwd>
 #include <map>
+#include <string>
+
+namespace SmartMet::Plugin::WFS
+{
+class PluginImpl;
+class StoredQueryHandlerFactoryDef;
+}  // namespace SmartMet::Plugin::WFS
+namespace SmartMet::Spine
+{
+class Reactor;
+}  // namespace SmartMet::Spine
 
 namespace SmartMet
 {

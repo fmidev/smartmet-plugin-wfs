@@ -2,9 +2,18 @@
 
 #include "ParameterTemplateBase.h"
 #include "ParameterTemplateItem.h"
+#include <boost/logic/tribool.hpp>
+#include <macgyver/DateTime.h>
+#include <macgyver/Exception.h>
 #include <spine/Value.h>
-#include <map>
-#include <vector>
+#include <optional>
+#include <string>
+
+namespace SmartMet::Plugin::WFS
+{
+class RequestParameterMap;
+class StoredQueryConfig;
+}  // namespace SmartMet::Plugin::WFS
 
 namespace SmartMet
 {

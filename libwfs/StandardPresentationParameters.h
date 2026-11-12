@@ -1,8 +1,12 @@
 #pragma once
 
-#include <spine/HTTP.h>
 #include <xercesc/dom/DOMElement.hpp>
 #include <string>
+
+namespace SmartMet::Spine::HTTP
+{
+class Request;
+}  // namespace SmartMet::Spine::HTTP
 
 namespace SmartMet
 {

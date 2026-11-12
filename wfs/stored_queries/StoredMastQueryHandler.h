@@ -2,21 +2,47 @@
 
 #ifndef WITHOUT_OBSERVATION
 
-#include "StoredQueryHandlerBase.h"
-#include "SupportsBoundingBox.h"
-#include "SupportsExtraHandlerParams.h"
-#include "SupportsLocationParameters.h"
-#include "SupportsQualityParameters.h"
+#include "RequestParameterMap.h"
 #include "RequiresGeoEngine.h"
 #include "RequiresObsEngine.h"
+#include "StoredQueryConfig.h"
+#include "StoredQueryHandlerBase.h"
+#include "SupportsBoundingBox.h"
+#include "SupportsLocationParameters.h"
+#include "SupportsQualityParameters.h"
 #include <boost/algorithm/string.hpp>
-#include <macgyver/DateTime.h>
-#include <boost/format.hpp>
+#include <boost/date_time/posix_time/posix_time.hpp>
 #include <boost/lambda/lambda.hpp>
-#include <engines/geonames/Engine.h>
-#include <engines/observation/Engine.h>
-#include <engines/observation/MastQueryParams.h>
-#include <engines/observation/QueryResult.h>
+#include <engines/observation/DBRegistryConfig.h>
+#include <spine/Location.h>
+#include <spine/Station.h>
+#include <cstdint>
+#include <iosfwd>
+#include <list>
+#include <map>
+#include <memory>
+#include <optional>
+#include <string>
+#include <tuple>
+#include <variant>
+#include <vector>
+
+namespace CTPP
+{
+class CDT;
+}  // namespace CTPP
+namespace SmartMet::Engine::Observation
+{
+class QueryResult;
+}  // namespace SmartMet::Engine::Observation
+namespace SmartMet::Plugin::WFS
+{
+class PluginImpl;
+}  // namespace SmartMet::Plugin::WFS
+namespace SmartMet::Spine
+{
+class Reactor;
+}  // namespace SmartMet::Spine
 
 namespace ba = boost::algorithm;
 namespace bl = boost::lambda;

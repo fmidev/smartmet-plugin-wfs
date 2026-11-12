@@ -2,13 +2,24 @@
 
 #ifndef WITHOUT_OBSERVATION
 
-#include "StoredQueryHandlerBase.h"
-#include "SupportsExtraHandlerParams.h"
 #include "RequiresGeoEngine.h"
 #include "RequiresObsEngine.h"
-#include <engines/geonames/Engine.h>
-#include <engines/observation/Engine.h>
-#include <engines/observation/MastQuery.h>
+#include "StoredQueryConfig.h"
+#include "StoredQueryHandlerBase.h"
+#include <engines/observation/DBRegistryConfig.h>
+#include <iosfwd>
+#include <memory>
+#include <optional>
+#include <string>
+
+namespace SmartMet::Plugin::WFS
+{
+class PluginImpl;
+}  // namespace SmartMet::Plugin::WFS
+namespace SmartMet::Spine
+{
+class Reactor;
+}  // namespace SmartMet::Spine
 
 namespace SmartMet
 {

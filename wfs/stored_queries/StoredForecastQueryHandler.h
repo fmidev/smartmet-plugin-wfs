@@ -1,23 +1,59 @@
 #pragma once
 
-#include "ArrayParameterTemplate.h"
+#include "RequestParameterMap.h"
 #include "RequiresGeoEngine.h"
 #include "RequiresQEngine.h"
-#include "ScalarParameterTemplate.h"
+#include "StoredQueryConfig.h"
 #include "StoredQueryHandlerBase.h"
-#include "SupportsExtraHandlerParams.h"
 #include "SupportsLocationParameters.h"
 #include "SupportsMeteoParameterOptions.h"
 #include "SupportsTimeParameters.h"
 #include "SupportsTimeZone.h"
-#include <macgyver/DateTime.h>
-#include <engines/geonames/Engine.h>
-#include <engines/querydata/Engine.h>
+#include <boost/date_time/posix_time/posix_time.hpp>
 #include <engines/querydata/MetaData.h>
+#include <engines/querydata/Producer.h>
+#include <macgyver/DateTime.h>
+#include <macgyver/LocalDateTime.h>
 #include <newbase/NFmiPoint.h>
+#include <spine/CRSRegistry.h>
+#include <spine/Location.h>
+#include <spine/Parameter.h>
+#include <spine/Table.h>
 #include <timeseries/TimeSeriesInclude.h>
+#include <cstddef>
+#include <iosfwd>
+#include <iterator>
 #include <list>
-#include <utility>
+#include <locale>
+#include <map>
+#include <memory>
+#include <optional>
+#include <set>
+#include <string>
+#include <vector>
+
+namespace CTPP
+{
+class CDT;
+}  // namespace CTPP
+namespace Fmi
+{
+class TimeFormatter;
+class ValueFormatter;
+struct ValueFormatterParam;
+}  // namespace Fmi
+namespace SmartMet::Plugin::WFS
+{
+class PluginImpl;
+}  // namespace SmartMet::Plugin::WFS
+namespace SmartMet::Spine
+{
+class Reactor;
+}  // namespace SmartMet::Spine
+namespace SmartMet::TimeSeries
+{
+struct TimeSeriesGeneratorOptions;
+}  // namespace SmartMet::TimeSeries
 
 namespace SmartMet
 {

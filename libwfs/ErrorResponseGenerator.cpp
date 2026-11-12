@@ -1,12 +1,22 @@
 #include "ErrorResponseGenerator.h"
 #include "AdHocQuery.h"
 #include "PluginImpl.h"
+#include "QueryBase.h"
+#include "RequestParameterMap.h"
 #include "StoredQuery.h"
-#include <boost/algorithm/string.hpp>
+#include "WfsException.h"
 #include <boost/format.hpp>
+#include <boost/thread.hpp>
+#include <macgyver/DateTime.h>
+#include <macgyver/Exception.h>
+#include <macgyver/TemplateFormatter.h>
 #include <macgyver/TypeName.h>
 #include <spine/Convenience.h>
-#include <macgyver/Exception.h>
+#include <cstdlib>
+#include <iostream>
+#include <memory>
+#include <optional>
+#include <sstream>
 
 using SmartMet::Plugin::WFS::ErrorResponseGenerator;
 

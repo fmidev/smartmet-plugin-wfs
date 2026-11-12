@@ -1,17 +1,57 @@
 #pragma once
 
-#include "StoredGridForecastQueryHandler.h"
-#include "StoredForecastQueryHandler.h"
-#include "RequiresGridEngine.h"
+#include "RequestParameterMap.h"
 #include "RequiresGeoEngine.h"
-#include <grid-files/common/AdditionalParameters.h>
-#include <engines/grid/Engine.h>
+#include "RequiresGridEngine.h"
+#include "StoredForecastQueryHandler.h"
+#include "StoredQueryHandlerBase.h"
+#include "SupportsLocationParameters.h"
+#include "SupportsTimeParameters.h"
+#include "SupportsTimeZone.h"
 #include <engines/gis/GeometryStorage.h>
-#include <newbase/NFmiSvgTools.h>
-#include <newbase/NFmiSvgPath.h>
+#include <engines/querydata/MetaData.h>
+#include <grid-files/common/Typedefs.h>
+#include <grid-files/grid/Typedefs.h>
+#include <macgyver/DateTime.h>
+#include <macgyver/LocalDateTime.h>
+#include <macgyver/TimeZones.h>
+#include <spine/CRSRegistry.h>
+#include <spine/Location.h>
+#include <spine/Parameter.h>
+#include <spine/Table.h>
+#include <ctime>
+#include <iosfwd>
+#include <iterator>
+#include <map>
+#include <memory>
+#include <optional>
+#include <string>
+#include <vector>
+
+namespace CTPP
+{
+class CDT;
+}  // namespace CTPP
+namespace SmartMet::Plugin::WFS
+{
+class FeatureID;
+class PluginImpl;
+class StoredQueryConfig;
+}  // namespace SmartMet::Plugin::WFS
+namespace SmartMet::QueryServer
+{
+class Query;
+class QueryParameter;
+}  // namespace SmartMet::QueryServer
+namespace SmartMet::Spine
+{
+class Reactor;
+}  // namespace SmartMet::Spine
 
 namespace SmartMet
 {
+class AdditionalParameters;
+
 namespace Plugin
 {
 namespace WFS

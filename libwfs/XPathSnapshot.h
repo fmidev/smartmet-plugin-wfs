@@ -1,10 +1,16 @@
 #pragma once
 
 #include "XmlDomErrorHandler.h"
-#include <memory>
 #include <xercesc/dom/DOM.hpp>
-#include <xercesc/sax/InputSource.hpp>
 #include <xqilla/xqilla-dom3.hpp>
+#include <cstddef>
+#include <memory>
+#include <string>
+
+namespace xercesc_3_2
+{
+class InputSource;
+}  // namespace xercesc_3_2
 
 namespace SmartMet
 {

@@ -1,9 +1,9 @@
 #pragma once
 
 #include <functional>
+#include <iterator>
 #include <queue>
 #include <string>
-#include <utility>
 
 namespace SmartMet
 {
@@ -11,8 +11,6 @@ namespace Plugin
 {
 namespace WFS
 {
-
-class StoredQueryHandlerFactoryDef;
 
 /**
  *   @brief Virtual base class for registering stored query handler initialization actions and executing them.

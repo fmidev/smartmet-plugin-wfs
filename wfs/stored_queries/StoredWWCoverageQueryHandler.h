@@ -1,6 +1,20 @@
 #pragma once
 
+#include "StoredContourQueryStructs.h"
 #include "StoredCoverageQueryHandler.h"
+#include "StoredQueryConfig.h"
+#include <optional>
+#include <string>
+#include <vector>
+
+namespace SmartMet::Plugin::WFS
+{
+class PluginImpl;
+}  // namespace SmartMet::Plugin::WFS
+namespace SmartMet::Spine
+{
+class Reactor;
+}  // namespace SmartMet::Spine
 
 namespace SmartMet
 {

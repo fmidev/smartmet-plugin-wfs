@@ -1,24 +1,38 @@
 #include "request/GetFeature.h"
 #include "AdHocQuery.h"
+#include "Config.h"
 #include "ErrorResponseGenerator.h"
+#include "QueryBase.h"
 #include "StoredQuery.h"
-#include "StoredQueryMap.h"
-#include "TypeNameStoredQueryMap.h"
 #include "WfsConst.h"
 #include "WfsException.h"
 #include "XPathSnapshot.h"
+#include "XmlError.h"
 #include "XmlUtils.h"
 #include <boost/format.hpp>
+#include <macgyver/Exception.h>
 #include <macgyver/StringConversion.h>
 #include <macgyver/TypeName.h>
 #include <spine/Convenience.h>
+#include <spine/HTTP.h>
 #include <xercesc/dom/DOM.hpp>
-#include <xercesc/dom/DOMException.hpp>
-#include <xercesc/dom/DOMXPathNSResolver.hpp>
-#include <xercesc/dom/DOMXPathResult.hpp>
-#include <xercesc/framework/MemBufInputSource.hpp>
 #include <xqilla/xqilla-dom3.hpp>
+#include <cassert>
+#include <cstddef>
+#include <iostream>
+#include <list>
+#include <optional>
 #include <set>
+#include <sstream>
+#include <strings.h>
+#include <utility>
+#include <variant>
+
+namespace SmartMet::Plugin::WFS
+{
+class StoredQueryMap;
+class TypeNameStoredQueryMap;
+}  // namespace SmartMet::Plugin::WFS
 
 namespace bw = SmartMet::Plugin::WFS;
 namespace bwx = SmartMet::Plugin::WFS::Xml;

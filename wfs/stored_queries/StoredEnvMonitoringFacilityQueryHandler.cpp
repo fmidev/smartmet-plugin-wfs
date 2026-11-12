@@ -1,20 +1,57 @@
 #ifndef WITHOUT_OBSERVATION
-#include "StoredQueryHandlerFactories.h"
-
 #include "stored_queries/StoredEnvMonitoringFacilityQueryHandler.h"
 #include "FeatureID.h"
 #include "MediaMonitored.h"
+#include "PluginImpl.h"
+#include "QueryBase.h"
+#include "RequestParameterMap.h"
+#include "RequiresGeoEngine.h"
+#include "RequiresObsEngine.h"
+#include "StoredQuery.h"
+#include "StoredQueryConfig.h"
+#include "StoredQueryHandlerBase.h"
+#include "StoredQueryHandlerFactories.h"
 #include "StoredQueryHandlerFactoryDef.h"
+#include "StoredQueryParamRegistry.h"
+#include "SupportsExtraHandlerParams.h"
 #include "SupportsLocationParameters.h"
+#include "WfsException.h"
+#include <boost/algorithm/hex.hpp>
+#include <ctpp2/CDT.hpp>
+#include <engines/geonames/Engine.h>
 #include <engines/observation/DBRegistry.h>
+#include <engines/observation/Engine.h>
+#include <engines/observation/MastQuery.h>
+#include <engines/observation/MastQueryParams.h>
+#include <engines/observation/QueryResult.h>
+#include <locus/QueryOptions.h>
+#include <macgyver/DateTime.h>
 #include <macgyver/Exception.h>
-
-#include <boost/icl/type_traits/to_string.hpp>
-#include <functional>
+#include <macgyver/StringConversion.h>
+#include <spine/CRSRegistry.h>
+#include <spine/Location.h>
+#include <any>
+#include <cstdint>
 #include <future>
+#include <iostream>
+#include <iterator>
+#include <map>
 #include <memory>
-#include <unordered_map>
+#include <optional>
+#include <sstream>
+#include <string>
+#include <typeinfo>
 #include <utility>
+#include <vector>
+
+namespace SmartMet::Engine::Observation
+{
+class DBRegistryConfig;
+}  // namespace SmartMet::Engine::Observation
+namespace SmartMet::Spine
+{
+class Reactor;
+}  // namespace SmartMet::Spine
 
 namespace bw = SmartMet::Plugin::WFS;
 namespace bo = SmartMet::Engine::Observation;

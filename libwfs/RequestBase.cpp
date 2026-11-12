@@ -1,15 +1,19 @@
 #include "RequestBase.h"
+#include "CapabilitiesConf.h"
+#include "Config.h"
 #include "PluginImpl.h"
 #include "QueryBase.h"
 #include "WfsConst.h"
 #include "WfsException.h"
 #include "XmlUtils.h"
-#include <boost/algorithm/string.hpp>
 #include <boost/regex.hpp>
 #include <fmt/format.h>
 #include <macgyver/Exception.h>
 #include <macgyver/StringConversion.h>
-#include <macgyver/TypeName.h>
+#include <xercesc/dom/DOMElement.hpp>
+#include <cstring>
+#include <functional>
+#include <set>
 #include <sstream>
 #include <utility>
 

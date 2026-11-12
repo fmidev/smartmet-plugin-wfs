@@ -1,6 +1,5 @@
 #include "XmlError.h"
 #include <boost/format.hpp>
-#include <macgyver/TypeName.h>
 #include <macgyver/Exception.h>
 
 namespace SmartMet

@@ -1,11 +1,14 @@
 #pragma once
 
 #include "StoredQueryHandlerInitBase.h"
-#include <spine/Reactor.h>
 #include <engines/querydata/Engine.h>
 #include <macgyver/DateTime.h>
+#include <spine/Reactor.h>
+#include <functional>
+#include <memory>
 #include <optional>
 #include <string>
+
 namespace SmartMet
 {
 namespace Plugin

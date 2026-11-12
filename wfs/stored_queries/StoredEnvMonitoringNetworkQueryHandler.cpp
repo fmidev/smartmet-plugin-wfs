@@ -1,15 +1,48 @@
 #ifndef WITHOUT_OBSERVATION
-#include "StoredQueryHandlerFactories.h"
-
 #include "stored_queries/StoredEnvMonitoringNetworkQueryHandler.h"
 #include "FeatureID.h"
+#include "PluginImpl.h"
+#include "QueryBase.h"
+#include "RequestParameterMap.h"
+#include "RequiresGeoEngine.h"
+#include "RequiresObsEngine.h"
+#include "StoredQuery.h"
+#include "StoredQueryConfig.h"
+#include "StoredQueryHandlerBase.h"
+#include "StoredQueryHandlerFactories.h"
 #include "StoredQueryHandlerFactoryDef.h"
+#include "StoredQueryParamRegistry.h"
+#include "SupportsExtraHandlerParams.h"
 #include "SupportsLocationParameters.h"
-#include <boost/icl/type_traits/to_string.hpp>
+#include "WfsException.h"
+#include <boost/algorithm/hex.hpp>
+#include <ctpp2/CDT.hpp>
 #include <engines/observation/DBRegistry.h>
+#include <engines/observation/Engine.h>
+#include <engines/observation/MastQuery.h>
+#include <engines/observation/MastQueryParams.h>
+#include <engines/observation/QueryResult.h>
+#include <macgyver/DateTime.h>
 #include <macgyver/Exception.h>
+#include <any>
+#include <cstddef>
+#include <cstdint>
+#include <iostream>
+#include <iterator>
 #include <memory>
-#include <utility>
+#include <optional>
+#include <sstream>
+#include <string>
+#include <vector>
+
+namespace SmartMet::Engine::Observation
+{
+class DBRegistryConfig;
+}  // namespace SmartMet::Engine::Observation
+namespace SmartMet::Spine
+{
+class Reactor;
+}  // namespace SmartMet::Spine
 
 namespace bw = SmartMet::Plugin::WFS;
 namespace bo = SmartMet::Engine::Observation;

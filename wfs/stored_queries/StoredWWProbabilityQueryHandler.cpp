@@ -1,17 +1,51 @@
 #include "stored_queries/StoredWWProbabilityQueryHandler.h"
+#include "Config.h"
+#include "PluginImpl.h"
+#include "QueryBase.h"
+#include "RequestParameterMap.h"
+#include "StoredQuery.h"
 #include "StoredQueryHandlerFactories.h"
-#include <gis/Box.h>
-#include <gis/OGR.h>
-#include <macgyver/TimeFormatter.h>
-#include <newbase/NFmiEnumConverter.h>
-#include <macgyver/Exception.h>
-
-#include <boost/algorithm/string/replace.hpp>
+#include "StoredQueryHandlerFactoryDef.h"
+#include "StoredQueryParamRegistry.h"
+#include "SupportsExtraHandlerParams.h"
+#include "WfsException.h"
+#include <boost/date_time/posix_time/posix_time.hpp>
 #include <boost/range/adaptor/map.hpp>
 #include <boost/range/algorithm/copy.hpp>
+#include <ctpp2/CDT.hpp>
+#include <engines/geonames/Engine.h>
+#include <engines/querydata/Engine.h>
+#include <engines/querydata/ParameterOptions.h>
+#include <gis/OGR.h>
+#include <macgyver/Exception.h>
+#include <macgyver/LocalDateTime.h>
+#include <macgyver/TimeFormatter.h>
+#include <macgyver/TimeZones.h>
+#include <newbase/NFmiGlobals.h>
+#include <newbase/NFmiMetTime.h>
+#include <newbase/NFmiPoint.h>
+#include <spine/CRSRegistry.h>
+#include <spine/Parameter.h>
+#include <timeseries/TimeSeries.h>
+#include <cstdint>
 #include <iomanip>
+#include <iostream>
+#include <iterator>
 #include <locale>
+#include <ogr_geometry.h>
+#include <set>
+#include <sstream>
 #include <utility>
+#include <variant>
+
+namespace SmartMet::Spine
+{
+class Reactor;
+}  // namespace SmartMet::Spine
+namespace SmartMet::TimeSeries
+{
+struct TimeSeriesGeneratorOptions;
+}  // namespace SmartMet::TimeSeries
 
 namespace
 {

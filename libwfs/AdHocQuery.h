@@ -1,15 +1,27 @@
 #pragma once
 
-#include "QueryBase.h"
 #include "StoredQuery.h"
-#include "StoredQueryHandlerBase.h"
-#include "StoredQueryMap.h"
-#include "TypeNameStoredQueryMap.h"
-#include "XPathSnapshot.h"
-#include <memory>
 #include <xercesc/dom/DOMElement.hpp>
+#include <memory>
+#include <optional>
+#include <set>
 #include <string>
 #include <vector>
+
+namespace SmartMet::Plugin::WFS::Xml
+{
+class XPathSnapshot;
+}  // namespace SmartMet::Plugin::WFS::Xml
+namespace SmartMet::Plugin::WFS
+{
+class QueryBase;
+class StandardPresentationParameters;
+class TypeNameStoredQueryMap;
+}  // namespace SmartMet::Plugin::WFS
+namespace SmartMet::Spine::HTTP
+{
+class Request;
+}  // namespace SmartMet::Spine::HTTP
 
 namespace SmartMet
 {
@@ -17,9 +29,8 @@ namespace Plugin
 {
 namespace WFS
 {
-class StoredQueryMap;
 class StoredQueryHandlerBase;
-class XPathSnapshot;
+class StoredQueryMap;
 
 /**
  *   @brief Represents parsed ad hoc query request

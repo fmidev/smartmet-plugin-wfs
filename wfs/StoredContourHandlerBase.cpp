@@ -1,17 +1,66 @@
 #include "StoredContourHandlerBase.h"
-#include <boost/algorithm/string/replace.hpp>
-#include <boost/format.hpp>
+#include "Config.h"
+#include "PluginImpl.h"
+#include "QueryBase.h"
+#include "RequestParameterMap.h"
+#include "StoredQuery.h"
+#include "StoredQueryConfig.h"
+#include "StoredQueryParamRegistry.h"
+#include "SupportsExtraHandlerParams.h"
+#include "WfsException.h"
+#include <ctpp2/CDT.hpp>
+#include <engines/contour/Engine.h>
+#include <engines/geonames/Engine.h>
+#include <engines/gis/Engine.h>
+#include <engines/grid/Engine.h>
+#include <engines/grid/ParameterDetails.h>
+#include <engines/querydata/Engine.h>
 #include <gis/Box.h>
+#include <grid-content/queryServer/definition/ParameterValues.h>
+#include <grid-content/queryServer/definition/Query.h>
 #include <grid-content/queryServer/definition/QueryConfigurator.h>
-#include <grid-files/common/GraphFunctions.h>
-#include <grid-files/common/ImageFunctions.h>
+#include <grid-content/queryServer/definition/QueryParameter.h>
+#include <grid-content/queryServer/definition/ServiceResults.h>
+#include <grid-files/common/Attribute.h>
+#include <grid-files/common/AttributeList.h>
+#include <grid-files/common/GeneralFunctions.h>
 #include <grid-files/common/ImagePaint.h>
+#include <grid-files/common/Typedefs.h>
+#include <grid-files/grid/Typedefs.h>
+#include <macgyver/Exception.h>
 #include <macgyver/Hash.h>
+#include <macgyver/LocalDateTime.h>
 #include <macgyver/StringConversion.h>
 #include <macgyver/TimeParser.h>
+#include <macgyver/TimeZones.h>
 #include <newbase/NFmiEnumConverter.h>
-#include <iomanip>
-#include <utility>
+#include <newbase/NFmiMetTime.h>
+#include <spine/CRSRegistry.h>
+#include <spine/Parameter.h>
+#include <spine/Value.h>
+#include <sys/types.h>
+#include <timeseries/TimeSeries.h>
+#include <timeseries/TimeSeriesGenerator.h>
+#include <timeseries/TimeSeriesGeneratorOptions.h>
+#include <timeseries/TimeSeriesInclude.h>
+#include <timeseries/TimeSeriesTypes.h>
+#include <cstdint>
+#include <cstdio>
+#include <exception>
+#include <iostream>
+#include <iterator>
+#include <list>
+#include <ogr_geometry.h>
+#include <strings.h>
+
+namespace SmartMet::ContentServer
+{
+class ServiceInterface;
+}  // namespace SmartMet::ContentServer
+namespace SmartMet::Spine
+{
+class Reactor;
+}  // namespace SmartMet::Spine
 
 namespace bw = SmartMet::Plugin::WFS;
 

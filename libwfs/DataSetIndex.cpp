@@ -1,14 +1,20 @@
 #include "DataSetIndex.h"
 #include <boost/geometry/algorithms/intersects.hpp>
-#include <boost/algorithm/string.hpp>
 #include <boost/regex.hpp>
 #include <macgyver/Exception.h>
+#include <macgyver/StringConversion.h>
 #include <macgyver/TimeParser.h>
-#include <macgyver/TypeName.h>
-#include <spine/Convenience.h>
+#include <spine/ConfigBase.h>
+#include <iostream>
 #include <memory>
-#include <stdexcept>
+#include <sstream>
+#include <utility>
 #include <vector>
+
+namespace libconfig
+{
+class Setting;
+}  // namespace libconfig
 
 namespace bw = SmartMet::Plugin::WFS;
 namespace fs = std::filesystem;

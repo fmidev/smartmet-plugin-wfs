@@ -1,7 +1,9 @@
 #include "RequestParameterMap.h"
 #include <boost/bind/bind.hpp>
+#include <ctpp2/CDT.hpp>
 #include <macgyver/Exception.h>
 #include <algorithm>
+#include <cctype>
 
 namespace bw = SmartMet::Plugin::WFS;
 namespace ph = boost::placeholders;

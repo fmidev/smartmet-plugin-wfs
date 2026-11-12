@@ -1,8 +1,21 @@
 #pragma once
 
-#include "DataSetIndex.h"
+#include "StoredQueryConfig.h"
 #include "stored_queries/StoredAtomQueryHandlerBase.h"
 #include <list>
+#include <memory>
+#include <optional>
+#include <string>
+
+namespace SmartMet::Plugin::WFS
+{
+class DataSetDefinition;
+class PluginImpl;
+}  // namespace SmartMet::Plugin::WFS
+namespace SmartMet::Spine
+{
+class Reactor;
+}  // namespace SmartMet::Spine
 
 namespace SmartMet
 {

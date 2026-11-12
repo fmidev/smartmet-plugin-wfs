@@ -1,15 +1,16 @@
 #pragma once
 
-#include "ArrayParameterTemplate.h"
-#include "ScalarParameterTemplate.h"
-#include "StoredQueryConfig.h"
+#include "RequestParameterMap.h"
 #include "StoredQueryParamRegistry.h"
 #include "SupportsExtraHandlerParams.h"
-#include <memory>
+#include <timeseries/TimeSeriesGeneratorOptions.h>
 #include <timeseries/TimeSeriesInclude.h>
-#include <map>
-#include <string>
-#include <vector>
+#include <memory>
+
+namespace SmartMet::Plugin::WFS
+{
+class StoredQueryConfig;
+}  // namespace SmartMet::Plugin::WFS
 
 namespace SmartMet
 {

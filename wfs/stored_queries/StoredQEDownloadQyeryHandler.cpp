@@ -1,29 +1,59 @@
 #include "AreaUtils.h"
-#include "StoredQueryHandlerFactories.h"
 #include "FeatureID.h"
+#include "PluginImpl.h"
+#include "RequestParameterMap.h"
+#include "RequiresGeoEngine.h"
+#include "RequiresQEngine.h"
+#include "StoredAtomQueryHandlerBase.h"
+#include "StoredQueryConfig.h"
+#include "StoredQueryHandlerFactories.h"
 #include "StoredQueryHandlerFactoryDef.h"
-#include "WfsConvenience.h"
+#include "StoredQueryParamRegistry.h"
+#include "SupportsBoundingBox.h"
+#include "SupportsExtraHandlerParams.h"
+#include "WfsException.h"
 #include "stored_queries/StoredQEDownloadQueryHandler.h"
 #include <boost/algorithm/string.hpp>
 #include <boost/bind/bind.hpp>
-#include <macgyver/DateTime.h>
 #include <boost/format.hpp>
 #include <boost/lambda/lambda.hpp>
-#include <boost/shared_array.hpp>
-#include <macgyver/StringConversion.h>
-#include <macgyver/TypeName.h>
-#include <newbase/NFmiQueryData.h>
-#include <engines/geonames/Engine.h>
 #include <engines/gis/GdalUtils.h>
 #include <engines/querydata/Engine.h>
+#include <engines/querydata/MetaData.h>
 #include <engines/querydata/MetaQueryOptions.h>
+#include <engines/querydata/Q.h>
+#include <macgyver/DateTime.h>
 #include <macgyver/Exception.h>
+#include <macgyver/StringConversion.h>
+#include <macgyver/TypeName.h>
+#include <newbase/NFmiArea.h>
+#include <newbase/NFmiPoint.h>
+#include <spine/CRSRegistry.h>
 #include <spine/Convenience.h>
+#include <spine/Value.h>
 #include <algorithm>
 #include <cpl_error.h>
+#include <cstdint>
+#include <iostream>
+#include <iterator>
 #include <list>
+#include <memory>
+#include <ogr_geometry.h>
+#include <optional>
+#include <set>
+#include <sstream>
 #include <string>
-#include <utility>
+#include <vector>
+
+class NFmiRect;
+namespace SmartMet::Plugin::WFS
+{
+class StoredQueryHandlerBase;
+}  // namespace SmartMet::Plugin::WFS
+namespace SmartMet::Spine
+{
+class Reactor;
+}  // namespace SmartMet::Spine
 
 namespace bw = SmartMet::Plugin::WFS;
 namespace ba = boost::algorithm;

@@ -4,23 +4,43 @@
 #include "Config.h"
 #include "GeoServerDB.h"
 #include "RequestBase.h"
-#include "RequestFactory.h"
-#include "StoredQueryMap.h"
-#include "TypeNameStoredQueryMap.h"
-#include "WfsCapabilities.h"
-#include "XmlEnvInit.h"
 #include "XmlParser.h"
-#include <macgyver/DateTime.h>
-#include <memory>
-#include <json/json.h>
-#include <engines/geonames/Engine.h>
-#include <engines/gis/Engine.h>
-#include <engines/querydata/Engine.h>
-#include <spine/CRSRegistry.h>
-#include <macgyver/DirectoryMonitor.h>
-#include <macgyver/TemplateFactory.h>
 #include <macgyver/Cache.h>
 #include <macgyver/CacheStats.h>
+#include <macgyver/DateTime.h>
+#include <macgyver/TemplateFactory.h>
+#include <xercesc/dom/DOM.hpp>
+#include <filesystem>
+#include <iosfwd>
+#include <memory>
+#include <optional>
+#include <string>
+#include <vector>
+
+namespace Fmi
+{
+class TemplateFormatter;
+}  // namespace Fmi
+namespace SmartMet::Plugin::WFS::Xml
+{
+class XmlError;
+}  // namespace SmartMet::Plugin::WFS::Xml
+namespace SmartMet::Plugin::WFS
+{
+class RequestFactory;
+class TypeNameStoredQueryMap;
+class WfsCapabilities;
+}  // namespace SmartMet::Plugin::WFS
+namespace SmartMet::Spine::HTTP
+{
+class Request;
+class Response;
+}  // namespace SmartMet::Spine::HTTP
+namespace SmartMet::Spine
+{
+class CRSRegistry;
+class Reactor;
+}  // namespace SmartMet::Spine
 
 namespace SmartMet
 {

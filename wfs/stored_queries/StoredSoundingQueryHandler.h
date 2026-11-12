@@ -2,20 +2,41 @@
 
 #ifndef WITHOUT_OBSERVATION
 
-#include "StoredQueryHandlerBase.h"
-#include "SupportsBoundingBox.h"
-#include "SupportsExtraHandlerParams.h"
-#include "SupportsLocationParameters.h"
-#include "SupportsQualityParameters.h"
+#include "RequestParameterMap.h"
 #include "RequiresGeoEngine.h"
 #include "RequiresObsEngine.h"
-#include <engines/geonames/Engine.h>
-#include <engines/observation/DBRegistry.h>
-#include <engines/observation/Engine.h>
+#include "StoredQueryConfig.h"
+#include "StoredQueryHandlerBase.h"
+#include "SupportsBoundingBox.h"
+#include "SupportsLocationParameters.h"
+#include "SupportsQualityParameters.h"
+#include <ctpp2/CDT.hpp>
+#include <engines/observation/DBRegistryConfig.h>
 #include <engines/observation/QueryResult.h>
-#include <map>
-#include <tuple>
 #include <macgyver/DateTime.h>
+#include <spine/Station.h>
+#include <cstdint>
+#include <iosfwd>
+#include <map>
+#include <memory>
+#include <optional>
+#include <string>
+#include <tuple>
+#include <variant>
+#include <vector>
+
+namespace SmartMet::Engine::Observation
+{
+class Settings;
+}  // namespace SmartMet::Engine::Observation
+namespace SmartMet::Plugin::WFS
+{
+class PluginImpl;
+}  // namespace SmartMet::Plugin::WFS
+namespace SmartMet::Spine
+{
+class Reactor;
+}  // namespace SmartMet::Spine
 
 // Stored query configuration parameter names.
 const std::string P_BEGIN_TIME = "beginTime";

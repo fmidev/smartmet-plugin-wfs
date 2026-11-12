@@ -1,9 +1,11 @@
 #include "FileContentChecker.h"
-#include <iostream>
-#include <fcntl.h>
-#include <openssl/sha.h>
 #include <macgyver/Base64.h>
+#include <openssl/sha.h>
 #include <spine/Convenience.h>
+#include <fcntl.h>
+#include <iostream>
+#include <unistd.h>
+#include <utility>
 
 using SmartMet::Plugin::WFS::FileContentChecker;
 

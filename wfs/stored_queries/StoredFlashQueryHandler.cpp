@@ -1,16 +1,45 @@
 #include "stored_queries/StoredFlashQueryHandler.h"
-#include "StoredQueryHandlerFactories.h"
+#include "Config.h"
 #include "FeatureID.h"
+#include "PluginImpl.h"
+#include "QueryBase.h"
+#include "RequestParameterMap.h"
+#include "StoredQuery.h"
+#include "StoredQueryHandlerFactories.h"
 #include "StoredQueryHandlerFactoryDef.h"
-#include "WfsConst.h"
+#include "StoredQueryParamRegistry.h"
+#include "SupportsExtraHandlerParams.h"
+#include "WfsConvenience.h"
+#include "WfsException.h"
+#include <boost/algorithm/string/predicate.hpp>
+#include <ctpp2/CDT.hpp>
+#include <engines/observation/Engine.h>
+#include <engines/observation/Settings.h>
 #include <fmt/format.h>
+#include <macgyver/DateTime.h>
 #include <macgyver/Exception.h>
+#include <macgyver/LocalDateTime.h>
 #include <macgyver/StringConversion.h>
+#include <macgyver/ValueFormatter.h>
+#include <newbase/NFmiPoint.h>
+#include <spine/CRSRegistry.h>
 #include <spine/Convenience.h>
 #include <spine/Value.h>
 #include <timeseries/ParameterTools.h>
-
+#include <timeseries/TimeSeries.h>
+#include <algorithm>
+#include <iostream>
+#include <iterator>
+#include <map>
+#include <memory>
+#include <sstream>
 #include <utility>
+#include <variant>
+
+namespace SmartMet::Spine
+{
+class Reactor;
+}  // namespace SmartMet::Spine
 
 namespace bw = SmartMet::Plugin::WFS;
 

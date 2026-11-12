@@ -1,13 +1,35 @@
 #include "stored_queries/StoredFileQueryHandler.h"
-#include "StoredQueryHandlerFactories.h"
+#include "DataSetIndex.h"
 #include "FeatureID.h"
+#include "RequestParameterMap.h"
+#include "StoredQueryHandlerFactories.h"
 #include "StoredQueryHandlerFactoryDef.h"
+#include "StoredQueryParamRegistry.h"
+#include "SupportsExtraHandlerParams.h"
+#include <macgyver/DateTime.h>
+#include <macgyver/Exception.h>
 #include <macgyver/StringConversion.h>
 #include <macgyver/TypeName.h>
 #include <spine/Convenience.h>
-#include <macgyver/Exception.h>
+#include <algorithm>
+#include <cstdint>
+#include <exception>
+#include <filesystem>
+#include <iostream>
+#include <iterator>
+#include <libconfig.h++>
 #include <set>
-#include <utility>
+#include <vector>
+
+namespace SmartMet::Plugin::WFS
+{
+class PluginImpl;
+class StoredQueryHandlerBase;
+}  // namespace SmartMet::Plugin::WFS
+namespace SmartMet::Spine
+{
+class Reactor;
+}  // namespace SmartMet::Spine
 
 namespace bw = SmartMet::Plugin::WFS;
 

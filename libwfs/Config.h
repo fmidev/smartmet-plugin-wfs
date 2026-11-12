@@ -9,15 +9,19 @@
 #include "CapabilitiesConf.h"
 #include "Hosts.h"
 #include "WfsFeatureDef.h"
-#include <filesystem>
-#include <memory>
-#include <boost/utility.hpp>
-#include <spine/CRSRegistry.h>
 #include <spine/ConfigBase.h>
 #include <spine/MultiLanguageString.h>
-#include <libconfig.h++>
+#include <cstddef>
+#include <filesystem>
+#include <map>
+#include <memory>
 #include <string>
 #include <vector>
+
+namespace SmartMet::Spine
+{
+class CRSRegistry;
+}  // namespace SmartMet::Spine
 
 namespace SmartMet
 {

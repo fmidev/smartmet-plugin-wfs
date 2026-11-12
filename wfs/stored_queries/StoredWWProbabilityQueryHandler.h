@@ -1,20 +1,46 @@
 #pragma once
 
-#include "PluginImpl.h"
+#include "RequiresGeoEngine.h"
+#include "RequiresQEngine.h"
 #include "StoredQueryConfig.h"
 #include "StoredQueryHandlerBase.h"
-#include "StoredQueryHandlerFactoryDef.h"
 #include "SupportsBoundingBox.h"
-#include "SupportsExtraHandlerParams.h"
 #include "SupportsLocationParameters.h"
 #include "SupportsTimeParameters.h"
 #include "SupportsTimeZone.h"
-#include "RequiresGeoEngine.h"
-#include "RequiresQEngine.h"
-
-#include <engines/querydata/Engine.h>
-
+#include <engines/querydata/Producer.h>
+#include <engines/querydata/Q.h>
+#include <macgyver/DateTime.h>
+#include <newbase/NFmiParameterName.h>
+#include <spine/Location.h>
+#include <spine/Value.h>
+#include <timeseries/TimeSeriesGenerator.h>
+#include <timeseries/TimeSeriesInclude.h>
+#include <iosfwd>
+#include <list>
+#include <locale>
+#include <map>
+#include <memory>
+#include <optional>
+#include <string>
 #include <utility>
+#include <vector>
+
+class OGRSpatialReference;
+namespace CTPP
+{
+class CDT;
+}  // namespace CTPP
+namespace SmartMet::Plugin::WFS
+{
+class PluginImpl;
+}  // namespace SmartMet::Plugin::WFS
+namespace SmartMet::Spine
+{
+class CRSRegistry;
+class Parameter;
+class Reactor;
+}  // namespace SmartMet::Spine
 
 namespace SmartMet
 {

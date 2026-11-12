@@ -7,13 +7,19 @@
 #include "Config.h"
 #include "WfsConvenience.h"
 #include <boost/algorithm/string.hpp>
-#include <boost/format.hpp>
 #include <macgyver/Exception.h>
-#include <spine/ConfigTools.h>
+#include <macgyver/StringConversion.h>
+#include <macgyver/TypeName.h>
 #include <spine/Convenience.h>
-#include <locale>
-#include <sstream>
-#include <stdexcept>
+#include <algorithm>
+#include <exception>
+#include <iostream>
+#include <libconfig.h++>
+
+namespace SmartMet::Spine
+{
+class CRSRegistry;
+}  // namespace SmartMet::Spine
 
 using namespace std;
 

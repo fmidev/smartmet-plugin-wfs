@@ -1,10 +1,15 @@
 #include "SupportsMeteoParameterOptions.h"
-#include "WfsConvenience.h"
+#include "StoredQueryConfig.h"
 #include "WfsException.h"
-#include <boost/algorithm/string.hpp>
-#include <cstdint>
+#include <boost/numeric/conversion/cast.hpp>
 #include <macgyver/Exception.h>
 #include <macgyver/StringConversion.h>
+#include <sys/types.h>
+#include <cstdint>
+#include <libconfig.h++>
+#include <limits>
+#include <sstream>
+#include <utility>
 
 namespace bw = SmartMet::Plugin::WFS;
 

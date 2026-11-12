@@ -1,6 +1,9 @@
 #include "SupportsBoundingBox.h"
 #include <boost/algorithm/string.hpp>
 #include <macgyver/Exception.h>
+#include <spine/CRSRegistry.h>
+#include <cassert>
+#include <memory>
 #include <ogr_geometry.h>
 
 namespace bw = SmartMet::Plugin::WFS;

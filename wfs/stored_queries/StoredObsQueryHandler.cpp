@@ -1,21 +1,53 @@
 #include "stored_queries/StoredObsQueryHandler.h"
-#include "StoredQueryHandlerFactories.h"
+#include "Config.h"
 #include "FeatureID.h"
+#include "PluginImpl.h"
+#include "QueryBase.h"
+#include "StoredQuery.h"
+#include "StoredQueryHandlerFactories.h"
 #include "StoredQueryHandlerFactoryDef.h"
-#include "WfsConst.h"
+#include "StoredQueryParamRegistry.h"
+#include "SupportsExtraHandlerParams.h"
 #include "WfsConvenience.h"
-#include <boost/algorithm/string.hpp>
+#include "WfsException.h"
+#include <boost/date_time/posix_time/posix_time.hpp>
 #include <boost/format.hpp>
-#include <boost/lambda/lambda.hpp>
+#include <ctpp2/CDT.hpp>
+#include <engines/geonames/Engine.h>
+#include <engines/observation/Engine.h>
+#include <engines/observation/Keywords.h>
+#include <engines/observation/Settings.h>
+#include <engines/observation/StationSettings.h>
+#include <macgyver/DateTime.h>
 #include <macgyver/Exception.h>
 #include <macgyver/StringConversion.h>
+#include <macgyver/TimeFormatter.h>
+#include <macgyver/ValueFormatter.h>
+#include <newbase/NFmiParameterName.h>
+#include <spine/CRSRegistry.h>
 #include <spine/Convenience.h>
+#include <spine/Station.h>
 #include <spine/Value.h>
+#include <sys/types.h>
+#include <timeseries/LocationParameters.h>
 #include <timeseries/ParameterTools.h>
+#include <timeseries/TimeParameters.h>
 #include <timeseries/TimeSeriesInclude.h>
-#include <algorithm>
-#include <functional>
+#include <timeseries/TimeSeriesOutput.h>
+#include <cassert>
+#include <iostream>
+#include <iterator>
+#include <list>
+#include <locale>
+#include <memory>
+#include <set>
+#include <sstream>
 #include <utility>
+
+namespace SmartMet::Spine
+{
+class Reactor;
+}  // namespace SmartMet::Spine
 
 #define P_BEGIN_TIME "beginTime"
 #define P_END_TIME "endTime"

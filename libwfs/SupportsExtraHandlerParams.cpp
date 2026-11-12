@@ -1,13 +1,21 @@
 #include "SupportsExtraHandlerParams.h"
 #include "ArrayParameterTemplate.h"
+#include "ParameterTemplateBase.h"
 #include "ScalarParameterTemplate.h"
-#include <boost/algorithm/string.hpp>
+#include <boost/logic/tribool.hpp>
+#include <ctpp2/CDT.hpp>
 #include <macgyver/Exception.h>
 #include <macgyver/StringConversion.h>
-#include <macgyver/TypeName.h>
 #include <spine/Value.h>
+#include <cassert>
+#include <cstddef>
+#include <libconfig.h++>
+#include <limits>
 #include <memory>
 #include <sstream>
+#include <utility>
+#include <variant>
+#include <vector>
 
 namespace bw = SmartMet::Plugin::WFS;
 

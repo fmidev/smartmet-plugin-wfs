@@ -1,13 +1,5 @@
 #pragma once
 
-#include <macgyver/DateTime.h>
-#include <optional>
-#include <ctpp2/CDT.hpp>
-#include <exception>
-#include <ostream>
-#include <string>
-#include <vector>
-
 #define WFS_EXCEPTION_CODE "WfsExceptionCode"
 #define WFS_LANGUAGE "WfsLanguage"
 #define WFS_LOCATION "WfsLocation"

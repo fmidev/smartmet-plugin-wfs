@@ -1,9 +1,17 @@
 #include "XmlEntityResolver.h"
-#include <xercesc/framework/MemBufInputSource.hpp>
-#include <xercesc/framework/LocalFileInputSource.hpp>
+#include "XmlUtils.h"
+#include <curl/curl.h>
 #include <macgyver/Exception.h>
 #include <spine/Convenience.h>
-#include "XmlUtils.h"
+#include <xercesc/framework/MemBufInputSource.hpp>
+#include <cassert>
+#include <cstring>
+#include <functional>
+#include <iostream>
+#include <memory>
+#include <sstream>
+#include <stdexcept>
+#include <utility>
 
 using SmartMet::Plugin::WFS::Xml::EntityResolver;
 

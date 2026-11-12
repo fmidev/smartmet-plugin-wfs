@@ -1,13 +1,16 @@
 #include "BStream.h"
 #include <boost/bind/bind.hpp>
 #include <macgyver/Base64.h>
-#include <macgyver/TypeName.h>
 #include <macgyver/Exception.h>
+#include <macgyver/TypeName.h>
 #include <algorithm>
 #include <array>
-#include <cstdio>
 #include <cstring>
+#include <iterator>
 #include <set>
+#include <sstream>
+#include <typeinfo>
+#include <utility>
 
 namespace bw = SmartMet::Plugin::WFS;
 namespace ph = boost::placeholders;

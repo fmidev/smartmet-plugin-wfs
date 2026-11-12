@@ -1,11 +1,16 @@
 #include "AreaUtils.h"
-#include <boost/lambda/lambda.hpp>
 #include <macgyver/Exception.h>
+#include <newbase/NFmiArea.h>
 #include <newbase/NFmiLatLonArea.h>
 #include <newbase/NFmiMercatorArea.h>
+#include <newbase/NFmiRect.h>
+#include <algorithm>
 #include <cmath>
+#include <cstddef>
 #include <memory>
-#include <stdexcept>
+#include <ogr_geometry.h>
+#include <string>
+#include <typeinfo>
 
 namespace SmartMet
 {

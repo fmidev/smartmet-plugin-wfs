@@ -1,10 +1,13 @@
 #include "HandlerFactorySummary.h"
+#include "StoredQueryConfig.h"
 #include "StoredQueryHandlerBase.h"
 #include <json/value.h>
+#include <macgyver/Exception.h>
+#include <algorithm>
+#include <cassert>
+#include <iterator>
 #include <ostream>
 #include <utility>
-
-#include <macgyver/DebugTools.h>
 
 using namespace SmartMet::Plugin::WFS;
 

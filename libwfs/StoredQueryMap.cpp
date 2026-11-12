@@ -1,19 +1,30 @@
 #include "StoredQueryMap.h"
+#include "Config.h"
 #include "HandlerFactorySummary.h"
+#include "PluginImpl.h"
+#include "StoredQueryConfig.h"
+#include "StoredQueryHandlerBase.h"
 #include "StoredQueryHandlerFactoryDef.h"
+#include "WfsException.h"
 #include <boost/algorithm/string.hpp>
 #include <boost/bind/bind.hpp>
-#include <boost/chrono.hpp>
-#include <filesystem>
-#include <spine/Convenience.h>
-#include <macgyver/Base64.h>
+#include <macgyver/AsyncTaskGroup.h>
 #include <macgyver/Exception.h>
+#include <macgyver/StringConversion.h>
 #include <macgyver/ThreadName.h>
-#include <queue>
+#include <spine/Convenience.h>
+#include <spine/Reactor.h>
+#include <algorithm>
+#include <cassert>
+#include <chrono>
+#include <ctime>
+#include <exception>
+#include <filesystem>
+#include <functional>
+#include <iostream>
+#include <iterator>
 #include <sstream>
-#include <stdexcept>
-#include <tuple>
-#include <openssl/sha.h>
+#include <utility>
 
 namespace ba = boost::algorithm;
 namespace bw = SmartMet::Plugin::WFS;

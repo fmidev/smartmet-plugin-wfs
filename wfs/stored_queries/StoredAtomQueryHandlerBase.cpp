@@ -1,17 +1,34 @@
 #include "stored_queries/StoredAtomQueryHandlerBase.h"
+#include "Hosts.h"
+#include "ParameterTemplateBase.h"
+#include "PluginImpl.h"
+#include "QueryBase.h"
+#include "StoredQuery.h"
 #include "StoredQueryHandlerFactories.h"
 #include "StoredQueryHandlerFactoryDef.h"
+#include "StoredQueryParamRegistry.h"
+#include "SupportsExtraHandlerParams.h"
+#include "UrlTemplateGenerator.h"
+#include "WfsException.h"
 #include <boost/bind/bind.hpp>
+#include <boost/logic/tribool.hpp>
+#include <ctpp2/CDT.hpp>
 #include <macgyver/Exception.h>
 #include <macgyver/StringConversion.h>
 #include <spine/Value.h>
 #include <cassert>
-#include <limits>
+#include <cstddef>
+#include <functional>
+#include <iostream>
 #include <memory>
-#include <sstream>
-#include <utility>
+#include <set>
 #include <variant>
 #include <vector>
+
+namespace SmartMet::Spine
+{
+class Reactor;
+}  // namespace SmartMet::Spine
 
 namespace bw = SmartMet::Plugin::WFS;
 namespace ph = boost::placeholders;

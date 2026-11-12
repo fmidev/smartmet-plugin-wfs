@@ -1,9 +1,10 @@
 #pragma once
 
 #include <macgyver/StringConversion.h>
-#include <memory>
+#include <map>
 #include <set>
 #include <string>
+#include <utility>
 
 namespace SmartMet
 {

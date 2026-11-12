@@ -1,15 +1,41 @@
 #pragma once
 #ifndef WITHOUT_OBSERVATION
 
-#include "StoredQueryHandlerBase.h"
-#include "SupportsExtraHandlerParams.h"
-#include "SupportsLocationParameters.h"
+#include "RequestParameterMap.h"
 #include "RequiresGeoEngine.h"
 #include "RequiresObsEngine.h"
-#include <engines/geonames/Engine.h>
-#include <engines/observation/Engine.h>
-#include <engines/observation/MastQuery.h>
-#include <unordered_map>
+#include "StoredQueryConfig.h"
+#include "StoredQueryHandlerBase.h"
+#include <engines/observation/DBRegistryConfig.h>
+#include <engines/observation/QueryResult.h>
+#include <cstdint>
+#include <iosfwd>
+#include <map>
+#include <memory>
+#include <optional>
+#include <string>
+#include <vector>
+
+namespace CTPP
+{
+class CDT;
+}  // namespace CTPP
+namespace Locus
+{
+class QueryOptions;
+}  // namespace Locus
+namespace SmartMet::Engine::Observation
+{
+class MastQuery;
+}  // namespace SmartMet::Engine::Observation
+namespace SmartMet::Plugin::WFS
+{
+class PluginImpl;
+}  // namespace SmartMet::Plugin::WFS
+namespace SmartMet::Spine
+{
+class Reactor;
+}  // namespace SmartMet::Spine
 
 namespace SmartMet
 {

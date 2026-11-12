@@ -1,17 +1,23 @@
 #pragma once
 
-#include "ArrayParameterTemplate.h"
-#include "ScalarParameterTemplate.h"
+#include "RequestParameterMap.h"
 #include "RequiresGeoEngine.h"
-#include "StoredQueryConfig.h"
 #include "StoredQueryParamRegistry.h"
 #include "SupportsExtraHandlerParams.h"
-#include "SupportsLocationParameters.h"
-#include <boost/scoped_ptr.hpp>
+#include <boost/date_time/posix_time/posix_time.hpp>
+#include <spine/Location.h>
+#include <list>
 #include <memory>
-#include <engines/geonames/Engine.h>
-#include <spine/Value.h>
-#include <map>
+#include <string>
+
+namespace SmartMet::Plugin::WFS
+{
+class StoredQueryConfig;
+}  // namespace SmartMet::Plugin::WFS
+namespace SmartMet::Spine
+{
+class Reactor;
+}  // namespace SmartMet::Spine
 
 namespace SmartMet
 {

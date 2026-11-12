@@ -1,7 +1,9 @@
 #pragma once
 
-#include "StoredQueryHandlerFactoryDef.h"
-
+namespace SmartMet::Plugin::WFS
+{
+class StoredQueryHandlerFactoryDef;
+}  // namespace SmartMet::Plugin::WFS
 // The stored query handler factories are looked up by name with dlsym(): the
 // constructor_name setting of a stored query configuration names one of these
 // objects. They must therefore have external linkage.

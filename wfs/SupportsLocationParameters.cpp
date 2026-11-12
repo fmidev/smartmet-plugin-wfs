@@ -1,13 +1,27 @@
 #include "SupportsLocationParameters.h"
+#include "StoredQueryConfig.h"
+#include "WfsException.h"
 #include <boost/algorithm/string.hpp>
 #include <boost/format.hpp>
 #include <boost/locale.hpp>
+#include <engines/geonames/Engine.h>
+#include <locus/QueryOptions.h>
 #include <macgyver/CharsetTools.h>
-#include <macgyver/StringConversion.h>
-#include <macgyver/TypeName.h>
 #include <macgyver/Exception.h>
+#include <macgyver/StringConversion.h>
 #include <cassert>
-#include <sstream>
+#include <cstddef>
+#include <cstdint>
+#include <iterator>
+#include <limits>
+#include <utility>
+#include <vector>
+
+namespace SmartMet::Spine
+{
+class Reactor;
+class Value;
+}  // namespace SmartMet::Spine
 
 namespace bw = SmartMet::Plugin::WFS;
 using SmartMet::Spine::Value;

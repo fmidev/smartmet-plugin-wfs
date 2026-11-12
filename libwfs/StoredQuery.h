@@ -1,16 +1,27 @@
 #pragma once
 
 #include "QueryBase.h"
-#include "RequestParameterMap.h"
-#include "StandardPresentationParameters.h"
-#include "StoredQueryHandlerBase.h"
-#include "StoredQueryMap.h"
-#include "XmlParameterExtractor.h"
-#include <memory>
 #include <spine/Value.h>
 #include <xercesc/dom/DOMElement.hpp>
+#include <iosfwd>
+#include <map>
+#include <memory>
 #include <string>
 #include <vector>
+
+namespace SmartMet::Plugin::WFS::Xml
+{
+class ParameterExtractor;
+}  // namespace SmartMet::Plugin::WFS::Xml
+namespace SmartMet::Plugin::WFS
+{
+class RequestParameterMap;
+class StandardPresentationParameters;
+}  // namespace SmartMet::Plugin::WFS
+namespace SmartMet::Spine::HTTP
+{
+class Request;
+}  // namespace SmartMet::Spine::HTTP
 
 namespace SmartMet
 {
@@ -19,8 +30,8 @@ namespace Plugin
 namespace WFS
 {
 class StoredQueryConfig;
-class StoredQueryMap;
 class StoredQueryHandlerBase;
+class StoredQueryMap;
 
 /**
  *   @brief Represents parsed stored query request with its ID and parameters

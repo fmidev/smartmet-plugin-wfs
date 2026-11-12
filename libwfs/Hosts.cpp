@@ -1,5 +1,4 @@
 #include "Hosts.h"
-#include <macgyver/Exception.h>
 
 namespace
 {

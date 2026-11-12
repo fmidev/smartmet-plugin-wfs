@@ -1,11 +1,21 @@
 #pragma once
 
-#include <optional>
-#include <memory>
-#include <spine/CRSRegistry.h>
-#include <spine/ConfigBase.h>
 #include <spine/MultiLanguageString.h>
 #include <array>
+#include <memory>
+#include <optional>
+#include <string>
+#include <vector>
+
+namespace SmartMet::Spine
+{
+class CRSRegistry;
+class ConfigBase;
+}  // namespace SmartMet::Spine
+namespace libconfig
+{
+class Setting;
+}  // namespace libconfig
 
 namespace SmartMet
 {

@@ -1,16 +1,28 @@
 #include "StoredQuery.h"
 #include "FeatureID.h"
+#include "RequestParameterMap.h"
+#include "StandardPresentationParameters.h"
+#include "StoredQueryConfig.h"
+#include "StoredQueryHandlerBase.h"
+#include "StoredQueryMap.h"
+#include "StoredQueryParamDef.h"
 #include "WfsConst.h"
 #include "WfsException.h"
+#include "XmlParameterExtractor.h"
 #include "XmlUtils.h"
 #include <boost/algorithm/string.hpp>
 #include <macgyver/DistanceParser.h>
 #include <macgyver/Exception.h>
 #include <macgyver/StringConversion.h>
-#include <macgyver/TypeName.h>
+#include <spine/HTTP.h>
+#include <algorithm>
+#include <cassert>
+#include <iterator>
 #include <memory>
+#include <optional>
 #include <set>
 #include <sstream>
+#include <utility>
 
 namespace ba = boost::algorithm;
 namespace bw = SmartMet::Plugin::WFS;

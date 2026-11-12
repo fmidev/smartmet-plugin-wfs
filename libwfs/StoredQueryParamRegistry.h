@@ -1,15 +1,17 @@
 #pragma once
 
-#include "ArrayParameterTemplate.h"   // IWYU pragma: keep (make_shared in templates)
+#include "ArrayParameterTemplate.h"  // IWYU pragma: keep (make_shared in templates)
 #include "HandlerFactorySummary.h"
 #include "RequestParameterMap.h"
 #include "ScalarParameterTemplate.h"  // IWYU pragma: keep (make_shared in templates)
 #include "StoredQueryConfig.h"
-#include <memory>
-#include <variant>
-#include <json/value.h>
+#include <cstddef>
+#include <cstdint>
+#include <limits>
 #include <map>
+#include <memory>
 #include <set>
+#include <string>
 #include <typeinfo>
 
 namespace SmartMet
@@ -19,8 +21,6 @@ namespace Plugin
 namespace WFS
 {
 class SupportsExtraHandlerParams;
-class ScalarParameterTemplate;
-class ArrayParameterTemplate;
 
 /**
  *   @brief Virtual base class for implementing registry of stored query

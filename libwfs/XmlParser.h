@@ -1,18 +1,23 @@
 #pragma once
 
-#include "XmlError.h"
-#include "XmlErrorHandler.h"
-#include <boost/function.hpp>
-#include <memory>
 #include <boost/thread/tss.hpp>
 #include <xercesc/parsers/XercesDOMParser.hpp>
-#include <xercesc/util/SecurityManager.hpp>
+#include <xercesc/sax/InputSource.hpp>
 #include <functional>
 #include <list>
 #include <map>
+#include <memory>
 #include <ostream>
-#include <stdexcept>
 #include <string>
+
+namespace SmartMet::Plugin::WFS::Xml
+{
+class XmlErrorHandler;
+}  // namespace SmartMet::Plugin::WFS::Xml
+namespace xercesc_3_2
+{
+class XMLGrammarPool;
+}  // namespace xercesc_3_2
 
 namespace SmartMet
 {

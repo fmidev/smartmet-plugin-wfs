@@ -1,10 +1,17 @@
 #pragma once
 
+#include "RequestParameterMap.h"
 #include "StoredQueryConfig.h"
 #include "StoredQueryParamRegistry.h"
 #include "SupportsExtraHandlerParams.h"
-#include <spine/CRSRegistry.h>
-#include <ogr_geometry.h>
+#include <spine/Value.h>
+#include <string>
+
+class OGRPolygon;
+namespace SmartMet::Spine
+{
+class CRSRegistry;
+}  // namespace SmartMet::Spine
 
 namespace SmartMet
 {

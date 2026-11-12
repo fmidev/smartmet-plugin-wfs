@@ -1,9 +1,20 @@
 #include "ArrayParameterTemplate.h"
-#include <macgyver/Exception.h>
-#include <algorithm>
-#include <typeinfo>
+#include "StoredQueryConfig.h"
+#include "StoredQueryParamDef.h"
+#include "WfsException.h"
 #include <boost/bind/bind.hpp>
 #include <fmt/format.h>
+#include <macgyver/Exception.h>
+#include <macgyver/TypeName.h>
+#include <algorithm>
+#include <cassert>
+#include <iostream>
+#include <iterator>
+#include <libconfig.h++>
+#include <memory>
+#include <optional>
+#include <sstream>
+#include <variant>
 
 namespace ph = boost::placeholders;
 

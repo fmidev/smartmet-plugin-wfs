@@ -1,20 +1,50 @@
 #pragma once
 
-#include "PluginImpl.h"
+#include "RequiresContourEngine.h"
+#include "RequiresGeoEngine.h"
+#include "RequiresGridEngine.h"
+#include "RequiresQEngine.h"
 #include "StoredContourQueryStructs.h"
-#include "StoredQueryConfig.h"
 #include "StoredQueryHandlerBase.h"
-#include "StoredQueryHandlerFactoryDef.h"
 #include "SupportsBoundingBox.h"
-#include "SupportsExtraHandlerParams.h"
 #include "SupportsTimeParameters.h"
 #include "SupportsTimeZone.h"
-#include "RequiresGridEngine.h"
-#include "RequiresContourEngine.h"
-#include "RequiresQEngine.h"
-#include "RequiresGeoEngine.h"
+#include <engines/contour/Options.h>
+#include <engines/querydata/Q.h>
+#include <gis/Types.h>
+#include <macgyver/DateTime.h>
+#include <newbase/NFmiParameterName.h>
+#include <iosfwd>
+#include <memory>
+#include <optional>
+#include <string>
+#include <vector>
 
-#include <gis/OGR.h>
+class OGRGeometry;
+class OGRGeometryCollection;
+class OGRPolygon;
+class OGRSpatialReference;
+namespace CTPP
+{
+class CDT;
+}  // namespace CTPP
+namespace Fmi
+{
+class Box;
+}  // namespace Fmi
+namespace SmartMet::Plugin::WFS
+{
+class PluginImpl;
+class StoredQuery;
+class StoredQueryConfig;
+}  // namespace SmartMet::Plugin::WFS
+namespace SmartMet::Spine
+{
+class CRSRegistry;
+class Parameter;
+class Reactor;
+struct BoundingBox;
+}  // namespace SmartMet::Spine
 
 namespace SmartMet
 {

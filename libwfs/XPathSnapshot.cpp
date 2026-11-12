@@ -1,12 +1,11 @@
 #include "XPathSnapshot.h"
 #include "XmlUtils.h"
-#include <macgyver/TypeName.h>
 #include <macgyver/Exception.h>
-#include <xercesc/dom/DOMLSParserFilter.hpp>
+#include <macgyver/TypeName.h>
 #include <xercesc/framework/MemBufInputSource.hpp>
+#include <exception>
 #include <iostream>
 #include <sstream>
-#include <stdexcept>
 
 using namespace xercesc;
 using SmartMet::Plugin::WFS::Xml::XmlDomErrorHandler;

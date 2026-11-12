@@ -1,18 +1,47 @@
-#include "FeatureID.h"
-#include "StoredQueryHandlerFactories.h"
-#include "GeoServerDataIndex.h"
-#include "StoredQueryHandlerFactoryDef.h"
-#include "WfsConvenience.h"
-#include "WfsException.h"
 #include "stored_queries/StoredGeoserverQueryHandler.h"
+#include "FeatureID.h"
+#include "GeoServerDataIndex.h"
+#include "PluginImpl.h"
+#include "RequestParameterMap.h"
+#include "StoredAtomQueryHandlerBase.h"
+#include "StoredQueryConfig.h"
+#include "StoredQueryHandlerFactories.h"
+#include "StoredQueryHandlerFactoryDef.h"
+#include "StoredQueryParamRegistry.h"
+#include "SupportsBoundingBox.h"
+#include "SupportsExtraHandlerParams.h"
+#include "WfsException.h"
 #include <boost/algorithm/string.hpp>
 #include <macgyver/DateTime.h>
-#include <macgyver/StringConversion.h>
-#include <macgyver/TypeName.h>
-#include <spine/Convenience.h>
 #include <macgyver/Exception.h>
+#include <macgyver/StringConversion.h>
+#include <spine/CRSRegistry.h>
+#include <spine/Convenience.h>
+#include <spine/Value.h>
+#include <cassert>
+#include <cstdint>
+#include <cstdio>
+#include <iostream>
+#include <iterator>
+#include <libconfig.h++>
+#include <map>
+#include <memory>
+#include <ogr_geometry.h>
+#include <optional>
+#include <set>
 #include <sstream>
+#include <string>
 #include <utility>
+#include <vector>
+
+namespace SmartMet::Plugin::WFS
+{
+class StoredQueryHandlerBase;
+}  // namespace SmartMet::Plugin::WFS
+namespace SmartMet::Spine
+{
+class Reactor;
+}  // namespace SmartMet::Spine
 
 namespace bw = SmartMet::Plugin::WFS;
 

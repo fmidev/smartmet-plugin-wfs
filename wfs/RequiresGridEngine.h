@@ -1,8 +1,10 @@
 #pragma once
 
 #include "StoredQueryHandlerInitBase.h"
-#include <spine/Reactor.h>
 #include <engines/grid/Engine.h>
+#include <spine/Reactor.h>
+#include <functional>
+#include <memory>
 #include <string>
 #include <vector>
 

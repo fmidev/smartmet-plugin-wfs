@@ -1,11 +1,12 @@
 #pragma once
 
 #include "RequestBase.h"
-#include <boost/function.hpp>
-#include <memory>
 #include <spine/HTTP.h>
 #include <xercesc/dom/DOMDocument.hpp>
+#include <xercesc/dom/DOMElement.hpp>
+#include <functional>
 #include <map>
+#include <memory>
 #include <set>
 #include <string>
 

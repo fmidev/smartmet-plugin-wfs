@@ -1,9 +1,14 @@
 #include "CapabilitiesConf.h"
-#include <set>
+#include <boost/algorithm/string.hpp>
+#include <ctpp2/CDT.hpp>
+#include <macgyver/Exception.h>
 #include <spine/ConfigBase.h>
 #include <spine/Convenience.h>
-#include <macgyver/Exception.h>
-#include <boost/algorithm/string.hpp>
+#include <iostream>
+#include <libconfig.h++>
+#include <set>
+#include <sstream>
+#include <vector>
 
 using Fmi::Exception;
 using SmartMet::Plugin::WFS::CapabilitiesConf;

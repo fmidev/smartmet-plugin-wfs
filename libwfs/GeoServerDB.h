@@ -1,8 +1,10 @@
 #pragma once
 
-#include <memory>
-#include <macgyver/WorkerPool.h>
 #include <macgyver/PostgreSQLConnection.h>
+#include <macgyver/WorkerPool.h>
+#include <cstddef>
+#include <memory>
+#include <string>
 
 namespace SmartMet
 {

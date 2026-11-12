@@ -1,19 +1,15 @@
 
 #include "XmlUtils.h"
 #include <boost/algorithm/string.hpp>
-#include <boost/regex.hpp>
-#include <boost/scoped_array.hpp>
+#include <fmt/format.h>
 #include <macgyver/Exception.h>
 #include <xercesc/dom/DOMImplementation.hpp>
-#include <xercesc/dom/DOMImplementationLS.hpp>
 #include <xercesc/dom/DOMImplementationRegistry.hpp>
+#include <xercesc/dom/DOMLSSerializer.hpp>
 #include <xercesc/dom/DOMText.hpp>
 #include <xercesc/util/Janitor.hpp>
-#include <xercesc/util/XMLUni.hpp>
-#include <fmt/format.h>
 #include <memory>
 #include <sstream>
-#include <stdexcept>
 
 namespace ba = boost::algorithm;
 

@@ -1,15 +1,29 @@
 #include "AdHocQuery.h"
 #include "FeatureID.h"
+#include "QueryBase.h"
+#include "RequestParameterMap.h"
+#include "StandardPresentationParameters.h"
+#include "StoredQueryConfig.h"
+#include "StoredQueryHandlerBase.h"
+#include "StoredQueryMap.h"
+#include "StoredQueryParamDef.h"
+#include "TypeNameStoredQueryMap.h"
 #include "WfsConst.h"
 #include "WfsException.h"
 #include "XPathSnapshot.h"
+#include "XmlParameterExtractor.h"
 #include "XmlUtils.h"
 #include <boost/algorithm/string.hpp>
-#include <boost/lambda/lambda.hpp>
 #include <fmt/format.h>
 #include <macgyver/Exception.h>
 #include <macgyver/StringConversion.h>
+#include <spine/HTTP.h>
+#include <spine/Value.h>
+#include <xercesc/dom/DOMDocument.hpp>
+#include <cstdlib>
+#include <cstring>
 #include <memory>
+#include <sstream>
 #include <utility>
 
 XERCES_CPP_NAMESPACE_USE

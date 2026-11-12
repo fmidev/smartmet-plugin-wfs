@@ -3,6 +3,9 @@
 #include "StoredQueryHandlerInitBase.h"
 #include <engines/contour/Engine.h>
 #include <spine/Reactor.h>
+#include <functional>
+#include <memory>
+#include <string>
 
 namespace SmartMet
 {

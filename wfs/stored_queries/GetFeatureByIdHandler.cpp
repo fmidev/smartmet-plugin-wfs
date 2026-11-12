@@ -1,13 +1,22 @@
 #include "stored_queries/GetFeatureByIdHandler.h"
-#include "StoredQueryHandlerFactories.h"
+#include "PluginImpl.h"
+#include "RequestParameterMap.h"
+#include "StoredQuery.h"
 #include "StoredQueryHandlerBase.h"
+#include "StoredQueryHandlerFactories.h"
 #include "StoredQueryHandlerFactoryDef.h"
 #include "StoredQueryMap.h"
-#include "WfsConvenience.h"
+#include "StoredQueryParamRegistry.h"
+#include "SupportsExtraHandlerParams.h"
 #include <macgyver/Exception.h>
-#include <spine/Value.h>
-#include <sstream>
-#include <utility>
+#include <memory>
+#include <optional>
+#include <vector>
+
+namespace SmartMet::Spine
+{
+class Reactor;
+}  // namespace SmartMet::Spine
 
 namespace bw = SmartMet::Plugin::WFS;
 

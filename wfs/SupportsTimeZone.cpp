@@ -1,9 +1,15 @@
 #include "SupportsTimeZone.h"
+#include "StoredQueryConfig.h"
 #include <boost/algorithm/string.hpp>
+#include <engines/geonames/Engine.h>
+#include <macgyver/Exception.h>
 #include <macgyver/StringConversion.h>
 #include <macgyver/TimeZones.h>
-#include <spine/Convenience.h>
-#include <macgyver/Exception.h>
+
+namespace SmartMet::Spine
+{
+class Reactor;
+}  // namespace SmartMet::Spine
 
 namespace bw = SmartMet::Plugin::WFS;
 

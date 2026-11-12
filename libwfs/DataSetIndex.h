@@ -1,17 +1,23 @@
 #pragma once
 
-#include <boost/geometry/core/cs.hpp>
 #include <boost/geometry/geometries/box.hpp>
-#include <boost/geometry/geometries/point.hpp>
-#include <boost/geometry/geometries/ring.hpp>
 #include <boost/geometry/geometries/point_xy.hpp>
 #include <boost/regex.hpp>
 #include <macgyver/DateTime.h>
-#include <spine/ConfigBase.h>
 #include <filesystem>
-#include <optional>
+#include <memory>
 #include <set>
 #include <string>
+#include <vector>
+
+namespace SmartMet::Spine
+{
+class ConfigBase;
+}  // namespace SmartMet::Spine
+namespace libconfig
+{
+class Setting;
+}  // namespace libconfig
 
 namespace SmartMet
 {

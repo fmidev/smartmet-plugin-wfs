@@ -1,28 +1,31 @@
 #pragma once
 
-#include "PluginImpl.h"
-#include "StandardPresentationParameters.h"
-#include "StoredQuery.h"
+#include "HandlerFactorySummary.h"
+#include "RequestParameterMap.h"
 #include "StoredQueryConfig.h"
 #include "StoredQueryHandlerInitBase.h"
-#include "StoredQueryMap.h"
 #include "StoredQueryParamRegistry.h"
 #include "SupportsExtraHandlerParams.h"
-
-#include <spine/CRSRegistry.h>
-#include <spine/Reactor.h>
-#include <spine/Value.h>
-
 #include <macgyver/TemplateFormatter.h>
-#include <macgyver/ValueFormatter.h>
-
-#include <optional>
+#include <spine/CRSRegistry.h>
+#include <iosfwd>
+#include <iterator>
+#include <map>
 #include <memory>
+#include <optional>
+#include <set>
+#include <string>
+#include <utility>
+#include <vector>
 
-namespace Fmi
+namespace CTPP
 {
-class TemplateFormatter;
-}
+class CDT;
+}  // namespace CTPP
+namespace SmartMet::Spine
+{
+class Reactor;
+}  // namespace SmartMet::Spine
 
 namespace SmartMet
 {

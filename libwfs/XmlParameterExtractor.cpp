@@ -1,17 +1,16 @@
 #include "XmlParameterExtractor.h"
 #include "WfsConst.h"
-#include "WfsException.h"
 #include "XmlGmlTypes.h"
 #include "XmlUtils.h"
 #include <boost/algorithm/string.hpp>
 #include <boost/bind/bind.hpp>
 #include <macgyver/DateTime.h>
-#include <cstdint>
 #include <macgyver/Exception.h>
 #include <macgyver/TimeParser.h>
-#include <macgyver/TypeName.h>
+#include <cstddef>
+#include <optional>
 #include <sstream>
-#include <stdexcept>
+#include <utility>
 
 namespace ph = boost::placeholders;
 

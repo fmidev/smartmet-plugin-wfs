@@ -1,11 +1,12 @@
 #include "StoredQueryHandlerFactoryDef.h"
-#include <openssl/sha.h>
 #include <macgyver/Exception.h>
+#include <openssl/sha.h>
+#include <cassert>
+#include <cstring>
 #include <dlfcn.h>
 #include <sstream>
 #include <string>
 #include <typeinfo>
-#include <utility>
 
 namespace SmartMet
 {

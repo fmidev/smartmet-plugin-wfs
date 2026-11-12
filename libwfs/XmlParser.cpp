@@ -1,26 +1,21 @@
 #include "XmlParser.h"
-#include "XmlUtils.h"
 #include "XmlEntityResolver.h"
+#include "XmlError.h"
+#include "XmlErrorHandler.h"
+#include "XmlUtils.h"
 #include <boost/archive/text_iarchive.hpp>
 #include <boost/archive/text_oarchive.hpp>
-#include <filesystem>
 #include <boost/serialization/map.hpp>
-#include <curl/curl.h>
-#include <macgyver/TypeName.h>
 #include <macgyver/Exception.h>
-#include <utility>
+#include <macgyver/TypeName.h>
 #include <xercesc/framework/LocalFileInputSource.hpp>
 #include <xercesc/framework/MemBufInputSource.hpp>
 #include <xercesc/framework/XMLGrammarPoolImpl.hpp>
-#include <xercesc/sax/ErrorHandler.hpp>
-#include <xercesc/sax/SAXParseException.hpp>
 #include <xercesc/util/BinFileInputStream.hpp>
-#include <cerrno>
 #include <fstream>
 #include <iostream>
-#include <sstream>
-#include <stdexcept>
 #include <string>
+#include <utility>
 
 namespace SmartMet
 {

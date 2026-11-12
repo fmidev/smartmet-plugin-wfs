@@ -1,5 +1,6 @@
 #include "GeoServerDB.h"
 #include <macgyver/Exception.h>
+#include <functional>
 
 namespace bw = SmartMet::Plugin::WFS;
 

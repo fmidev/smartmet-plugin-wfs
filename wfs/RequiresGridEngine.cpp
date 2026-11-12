@@ -1,6 +1,7 @@
 #include "RequiresGridEngine.h"
 #include <boost/algorithm/string/join.hpp>
 #include <grid-content/contentServer/definition/GenerationInfo.h>
+#include <grid-content/contentServer/definition/ServiceInterface.h>
 #include <macgyver/Exception.h>
 #include <set>
 

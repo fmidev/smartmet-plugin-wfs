@@ -1,11 +1,33 @@
 #include "request/DescribeStoredQueries.h"
+#include "Config.h"
+#include "PluginImpl.h"
+#include "QueryBase.h"
+#include "StoredQueryConfig.h"
+#include "StoredQueryHandlerBase.h"
+#include "StoredQueryMap.h"
+#include "WfsCapabilities.h"
 #include "WfsConst.h"
-#include "WfsConvenience.h"
+#include "WfsException.h"
+#include "WfsFeatureDef.h"
 #include "XmlUtils.h"
 #include <boost/algorithm/string.hpp>
 #include <boost/format.hpp>
-#include <optional>
+#include <ctpp2/CDT.hpp>
+#include <macgyver/Exception.h>
+#include <macgyver/TemplateFormatter.h>
+#include <spine/HTTP.h>
 #include <algorithm>
+#include <cassert>
+#include <cstddef>
+#include <exception>
+#include <map>
+#include <optional>
+#include <sstream>
+
+namespace xercesc_3_2
+{
+class DOMElement;
+}  // namespace xercesc_3_2
 
 namespace bw = SmartMet::Plugin::WFS;
 namespace bwx = SmartMet::Plugin::WFS::Xml;

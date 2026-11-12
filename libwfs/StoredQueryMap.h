@@ -2,21 +2,29 @@
 
 #include "FileContentChecker.h"
 #include "HandlerFactorySummary.h"
-#include "PluginImpl.h"
-#include "StoredQuery.h"
-#include "StoredQueryHandlerBase.h"
-#include <json/json.h>
-#include <macgyver/AsyncTaskGroup.h>
+#include <boost/asio.hpp>
 #include <macgyver/DirectoryMonitor.h>
-#include <spine/Reactor.h>
 #include <atomic>
-#include <shared_mutex>
 #include <condition_variable>
 #include <filesystem>
 #include <map>
 #include <memory>
 #include <mutex>
+#include <optional>
 #include <set>
+#include <shared_mutex>
+#include <string>
+#include <thread>
+#include <vector>
+
+namespace Fmi
+{
+class AsyncTaskGroup;
+}  // namespace Fmi
+namespace SmartMet::Spine
+{
+class Reactor;
+}  // namespace SmartMet::Spine
 
 namespace SmartMet
 {
@@ -24,7 +32,6 @@ namespace Plugin
 {
 namespace WFS
 {
-struct HandlerFactorySummary;
 class PluginImpl;
 class StoredQueryConfig;
 class StoredQueryHandlerBase;

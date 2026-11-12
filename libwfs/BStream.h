@@ -1,9 +1,10 @@
 #pragma once
 
 #include <boost/shared_array.hpp>
-
 #include <macgyver/DateTime.h>
 #include <spine/Value.h>
+#include <cstddef>
+#include <cstdint>
 #include <map>
 #include <string>
 

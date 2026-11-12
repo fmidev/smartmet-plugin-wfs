@@ -1,19 +1,23 @@
 #pragma once
 
-#include "GeoServerDB.h"
-
-#include <engines/gis/GdalUtils.h>
-#include <spine/Value.h>
-
-#include <ogr_geometry.h>
-
 #include <macgyver/DateTime.h>
-#include <boost/format.hpp>
-#include <boost/function.hpp>
-#include <variant>
-
+#include <spine/Value.h>
+#include <cstddef>
+#include <functional>
+#include <map>
 #include <string>
+#include <variant>
 #include <vector>
+
+class OGRLineString;
+namespace SmartMet::Plugin::WFS
+{
+class GeoServerDB;
+}  // namespace SmartMet::Plugin::WFS
+namespace pqxx
+{
+class result;
+}  // namespace pqxx
 
 namespace SmartMet
 {

@@ -1,6 +1,23 @@
 #pragma once
 
 #include "StoredContourHandlerBase.h"
+#include "StoredContourQueryStructs.h"
+#include "StoredQueryConfig.h"
+#include <engines/querydata/Q.h>
+#include <gis/Types.h>
+#include <macgyver/DateTime.h>
+#include <optional>
+#include <string>
+#include <vector>
+
+namespace SmartMet::Plugin::WFS
+{
+class PluginImpl;
+}  // namespace SmartMet::Plugin::WFS
+namespace SmartMet::Spine
+{
+class Reactor;
+}  // namespace SmartMet::Spine
 
 namespace SmartMet
 {

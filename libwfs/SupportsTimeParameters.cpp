@@ -1,10 +1,17 @@
 #include "SupportsTimeParameters.h"
-#include "WfsConvenience.h"
+#include "StoredQueryConfig.h"
 #include "WfsException.h"
 #include <macgyver/DateTime.h>
+#include <macgyver/Exception.h>
 #include <macgyver/Optional.h>
 #include <cstdint>
-#include <macgyver/Exception.h>
+#include <iostream>
+#include <iterator>
+#include <limits>
+#include <optional>
+#include <set>
+#include <string>
+#include <vector>
 
 namespace bw = SmartMet::Plugin::WFS;
 

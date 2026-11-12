@@ -6,26 +6,31 @@
  */
 // ======================================================================
 
-#include "Config.h"
-#include "PluginImpl.h"
 #include "XmlEnvInit.h"
-#include <boost/utility.hpp>
-#include <ctpp2/CDT.hpp>
 #include <macgyver/AtomicSharedPtr.h>
-#include <macgyver/Cache.h>
 #include <macgyver/CacheStats.h>
-#include <spine/HTTP.h>
 #include <spine/HTTPAuthentication.h>
-#include <spine/Reactor.h>
 #include <spine/SmartMetPlugin.h>
+#include <atomic>
 #include <condition_variable>
-#include <iostream>
-#include <list>
-#include <map>
 #include <memory>
 #include <mutex>
 #include <string>
 #include <thread>
+
+namespace SmartMet::Plugin::WFS
+{
+class PluginImpl;
+}  // namespace SmartMet::Plugin::WFS
+namespace SmartMet::Spine::HTTP
+{
+class Request;
+class Response;
+}  // namespace SmartMet::Spine::HTTP
+namespace SmartMet::Spine
+{
+class Reactor;
+}  // namespace SmartMet::Spine
 
 namespace SmartMet
 {

@@ -1,10 +1,11 @@
 #pragma once
 
 #include <boost/bind/bind.hpp>
-#include <boost/function.hpp>
 #include <spine/Value.h>
 #include <xercesc/dom/DOMElement.hpp>
 #include <cassert>
+#include <cstdint>
+#include <functional>
 #include <limits>
 #include <map>
 #include <string>
