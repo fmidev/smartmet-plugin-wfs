@@ -5,6 +5,7 @@
 #include <boost/optional/optional_io.hpp>
 #include <macgyver/Optional.h>
 #include <spine/CRSRegistry.h>
+#include <spine/ConfigBase.h>
 #include "WfsFeatureDef.h"
 
 using namespace boost::unit_test;

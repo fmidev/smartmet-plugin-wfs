@@ -7,6 +7,7 @@
 #include <newbase/NFmiLatLonArea.h>
 #include <newbase/NFmiMercatorArea.h>
 #include <newbase/NFmiRotatedLatLonArea.h>
+#include <ogr_geometry.h>
 #include <boost/test/unit_test.hpp>
 #include "AreaUtils.h"
 #include <boost/algorithm/hex.hpp>
