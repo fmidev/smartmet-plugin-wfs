@@ -4,6 +4,8 @@
 #include <boost/test/unit_test.hpp>
 #include <CapabilitiesConf.h>
 #include <macgyver/Exception.h>
+#include <libconfig.h++>
+#include <ctpp2/CDT.hpp>
 
 using namespace boost::unit_test;
 using libconfig::Setting;
