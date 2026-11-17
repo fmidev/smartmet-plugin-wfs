@@ -2,6 +2,7 @@
 
 #include <xercesc/dom/DOMDocument.hpp>
 #include <xercesc/dom/DOMElement.hpp>
+#include <xercesc/dom/DOMLSSerializer.hpp>
 #include <functional>
 #include <iterator>
 #include <memory>
@@ -9,11 +10,6 @@
 #include <string>
 #include <utility>
 #include <vector>
-
-namespace xercesc_3_2
-{
-class DOMLSSerializer;
-}  // namespace xercesc_3_2
 
 namespace SmartMet
 {
