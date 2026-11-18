@@ -73,6 +73,13 @@ XPathSnapshot::XPathSnapshot()
     parser->getDomConfig()->setParameter(XMLUni::fgDOMValidateIfSchema, false);
     parser->getDomConfig()->setParameter(XMLUni::fgXercesContinueAfterFatalError, false);
     parser->getDomConfig()->setParameter(XMLUni::fgXercesLoadSchema, false);
+
+    // The parsed documents (query responses and filters given in requests) never have a
+    // document type declaration: do not accept one, and never load external DTDs or
+    // entities.
+    parser->getDomConfig()->setParameter(XMLUni::fgDOMDisallowDoctype, true);
+    parser->getDomConfig()->setParameter(XMLUni::fgXercesLoadExternalDTD, false);
+    parser->getDomConfig()->setParameter(XMLUni::fgXercesDisableDefaultEntityResolution, true);
     parser->getDomConfig()->setParameter(XMLUni::fgDOMErrorHandler, this);
 
     parser->setFilter(&filter);
